@@ -1,3 +1,7 @@
+import { countCards, staticAbility } from "../../engine/dsl/builders";
+import { atEndOfTurn, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { additionalDrawPhaseCards, discard } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -11,5 +15,9 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  abilities: () => [
+    staticAbility(additionalDrawPhaseCards("you", 2)),
+    triggered(atEndOfTurn(), discard(countCards("hand"))),
+  ],
+  verifiedText: expectedVerifiedText("Draw two additional cards during your Draw phase.\n\nAt the end of each turn, discard your hand."),
 });

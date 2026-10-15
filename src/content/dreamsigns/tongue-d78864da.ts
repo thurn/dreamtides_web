@@ -1,3 +1,6 @@
+import { afterOpeningHand, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { optional, redrawChosenHand } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Rare",
   tideIds: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(afterOpeningHand(), optional(redrawChosenHand()))],
+  verifiedText: expectedVerifiedText("After you draw your opening hand, you may discard any number of cards, then draw that many cards."),
 });

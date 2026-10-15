@@ -1,3 +1,7 @@
+import { characterYouControl, randomCharacter } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { triggerAbility } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +18,8 @@ export default dreamsign({
     "4b01b6c1-ccca-4e19-848a-d799d46088b2",
   ],
   tags: ["J10", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), triggerAbility(randomCharacter(characterYouControl({ hasAbility: "dawn" })), "dawn")),
+  ],
+  verifiedText: expectedVerifiedText("The ▸Dawn ability of a random character you control triggers an additional time each turn."),
 });

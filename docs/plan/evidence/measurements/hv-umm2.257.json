@@ -1,0 +1,2161 @@
+{
+  "bead": "hv-umm2.257",
+  "phase": 5,
+  "base": "9eb3f8aca1b7fe2efd42d827920b0a08064b5dc4",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+  "implementer": "sole parent-dispatched helper dreamsign_battle257",
+  "sourceProposal": {
+    "path": "/tmp/root-257/source-first-proposal.json",
+    "sha256": "58761b75a6a94aade162f2fd7093128041ffb43c10cfdc8b5e6aee1288a23293"
+  },
+  "nativeDispatch": {
+    "nativeDispatch": "2026-10-15T05:38:53.982Z",
+    "call_id": "call_407f338b4f7246cc8834bbed4f3545b9",
+    "ordinal": 59157,
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl",
+    "recordSHA256": "bf19df02e4df3c7af609ae89e3bc81f62622a2eadafee2d8e535735299a4dbba"
+  },
+  "writeAdmission": {
+    "path": "/tmp/root-257/exact-write-grant.txt",
+    "sha256": "55f1d26eb279126d29aa3754575e10ed0bf576c8cd9ee708b81c640b7674cd48"
+  },
+  "timing": {
+    "start": "2026-10-15T05:38:53.982Z",
+    "evidenceCutoff": "2026-10-15T06:07:41.725541+00:00",
+    "inclusiveElapsedMinThroughCutoff": 28.795725683333334,
+    "actualGitStart": null,
+    "actualGitEnd": null,
+    "actualGitCommitterDate": null,
+    "endpointStatus": "UNKNOWN: future Git execution has not happened at evidence cutoff. implementWindow.end is this evidence cutoff proxy, not a predicted Git timestamp. Parent requires actual terminal Git completion within60seconds of final cutoff, observed externally; no tracked postcommit rewrite. Research, parent coordination and resource waits remain included from original dispatch."
+  },
+  "sampling": "UNKNOWN; no token or process sampling interval was instrumented",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary-review process start, sysctl -n vm.loadavg 1-minute value",
+        "receipt": {
+          "path": "/tmp/root-257/receipts/ordinary-review.json",
+          "sha256": "fc66db1e054b98637b0eff2e66a1b3406b8c350944a02023d64cfcfa5f5c06fe"
+        }
+      },
+      "implementWindow.end": {
+        "measuredFor": "evidence cutoff proxy before Git; actual future endpoint UNKNOWN and externally bounded to60seconds"
+      }
+    }
+  },
+  "source": {
+    "exactFourLeafWrites": [
+      {
+        "path": "src/content/dreamsigns/antler-b8590328.ts",
+        "beforeSHA256": "9bf26b08ca65d369bb4cb54389a72848b8b211fddadce5cbc223318dcff7c40a",
+        "afterSHA256": "e4a31f796f3d44d0384c85cfcb34343b597f896ae948841d6ebc028f9b808c3f"
+      },
+      {
+        "path": "src/content/dreamsigns/butterfly-wings-c75cd943.ts",
+        "beforeSHA256": "3409a192033c441a56986c04d042a6670ae138b23859d8fd4fc81453d31d874b",
+        "afterSHA256": "5ccfdc786abbcbc62eb2d6e91cc8da113719555d4cd06b05a77487e023864594"
+      },
+      {
+        "path": "src/content/dreamsigns/sealed-letter-bb8bb233.ts",
+        "beforeSHA256": "e14481cf8a33fd0623bd0e64403412b6711ab485edbedc2880fcc612eccdc8dc",
+        "afterSHA256": "ae1a975ecbdf1cc10c6d1649f781d8aeaf4e9824c156038a6aef7aae50737892"
+      },
+      {
+        "path": "src/content/dreamsigns/tongue-d78864da.ts",
+        "beforeSHA256": "b0c294e7f2ba1d7e3c5834b3b90df150a731a3789a0e04d0a38ac5591d428a43",
+        "afterSHA256": "f4454e76865dc8f82317657c350cdf4f2da1af8fad1e7474020823bcb31d11c9"
+      }
+    ],
+    "allReferencedReadOnlyBindings": [
+      {
+        "path": "src/content/define.ts",
+        "sha256": "3482d10ad712935eca708fc1bd3752fbdac1b1110ac99a5ecc6b6aa20d105d71",
+        "lineCount": 187,
+        "ranges": [
+          {
+            "start": 24,
+            "end": 39,
+            "sha256": "d9d985633f2c0d249afe97f6b5cb4e481a401f76e5ba8dbd4c5c029d9800fbfe"
+          },
+          {
+            "start": 109,
+            "end": 139,
+            "sha256": "7fccaf4d8d89fd766b0062e7a2efc98f18d492b9c5e543e5970a465c5c173645"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/content-catalog.ts",
+        "sha256": "e1717a3c4e277ebe83746120f7169ba36f1816037945378d454a9aae758fb345",
+        "lineCount": 117,
+        "ranges": [
+          {
+            "start": 110,
+            "end": 117,
+            "sha256": "230b891976244a800fea2dd18469934baf22b6ac72ff821a83c02c6cd50507dd"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/dsl/builders.ts",
+        "sha256": "95defe063356c03260c95632d4a126a1862bb8b08cadf657eccf5d9c8a08fb1f",
+        "lineCount": 675,
+        "ranges": [
+          {
+            "start": 74,
+            "end": 82,
+            "sha256": "c5ea4a8124d1f12bd1065e29184492300f568d597f2c8e7369e76fefbd69356f"
+          },
+          {
+            "start": 401,
+            "end": 404,
+            "sha256": "de81caf538fd8e0fe6d00608dc8c7c18eb9e92388685a2c87f63b950fa261225"
+          },
+          {
+            "start": 513,
+            "end": 516,
+            "sha256": "88917ec54be5cf07d78869d2eeaadc248a0fc55bf1861249a984f643d81fcf92"
+          },
+          {
+            "start": 528,
+            "end": 531,
+            "sha256": "756346b24c9f071c19f93c08877907576fd4272db52ed714f6af3c1278bd18d8"
+          },
+          {
+            "start": 593,
+            "end": 600,
+            "sha256": "6e30a9e6ac0b1de26a4329008bae086040cc8ef88402110bb0c54565a1bce8be"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/dsl/types.ts",
+        "sha256": "2d5e48635fad6118016fd9533484c327652aa47bf16397543cdfdea77458a5e0",
+        "lineCount": 896,
+        "ranges": [
+          {
+            "start": 107,
+            "end": 118,
+            "sha256": "ae1147fdd4083a00da8bb4dc4269abb3db5b517e379d9c2490c2d8e93fb2eaeb"
+          },
+          {
+            "start": 795,
+            "end": 806,
+            "sha256": "76437dc94b0a5ba1340b64a838b31d5f1c5cc3088986380cdff49cc87ef8652a"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/dsl/abilities.ts",
+        "sha256": "0ba25e2a4303f486dbd1cb0f378041888c413e30dd16ca66f75ea9236a9ca5a7",
+        "lineCount": 52,
+        "ranges": [
+          {
+            "start": 14,
+            "end": 29,
+            "sha256": "6675352bcfc6f1df3f8fca2b459e65804759d67f3d3832a8bec314705804ac52"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/rules/activation.ts",
+        "sha256": "84abc85ff59468c7bf160c8359763a6211f8917a7749d3bc741ecf1ae8829f39",
+        "lineCount": 206,
+        "ranges": [
+          {
+            "start": 33,
+            "end": 49,
+            "sha256": "19b428abf03ebd7843abceb5f857e221bbe97999c939e6b7212a91f58283d9c4"
+          },
+          {
+            "start": 66,
+            "end": 113,
+            "sha256": "17a49c79b816c8fbbf5905a646bbc88fd7ec2ad2d54e363302a0ab7bb0da13a6"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/rules/ability-disabling.ts",
+        "sha256": "633d432d66a49439f74a8952c9455944141690b1eefde510b6fb4644039bcc09",
+        "lineCount": 19,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 19,
+            "sha256": "633d432d66a49439f74a8952c9455944141690b1eefde510b6fb4644039bcc09"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/triggers/body.ts",
+        "sha256": "0304002782eeb7499500002295eb747b73fd8ee514de271797be41935cf83d99",
+        "lineCount": 84,
+        "ranges": [
+          {
+            "start": 51,
+            "end": 59,
+            "sha256": "2c7e09af10147243b94a8e9827e651f012394c6de4fde22413a3a5b0fd72783c"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/triggers/resolve.ts",
+        "sha256": "63f52c0c18f0dc00f62379e3203e2e1f0feecc741dcd9c0590e03c8ca795a8c3",
+        "lineCount": 76,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 42,
+            "sha256": "bebd9fe14e812b2af2a658415de22a4a9d06a840a5ea105e7b23f997e58471e1"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/selector-has-ability.contracts.ts",
+        "sha256": "2eaebfbf80dce94f9defd9c875c4ff4898834aefa432ecdfe7c30f75f2814fa9",
+        "lineCount": 301,
+        "ranges": [
+          {
+            "start": 40,
+            "end": 70,
+            "sha256": "b8891bddfe1a84716e18da6eee5117ef4df4fc43fc0b284e17f38bbc016b3244"
+          },
+          {
+            "start": 82,
+            "end": 133,
+            "sha256": "e1276051f8e0685e3dddee0dbff5a8909fde4f8227a36d43786c7e34169c5c7b"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/repeat-triggering-ability.contracts.ts",
+        "sha256": "392ec7ac4f99a69f58ea4ccd3f64a3f361d0985760b44b1fb6af5c8fc2ed80ca",
+        "lineCount": 374,
+        "ranges": [
+          {
+            "start": 46,
+            "end": 81,
+            "sha256": "9836562e6cdc6df7265de937f7b3c72b1440c928c8f8ac188886a5e8bc99f5a0"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/dsl/triggers.ts",
+        "sha256": "eddd7fa4f64ed4d45cd4358dac10ba7d759d164bd89ac28b0ac67e3d87c30b27",
+        "lineCount": 321,
+        "ranges": [
+          {
+            "start": 32,
+            "end": 50,
+            "sha256": "57c85158de7fa0119423c6d246cf08214364f62da0e4a7c1f75d1f64c238e4ce"
+          },
+          {
+            "start": 58,
+            "end": 60,
+            "sha256": "9815857765197a096ce40dd32ecff1b4547d18e516567fb0d695b46ce87b370e"
+          },
+          {
+            "start": 204,
+            "end": 206,
+            "sha256": "4a80420737b60ee63afac5f49aa42df7ab7903175b359a3c92e956c3e8196608"
+          },
+          {
+            "start": 284,
+            "end": 286,
+            "sha256": "6883813b8c47d73aa0c8b22985eb80a96330d8d2e16d299d7c74ba04ea348b72"
+          },
+          {
+            "start": 289,
+            "end": 298,
+            "sha256": "229a2a268bca43058a7c9e7f912671367d0b06500e238538ef418501c06320c7"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/dsl/verified-text.ts",
+        "sha256": "7051785703d83bf9d50c8b5d76926f1cf70ba263aed76de8515e285c8533b732",
+        "lineCount": 10,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 10,
+            "sha256": "7051785703d83bf9d50c8b5d76926f1cf70ba263aed76de8515e285c8533b732"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/additional-draw-phase.ts",
+        "sha256": "d34dd5e76872bc8538c491fdf69328612ba0a1fee7763cb397f2af0eaf48b79d",
+        "lineCount": 35,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 34,
+            "sha256": "eef9cd018badcc73d5a834e0075b247434f18ff2be1ef124b7f50d8d10f0c238"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/trigger-ability.ts",
+        "sha256": "061269908d3275f54e7ada2029a94d298f55b3e220eced5fe9ff4b081e0b37d7",
+        "lineCount": 27,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 25,
+            "sha256": "4542eb39ec97eb7c7f4b85e48ac491264c2eb7818128d5a3d8204b0addec0532"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/trigger-abandoned-named.ts",
+        "sha256": "1e0ca7c17b8cf03bee474af8ad8ffaa1931f401ed3cc5d69c481264b9c52032a",
+        "lineCount": 19,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 19,
+            "sha256": "1e0ca7c17b8cf03bee474af8ad8ffaa1931f401ed3cc5d69c481264b9c52032a"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/partial-redraw-hand.ts",
+        "sha256": "61e05600409a9be35fade45a6fb3580064b00994bcc7ed028de502cfcf16ec96",
+        "lineCount": 33,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 33,
+            "sha256": "61e05600409a9be35fade45a6fb3580064b00994bcc7ed028de502cfcf16ec96"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/optional.ts",
+        "sha256": "718223e5b6b61638abab1d2e0da4205b7a9c419016bfcf41f26ea7ef99429c97",
+        "lineCount": 25,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 25,
+            "sha256": "718223e5b6b61638abab1d2e0da4205b7a9c419016bfcf41f26ea7ef99429c97"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/discard.ts",
+        "sha256": "12e8cb484178acdd0e0837485f2b43449f1f0ddf73b8367758041b9c0a9ba815",
+        "lineCount": 56,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 56,
+            "sha256": "12e8cb484178acdd0e0837485f2b43449f1f0ddf73b8367758041b9c0a9ba815"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/index.ts",
+        "sha256": "b36b64ebb6f4bc9a60721bc71d7e27a2c2e852a52467040fb32f18b6deab5d24",
+        "lineCount": 103,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 103,
+            "sha256": "b36b64ebb6f4bc9a60721bc71d7e27a2c2e852a52467040fb32f18b6deab5d24"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/registry.ts",
+        "sha256": "41b7c5b8afebbdc1a4c3f721dfbcaecf39d7eeb4d924a1ebee89aab4ec410532",
+        "lineCount": 431,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 70,
+            "sha256": "9fcdf1ab91b41d05bd1bbd01388a0b228ffcea9210c757dec267eb5aa0f2bdd9"
+          },
+          {
+            "start": 180,
+            "end": 209,
+            "sha256": "a1def3c3b247f66181682adff5964189595deef41b6f635de0cdc74bdef04e55"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/continuous/layers.ts",
+        "sha256": "e09ec6c865cb5877c51a8c44b292d5df8e56becbe9a279351a407bd930ed2344",
+        "lineCount": 604,
+        "ranges": [
+          {
+            "start": 188,
+            "end": 214,
+            "sha256": "30c80ddb476fc92ba458619c8717c855c79bcd2ed7c5f6e10eef2636bcecf8ef"
+          },
+          {
+            "start": 337,
+            "end": 343,
+            "sha256": "9f4e2e9026cd4c5f5bac6beb1aaa14dddf3d7fbc4c0012d8d8b97ac18a6578b7"
+          },
+          {
+            "start": 580,
+            "end": 595,
+            "sha256": "4b56a443fba0f21e4042115c316d8409c6f4be7dbf0e48a5935b3626a385caa9"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/interpreter.ts",
+        "sha256": "398bf3c48a39f3098fca872d8945c9e768e26fc65c407244e1f7de80e9211c7a",
+        "lineCount": 1148,
+        "ranges": [
+          {
+            "start": 671,
+            "end": 675,
+            "sha256": "2a95651ae48ccb35718cf4d1b7a878fab07213f64a9d657c7dccf16fc8c136a7"
+          },
+          {
+            "start": 688,
+            "end": 708,
+            "sha256": "4e1e986af2a3745ef8a8aefd892b84512bdad403ad6e52cf67368c05ef3e1c1c"
+          },
+          {
+            "start": 765,
+            "end": 765,
+            "sha256": "3fe66602423866c00dc60c0ed1282ec85ff9f4b182d3b138e1db2f8e5db0df85"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/dsl/selectors.ts",
+        "sha256": "dac7c29dbccd65da8f521a564f8b59d079ccb3a559e9621de93777135c069c82",
+        "lineCount": 298,
+        "ranges": [
+          {
+            "start": 180,
+            "end": 189,
+            "sha256": "7fdbd07b2238f9beabd54573a88f8c1b190f4d47ba4989e84623b6cd9b70c4de"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/rules/resources.ts",
+        "sha256": "f768867611b289b2f7e4c0ac00dd89ee5e73abe16e605f5cbe1d1e0b06b9d7c3",
+        "lineCount": 146,
+        "ranges": [
+          {
+            "start": 93,
+            "end": 145,
+            "sha256": "250a3a3f02ac213bff0a42216895df552b09f84d92f6f5711853784a44682de9"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/rules/turn.ts",
+        "sha256": "1ffa3ce2e84f93e0e107a19baa1d0f558a3bf5e9153ff0c0fb0b664fd4960bb7",
+        "lineCount": 269,
+        "ranges": [
+          {
+            "start": 34,
+            "end": 45,
+            "sha256": "8fdbb34bf5b1ebb122fdc170881c3694a52c66821bd0b1d6cf96fe50c182c7dc"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/rules/zones.ts",
+        "sha256": "cde768cb17715dbc37fbf946d8aec2d7a06a93c1c2b2f0707fd77b5700d4f5a6",
+        "lineCount": 589,
+        "ranges": [
+          {
+            "start": 432,
+            "end": 471,
+            "sha256": "4588c3ea0930d13a0bc87bd84927281d880ce15bfc984011b6ad0863d805022c"
+          },
+          {
+            "start": 486,
+            "end": 524,
+            "sha256": "8e89cf6aea8680a8a78786dd96ff471e5b929889acc453fa98fe5262952ef96b"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/rules/stack.ts",
+        "sha256": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4",
+        "lineCount": 64,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 64,
+            "sha256": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/triggers/matcher.ts",
+        "sha256": "5ee4aa2b6f3445415fba5cb5015453b4f652ca53efe548e84f5a3e362ccba17d",
+        "lineCount": 1160,
+        "ranges": [
+          {
+            "start": 135,
+            "end": 145,
+            "sha256": "8b6ae8d427870b695288fe73940a509d8f74c24f0d4f3beacb542f8ed93cfce0"
+          },
+          {
+            "start": 509,
+            "end": 517,
+            "sha256": "7e3a6adee26a1d874a7786463c135f535cac9c18dc2f0565ceebeb20d68078f7"
+          },
+          {
+            "start": 555,
+            "end": 583,
+            "sha256": "dc31b3ce782a3f183e4384a2ed7310ba8db45006210a6d1b65afc25a5dfacecd"
+          },
+          {
+            "start": 688,
+            "end": 713,
+            "sha256": "acec2d010b7e9c4594a732b1611dfccae1b1964dfc0e6890e7007fa663706c0a"
+          },
+          {
+            "start": 340,
+            "end": 366,
+            "sha256": "48551b3b582065223168c095e569937a954760e16ae326d865e81335342e0621"
+          },
+          {
+            "start": 493,
+            "end": 506,
+            "sha256": "61403964dda1152def441f1aceca23038d80631c98b28d732370d791d1c67800"
+          },
+          {
+            "start": 617,
+            "end": 650,
+            "sha256": "b922f892fee15cf52876fd8828697d19d1d80fc915c225fcb408ca2f74f29de0"
+          },
+          {
+            "start": 897,
+            "end": 920,
+            "sha256": "c7e2c8b4c02cbf2434cd6461e02402ea7822b796b0883ab440e63fd1d01a8ba4"
+          },
+          {
+            "start": 1016,
+            "end": 1072,
+            "sha256": "6b372c30e68d177d46228cbc1a60679a3614181bb23262c2e69d96fdc1836aa4"
+          },
+          {
+            "start": 1108,
+            "end": 1126,
+            "sha256": "5ae01472c76d0600a701713ec7b74aa45d3bc7a3f7abc976bd39d54242c2b952"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/steps/kinds/begin-battle.ts",
+        "sha256": "6157db9860387ed50164d73d3d66982a0739a3e129897a3b30b9ddc3bf89e23c",
+        "lineCount": 93,
+        "ranges": [
+          {
+            "start": 70,
+            "end": 93,
+            "sha256": "d8fa1a2f99497a2189940d22a1ba4bbc84628a05373bbe12a4b83ca5870462f2"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/prompts/answers.ts",
+        "sha256": "9681bca388216c5afa66eb287474a68e9370162cb4fde1c1d2a967181e7feba5",
+        "lineCount": 330,
+        "ranges": [
+          {
+            "start": 225,
+            "end": 238,
+            "sha256": "c25a616a215cf8dbfb3ce565e09196010d7cec6c5a1f0de11d324fa4c7722793"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/testing/emblem-lab.ts",
+        "sha256": "cc2741bb6010fb92fa7dba670fe173a24865cd4deb94cb5669524a275c5589e0",
+        "lineCount": 114,
+        "ranges": [
+          {
+            "start": 19,
+            "end": 44,
+            "sha256": "b4bf29de68ab6d353ea12cce2524d5c74a08caf6878ded24d728f525aff067b2"
+          },
+          {
+            "start": 75,
+            "end": 114,
+            "sha256": "15cac26de077fd7f6238767e32ee740056eb6fd713e8f6dc97c5ea8b66954c65"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/testing/dreamsign-lab.ts",
+        "sha256": "cea0862001cf375aa14d7411cd0fda7e0e00a9efb5d05e1a83785f02a555e806",
+        "lineCount": 36,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 36,
+            "sha256": "cea0862001cf375aa14d7411cd0fda7e0e00a9efb5d05e1a83785f02a555e806"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/testing/scenario.ts",
+        "sha256": "154645bcca302217fa268b8d53f48e2aba44c3d71bad6980d2420d58931bf0ee",
+        "lineCount": 81,
+        "ranges": [
+          {
+            "start": 18,
+            "end": 81,
+            "sha256": "29a4fe93437b6d400e1036139e85a495927cee69731bb957b0b8002e18f0c93e"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/testing/fuzz.ts",
+        "sha256": "c30cc9d8a01c3a1f66d9bd24cbdf84f713a02a0d01f624496926ec9f59da4f6f",
+        "lineCount": 730,
+        "ranges": [
+          {
+            "start": 324,
+            "end": 354,
+            "sha256": "2da6d86c085a65aa972ea8c612d3c1bf0c0c1e7b020382c2e8b4600d2b07305c"
+          },
+          {
+            "start": 438,
+            "end": 450,
+            "sha256": "6dd8e8959a7128d06696bc42c3397136ab6e34f40ba9babfce44252ce05f767e"
+          },
+          {
+            "start": 485,
+            "end": 502,
+            "sha256": "d8b86160a8950313894126e7132bda9a00fdbd2f31d1bb65b21ba402087a11b6"
+          }
+        ]
+      },
+      {
+        "path": "src/content/specs/index.ts",
+        "sha256": "ab5efcc38d72018c30b4f1e6b75a80d2ed044c0bb2c2d20e4765843d75aac287",
+        "lineCount": 12,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 12,
+            "sha256": "ab5efcc38d72018c30b4f1e6b75a80d2ed044c0bb2c2d20e4765843d75aac287"
+          }
+        ]
+      },
+      {
+        "path": "src/content/specs/specs.test.ts",
+        "sha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+        "lineCount": 52,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 52,
+            "sha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/content-gates.test.ts",
+        "sha256": "b5ef1168dd129523d0ad021417ebfd3f3c80ba259985c5807ca1c27e52a30446",
+        "lineCount": 421,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 12,
+            "sha256": "32ad27651d48ed4d244f6dba099e7010e1a08ebfbe90e9dd76b22442463e6797"
+          },
+          {
+            "start": 157,
+            "end": 190,
+            "sha256": "66c4ee3bde6b11653d7fec10f671f81535671ac9b9352a6ab1b9c05d42b963dd"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts.test.ts",
+        "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+        "lineCount": 6,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 6,
+            "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/additional-draw-phase.contracts.ts",
+        "sha256": "04d09e19342231236c9038863aca9680709a5e0c8bb74c0ebf1e50491a0282e9",
+        "lineCount": 294,
+        "ranges": [
+          {
+            "start": 43,
+            "end": 94,
+            "sha256": "2aa086e1c667d4bf0dbb70bea505fe8e85837e12e4e9e485e71242f27592702d"
+          },
+          {
+            "start": 102,
+            "end": 134,
+            "sha256": "97bd52cb0fb2e8bd71152858ce6a5dc7d0e20ff3b6ffa1a0053d6fa6d1414a20"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/completed-opening-hand.contracts.ts",
+        "sha256": "49c5219669ceee4c36e35f73612328c382df26af6833087a52f830cd3af8fded",
+        "lineCount": 317,
+        "ranges": [
+          {
+            "start": 29,
+            "end": 51,
+            "sha256": "689d3dd1edeb51a775b2f4c9d73ec70ef22e0182ecc1db680fef4a8d094a49df"
+          },
+          {
+            "start": 88,
+            "end": 111,
+            "sha256": "fa0ce8a93da0984ca107f6c7a35bdaa762d51977819dfd2041ac2353f3adab1b"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts",
+        "sha256": "83957c10aa3253c0699c0c6fae34841664e780189d7da14f48778664ce073b84",
+        "lineCount": 205,
+        "ranges": [
+          {
+            "start": 72,
+            "end": 205,
+            "sha256": "f4911e1748e257ca5fe77d7a27bbed5491a1f1f1385fb78e4ca9b058d0eeed24"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/trigger-abandoned-named.contracts.ts",
+        "sha256": "dc93eb062d9506c041f937e4831f5d2c9cc283726fedb76cf51efa7edfbf2840",
+        "lineCount": 491,
+        "ranges": [
+          {
+            "start": 70,
+            "end": 140,
+            "sha256": "e07d797ced9a554cb90d60bb222e0e8e59967f28f11b2edc93f53b2c6045689d"
+          },
+          {
+            "start": 367,
+            "end": 491,
+            "sha256": "2c710c07272b1da98aa3deb1d6e2398e4abc49977b764784e7d1b0b9fb8308fc"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/random-character-reference.contracts.ts",
+        "sha256": "d9d784a7dc53c65556edc4662195b2fe3817ba5f1e6aa032c180cac1580621db",
+        "lineCount": 208,
+        "ranges": [
+          {
+            "start": 76,
+            "end": 120,
+            "sha256": "a21d666023d5fcdff87a74d50b5856038e14d233cecc069236974118d0750612"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/at-end-of-turn-trigger.contracts.ts",
+        "sha256": "71e52d9067a07abaa0efcbdf4a41dc4a7ddba3952a5d603ce34fb6e33994b9f0",
+        "lineCount": 256,
+        "ranges": [
+          {
+            "start": 49,
+            "end": 110,
+            "sha256": "aeb1081fc2bb6ce138f7f46e8e090f760156f93595158011cb23198be0755f38"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/rule-modifier-dawn.contracts.ts",
+        "sha256": "f7382c06b764a2a99301e7868e7ffa8ec0c9a9d57e01894c91749c2e9d75cbe6",
+        "lineCount": 412,
+        "ranges": [
+          {
+            "start": 55,
+            "end": 85,
+            "sha256": "eca29379854f5b2bef14bdbf12d8fa4d0e7ecb6335978721bc264abed1df8ee6"
+          },
+          {
+            "start": 134,
+            "end": 179,
+            "sha256": "c73515eaf718efbd52b9514b20c2b82a114ca9a3c8fb225078680657805cca6e"
+          }
+        ]
+      },
+      {
+        "path": "src/runtime/battle-prompt-messages.ts",
+        "sha256": "39ca003a4182e9b69f185bbd5414488e01fe54ea4b14a5ababcf7a851bc4e72c",
+        "lineCount": 983,
+        "ranges": [
+          {
+            "start": 140,
+            "end": 141,
+            "sha256": "c32f9db864bec43b4403f7c498a9952b8eb2babaa6431aeaa16c1ecdb45da7d5"
+          },
+          {
+            "start": 452,
+            "end": 455,
+            "sha256": "0ce330892c7ef91971a8504a78eecf7cd9f06b1aca360d82435280ed64e0ea47"
+          }
+        ]
+      },
+      {
+        "path": "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "sha256": "f902d60deda3a5bd3ee1306082bc9a32c3cdf01a4f641ee523739dcfd5520984",
+        "lineCount": 585,
+        "ranges": [
+          {
+            "start": 303,
+            "end": 350,
+            "sha256": "25500d8190016179e8ba0c46fe58c28c368a7ebc78ec650e37767d5237bbf1a1"
+          }
+        ]
+      },
+      {
+        "path": "src/engine/testing/card-lab.ts",
+        "sha256": "756df801b78ef81a854a21efd427906fba1e8b29ed2b03422763cb81a7bd78de",
+        "lineCount": 361,
+        "ranges": [
+          {
+            "start": 27,
+            "end": 40,
+            "sha256": "c25e94d72efc017836c291297fb3f8e26d720ae866680afcc29f4b25112c1d4e"
+          }
+        ]
+      },
+      {
+        "path": "scripts/qa/lab-preflight.ts",
+        "sha256": "d1f13b839cc3ac95ac76e1d0a758abf39be5c0f65f2d1f26265ab82b4cabae76",
+        "lineCount": 122,
+        "ranges": [
+          {
+            "start": 32,
+            "end": 51,
+            "sha256": "d1c9c20c882457edd2b486662b1d47c1ead6e792fcefb2fef710d11834ec95d7"
+          },
+          {
+            "start": 76,
+            "end": 88,
+            "sha256": "7faaca16ba795a839cee4809afbb5e38113c5699f57ddc412fd52c55905dca9a"
+          }
+        ]
+      },
+      {
+        "path": "scripts/qa/scenarios/card-lab-play.mjs",
+        "sha256": "2b0de8945ac6414bd98f11783376cbcfc01dfc302f22d5dd235ac2cc386368e6",
+        "lineCount": 292,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 150,
+            "sha256": "07113e641662c0fcb9a40361727c319c3cb3a5568e9a67759beb53887179834e"
+          }
+        ]
+      },
+      {
+        "path": "scripts/qa/run-scenario.mjs",
+        "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "lineCount": 827,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 39,
+            "sha256": "72c3aad69ae90def2c936b2ca6563199caa3b41b4b2eb85c2fd1c364a6ad4c79"
+          }
+        ]
+      },
+      {
+        "path": "scripts/qa/prelude.mjs",
+        "sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+        "lineCount": 2148,
+        "ranges": [
+          {
+            "start": 1320,
+            "end": 1363,
+            "sha256": "657e78dd7b1e9e40d448bed3dca3388c4d7a537b86f2da99ec5dbc6ce88526dc"
+          }
+        ]
+      },
+      {
+        "path": "scripts/fuzz-engine.ts",
+        "sha256": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+        "lineCount": 138,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 17,
+            "sha256": "7850d1aa91bd2aa0af179874ba0ec494e06c651786379041b36307ae7c7d175c"
+          },
+          {
+            "start": 44,
+            "end": 66,
+            "sha256": "c9b8af18515f540efa159d651e682c7dd57710f9a26ae1aa266e78a21b4d3ac3"
+          }
+        ]
+      },
+      {
+        "path": "docs/rules.md",
+        "sha256": "d0eb65a8d1ff4d03248799d10f91c5985192b587d17917bd07ad0291ea518722",
+        "lineCount": 3375,
+        "ranges": [
+          {
+            "start": 459,
+            "end": 467,
+            "sha256": "36030ad1097785785dd6e0f1c760336c88114f7f451afa9e731073c80c3e2abc"
+          },
+          {
+            "start": 508,
+            "end": 530,
+            "sha256": "425cb4f3686de1544656ef045b483d080d20426827a9278c6720f4f2ef8714f5"
+          },
+          {
+            "start": 1414,
+            "end": 1420,
+            "sha256": "5503e4ca5d9d00ed38b75051bbfe3eb1111e9629a42fa9ede25b9cd08d607101"
+          },
+          {
+            "start": 2251,
+            "end": 2281,
+            "sha256": "09045a12e29bfbf7584bdf13bcb92af55306dd6c2151adbe507fde15bd9ad1ea"
+          },
+          {
+            "start": 2368,
+            "end": 2381,
+            "sha256": "2ffdc347f71ac8e87388a872259a2a73de374bef80f999b6a5d5093aa39cd236"
+          },
+          {
+            "start": 2614,
+            "end": 2625,
+            "sha256": "e491dd32cf9e3f6208fbb5de853dc8be581aa4490e2774420fc102e3ad7678bd"
+          },
+          {
+            "start": 2634,
+            "end": 2655,
+            "sha256": "a11b32cf9ef7c583b822ee4ab0f2ea5f03df05d500f778d718a63159a4edcd23"
+          },
+          {
+            "start": 2804,
+            "end": 2812,
+            "sha256": "3f12c9632823a9d7afc8cb961d3b1627ca3cfabedf887c53fcdb13507f6f3711"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/decisions.md",
+        "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "lineCount": 1170,
+        "ranges": [
+          {
+            "start": 119,
+            "end": 141,
+            "sha256": "fbdcf93c3c265b46f11b9d20fed602057e4bb357818e8d4344e0c4973358de9c"
+          },
+          {
+            "start": 324,
+            "end": 360,
+            "sha256": "21a07da4b8056db795082e993d0f4cdecbe3d48e8c614d99895e03947edd2f13"
+          },
+          {
+            "start": 520,
+            "end": 561,
+            "sha256": "6101c223b0254cd46463b79ad60e6bf9ca193ae527bb18441e25d262b8764d7d"
+          },
+          {
+            "start": 734,
+            "end": 827,
+            "sha256": "18f88c9d82f46ff13b255b11c10f95f92282dd013fb3dd1c510276703282f613"
+          },
+          {
+            "start": 995,
+            "end": 1170,
+            "sha256": "553fcbe32ee6b48b1d057509d89dc163c4043d5192645b39fbbdc11c30c733ae"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.616-1.md",
+        "sha256": "0510c5b874d155a6de5283d02906913d4bf86d444c5a96367abbac2900f55849",
+        "lineCount": 7,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 7,
+            "sha256": "0510c5b874d155a6de5283d02906913d4bf86d444c5a96367abbac2900f55849"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.617-1.md",
+        "sha256": "03185141aec5ea7e0282029f42ccd1d28945b3c8d469f76599bd605eed0f0e9b",
+        "lineCount": 36,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 34,
+            "sha256": "967fd99227426c8e937b9a812c2de759d108070bc227921488353971ce80b9fc"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.618-1.md",
+        "sha256": "457d1d1b2e872ae7413b473d5f615cf6c1c2cfdc483fadaf3b6fc6fc3560f98d",
+        "lineCount": 38,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 38,
+            "sha256": "457d1d1b2e872ae7413b473d5f615cf6c1c2cfdc483fadaf3b6fc6fc3560f98d"
+          }
+        ]
+      },
+      {
+        "path": "AGENTS.md",
+        "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "lineCount": 145,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 145,
+            "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/README.md",
+        "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "lineCount": 334,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 334,
+            "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/phase-5-content.md",
+        "sha256": "dd795dc77fb0a98456443a546c9f84d48ecbb163ef45f0f2c55e8fdb9cc5c2ec",
+        "lineCount": 642,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 330,
+            "sha256": "9bbaf3829783e13e2f24f97d77b51baf168002b0422be0a3ce646aa10e4d809a"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/workflow.md",
+        "sha256": "711d807bba2675ba8519bb9219e6eb78f78d0ec450d08834fa950c5bb44b759e",
+        "lineCount": 1906,
+        "ranges": [
+          {
+            "start": 249,
+            "end": 278,
+            "sha256": "dd99c38bd99193ca7a3da2a567b3aba8b3921caafe1c0a86b76c91194a05992a"
+          },
+          {
+            "start": 709,
+            "end": 792,
+            "sha256": "d03c77631e067b466ac67ab4fe7227ebc98594bc604b667b59ad6352dd04162f"
+          },
+          {
+            "start": 996,
+            "end": 1168,
+            "sha256": "ef7f2d11686179515d7e6ab79c28179cb12c7f8ac5eae3b9a6f95d46f37031b1"
+          },
+          {
+            "start": 1202,
+            "end": 1273,
+            "sha256": "d8344f9c69a1a0773ae68ef0d3cc62686ec230c569cba7d7b958c02d91173093"
+          },
+          {
+            "start": 1369,
+            "end": 1397,
+            "sha256": "c363a0f2089d8b98ae8b47301bd264cc102ee9583bf4b9f7f111ae85d0143e21"
+          },
+          {
+            "start": 1512,
+            "end": 1645,
+            "sha256": "ebe024b7a361435af304baa49cb0fe2a493166a70e9ad90eb39ef0a3d1b855ba"
+          },
+          {
+            "start": 1678,
+            "end": 1723,
+            "sha256": "f78a2c7d0c434b33adf3d9e07b43e7d2966c9b3caac554754ba9a1d3dcfbfd76"
+          },
+          {
+            "start": 1756,
+            "end": 1802,
+            "sha256": "d338b5f61575ef3901a1b730bb12f8da0041bd8e6adcada26f33b6a52387d2eb"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/engine-design.md",
+        "sha256": "3e342895e861a93a33e9cc5f8e6137b7b723b7498d50917cd6da1e4289762e15",
+        "lineCount": 3097,
+        "ranges": [
+          {
+            "start": 1710,
+            "end": 1775,
+            "sha256": "69081ca2999a866f23d1b503cd73da7e6d0257640e593422f97fdf27b7d0eae1"
+          },
+          {
+            "start": 2206,
+            "end": 2325,
+            "sha256": "92e4cbc3fe911f6583f78029c987de253c9efc2d81899e584fb09d00177790df"
+          }
+        ]
+      },
+      {
+        "path": "docs/plan/evidence/legacy-behavior.md",
+        "sha256": "7b47a6b00712655d106eed969f252f317457c18033354a799250e6c4509219a7",
+        "lineCount": 223,
+        "ranges": [
+          {
+            "start": 1,
+            "end": 35,
+            "sha256": "4b62ded20e255e4cdbf4a7c576e7fab196afce7d3eaeb905824226186a140c5d"
+          }
+        ]
+      },
+      {
+        "path": "README.md",
+        "sha256": "e17ead6e7744306943fb2e4efd64a33b8adc6183065e1ef52c765a092c4d4214",
+        "lineCount": 1060,
+        "ranges": [
+          {
+            "start": 156,
+            "end": 360,
+            "sha256": "ce9b3fa2ea834824cfd91b8c34601864bf3e165d21a4a1cff65eec36a9f164d8"
+          },
+          {
+            "start": 658,
+            "end": 783,
+            "sha256": "00b50f9a005914d0d61ff57a720f1026b2d1c975fb88bdf1ef09c945cc2055fa"
+          },
+          {
+            "start": 886,
+            "end": 984,
+            "sha256": "6d3d8d4ab6b24ec6d89a36997399be3722f5a6d2a275096ee1a260fac2be8a66"
+          }
+        ]
+      }
+    ],
+    "initialPathCount": 5446,
+    "stableRuntimeSourceEpochSHA256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+    "nativeScope": "Four native UUIDs, original dreamsigns-battle-20 filing key and complete recipe1–9 govern; generated routing projection labels do not assign ownership. No runtime/test/UI/rules/config/inventory/generator/other-leaf writes."
+  },
+  "printedClauses": [
+    {
+      "uuid": "c75cd943-5e8b-4a56-8c09-d975571570d4",
+      "clause": "The ▸Dawn ability of a random character you control triggers an additional time each turn.",
+      "implementation": "triggered(onDawn(), triggerAbility(randomCharacter(characterYouControl({ hasAbility: \"dawn\" })), \"dawn\"))",
+      "api": [
+        "src/engine/dsl/triggers.ts:58-59",
+        "src/engine/dsl/builders.ts:401-403,513-516",
+        "src/engine/effects/primitives/trigger-ability.ts:16-25",
+        "src/engine/rules/activation.ts:38-49,96-104",
+        "src/engine/triggers/matcher.ts:135-145,555-583,362-366,1108-1126",
+        "src/engine/dsl/abilities.ts:14-29",
+        "src/engine/triggers/body.ts:54-58",
+        "docs/rules.md:2634-2636"
+      ],
+      "meaning": "One extra named-trigger instruction each own Dawn. At resolution choose one controlled character with a Dawn-bearing ability, uniformly via random:selection. All eligible named-Dawn indexes on that physical character are admitted in order, respecting functional zones, conditions, disabling and once-per-turn. No matching character means no RNG draw/no child. The printed named ability identifies the structural Dawn-bearing pool; ordinary random-match and Dawn timing rules apply. Selection is not prefiltered by current trigger conditions, disabling, spent allowance or functional zone: a structurally matching pick can supply zero new admissions, with no retry. This is the existing explicit triggerAbility instruction at own Dawn, not repeatTriggeringAbility/captured-ordinary-occurrence replay or a static trigger multiplier. cardListener uses instanceOrigin which copies gained/lost state; originAbilities combines current own and gained definitions with sparse holes for lost groups, so gained-only Dawn candidates are handled. Recursive combined named descriptors match once per ability index, not once per branch. All printed/gained qualifying indexes are requested at instruction resolution, and ordinary current checks plus resolution-time intervening condition recheck apply."
+    },
+    {
+      "uuid": "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+      "clause": "When you abandon a character, its ▸Dissolved ability triggers an additional time.",
+      "implementation": "triggered(whenAbandon(), triggerAbandonedNamed(\"dissolved\"))",
+      "api": [
+        "src/engine/dsl/triggers.ts:204-206",
+        "src/engine/effects/primitives/trigger-abandoned-named.ts:10-19",
+        "src/engine/triggers/matcher.ts:617-650,1016-1072"
+      ],
+      "meaning": "Reader is the held Dreamsign. Existing retained-abandon binding refers to the actual departed physical subject and original controller/definition. Only confirmed ordinary Dissolved admissions from that abandon supply extras; Reclaim banishment, disabled/failed/once-spent candidates do not. Existing RD616 and delivered716/717/719 apply directly."
+    },
+    {
+      "uuid": "b8590328-ca72-4869-a795-c7f4b6802bed",
+      "clause": "Draw two additional cards during your Draw phase.",
+      "implementation": "staticAbility(additionalDrawPhaseCards(\"you\", 2))",
+      "api": [
+        "src/engine/dsl/builders.ts:74-82",
+        "src/engine/effects/primitives/additional-draw-phase.ts:16-34",
+        "src/engine/continuous/layers.ts:337-343",
+        "src/engine/rules/turn.ts:34-45"
+      ],
+      "meaning": "Adds two requests after ordinary draw, counted before drawing; each held copy stacks. Entire skipped first Draw makes no requests, effect draws/opening hands are independent, ordinary Fatigue and draw triggers apply per RD617."
+    },
+    {
+      "uuid": "b8590328-ca72-4869-a795-c7f4b6802bed",
+      "clause": "At the end of each turn, discard your hand.",
+      "implementation": "triggered(atEndOfTurn(), discard(countCards(\"hand\")))",
+      "api": [
+        "src/engine/dsl/triggers.ts:289-298",
+        "src/engine/dsl/builders.ts:593-600",
+        "src/engine/effects/primitives/discard.ts:25-58",
+        "src/engine/rules/resources.ts:119-142"
+      ],
+      "meaning": "No player filter on atEndOfTurn: acts at both players Ending boundaries, before hand-limit cleanup. Resolving current holder hand size requests its whole cohort once. For emblem source discard excludes no physical hand card; full cohort is forced via autoAnswerForcedPrompts, so inventory role is existing and may be invisible."
+    },
+    {
+      "uuid": "d78864da-eb31-4f25-9d51-94fca7ecf810",
+      "clause": "After you draw your opening hand,",
+      "implementation": "triggered(afterOpeningHand(), ...)",
+      "api": [
+        "src/engine/dsl/triggers.ts:284-286",
+        "src/engine/steps/kinds/begin-battle.ts:75-92",
+        "src/engine/triggers/matcher.ts:493-495,897-920"
+      ],
+      "meaning": "Exactly one settled completion per side, after both ordinary/extra groups and energy, starting side first, before first turn. RD618 supplies empty groups, FIFO and draw-trigger suppression."
+    },
+    {
+      "uuid": "d78864da-eb31-4f25-9d51-94fca7ecf810",
+      "clause": "you may discard any number of cards, then draw that many cards.",
+      "implementation": "optional(redrawChosenHand())",
+      "api": [
+        "src/engine/effects/primitives/optional.ts:12-27",
+        "src/engine/effects/primitives/partial-redraw-hand.ts:13-33",
+        "src/engine/rules/resources.ts:119-142"
+      ],
+      "meaning": "Existing confirm:youMay first; accepting offers existing chooseCards:discard min0/max current hand. One discardCards successful count drives that many normal draws, including created-card replacement count/Fatigue. Decline or empty subset has no discard batch/draw. Selection/privacy/replay/refusal are existing primitive contracts."
+    }
+  ],
+  "authoring": {
+    "battleOnlyWholeEntities": true,
+    "pendingClearedFor": [
+      "c75cd943-5e8b-4a56-8c09-d975571570d4",
+      "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+      "b8590328-ca72-4869-a795-c7f4b6802bed",
+      "d78864da-eb31-4f25-9d51-94fca7ecf810"
+    ],
+    "verifiedText": "expectedVerifiedText of each entire unchanged effectDescription; no journey clause remains",
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "newRulesDecisions": [],
+    "existingRulesDecisions": [
+      "RD-hv-umm2.616-1",
+      "RD-hv-umm2.617-1",
+      "RD-hv-umm2.618-1"
+    ],
+    "cardIssues": [],
+    "preExistingIssuesEstablished": [],
+    "fallout": [],
+    "D20": {
+      "needed": false,
+      "path": null,
+      "reason": "All four behaviors are direct existing public primitive/DSL compositions. The coupled opening redraw is already exercised as that exact composition in completed-opening-hand synthetic contracts. Retained Dissolved binding is a public primitive with original and716/717/719 contracts. Antler independent Draw static/Ending trigger introduce no additional interaction rule. No scenario module or shared index write."
+    },
+    "D21": {
+      "mandatoryJudged": [],
+      "sample": {
+        "c75cd943-5e8b-4a56-8c09-d975571570d4": 75,
+        "bb8bb233-7cb1-43b3-af30-e71ab9e832c5": 58,
+        "b8590328-ca72-4869-a795-c7f4b6802bed": 114,
+        "d78864da-eb31-4f25-9d51-94fca7ecf810": 197
+      },
+      "reason": "No first byte <26. No new prompt kind, status indicator or visual effect: confirm:youMay, chooseCards:discard, trigger announcements, ordinary draw/discard movement all use existing delivered surfaces. Tongue actual subset role exceeds inventory confirm listing but is already existing partial-redraw fixture; inventory is evidence, not authority to ignore a new surface. Antler full hand choice is normally auto-forced. Butterfly/Sealed use existing named-trigger presentation. Re-evaluate if implementation or actual QA identifies a genuinely new surface.",
+      "voluntaryJudged": []
+    }
+  },
+  "checks": [
+    {
+      "label": "browser-sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.257",
+        "--dreamsigns",
+        "c75cd943-5e8b-4a56-8c09-d975571570d4,bb8bb233-7cb1-43b3-af30-e71ab9e832c5,b8590328-ca72-4869-a795-c7f4b6802bed,d78864da-eb31-4f25-9d51-94fca7ecf810",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 11916,
+      "pgid": 11916,
+      "runnerPID": 11895,
+      "startedAt": "2026-10-15T05:48:35.479652+00:00",
+      "stdout": "/tmp/root-257/receipts/browser-sweep.stdout",
+      "stderr": "/tmp/root-257/receipts/browser-sweep.stderr",
+      "endedAt": "2026-10-15T05:49:20.324934+00:00",
+      "wallS": 44.84452595899347,
+      "childCPUUserS": 7.191522,
+      "childCPUSystemS": 3.517268,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 13.06 14.94 13.11 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/browser-sweep.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/browser-sweep.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "c210052bd633710f61185a1af461a74e0f5684ed446fc9b97f1bedc6dca6db7b",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/browser-sweep.json",
+        "sha256": "424814b3f8488103367412694e99296c9a08b0df5e5cf72577a19af273115649"
+      }
+    },
+    {
+      "label": "content-coverage-specs",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 8645,
+      "pgid": 8645,
+      "runnerPID": 8599,
+      "startedAt": "2026-10-15T05:47:44.569615+00:00",
+      "stdout": "/tmp/root-257/receipts/content-coverage-specs.stdout",
+      "stderr": "/tmp/root-257/receipts/content-coverage-specs.stderr",
+      "endedAt": "2026-10-15T05:47:57.325999+00:00",
+      "wallS": 12.756113832991105,
+      "childCPUUserS": 9.319056,
+      "childCPUSystemS": 3.2984690000000003,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 18.27 15.94 13.31 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/content-coverage-specs.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/content-coverage-specs.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "61d783dd025bdc058d0fe64297cd292161a8a5a8983a6805d47116bc2280557f",
+      "stderrSHA256": "2f38efe94d3e2290fa7acc61904bc08a9d5555a24bd268129a3ec90ad3fd4a4e",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/content-coverage-specs.json",
+        "sha256": "618fc92f7b15b4ed5f3b04c5a11079f5110cdde16f76efb9324077973dd46709"
+      }
+    },
+    {
+      "label": "evidence-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 89566,
+      "pgid": 89566,
+      "runnerPID": 87997,
+      "startedAt": "2026-10-15T06:03:46.061423+00:00",
+      "stdout": "/tmp/root-257/receipts/evidence-schema.stdout",
+      "stderr": "/tmp/root-257/receipts/evidence-schema.stderr",
+      "endedAt": "2026-10-15T06:03:46.152186+00:00",
+      "wallS": 0.09062087500933558,
+      "childCPUUserS": 0.06197799999999999,
+      "childCPUSystemS": 0.02759,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 18.00 13.89 12.87 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/evidence-schema.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/evidence-schema.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "0d191c6d3ebcbd025e094f8bf57aea391924b673e091e15284358b6a0f7c3c70",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/evidence-schema.json",
+        "sha256": "3d4ca0b447feea032f0b21f918cc0a77dd260174dec0a1d60cd7dc61fa8027ec"
+      }
+    },
+    {
+      "label": "focused-contracts",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "additional Draw-phase|completed opening hand|redrawChosenHand|triggerAbandonedNamed|716 regression|717 regression|719 regression|atEndOfTurn|random battlefield character|named ability presence|counts repeated either|excludes failed conditions"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 5865,
+      "pgid": 5865,
+      "runnerPID": 5817,
+      "startedAt": "2026-10-15T05:47:14.155764+00:00",
+      "stdout": "/tmp/root-257/receipts/focused-contracts.stdout",
+      "stderr": "/tmp/root-257/receipts/focused-contracts.stderr",
+      "endedAt": "2026-10-15T05:47:26.439675+00:00",
+      "wallS": 12.283522709039971,
+      "childCPUUserS": 10.77336,
+      "childCPUSystemS": 3.5912379999999997,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 21.57 16.23 13.32 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/focused-contracts.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/focused-contracts.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "23336b9222e54d3c987e67fd2483011ebdb593c238bca0501ef11e0764920baf",
+      "stderrSHA256": "2f38efe94d3e2290fa7acc61904bc08a9d5555a24bd268129a3ec90ad3fd4a4e",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/focused-contracts.json",
+        "sha256": "5973d8d22eb8b4d5959c7aa3d3ffe67b9f3e62c3ccc12deb91d2dc31d2673273"
+      }
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 21858,
+      "pgid": 21858,
+      "runnerPID": 21824,
+      "startedAt": "2026-10-15T05:50:58.232767+00:00",
+      "stdout": "/tmp/root-257/receipts/knip.stdout",
+      "stderr": "/tmp/root-257/receipts/knip.stderr",
+      "endedAt": "2026-10-15T05:51:03.174733+00:00",
+      "wallS": 4.94173108402174,
+      "childCPUUserS": 4.585653,
+      "childCPUSystemS": 1.5913639999999998,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 8.52 12.42 12.37 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/knip.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/knip.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "bfbab45362cb3487e221e74267f5ac77f9dfb855db165698d9d33c587879725d",
+      "stderrSHA256": "2f38efe94d3e2290fa7acc61904bc08a9d5555a24bd268129a3ec90ad3fd4a4e",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/knip.json",
+        "sha256": "cd787748932f4bac7488b4d88aa4d6c36dba76eb4aeda5014e6e05c7e69395c3"
+      }
+    },
+    {
+      "label": "lab-preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "c75cd943-5e8b-4a56-8c09-d975571570d4,bb8bb233-7cb1-43b3-af30-e71ab9e832c5,b8590328-ca72-4869-a795-c7f4b6802bed,d78864da-eb31-4f25-9d51-94fca7ecf810",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 10750,
+      "pgid": 10750,
+      "runnerPID": 10716,
+      "startedAt": "2026-10-15T05:48:16.432842+00:00",
+      "stdout": "/tmp/root-257/receipts/lab-preflight.stdout",
+      "stderr": "/tmp/root-257/receipts/lab-preflight.stderr",
+      "endedAt": "2026-10-15T05:48:18.442464+00:00",
+      "wallS": 2.009411374980118,
+      "childCPUUserS": 1.560159,
+      "childCPUSystemS": 0.707295,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 14.51 15.32 13.20 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/lab-preflight.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/lab-preflight.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "84e8f6a730ec0ca896cf20fbc9fe05f824e6dd4e4c23815d1897f25be7fd362a",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/lab-preflight.json",
+        "sha256": "c2047fbae2f432cdb88584b623564702a71d9420d7d574cd737dc6833ff4385c"
+      }
+    },
+    {
+      "label": "ordinary-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 16762,
+      "pgid": 16762,
+      "runnerPID": 16742,
+      "startedAt": "2026-10-15T05:49:41.068028+00:00",
+      "stdout": "/tmp/root-257/receipts/ordinary-review.stdout",
+      "stderr": "/tmp/root-257/receipts/ordinary-review.stderr",
+      "endedAt": "2026-10-15T05:50:47.943367+00:00",
+      "wallS": 66.87437912495807,
+      "childCPUUserS": 182.984095,
+      "childCPUSystemS": 17.024874,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 9.27 13.54 12.72 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/ordinary-review.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/ordinary-review.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "e8c1ead604b6700cc499dde5f214c9c992401a13946a14b72a4cdda9dbd0057e",
+      "stderrSHA256": "2f38efe94d3e2290fa7acc61904bc08a9d5555a24bd268129a3ec90ad3fd4a4e",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/ordinary-review.json",
+        "sha256": "fc66db1e054b98637b0eff2e66a1b3406b8c350944a02023d64cfcfa5f5c06fe"
+      }
+    },
+    {
+      "label": "weighted300",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "c75cd943-5e8b-4a56-8c09-d975571570d4,bb8bb233-7cb1-43b3-af30-e71ab9e832c5,b8590328-ca72-4869-a795-c7f4b6802bed,d78864da-eb31-4f25-9d51-94fca7ecf810"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle257-root",
+      "pid": 9926,
+      "pgid": 9926,
+      "runnerPID": 9906,
+      "startedAt": "2026-10-15T05:48:03.511509+00:00",
+      "stdout": "/tmp/root-257/receipts/weighted300.stdout",
+      "stderr": "/tmp/root-257/receipts/weighted300.stderr",
+      "endedAt": "2026-10-15T06:03:08.605967+00:00",
+      "wallS": 905.0828437919845,
+      "childCPUUserS": 426.880309,
+      "childCPUSystemS": 4.0551509999999995,
+      "exit": 0,
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "hostLoad": {
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ],
+        "exit": 0,
+        "stdout": "{ 16.94 15.81 13.33 }\n",
+        "stderr": ""
+      },
+      "beforeSourceEpoch": {
+        "path": "/tmp/root-257/receipts/weighted300.before-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "afterSourceEpoch": {
+        "path": "/tmp/root-257/receipts/weighted300.after-source.json",
+        "sha256": "1094907807cbbbb9c01648c5b857fe9e7051e2ad1374493327175893741420f1",
+        "paths": 5446
+      },
+      "stdoutSHA256": "61a90332b95538b3611a616f33089259a4c182f8e696f0455950b170d9070f65",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "completed": true,
+      "receipt": {
+        "path": "/tmp/root-257/receipts/weighted300.json",
+        "sha256": "967d2e50ff80da93fce09a31453913ab1e62dfdf06fa3d6d5525de139dc7ebdd"
+      }
+    }
+  ],
+  "fuzz": {
+    "status": "terminal",
+    "commandExit": 0,
+    "requestedGames": 300,
+    "requestedUUIDs": [
+      "b8590328-ca72-4869-a795-c7f4b6802bed",
+      "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+      "c75cd943-5e8b-4a56-8c09-d975571570d4",
+      "d78864da-eb31-4f25-9d51-94fca7ecf810"
+    ],
+    "nativeOutput": [],
+    "outerWallS": 905.0828437919845,
+    "outerChildCPUUserS": 426.880309,
+    "outerChildCPUSystemS": 4.0551509999999995,
+    "admission": "The exact lockf invocation holds the machine heavy lock only for its child. Outer wall includes lock admission and npm startup/teardown; native elapsed and CPU come from the retained summary. An exact lock-admission timestamp was not instrumented and is UNKNOWN. No split is invented.",
+    "nativeSummary": {
+      "games": 300,
+      "steps": 80573,
+      "wallSRounded": 404.8,
+      "cpuSRounded": 429.0,
+      "interactiveReruns": 417,
+      "failures": 0,
+      "rawSummary": "fuzz:engine 300 games, 80573 steps, 404.8 s wall, 429.0 s CPU (0.7 games/s wall, 0.7 games/s CPU); prompts 4377; interactive re-runs 417 (7.385 ms each); feasibility bounded {\"legality\":0,\"prompts\":6}; results {\"player\":157,\"enemy\":143,\"draw\":0}; failures 0",
+      "prompts": 4377,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 6
+      }
+    },
+    "targetCoverage": [
+      {
+        "kind": "dreamsign",
+        "uuid": "c75cd943-5e8b-4a56-8c09-d975571570d4",
+        "included": 600,
+        "exercised": 1871
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+        "included": 600,
+        "exercised": 312
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "b8590328-ca72-4869-a795-c7f4b6802bed",
+        "included": 600,
+        "exercised": 3398
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "d78864da-eb31-4f25-9d51-94fca7ecf810",
+        "included": 600,
+        "exercised": 600
+      }
+    ],
+    "outerMinusRoundedNativeWallS": 500.2828437919845
+  },
+  "qa": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-XLNBVs",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs",
+      "counts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "attemptCounts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "hostLoad": 13.0595703125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 3217,
+        "scenario": 40950.470418,
+        "cleanup": 397.02579200000037,
+        "execution": 44626.864792,
+        "total": 44633.864792
+      }
+    },
+    "summarySHA256": "59e5179a53e8e1af71bf96ff6c246643b09a468e77971ac00b843cab2a39e4d4",
+    "ledgerRows": 80,
+    "ledgerCounts": {
+      "pass": 8,
+      "skip": 72,
+      "pending": 0,
+      "fail": 0
+    },
+    "allAttemptsRetained": true,
+    "reports": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-b8590328-ca72-4869-a795-c7f4b6802bed-base-enemy-attempt-1.result.json",
+        "sha256": "52f3ccb96bec8bb6234766aa00754c360990c25adb80c798e595a42b9cf7fc97",
+        "error": null,
+        "caps": [],
+        "uuid": "b8590328-ca72-4869-a795-c7f4b6802bed",
+        "side": "enemy",
+        "exercised": false,
+        "answered": 0,
+        "screens": [
+          "sweep-b8590328-base-enemy-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-b8590328-ca72-4869-a795-c7f4b6802bed-base-player-attempt-1.result.json",
+        "sha256": "a3337e2bce5d15ec8437315dea9ae431048cb0f070cb681953660b81b469c083",
+        "error": null,
+        "caps": [],
+        "uuid": "b8590328-ca72-4869-a795-c7f4b6802bed",
+        "side": "player",
+        "exercised": false,
+        "answered": 0,
+        "screens": [
+          "sweep-b8590328-base-player-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-bb8bb233-7cb1-43b3-af30-e71ab9e832c5-base-enemy-attempt-1.result.json",
+        "sha256": "6d57b2cfad05a7a67e4cd7f19311adba9a7b9b9a1892a4014b3f3cb4f7de9341",
+        "error": null,
+        "caps": [],
+        "uuid": "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+        "side": "enemy",
+        "exercised": false,
+        "answered": 0,
+        "screens": [
+          "sweep-bb8bb233-base-enemy-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-bb8bb233-7cb1-43b3-af30-e71ab9e832c5-base-player-attempt-1.result.json",
+        "sha256": "1281c58074e1ac2636f541ab945bb2ba89ac2d1c3cf42a8217f01c2582d1c46a",
+        "error": null,
+        "caps": [],
+        "uuid": "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+        "side": "player",
+        "exercised": false,
+        "answered": 0,
+        "screens": [
+          "sweep-bb8bb233-base-player-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-c75cd943-5e8b-4a56-8c09-d975571570d4-base-enemy-attempt-1.result.json",
+        "sha256": "dfb33fdc519024edcd13b99a7af4ee23f416c61fe0127449596fd24026731add",
+        "error": null,
+        "caps": [],
+        "uuid": "c75cd943-5e8b-4a56-8c09-d975571570d4",
+        "side": "enemy",
+        "exercised": true,
+        "answered": 0,
+        "screens": [
+          "sweep-c75cd943-base-enemy-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-c75cd943-5e8b-4a56-8c09-d975571570d4-base-player-attempt-1.result.json",
+        "sha256": "322bba4f09bf50d73a3353f0ab96f21dfdc0398f67ebd83da21cb2ba181ec8f6",
+        "error": null,
+        "caps": [],
+        "uuid": "c75cd943-5e8b-4a56-8c09-d975571570d4",
+        "side": "player",
+        "exercised": true,
+        "answered": 0,
+        "screens": [
+          "sweep-c75cd943-base-player-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-d78864da-eb31-4f25-9d51-94fca7ecf810-base-enemy-attempt-1.result.json",
+        "sha256": "2a0cdf78da28419c84695582629a4e319df413f4595f543b08fdac7b328e4447",
+        "error": null,
+        "caps": [],
+        "uuid": "d78864da-eb31-4f25-9d51-94fca7ecf810",
+        "side": "enemy",
+        "exercised": true,
+        "answered": 0,
+        "screens": [
+          "sweep-d78864da-base-enemy-attempt-1.png"
+        ]
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.257/invocations/sweep-XLNBVs/run-RpW1l5/sweep-d78864da-eb31-4f25-9d51-94fca7ecf810-base-player-attempt-1.result.json",
+        "sha256": "26e56c7474e80865c0c200e8361efbea0203c79519a29e97723bd9232d0951af",
+        "error": null,
+        "caps": [],
+        "uuid": "d78864da-eb31-4f25-9d51-94fca7ecf810",
+        "side": "player",
+        "exercised": true,
+        "answered": 2,
+        "screens": [
+          "sweep-d78864da-base-player-attempt-1.png"
+        ]
+      }
+    ],
+    "captures": [
+      {
+        "filename": "sweep-b8590328-base-enemy-attempt-1.png",
+        "sha256": "b3294c03d98ad0dc1243c91efd9df43d7dba400e1c6d33dcda3ae1834a5d6d39",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2801541
+      },
+      {
+        "filename": "sweep-b8590328-base-player-attempt-1.png",
+        "sha256": "073ffbcf8442c55afdbd74dc7b135157158f24b390a00c8e86674e027cc2bdff",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2861339
+      },
+      {
+        "filename": "sweep-bb8bb233-base-enemy-attempt-1.png",
+        "sha256": "e21728554804c4c367bed54a26d753476a5d0b722c79cefac3e88ed5d46ec9e4",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2731944
+      },
+      {
+        "filename": "sweep-bb8bb233-base-player-attempt-1.png",
+        "sha256": "7f0a56ec2373963d63e74809a69c78d66e05ff8a2d7f25cb2c80d17a5c464c3b",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2860295
+      },
+      {
+        "filename": "sweep-c75cd943-base-enemy-attempt-1.png",
+        "sha256": "2fe8f367bdd29f055078aa6ad192249ec345d61922e33c1d0197a489b3692ae1",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2731600
+      },
+      {
+        "filename": "sweep-c75cd943-base-player-attempt-1.png",
+        "sha256": "91af11ef658f417f501e66bc2dbd65bc917ee7f07cd7776ce33c62c6610de4a4",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2863748
+      },
+      {
+        "filename": "sweep-d78864da-base-enemy-attempt-1.png",
+        "sha256": "f010853286d402ec95e410f9f48caa571916f6970ee5a9729048012d89c85022",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2838957
+      },
+      {
+        "filename": "sweep-d78864da-base-player-attempt-1.png",
+        "sha256": "59f6f6a7bf4014de9f04e422bf540c8ac752614662cf14dc2ee68a96da525a25",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2857919
+      }
+    ],
+    "qualifications": "Standard emblems lab proves exact membership and settled normal first Day. Sealed Letter and Antler later effects are inert here. Butterfly source-scoped resolved event sets exercised=true but its vanilla board has no Dawn-bearing character, so no extra character admission is proved. Tongue opening optional/subset workflow is reached, while first legal subset is empty; no actual replacement discards/draws are claimed by that path. Existing synthetic primitive contracts cover actual subset/count/privacy/replay, retained abandonment, random matching and normal named admissions. Weighted inclusion/exercise counters are recorded independently, not used as per-clause thresholds. No mandatory D21 judged UUID follows the positive surface/sample audit; no fabricated judged row. Captures are eight desktop1440×900 settled states, not mobile judged coverage.",
+    "exportedGameLogFiles": [],
+    "noProductFailureWaived": true
+  },
+  "resources": {
+    "finalResourceAudit": {
+      "path": "/tmp/root-257/resource-final.json",
+      "sha256": "631cd301d6d6c0cd1ec2ecd99dad69febfc434ddda131fc9ce9ebd000efc1b72",
+      "observations": {
+        "at": "2026-10-15T06:03:45.241486+00:00",
+        "immutableEarlierBrowserAudit": {
+          "path": "/tmp/root-257/resource-audit.json",
+          "sha256": "b730ea1e234ae891bf178fbcfe9e6450f7b43d245814970738a8a2fcf6f2dad4"
+        },
+        "commands": [
+          {
+            "label": "browser-sweep",
+            "pid": 11916,
+            "pgid": 11916,
+            "runnerPID": 11895,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          },
+          {
+            "label": "content-coverage-specs",
+            "pid": 8645,
+            "pgid": 8645,
+            "runnerPID": 8599,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          },
+          {
+            "label": "focused-contracts",
+            "pid": 5865,
+            "pgid": 5865,
+            "runnerPID": 5817,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          },
+          {
+            "label": "knip",
+            "pid": 21858,
+            "pgid": 21858,
+            "runnerPID": 21824,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          },
+          {
+            "label": "lab-preflight",
+            "pid": 10750,
+            "pgid": 10750,
+            "runnerPID": 10716,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          },
+          {
+            "label": "ordinary-review",
+            "pid": 16762,
+            "pgid": 16762,
+            "runnerPID": 16742,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          },
+          {
+            "label": "weighted300",
+            "pid": 9926,
+            "pgid": 9926,
+            "runnerPID": 9906,
+            "exit": 0,
+            "processGroupObservedAbsent": true,
+            "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+          }
+        ],
+        "ownServer": {
+          "pgid": 11967,
+          "processGroupObservedAbsent": true,
+          "observation": "  PID  PPID  PGID STARTED                      COMMAND\n"
+        },
+        "unifiedExecSessions": [
+          {
+            "id": 23581,
+            "terminal": true
+          },
+          {
+            "id": 74811,
+            "terminal": true
+          },
+          {
+            "id": 68075,
+            "terminal": true
+          },
+          {
+            "id": 62930,
+            "terminal": true
+          },
+          {
+            "id": 37201,
+            "terminal": true
+          },
+          {
+            "id": 85376,
+            "terminal": true
+          },
+          {
+            "id": 26594,
+            "terminal": true
+          }
+        ],
+        "activeReceiptFiles": [],
+        "fuzzAdmissionObservation": {
+          "path": "/tmp/root-257/fuzz-first-observed-admission.json",
+          "sha256": "5f20ff7e901e7e0109767e129fd9811d3c5e5339e5aecb4671b9d3da423fa265"
+        },
+        "sampling": "UNKNOWN; no interval sampler was run",
+        "cleanup": "Every recorded child command has an actual terminal receipt; all own child process groups and own browser server group are absent. Earlier frozen browser audit separately proves owned port free and exact owner/server records absent at managed cleanup. No foreign process/record cleanup."
+      }
+    },
+    "fuzzAdmissionObservation": {
+      "path": "/tmp/root-257/fuzz-first-observed-admission.json",
+      "sha256": "5f20ff7e901e7e0109767e129fd9811d3c5e5339e5aecb4671b9d3da423fa265"
+    },
+    "audit": {
+      "path": "/tmp/root-257/resource-audit.json",
+      "sha256": "b730ea1e234ae891bf178fbcfe9e6450f7b43d245814970738a8a2fcf6f2dad4"
+    },
+    "ownProcessGroups": {
+      "5865": {
+        "exit": 1,
+        "stdout": "  PID  PPID  PGID STARTED                      COMMAND\n",
+        "stderr": ""
+      },
+      "8645": {
+        "exit": 1,
+        "stdout": "  PID  PPID  PGID STARTED                      COMMAND\n",
+        "stderr": ""
+      },
+      "10750": {
+        "exit": 1,
+        "stdout": "  PID  PPID  PGID STARTED                      COMMAND\n",
+        "stderr": ""
+      },
+      "11916": {
+        "exit": 1,
+        "stdout": "  PID  PPID  PGID STARTED                      COMMAND\n",
+        "stderr": ""
+      },
+      "11967": {
+        "exit": 1,
+        "stdout": "  PID  PPID  PGID STARTED                      COMMAND\n",
+        "stderr": ""
+      }
+    },
+    "ownServerGroup": 11967,
+    "ownPort": {
+      "port": 5274,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "slotRecordObservations": {
+      ".owner.json": {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "exists": false
+      },
+      ".server.json": {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "exists": false
+      }
+    },
+    "provider": "Managed isolated Playwright MCP context through repository runner on port5274/slot1; normal successful cleanup, exact own provider/server records absent in read-only audit. No direct browser launch, foreign record removal or process signals.",
+    "heavy": "Exact lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock for literal weighted300 only; JOURNEY_TEST_WORKERS=2; no heavy lock is held while its command waits for a browser slot."
+  },
+  "failurePaths": {
+    "applicability": "Composition-only leaf authoring adds no engine transition or prompt protocol. Existing synthetic public contracts are the recovery boundary; no per-card/private/string tests added.",
+    "midStepError": "partial-redraw-hand: rolls back a redraw error through existing fold boundary; completed-opening-hand/additional-draw/abandoned-named recovery contracts selected",
+    "reload": "redraw pending and partially presented replay; opening completion and Ending cold-save contracts",
+    "partialWrite": "discard batch validates whole cohort before movement and fold rolls back errors",
+    "invalidStale": "partial redraw and Ending stale/foreign/competing answers refuse without side effects",
+    "concurrentActors": "one committed answer, other stale/foreign actor refusal under existing fold contracts"
+  },
+  "validationDecisions": {
+    "reviewFull": "Not applicable to pure catalog composition; no infrastructure/config/cross-cutting state changes",
+    "standaloneColdReview": "Parent provisional audit counts31grossnon-testlines; no core-review marker and default>100 threshold unmet, phasegate review retained. Parent owns final threshold assessment.",
+    "greenReruns": "None without justified changed source/failure; final schema check covers newly finalized evidence without repeating green source review.",
+    "failedValidationAttempts": [],
+    "inspectionCommandErrors": "Read-only guessed-filename and initial inventory uuid-key probes corrected during source investigation. They were not validation/runtime attempts, no implementation capability gap established."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "remainingRequiredReceipts": [],
+  "commit": "UNKNOWN before actual Git; exactly one detailed ConventionalCommit with Bead trailer after separate parent COMMITACK; parent alone handles delivery."
+}

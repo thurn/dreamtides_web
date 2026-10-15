@@ -1,3 +1,6 @@
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { triggerAbandonedNamed } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenAbandon(), triggerAbandonedNamed("dissolved"))],
+  verifiedText: expectedVerifiedText("When you abandon a character, its ▸Dissolved ability triggers an additional time."),
 });
