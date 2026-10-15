@@ -1,4 +1,8 @@
 import { dreamsign } from "../define";
+import { charactersPlayedThisTurn, thisTurn } from "../../engine/dsl/builders";
+import { onNight, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw } from "../../engine/effects/primitives";
 
 export default dreamsign({
   id: "56caa78b-021d-4b27-acab-c77fb0146ced",
@@ -11,5 +15,6 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(onNight(), draw(1), { condition: thisTurn(charactersPlayedThisTurn(), 0, 0) })],
+  verifiedText: expectedVerifiedText("▸Night: If you have played no characters this turn, draw a card."),
 });

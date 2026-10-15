@@ -1,4 +1,7 @@
 import { dreamsign } from "../define";
+import { costExactly, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { costSetter } from "../../engine/effects/primitives";
 
 export default dreamsign({
   id: "fb87262c-5bde-409e-92f1-58cc7a4e5491",
@@ -12,5 +15,6 @@ export default dreamsign({
     "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
   ],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(costSetter("you", { cardType: "character", ...costExactly(3) }, 2))],
+  verifiedText: expectedVerifiedText("3● cost characters cost you 2●."),
 });
