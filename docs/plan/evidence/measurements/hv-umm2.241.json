@@ -1,0 +1,809 @@
+{
+  "bead": "hv-umm2.241",
+  "base": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+  "clock": {
+    "claimAttempt": "2026-10-15T10:14:25.423975+00:00",
+    "claimAcknowledged": "2026-10-15T10:14:25.536173+00:00",
+    "actor": "01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf",
+    "history": "Prior114861d9 sourcefree setup/research/recovery/cleanup/wait segments remain in native241 notes; this ownership clock is fresh, not prior CPU.",
+    "evidenceCutoff": "2026-10-15T11:13:20.277938+00:00",
+    "cutoffQualification": "Original current-owner claim through all setup/research/native admission/implementation/checks/waits/QA/evidence; Git return and short schema/commit tail are recorded separately in ignored 241-git-return.json. No clock reset. Prior114861d9 historical ownership remains native history, not current-owner CPU."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Corrected-source npm run review command start2026-10-15T10:38:33.267146+00:00; sysctl-compatible os.getloadavg 1-minute value."
+      },
+      "implementWindow": {
+        "start": "Original current-owner claim per explicit finite brief; includes parent setup/proposal/admission/waits."
+      },
+      "localValidationS": {
+        "scope": "Sum of actual local wrapper wall times by named category, including retained failures. Fuzz wrapper includes heavy queue; engine summary and acquisition bounds below distinguish execution."
+      },
+      "testDelta": {
+        "scope": "One plain193-line scenario module/6named cases; configured test-entrypoint delta0 and jsdom delta0."
+      }
+    }
+  },
+  "source": {
+    "epochA": {
+      "src/content/dreamsigns/hair-lock-4e51f321.ts": "4eb875c348ee76814cf5db3c28179a4ea01eba37b6bd5770a5b28c59ee6ac07e",
+      "src/content/dreamsigns/mushroom-caps-6b95d6bd.ts": "c9ecca5a91f809fa8afba6cf2b62181b44e83b2365d26d8620369c812c38f2c8",
+      "src/content/specs/dreamsigns-battle-04.scenarios.ts": "d9697081ce5ea371e6d2ed7c05a9be2831409bd745d9578f990b9aa3b5f6e12b",
+      "docs/rules.md": "1ed64382b39737e14cadd134f9daa78d9f5ff23d515230ec14ae9ad90c7bce14",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.241-1.md": "135ffe784d5eb78ba56ef626c2ca50806b5d08ee0c792b17d3bf2763cf95a150"
+    },
+    "epochB": {
+      "src/content/dreamsigns/hair-lock-4e51f321.ts": "4eb875c348ee76814cf5db3c28179a4ea01eba37b6bd5770a5b28c59ee6ac07e",
+      "src/content/dreamsigns/mushroom-caps-6b95d6bd.ts": "c9ecca5a91f809fa8afba6cf2b62181b44e83b2365d26d8620369c812c38f2c8",
+      "src/content/specs/dreamsigns-battle-04.scenarios.ts": "9c31fbd23ee817849ead6a80345c797bccfd97efbd967b6afc67534f64df913d",
+      "docs/rules.md": "1ed64382b39737e14cadd134f9daa78d9f5ff23d515230ec14ae9ad90c7bce14",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.241-1.md": "135ffe784d5eb78ba56ef626c2ca50806b5d08ee0c792b17d3bf2763cf95a150"
+    },
+    "qualification": "Epoch A focused/preflight/initial review contained one unused type-only BattleSlice import. Epoch B removes that import only; no production, rules or scenario runtime change.",
+    "finalWholeBaseEntryCount": 5632,
+    "changedExistingPaths": [
+      "docs/rules.md",
+      "src/content/dreamsigns/hair-lock-4e51f321.ts",
+      "src/content/dreamsigns/mushroom-caps-6b95d6bd.ts"
+    ],
+    "allOtherBaseTrackedPathsUnchanged": true,
+    "printedBytesAndOtherFields": [
+      {
+        "path": "src/content/dreamsigns/hair-lock-4e51f321.ts",
+        "allOtherBytesIdenticalAfterExactAuthoredDelta": true,
+        "baseSha256": "bcf61ec5fd98d0b3ec000bcbf79f77f649a41c85e1d6c5b019256ba47e1c45b4",
+        "currentSha256": "4eb875c348ee76814cf5db3c28179a4ea01eba37b6bd5770a5b28c59ee6ac07e"
+      },
+      {
+        "path": "src/content/dreamsigns/mushroom-caps-6b95d6bd.ts",
+        "allOtherBytesIdenticalAfterExactAuthoredDelta": true,
+        "baseSha256": "f8ed7a77fff9e03c26f10c5fcc1ad5be571785ec9741299b470e0ee8185ef4b3",
+        "currentSha256": "c9ecca5a91f809fa8afba6cf2b62181b44e83b2365d26d8620369c812c38f2c8"
+      }
+    ],
+    "mushroomNamedExportAndJourneyAttachmentUnchanged": true,
+    "sourceBindings": {
+      "count": 56,
+      "receipt": "241-stage1-bindings.json",
+      "sha256": "3d2de448065bca02235e7407a1d2304e920ef1777bbcaf4de06340a580f19141"
+    },
+    "integrityReceipt": {
+      "file": "241-source-integrity.json",
+      "sha256": "a7fc5df6d971700ef369f799aa09f82ef12258f77f3b7ac2209ef60d97d607a1"
+    },
+    "fallout": [],
+    "newPrimitives": 0,
+    "newPromptKinds": 0,
+    "excludedCoreUiSdkProviderConfigWrites": 0,
+    "productionCounterfactualMutations": 0
+  },
+  "testDelta": {
+    "plainScenarioModules": 1,
+    "scenarioLines": 193,
+    "namedCases": 6,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0,
+    "focusedPass": {
+      "files": 2,
+      "tests": 587
+    },
+    "reviewPass": {
+      "files": 283,
+      "tests": 9129,
+      "vitestWallS": 52.74
+    }
+  },
+  "validation": [
+    {"name":"focused-1","command":"npm test -- src/content/specs/specs.test.ts src/engine/content-gates.test.ts","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:33:53.197957+00:00","load":[6.3359375,8.05615234375,9.85546875],"pid":17416,"pgid":17416,"workers":"2","end":"2026-10-15T10:34:03.403060+00:00","wallS":10.204908874991816,"userS":9.132563,"sysS":2.975292,"exit":1,"logSha256":"ba180c83b14890252f5ae9cc5d0a690b1a815482e830e35e2e0bd30cd903205f","rawLog":"241-focused-1.log"},
+    {"name":"focused-2","command":"npm test -- src/content/specs/specs.test.ts src/engine/content-gates.test.ts","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:34:21.550819+00:00","load":[6.0185546875,7.8544921875,9.73046875],"pid":19221,"pgid":19221,"workers":"2","end":"2026-10-15T10:34:28.311290+00:00","wallS":6.760329250013456,"userS":7.931754,"sysS":2.153651,"exit":1,"logSha256":"dbcbd9bcb7842ffcf08d0bfc1a733e2c70ce9bf74a5853fbd62693bd984711c3","rawLog":"241-focused-2.log"},
+    {"name":"focused-final","command":"npm test -- src/content/specs/specs.test.ts src/engine/content-gates.test.ts","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:34:41.293634+00:00","load":[6.236328125,7.78173828125,9.66064453125],"pid":20541,"pgid":20541,"workers":"2","end":"2026-10-15T10:34:48.063369+00:00","wallS":6.769579374988098,"userS":7.851128,"sysS":2.186232,"exit":0,"logSha256":"be44b6f780128f07dcec9ccc31a07101a3d9345aab499e71f866677a4f5a45ff","rawLog":"241-focused-final.log"},
+    {"name":"preflight","command":"npm run lab:preflight -- --dreamsigns 253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,4e51f321-9089-4872-a0e2-ab909e242b33,6b95d6bd-c970-4465-9536-4f21e7630d0a,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607 --variants all --as both","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:35:38.956220+00:00","load":[7.2431640625,7.68896484375,9.4912109375],"pid":24185,"pgid":24185,"workers":"2","end":"2026-10-15T10:35:42.908766+00:00","wallS":3.9522947919904254,"userS":1.594217,"sysS":1.011324,"exit":0,"logSha256":"11202358d1eb8bad90c0959b7da1dff14c4a7da3b186c080c15c95e082824339","rawLog":"241-preflight.log"},
+    {"name":"review","command":"npm run review","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:35:40.101985+00:00","load":[7.2431640625,7.68896484375,9.4912109375],"pid":24270,"pgid":24270,"workers":"2","end":"2026-10-15T10:36:57.060817+00:00","wallS":76.95817645895295,"userS":179.488749,"sysS":17.933122,"exit":2,"logSha256":"239c9708433cde57d2db6a6f9a9c53b3c73f7d62efdb894c1595d4733a569eaa","rawLog":"241-review.log"},
+    {"name":"tournament-isolation","command":"npm test -- scripts/tournament/contracts.test.ts","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:37:33.213199+00:00","load":[8.79248046875,8.1162109375,9.4296875],"pid":26133,"pgid":26133,"workers":"2","end":"2026-10-15T10:38:21.085489+00:00","wallS":47.871684375044424,"userS":6.567138,"sysS":3.992653,"exit":1,"logSha256":"3c3d5887af37c8ddf8784b7614ce0cd0105d415c452167a54bdec2f8ecc292ee","rawLog":"241-tournament-isolation.log"},
+    {"name":"review-corrected","command":"npm run review","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:38:33.267146+00:00","load":[6.87109375,7.658203125,9.166015625],"pid":27485,"pgid":27485,"workers":"2","end":"2026-10-15T10:39:42.211515+00:00","wallS":68.94351383298635,"userS":153.720499,"sysS":18.67861,"exit":0,"logSha256":"e83647513f9b8d150faca434206cdc25e3c0b4f4866efa4ffde9b984da1e87cd","rawLog":"241-review-corrected.log"},
+    {"name":"knip","command":"npm run knip","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:38:09.385316+00:00","load":[7.43017578125,7.849609375,9.27880859375],"pid":27022,"pgid":27022,"workers":"2","end":"2026-10-15T10:38:36.125901+00:00","wallS":26.739997084019706,"userS":4.353381,"sysS":2.667177,"exit":0,"logSha256":"33b43a502c0a417dbd6d6ab9dd7c7f1de1d5a44378a1c0ce74289851d1474561","rawLog":"241-knip.log"},
+    {"name":"sweep","command":"node scripts/qa/card-sweep.mjs --bead hv-umm2.241 --dreamsigns 253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,4e51f321-9089-4872-a0e2-ab909e242b33,6b95d6bd-c970-4465-9536-4f21e7630d0a,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607 --variants all --as both","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:44:33.590779+00:00","load":[21.64794921875,12.90283203125,10.677734375],"pid":74287,"pgid":74287,"workers":"2","end":"2026-10-15T10:45:40.644318+00:00","wallS":67.05273754097288,"userS":7.938651,"sysS":4.117004,"exit":0,"logSha256":"0710c00990c1c818aaa8ea0387f076b9d8c58f288b3ef7aac8cd33e3e1da8adb","rawLog":"241-sweep.log"},
+    {"name":"opening-qa","command":"node scripts/qa/run-scenario.mjs opening-workflow --bead hv-umm2.241 --viewports desktop,mobile","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:46:21.302552+00:00","load":[10.72119140625,12.0185546875,10.6201171875],"pid":1008,"pgid":1008,"workers":"2","end":"2026-10-15T10:46:53.817652+00:00","wallS":32.51466329197865,"userS":5.586573,"sysS":2.445771,"exit":1,"logSha256":"21e694e29b4c5a6db7e534a62267b4f429969ae52c135eec30380a6e8d954c54","rawLog":"241-opening-qa.log"},
+    {"name":"opening-qa-corrected","command":"node scripts/qa/run-scenario.mjs opening-workflow --bead hv-umm2.241 --viewports desktop,mobile","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:47:42.273373+00:00","load":[8.1552734375,10.97216796875,10.35009765625],"pid":6346,"pgid":6346,"workers":"2","end":"2026-10-15T10:48:40.242443+00:00","wallS":57.96830816700822,"userS":6.53872,"sysS":3.441841,"exit":0,"logSha256":"be50cda8986f7df6405bb9e231245ca02f0aa01ad4645a7a1a2bf49440ad9234","rawLog":"241-opening-qa-corrected.log"},
+    {"name":"dawn-qa","command":"node scripts/qa/run-scenario.mjs dawn-workflow --bead hv-umm2.241 --viewports desktop,mobile","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:49:04.292147+00:00","load":[9.23681640625,10.72509765625,10.31591796875],"pid":18065,"pgid":18065,"workers":"2","end":"2026-10-15T10:50:04.968687+00:00","wallS":60.67583054199349,"userS":6.316919,"sysS":3.351783,"exit":0,"logSha256":"96ad52db39a534af95b7180690cbee3171de647c12cb5b0fc60b8f27d93b7289","rawLog":"241-dawn-qa.log"},
+    {"name":"opening-mobile-scroll","command":"node scripts/qa/run-scenario.mjs opening-workflow --bead hv-umm2.241 --viewports mobile","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:50:50.775893+00:00","load":[8.56640625,10.33984375,10.23046875],"pid":31510,"pgid":31510,"workers":"2","end":"2026-10-15T10:51:21.940285+00:00","wallS":31.163990165980067,"userS":6.062706,"sysS":2.788315,"exit":0,"logSha256":"9c69a85d4ffb8245ba4f76d6feec8df49e9cf5ded43dee33c61a51872b1fc218","rawLog":"241-opening-mobile-scroll.log"},
+    {"name":"dawn-live-qa","command":"node scripts/qa/run-scenario.mjs dawn-live-log --bead hv-umm2.241 --viewports desktop,mobile","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:52:51.018996+00:00","load":[9.32177734375,10.02099609375,10.11083984375],"pid":42831,"pgid":42831,"workers":"2","end":"2026-10-15T10:54:00.804677+00:00","wallS":69.78462874999968,"userS":6.2247959999999996,"sysS":3.239715,"exit":1,"logSha256":"a572aa03026b2265cc3bc9af6b223ca1f360bacff31a701e5400f8cce4eac12e","rawLog":"241-dawn-live-qa.log"},
+    {"name":"dawn-live-qa-corrected","command":"node scripts/qa/run-scenario.mjs dawn-live-log --bead hv-umm2.241 --viewports desktop,mobile","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:55:40.011890+00:00","load":[6.89404296875,8.83056640625,9.60400390625],"pid":56572,"pgid":56572,"workers":"2","end":"2026-10-15T10:57:48.506650+00:00","wallS":128.49330645805458,"userS":6.079336,"sysS":2.865349,"exit":0,"logSha256":"5a3a1b22cfe760be32678e026b8a2a9369df9b938e5712e274351c6fee809801","rawLog":"241-dawn-live-qa-corrected.log"},
+    {"name":"fuzz-300","command":"lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,4e51f321-9089-4872-a0e2-ab909e242b33,6b95d6bd-c970-4465-9536-4f21e7630d0a,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607","cwd":"/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241","start":"2026-10-15T10:34:53.668560+00:00","load":[6.1640625,7.69287109375,9.59619140625],"pid":21410,"pgid":21410,"workers":"2","end":"2026-10-15T11:07:55.309912+00:00","wallS":1981.6141802920029,"userS":764.503543,"sysS":6.594957,"exit":0,"logSha256":"6260d975c35126949a1957534ba13fe6f814b98b89554cc1f1880386e78d0469","rawLog":"241-fuzz-300.log"}
+  ],
+  "hostLoadSamples": [
+    {"step":"focused-1","at":"2026-10-15T10:33:53.197957+00:00","load1m":6.3359375},
+    {"step":"focused-2","at":"2026-10-15T10:34:21.550819+00:00","load1m":6.0185546875},
+    {"step":"focused-final","at":"2026-10-15T10:34:41.293634+00:00","load1m":6.236328125},
+    {"step":"preflight","at":"2026-10-15T10:35:38.956220+00:00","load1m":7.2431640625},
+    {"step":"review","at":"2026-10-15T10:35:40.101985+00:00","load1m":7.2431640625},
+    {"step":"tournament-isolation","at":"2026-10-15T10:37:33.213199+00:00","load1m":8.79248046875},
+    {"step":"review-corrected","at":"2026-10-15T10:38:33.267146+00:00","load1m":6.87109375},
+    {"step":"knip","at":"2026-10-15T10:38:09.385316+00:00","load1m":7.43017578125},
+    {"step":"sweep","at":"2026-10-15T10:44:33.590779+00:00","load1m":21.64794921875},
+    {"step":"opening-qa","at":"2026-10-15T10:46:21.302552+00:00","load1m":10.72119140625},
+    {"step":"opening-qa-corrected","at":"2026-10-15T10:47:42.273373+00:00","load1m":8.1552734375},
+    {"step":"dawn-qa","at":"2026-10-15T10:49:04.292147+00:00","load1m":9.23681640625},
+    {"step":"opening-mobile-scroll","at":"2026-10-15T10:50:50.775893+00:00","load1m":8.56640625},
+    {"step":"dawn-live-qa","at":"2026-10-15T10:52:51.018996+00:00","load1m":9.32177734375},
+    {"step":"dawn-live-qa-corrected","at":"2026-10-15T10:55:40.011890+00:00","load1m":6.89404296875},
+    {"step":"fuzz-300","at":"2026-10-15T10:34:53.668560+00:00","load1m":6.1640625}
+  ],
+  "cpuScope": "Measured process-family user/sys from local command wrappers; excludes model and shared MCP browser provider CPU. No CPU inferred for parent setup or prior ownership. Fuzzer prints its own execution wall/CPU separately.",
+  "heavy": {
+    "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "pgid": 21410,
+    "observedOwnNpmPid": 56754,
+    "observedOwnFuzzerPid": 56770,
+    "npmOsStartSecond": "2026-10-15T10:55:45+00:00",
+    "acquisitionObservedBetween": {
+      "after": "2026-10-15T10:55:43.118151+00:00",
+      "by": "2026-10-15T10:55:53.132008+00:00"
+    },
+    "queueWaitBoundsS": {
+      "lower": 1249.449591,
+      "upper": 1259.463448
+    },
+    "queueQualification": "OS child start has second precision; bounds are real10-second telemetry, not an invented exact lease timestamp.",
+    "summary": "fuzz:engine 300 games, 80895 steps, 728.3 s wall, 769.4 s CPU (0.4 games/s wall, 0.4 games/s CPU); prompts 7604; interactive re-runs 825 (10.920 ms each); feasibility bounded {\"legality\":0,\"prompts\":0}; results {\"player\":144,\"enemy\":156,\"draw\":0}; failures 0",
+    "targets": [
+      {
+        "kind": "dreamsign",
+        "uuid": "253a106d-f64e-4a60-9471-446a18ee8959",
+        "included": 600,
+        "exercised": 1313
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "a92d2b95-c63d-4c1c-831b-902c44deee57",
+        "included": 600,
+        "exercised": 1620
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "4e51f321-9089-4872-a0e2-ab909e242b33",
+        "included": 600,
+        "exercised": 600
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "6b95d6bd-c970-4465-9536-4f21e7630d0a",
+        "included": 600,
+        "exercised": 1293
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "9aaed05a-2223-42f2-9b9d-81a53eab811c",
+        "included": 600,
+        "exercised": 1022
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+        "included": 600,
+        "exercised": 685
+      }
+    ],
+    "receipt": "241-heavy-lease-observation.json",
+    "receiptSha256": "4a1986f6700291ba1dbc9890e7be683fae6496f020e5e8f279f76864da0af681",
+    "scheduling": "Root native refinement permits independent browser runner while weighted command waits/runs. Weighted command never waits for browser; browser never takes heavy. No concurrent aggregate workspace preparation during QA."
+  },
+  "preflight": {
+    "counts": {
+      "pass": 12,
+      "pending": 0,
+      "skip": 108,
+      "fail": 0
+    },
+    "engineElapsedMs": 52.65666699999974,
+    "baseExercise": [
+      {
+        "uuid": "253a106d-f64e-4a60-9471-446a18ee8959",
+        "side": "player",
+        "exercised": true
+      },
+      {
+        "uuid": "253a106d-f64e-4a60-9471-446a18ee8959",
+        "side": "enemy",
+        "exercised": true
+      },
+      {
+        "uuid": "a92d2b95-c63d-4c1c-831b-902c44deee57",
+        "side": "player",
+        "exercised": false
+      },
+      {
+        "uuid": "a92d2b95-c63d-4c1c-831b-902c44deee57",
+        "side": "enemy",
+        "exercised": false
+      },
+      {
+        "uuid": "4e51f321-9089-4872-a0e2-ab909e242b33",
+        "side": "player",
+        "exercised": true
+      },
+      {
+        "uuid": "4e51f321-9089-4872-a0e2-ab909e242b33",
+        "side": "enemy",
+        "exercised": true
+      },
+      {
+        "uuid": "6b95d6bd-c970-4465-9536-4f21e7630d0a",
+        "side": "player",
+        "exercised": true
+      },
+      {
+        "uuid": "6b95d6bd-c970-4465-9536-4f21e7630d0a",
+        "side": "enemy",
+        "exercised": true
+      },
+      {
+        "uuid": "9aaed05a-2223-42f2-9b9d-81a53eab811c",
+        "side": "player",
+        "exercised": false
+      },
+      {
+        "uuid": "9aaed05a-2223-42f2-9b9d-81a53eab811c",
+        "side": "enemy",
+        "exercised": false
+      },
+      {
+        "uuid": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+        "side": "player",
+        "exercised": false
+      },
+      {
+        "uuid": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+        "side": "enemy",
+        "exercised": false
+      }
+    ]
+  },
+  "qa": {
+    "reports": [
+      {
+        "invocation": "run-XsVdGz",
+        "report": "opening-workflow.result.json",
+        "sha256": "eb496a7d7dc5ab7cfedd7c45531ddd0e1b4c9221aa686625f91f1fb52f90fd6f",
+        "ok": false,
+        "qualification": "qa-log-predicate-failure",
+        "error": "desktop#0: QaTimeoutError: persisted arrangement: the persisted log of game 7jorvf (34 lines) did not satisfy the predicate within 15000 ms",
+        "slot": 1,
+        "port": 5274,
+        "serverPgid": 1053,
+        "hostLoad": 10.72119140625,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1968,
+          "scenario": 30031,
+          "total": 32069
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 30030
+          }
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "opening-workflow-desktop.jsonl",
+            "gameId": "7jorvf",
+            "selectedBy": "url",
+            "rows": 34,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-SUVJVC",
+        "report": "opening-workflow.result.json",
+        "sha256": "c3390c0a81ee3075263ef818098350299c616db77d5d6f105b51e732c0a97d9d",
+        "ok": true,
+        "qualification": "desktop-and-mobile-initial-scroll-qualification",
+        "error": null,
+        "slot": 0,
+        "port": 5174,
+        "serverPgid": 7896,
+        "hostLoad": 8.1552734375,
+        "wallMs": {
+          "browserLeaseWait": 8231,
+          "serve": 3515,
+          "scenario": 45317,
+          "total": 57124
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 27009
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 18307
+          }
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "opening-workflow-desktop.jsonl",
+            "gameId": "2gx43p",
+            "selectedBy": "url",
+            "rows": 52,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "opening-workflow-mobile.jsonl",
+            "gameId": "bgj4yu",
+            "selectedBy": "url",
+            "rows": 52,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-szxR8Q",
+        "report": "dawn-workflow.result.json",
+        "sha256": "a420b4cc0f043d6b3c683fb5414a08834297f5186544594375ca59516334de99",
+        "ok": true,
+        "qualification": "constructor-initialization-only-log-qualified",
+        "error": null,
+        "slot": 0,
+        "port": 5174,
+        "serverPgid": 22454,
+        "hostLoad": 9.23681640625,
+        "wallMs": {
+          "browserLeaseWait": 25151,
+          "serve": 3488,
+          "scenario": 31511,
+          "total": 60205
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 20585
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 10925
+          }
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "dawn-workflow-desktop.jsonl",
+            "gameId": "xbwvbh",
+            "selectedBy": "url",
+            "rows": 49,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "dawn-workflow-mobile.jsonl",
+            "gameId": "vuibhp",
+            "selectedBy": "url",
+            "rows": 49,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-Oj6RU5",
+        "report": "opening-workflow.result.json",
+        "sha256": "2ae3fd2f685471fae738de71cea130ae1723ad9fac8bf4cc90e0eebb5b39250c",
+        "ok": true,
+        "qualification": "mobile-scroll-complete",
+        "error": null,
+        "slot": 0,
+        "port": 5174,
+        "serverPgid": 32863,
+        "hostLoad": 8.56640625,
+        "wallMs": {
+          "browserLeaseWait": 7269,
+          "serve": 1663,
+          "scenario": 21773,
+          "total": 30758
+        },
+        "calls": [
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 21772
+          }
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "mobile",
+            "path": "opening-workflow-mobile.jsonl",
+            "gameId": "s9nu35",
+            "selectedBy": "url",
+            "rows": 52,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-PomKdu",
+        "report": "dawn-live-log.result.json",
+        "sha256": "b85bbc113f11824498f2251d44f5fce9464848d19e00d9e1b0cbef718fc46aee",
+        "ok": false,
+        "qualification": "prior-snapshot-mismatch-unknown-geometry",
+        "error": "desktop#1: Error: Energy not visibly readable at five points",
+        "slot": 1,
+        "port": 5274,
+        "serverPgid": 44738,
+        "hostLoad": 9.32177734375,
+        "wallMs": {
+          "browserLeaseWait": 10541,
+          "serve": 3498,
+          "scenario": 55233,
+          "total": 69335
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 24793
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 30440
+          }
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "dawn-live-log-desktop.jsonl",
+            "gameId": "hwjnkh",
+            "selectedBy": "url",
+            "rows": 68,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-Fh5iFY",
+        "report": "dawn-live-log.result.json",
+        "sha256": "b96fc7c4fe94673b20e96bb865e22471fe8344bd811e01872b6dccae9a7d42a6",
+        "ok": true,
+        "qualification": "live-log-complete",
+        "error": null,
+        "slot": 0,
+        "port": 5174,
+        "serverPgid": 56607,
+        "hostLoad": 6.89404296875,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 2270,
+          "scenario": 125634,
+          "total": 127980
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 34012
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 27982
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 29630
+          },
+          {
+            "viewport": "mobile",
+            "step": 1,
+            "ms": 34008
+          }
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "dawn-live-log-desktop.jsonl",
+            "gameId": "e7c5k5",
+            "selectedBy": "url",
+            "rows": 76,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "dawn-live-log-mobile.jsonl",
+            "gameId": "7zyp25",
+            "selectedBy": "url",
+            "rows": 77,
+            "reason": null
+          }
+        ]
+      }
+    ],
+    "ledgerCounts": {
+      "pass": 20,
+      "skip": 108,
+      "fail": 2
+    },
+    "scripted": {
+      "pass": 12,
+      "skip": 108,
+      "fail": 0,
+      "matrixCells": 120,
+      "variants": "all",
+      "actors": "both",
+      "qualification": "Only base is eligible for Dreamsigns. Ice/Hair/Mushroom actually resolve in this first-turn fixture. Garlic/Honey/BlackHorn initialization-only rows are not causal exercise; canonical child proof supplies their authored workflow evidence."
+    },
+    "judged": {
+      "pass": 8,
+      "retainedFail": 2,
+      "failureQualification": "XsVdGz wrong QA log-field predicate; PomKdu compared prior engine energy to later HUD without retaining failed geometry, so precise cause is unknown. Both raw failures and later scoped observations remain. No product attribution inferred from a later pass."
+    },
+    "browserNonstarterQualification": "Requested controller is also starter in lab. Six actual-catalog public-engine scenarios supply nonstarter proof.",
+    "constructorQualification": "Initial Mushroom source-scoped gain is real constructor observation; initial visible log is empty. Live second Dawn supplies persisted trigger and plain-language energy line. Initial11/10 and live later normalAI payment are separately recorded.",
+    "nativeEvidence": {
+      "uniqueGameIds": 16,
+      "filesRead": 20,
+      "qualification": "Automatic final-game exports plus exact scenario qa.gameLog.read lines materialized from reports; some observations are duplicate views of the same native game. All relevant intent/source rows were read.",
+      "receipt": "241-qa-reports-audit.json",
+      "sha256": "55ea91249d6cd16ca38d11572e192bbb9e7a761c7b2ae0bf6ea767d421f2fc0d"
+    },
+    "captureEvidence": {
+      "count": 36,
+      "desktopCss": [
+        1440,
+        900
+      ],
+      "desktopPixels": [
+        2880,
+        1800
+      ],
+      "mobileCss": [
+        390,
+        844
+      ],
+      "mobilePixels": [
+        780,
+        1688
+      ],
+      "qualification": "Actual PNG dimensions are2xCSS viewports; raw captures retained, no image committed.",
+      "mobileVoidGeometry": {
+        "scrollLeft": 158,
+        "clientWidth": 366,
+        "scrollWidth": 524,
+        "cardX": [
+          202,
+          306
+        ],
+        "laneX": [
+          314,
+          378
+        ],
+        "viewportWidth": 390,
+        "positiveCentreHits": true
+      },
+      "inspected": [
+        "hair-opening-desktop.png",
+        "hair-staged-desktop.png",
+        "hair-opening-mobile.png",
+        "hair-void-visible-mobile.png",
+        "mushroom-player-desktop.png",
+        "mushroom-player-mobile.png",
+        "mushroom-live-player-log-desktop.png",
+        "mushroom-live-enemy-log-desktop.png",
+        "mushroom-live-player-log-mobile.png",
+        "mushroom-live-enemy-log-mobile.png"
+      ]
+    }
+  },
+  "childJoins": {
+    "fourWholeLeaves": [
+      {
+        "path": "src/content/dreamsigns/ice-crystals-253a106d.ts",
+        "childSource": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+        "currentBase": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+        "sha256": "d24924e10020fa3785afe2d5b16cf0eafb7bbd9e7e6964cc1d0657ec9e38976f",
+        "wholeBlobIdentical": true
+      },
+      {
+        "path": "src/content/dreamsigns/garlic-bulb-a92d2b95.ts",
+        "childSource": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+        "currentBase": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+        "sha256": "ec988f7f496896708502d9225f354b02674ec40b665eddf3948513074210940b",
+        "wholeBlobIdentical": true
+      },
+      {
+        "path": "src/content/dreamsigns/honeycombs-9aaed05a.ts",
+        "childSource": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+        "currentBase": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+        "sha256": "a2b0a249e8580e40f35fe435151b41b248f7efd145e2607fd1c2f52982e7366e",
+        "wholeBlobIdentical": true
+      },
+      {
+        "path": "src/content/dreamsigns/black-horn-c92438fc.ts",
+        "childSource": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+        "currentBase": "b949f6a5a979f783de7688cebdca2c82b4f96e7b",
+        "sha256": "37e1ddc2c28ed92e59a82bbb7b60134b635a399eb5db8a5e742af5013c0aeae4",
+        "wholeBlobIdentical": true
+      }
+    ],
+    "child660Source": "83b177889cf506529feb3e67a3fe8b7c80a2f37a",
+    "childConditionalScenarioAbsent": true,
+    "childD20Qualification": "No private module was needed for four primitive compositions; actual absence consumed, no fabricated module.",
+    "blackHornJudged": {
+      "repair": "hv-f6p9",
+      "ledgerSha256": "d20a5b45d6c1472ce8a8b5a6ba39369b37cde7dbfa383a7b478aa3257cc53d44",
+      "finalJudgments": 4,
+      "historicalChildFailures": 6,
+      "qualification": "Read-only certified delivered evidence, not new current-source observations."
+    },
+    "mushroomJourneySource": "12576be105dfc76605dc35b767ba9b8b27030846",
+    "mushroomJourneyTestedBase": "b949f6a5a979f783de7688cebdca2c82b4f96e7b"
+  },
+  "rules": {
+    "rd": "RD-hv-umm2.241-1",
+    "D10": "D14 plus qualified prototype/nohandler, Rust different text, official2026-09-25 CR adapted ordering rung4, simplest shared-occasion specifics rung5. RD618 explicitly excludes Hair.",
+    "D20": "Six private actual-content opening scenarios in original slug; no sharedindex edit.",
+    "D21": "BlackHornSHA256firstbyte16 canonical660/f6p9 sample; Hair71/Mushroom251 unsampled with proportional own QA."
+  },
+  "preExisting": {
+    "tournamentTimeout": "hv-umm2.740",
+    "observations": [
+      "review initial15s timeout",
+      "isolated15s timeout",
+      "corrected review283files9129tests passed"
+    ],
+    "failedQaSnapshot": "PomKdu exact prior geometry unavailable; actual68-row log ends at live Dawn trigger before any later action. No post-Dawn payment inferred for that failure.",
+    "other": "Setup dependency advisories retained in241-install.log; acquisition identity issuehv-umm2.738 is separate."
+  },
+  "runtime": {
+    "observedAt": "2026-10-15T11:12:08.451050+00:00",
+    "ownCommandAndServerGroups": [
+      1008,
+      1053,
+      6346,
+      7896,
+      17416,
+      18065,
+      19221,
+      20541,
+      21410,
+      22454,
+      24185,
+      24270,
+      26133,
+      27022,
+      27485,
+      31510,
+      32863,
+      42831,
+      44738,
+      56572,
+      56607,
+      74287,
+      74677
+    ],
+    "matchingProcessRows": [],
+    "allOwnedRuntimeGroupsAbsent": true,
+    "browserCensus": {
+      "observedAt": "2026-10-15T11:00:04.905027+00:00",
+      "knownOwnServerGroups": [
+        1053,
+        7896,
+        22454,
+        32863,
+        44738,
+        56607,
+        74677
+      ],
+      "remainingGroupRows": [],
+      "allOwnServersAbsent": true,
+      "portsReportedFreeAtEachRunnerCleanup": true,
+      "providerCompletionEvidence": "Each successful run exited0 after the existing runner normal-close protocol; failed QA assertions also completed runner cleanup with portfree and no cleanup error. No separate completion flag snapshot was captured or manually written. Slot0 own record was observed active(pid56572) then absent after normal completion. Foreign records and services untouched.",
+      "qaReports": [
+        {
+          "invocation": "run-XsVdGz",
+          "ok": false,
+          "slot": 1,
+          "port": 5274,
+          "serverPgid": 1053,
+          "caps": [],
+          "error": "desktop#0: QaTimeoutError: persisted arrangement: the persisted log of game 7jorvf (34 lines) did not satisfy the predicate within 15000 ms"
+        },
+        {
+          "invocation": "run-SUVJVC",
+          "ok": true,
+          "slot": 0,
+          "port": 5174,
+          "serverPgid": 7896,
+          "caps": [],
+          "error": null
+        },
+        {
+          "invocation": "run-szxR8Q",
+          "ok": true,
+          "slot": 0,
+          "port": 5174,
+          "serverPgid": 22454,
+          "caps": [],
+          "error": null
+        },
+        {
+          "invocation": "run-Oj6RU5",
+          "ok": true,
+          "slot": 0,
+          "port": 5174,
+          "serverPgid": 32863,
+          "caps": [],
+          "error": null
+        },
+        {
+          "invocation": "run-PomKdu",
+          "ok": false,
+          "slot": 1,
+          "port": 5274,
+          "serverPgid": 44738,
+          "caps": [],
+          "error": "desktop#1: Error: Energy not visibly readable at five points"
+        },
+        {
+          "invocation": "run-Fh5iFY",
+          "ok": true,
+          "slot": 0,
+          "port": 5174,
+          "serverPgid": 56607,
+          "caps": [],
+          "error": null
+        }
+      ]
+    },
+    "fuzzTerminal": {
+      "name": "fuzz-300",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "253a106d-f64e-4a60-9471-446a18ee8959,a92d2b95-c63d-4c1c-831b-902c44deee57,4e51f321-9089-4872-a0e2-ab909e242b33,6b95d6bd-c970-4465-9536-4f21e7630d0a,9aaed05a-2223-42f2-9b9d-81a53eab811c,c92438fc-8e1f-4f97-9dcf-8ca0edaa8607"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle-four-241",
+      "start": "2026-10-15T10:34:53.668560+00:00",
+      "load": [
+        6.1640625,
+        7.69287109375,
+        9.59619140625
+      ],
+      "pid": 21410,
+      "pgid": 21410,
+      "workers": "2",
+      "end": "2026-10-15T11:07:55.309912+00:00",
+      "wallS": 1981.6141802920029,
+      "userS": 764.503543,
+      "sysS": 6.594957,
+      "exit": 0,
+      "logSha256": "6260d975c35126949a1957534ba13fe6f814b98b89554cc1f1880386e78d0469"
+    },
+    "fuzzResultObservedAt": "2026-10-15T11:11:30+00:00",
+    "qualification": "Process completion11:07:55 precedes observed terminal receipt; intervening evidence preparation/observation latency stays in original owner elapsed clock. No process or provider cleanup intervention performed."
+  },
+  "evidenceOnlyTail": "Source unchanged after epochB. Review/Knip pass before final evidence; final friction schema and whitespace checks run after evidence generation. All runtime groups are checked again after fuzz and before one commit. Parent owns review routing/native candidate/promotion."
+}

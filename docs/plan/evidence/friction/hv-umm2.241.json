@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.241",
+  "phase": 5,
+  "implementMin": 58.91236275000001,
+  "implementWindow": {
+    "start": "2026-10-15T10:14:25.536173+00:00",
+    "end": "2026-10-15T11:13:20.277938+00:00"
+  },
+  "localValidationS": {
+    "review": 145.9016902919393,
+    "focused": 71.6065018750378,
+    "fuzz": 1981.6141802920029,
+    "preflight": 3.9522947919904254,
+    "knip": 26.739997084019706
+  },
+  "hostLoad": 6.87109375,
+  "testDelta": {
+    "files": 1,
+    "lines": 193,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 20.907608658333334,
+      "note": "Required weighted300 waited under the machine-wide D17 lock; acquisition is bounded by actual own-group observations. Queue time is separate from fuzzer execution/CPU in measurements. No source/acceptance substitution."
+    }
+  ]
+}

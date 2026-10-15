@@ -567,6 +567,16 @@ The usual victory checks apply after each completed rules step. A battle
 prepared at a declared Draw, Dawn, or Day boundary enters that phase directly
 and has no opening-hand occasion.
 
+**Battle-start Foresee:** An “At the start of each battle, foresee N” ability
+uses your completed-opening-hand occasion. It shares the usual FIFO and source
+order with your other opening abilities. Both players finish these abilities
+and their choices before the first turn begins. Ordinary events during these
+abilities, including Foresee and cards sent to the void, do not trigger
+abilities. Each such ability occurs once per battle, including with an empty
+deck. Replacement draws and later turns, extra turns included, do not create
+another occasion. A battle prepared at a declared Draw, Dawn, or Day boundary
+has no battle-start Foresee occasion.
+
 **Additional Draw-phase cards:** “Draw N additional cards during your Draw
 phase” adds N cards to the active player's ordinary one-card draw. As that Draw
 phase begins, determine the total additional count from every applicable static

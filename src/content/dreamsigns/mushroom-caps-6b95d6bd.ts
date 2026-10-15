@@ -1,3 +1,6 @@
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 import type { JourneyDraftEffect } from "../../types/journey";
 
@@ -14,6 +17,7 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(onDawn(), gainEnergy(1))],
+  verifiedText: expectedVerifiedText("When drafting cards, see 1 fewer choice.\n\n▸Dawn: Gain 1●."),
   journeyDraft: journeyDraftEffect,
 });
