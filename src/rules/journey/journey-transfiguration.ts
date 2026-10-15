@@ -33,7 +33,7 @@ export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: Jou
     !Number.isSafeInteger(descriptor.maxCount) || descriptor.maxCount < 1)) throw new RangeError("Invalid journeyTransfiguration descriptor.");
   const effect = Object.freeze({ ...descriptor });
   return { dreamsignId, journeyTransfiguration: effect,
-    afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, transfigurations }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+    afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, transfigurations, reservedEntries = [] }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
       if (effect.kind === "afterBattleTransfiguration") {
         if (eventType !== "END_BATTLE" || siteId === null || before.screen.type !== "site" || before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;
         const next = appendAfterBattleSource(journey, siteId, { kind: "transfiguration", dreamsignId, heldIndex, maxCount: effect.maxCount });
@@ -45,7 +45,7 @@ export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: Jou
       if (events.length === 0) return null;
       let deck = [...journey.deck];
       const copies = events.map(({ entry, cardId }, index) => {
-        const copy = { ...structuredClone(entry), entryId: mintEntryId(deck, seq, index) };
+        const copy = { ...structuredClone(entry), entryId: mintEntryId([...deck, ...reservedEntries], seq, index) };
         deck = [...deck, copy];
         return { fromEntryId: entry.entryId, entryId: copy.entryId, cardId };
       });

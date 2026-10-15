@@ -21,12 +21,12 @@ const effectLog = (source: JourneyDreamsignGain, fields: Record<string, unknown>
 
 
 /** The concrete acquisition stage precedes the existing card-observer waves. */
-export function prepareJourneyOnGain(input: { resume?: import("../../types/journey").JourneySubtypeResume; beforeContext: import("../../types/journey").JourneyModifierBefore; eventType: import("../events").GameplayEventType; observerSources: readonly JourneyDreamsignGain[]; battleBinding: JourneySuspendedBattle | null; purges: readonly import("../../types/journey").JourneyPurgeOccurrence[]; domainTransfigurations: readonly JourneyTransfigurationOccurrence[]; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null;
+export function prepareJourneyOnGain(input: { reservedEntries?: readonly import("../../types/journey").DeckEntry[]; resume?: import("../../types/journey").JourneySubtypeResume; beforeContext: import("../../types/journey").JourneyModifierBefore; eventType: import("../events").GameplayEventType; observerSources: readonly JourneyDreamsignGain[]; battleBinding: JourneySuspendedBattle | null; purges: readonly import("../../types/journey").JourneyPurgeOccurrence[]; domainTransfigurations: readonly JourneyTransfigurationOccurrence[]; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null;
   excludeAcquisitionAdditions: (previous: JourneyState, tentative: JourneyState) => { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } }) {
   let journey = input.journey;
   const starterSources = [...(input.resume?.starterSources ?? [])];
   const transfigurations = [...(input.resume?.transfigurations ?? input.domainTransfigurations)], copySources = [...(input.resume?.copySources ?? [])], typeRemapSources: JourneyDreamsignGain[] = [], logRecords: ReducerLogRecord[] = [];
-  const attemptedEntries = [...(input.resume?.attemptedEntries ?? [])];
+  const attemptedEntries = [...(input.reservedEntries ?? input.resume?.attemptedEntries ?? [])];
   const mixed = input.resume !== undefined || input.gains.some(source => input.lookup(source.dreamsignId)?.journeyOnGain?.kind === "deckSubtypeOnGain");
   for (let sourceIndex = input.resume?.sourceIndex ?? 0; sourceIndex < input.gains.length; sourceIndex++) {
     const source = input.gains[sourceIndex];

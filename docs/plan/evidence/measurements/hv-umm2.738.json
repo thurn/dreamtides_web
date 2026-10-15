@@ -1,0 +1,181 @@
+{
+  "bead": "hv-umm2.738",
+  "base": "a2e068e78b42ae40a9dc929582aa965f23cd35e2",
+  "status": "Final localacceptance green; sourcecommit/coldreview/certifiedpromotion pending",
+  "implementer": "Root selfimplements from acknowledgedclaim15:29:48Z; includessetup/sourcefirst/coordination/diagnostics/checks/evidence throughactualGitreturn; no helper",
+  "sourceFirst": {
+    "proposal": "/tmp/root738-20261015/proposal-v01.md",
+    "proposalSHA256": "562d041fbe36dc0c3fbca3ca0901280f8ee130339ef79e7b96ec0c55427f2087",
+    "coverage": "/tmp/root738-20261015/sourcefirst-coverage-v01.json",
+    "coverageSHA256": "f814742ec2dc774503cc4a1e4fd84d31e10f9e6fea37b107a6c5c864c517b73d",
+    "nativeAdmission": "/tmp/root738-20261015/sourcefirst-admission-v01-native.stdout",
+    "callerInventory": "/tmp/root738-20261015/public-callers-v01.txt",
+    "prerequisites": "270/271closedcompleted; currentbase contains both actual source APIs; no oldbase implementation.",
+    "scope": "Only3productionwriters plus new114line syntheticcontract and4own evidencefiles. No savedshape/newtype/allocator/config/UI/engine/content changes. Optional readonly hook input and acquisitioninput consumed by actual registry/hook; directcaller defaults retained."
+  },
+  "implementation": {
+    "at": "2026-10-15T15:39:57.781567+00:00",
+    "base": "a2e068e78b42ae40a9dc929582aa965f23cd35e2",
+    "files": {
+      "src/rules/journey/modifier-registry.ts": "a34b8d530ab6729f0484fa9e1a73536f03bbf49fcfe6a889cf62389389a4993f",
+      "src/rules/journey/journey-on-gain.ts": "89b82585626e1617a5d0913c123dce02e263c66ae8d0c8454f5aefd02d8a6d5f",
+      "src/rules/journey/journey-transfiguration.ts": "46c61d400bd2152aaa0c0c5fc4c418384eec2216935f12edc294c6eb015ebd12",
+      "src/rules/journey/journey-entry-reservations.test.ts": "aabc91c4c7eb6ef262e881df852f4c8d3c444fa4fb6fc5a20286d2c8e9098a1b"
+    }
+  },
+  "semantics": {
+    "reservations": "One branded DeckEntryId map carries before/current/resumed physicalentry reservations through initialprohibition, acquisition tentative batches and later modifierresult deck handoffs. Minting includes both current deck and reservations.",
+    "savedContinuations": "Existing resume.attemptedEntries holds unique snapshots, including eraseddomain/acquisition identities; existingvalidEntries/continuation/battle validators unchanged. No new savedfield/format.",
+    "order": "Actual heldorder, per-source occurrence cursors, thresholdmeasurements/randomdraws/pause/battlecontinuation and copiedcardmods unchanged.",
+    "diagnostics": "Existing UUID/card/entry/heldslot prevention, acquisition and copy logs now refer to disjoint physicalattempts; no new names/displaycopy introduced."
+  },
+  "baselineRed": {
+    "finalSource": {
+      "at": "2026-10-15T15:38:26.644438+00:00",
+      "source": "actualbasea2e068e",
+      "hashes": {
+        "src/rules/journey/modifier-registry.ts": "d208f0e06732a1b3a81c252c3dc41e10c14ebe5569406cb33b4e9991231e08d0",
+        "src/rules/journey/journey-on-gain.ts": "cdf261c8f6b10c834a8d8af24ec8044ab8331657fcfea36647ccb5de9b341500",
+        "src/rules/journey/journey-transfiguration.ts": "cc8992ebe2bd1d163c5ad3e78935d5b5a57c1e7d6b46790753f129dd5ba0f032",
+        "src/rules/journey/journey-entry-reservations.test.ts": "aabc91c4c7eb6ef262e881df852f4c8d3c444fa4fb6fc5a20286d2c8e9098a1b"
+      }
+    },
+    "receipt": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-entry-reservations.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-reservations738",
+      "start": "2026-10-15T15:38:26.670033+00:00",
+      "end": "2026-10-15T15:38:33.507470+00:00",
+      "exit": 1,
+      "wallSeconds": 6.837232291989494,
+      "pid": 68452,
+      "pgid": 68452,
+      "load": "{ 9.72 8.15 8.79 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 324242553072708,
+      "endedMonotonicNs": 324249390254666,
+      "cpuUserSeconds": 6.332066,
+      "cpuSystemSeconds": 2.43314
+    },
+    "outcome": "All5cases meaningful actualbase failures on observed entry-ID intersection, including mixedchoice aftervalidsavedreload/resumes. Exact final fixture;fixed3productionfiles restoredbyteforbyte afterward."
+  },
+  "focusedGreen": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-entry-reservations.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-on-gain-nightmares.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/journey-type-remap.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/deck.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-reservations738",
+      "start": "2026-10-15T15:38:46.848753+00:00",
+      "end": "2026-10-15T15:38:53.551456+00:00",
+      "exit": 0,
+      "wallSeconds": 6.702257375000045,
+      "pid": 69922,
+      "pgid": 69922,
+      "load": "{ 14.40 9.23 9.16 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 324262731813625,
+      "endedMonotonicNs": 324269434005208,
+      "cpuUserSeconds": 7.697611,
+      "cpuSystemSeconds": 2.354855
+    },
+    "outcome": "194cases/8filesPASS: all5new, existing270/271 acquiredsubtype/C12/persistence/battle/atomicrefusal plus Nightmare/copy/registry/deck controls."
+  },
+  "qualifiedEarlierEpochs": {
+    "baseline-red-v01": "Four actual ID collisions plus newfixture LOAD normalization equalityfailure (legacy inactive fixture runIdnull normalizes).",
+    "baseline-red-v02": "Manual nonnullrunId fixture activates incompatible layer invariant; initial pause cannotbeaccepted.",
+    "baseline-red-v03": "Fouractualcollisions; last fixture resumes bounced on actualcurrent_dreamscape_wrong_layer afterLOAD normalizesrunId.",
+    "focused-green-v01": "193passed+1same fixture invariant failure, not sourcebehavior failure.",
+    "choice-diagnostic-v01_v02": "Actual LocalLog contained fold_error; diagnostic reader first looked for errors instead of error, corrected; exactstack current_dreamscape_wrong_layer node-1/1/0. Removed all debugwrites and corrected fixture currentnode LayerName.One. LOAD comparison excludes only existing legacy runId normalization; deck/choice/reserveddata all exact. FinalREDv04 and GREENv02 use same final114linefixture.",
+    "retained": "Every prior raw stdout/stderr/receipt kept under scratch; no falsecredit for partialbaselinecase, no runtimeproduct scope expansion."
+  },
+  "failurePaths": {
+    "errorAtomicity": "Existing194set includes providerthrow/refusal/no-partialstate and recordedreplay; reservations are local state only; allinputs immutable.",
+    "restart": "Newactual publicLOAD JSONsavedsubtype +mixedToad/C12 resumes, finalrecorded LocalLog/foldEvents equality; existing canonicalcheckpoint codecs/pendingbattle tests through onGain testentry.",
+    "concurrency": "Existing registry/CAS/refusal controls, ownsinglewriter, no activeprimaryoverlap; optionalparams maintain existing directcallers.",
+    "format": "No new persistentfield/validator or genericcodec change. Agentadded directcustomregistry canonicaldecode quota unnecessary; existingregisteredrolecodeccoverage remains in focusedentry. Newexplicit customrole tests use actualLOAD+eventfold."
+  },
+  "acceptanceOwnership": "274acceptedfinding onlyfixed after738certifieddelivery. Original269/730 consume repairedhandoff; their wideracceptance/scopes retained.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinaryreview-v01 starting1minute load9.98"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "successful final194case/8file focusedcommand only; failedbaselines/diagnostics separate"
+      }
+    }
+  },
+  "qa": "Internal identityplumbing repair; unchangedplayerworkflow/presentation, no browser/full/fuzz/heavy. Crosscut architecture/config/testinfrastructure unchanged.",
+  "preExistingIssues": [],
+  "rawRoot": "/tmp/root738-20261015",
+  "ordinaryReview": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-reservations738",
+      "start": "2026-10-15T15:39:58.117366+00:00",
+      "end": "2026-10-15T15:40:50.343015+00:00",
+      "exit": 0,
+      "wallSeconds": 52.22490829200251,
+      "pid": 31095,
+      "pgid": 31095,
+      "load": "{ 9.98 9.13 9.13 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 324333999398541,
+      "endedMonotonicNs": 324386224254750,
+      "cpuUserSeconds": 136.665609,
+      "cpuSystemSeconds": 12.441711
+    },
+    "outcome": "7977tests/139files+types/typecheck-node/lint/cycles/frictionschemaPASS"
+  },
+  "knip": {
+    "receipt": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey-reservations738",
+      "start": "2026-10-15T15:41:00.796688+00:00",
+      "end": "2026-10-15T15:41:05.667867+00:00",
+      "exit": 0,
+      "wallSeconds": 4.871046834043227,
+      "pid": 35981,
+      "pgid": 35981,
+      "load": "{ 10.59 9.62 9.32 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 324396677941291,
+      "endedMonotonicNs": 324401548929541,
+      "cpuUserSeconds": 4.270439,
+      "cpuSystemSeconds": 1.380236
+    },
+    "outcome": "PASS afterordinaryreview"
+  },
+  "inclusiveClock": {
+    "actualDispatch": "2026-10-15T15:29:48Z",
+    "dispatchProvenance": "Native acknowledgedclaim started_at,root selfimplements immediately from this claim; timestamp precisionseconds. Includesallsetup/research/sourcefirst/coordination/diagnostics/checks/evidence untilordinaryGitreturn; no helperclock/reset/subtraction.",
+    "evidenceCutoff": "2026-10-15T15:42:07.764911+00:00",
+    "cutoffMonotonicNs": 324463645629541,
+    "commitPending": true,
+    "meaning": "Actual Gitreturn/receipt independently retained immediately aftercommit; finalcutofftail checked within1minute schema allowance."
+  },
+  "finalScopeVerification": "All4functionalfile frozenhashes exact; all5757otheroriginalregularpaths byteidentical. Only8intendedpaths; no newhelpers/entry/config/generated/content/UI files. No own live process/check/browser/provider beforecommit.",
+  "durableCustodyPlanned": "artifacts/qa/hv-umm2.738/final-delivery-v01 after terminal coldreview/certification; regular task evidence+packet source only,no symlink/dependency trees."
+}
