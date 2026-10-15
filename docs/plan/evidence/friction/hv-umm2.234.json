@@ -20,7 +20,7 @@
   },
   "hostLoad": 4.67,
   "testDelta": {
-    "files": 2,
+    "files": 4,
     "lines": 526,
     "jsdomFiles": 0
   },

@@ -1,0 +1,3882 @@
+{
+  "bead": "hv-umm2.710",
+  "auditDate": "2026-10-14",
+  "auditDateZone": "America/Los_Angeles",
+  "source": "a8b32f8ca664610273c3f1da6e8658396de6f1f9",
+  "previousRetrospective": "hv-b9na",
+  "sourceManifest": {
+    "bead": "hv-umm2.710",
+    "source": "a8b32f8ca664610273c3f1da6e8658396de6f1f9",
+    "capturedAt": "2026-10-15T02:11:49.724606+00:00",
+    "previous": {
+      "date": "2026-10-14",
+      "phase": "5",
+      "bead": "hv-b9na",
+      "covers": [
+        "hv-lf7t",
+        "hv-n913",
+        "hv-odqg",
+        "hv-pu55",
+        "hv-umm2.104",
+        "hv-umm2.105",
+        "hv-umm2.148",
+        "hv-umm2.182",
+        "hv-umm2.183",
+        "hv-umm2.184",
+        "hv-umm2.190",
+        "hv-umm2.193",
+        "hv-umm2.194",
+        "hv-umm2.202",
+        "hv-umm2.225",
+        "hv-umm2.227",
+        "hv-umm2.343",
+        "hv-umm2.484",
+        "hv-umm2.584",
+        "hv-umm2.589",
+        "hv-umm2.680",
+        "hv-umm2.684",
+        "hv-umm2.691",
+        "hv-umm2.693",
+        "hv-umm2.694",
+        "hv-umm2.695",
+        "hv-umm2.696"
+      ]
+    },
+    "covers": [
+      "hv-6nkw",
+      "hv-b9na",
+      "hv-pj9p",
+      "hv-twm7",
+      "hv-umm2.103",
+      "hv-umm2.191",
+      "hv-umm2.234",
+      "hv-umm2.237",
+      "hv-umm2.238",
+      "hv-umm2.244",
+      "hv-umm2.247",
+      "hv-umm2.249",
+      "hv-umm2.254",
+      "hv-umm2.582",
+      "hv-umm2.590",
+      "hv-umm2.627",
+      "hv-umm2.697",
+      "hv-umm2.699",
+      "hv-umm2.700",
+      "hv-umm2.701",
+      "hv-umm2.702",
+      "hv-umm2.703",
+      "hv-umm2.704",
+      "hv-umm2.706",
+      "hv-umm2.709"
+    ],
+    "files": [
+      {
+        "path": "docs/plan/evidence/friction/hv-6nkw.json",
+        "sha256": "d3d82ff95cd98097a8405d74422e5aa13a1caa0ab642586c0996ce4139abf0ef",
+        "bytes": 433
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-6nkw.json",
+        "sha256": "1da1dbfb0cdc391b879ba465c1948bacba7125f8c11523bf046b33ba0d39d040",
+        "bytes": 23867
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-6nkw.md",
+        "sha256": "b05d315d9c6d40bc841bc6d4f3a73d397600a78ad508d127b95b5d45edc8cc37",
+        "bytes": 4670
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-b9na.json",
+        "sha256": "c922f3f254482003074fd629ae491a7f16129ab3edb64dc0926a92ef5cb67245",
+        "bytes": 514
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-b9na.json",
+        "sha256": "5634cdfda429694931d4d047181f466cbb31e1f3af83cde3acbbc6097f3a6a4d",
+        "bytes": 25938
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-b9na.md",
+        "sha256": "e4aa356f5d85082d75b9b48a67730d0b35c89f4655abcc1511fd1fc6d92ac503",
+        "bytes": 19045
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-pj9p.json",
+        "sha256": "5cb4543251d5b6a68bfc55f303472007562c3b0b743ff3fcea7ca4ac57f4712c",
+        "bytes": 438
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-pj9p.json",
+        "sha256": "0ab5bbfcc2bbd06f82faf7ca784f14e8537db2a0ac633a069fe5209f7bdc182a",
+        "bytes": 9068
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-twm7.json",
+        "sha256": "19bcd1d3799604537ccf5120d013c215c132c993a5e7e1ea04873642914abd1a",
+        "bytes": 428
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-twm7.json",
+        "sha256": "61077b45d56d844d38171b8a1de2f4c3f56a03374c337e0d5783a785399c7525",
+        "bytes": 10102
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.103.json",
+        "sha256": "4909d66828ef2166074f50269111eb2d6652313ac533a197d8833f96f602ebf8",
+        "bytes": 1178
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.103.json",
+        "sha256": "c95eaa74457b0d704346921d74995d36f24bc2d6a01edbecd98c8be208dac8a2",
+        "bytes": 222362
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.103.jsonl",
+        "sha256": "aafd6dc56843b9debed6386ae4a67dd42fa2e0123db8607e46c9c0017cf2b735",
+        "bytes": 61499
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.191.json",
+        "sha256": "9403856a206bcdd12d917ef8ac52ead71e5a6e4022d789c18684635542eb0e89",
+        "bytes": 974
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.191.json",
+        "sha256": "7a0129cb83d4f842131cff3132ee7a53cfb485ac8b665e37ee85406c0f763277",
+        "bytes": 21199
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.191.jsonl",
+        "sha256": "bc910ebb5fa3a5dc368e7e180202f5beaf5ee06fd26abe5239cf5cace272b8e8",
+        "bytes": 204743
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.234.json",
+        "sha256": "52fe14f87f07eddb6fc1aeda5d9533f32171ba07e5446aa4ac8bee468a2122a4",
+        "bytes": 2229
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.234.json",
+        "sha256": "080a9ab3a6d9af9b7a8c5ccf04b369c98e820b2b57a828465e64ac16af2cc5a8",
+        "bytes": 25390
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.234.md",
+        "sha256": "e74a8a3dc52f46b952afb3d7ffa39e8796b9bf29ff063a59813767c46fa43a9f",
+        "bytes": 8536
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.234.jsonl",
+        "sha256": "fcd9e29c3aadf96630572148b40901a3a17cd82e6449cdac71eacc8efbd64a24",
+        "bytes": 50273
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.237.json",
+        "sha256": "4238df060a79f64462f1f0dfdcb2eefe470c3d9cb5e6ccc2cbbc9c60c2ef93c6",
+        "bytes": 1484
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.237.json",
+        "sha256": "c6f3fc157738aa30ce8d1e8b25add2100da88908ebe384bbe2e10f630be547d7",
+        "bytes": 33598
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.237.md",
+        "sha256": "c0e76642d8dcff56ab052eb1bd8a110b13ad216755ba27560e2589d0b22f3af7",
+        "bytes": 11251
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.237.jsonl",
+        "sha256": "1b5af0e76515c4a9a07d2af4ef7a0478944564bf47ce9cbbb169e2cf79da9565",
+        "bytes": 40371
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.238.json",
+        "sha256": "7fb20d8f32c7938b55940e29eb68f0381b3d0ef301ad083429f3b4ff79a63e4a",
+        "bytes": 1044
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.238.json",
+        "sha256": "6b3ded8d72fb172c07015f26ac5d64b2d93fdadbc4b617319ffc3a15348f49af",
+        "bytes": 17793
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.238.jsonl",
+        "sha256": "c27080fb6189966274804d7dfbba68d28e58014dcb801ac7b7841f2510925d5d",
+        "bytes": 82852
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.244.json",
+        "sha256": "a4464ef64028601eb4f306be3e9acbca069bf932980f482deb21a34d18794720",
+        "bytes": 1088
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.244.json",
+        "sha256": "9f14dc0ea008e6b45b36cc29be4fb369dc6eab650f89c622477b006d9b852779",
+        "bytes": 37209
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.244.md",
+        "sha256": "a2b4cbdb6530ed58af76e8d572bde9ebd5154873cc5cc7a8c850cd36a1db8f0c",
+        "bytes": 7268
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.244.jsonl",
+        "sha256": "830c3b757f981271c5f3579ba4b66879293f21475d50cd857c72cd21a5af7247",
+        "bytes": 87313
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.247.json",
+        "sha256": "9cf9c7b2c6662511e81d9ea530307e27cc36c216c26e9655b462870e7dcec680",
+        "bytes": 961
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.247.json",
+        "sha256": "576bf51ba185459984e46c0173ff970405cd9b640df5af34e15759e18bf3eea6",
+        "bytes": 43185
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.247.md",
+        "sha256": "a345a9df7ee1e8051aa11fe5ec66e65e777d89f656b2e41519d22661792e6c49",
+        "bytes": 5288
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.247.jsonl",
+        "sha256": "5142c8bca78d5b5883b1348622c541dc161733985e296c2d36f9de0e52e16349",
+        "bytes": 101538
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.249.json",
+        "sha256": "ce290113b8c0682b3638e38f68d7abbedcc1bcb5c298e0d74e17a25943b099ae",
+        "bytes": 575
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.249.json",
+        "sha256": "0b7184002d095391c76dfe2b886a2fb8b38a4f595ad40ce58030b7532f150a40",
+        "bytes": 42027
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.249.md",
+        "sha256": "2038efd80bc1a7ad4fb2bc08cfe68f643bd570bef60403843abc26c3e41b56d1",
+        "bytes": 9170
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.249.jsonl",
+        "sha256": "d7600131de4f29897eb00ef65f98aad428976c6a96205e61c661beed945e66ff",
+        "bytes": 73903
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.254.json",
+        "sha256": "faebe61818906e475fd096d8cda4bcfa092a9e3636813e6c1e21187236374d1a",
+        "bytes": 1921
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.254.json",
+        "sha256": "fd86c466078dcd573ba99f4fe2884f2c14385228aa889a0e1d407521103ee637",
+        "bytes": 68391
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.254.md",
+        "sha256": "9faad11dbbf1643793953c3bda7d41434a4a6c881e80aa7fc433beb6544a23c7",
+        "bytes": 6914
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.254.jsonl",
+        "sha256": "5299dccdce320577a5f5a377d67895aff87b918fda4076e4a1a30fc6da4568fd",
+        "bytes": 101518
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.582.json",
+        "sha256": "610073d3a4fdd48cb8599f1172c8e83000b0cf4a8fc35f54bce6d41ab32a81ef",
+        "bytes": 1100
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.582.json",
+        "sha256": "10c0505bc0ce12fd588f83f1228f0b3f0d8d14da3fd47ac0558a50a8b46b9205",
+        "bytes": 26305
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.582.jsonl",
+        "sha256": "71882cefe7f6a0d17c8d29463460e9ba187149bb8bf62985a01b2632e44671ae",
+        "bytes": 14754
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.590.json",
+        "sha256": "337a1405f3976ad67ca96145af4a62d9ac2b0ef1cec98464c47af0b19c341a0d",
+        "bytes": 1922
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.590.json",
+        "sha256": "8520a88a8ab0b19a64fc0755f8e222bf1bdae45f8cdb211df7494f7e171b9026",
+        "bytes": 65444
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.590.md",
+        "sha256": "52c855d1fa67ff74fbe6cd55d1fba395edccfb5f2747ef237ef0b97ba3a2dadf",
+        "bytes": 3932
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.590.jsonl",
+        "sha256": "36b9301ea0d967afb2096663dc9458623005d573b0d39707958c23732c9324b5",
+        "bytes": 27742
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.627.json",
+        "sha256": "7dc87f6deefde171ce26404db6cdeb2fae23225a2704881430c49ec4e347141a",
+        "bytes": 1089
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.627.json",
+        "sha256": "8b22463b2cf145e47cc94e5aa69173bc1f7e2fb8758b775beadfd76c83e0209e",
+        "bytes": 38446
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.627.jsonl",
+        "sha256": "ee6e1004d3baf99e5797f8e6ca77087a4666174e9db8bfbba3ce5e73dbf9c7dd",
+        "bytes": 11832
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.697.json",
+        "sha256": "2dcb2845d850555963d07071971c29d440294e2eeaf70cf672a376d8ac0f912c",
+        "bytes": 1004
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.697.json",
+        "sha256": "89b1589741c7a5431997f4fcb28c38e727acbd4cf9040811185a3da13a304019",
+        "bytes": 53066
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.697.md",
+        "sha256": "7090cd39bf6ec7e96476ba9970052bd8e4a483d795baadb8c07752d725dd27c2",
+        "bytes": 3472
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.697.jsonl",
+        "sha256": "ecbe4f6dda26a76482b79f44fa2252611987e6f7dcdf584d82545c41423e37ca",
+        "bytes": 5867
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.699.json",
+        "sha256": "6d609c4f28d1f76ab10fc165f0e7a7343c6e5a23fad69cede5c5e106eb7d00a3",
+        "bytes": 464
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.699.json",
+        "sha256": "12816a8bb40c14386594aeb81d666024f8097f9314672e02af3d6872ce8732e4",
+        "bytes": 15932
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.699.md",
+        "sha256": "305467cd2817077837f51b3f09778d72bc0cd0f17911026845aa8b8adbcec2be",
+        "bytes": 2105
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.700.json",
+        "sha256": "3fc2ec179727d9b6fbd023397a11bc2de70bc6d05a442226bc4bc2a52ed8b958",
+        "bytes": 1691
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.700.md",
+        "sha256": "f361b4ae5d0f9c126b62816a4456bf45d4ecca2ff72c5661c0cea43a8dacad1c",
+        "bytes": 8811
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.700.jsonl",
+        "sha256": "3fb10f3a73980ef9031a8eaf66471403a9999ee1047d6282cec019dc8adabc71",
+        "bytes": 2282
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.701.json",
+        "sha256": "1fa75518a039db78a356d230d24d4fc1a6f97ec0766f3de1e6cdce11f81705a3",
+        "bytes": 1859
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.701.json",
+        "sha256": "ad39b1c403fc425fdd8f6a6d1443a78571f9a13f6d4f11976e723ebd2cfeb194",
+        "bytes": 17653
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.701.md",
+        "sha256": "ab8754008f648ca870de8c7d4e88bc74500b2b7f7c44bf87a6f7225160796271",
+        "bytes": 2546
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.702.json",
+        "sha256": "bd4e14c20ff800b1e90de6f1e210bbf510c58f0f1bb0d13a0b1b86668f6b43c5",
+        "bytes": 630
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.702.json",
+        "sha256": "2e0b950c7c231cdb76dee80f59aab89eab94f4252d142aa947cf5e6bb5708986",
+        "bytes": 34028
+      },
+      {
+        "path": "docs/plan/evidence/qa-ledger/hv-umm2.702.jsonl",
+        "sha256": "9e9e49c99b69f6f2ea7da98a0f1b70a81c60eebc1ddd80caa85be69774154ff8",
+        "bytes": 5092
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.703.json",
+        "sha256": "d4b1d703a156ebdf9dab5f3eaa2a45b6506f9fbad7c1742ef974cfe6f8204f91",
+        "bytes": 750
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.703.json",
+        "sha256": "2fde217f6d8890fe5cac22d4e018e03c66fe29a8f8d0a6a02ea2dda7e37efc42",
+        "bytes": 44291
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.703.md",
+        "sha256": "ac0915ef1a6ad42ac779b62d6b9e73e8f4ff88b4653cd4dfd199e77e35c85325",
+        "bytes": 3247
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.704.json",
+        "sha256": "af9a8f64509e1fc6cf2d5dbc38167a12c79c8709c1bd6955850c4dc94a345eb1",
+        "bytes": 669
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.704.json",
+        "sha256": "85b53133c876100bf84caafe2da8df2d8ead0561d308017ef709a15e5e797a1b",
+        "bytes": 11490
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.706.json",
+        "sha256": "4f53451316f26e8517c6a3f01bca73a1e644c9dc963c738207a0dfc641460e96",
+        "bytes": 401
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.706.json",
+        "sha256": "6e7688f6062b3beb195f52dd100f43761e2e0708eaf99b5b4f15dcb6eee0ee59",
+        "bytes": 5692
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.706.md",
+        "sha256": "2abbf1fd510f1ee11695d8af42286014f34b7cc39f51aa64dcb51595be38295b",
+        "bytes": 1238
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.709.json",
+        "sha256": "981897ac85134de8e5eb305900846c1b4329f53534a9afc10f898f7cb81ec83e",
+        "bytes": 441
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.709.json",
+        "sha256": "17b66cdc545bcfcabc456623bd7cc66cac964869b3007777661db2e81e5a1cd2",
+        "bytes": 14720
+      },
+      {
+        "path": "docs/plan/evidence/measurements/hv-umm2.709.md",
+        "sha256": "172d878ef36f9cdc3dab2ccf880f479f230baef2d55bf66a1fa096c479d53d66",
+        "bytes": 2681
+      }
+    ],
+    "actualReadOnlySageDispatch": {
+      "actualDispatch": "2026-10-15T02:14:44.240Z",
+      "callId": "call_576971a818fa4fa09edc7dd1843fed75",
+      "argumentsSHA256": "85c6445ca35e43ea039ed53ceb5e314e01ab49a7d247ebf4899275591d4c6779",
+      "nativeLineSHA256": "d335afcc5e3f368b861e2eb77c463912ee96dfd27668f56d75859b28cbf88b19",
+      "sampling": "UNKNOWN"
+    },
+    "scopeQualification": "Exact25 uncovered records at frozen a8b32f source; HEAD=staging verified immediately before dispatch, manifest binds all80artifact hashes. Historical rootnotes/current status distinguishable."
+  },
+  "sourceManifestSHA256": "11572e705288d5e7381e475943eda6a1b20e7136fb0b0f1732e8860e6f9d9b7c",
+  "readOnlySage": {
+    "agent": "/root/phase5_retro710",
+    "dispatch": {
+      "actualDispatch": "2026-10-15T02:14:44.240Z",
+      "callId": "call_576971a818fa4fa09edc7dd1843fed75",
+      "argumentsSHA256": "85c6445ca35e43ea039ed53ceb5e314e01ab49a7d247ebf4899275591d4c6779",
+      "nativeLineSHA256": "d335afcc5e3f368b861e2eb77c463912ee96dfd27668f56d75859b28cbf88b19",
+      "sampling": "UNKNOWN"
+    },
+    "all25FrictionAnd80ArtifactHashesVerified": true,
+    "nativeCommentsInspected": 119,
+    "mutation": false,
+    "newImprovementBeads": [],
+    "newTriggerDispositions": [],
+    "budgetRevisions": []
+  },
+  "outcomes": {
+    "hv-6nkw": "Remembered-origin/checkpoint repairs delivered; normal47-input review remains unread/debt.",
+    "hv-b9na": "Previous exact27 retrospective own evidence; no new recurring cause in that audit.",
+    "hv-pj9p": "Normal28/28 review after same-cold scope completion; accepted3 findings delivered by6nkw. Later actualdispatch recovery preserved separately from conservative bound.",
+    "hv-twm7": "225 measurement corrections delivered; later actualdispatch recovery preserved separately from conservative bound.",
+    "hv-umm2.103": "Exhaustive-route gate failure and inventory conflict repaired; final normal review produced canonical702. Historical/runtime and integration source epochs separate.",
+    "hv-umm2.191": "Four-UUID acceptance: weighted300,36 initializationpasses/44 ineligible,16 finaljudgedpasses; originalcallerfail retained.",
+    "hv-umm2.234": "Hidden Reclaim pricing/integration conflict repaired; full86-input normalreview accepted706. Later agent-added unchanged-keyword supplement explicitly withdrawn, no current234 debt.",
+    "hv-umm2.237": "Full certified acceptance;56-input normalreview unread/debt. Prior-owner research/unmeasured dependency gap separate.",
+    "hv-umm2.238": "Seven-line supported composition/fullfive-UUID recipe. Heavyadmission lowerbound10.26min; sweep initializationonly.",
+    "hv-umm2.244": "Zero runtime/test delta; weighted/judged acceptance passed. Outer weighted time has unseparated admission/startup/drain.",
+    "hv-umm2.247": "Zero runtime/test delta/fullfive-UUID acceptance; two ineffectivefailedsweep attempts retained. Historical default-fuzz comparator repair703,708cancelledduplicate.",
+    "hv-umm2.249": "Four-UUID acceptance/four actual changed-clause workflows; two callerfails retained. Child666 historical qualifications preserved.",
+    "hv-umm2.254": "Zero runtime/test delta;14source-qualified consumedjudgments+8fresh opponentcases. Ten effectiveinitcells from11sweepattempts, threecausal privatecallererrors retained.",
+    "hv-umm2.582": "Scoring-group source certified; fourcaller corrections useexisting UI/driver;77-entry normalreviewdebt retained.",
+    "hv-umm2.590": "Duplicate-channel repair/direct durablegrant log delivered. Surviving lateallocation control doesnotjustify extraallocationmap; cancelled heavy sourceepochs retained; reviewdebt.",
+    "hv-umm2.627": "Hand-source capability/integration repair certified with combinedchecks; finalnormalreviewcomplete, earlier limited/superseded source qualified; primitivefuzz distinct191 recipe.",
+    "hv-umm2.697": "Another-event form delivered; sevenpartial callerfails retained; review findings delivered699.",
+    "hv-umm2.699": "Actual extra-turn contract/docs repaired, meaningful restoredfault failsbothactors; fullnormalreview0findings.",
+    "hv-umm2.700": "Status/saveboundary repair,10liveworkflowsteps/full35-inputnormalreview. Exactcanonicalclock corrected in thisretro.",
+    "hv-umm2.701": "Public stale-member negatives/docs,6intended omissionfailures; boundedfollowup requires no newcore review.",
+    "hv-umm2.702": "Alternative-payment producerattribution repaired; oldprefix38exact/6rebuilt/14strictrefusals. FourUIregressions donotclaimnumeric compositepayment witness;40-inputreviewdebt.",
+    "hv-umm2.703": "Hidden physical-member fidelity comparator validationrepair certified, canonicalhistoricalreleasefix; no gameplaydefectinferred; reviewdebt.",
+    "hv-umm2.704": "Nth-cost passive exemption/reverseorder/route witnesses delivered; reviewdebt.",
+    "hv-umm2.706": "Reclaim comments/docs match executable behavior;49s review selected7356tests, not quickMarkdown measurement. Supplementalreview note historical,234currentdebt withdrawn.",
+    "hv-umm2.709": "UUID-only atlas logboundary with meaningful before/after contracts; dated247evidence identifies703and preserves708historicalprovenance."
+  },
+  "originalCohortRecords": [
+    {
+      "bead": "hv-6nkw",
+      "originalWindow": {
+        "start": "2026-10-14T23:59:53.955Z",
+        "end": "2026-10-15T00:11:41.447073+00:00"
+      },
+      "originalMinutes": 11.79153455,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 47,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review": 39.89842541603139,
+        "focused": 81.06354825093877,
+        "knip": 6.713548084022477
+      },
+      "hostLoad": 11.44287109375
+    },
+    {
+      "bead": "hv-b9na",
+      "originalWindow": {
+        "start": "2026-10-14T23:03:50.040Z",
+        "end": "2026-10-14T23:18:53.859026+00:00"
+      },
+      "originalMinutes": 15.063650433333333,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "schema": 0.08481258299434558,
+        "triggers": 0.29724937496939674,
+        "review": 0.3541477090329863,
+        "knip": 8.957138458034024,
+        "whitespace": 0.012826375022996217
+      },
+      "hostLoad": 16.8515625
+    },
+    {
+      "bead": "hv-pj9p",
+      "originalWindow": {
+        "start": "2026-10-14T23:04:48.377599+00:00",
+        "end": "2026-10-14T23:12:13.510678+00:00"
+      },
+      "originalMinutes": 7.41888465,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 53,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 21.60127491602907,
+        "review": 34.38233695802046,
+        "knip": 4.685230833012611
+      },
+      "hostLoad": 16.279296875
+    },
+    {
+      "bead": "hv-twm7",
+      "originalWindow": {
+        "start": "2026-10-14T22:57:15.702643Z",
+        "end": "2026-10-14T23:01:05+00:00"
+      },
+      "originalMinutes": 3.8216226166666667,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 0.6441716240369715,
+        "review": 0.3286496250075288,
+        "knip": 6.490060125011951
+      },
+      "hostLoad": 15.19
+    },
+    {
+      "bead": "hv-umm2.103",
+      "originalWindow": {
+        "start": "2026-10-14T21:06:31.112Z",
+        "end": "2026-10-14T23:19:30.592039+00:00"
+      },
+      "originalMinutes": 132.99133398333333,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 433,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review": 77.3883265000186,
+        "focusedFinalWitnesses": 14.288216499960981,
+        "knip": 5.7940216670394875,
+        "reviewFull": 239.06263412500266,
+        "fuzz": 804.7125853330072,
+        "preflight": 3.0565733749826904,
+        "sweep": 101.82007866600179,
+        "judgedAccepted": 163.412910457002
+      },
+      "hostLoad": 7.2373046875
+    },
+    {
+      "bead": "hv-umm2.191",
+      "originalWindow": {
+        "start": "2026-10-15T00:29:25.204929+00:00",
+        "end": "2026-10-15T01:12:06.390186+00:00"
+      },
+      "originalMinutes": 42.68642095,
+      "originalTestDelta": {
+        "files": 1,
+        "lines": 99,
+        "jsdomFiles": 0,
+        "configuredEntrypoints": 0
+      },
+      "localValidationS": {
+        "focused": 7.304483833024278,
+        "focused-repair": 5.735697333002463,
+        "focused-final": 5.7075580839882605,
+        "entities-after": 1.0342485830187798,
+        "review": 71.45041137502994,
+        "knip": 5.5643313330365345,
+        "weighted300": 463.2963992499863,
+        "preflight": 2.2082643750472926,
+        "sweep": 327.8410224579857,
+        "judged-nullifier-player": 9.580143041966949,
+        "judged-nullifier-player-recovery1": 38.78833608399145,
+        "judged-nullifier-enemy": 71.04055095801596,
+        "judged-vaultbreaker-player": 44.70541299995966,
+        "judged-vaultbreaker-enemy": 32.582777332980186
+      },
+      "hostLoad": 18.28271484375
+    },
+    {
+      "bead": "hv-umm2.234",
+      "originalWindow": {
+        "start": "2026-10-14T22:37:34.424Z",
+        "end": "2026-10-14T23:57:39.256306+00:00"
+      },
+      "originalMinutes": 80.08053843333333,
+      "originalTestDelta": {
+        "files": 2,
+        "lines": 526,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 17.301029042049777,
+        "focusedComposition": 7.000078541983385,
+        "review": 62.4576489579631,
+        "knip": 5.343597458966542,
+        "reviewFull": 125.37239129195223,
+        "fuzz": 368.0512199579971,
+        "preflight": 3.133525459037628,
+        "sweep": 66.13199929200346,
+        "browser": 257.3181939170463,
+        "inventory": 2.973183457972482
+      },
+      "hostLoad": 4.67
+    },
+    {
+      "bead": "hv-umm2.237",
+      "originalWindow": {
+        "start": "2026-10-15T00:40:26.407000+00:00",
+        "end": "2026-10-15T01:52:46.285256+00:00"
+      },
+      "originalMinutes": 72.33130426666666,
+      "originalTestDelta": {
+        "files": 2,
+        "lines": 361,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focusedAttempts": 106.57474062498659,
+        "review": 63.16903270804323,
+        "knip": 4.881309000018518,
+        "restoredCounterfactuals": 30.84594324999489,
+        "compatibility": 7.423225042002741,
+        "typecheckAttempt": 16.676698291965295,
+        "inventoryGeneration": 2.2141050830250606,
+        "full": 98.5739539579954,
+        "fuzz": 461.3856027920265,
+        "preflight": 3.1385012500104494,
+        "sweep": 16.76915754203219,
+        "judgedWorkflowAttempts": 236.02468625002075,
+        "diagnostic": 9.117173917009495
+      },
+      "hostLoad": 8.13
+    },
+    {
+      "bead": "hv-umm2.238",
+      "originalWindow": {
+        "start": "2026-10-15T01:18:50.886927+00:00",
+        "end": "2026-10-15T01:45:22.464424+00:00"
+      },
+      "originalMinutes": 26.526291616666665,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0,
+        "configuredEntrypoints": 0
+      },
+      "localValidationS": {
+        "focused": 9.348684791009873,
+        "entities-after": 1.2949707910302095,
+        "review": 63.615294500021264,
+        "knip": 4.9639851250103675,
+        "preflight": 1.8223436250118539,
+        "sweep": 35.956219832994975,
+        "weighted300Inclusive": 1086.9961404589703
+      },
+      "hostLoad": 14.65185546875
+    },
+    {
+      "bead": "hv-umm2.244",
+      "originalWindow": {
+        "start": "2026-10-15T01:02:08.619Z",
+        "end": "2026-10-15T01:38:07.282848+00:00"
+      },
+      "originalMinutes": 35.9777308,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 6.496223374968395,
+        "fuzz": 1008.588302958,
+        "fixturePrecheck": 3.31966849998571,
+        "preflight": 3.330873375001829,
+        "browserQA": 184.74662866600556,
+        "review": 0.3247223749640398,
+        "knip": 5.959481084020808
+      },
+      "hostLoad": 5.0830078125
+    },
+    {
+      "bead": "hv-umm2.247",
+      "originalWindow": {
+        "start": "2026-10-15T00:18:45.998Z",
+        "end": "2026-10-15T00:44:47.484508+00:00"
+      },
+      "originalMinutes": 26.024775133333332,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 20.413318915991113,
+        "fuzz": 728.1176587920054,
+        "preflight": 1.7528850419912487,
+        "browserQA": 160.39265858300496,
+        "review": 0.3149742499808781,
+        "knip": 4.6798616670421325
+      },
+      "hostLoad": 6.84326171875
+    },
+    {
+      "bead": "hv-umm2.249",
+      "originalWindow": {
+        "start": "2026-10-14T23:22:54.389Z",
+        "end": "2026-10-14T23:53:48.399114+00:00"
+      },
+      "originalMinutes": 30.900168566666665,
+      "originalTestDelta": {
+        "files": 1,
+        "lines": 136,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review": 54.771437166957185,
+        "knip": 4.402602249989286,
+        "focused": 17.56726979103405,
+        "fuzz": 460.4713397080195,
+        "preflight": 1.422560542006977,
+        "sweep": 28.679424666974228,
+        "qa": 266.36503166600596
+      },
+      "hostLoad": 7.92529296875
+    },
+    {
+      "bead": "hv-umm2.254",
+      "originalWindow": {
+        "start": "2026-10-15T01:23:08.965000+00:00",
+        "end": "2026-10-15T02:02:26.226231+00:00"
+      },
+      "originalMinutes": 39.28768718333333,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review": 0.22669095802120864,
+        "focused": 28.06030816701241,
+        "knip": 6.0385140419821255,
+        "entities": 1.8294594999752007,
+        "schema": 0.06489241705276072,
+        "preflight": 3.14038299996173,
+        "review-evidence": 0.3138053329894319,
+        "sweep": 71.93176187499193,
+        "judged-enemy": 82.57231066701934,
+        "judged-enemy-repaired": 49.715270666987635,
+        "judged-enemy-readiness": 122.46130641701166,
+        "judged-enemy-log": 223.74347458296688,
+        "weighted-outer": 1517.811140957987,
+        "weighted": 516.8234673329862,
+        "final-review": 0.31075895798858255,
+        "final-schema": 0.06757670798106119,
+        "final-whitespace": 0.006914291996508837
+      },
+      "hostLoad": 13.42333984375
+    },
+    {
+      "bead": "hv-umm2.582",
+      "originalWindow": {
+        "start": "2026-10-14T23:18:33.075000+00:00",
+        "end": "2026-10-15T00:00:11.304660+00:00"
+      },
+      "originalMinutes": 41.637161,
+      "originalTestDelta": {
+        "files": 1,
+        "lines": 345,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review": 55.798589916026685,
+        "focused": 47.359130541968625,
+        "fuzz": 400.5526270829723,
+        "fullReview": 148.0312562920153,
+        "browserQA": 183.27149291697424,
+        "knip": 4.319913166982587
+      },
+      "hostLoad": 6.60986328125
+    },
+    {
+      "bead": "hv-umm2.590",
+      "originalWindow": {
+        "start": "2026-10-15T00:34:02.579Z",
+        "end": "2026-10-15T01:15:05.958207+00:00"
+      },
+      "originalMinutes": 41.05632011666667,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 502,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "compile-initial": 11.099997291050386,
+        "copy-before-entry": 8.791761792032048,
+        "doctor": 1.5112783340155147,
+        "fault-exclude-created": 7.41746070899535,
+        "fault-keyword-expiry": 9.332245416997466,
+        "fault-late-source-allocation": 11.14266466605477,
+        "fault-post-announcement-grant": 12.375502583978232,
+        "fault-wrong-ordinal": 9.223784624948166,
+        "fault-wrong-side": 7.512818832998164,
+        "focused-all": 21.98340979096247,
+        "focused-boundaries": 7.086895417014603,
+        "focused-fidelity": 10.026466499955859,
+        "focused-fidelity-fixed": 9.57750766701065,
+        "focused-initial": 3.662616374960635,
+        "focused-own": 6.94837329199072,
+        "focused-own-complete": 7.055264999973588,
+        "focused-own-fixed": 8.160020250012167,
+        "friction-dispatch": 0.36517624999396503,
+        "friction-schema": 0.2617872910341248,
+        "full-outer": 151.05118062498514,
+        "full-v2-inner": 111.4430167079554,
+        "full-v2-outer": 111.46975595800905,
+        "install": 2.714777166955173,
+        "judged-v2": 29.835023207997438,
+        "knip": 7.437316125025973,
+        "knip-v2": 5.141716916987207,
+        "logging-focused": 9.854074290953577,
+        "preflight": 1.5092456670245156,
+        "preflight-v2": 3.678431583044585,
+        "prepare-workspace": 2.3668473750003614,
+        "review": 85.22401654196437,
+        "review-fixed": 126.75384062499506,
+        "review-v2": 76.78761587501504,
+        "sweep": 10.639347209013067,
+        "sweep-v2": 10.282469291996676,
+        "weighted-outer": 151.11944974999642,
+        "weighted-v2-inner": 448.1841864170274,
+        "weighted-v2-outer": 547.4116074170452
+      },
+      "hostLoad": 16.16357421875
+    },
+    {
+      "bead": "hv-umm2.627",
+      "originalWindow": {
+        "start": "2026-10-14T22:16:23.137895+00:00",
+        "end": "2026-10-14T23:58:14.462337+00:00"
+      },
+      "originalMinutes": 101.85540736666667,
+      "originalTestDelta": {
+        "files": 1,
+        "lines": 358,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused-final": 15.843666542030405,
+        "review": 86.12119816697668,
+        "review-repair": 68.83562354097376,
+        "knip": 9.012849832943175,
+        "review-full": 113.17861599999014,
+        "engine300": 368.21167770796455,
+        "integration-focused": 19.405037083022762,
+        "integration-review": 58.612564167007804,
+        "integration-knip": 3.8469236249802634,
+        "integration-full": 311.68347691698
+      },
+      "hostLoad": 6.98876953125
+    },
+    {
+      "bead": "hv-umm2.697",
+      "originalWindow": {
+        "start": "2026-10-14T22:07:54.551Z",
+        "end": "2026-10-14T23:00:59Z"
+      },
+      "originalMinutes": 53.07415,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 300,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 14.993166959000519,
+        "fuzz": 435.2908300840354,
+        "review": 84.28217391599901,
+        "knip": 5.59376316604903,
+        "schema": 0.1667559170164168
+      },
+      "hostLoad": 17.54
+    },
+    {
+      "bead": "hv-umm2.699",
+      "originalWindow": {
+        "start": "2026-10-14T23:15:27.950Z",
+        "end": "2026-10-14T23:22:12+00:00"
+      },
+      "originalMinutes": 6.734166666666667,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": -1,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 19.525963959051296,
+        "mutation": 8.544721708982252,
+        "review": 26.001170208968688,
+        "knip": 5.409496542008128
+      },
+      "hostLoad": 22.32
+    },
+    {
+      "bead": "hv-umm2.700",
+      "originalWindow": {
+        "start": "2026-10-14T23:33:52.207Z",
+        "end": "2026-10-14T23:55:11.167288+00:00"
+      },
+      "originalMinutes": 21.316004799999998,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 111,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review-v1": 33.024107665987685,
+        "focused-v2": 7.310807208996266,
+        "full-v1": 102.2465157090337,
+        "knip-v1": 4.521297500003129,
+        "cf-dropped-entry-side-filter-original40": 7.433317792019807,
+        "focused-v1": 8.360568667005282,
+        "cf-dropped-entry-side-filter-new-negatives": 6.580265666998457,
+        "cf-both-sides-historical-cohort-original40": 6.918087458005175,
+        "cf-both-sides-historical-cohort-new-negatives": 6.72657875000732,
+        "live-two-window-v1": 48.726,
+        "live-two-window-v2": 77.017,
+        "schema-v1": 0.30170091695617884
+      },
+      "hostLoad": 17.4990234375
+    },
+    {
+      "bead": "hv-umm2.701",
+      "originalWindow": {
+        "start": "2026-10-15T00:09:42.764Z",
+        "end": "2026-10-15T00:18:53.949849+00:00"
+      },
+      "originalMinutes": 9.186430816666666,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 10,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused-corrected": 9.81996666698251,
+        "omission-counterfactual": 8.902511749998666,
+        "review": 76.44679758400889,
+        "knip": 5.2853405000059865,
+        "evidence-schema": 0.25587504100985825,
+        "whitespace": 0.27480395801831037
+      },
+      "hostLoad": 22.69189453125
+    },
+    {
+      "bead": "hv-umm2.702",
+      "originalWindow": {
+        "start": "2026-10-15T00:07:23.636Z",
+        "end": "2026-10-15T00:33:45.662720+00:00"
+      },
+      "originalMinutes": 26.367112000000002,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 227,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 30.78270058298949,
+        "review": 67.33039208303671,
+        "reviewEarlierEpoch": 89.05797337502008,
+        "knip": 7.598796458041761,
+        "qaAttempt1": 11.516945084033068,
+        "qaAttempt2": 39.03899029199965,
+        "qaAttempt3": 28.28403325000545,
+        "qaAttempt4": 42.50731795805041
+      },
+      "hostLoad": 19.25
+    },
+    {
+      "bead": "hv-umm2.703",
+      "originalWindow": {
+        "start": "2026-10-14T23:53:44.089Z",
+        "end": "2026-10-15T00:07:57.867318+00:00"
+      },
+      "originalMinutes": 14.229638633333334,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 205,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "baseline": 11.702887875027955,
+        "focused-corrected": 11.40754891600227,
+        "focused-final": 10.95161145797465,
+        "focused": 13.311562791990582,
+        "full-final": 128.26177866698708,
+        "full": 123.06703054200625,
+        "knip": 8.427086250041611,
+        "review-final": 31.15948166704038,
+        "review": 36.06296533398563,
+        "schema": 0.09230129100615159,
+        "whitespace": 0.012561916024424136
+      },
+      "hostLoad": 23.27587890625
+    },
+    {
+      "bead": "hv-umm2.704",
+      "originalWindow": {
+        "start": "2026-10-15T00:11:12.995Z",
+        "end": "2026-10-15T00:19:49.466957+00:00"
+      },
+      "originalMinutes": 8.607865949999999,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 96,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "before-passive": 11.440479708951898,
+        "focused": 27.113696624990553,
+        "full-lock": 149.41649358300492,
+        "full": 149.38669908302836,
+        "knip": 4.7109819580218755,
+        "mapped-route-counterfactual": 11.233568082971033,
+        "review": 60.4726523749996,
+        "timestamp-fixture-counterfactual": 9.016541082994081
+      },
+      "hostLoad": 19.03466796875
+    },
+    {
+      "bead": "hv-umm2.706",
+      "originalWindow": {
+        "start": "2026-10-15T00:27:55.187Z",
+        "end": "2026-10-15T00:30:33.035391+00:00"
+      },
+      "originalMinutes": 2.6308065166666665,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "review": 49.236613792018034,
+        "knip": 4.957365458016284
+      },
+      "hostLoad": 12.82
+    },
+    {
+      "bead": "hv-umm2.709",
+      "originalWindow": {
+        "start": "2026-10-15T00:52:02.306Z",
+        "end": "2026-10-15T00:58:06.904663+00:00"
+      },
+      "originalMinutes": 6.076644383333333,
+      "originalTestDelta": {
+        "files": 0,
+        "lines": 38,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": 5.938211374974344,
+        "review": 22.519635582983028,
+        "knip": 4.706047874991782
+      },
+      "hostLoad": 7.583984375
+    }
+  ],
+  "candidateSupplement": {
+    "nativeRecords": 30,
+    "finalGateItems": [
+      {
+        "candidate": "01a13ca9-7845-71b2-9701-3574068d4ef6",
+        "source": "9fee69906f65d23f4f23f8e91b298047b61a6317",
+        "beadTrailer": [
+          "hv-umm2.697"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): read another event played this turn at resolution",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13ca9-7e78-7f13-9df1-c5b5fad6144f",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            5,
+            3,
+            620825000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            6,
+            44,
+            707440000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            5,
+            3,
+            433831000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4952,
+              "exit_code": 0,
+              "log_hash": "7f10bee72a6f1d49f4d5b84f7234f17ce63a362c59929f8608c69c42e6e0cc81",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 95990,
+              "exit_code": 0,
+              "log_hash": "b4c5ad9ffe88e8f39af43c65e7aab4e0583ab0c57a5137d1619d35a066784b15",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 55274
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cab-0a71-7da2-a3ff-d31ad13d7408",
+          "tested_oid": {
+            "bytes": "f89640c8a4d73d693a07038c1891fee4576fb02c",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "9360f3189c064a9f6b57b1f113b4c926f65e7d77",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cb6-8c41-7fb0-a3e5-8cecb9b1e670",
+        "source": "9a07827003c78875feee7e3d0598dd636745fd01",
+        "beadTrailer": [
+          "hv-b9na"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "docs(evidence): audit Phase 5 workflow since hv-n913",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cb6-91f5-7822-b3e5-80c477072b9e",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            19,
+            20,
+            462668000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            19,
+            42,
+            50387000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            19,
+            20,
+            395486000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4726,
+              "exit_code": 0,
+              "log_hash": "5b060f67151f6876ce52c0791bf5b2ea2b9f6ff123f34a1dc4a7be768d08f758",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 16709,
+              "exit_code": 0,
+              "log_hash": "1fdf60b315211c0ba3771017e9f655490050ed11536bc429b68f4caef8f07d67",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 1447
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cb6-e6e9-7b21-88ab-7c6a236afd50",
+          "tested_oid": {
+            "bytes": "ae5615455b519d93501aacabc78cdd651c8d7bf2",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cb7-33c0-7420-95d5-787cd4d0f462",
+        "source": "8c62636985197600c9050011f94c1fe9d5768296",
+        "beadTrailer": [
+          "hv-umm2.103"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): add declared alternative play costs",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cb7-3a77-77e3-b62c-d865c7a5178b",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            20,
+            3,
+            748724000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            21,
+            40,
+            917891000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            20,
+            3,
+            670922000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4911,
+              "exit_code": 0,
+              "log_hash": "184732e94844569bffac3e49488b82b6391c2860be99d103752dca88d1170c88",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 92048,
+              "exit_code": 0,
+              "log_hash": "36587877a133ea1f9ef497e824879c25b9e0cc9c68f021254354b335a7385ef6",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54676
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cb8-b744-7b72-bf0c-890551bef2c7",
+          "tested_oid": {
+            "bytes": "96f5db577359d02040bf8624a04b06f22a060379",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "ae5615455b519d93501aacabc78cdd651c8d7bf2",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cba-2a44-7702-9e5e-a121e7a06ad5",
+        "source": "63354a495745029140617ef93883fb3d8c025510",
+        "beadTrailer": [
+          "hv-umm2.699"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "test(engine): observe event history on the requested extra turn",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cba-343d-7c41-967b-783b86a75e11",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            23,
+            18,
+            997804000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            23,
+            53,
+            651415000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            23,
+            18,
+            769273000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5401,
+              "exit_code": 0,
+              "log_hash": "43658e35626cb61121f1c6c4648e46814dd947785f6e70657a5590c33e494d9c",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 29066,
+              "exit_code": 0,
+              "log_hash": "5b5e39b7368f7763bb96b53fd0b9da7835efd6cd8d466f30e3c52e44272f0338",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 2245
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cba-bdbf-7bb1-ab20-88490ae41f7a",
+          "tested_oid": {
+            "bytes": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "96f5db577359d02040bf8624a04b06f22a060379",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cd6-c16d-7db1-ba38-dc150c9feb98",
+        "source": "55cebea9b9951d2d47adfba90b867b1adc7d605f",
+        "beadTrailer": [
+          "hv-umm2.249"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(content): compose discard and opponent-turn Dreamsign costs",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cd6-c7e8-7f02-bd8c-27f69bff2856",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            54,
+            31,
+            410936000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            56,
+            15,
+            810405000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            54,
+            31,
+            350350000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4792,
+              "exit_code": 0,
+              "log_hash": "f9dd9378bc80633bb1513cd6cd782c908fbe3de40a3c75130e611b28c5d7c643",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 99506,
+              "exit_code": 0,
+              "log_hash": "445da2dcb53e1d05abd832a081a4a0ff5c1197aa6e7ea4ccd153960912939a5f",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54249
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cd8-604e-7a53-8436-c4940ae93c07",
+          "tested_oid": {
+            "bytes": "5e0d191920dd366ffa6ad059ed461f6880a33aee",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cd9-e7b1-73e2-984e-801b26c2d3ac",
+        "source": "519d7b9f96658ef17c6a9f9cf6810c73e56e3476",
+        "beadTrailer": [
+          "hv-umm2.234"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): price Reclaim abilities and author cost Dreamsigns",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cda-9c01-7f63-b01d-550addfc2e07",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            0,
+            32,
+            383098000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            2,
+            13,
+            718729000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            0,
+            32,
+            304084000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4964,
+              "exit_code": 0,
+              "log_hash": "fcad26cfa07be9422162bc64f649fc845329c610aa8674c310ca789d2b2a4bd2",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 96203,
+              "exit_code": 0,
+              "log_hash": "71f099d770eabc5f4906447b775de25be618e6d2e7328ed8526688cc83b421eb",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54511
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cdd-d662-7131-98af-7f6f9ab86f51",
+          "tested_oid": {
+            "bytes": "8fee862c17ada458e7e14346b95c612d1583193d",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "92d563adfe90522e101465381db5a49e88407331",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cda-289c-7d23-a8db-ac9c2ffb2ed4",
+        "source": "fa9bffe7125aa52c9ca5b1d57cbf12d1041c77cb",
+        "beadTrailer": [
+          "hv-umm2.700"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(battle): enforce materialization status and save boundaries",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cda-8a61-7bc3-921a-77732ff29430",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            58,
+            42,
+            435326000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            0,
+            22,
+            930105000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            58,
+            42,
+            310744000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5248,
+              "exit_code": 0,
+              "log_hash": "7a06ed3c83471631cb841d43f8b9c37b3df063873ec095903efa498b3576f87f",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 94891,
+              "exit_code": 0,
+              "log_hash": "c8c0468a2552924b3673d0d0e1cd13b4b23f8c1d797ce500226aa37b96c2a951",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54263
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cdc-25a0-7d02-9839-d129e1504f8e",
+          "tested_oid": {
+            "bytes": "92d563adfe90522e101465381db5a49e88407331",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "5e0d191920dd366ffa6ad059ed461f6880a33aee",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cdb-cfdc-7ce2-9a46-ba2a57050459",
+        "source": "0737051c2961e16d0b9f472388b09b8520560237",
+        "beadTrailer": [
+          "hv-umm2.627"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): activate hand sources with exact reveal payment",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cdb-daf9-7a82-b154-cea8913c96c8",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            2,
+            20,
+            490413000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            4,
+            3,
+            884446000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            2,
+            20,
+            440638000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4817,
+              "exit_code": 0,
+              "log_hash": "3b0d12b578ffcd83da73e2466575514def42dd10303309e435e7d8a671ad79c8",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 98282,
+              "exit_code": 0,
+              "log_hash": "eb2eac911bc4fd9a5b6ef3ab5bb2667d6ddb75206baf0fcd064a057040ee1ff5",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54237
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cdf-84b8-7d03-aa22-9babc4b8c415",
+          "tested_oid": {
+            "bytes": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "8fee862c17ada458e7e14346b95c612d1583193d",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cdc-c99b-75d1-9f5f-a0575fc2fba1",
+        "source": "6b7d26b5e4877731faa7326be52c62acf15b588b",
+        "beadTrailer": [
+          "hv-umm2.582"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): trigger once for settled scoring groups",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cdc-d73b-7b02-8367-512d8a9757cb",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            4,
+            13,
+            606876000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            6,
+            4,
+            996215000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            4,
+            13,
+            520086000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5445,
+              "exit_code": 0,
+              "log_hash": "b0c77ef49fd7ea5074879001ead2dc2b1f1db019a337d9db24acefa115458ac2",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 105726,
+              "exit_code": 0,
+              "log_hash": "44dd38c7980b416e4bec04e6e74b5f9cb29b92dbecb9040a027be78cb856f732",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 55084
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13ce1-5de4-74f2-b0ca-be0e5cffd8af",
+          "tested_oid": {
+            "bytes": "d08e03d02fa6ecc9d6380fde2cfcc5760e65debc",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13ce3-e9ac-70c1-b693-658e321cf310",
+        "source": "991fba83ea803913515bf0ee85b0d5634cbdf48f",
+        "beadTrailer": [
+          "hv-umm2.703"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(engine): compare materialization grants on hidden physical members",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13ce3-efa9-7630-8464-1f45ff0e4034",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            8,
+            53,
+            553382000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            9,
+            29,
+            719003000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            8,
+            53,
+            501223000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4698,
+              "exit_code": 0,
+              "log_hash": "2fa4bf89327e64f90fc0f2ff2042f71a57eede242a6ebd5d2fb86c5f18fa2aff",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 31347,
+              "exit_code": 0,
+              "log_hash": "597a5ea189736d0934e40387895bb8c58e4ff097b3c25b73299f60e507637d3c",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 2230
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13ce4-7d80-7733-ba92-7d41326308e2",
+          "tested_oid": {
+            "bytes": "1e0398642e3fb530abdeaa7cf35fa3b74578e1f6",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "d08e03d02fa6ecc9d6380fde2cfcc5760e65debc",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13ce7-5f2f-7521-9ebc-6966a3e504c7",
+        "source": "73976989e8305aa6076379188b23f93472d855bf",
+        "beadTrailer": [
+          "hv-6nkw"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(engine): validate remembered journey-deck origin agreement",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13ce7-66c9-7f31-82e2-9c6dd8a1bad2",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            12,
+            40,
+            736674000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            14,
+            27,
+            303638000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            12,
+            40,
+            603797000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4942,
+              "exit_code": 0,
+              "log_hash": "e075c48124390398701bb2541173a1054f88b868cf1945540fd983c5e212b40b",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 101494,
+              "exit_code": 0,
+              "log_hash": "e690ee8577ada88a7347c84dfc2654b79ef3533eccd534d2e45399f68f28b98e",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54372
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13ce9-07f6-7130-ba55-2e25cdc5ce1a",
+          "tested_oid": {
+            "bytes": "c1b13bdd8466755978c6993727a3db8340969567",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "1e0398642e3fb530abdeaa7cf35fa3b74578e1f6",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13ced-eb7b-7702-ad3f-c8e6e958298f",
+        "source": "95178aaae0382506f42cce9759214d1ae36145c6",
+        "beadTrailer": [
+          "hv-umm2.701"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "test(engine): strengthen qualified void target membership proof",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13ced-f285-7cf3-976e-68c99dbadb66",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            19,
+            49,
+            681633000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            21,
+            47,
+            34732000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            19,
+            49,
+            601752000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 6535,
+              "exit_code": 0,
+              "log_hash": "6e947d61f3b6dc0560e07552bdc9c7441ad170c81a172a4669e535ee1e59fe86",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 110649,
+              "exit_code": 0,
+              "log_hash": "1f2085fb685bf7d6a0dcc3cead330eeab52cdccb7060d36ed6ac2422b512466d",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 55395
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cef-bdac-7f03-96cd-0a17673fd910",
+          "tested_oid": {
+            "bytes": "5019e52f637759a39fec64ff571fb1ea381207e2",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "c1b13bdd8466755978c6993727a3db8340969567",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cef-0319-7c41-9819-e2a87914a00e",
+        "source": "18fc1800c85ef296563281eec4c4547af58fa0c1",
+        "beadTrailer": [
+          "hv-umm2.704"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(engine): admit inert nth cost statics in copy continuation proof",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cef-0bb6-7bf1-b37e-e2ccc497ba14",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            21,
+            53,
+            849593000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            23,
+            46,
+            945409000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            21,
+            53,
+            792428000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5787,
+              "exit_code": 0,
+              "log_hash": "0c5985ce3c2ba8d800fd752d954cf5bd20942e1b9aa455233a005ca7b728f062",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 107166,
+              "exit_code": 0,
+              "log_hash": "43880940fe95ffb5a1f986846f4f169374c7869a78f7d3e132272ec36dd5ec3f",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 55396
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cf1-9213-7863-8d3d-45be169737a8",
+          "tested_oid": {
+            "bytes": "13dc7960c17f9bf2b645ec7966b80361b94d0a9f",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "5019e52f637759a39fec64ff571fb1ea381207e2",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cf8-4e31-79e2-87bb-166bba950cc6",
+        "source": "323bd4c6f1848045103eec40cf5840f47a04b4df",
+        "beadTrailer": [
+          "hv-umm2.706"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "docs(engine): describe observed Reclaim reconciliation distance",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cf8-55d3-7b73-b378-c0aafdb91d7c",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            31,
+            10,
+            503447000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            32,
+            50,
+            635608000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            31,
+            10,
+            394701000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4830,
+              "exit_code": 0,
+              "log_hash": "b37acba4bdbddb2856983dd2d3cbe70a3bcc4f23ea12b8f710165eba22a4d33f",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 95168,
+              "exit_code": 0,
+              "log_hash": "4083ad883889eac5e358bb7b7f2deedc9b3d61809d8230c43255b23e15efdd29",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54377
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cf9-ddd7-76a1-935a-aebbb7e0884d",
+          "tested_oid": {
+            "bytes": "323bd4c6f1848045103eec40cf5840f47a04b4df",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "13dc7960c17f9bf2b645ec7966b80361b94d0a9f",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cfb-0c59-78d2-9f2a-7be28cfcc24a",
+        "source": "9d856c20d9912ca73488dc6042487816b8d2e1f2",
+        "beadTrailer": [
+          "hv-umm2.702"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(engine): attribute alternative payment prompts to cost producers",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cfb-13cd-7af1-9468-1ff20b9aaf43",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            34,
+            10,
+            291551000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            36,
+            4,
+            20993000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            34,
+            10,
+            111715000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 6457,
+              "exit_code": 0,
+              "log_hash": "bf594a1dc795ff0b1b512cc488f52768b99f53d3b9fff24ce7c564df9be509c1",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 107098,
+              "exit_code": 0,
+              "log_hash": "686809141c3ddc0f8452a444555cf54fe0f07ff73096ce5a83080ec04c72ee12",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54948
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cfc-d149-7712-8ff7-14c77f906a5d",
+          "tested_oid": {
+            "bytes": "abf6062de4adf8123370839e966d57f61af167b9",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "323bd4c6f1848045103eec40cf5840f47a04b4df",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d06-0759-7fc2-a7a2-b059d00347b9",
+        "source": "e7c94f820bffc9ca36e5d7c765ee76a0f1c981fe",
+        "beadTrailer": [
+          "hv-umm2.247"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "docs(content): record five Dreamsign battle acceptance",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d06-0d41-71f0-826f-702f8a9d4410",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            46,
+            9,
+            370861000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            46,
+            31,
+            924986000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            46,
+            9,
+            303060000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5167,
+              "exit_code": 0,
+              "log_hash": "0f5ea07e00b5f9cec8cda0f75160986c3faaccd93aa45bb5f675a7d9688ee3e5",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 17268,
+              "exit_code": 0,
+              "log_hash": "5eadab70d6524ef3d67e67c627e7493e9b5f97c25654b6077603bd1878abd5b2",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 1447
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d06-65fe-77f0-8361-aa35cdabf5ab",
+          "tested_oid": {
+            "bytes": "ed4d6273ab60df783ac4c365418f5041f087e811",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "abf6062de4adf8123370839e966d57f61af167b9",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d11-434c-7903-ac10-d4ba1ce42bdf",
+        "source": "8e47d80f245c669577d4400b6154b7152ca1ed70",
+        "beadTrailer": [
+          "hv-umm2.709"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(atlas): keep reveal log identities UUID-only",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d11-49d6-7002-9d20-e9f3148a476d",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            0,
+            58,
+            26,
+            441237000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            0,
+            58,
+            57,
+            425303000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            0,
+            58,
+            25,
+            689311000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4600,
+              "exit_code": 0,
+              "log_hash": "e114309fbfde38f6cd899ec19cf4f038bc61ecb6b94c1d37df986e6f8fcdbe43",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 26022,
+              "exit_code": 0,
+              "log_hash": "a7c228b5215a2d6e131c222fadd1ccb990bd8a4443f2c58b6fdaa5a64c3f9b52",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 2256
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d11-c620-72f2-888a-84483c7e858c",
+          "tested_oid": {
+            "bytes": "8e47d80f245c669577d4400b6154b7152ca1ed70",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "ed4d6273ab60df783ac4c365418f5041f087e811",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d21-1a44-7dd0-9d70-e87a09ceba4e",
+        "source": "106540a262fa6319b9a9f3d2db4b2221da18d9bd",
+        "beadTrailer": [
+          "hv-umm2.191"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(cards): author remaining cards-79 supported clauses",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d21-1fdc-7ce2-b82e-6bcf25415dbc",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            1,
+            15,
+            43,
+            712758000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            1,
+            17,
+            10,
+            374377000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            1,
+            15,
+            43,
+            631719000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4629,
+              "exit_code": 0,
+              "log_hash": "d00da5687a55457591c94b0eb0abcfdb5acb1943b7d83c342d55d8f4051a5bf1",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 81863,
+              "exit_code": 0,
+              "log_hash": "e16eeb6d845cdb03535484bd3a8d167f8c293dc798d98dd73564d91833561f44",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54264
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d22-736d-7902-ba2f-fdbe264a32c1",
+          "tested_oid": {
+            "bytes": "56254ac94763fd7b650200b71bf0b8317b12d2ea",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "8e47d80f245c669577d4400b6154b7152ca1ed70",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d22-0ff2-73d1-899f-8ed13495d29c",
+        "source": "468d2a5aaa9fc8eb9deae102a83b91ae943c52b4",
+        "beadTrailer": [
+          "hv-umm2.590"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): grant Awakened before the first materialization",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d22-199f-79a0-be10-a06b2b983013",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            1,
+            17,
+            15,
+            952739000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            1,
+            19,
+            30,
+            5899000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            1,
+            17,
+            15,
+            857183000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 7023,
+              "exit_code": 0,
+              "log_hash": "4953a14454cdc00583ef29b9156aba72716bbdbe6dbfa8d65117c76424f8c2f7",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 126838,
+              "exit_code": 0,
+              "log_hash": "dfea3ed571cb8349d595874705827b91711dd68d239ba2e986b7622704750805",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54230
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d24-94ef-73e0-80c2-f87b532a2080",
+          "tested_oid": {
+            "bytes": "7d4809c6939155f3cd563cbc1ae58452fe40d358",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "56254ac94763fd7b650200b71bf0b8317b12d2ea",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d36-265b-7dd2-ba2b-59f489407842",
+        "source": "fb40400e6f11c5f2fbdbf165dd02745e85c3e3d3",
+        "beadTrailer": [
+          "hv-umm2.244"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "test(content): certify Dreamsign synergy batch acceptance",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d36-2dd5-7223-a52d-39b0cb25b024",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            1,
+            38,
+            43,
+            390705000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            1,
+            39,
+            4,
+            634124000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            1,
+            38,
+            43,
+            353881000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4737,
+              "exit_code": 0,
+              "log_hash": "7d30d36179a8a152a15374e96dcc162eb8a3eef83c618ea89de121751965c08f",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 16079,
+              "exit_code": 0,
+              "log_hash": "ef0a36347c4859981638163df11f73e830d638c149bf8e7a4e3c1b5291238196",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 1451
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d36-8148-7d73-90f6-8f8e91ccbe42",
+          "tested_oid": {
+            "bytes": "53e88efa62b282cc6b82e9120da049e7367675f1",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "7d4809c6939155f3cd563cbc1ae58452fe40d358",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d3c-ffc5-7463-9ee9-63b6093083aa",
+        "source": "33a3ed87162dd5497bee9bee1a10598c0cc2e92b",
+        "beadTrailer": [
+          "hv-umm2.238"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(content): author Potion Mortar using the supported random cost setter",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d3d-0805-7cf1-817e-08f1fd08dd06",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            1,
+            46,
+            12,
+            507430000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            1,
+            47,
+            48,
+            959572000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            1,
+            46,
+            12,
+            433270000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5176,
+              "exit_code": 0,
+              "log_hash": "b1438f1a716da196060abe112f1260dc264a0f3d8e4b97701a3b4a6a63ec80ec",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 91138,
+              "exit_code": 0,
+              "log_hash": "880ef17eff09582576aa30894584db9e2dd1a9cb8c925a213cb85fa36a484c8f",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54251
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d3e-816d-7a92-933f-09795b79c17a",
+          "tested_oid": {
+            "bytes": "e4769f5f8be92ef9caec8c9b96cd94788eb2f927",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "53e88efa62b282cc6b82e9120da049e7367675f1",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d43-3786-7032-9af7-568f5f9bc104",
+        "source": "c068a0f3123e3b8bb69f964141abf4181858b50b",
+        "beadTrailer": [
+          "hv-umm2.237"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "feat(engine): track first qualifying occasions each turn",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d43-42ac-7e80-9f89-738ece2cdd21",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            1,
+            53,
+            0,
+            914406000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            1,
+            54,
+            38,
+            952588000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            1,
+            53,
+            0,
+            836355000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5380,
+              "exit_code": 0,
+              "log_hash": "4efb956df8767123dbbb06babe364faa577d53422266077c200dfb096c3a74ca",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 92501,
+              "exit_code": 0,
+              "log_hash": "77e0c93ea8ef49d420a9e8503aa93eafc233033d1961c1f6315ebbf6914b7323",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 54306
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d44-c2f8-70c0-9796-d4ff8adbed7c",
+          "tested_oid": {
+            "bytes": "400934730a5d2036691d472739311dd0efe3cfd1",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "e4769f5f8be92ef9caec8c9b96cd94788eb2f927",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13d4d-9e6f-7e90-95a9-15b29d042dd6",
+        "source": "8e070651be7386f445ca614d50c6f9dcbbe7399a",
+        "beadTrailer": [
+          "hv-umm2.254"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "docs(content): certify five Dreamsign batch acceptance",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13d4d-a5eb-79b0-ba3a-5b96a5e916ba",
+          "state": "passed",
+          "started_at": [
+            2026,
+            288,
+            2,
+            4,
+            21,
+            524277000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            288,
+            2,
+            4,
+            42,
+            476544000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            288,
+            2,
+            4,
+            21,
+            433689000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 4702,
+              "exit_code": 0,
+              "log_hash": "a1e267c0e283939ac6f8aaed93e9db1094daa1910d897595893dcde1418dd512",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 16152,
+              "exit_code": 0,
+              "log_hash": "fe6499e61de8b88f1f9ee6effae42aa8d766388edaf725550a2755917a4efe55",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 1451
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13d4d-f874-7d20-9055-d1526df3ba53",
+          "tested_oid": {
+            "bytes": "a8b32f8ca664610273c3f1da6e8658396de6f1f9",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "400934730a5d2036691d472739311dd0efe3cfd1",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13ca6-afdf-7a92-8aa9-df31762b7997",
+        "source": "95998a7b8ba53b9d6ee7ed7369649ac6f1c5e30f",
+        "beadTrailer": [
+          "hv-twm7"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "docs(evidence): normalize Avatar batch 5 measurement units",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13ca6-b790-7811-8461-e0d70f2ca08e",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            2,
+            1,
+            685086000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            2,
+            23,
+            552451000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            2,
+            1,
+            455779000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5324,
+              "exit_code": 0,
+              "log_hash": "393479e113e8c53b7a39ba5367ee09d72b12af5f61e36d54e676966677c63412",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 16412,
+              "exit_code": 0,
+              "log_hash": "9d90c1575cfa05ed3fb9eee30a9a2a7fd320f537cb0e54c345c5bf3a82ea3ec2",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 1451
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13ca7-0e49-7473-8682-25ba0729c169",
+          "tested_oid": {
+            "bytes": "9360f3189c064a9f6b57b1f113b4c926f65e7d77",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "4f4372ea073e6f3e1cd73210bf7a8f4f105ab011",
+            "format": "sha1"
+          }
+        }
+      },
+      {
+        "candidate": "01a13cb0-6fb0-7b51-8884-5ac7feacac8c",
+        "source": "92b2c574ac1a091d22cada141fbe2c7e87729e05",
+        "beadTrailer": [
+          "hv-pj9p"
+        ],
+        "kind": "gate",
+        "state": "promoted",
+        "cleanup": "completed",
+        "terminalReason": null,
+        "sourceSubject": "fix(rules): validate C4 origin cohort declarations",
+        "retryOf": null,
+        "buildset": {
+          "id": "01a13cb0-8170-7460-8b4c-e1148d33782d",
+          "state": "passed",
+          "started_at": [
+            2026,
+            287,
+            23,
+            12,
+            44,
+            117791000,
+            0,
+            0,
+            0
+          ],
+          "finished_at": [
+            2026,
+            287,
+            23,
+            14,
+            35,
+            918883000,
+            0,
+            0,
+            0
+          ],
+          "created_at": [
+            2026,
+            287,
+            23,
+            12,
+            43,
+            960425000,
+            0,
+            0,
+            0
+          ],
+          "step_results": [
+            {
+              "diagnostics": [],
+              "elapsed_ms": 5323,
+              "exit_code": 0,
+              "log_hash": "f7bbde405cf40811837611a5cc8035c1fd89e092b4f4115cc35e97a576dead64",
+              "name": "dependencies",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 0,
+              "stdout_end": 26
+            },
+            {
+              "diagnostics": [],
+              "elapsed_ms": 106355,
+              "exit_code": 0,
+              "log_hash": "eb7f0231ea047ae96e09c0fbf736e018beb3c1aad77b66b4996c8ec800db1070",
+              "name": "review-gate",
+              "result_class": "success",
+              "reused_from_attempt_id": null,
+              "signal": null,
+              "stderr_end": 69973,
+              "stdout_end": 55388
+            }
+          ]
+        },
+        "certificate": {
+          "id": "01a13cb2-4181-78c0-88d3-55a57e195def",
+          "tested_oid": {
+            "bytes": "306fa9236e8e9ec90a6f89dd3585bfd743a59c09",
+            "format": "sha1"
+          },
+          "expected_parent_oid": {
+            "bytes": "f89640c8a4d73d693a07038c1891fee4576fb02c",
+            "format": "sha1"
+          }
+        }
+      }
+    ],
+    "all25CertifiedAndCleaned": true,
+    "freshSuccessfulSteps": 50,
+    "reusedSteps": 0
+  },
+  "aggregates": {
+    "gateSeconds": {
+      "n": 25,
+      "median": 99.998,
+      "min": 20.816,
+      "max": 133.861,
+      "above90": 16,
+      "scope": "Dependencies plus review-gate actualsteps, mixedselections, matchedloadUNKNOWN, target60 not controlledcausalcomparison"
+    },
+    "gateDependenciesMedianSeconds": 4.964,
+    "gateReviewMedianSeconds": 94.891,
+    "releaseSeconds": {
+      "n": 15,
+      "median": 444.286,
+      "min": 382.091,
+      "max": 500.403,
+      "above450": 4,
+      "target": 300,
+      "scope": "Actual15passedruns in retainedhistorywindow; mixedloads, incompleteinterval, not isolatedbenchmark"
+    },
+    "releaseComponentMedianSeconds": {
+      "dependencies": 4.864,
+      "reviewFull": 121.555,
+      "fuzz200": 309.907
+    },
+    "ordinaryReview": {
+      "n": 24,
+      "median": 55.285,
+      "min": 0.227,
+      "max": 86.121,
+      "quickEvidenceOnlyN": 5,
+      "aboveOneSecondN": 19,
+      "aboveOneSecondMedian": 62.458,
+      "scope": "Stored mixed selectedcommands, no full-suitewallclaim"
+    },
+    "focused": {
+      "n": 17,
+      "median": 17.567,
+      "min": 0.644,
+      "max": 81.064,
+      "scope": "Mixedselections/aggregates;6nkw81.064 includesred/setup/fault epochs, finalgreen17.344"
+    },
+    "knip": {
+      "n": 24,
+      "median": 5.487,
+      "min": 4.32,
+      "max": 9.013
+    },
+    "originalOverlappingWindowSumMinutes": 857.674,
+    "correctedDedicatedModuleDelta": 21,
+    "originalStoredFileDelta": 8,
+    "netTestLines": 3846,
+    "jsdomDelta": 0,
+    "configuredEntrypointDelta": 0
+  },
+  "history": {
+    "events": 500,
+    "firstSequence": 29969,
+    "lastSequence": 30468,
+    "from": "2026-10-14T23:28:37.452430Z",
+    "to": "2026-10-15T02:11:38.433582Z",
+    "previousClose": "2026-10-14T23:20:46Z",
+    "qualification": "Actualhistory begins8min afterpreviousclose; exactcandidate supplements coverall25deliveries, no inventedfullintervalhistory",
+    "promotions": 19,
+    "releasePasses": 15,
+    "releaseSupersessions": 4,
+    "releaseFailures": 1
+  },
+  "retainedFailures": {
+    "votingFailure": "One103exhaustiveroute gate repaired",
+    "mergeConflicts": [
+      "hv-umm2.103",
+      "hv-umm2.627",
+      "hv-umm2.234"
+    ],
+    "release": {
+      "item": "01a13cdd-ef8b-7421-b5dd-4c5c22ae5c1f",
+      "buildset": "01a13cdf-83b0-7132-b165-03543cde2e8a",
+      "tested": "8fee862c17ada458e7e14346b95c612d1583193d",
+      "failingStep": "fuzz",
+      "case": "fuzz-46 beforeaction42/afterstep124 extrafloatinge14 bothviewers",
+      "canonicalRepair": "hv-umm2.703",
+      "repairSource": "991fba83ea803913515bf0ee85b0d5634cbdf48f",
+      "duplicateCancelled": "hv-umm2.708",
+      "qualification": "Comparatorvalidationrepair, notgameplaybug; laterweightedpass isdifferentworkload andnotitself resolution"
+    }
+  },
+  "D19": {
+    "currentControlledIntegratedCompliance": "UNESTABLISHED",
+    "observations": [
+      {
+        "bead": "hv-umm2.103",
+        "suiteSeconds": 65.3,
+        "startingLoad": 5.86
+      },
+      {
+        "bead": "hv-umm2.234",
+        "suiteSeconds": 81.56,
+        "startingLoad": 18.92
+      }
+    ],
+    "qualification": "No controlled currentintegrated lowload comparison; phase5gate46 retains measureandjustifiedtestcut duty. Filecount informational, no ceiling/budget revision."
+  },
+  "capacity": {
+    "237OuterMinusExecutionOverheadSeconds": 905.878,
+    "254OuterSeconds": 1517.811140957987,
+    "254InnerReceiptSeconds": 516.8234673329862,
+    "254AdmissionPlusStartupSeconds": 1000.9876736250009,
+    "254ProgramWallSeconds": 513.7,
+    "254ProgramCPUSeconds": 561.7,
+    "244OuterSeconds": 1008.588,
+    "244NativeWallSeconds": 496.8,
+    "247OuterSeconds": 728.118,
+    "247NativeWallSeconds": 663.8,
+    "qualification": "Nestedscopes are not additive nor exactkernel-lockwait. Browserleasewaitmilliseconds distinctcallerrepairtime, no idle/productiveCPU/benchmarkclaim."
+  },
+  "normalReview": {
+    "debt": [
+      "hv-6nkw",
+      "hv-umm2.237",
+      "hv-umm2.254",
+      "hv-umm2.582",
+      "hv-umm2.590",
+      "hv-umm2.702",
+      "hv-umm2.703",
+      "hv-umm2.704"
+    ],
+    "ownOnceAt710Retries": [
+      {
+        "bead": "hv-umm2.582",
+        "exit": 1,
+        "receipt": "{\"start\": \"2026-10-15T02:11:10.093225+00:00\", \"end\": \"2026-10-15T02:11:12.712117+00:00\", \"pid\": 70888, \"pgid\": 70888, \"exitCode\": 1, \"wallSeconds\": 2.618813458015211, \"cpuSeconds\": 1.2885710000000001, \"remainingGroup\": \"\"}\n",
+        "stderr": "",
+        "report": "You've hit your session limit · resets 8:40pm (America/Los_Angeles)\n"
+      },
+      {
+        "bead": "hv-umm2.704",
+        "exit": 1,
+        "receipt": "{\"start\": \"2026-10-15T02:11:10.092039+00:00\", \"end\": \"2026-10-15T02:11:12.407955+00:00\", \"pid\": 70886, \"pgid\": 70886, \"exitCode\": 1, \"wallSeconds\": 2.315814041008707, \"cpuSeconds\": 1.271062, \"remainingGroup\": \"\"}\n",
+        "stderr": "",
+        "report": "You've hit your session limit · resets 8:40pm (America/Los_Angeles)\n"
+      },
+      {
+        "bead": "hv-umm2.590",
+        "exit": 1,
+        "receipt": "{\"start\": \"2026-10-15T02:11:10.094314+00:00\", \"end\": \"2026-10-15T02:11:12.352061+00:00\", \"pid\": 70889, \"pgid\": 70889, \"exitCode\": 1, \"wallSeconds\": 2.2576860419940203, \"cpuSeconds\": 1.8986699999999999, \"remainingGroup\": \"\"}\n",
+        "stderr": "",
+        "report": "You've hit your session limit · resets 8:40pm (America/Los_Angeles)\n"
+      },
+      {
+        "bead": "hv-umm2.254",
+        "exit": 1,
+        "receipt": "{\"start\": \"2026-10-15T02:11:10.092060+00:00\", \"end\": \"2026-10-15T02:11:12.383343+00:00\", \"pid\": 70887, \"pgid\": 70887, \"exitCode\": 1, \"wallSeconds\": 2.2911629590089433, \"cpuSeconds\": 1.659058, \"remainingGroup\": \"\"}\n",
+        "stderr": "",
+        "report": "You've hit your session limit · resets 8:40pm (America/Los_Angeles)\n"
+      }
+    ],
+    "routing": "Normal other-family Claude; temporarySoloverride expired2026-10-14T01:00Z",
+    "current234": "Completeoriginal86-inputreview; later agent-addedunchangedkeyword supplement withdrawn, notcurrentdebt",
+    "qualification": "All debts retainedwithnativeowners; unavailable attempts providenoverdict, no waiver/fallback."
+  },
+  "existingDispositions": [
+    "browser scripting/initialization308/391/428",
+    "requiredreadcompletioncurrentreviewprocedure",
+    "heavyadmissionlf7t/D17"
+  ],
+  "historicalCorrections": {
+    "proof": {
+      "at": "2026-10-15T02:24:16.983846+00:00",
+      "testModuleCorrections": [
+        {
+          "bead": "hv-umm2.103",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.103.json",
+          "originalSHA256": "4909d66828ef2166074f50269111eb2d6652313ac533a197d8833f96f602ebf8",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 433,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 4,
+          "configuredEntrypointDelta": 0,
+          "source": "8c62636985197600c9050011f94c1fe9d5768296",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/alternative-cost-recovery.contracts.ts",
+            "src/engine/effects/primitives/contracts/alternative-cost-support.ts",
+            "src/engine/effects/primitives/contracts/alternative-cost.contracts.ts",
+            "src/engine/effects/primitives/contracts/counter-x-cost-composition.contracts.ts"
+          ],
+          "sourceNetTestLines": 433,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.234",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.234.json",
+          "originalSHA256": "52fe14f87f07eddb6fc1aeda5d9533f32171ba07e5446aa4ac8bee468a2122a4",
+          "originalTestDelta": {
+            "files": 2,
+            "lines": 526,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 4,
+          "configuredEntrypointDelta": 0,
+          "source": "519d7b9f96658ef17c6a9f9cf6810c73e56e3476",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim-composition-support.ts",
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim-recovery.contracts.ts",
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim-support.ts",
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim.contracts.ts"
+          ],
+          "sourceNetTestLines": 526,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.590",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.590.json",
+          "originalSHA256": "337a1405f3976ad67ca96145af4a62d9ac2b0ef1cec98464c47af0b19c341a0d",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 502,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 3,
+          "configuredEntrypointDelta": 0,
+          "source": "468d2a5aaa9fc8eb9deae102a83b91ae943c52b4",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/first-materialization-keyword-fidelity.contracts.ts",
+            "src/engine/effects/primitives/contracts/first-materialization-keyword-support.ts",
+            "src/engine/effects/primitives/contracts/first-materialization-keyword.contracts.ts"
+          ],
+          "sourceNetTestLines": 502,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.697",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.697.json",
+          "originalSHA256": "2dcb2845d850555963d07071971c29d440294e2eeaf70cf672a376d8ac0f912c",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 300,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 1,
+          "configuredEntrypointDelta": 0,
+          "source": "9fee69906f65d23f4f23f8e91b298047b61a6317",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts"
+          ],
+          "sourceNetTestLines": 300,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.702",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.702.json",
+          "originalSHA256": "bd4e14c20ff800b1e90de6f1e210bbf510c58f0f1bb0d13a0b1b86668f6b43c5",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 227,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 2,
+          "configuredEntrypointDelta": 0,
+          "source": "9d856c20d9912ca73488dc6042487816b8d2e1f2",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/alternative-cost-provenance-support.ts",
+            "src/engine/effects/primitives/contracts/alternative-cost-provenance.contracts.ts"
+          ],
+          "sourceNetTestLines": 227,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.703",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.703.json",
+          "originalSHA256": "d4b1d703a156ebdf9dab5f3eaa2a45b6506f9fbad7c1742ef974cfe6f8204f91",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 205,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 1,
+          "configuredEntrypointDelta": 0,
+          "source": "991fba83ea803913515bf0ee85b0d5634cbdf48f",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/materialize-keyword-fidelity.contracts.ts"
+          ],
+          "sourceNetTestLines": 205,
+          "allOtherFrictionFieldsReadOnly": true
+        }
+      ],
+      "clock700": {
+        "frictionPath": "docs/plan/evidence/friction/hv-umm2.700.json",
+        "measurementPath": "docs/plan/evidence/measurements/hv-umm2.700.md",
+        "originalCutoff": "2026-10-14T23:55:11.167288+00:00",
+        "canonicalEnd": "2026-10-14T23:56:27.741245+00:00",
+        "start": "2026-10-14T23:33:52.207Z",
+        "rawCommitReceipt": "/tmp/dreamtides-executor-01a1304d/retro-since-b9na/700-actual-git-receipt.json",
+        "nativeHandoff": "/tmp/dreamtides-executor-01a1304d/retro-since-b9na/700-original-commit-handoff.json",
+        "sourceCommit": "fa9bffe7125aa52c9ca5b1d57cbf12d1041c77cb",
+        "actualTailSeconds": 76.573957,
+        "noStructured700Measurement": "Absent in audited source, no new historical JSON created"
+      },
+      "exactAdmittedPaths": [
+        "docs/plan/evidence/friction/hv-umm2.103.json",
+        "docs/plan/evidence/friction/hv-umm2.234.json",
+        "docs/plan/evidence/friction/hv-umm2.590.json",
+        "docs/plan/evidence/friction/hv-umm2.697.json",
+        "docs/plan/evidence/friction/hv-umm2.702.json",
+        "docs/plan/evidence/friction/hv-umm2.703.json",
+        "docs/plan/evidence/friction/hv-umm2.700.json",
+        "docs/plan/evidence/measurements/hv-umm2.700.md"
+      ],
+      "prewriteSHA256": {
+        "docs/plan/evidence/friction/hv-umm2.103.json": "4909d66828ef2166074f50269111eb2d6652313ac533a197d8833f96f602ebf8",
+        "docs/plan/evidence/friction/hv-umm2.234.json": "52fe14f87f07eddb6fc1aeda5d9533f32171ba07e5446aa4ac8bee468a2122a4",
+        "docs/plan/evidence/friction/hv-umm2.590.json": "337a1405f3976ad67ca96145af4a62d9ac2b0ef1cec98464c47af0b19c341a0d",
+        "docs/plan/evidence/friction/hv-umm2.697.json": "2dcb2845d850555963d07071971c29d440294e2eeaf70cf672a376d8ac0f912c",
+        "docs/plan/evidence/friction/hv-umm2.702.json": "bd4e14c20ff800b1e90de6f1e210bbf510c58f0f1bb0d13a0b1b86668f6b43c5",
+        "docs/plan/evidence/friction/hv-umm2.703.json": "d4b1d703a156ebdf9dab5f3eaa2a45b6506f9fbad7c1742ef974cfe6f8204f91",
+        "docs/plan/evidence/friction/hv-umm2.700.json": "3fc2ec179727d9b6fbd023397a11bc2de70bc6d05a442226bc4bc2a52ed8b958",
+        "docs/plan/evidence/measurements/hv-umm2.700.md": "f361b4ae5d0f9c126b62816a4456bf45d4ecca2ff72c5661c0cea43a8dacad1c"
+      }
+    },
+    "result": {
+      "at": "2026-10-15T02:27:19.612600+00:00",
+      "exactFieldOnlyCorrections": [
+        {
+          "bead": "hv-umm2.103",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.103.json",
+          "originalSHA256": "4909d66828ef2166074f50269111eb2d6652313ac533a197d8833f96f602ebf8",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 433,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 4,
+          "configuredEntrypointDelta": 0,
+          "source": "8c62636985197600c9050011f94c1fe9d5768296",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/alternative-cost-recovery.contracts.ts",
+            "src/engine/effects/primitives/contracts/alternative-cost-support.ts",
+            "src/engine/effects/primitives/contracts/alternative-cost.contracts.ts",
+            "src/engine/effects/primitives/contracts/counter-x-cost-composition.contracts.ts"
+          ],
+          "sourceNetTestLines": 433,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.234",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.234.json",
+          "originalSHA256": "52fe14f87f07eddb6fc1aeda5d9533f32171ba07e5446aa4ac8bee468a2122a4",
+          "originalTestDelta": {
+            "files": 2,
+            "lines": 526,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 4,
+          "configuredEntrypointDelta": 0,
+          "source": "519d7b9f96658ef17c6a9f9cf6810c73e56e3476",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim-composition-support.ts",
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim-recovery.contracts.ts",
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim-support.ts",
+            "src/engine/effects/primitives/contracts/cost-modifier-reclaim.contracts.ts"
+          ],
+          "sourceNetTestLines": 526,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.590",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.590.json",
+          "originalSHA256": "337a1405f3976ad67ca96145af4a62d9ac2b0ef1cec98464c47af0b19c341a0d",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 502,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 3,
+          "configuredEntrypointDelta": 0,
+          "source": "468d2a5aaa9fc8eb9deae102a83b91ae943c52b4",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/first-materialization-keyword-fidelity.contracts.ts",
+            "src/engine/effects/primitives/contracts/first-materialization-keyword-support.ts",
+            "src/engine/effects/primitives/contracts/first-materialization-keyword.contracts.ts"
+          ],
+          "sourceNetTestLines": 502,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.697",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.697.json",
+          "originalSHA256": "2dcb2845d850555963d07071971c29d440294e2eeaf70cf672a376d8ac0f912c",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 300,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 1,
+          "configuredEntrypointDelta": 0,
+          "source": "9fee69906f65d23f4f23f8e91b298047b61a6317",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts"
+          ],
+          "sourceNetTestLines": 300,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.702",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.702.json",
+          "originalSHA256": "bd4e14c20ff800b1e90de6f1e210bbf510c58f0f1bb0d13a0b1b86668f6b43c5",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 227,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 2,
+          "configuredEntrypointDelta": 0,
+          "source": "9d856c20d9912ca73488dc6042487816b8d2e1f2",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/alternative-cost-provenance-support.ts",
+            "src/engine/effects/primitives/contracts/alternative-cost-provenance.contracts.ts"
+          ],
+          "sourceNetTestLines": 227,
+          "allOtherFrictionFieldsReadOnly": true
+        },
+        {
+          "bead": "hv-umm2.703",
+          "frictionPath": "docs/plan/evidence/friction/hv-umm2.703.json",
+          "originalSHA256": "d4b1d703a156ebdf9dab5f3eaa2a45b6506f9fbad7c1742ef974cfe6f8204f91",
+          "originalTestDelta": {
+            "files": 0,
+            "lines": 205,
+            "jsdomFiles": 0
+          },
+          "correctedDedicatedTestModuleFiles": 1,
+          "configuredEntrypointDelta": 0,
+          "source": "991fba83ea803913515bf0ee85b0d5634cbdf48f",
+          "newDedicatedModules": [
+            "src/engine/effects/primitives/contracts/materialize-keyword-fidelity.contracts.ts"
+          ],
+          "sourceNetTestLines": 205,
+          "allOtherFrictionFieldsReadOnly": true
+        }
+      ],
+      "clock700": {
+        "frictionPath": "docs/plan/evidence/friction/hv-umm2.700.json",
+        "measurementPath": "docs/plan/evidence/measurements/hv-umm2.700.md",
+        "originalCutoff": "2026-10-14T23:55:11.167288+00:00",
+        "canonicalEnd": "2026-10-14T23:56:27.741245+00:00",
+        "start": "2026-10-14T23:33:52.207Z",
+        "rawCommitReceipt": "/tmp/dreamtides-executor-01a1304d/retro-since-b9na/700-actual-git-receipt.json",
+        "nativeHandoff": "/tmp/dreamtides-executor-01a1304d/retro-since-b9na/700-original-commit-handoff.json",
+        "sourceCommit": "fa9bffe7125aa52c9ca5b1d57cbf12d1041c77cb",
+        "actualTailSeconds": 76.573957,
+        "noStructured700Measurement": "Absent in audited source, no new historical JSON created",
+        "canonicalMinutes": 22.592237416666666
+      },
+      "newSHA256": {
+        "docs/plan/evidence/friction/hv-umm2.103.json": "b7af47fbc8530d950e4c656bb2a754dd467b34fc5e9508a616465a354fa0f8fa",
+        "docs/plan/evidence/friction/hv-umm2.234.json": "c22ecb2986c164321556ab98b5423c625505fa00194d63f3f0cbf5d55ad4fed7",
+        "docs/plan/evidence/friction/hv-umm2.590.json": "a55f3f36b3daafa044943eea5c3b62d7f098181a8568b3debdf96112b63aee12",
+        "docs/plan/evidence/friction/hv-umm2.697.json": "b4b44e9089a56a04c3b389706bde82f10c1ba7605b678587f255101f5e84596b",
+        "docs/plan/evidence/friction/hv-umm2.702.json": "a4c0aeebf852f2b155de0a6f1043647f9a527a2e045388baf6bfffb93c309882",
+        "docs/plan/evidence/friction/hv-umm2.703.json": "342ec0004b4bf62155d6cb3031c05d2611e35ec511ca4da87083a1c3dfaedde3",
+        "docs/plan/evidence/friction/hv-umm2.700.json": "0ff1cb195178f38fd4ba58f1eea916e63ef184ac17e288664bceeb711f47eeab",
+        "docs/plan/evidence/measurements/hv-umm2.700.md": "716b1f5c7e4e4e46a5bbb1e5d60b30bb25483a813550e0896560d47109177e79"
+      },
+      "newTestRuntimeBehavior": false
+    },
+    "raw700CommitReceiptSHA256": "93d912a9d1d96182c1f1b1a3d5143630a6f3eddea35c8ce068884d38e673fa05",
+    "originalValuesPreservedInOwnEvidence": true,
+    "testRuntimePolicyChange": false
+  },
+  "clock": {
+    "canonicalStart": "2026-10-15T02:14:44.240Z",
+    "sampling": "UNKNOWN",
+    "actualReclaimAck": "2026-10-15T02:10:01.811166+00:00",
+    "evidenceCutoff": "2026-10-15T02:33:19.822166+00:00",
+    "canonicalElapsedToCutoffMinutes": 18.5930361,
+    "qualification": "ActualreadonlySagedispatch-to-parentGit inclusivewindow. Pre-dispatch filing/claim/setup/materialization/providerretriesseparate. FinalautomaticGitendpoint+shorttail retainedexternally; no productiveCPUinference. Priorpj9p/twm7conservativebounds preserved."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "localChecks": {
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro-since-b9na",
+      "start": "2026-10-15T02:30:45.967166+00:00",
+      "end": "2026-10-15T02:30:47.177886+00:00",
+      "pid": 97866,
+      "pgid": 97866,
+      "exitCode": 0,
+      "wallSeconds": 1.2107496669632383,
+      "cpuSeconds": {
+        "user": 0.437044,
+        "system": 0.441335
+      },
+      "startLoad": [
+        9.22900390625,
+        11.98583984375,
+        12.2236328125
+      ],
+      "endLoad": [
+        9.22900390625,
+        11.98583984375,
+        12.2236328125
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro-since-b9na",
+      "start": "2026-10-15T02:30:45.967246+00:00",
+      "end": "2026-10-15T02:30:54.044057+00:00",
+      "pid": 97867,
+      "pgid": 97867,
+      "exitCode": 0,
+      "wallSeconds": 8.076826708042063,
+      "cpuSeconds": {
+        "user": 6.281094,
+        "system": 2.403658
+      },
+      "startLoad": [
+        9.22900390625,
+        11.98583984375,
+        12.2236328125
+      ],
+      "endLoad": [
+        9.29052734375,
+        11.95263671875,
+        12.21044921875
+      ]
+    },
+    "reviewQualification": "12evidencefiles select friction-recordschema only,906records/41historicalunknown. No runtime testtotal claimed.",
+    "finalSchemaAndWhitespace": "Run after this evidence cutoff and before automaticGit; actual receipts retained in final-handoff.json and native delivery, no repeated broadchecks.",
+    "coreReviewRequired": false,
+    "coreReviewReason": "Evidence-only non-gate retrospective; no production/test/tooling/UI/source behavior delta."
+  },
+  "parentReadCorrections": [
+    "NotesNone parser TypeError beforeanycandidate effect, repairedemptystring default",
+    "Read-only zsh unmatchedglob preventedD19read, rerunwithactualpaths",
+    "Historical700structuredmeasurementJSON absent; manifestMDonly read, no newJSONcreated"
+  ],
+  "epicSummaryFiledIDs": []
+}
