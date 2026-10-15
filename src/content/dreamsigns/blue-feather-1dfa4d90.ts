@@ -1,3 +1,9 @@
+import { turnOf } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenDraw } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainTriggeringCardSpark } from "../../engine/effects/primitives/gain-triggering-card-spark";
+import { changeCardCost } from "../../engine/effects/primitives/modify-card-cost";
+import { sequence } from "../../engine/effects/primitives/sequence";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +21,10 @@ export default dreamsign({
     "833ba3dd-498a-42ce-9a03-32f6636acea1",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [triggered(
+    whenDraw("you", 1, { subtype: "Warrior" }),
+    sequence(changeCardCost(triggeringCard(), { reduce: 1 }), gainTriggeringCardSpark(triggeringCard(), 2)),
+    { condition: turnOf("you") },
+  )],
+  verifiedText: expectedVerifiedText("If the first card you draw during your turn is a warrior, reduce its cost by 1● and it gains +2✦."),
 });

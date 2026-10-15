@@ -1,3 +1,6 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { firstPlayedCharacterEntrySpark } from "../../engine/effects/primitives/first-played-entry-spark";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +13,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(firstPlayedCharacterEntrySpark(1))],
+  verifiedText: expectedVerifiedText("The first character you play each turn materializes with +1✦."),
 });

@@ -1,0 +1,875 @@
+{
+  "bead": "hv-umm2.255",
+  "baseOID": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+  "implementer": "Root session itself; QA preparation delegated separately, no feature implementation helper.",
+  "clock": {
+    "conservativeStart": "2026-10-15T05:58:52.831991+00:00",
+    "startMeaning": "Actual native claim acknowledgement; root implementation starts at or after it. This includes source inspection, coordination, validation and resource waits.",
+    "samplingStart": "UNKNOWN",
+    "precommitEvidenceCutoff": "2026-10-15T06:35:11.120942+00:00",
+    "endpointQualification": "Inclusive original root claim-ACK through final precommit evidence observation. Normal automatic Git committer timestamp and actual subprocess bracket follow in ignored final-commit receipt; no date override or postcommit evidence rewrite.",
+    "inclusiveMinutesThroughCutoff": 36.30481585,
+    "metadataSchemaAndGitTail": "Actual difference retained separately in ignored final commit receipt; committed cutoff is not claimed to be Git terminal."
+  },
+  "sourceProof": {
+    "bead": "hv-umm2.255",
+    "at": "2026-10-15T06:31:58.500953+00:00",
+    "baseOID": "96a1e5e91ac8ca35e6f5aa424d33ea34b09aac2f",
+    "sourceCount": 5458,
+    "outsideSourceInitialHashesUnchanged": 5455,
+    "productionPrintedBytesPreserved": true,
+    "codeHashes": {
+      "src/content/dreamsigns/blue-feather-1dfa4d90.ts": "4a1a673c39c0f9a13dc5a6add15553f643ce3eaa15ebe50e2428104b8a193019",
+      "src/content/dreamsigns/silver-key-11018e32.ts": "4823417a70aa3f73d3976302d1e671530089cd0cb1ba37f09b785dc6a6ee5c3a",
+      "src/content/specs/dreamsigns-battle-18.scenarios.ts": "6bd754866e1d1b3e1081a82a5fb8bc7d303fcc1be6115a00a91a01a571d1f8d1"
+    },
+    "scenarioLines": 102,
+    "scenarioCases": 8,
+    "newConfiguredTestEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "mechanicalFallout": [],
+    "runtimeEdits": [],
+    "coreReviewRequired": false,
+    "coreReviewReason": "Composition bead not marked core-review; small data leaf delta, no phase gate. Review policy thresholds preserved."
+  },
+  "scope": {
+    "authoredUUIDs": [
+      "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+      "1dfa4d90-8270-4b7c-87be-d95ab6201e00"
+    ],
+    "fullAcceptanceUUIDs": [
+      "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+      "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+      "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+      "7a37386d-6e7c-4f08-b07f-e92a1fd69893"
+    ],
+    "readOnlyChildren": {
+      "hv-umm2.671": "Wing; conditional scenario absent",
+      "hv-umm2.676": "Bead Charm; conditional scenario absent"
+    },
+    "writers": "Two exact leaves abilities/verifiedText/pending only; one private auto-discovered scenario; own evidence. No runtime/UI/shared registration/generator/config changes or fallout."
+  },
+  "rules": {
+    "newDecisions": [],
+    "cardIssues": [],
+    "anchors": [
+      "docs/rules.md: Gains on the triggering card; Spark outside play; Gaining spark; A card\u2019s own cost; Durations; First-play entry spark",
+      "RD-hv-umm2.235-1",
+      "RD-hv-umm2.611-1",
+      "RD-hv-umm2.624-1"
+    ],
+    "interpretation": "Blue Feather conjoins first ALL-card draw ordinal, Warrior current type and controller active turn. Exact physical subject gets permanent one-energy reduction and ordinary +2 gainedSpark; opponent turn/first non-Warrior/later Warrior do not match. Silver Key uses static entry-only primitive exactly; permanent gain before entry observers, not a later play trigger."
+  },
+  "D20": {
+    "module": "src/content/specs/dreamsigns-battle-18.scenarios.ts",
+    "lines": 102,
+    "cases": 8,
+    "reason": "Combined first-draw ordinal/type/active-turn restriction with private permanent cost+spark changes and actual first-play entry composition. Existing thorough primitive contracts remain their own tests.",
+    "contracts": [
+      "Both actors: first Warrior changes only first physical duplicate, immutable later duplicate; hidden cost/gain announcements and private view; actual two-energy payment; cold JSON replay equal events/hash; changes persist through Ending.",
+      "Both actors: first non-Warrior excludes later Warrior; draw on opponent turn excludes the owner-only trigger.",
+      "Both actors: Silver Key first physical character gains once before its materialized announcement, second same-printing physical card unchanged; source occurrence attribution."
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 102,
+      "jsdomFiles": 0
+    },
+    "newEntryPoints": 0,
+    "defaultProductionDataAssertions": false,
+    "copyAssertions": false
+  },
+  "recoveryApplicability": {
+    "newStateTransition": "None; composition consumes already-certified effects/conditions and normal fold protocol.",
+    "errorPartialWrite": "Existing draw235/triggering-card611 transactional rollback contracts remain unchanged. No new mutation boundary.",
+    "restart": "Own positive Blue Feather scenario deserializes settled state and checks same actual payment events/hash.",
+    "invalidStaleConcurrent": "Existing draw235 and active-turn626 fold contracts preserve wrong-side, stale and concurrent-answer rejection. This batch introduces no prompt/intent or new acceptance branch.",
+    "cancellationRefusal": "No new optional action/prompt; ordinary engine cancellation and refusal stay existing contracts."
+  },
+  "validation": {
+    "weighted300-final": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "72ef4b11-5366-4798-aab0-09e5ffbb1ed8,11018e32-f47e-45fd-a8cf-3a9e3f3be71b,1dfa4d90-8270-4b7c-87be-d95ab6201e00,7a37386d-6e7c-4f08-b07f-e92a1fd69893"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:07:55.011827+00:00",
+      "loadBefore": [
+        9.78662109375,
+        13.4765625,
+        13.142578125
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281",
+      "pid": 85867,
+      "processGroup": 85867,
+      "state": "terminal",
+      "exitCode": 0,
+      "ended": "2026-10-15T06:23:23.048547+00:00",
+      "elapsedS": 928.0190606659744,
+      "loadAfter": [
+        17.5205078125,
+        18.05322265625,
+        16.25244140625
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281",
+      "stdoutSHA": "df0e4732dc6cae18173e5873e049eab9ee258deff17b43eabc753b27a56987d7",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:09:23.235536+00:00",
+      "loadBefore": [
+        21.28662109375,
+        16.23681640625,
+        14.2255859375
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281",
+      "pid": 49621,
+      "processGroup": 49621,
+      "state": "terminal",
+      "exitCode": 0,
+      "ended": "2026-10-15T06:09:31.632064+00:00",
+      "elapsedS": 8.393946084019262,
+      "loadAfter": [
+        24.17578125,
+        17.01904296875,
+        14.5263671875
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281",
+      "stdoutSHA": "5fd1b55346f872af16a0342a8adc3991ac6a32f8f293f4995739eb9280d40413",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "weighted300": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "72ef4b11-5366-4798-aab0-09e5ffbb1ed8,11018e32-f47e-45fd-a8cf-3a9e3f3be71b,1dfa4d90-8270-4b7c-87be-d95ab6201e00,7a37386d-6e7c-4f08-b07f-e92a1fd69893"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:03:58.799424+00:00",
+      "loadBefore": [
+        17.88818359375,
+        14.009765625,
+        12.92431640625
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "pid": 5231,
+      "processGroup": 5231,
+      "state": "terminal",
+      "exitCode": -15,
+      "ended": "2026-10-15T06:06:49.149077+00:00",
+      "elapsedS": 170.34540333400946,
+      "loadAfter": [
+        13.75341796875,
+        14.83984375,
+        13.5615234375
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "stdoutSHA": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "review-2": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:07:53.880670+00:00",
+      "loadBefore": [
+        9.78662109375,
+        13.4765625,
+        13.142578125
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281",
+      "pid": 85674,
+      "processGroup": 85674,
+      "state": "terminal",
+      "exitCode": 0,
+      "ended": "2026-10-15T06:09:12.573866+00:00",
+      "elapsedS": 78.69009795901366,
+      "loadAfter": [
+        20.15869140625,
+        15.84033203125,
+        14.0634765625
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281",
+      "stdoutSHA": "4ba11af2e0c04109c0edeea3629444b8031d8bb76c642c949b5f64613776b4c0",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:06:02.725162+00:00",
+      "loadBefore": [
+        16.0009765625,
+        15.3271484375,
+        13.654296875
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "pid": 77844,
+      "processGroup": 77844,
+      "state": "terminal",
+      "exitCode": 2,
+      "ended": "2026-10-15T06:07:06.802555+00:00",
+      "elapsedS": 64.07451474998379,
+      "loadAfter": [
+        12.7568359375,
+        14.5419921875,
+        13.48388671875
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "stdoutSHA": "900e5962625a2be0a133a44bdb6c8e073363d752cd692c100e2be24462eba7d7",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "focused-1": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "dreamsigns-battle-18"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:02:21.041040+00:00",
+      "loadBefore": [
+        20.2001953125,
+        12.63818359375,
+        12.35888671875
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "pid": 45674,
+      "processGroup": 45674,
+      "state": "terminal",
+      "exitCode": 0,
+      "ended": "2026-10-15T06:02:29.592715+00:00",
+      "elapsedS": 8.549157415982336,
+      "loadAfter": [
+        19.54345703125,
+        12.62744140625,
+        12.3564453125
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "stdoutSHA": "d4e6f701e08b3c45c5f546e22fd28ed324a383a5ab2c4500f969be1c4a5c1eaf",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "coverage": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:03:04.728106+00:00",
+      "loadBefore": [
+        22.19482421875,
+        13.91796875,
+        12.82861328125
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "pid": 77247,
+      "processGroup": 77247,
+      "state": "terminal",
+      "exitCode": 0,
+      "ended": "2026-10-15T06:03:11.577594+00:00",
+      "elapsedS": 6.846897666982841,
+      "loadAfter": [
+        21.4052734375,
+        14.0322265625,
+        12.88232421875
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "stdoutSHA": "70f972d9b457606a63c23fbdfdfe7b6dc11e9c7d6144cc7b3b8192f3eaa9bf97",
+      "actualChildWait": true,
+      "groupAbsent": true
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "72ef4b11-5366-4798-aab0-09e5ffbb1ed8,11018e32-f47e-45fd-a8cf-3a9e3f3be71b,1dfa4d90-8270-4b7c-87be-d95ab6201e00,7a37386d-6e7c-4f08-b07f-e92a1fd69893"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+      "started": "2026-10-15T06:03:25.711232+00:00",
+      "loadBefore": [
+        18.6005859375,
+        13.76953125,
+        12.80810546875
+      ],
+      "workers": 2,
+      "sourceCount": 5458,
+      "sourceBeforeMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "pid": 78620,
+      "processGroup": 78620,
+      "state": "terminal",
+      "exitCode": 0,
+      "ended": "2026-10-15T06:03:28.059083+00:00",
+      "elapsedS": 2.345068290946074,
+      "loadAfter": [
+        18.6005859375,
+        13.76953125,
+        12.80810546875
+      ],
+      "sourceUnchanged": true,
+      "sourceAfterMapSHA": "23e66eea2903f256224990fb982b3a4d9b50b080ca214d05de58dddc017691b9",
+      "stdoutSHA": "2374f820bcb1f44066892c60203669b50d16e90251612868bb3c7224d8e37da3",
+      "actualChildWait": true,
+      "groupAbsent": true
+    }
+  },
+  "preflightSummary": {
+    "pass": 8,
+    "skip": 72,
+    "fail": 0,
+    "scope": "All four original UUIDs, base and recognized ineligible variants, both controllers; initialization is separate from trigger exercise."
+  },
+  "D21": {
+    "sample": "SHA256 UUID first byte <26",
+    "entities": [
+      {
+        "uuid": "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+        "firstByte": 64,
+        "sampled": false
+      },
+      {
+        "uuid": "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+        "firstByte": 101,
+        "sampled": false
+      },
+      {
+        "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+        "firstByte": 24,
+        "sampled": true
+      },
+      {
+        "uuid": "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+        "firstByte": 219,
+        "sampled": false
+      }
+    ],
+    "newSurfaceAssessment": "Existing gain/cost/status presentation and triggers; no new prompt kind, status indicator or visual effect in authored slice. Bead Charm static shares-type selector introduces no chooseSubtype prompt despite broad generated planning label.",
+    "qaStatus": "Complete: four judged BlueFeather cells (bothcontrollers x desktop/mobile), full original fourUUID sweep8pass72ineligible skip, no failures/retries.",
+    "judged": [
+      {
+        "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+        "side": "player",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "physicalFirst": "i52",
+        "physicalLater": "i51",
+        "sourceIndex": 0,
+        "actualControllerTurn": {
+          "round": 1,
+          "turnNumber": 1,
+          "active": "player",
+          "phase": "day",
+          "sideTurns": {
+            "player": 1,
+            "enemy": 0
+          },
+          "extra": false,
+          "lastNormal": "player",
+          "extraTurns": [],
+          "challengeLane": null,
+          "beginning": false
+        },
+        "payment": {
+          "before": 6,
+          "after": 5,
+          "amount": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-p4RDg7/blue-feather-judged.result.json",
+        "reportSHA256": "2e4a00099e206d14ce21b2d841a8bbb42e65a5db0a7b861ff3fd0cc062b3ca02",
+        "gameId": "eqvmrn",
+        "finalPersistedRows": 126,
+        "predicateSnapshotRows": 125,
+        "log": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-p4RDg7/blue-feather-judged-desktop.jsonl",
+        "logSHA256": "6ef71e2cff53c7b0feafb28abbb8a3932e6bede9f6efc25c3e2756e32841655d",
+        "caps": []
+      },
+      {
+        "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+        "side": "player",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "physicalFirst": "i52",
+        "physicalLater": "i51",
+        "sourceIndex": 0,
+        "actualControllerTurn": {
+          "round": 1,
+          "turnNumber": 1,
+          "active": "player",
+          "phase": "day",
+          "sideTurns": {
+            "player": 1,
+            "enemy": 0
+          },
+          "extra": false,
+          "lastNormal": "player",
+          "extraTurns": [],
+          "challengeLane": null,
+          "beginning": false
+        },
+        "payment": {
+          "before": 6,
+          "after": 5,
+          "amount": 1
+        },
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-p4RDg7/blue-feather-judged.result.json",
+        "reportSHA256": "2e4a00099e206d14ce21b2d841a8bbb42e65a5db0a7b861ff3fd0cc062b3ca02",
+        "gameId": "rmma4j",
+        "finalPersistedRows": 128,
+        "predicateSnapshotRows": 127,
+        "log": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-p4RDg7/blue-feather-judged-mobile.jsonl",
+        "logSHA256": "90fe850fcb62100d56aa3fd48163447ca7b26a73f385c070ac5084a1aab7ac52",
+        "caps": []
+      },
+      {
+        "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+        "side": "enemy",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "physicalFirst": "i52",
+        "physicalLater": "i51",
+        "sourceIndex": 0,
+        "actualControllerTurn": {
+          "kind": "turnStarted",
+          "side": "enemy",
+          "round": 2,
+          "turnNumber": 3,
+          "extra": false
+        },
+        "payment": null,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-vW0Rli/blue-feather-judged.result.json",
+        "reportSHA256": "c706e6c1158cb92b5472c67d3edb9c7957b19d44332705ef8516e43a5d7d65dd",
+        "gameId": "bse6jv",
+        "finalPersistedRows": 91,
+        "predicateSnapshotRows": 90,
+        "log": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-vW0Rli/blue-feather-judged-desktop.jsonl",
+        "logSHA256": "341731c85dd9bde7d08b999bb7bc1353d58e3a49e7fa9133d3bf87df341a7253",
+        "caps": []
+      },
+      {
+        "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+        "side": "enemy",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "physicalFirst": "i52",
+        "physicalLater": "i51",
+        "sourceIndex": 0,
+        "actualControllerTurn": {
+          "kind": "turnStarted",
+          "side": "enemy",
+          "round": 2,
+          "turnNumber": 3,
+          "extra": false
+        },
+        "payment": null,
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-vW0Rli/blue-feather-judged.result.json",
+        "reportSHA256": "c706e6c1158cb92b5472c67d3edb9c7957b19d44332705ef8516e43a5d7d65dd",
+        "gameId": "cope8y",
+        "finalPersistedRows": 91,
+        "predicateSnapshotRows": 90,
+        "log": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/invocations/run-vW0Rli/blue-feather-judged-mobile.jsonl",
+        "logSHA256": "40719f49f0d927e48e1fcd7ec6a96607671d283c5ba0429c7fa36f645a6fd990",
+        "caps": []
+      }
+    ],
+    "sweep": {
+      "counts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "attemptCounts": {
+        "pass": 8,
+        "skip": 72
+      },
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 3501,
+        "scenario": 27274.352792000005,
+        "cleanup": 404.010624999999,
+        "execution": 31268.378375,
+        "total": 31275.378375
+      },
+      "scope": "AllfouroriginalUUIDs, bothcontrollers, allrecognizedvariants. Base cells initialize exact authored emblem; exercisedfalse is correctly initialization-only, not proof of content-specific trigger."
+    },
+    "captures": [
+      {
+        "filename": "blue-feather-player-reloaded-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "SHA256": "54cdb69d586fb300b72d1601a97f419a07b2423cdb44f9e1b1578c7055c602f2"
+      },
+      {
+        "filename": "blue-feather-player-hand-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "SHA256": "a5a7f2ce1724f6a975412deb457dbea54434a2c261955447665895171b28ca17"
+      },
+      {
+        "filename": "blue-feather-player-played-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "SHA256": "0b90e7803c32ae1c04ee04b1b1dd7e2fe1bdc48d63f3db7b12517e562f42a2ef"
+      },
+      {
+        "filename": "blue-feather-player-played-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "SHA256": "8f4c2b3820118293f556a988c84c20792f494d7b69084291a28b51e52f467287"
+      },
+      {
+        "filename": "blue-feather-player-reloaded-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "SHA256": "93afeedba537f41bbb310765726a7a02cd1f65ca49f6098e866cbb6ebad0ffca"
+      },
+      {
+        "filename": "blue-feather-player-hand-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "SHA256": "d8536f568f9075b6274a4e02158b9dd92c217d0eb549c867ae0ab2d1d224b61c"
+      },
+      {
+        "filename": "blue-feather-enemy-reloaded-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "SHA256": "b4311b1b08270e6608364aa672eefc3358ef16535e45782f3ba70286230622f1"
+      },
+      {
+        "filename": "blue-feather-enemy-played-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "SHA256": "5e303da516c53c107a27152ba22e96499d0a3e91139326284012c00e15b886f4"
+      },
+      {
+        "filename": "blue-feather-enemy-reloaded-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "SHA256": "58d49b23c76e1c07e1c4174e20b259df9e82d474994922af9115e9650aca4a2c"
+      },
+      {
+        "filename": "blue-feather-enemy-played-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "SHA256": "b7041092cd2173cc9fabb1a3884901df4cad3920dba1f8cd65fa77ad0e8b01e0"
+      }
+    ],
+    "visualQualification": "Mobile hand fan overlaps first card rightspark badge; hand4 is DOM/probe observation, not unobstructed visual. Played4 is visibly inspected on both controllers, cost1/pay1 on player; later2 is clear. Existing fan art extends below viewport.",
+    "logQualification": "Generic spark/cost events are actual probe observations; persisted exact UUID setup, physical play and source-indexed trigger reconstruct them through fold. Final exported rows include the tail after predicate snapshot."
+  },
+  "review": {
+    "coreReviewRequired": false,
+    "reason": "Composition bead not marked core-review; small data leaf delta, no phase gate. Review policy thresholds preserved.",
+    "productionLineDelta": {
+      "added": 17,
+      "deleted": 2,
+      "gross": 19
+    },
+    "previous624": "Completed separate fresh Codex review verified 71 actual calls/all94required inputs and successful terminal; no findings or debt."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final ordinaryreview2 outer command starting loadBefore[0]. Source and checks stable; loaded host, not isolated benchmark."
+      }
+    }
+  },
+  "resources": {
+    "setup": "npm install terminal0, own PG5205 absent, Doctor healthy.",
+    "checks": "Each raw receipt retains actual wait, process group absence, source hashes, host load and elapsed wall.",
+    "QA": "All3actualcommands terminal0,6groupsabsent,portfree,ownrecordsabsent,all6logFDsclosed; source5458exact.",
+    "artifacts": "Ignored primary artifacts/qa/hv-umm2.255/; no images committed.",
+    "allRecordedGroupsAbsent": [
+      4845,
+      4886,
+      5205,
+      5231,
+      12347,
+      12384,
+      38041,
+      38101,
+      45674,
+      49621,
+      77247,
+      77844,
+      78620,
+      85674,
+      85867
+    ],
+    "sourceFreezeMapQualification": "Parent ACK/default Python sorted JSON map SHA cbad7d268d72549b179c8b8e7a44fd19acf96ee7e93af2d6f4544f2f2a1a3281; helper compact canonical map hash8625d856a489a34488086576cc125f7cb89f5ded50e71c984caf280b538e786a matches its compact baseline. Both bind identical5458 path/value pairs; serializer spacing differs."
+  },
+  "validationQualifications": {
+    "initialFocusedCoveragePreflight": "Run before two private scenario type-only fixture corrections; production leaf hashes identical. Final review2 runs all corrected scenarios and 8695 related tests.",
+    "review1": "Terminal2: missing active in empty ScenarioSpec plus filter/map eventunion narrowing; all8695 tests passed. Only private scenario typing corrected.",
+    "cancelledWeightedAttempt": "Initial own lockf5231 cancelled SIGTERM while only lockf observed and raw empty; terminal-15, enclosing241, no pass or executed-fuzz claim. Actual170.3454 seconds includes native wait/observation/cancellation.",
+    "finalWeighted": "Final exact runtime source; elapsed includes shared heavy-slot wait and execution. Observations are in ignored receipts; no isolated lock acquisition timestamp, active CPU or benchmark/budget claim.",
+    "scope": "No engine, runner, infrastructure or cross-cutting schema changes; local full aggregate inapplicable."
+  },
+  "QAResources": {
+    "sourceFreezeACKAt": "2026-10-15T06:23:29.093091+00:00",
+    "driver": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/blue-feather-judged.mjs",
+    "driverSHA256": "8f00d05bd87e81b7ed7926ce254c09c832f229e3ff1f808f79cccaa34989f370",
+    "sourceCount": 5458,
+    "all5458BeforeAfterEqual": true,
+    "rootReadEditCheckPauseObserved": true,
+    "commands": [
+      {
+        "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/enemy-1792045568191144000/receipt.json",
+        "label": "enemy",
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/blue-feather-judged.mjs",
+          "--bead",
+          "hv-umm2.255",
+          "--port",
+          "5174",
+          "--arg",
+          "side=enemy",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "startedUtc": "2026-10-15T06:26:08.191236+00:00",
+        "wrapperPid": 12337,
+        "stdout": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/enemy-1792045568191144000/stdout.log",
+        "stderr": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/enemy-1792045568191144000/stderr.log",
+        "pid": 12347,
+        "pgid": 12347,
+        "exitCode": 0,
+        "finishedUtc": "2026-10-15T06:28:45.203466+00:00",
+        "wallSeconds": 157.00975391600514,
+        "commandGroupAbsent": true,
+        "stdoutBytes": 69063,
+        "stdoutSha256": "c706e6c1158cb92b5472c67d3edb9c7957b19d44332705ef8516e43a5d7d65dd",
+        "stderrBytes": 947,
+        "stderrSha256": "b16f50e1921196d7e0af2eb3dbbc45587d1911363101a7a27f438102334f773f"
+      },
+      {
+        "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/player-1792045446219187000/receipt.json",
+        "label": "player",
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/blue-feather-judged.mjs",
+          "--bead",
+          "hv-umm2.255",
+          "--port",
+          "5174",
+          "--arg",
+          "side=player",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "startedUtc": "2026-10-15T06:24:06.219601+00:00",
+        "wrapperPid": 4834,
+        "stdout": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/player-1792045446219187000/stdout.log",
+        "stderr": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/player-1792045446219187000/stderr.log",
+        "pid": 4845,
+        "pgid": 4845,
+        "exitCode": 0,
+        "finishedUtc": "2026-10-15T06:25:54.131907+00:00",
+        "wallSeconds": 107.91047345899278,
+        "commandGroupAbsent": true,
+        "stdoutBytes": 92001,
+        "stdoutSha256": "2e4a00099e206d14ce21b2d841a8bbb42e65a5db0a7b861ff3fd0cc062b3ca02",
+        "stderrBytes": 950,
+        "stderrSha256": "e6a592dc25c8a12c17bf44a12bdef722e0efd1db237f491798b1224bc3f3fe83"
+      },
+      {
+        "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/sweep-1792045739366099000/receipt.json",
+        "label": "sweep",
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-battle18-255-root",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--dreamsigns",
+          "72ef4b11-5366-4798-aab0-09e5ffbb1ed8,11018e32-f47e-45fd-a8cf-3a9e3f3be71b,1dfa4d90-8270-4b7c-87be-d95ab6201e00,7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+          "--bead",
+          "hv-umm2.255",
+          "--port",
+          "5174"
+        ],
+        "startedUtc": "2026-10-15T06:28:59.366196+00:00",
+        "wrapperPid": 38028,
+        "stdout": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/sweep-1792045739366099000/stdout.log",
+        "stderr": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/sweep-1792045739366099000/stderr.log",
+        "pid": 38041,
+        "pgid": 38041,
+        "exitCode": 0,
+        "finishedUtc": "2026-10-15T06:29:30.861731+00:00",
+        "wallSeconds": 31.494706958997995,
+        "commandGroupAbsent": true,
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrBytes": 8937,
+        "stderrSha256": "261ddacec3611cc2fe6b0a2629d5723bb11f3f4503e5a6bdb8dffab6475725be"
+      }
+    ],
+    "runtimeCleanup": {
+      "groups": {
+        "4845": "absent",
+        "4886": "absent",
+        "12347": "absent",
+        "12384": "absent",
+        "38041": "absent",
+        "38101": "absent"
+      },
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+          "exists": false
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+          "exists": false
+        }
+      },
+      "port5274LsofExit": 1,
+      "port5274Listeners": "",
+      "commandLogFdObservations": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/enemy-1792045568191144000/stdout.log",
+          "lsofExit": 1,
+          "openDescriptors": ""
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/enemy-1792045568191144000/stderr.log",
+          "lsofExit": 1,
+          "openDescriptors": ""
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/player-1792045446219187000/stdout.log",
+          "lsofExit": 1,
+          "openDescriptors": ""
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/player-1792045446219187000/stderr.log",
+          "lsofExit": 1,
+          "openDescriptors": ""
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/sweep-1792045739366099000/stdout.log",
+          "lsofExit": 1,
+          "openDescriptors": ""
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.255/receipts/browser/sweep-1792045739366099000/stderr.log",
+          "lsofExit": 1,
+          "openDescriptors": ""
+        }
+      ]
+    },
+    "parentIndependentlyVerified": true,
+    "captureCount": 10,
+    "parentViewed": [
+      "blue-feather-player-hand-desktop.png",
+      "blue-feather-player-hand-mobile.png",
+      "blue-feather-player-played-mobile.png",
+      "blue-feather-enemy-played-desktop.png",
+      "blue-feather-enemy-reloaded-mobile.png"
+    ],
+    "helperIndividuallyViewed": 10,
+    "sourceResumeAt": "2026-10-15T06:33:44.755560+00:00"
+  },
+  "preExisting": [
+    "docs/plan/evidence/pre-existing/hv-umm2.255.md"
+  ],
+  "rawFuzzSummary": {
+    "games": 300,
+    "steps": 97704,
+    "wallS": 530.1,
+    "cpuS": 568.6,
+    "prompts": 7104,
+    "interactiveReruns": 684,
+    "failures": 0,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 2
+    },
+    "targets": [
+      {
+        "uuid": "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+        "included": 600,
+        "exercised": 2168
+      },
+      {
+        "uuid": "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+        "included": 600,
+        "exercised": 0
+      },
+      {
+        "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+        "included": 600,
+        "exercised": 691
+      },
+      {
+        "uuid": "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+        "included": 600,
+        "exercised": 0
+      }
+    ],
+    "exerciseQualification": "Counter observes named trigger/activation resolutions. Static SilverKey/BeadCharm zero counter is not an absence-of-effect claim. Own actual leaf first-entry scenarios cover SilverKey; wholebatch original acceptance retained."
+  }
+}
