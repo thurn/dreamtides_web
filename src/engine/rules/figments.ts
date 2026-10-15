@@ -84,7 +84,7 @@ export function mergeable(state: BattleState, source: InstanceId, destination: I
 export function mergeFigments(ctx: StepContext, source: InstanceId, destination: InstanceId): void {
   const { state, catalog } = ctx;
   const from = instanceOf(state, source);
-  const spark = (characteristicsOf(state, catalog, source).baseSpark ?? 0) + from.status.gainedSpark;
+  const spark = Math.max(0, (characteristicsOf(state, catalog, source).baseSpark ?? 0) + from.status.gainedSpark);
   const side = from.controller;
   instanceOf(state, destination).status.gainedSpark += spark;
   ceaseToExist(ctx, source, { silent: true });

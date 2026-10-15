@@ -552,9 +552,16 @@ export class Layers {
       if (ability.kind === "keyword") keywords.add(ability.keyword);
     }
     // Numeric bases already include entry mods; a remaining X needs its permanent bonus after resolving X.
-    const base = definition.spark === null ? null : definition.spark === "x"
+    let base = definition.spark === null ? null : definition.spark === "x"
       ? (instance.status.x ?? 0) + (instance.variant.deckMods?.sparkBonus ?? 0)
       : definition.spark;
+    // Recover signed numeric debt before later spark changes use the final zero floor.
+    const bonus = instance.variant.deckMods?.sparkBonus ?? 0;
+    if (definition.spark === 0 && bonus < 0 && instance.printing.kind !== "figment" &&
+        !(instance.printing.kind === "figmentCopy" && instance.printing.spark !== null)) {
+      const structural = this.catalog.variantCard(instance.printing.cardId, instance.variant).spark;
+      if (typeof structural === "number") base = structural + bonus;
+    }
     return {
       cardType: definition.cardType,
       subtype: definition.subtype,

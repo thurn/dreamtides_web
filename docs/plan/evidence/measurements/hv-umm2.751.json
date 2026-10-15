@@ -1,0 +1,375 @@
+{
+  "bead": "hv-umm2.751",
+  "phase": 5,
+  "sourceBase": "8f01840395559a0b83cde95a3af9ab2cc43958ae",
+  "sourceFiles": {
+    "src/engine/continuous/layers.ts": {
+      "sha256": "359b26c7116174152f2414eb2c9e0b9587e27f061a2188837b791235857ad77c",
+      "lines": 624
+    },
+    "src/engine/rules/figments.ts": {
+      "sha256": "46b57e98d2123af9a99fc7888ff78feb07dfeada85f2b0f8ea49be8ef8043d65",
+      "lines": 92
+    },
+    "src/engine/continuous/continuous.test.ts": {
+      "sha256": "cea54c0b6b2edc0a8a6f474a6c699d7d5a67d77e9e14ec7f8ca07e9188af5b24",
+      "lines": 486
+    },
+    "src/engine/rules/figments.test.ts": {
+      "sha256": "2a26714e9103605a2439ba130ceeaade5dbf30b5452e31adbcfdee5cdafe6a0f",
+      "lines": 255
+    }
+  },
+  "scope": "Private numeric debt recovery in Layers.copiable and mergeFigments donation floor; normalized catalog projection and other readers retain existing contracts. No saved state, schema, payment, ordinary-X branch or public API changes.",
+  "claimStartPrecision": {
+    "value": "2026-10-15T14:24:51Z",
+    "source": "native whole-second updated_at/start retained at claim",
+    "qualification": "Exact subsecond claim instant was not retained; conservative original start includes all elapsed work through final commit."
+  },
+  "localCommands": {
+    "red-only-receipt": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:35:05.220020+00:00",
+      "elapsedS": 5.998073042021133,
+      "exitCode": 1
+    },
+    "merge-fallout-red": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/rules/figments.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:45:23.169875+00:00",
+      "end": "2026-10-15T14:45:27.243763+00:00",
+      "pid": 88596,
+      "elapsedS": 4.073747041984461,
+      "exitCode": 1,
+      "outputSha256": "0d45b2aa88cbf30e96304adef2b7bd326c3463599b60977ec587c303b614ee51"
+    },
+    "core-green": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/rules/figments.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:45:36.843943+00:00",
+      "end": "2026-10-15T14:45:40.605339+00:00",
+      "pid": 89009,
+      "elapsedS": 3.7612155840033665,
+      "exitCode": 0,
+      "outputSha256": "a782c6b03da0a4e2439e0f722d05e71bacf4545bd90ed65ed8ed577a42401f31"
+    },
+    "mutant-original-floor": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "preserves numeric and ordinary-X debt before a later static gain"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:46:12.406502+00:00",
+      "end": "2026-10-15T14:46:16.764620+00:00",
+      "pid": 89818,
+      "elapsedS": 4.35797608300345,
+      "exitCode": 1,
+      "outputSha256": "0fa65d5a2409b935ca9af63cdcff17dae288f94fe7088f29130d74883cef4924",
+      "restoredExactBytes": true
+    },
+    "mutant-double-bonus": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "-t",
+        "preserves numeric and ordinary-X debt before a later static gain"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:46:16.766643+00:00",
+      "end": "2026-10-15T14:46:20.306833+00:00",
+      "pid": 90418,
+      "elapsedS": 3.540148500003852,
+      "exitCode": 1,
+      "outputSha256": "1dc797033804e6c5dc1e37066d1a6225544e64d6eb67907ea358ff577d97ee0b",
+      "restoredExactBytes": true
+    },
+    "mutant-merge-unfloor": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/rules/figments.test.ts",
+        "-t",
+        "floors the whole nonstatic contribution before merging"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:46:20.308056+00:00",
+      "end": "2026-10-15T14:46:23.793686+00:00",
+      "pid": 90935,
+      "elapsedS": 3.4855930830235593,
+      "exitCode": 1,
+      "outputSha256": "56ab180579381f3fdde14e6f92a24c5f1c8b95dba7233b84f6f42b792d22264c",
+      "restoredExactBytes": true
+    },
+    "focused-green": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/continuous/continuous-zones.test.ts",
+        "src/engine/transfigurations.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T14:46:33.884368+00:00",
+      "end": "2026-10-15T14:46:39.680364+00:00",
+      "pid": 92266,
+      "elapsedS": 5.7958167910110205,
+      "exitCode": 0,
+      "outputSha256": "035025bb1c3b0957317df3ca632ff89b19dd5cb640984eb942228cd86c27dae8"
+    },
+    "final-review": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T15:02:00.030617+00:00",
+      "end": "2026-10-15T15:03:25.248268+00:00",
+      "pid": 15942,
+      "elapsedS": 85.21689083398087,
+      "exitCode": 0,
+      "hostLoadStart": 4.56,
+      "outputSha256": "7b7e1d8f0210a660fc16acaab9b796d502752d070364de71562e74449f8e1036"
+    },
+    "final-knip": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "JOURNEY_TEST_WORKERS": "2",
+      "start": "2026-10-15T15:03:25.252909+00:00",
+      "end": "2026-10-15T15:03:30.228582+00:00",
+      "pid": 21767,
+      "elapsedS": 4.975611000030767,
+      "exitCode": 0,
+      "hostLoadStart": 7.83,
+      "outputSha256": "411229456a7d6fc5b8b490fe73e608ef174263306e5679c8eea31ecae8cbaf9d"
+    }
+  },
+  "initialRedQualification": "Actual command start, elapsed and output retained; actual process PID and end timestamp were not retained and are unknown. No reconstructed values.",
+  "semanticProof": {
+    "baseline": "Both actors numeric/X actual [3,1], expected [1,1]; 25 passed, 2 failed.",
+    "layerOnlyMerge": "Both actors emitted merge spark -2 instead of 0; 46 passed, 2 failed.",
+    "repaired": "48/48 passed in two entries; 188/188 passed across nine relevant existing entries.",
+    "counterfactuals": "Original floor [3,1], doubled bonus [0,1], and unnormalized merge donation -2 each failed intended public assertions for both actors. Both production files restored exact bytes and hashes after each."
+  },
+  "pureStructuralResolution": "The zero-normalized numeric/negative-bonus path resolves the same structural variant a second time through the existing pure pipeline. No cache or measured performance claim.",
+  "failurePaths": [
+    {
+      "path": "error mid-step or partial write",
+      "coverage": "No new transition/write path: catalog-derived arithmetic reads existing immutable state. Existing engine/fold transactional contracts remain authoritative; merge runs inside existing cloned step and emits its existing event."
+    },
+    {
+      "path": "reload/restart",
+      "coverage": "New both-actor gain fold tests save/reload pending target choice, replay identical final state hashes, clone and determinize public views. Actual desktop same-game reload preserves exact committed state."
+    },
+    {
+      "path": "invalid/stale input",
+      "coverage": "No input grammar, legality/admission, receipt, or mutation boundary changes. Existing fold and play-cost contracts exercised in 188-test focused run."
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "Both actors exercise the same numeric/X/debt, gain/duration, Kindled/type/control, copy/merge public contracts. Existing atomic fold protocol remains authoritative."
+    }
+  ],
+  "qa": {
+    "firstAttempt": {
+      "command": [
+        "/opt/homebrew/bin/node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.751/numeric-spark751.mjs",
+        "--bead",
+        "hv-umm2.751",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-numeric-spark751-root",
+      "start": "2026-10-15T14:56:23.210291+00:00",
+      "end": "2026-10-15T14:56:39.853040+00:00",
+      "pid": 91714,
+      "elapsedS": 16.642552375036757,
+      "exitCode": 1,
+      "outputSha256": "d27ee6fb9480f3fc7a81bbd0961d804e8a870759b87e5c98a1d43e5829c3787d",
+      "invocation": "run-5gjXYo",
+      "gameId": "zvuswh",
+      "outcome": "Driver-only ReferenceError: URL is not defined in provider VM after live arithmetic checks and before reload; corrected by evaluating URL parsing in existing qa.read browser function.",
+      "mcpSessionId": null,
+      "mcpProtocolVersion": null,
+      "identityQualification": "Original negotiated identity not retained before normal record clear; explicitly unknown.",
+      "settlement": {
+        "at": "2026-10-15T14:57:51.714Z",
+        "ownServerGroup": 91767,
+        "groupAbsent": true,
+        "port": 5174,
+        "portFree": true,
+        "recordsAbsent": {
+          "provider": true,
+          "server": true
+        },
+        "leaseReleased": true,
+        "canonicalOrder": "terminalnormalreturn withoutcleanupfailure: browser_close\u2192activeCalls drain\u2192execution completed record\u2192client transport close\u2192recordclear\u2192ownedServer.stop verifiedgroups\u2192port diagnostic free\u2192lease/evidence release",
+        "firstNegotiatedMcpIdentity": "not retained before normal owner-record clear; unknown, no reconstruction",
+        "sourceFreeze": "still active pending parent settled repair ACK"
+      }
+    },
+    "passedAttempt": {
+      "invocation": "run-u7oZmo",
+      "start": "2026-10-15T14:59:39.036460+00:00",
+      "end": "2026-10-15T14:59:58.196676+00:00",
+      "pid": 6158,
+      "elapsedS": 19.159978958021384,
+      "exitCode": 0,
+      "outputSha256": "01262abab8baf6caecba9053cd4ee774bfa52e005fb724c1344c30790c8467bc",
+      "mcpSessionId": "a7c4a407-b1eb-4289-b859-966a6ea2b4e9",
+      "mcpProtocolVersion": "2025-11-25",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "slot": 1,
+      "serverProcessGroup": 6196,
+      "port": 5274,
+      "settlement": {
+        "at": "2026-10-15T14:59:58.256719+00:00",
+        "ownGroup": 6196,
+        "groupAbsent": true,
+        "port": 5274,
+        "portFree": true,
+        "recordsAbsent": {
+          "provider": true,
+          "server": true
+        },
+        "leaseReleased": true,
+        "normalSettlementConfirmed": true
+      },
+      "gameId": "ggqfgo",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "modified": {
+        "id": "i1",
+        "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "spark": 1,
+        "permanentBonus": -6,
+        "gained": 3
+      },
+      "neighbor": {
+        "id": "i19",
+        "card": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "spark": 4
+      },
+      "boost": {
+        "id": "i18",
+        "card": "944e15d2-d680-4ebe-8d18-36826f4b1535"
+      },
+      "geometry": {
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=e83014d3-9d35-4e80-a1b3-9b25360ad2af&variant=base&as=player&seed=1&debug=1&mods=%7B%22sparkBonus%22%3A-6%7D&labStage=%7B%22player%22%3A%7B%22energy%22%3A10%2C%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%7D%2C%22enemy%22%3A%7B%22energy%22%3A0%2C%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%7D%7D&game=ggqfgo",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "x": 348,
+        "y": 483.5,
+        "width": 89.5,
+        "height": 89.5,
+        "inViewport": true,
+        "hit": true
+      },
+      "committedRestored": true,
+      "caps": [],
+      "persistedLogRows": 51,
+      "captures": [
+        {
+          "filename": "numeric-spark-target-desktop.png",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "pixelWidth": 2880,
+          "pixelHeight": 1800,
+          "visuallyInspected": true
+        },
+        {
+          "filename": "numeric-spark-restored-desktop.png",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "pixelWidth": 2880,
+          "pixelHeight": 1800,
+          "visuallyInspected": true
+        }
+      ]
+    },
+    "coverage": "One desktop numeric-value workflow, target interaction and restored state. No layout/responsive code change; desktop-only runtime scope explicitly admitted. Images remain ignored."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 109,
+    "jsdomFiles": 0
+  },
+  "rulesDecisions": [],
+  "fallout": "Exact mergeFigments sum floor and additive existing figments.test.ts contracts were source-audited, natively admitted and proven by intermediate semantic RED. All other source bodies read-only.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actual final npm run review command start",
+        "at": "2026-10-15T15:02:00.030617+00:00"
+      }
+    }
+  },
+  "frictionTriggerDisposition": {
+    "parentObserved": "GREEN 0 / 0.146s",
+    "phase5Duty": "25/25 since hv-umm2.736 matched canonical peer hv-umm2.752; no duplicate duty filed"
+  },
+  "finalChecks": {
+    "review": "passed: typechecks/import cycles/lint/friction schema and related 342 files / 10142 tests; total85.216891s, related Vitest71.09s at2workers, not full-suite benchmark",
+    "knip": "passed4.975611s",
+    "schemaWhitespace": "Explicit final validation after this actual window refresh; terminal receipt retained in session scratch.",
+    "reviewFull": "Not run: bounded arithmetic/consumer repair; no repository configuration, test infrastructure or cross-cutting architecture change."
+  },
+  "workspaceSetup": {
+    "npmInstallS": 2.45,
+    "scope": "parent measured install in fresh assigned worktree before implementation dispatch; no reinstall by helper"
+  },
+  "finalCommitWindow": {
+    "start": "2026-10-15T14:24:51Z",
+    "end": "2026-10-15T15:05:32.877976+00:00",
+    "scope": "Conservative original whole-second native claim through immediate precommit boundary, includes setup/research/admissions/waits/QA/final checks. Actual Git command start/end and PID retained separately in scratch after commit; no inferred timestamps."
+  }
+}

@@ -6,21 +6,23 @@
  * figment types.
  */
 import { describe, expect, it } from "vitest";
-import { printedCard, type EngineFigmentDefinition } from "../catalog";
-import { characterYouControl, energy } from "../dsl/builders";
+import { printedCard, type EngineCardDefinition, type EngineFigmentDefinition } from "../catalog";
+import { all, anyCharacter, characterYouControl, energy, event, staticAbility, target } from "../dsl/builders";
+import { NO_DECK_MODS } from "../dsl/types";
+import { gainSpark, materializeFigmentCopy, sequence, sparkModifier } from "../effects/primitives";
 import { matchingCharacters } from "../dsl/selectors";
 import { createEngine } from "../engine";
 import type { Answer } from "../prompts/types";
 import type { Action } from "./actions";
 import type { InstanceId, Side } from "../state/ids";
-import { parseFigmentId } from "../state/ids";
+import { parseFigmentId, SIDES } from "../state/ids";
 import type { BattleState, Printing } from "../state/types";
 import { ScriptedSource } from "../steps/sources";
 import { boardState, placeFigment, type BoardSetup } from "../testing/board";
 import { CONTINUOUS } from "../testing/continuous-cards";
 import { DSL } from "../testing/dsl-cards";
 import { invariantViolations } from "../testing/invariants";
-import { SYNTHETIC } from "../testing/synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { ZONE, ZONE_FIGMENT, ZONE_FIGMENTS, zoneCatalog } from "../testing/zone-cards";
 import { effectiveSpark } from "./spark";
@@ -220,5 +222,34 @@ describe("figment copies", () => {
     const copy = backRank(after)[2]!;
     expect(after.instances[copy].printing).toEqual({ kind: "figmentCopy", cardId: v.vanilla3.id, spark: 0 });
     expect(spark(after, copy)).toBe(0);
+  });
+});
+
+describe("merging fixed numeric copies with permanent spark debt", () => {
+  const fixed: EngineCardDefinition = { ...v.vanilla0, id: syntheticId(0x7517), spark: 4 };
+  const support: EngineCardDefinition = { ...v.vanilla0, id: syntheticId(0x7518), status: "authored", abilities: () => [staticAbility(sparkModifier(all(characterYouControl()), 3))] };
+  const copier: EngineCardDefinition = { ...v.event0, id: syntheticId(0x7519), status: "authored", abilities: () => [event(sequence(materializeFigmentCopy(target(anyCharacter())), materializeFigmentCopy(target(anyCharacter()), { zeroSpark: true })))] };
+  const boost: EngineCardDefinition = { ...v.event0, id: syntheticId(0x751a), status: "authored", abilities: () => [event(gainSpark(target(anyCharacter()), 3))] };
+  const E = createEngine(testCatalog([fixed, support, copier, boost])), C = E.catalog;
+  for (const side of SIDES) it(`floors the whole nonstatic contribution before merging for ${side}`, () => {
+    for (const [gained, donation, destinationSpark] of [[false, 0, 3], [true, 1, 4]] as const) {
+      const mods = { ...NO_DECK_MODS, sparkBonus: -6 };
+      const { state, ids } = boardState(C, { active: side, phase: "day", [side]: { hand: [{ cardId: fixed.id, deckMods: mods }, copier.id, boost.id], back: [support.id] } });
+      const [id, copy, gain] = ids[side].hand;
+      let next = E.apply(state, side, { kind: "play", card: id, from: "hand" }, new ScriptedSource([])).state;
+      next = E.apply(next, side, { kind: "play", card: copy, from: "hand" }, new ScriptedSource([[id], [id]])).state;
+      const copies = Object.values(next.instances).filter(instance => instance.printing.kind === "figmentCopy");
+      expect(copies).toHaveLength(2);
+      const source = copies.find(instance => instance.printing.kind === "figmentCopy" && instance.printing.spark === null)!.id;
+      const destination = copies.find(instance => instance.printing.kind === "figmentCopy" && instance.printing.spark === 0)!.id;
+      expect([source, destination].map(card => E.view(next, side).instances[card].characteristics.spark)).toEqual([1, 3]);
+      if (gained) next = E.apply(next, side, { kind: "play", card: gain, from: "hand" }, new ScriptedSource([[source]])).state;
+      const action = { kind: "reposition" as const, card: source, to: { rank: "back" as const, index: next.sides[side].backRank.indexOf(destination) } };
+      expect(E.legalActions(next, side)).toContainEqual(action);
+      const merged = E.apply(next, side, action, new ScriptedSource([]));
+      expect(merged.state.instances[source]).toBeUndefined();
+      expect(merged.events).toContainEqual({ kind: "figmentsMerged", side, source, destination, spark: donation });
+      for (const viewer of SIDES) expect(E.view(merged.state, viewer).instances[destination].characteristics.spark).toBe(destinationSpark);
+    }
   });
 });
