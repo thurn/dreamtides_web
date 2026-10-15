@@ -1,0 +1,552 @@
+{
+  "bead": "hv-umm2.637",
+  "base": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+  "branch": "wt/deck-opening-contract-637",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/deck-opening-contract-637",
+  "clock": {
+    "claim": {
+      "claimAttempt": "2026-10-15T09:35:06.628002+00:00",
+      "claimAcknowledged": "2026-10-15T09:35:06.726818+00:00",
+      "actor": "01a13a7a-741e-7cc1-a0dd-3f8eb1805ecf"
+    },
+    "evidenceCutoff": "2026-10-15T09:48:10.994849+00:00",
+    "elapsedSecondsToCutoff": 784.268031,
+    "includes": "Parent postclaim setup/install/audit/implementation/verification/coordination/waits; actual Git return is recorded in scratch commit-tail.json after commit.",
+    "gitReturn": "pending actual local commit return, separate tail receipt"
+  },
+  "sourceAudit": {
+    "time": "2026-10-15T09:41:15.695698+00:00",
+    "base": "b8cd67fd006682cd24c701ab0eb801b99af52581",
+    "sources": {
+      "src/battle/integration/deck-mods.test.ts": {
+        "sha256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+        "baselineMatches": true
+      },
+      "src/battle/integration/deck-mods/preparation.contracts.ts": {
+        "sha256": "840270d5a877d3a7ef64f04f9e6bb8cb65c4f91106c91283e25747f677996dc3",
+        "baselineMatches": true
+      },
+      "src/battle/integration/engine-battle-init.ts": {
+        "sha256": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+        "baselineMatches": true
+      },
+      "src/engine/catalog.ts": {
+        "sha256": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+        "baselineMatches": true
+      },
+      "src/engine/state/create.ts": {
+        "sha256": "85f715f9d8f1085902f4ba8d1eeb6de1a1b823f1d3cecc57b4703820d9f0a020",
+        "baselineMatches": true
+      },
+      "src/engine/steps/kinds/begin-battle.ts": {
+        "sha256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+        "baselineMatches": true
+      },
+      "src/rules/journey/reward-effects.ts": {
+        "sha256": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+        "baselineMatches": true
+      },
+      "src/session/providers/exploration-provider.ts": {
+        "sha256": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+        "baselineMatches": true
+      }
+    },
+    "method": [
+      "Read public provider buildExplorationRuntime/resolveExplorationChoice including all opening reward cases, reward-effects full union/apply, adapter complete engineDeckEntry/createEngineBattleInit/nextBattleEffects, catalog instanceCard/modifiedCard, initialState/variantOf/dealtDeck and beginBattle entire bodies.",
+      "Canonical eager glob imports unique plain contract module; runner is read-only.",
+      "Journey reward maps only player; direct public engine nextBattle permits both sides. Ordinary hand then ordered groups; filtered groups evaluate current card characteristics; END_BATTLE victory decrements active modifiers; defeat terminates journey.",
+      "No new production behavior or private helper contract; synthetic fixture sources and public fold outcome/state are observables. Original 286 full content acceptance retained."
+    ],
+    "runtime": {
+      "pid": 25886,
+      "pgid": 25886,
+      "load": [
+        9.69677734375,
+        8.33349609375,
+        8.86572265625
+      ]
+    }
+  },
+  "protectedSourcesAtCutoff": {
+    "src/battle/integration/deck-mods.test.ts": {
+      "sha256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+      "baselineMatches": true
+    },
+    "src/battle/integration/deck-mods/preparation.contracts.ts": {
+      "sha256": "840270d5a877d3a7ef64f04f9e6bb8cb65c4f91106c91283e25747f677996dc3",
+      "baselineMatches": true
+    },
+    "src/battle/integration/engine-battle-init.ts": {
+      "sha256": "599b85f4552fc1659698a050a3d8da25fdb6b748d21ef12407e4d5aecc140ab9",
+      "baselineMatches": true
+    },
+    "src/engine/catalog.ts": {
+      "sha256": "42575821be65b3ae244b5c02cbecdccd6ae53b8bb40aa98a94a8b893f26282cc",
+      "baselineMatches": true
+    },
+    "src/engine/state/create.ts": {
+      "sha256": "85f715f9d8f1085902f4ba8d1eeb6de1a1b823f1d3cecc57b4703820d9f0a020",
+      "baselineMatches": true
+    },
+    "src/engine/steps/kinds/begin-battle.ts": {
+      "sha256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+      "baselineMatches": true
+    },
+    "src/rules/journey/reward-effects.ts": {
+      "sha256": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+      "baselineMatches": true
+    },
+    "src/session/providers/exploration-provider.ts": {
+      "sha256": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+      "baselineMatches": true
+    }
+  },
+  "module": {
+    "path": "src/battle/integration/deck-mods/opening-hand.contracts.ts",
+    "sha256": "c0649edf6e9cd1d875c04b0e6d3bab40b12ab62bb33f4390ac70a86f40bb34a5",
+    "modifiedAt": "2026-10-15T09:46:00.122980+00:00",
+    "newPlainContractModules": 1,
+    "lines": 237,
+    "newCases": 11,
+    "configuredEntrypointDelta": 0,
+    "jsdomDelta": 0,
+    "runner": "src/battle/integration/deck-mods.test.ts existing eager glob; untouched"
+  },
+  "checks": {
+    "focused-first": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:42:54.323299+00:00",
+      "end": "2026-10-15T09:43:05.985870+00:00",
+      "wallS": 11.662474791985005,
+      "userS": 7.7936309999999995,
+      "sysS": 3.380049,
+      "hostLoad": [
+        6.99365234375,
+        7.80419921875,
+        8.60205078125
+      ],
+      "exitCode": 1,
+      "pid": 32236,
+      "pgid": 32236,
+      "workers": 2,
+      "terminal": true
+    },
+    "focused-second": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:43:32.289184+00:00",
+      "end": "2026-10-15T09:43:42.608807+00:00",
+      "wallS": 10.319299875001889,
+      "userS": 6.521032,
+      "sysS": 2.960419,
+      "hostLoad": [
+        6.7802734375,
+        7.67724609375,
+        8.51953125
+      ],
+      "exitCode": 1,
+      "pid": 34773,
+      "pgid": 34773,
+      "workers": 2,
+      "terminal": true
+    },
+    "focused-third": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:44:02.233026+00:00",
+      "end": "2026-10-15T09:44:08.829309+00:00",
+      "wallS": 6.596190457988996,
+      "userS": 6.374701,
+      "sysS": 2.312871,
+      "hostLoad": [
+        7.02294921875,
+        7.63134765625,
+        8.47216796875
+      ],
+      "exitCode": 1,
+      "pid": 36862,
+      "pgid": 36862,
+      "workers": 2,
+      "terminal": true
+    },
+    "focused-fourth": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:44:14.516787+00:00",
+      "end": "2026-10-15T09:44:20.751550+00:00",
+      "wallS": 6.234656082990114,
+      "userS": 6.422571,
+      "sysS": 2.125643,
+      "hostLoad": [
+        7.98974609375,
+        7.82275390625,
+        8.5302734375
+      ],
+      "exitCode": 0,
+      "pid": 37694,
+      "pgid": 37694,
+      "workers": 2,
+      "terminal": true
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ],
+      "start": "2026-10-15T09:44:52.383414+00:00",
+      "end": "2026-10-15T09:45:00.597051+00:00",
+      "wallS": 8.213571875006892,
+      "userS": 6.549338,
+      "sysS": 2.413834,
+      "hostLoad": [
+        9.53564453125,
+        8.1982421875,
+        8.6318359375
+      ],
+      "exitCode": 0,
+      "pid": 40066,
+      "pgid": 40066,
+      "workers": 2,
+      "terminal": true
+    },
+    "review-first": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T09:45:29.386941+00:00",
+      "end": "2026-10-15T09:45:46.711308+00:00",
+      "wallS": 17.324277834035456,
+      "userS": 56.767968,
+      "sysS": 7.58487,
+      "hostLoad": [
+        8.6708984375,
+        8.1904296875,
+        8.6142578125
+      ],
+      "exitCode": 2,
+      "pid": 42207,
+      "pgid": 42207,
+      "workers": 2,
+      "terminal": true
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T09:46:00.152844+00:00",
+      "end": "2026-10-15T09:46:12.149118+00:00",
+      "wallS": 11.99621000001207,
+      "userS": 31.816343,
+      "sysS": 6.192429,
+      "hostLoad": [
+        8.2353515625,
+        8.1494140625,
+        8.5849609375
+      ],
+      "exitCode": 0,
+      "pid": 44155,
+      "pgid": 44155,
+      "workers": 2,
+      "terminal": true
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T09:46:24.641002+00:00",
+      "end": "2026-10-15T09:46:29.775317+00:00",
+      "wallS": 5.134248040965758,
+      "userS": 4.405604,
+      "sysS": 1.601826,
+      "hostLoad": [
+        8.0283203125,
+        8.13037109375,
+        8.5654296875
+      ],
+      "exitCode": 0,
+      "pid": 45599,
+      "pgid": 45599,
+      "workers": 2,
+      "terminal": true
+    }
+  },
+  "failureModeProof": [
+    {
+      "failure": "DTO silently dropped before engine",
+      "witness": "Both isolated actual provider rewards assert exact nextBattle DTO, then expected physical extra hand/deck delta against control; END_BATTLE test starts actual public journey engine battle."
+    },
+    {
+      "failure": "Wrong side/variant/type receives modifier",
+      "witness": "Player/enemy tables assert unaffected opposing side, physical IDs and preserved variant; Event match includes remapped printed Character and excludes remapped printed Event."
+    },
+    {
+      "failure": "Ordering versus transfiguration/payment is incorrect",
+      "witness": "Stacked ordinary groups precede filtered groups and preserve deck order; remapped Amplified Event quotes/spends 2 energy after entry reduction and resolves amplified 2 points on both sides."
+    },
+    {
+      "failure": "Invalid/stale/replay input changes state",
+      "witness": "Invalid count/version/encounter/reroll/visited reward controls; existing public provider event-fold fixture alternates branded actors and bounces duplicate resolution. Both-side wrong actor/illegal answer/stale prompt, cancellation, serialized pending reload, stale cancelled answer, duplicate committed answer, deterministic replay and unchanged original states. END_BATTLE refuses in-progress/duplicate and replays identically."
+    },
+    {
+      "failure": "Synthetic test or one encounter substitutes for original acceptance",
+      "witness": "Explicit scope boundary: this module uses two synthetic UUIDs with 40 physical copies/variants, not 20 distinct eligible production UUIDs. Original hv-umm2.286 retains full 67 UUID authoring/recipes, >=20 eligible cards BOTH controllers, one judgment per modification kind, real encounter-to-battle empty-Caps QA, weighted300/preflight/sweep/D21/coverage/final joins. These remain acceptance requirements, with no waiver from synthetic tests."
+    }
+  ],
+  "failureAndRecovery": {
+    "midStepError": "No new transition or fault injector is introduced. Ordinary opening rewards are resolved synchronously without prompts; own fixtures supply valid printed definitions and no synthetic fault hooks. Broader engine fault recovery stays with engine contracts.",
+    "reload": "Both-side serialized pending play accepted by parseEngineBattleFold and same prompt replay; complete opening init replay equals original result.",
+    "partialWrite": "Rejected reward payloads preserve original journey; pending play keeps committed state; cancellation preserves dealt hand and resources.",
+    "staleInput": "Wrong/stale actor/prompt/version/reroll/encounter plus invalid mode/count and duplicate resolution/END_BATTLE controls.",
+    "concurrentActors": "Existing public event-fold helper writes alternating branded clients and competing reward resolution; engine both-side actor ownership controls.",
+    "lifetime": "Actual journey victory END_BATTLE consumes ordinary/event single-battle rewards and retains exactly one tick of a two-battle filtered reward. Public journey mapping is player-only; both-side public engine tests establish deal/payment/continuation lifetime separately."
+  },
+  "rawEvidence": {
+    "directory": "/tmp/dreamtides-mod-contract-01a13a7a/hv-umm2.637",
+    "logsAndSourceAuditHashes": [
+      {
+        "file": "dispatch-friction-triggers.log",
+        "sha256": "ec64af52459320a85dec8ba96d506bb71a879e37b5ee035165ac05915e1b7003"
+      },
+      {
+        "file": "focused-final.log",
+        "sha256": "193b42f1c855f877d8c85f06819a03af31f627423c90d03f396a25eac3a29a10"
+      },
+      {
+        "file": "focused-first.log",
+        "sha256": "a02ecd2cc975ac4b6c7206b1596e8b3d1ec5e2c4e5fd3d881ea4a302594dabab"
+      },
+      {
+        "file": "focused-fourth.log",
+        "sha256": "99a608c021ce575ef84fef57b6ca96484183e34e85bbd75b8ae2f4fb386e17f0"
+      },
+      {
+        "file": "focused-second.log",
+        "sha256": "4052ce8ba76f903a7af9a6ba2b20965553dd8b5d5f7165f30ecc4d42fe4944c2"
+      },
+      {
+        "file": "focused-third.log",
+        "sha256": "d0d1ea168ece1bc5cb1f7e2e45fa42d9b6c9439e08a04eaa6cb7ccddf03efa22"
+      },
+      {
+        "file": "initial-doctor.log",
+        "sha256": "44564666ddade6bc0811c28b93261ecc2e82b2d2018fc63204279f30e1bf910c"
+      },
+      {
+        "file": "initial-status.log",
+        "sha256": "f0a11e0825dcd7364f108b732f58883633a7bff9be2775129b6040d8e5f0a326"
+      },
+      {
+        "file": "install.log",
+        "sha256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789"
+      },
+      {
+        "file": "knip.log",
+        "sha256": "4fbd0ac8cec20fb86f59c4209d2d1eba031670cf01eda46fcf5fc30145a7ca7e"
+      },
+      {
+        "file": "review-final.log",
+        "sha256": "f28995db7f654b33960facf3a234c0de5db2de5fdc0681363ad1234c14057e49"
+      },
+      {
+        "file": "review-first.log",
+        "sha256": "1119aa835b1e1df25216e38baa829d0d7c0030226f90f7152b4d4bd22a298607"
+      },
+      {
+        "file": "source-audit.json",
+        "sha256": "b6506d5fb3e3f03852d292ae098fdb9bb01a478a63ca73cbad044f1e4eeccd8b"
+      }
+    ],
+    "terminalCensus": "terminal-process-census.txt",
+    "notes": "Full raw log output is retained, including authored fixture failures. Final review tests the final module after fixture type repairs; initial fixture failures are not product RED proof. Production counterfactual writes are outside authority and absent."
+  },
+  "hostLoadSamples": [
+    {
+      "name": "focused-first",
+      "at": "2026-10-15T09:42:54.323299+00:00",
+      "value": [
+        6.99365234375,
+        7.80419921875,
+        8.60205078125
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    },
+    {
+      "name": "focused-second",
+      "at": "2026-10-15T09:43:32.289184+00:00",
+      "value": [
+        6.7802734375,
+        7.67724609375,
+        8.51953125
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    },
+    {
+      "name": "focused-third",
+      "at": "2026-10-15T09:44:02.233026+00:00",
+      "value": [
+        7.02294921875,
+        7.63134765625,
+        8.47216796875
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    },
+    {
+      "name": "focused-fourth",
+      "at": "2026-10-15T09:44:14.516787+00:00",
+      "value": [
+        7.98974609375,
+        7.82275390625,
+        8.5302734375
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    },
+    {
+      "name": "focused-final",
+      "at": "2026-10-15T09:44:52.383414+00:00",
+      "value": [
+        9.53564453125,
+        8.1982421875,
+        8.6318359375
+      ],
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts",
+        "--reporter=verbose"
+      ]
+    },
+    {
+      "name": "review-first",
+      "at": "2026-10-15T09:45:29.386941+00:00",
+      "value": [
+        8.6708984375,
+        8.1904296875,
+        8.6142578125
+      ],
+      "measuredFor": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    {
+      "name": "review-final",
+      "at": "2026-10-15T09:46:00.152844+00:00",
+      "value": [
+        8.2353515625,
+        8.1494140625,
+        8.5849609375
+      ],
+      "measuredFor": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    {
+      "name": "knip",
+      "at": "2026-10-15T09:46:24.641002+00:00",
+      "value": [
+        8.0283203125,
+        8.13037109375,
+        8.5654296875
+      ],
+      "measuredFor": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final process group command start; inner review typecheck/lint/test start loads are in raw log"
+      },
+      "testDelta": {
+        "files": "Configured test entrypoints added minus deleted: 0. The one plain contract module and its exact test lines are counted separately.",
+        "lines": 237
+      }
+    }
+  },
+  "runtime": {
+    "workers": 2,
+    "processGroups": [
+      32236,
+      34773,
+      36862,
+      37694,
+      40066,
+      42207,
+      44155,
+      45599
+    ],
+    "allRecordedGroupsTerminalAtCutoff": true,
+    "remainingOwnedMembers": [],
+    "browserContexts": [],
+    "servers": [],
+    "ports": [],
+    "heavyRuns": []
+  },
+  "delivery": {
+    "fallout": [],
+    "codeReviewRouting": "Parent decides threshold and routes required fresh read-only Codex fork:none review. Helper spawns none.",
+    "nativeDelivery": "Parent only; helper makes one local Conventional Commit."
+  },
+  "remainingAcceptanceOwner": "hv-umm2.286 (plus original final phase join); complete original real-content acceptance stays intact."
+}

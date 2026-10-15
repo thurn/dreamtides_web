@@ -1,0 +1,3 @@
+# hv-umm2.637 observations
+
+The source audit and focused checks establish no pre-existing product defect. Initial failures concern authored fixture assumptions: hand views use a count field, numeric prompt identities require three colon-separated numeric components, mode answers are scalar indices, remapped Event selection requires the current variant, the replay fixture documents its Battle-only seed, type-change DTOs include their predicate and label metadata, and event unions require narrowed access. Those fixture repairs are confined to the owned contract module. Workspace preparation emits missing-art warnings under its temporary local-assets materialization, and its restore step links the normal assets successfully. No images enter this commit.
