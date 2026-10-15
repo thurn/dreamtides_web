@@ -1,0 +1,3 @@
+# hv-umm2.702 pre-existing issue
+
+At base `5d3e36879dc74526b6ebcb04c498412fe0661d14`, ordinary card play attributes every additional payment to the first additionalCost declaration (`src/engine/steps/kinds/play.ts`, planCardPlay). With several additional declarations, a later optional, choice or card-cost prompt therefore identifies the first producer. The source-qualified baseline composite normal-route receipt in `/tmp/worker702-20261015/base-prefixes-v01.json` reproduces it through actual public Engine/fold calls for both actors. This bead preserves ordinary-route purposes and saved fingerprints under its finite admission; its new contracts assert ordinary payment/reload results without pinning that attribution limitation.

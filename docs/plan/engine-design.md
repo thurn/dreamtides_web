@@ -752,8 +752,9 @@ type Prompt =
 A view of a prompt for the side that does not answer it leaves out
 `allowed`, which names cards. A route option's `route` appears only on a
 `playRoute` or `voidRoute` prompt, and the view strips it when that side
-cannot identify the source. A `chooseCost` prompt's `costOptions` appear
-only when that side identifies the source and the prompt is public to it.
+cannot identify the source, along with each option's `costs`. Mode option
+`costs` and a `chooseCost` prompt's `costOptions` appear only when that side
+identifies the source and the prompt is public to it.
 The answering side keeps its options and costs.
 
 Rules code passes a `PromptSpec` (a prompt without `cancellable`) to
@@ -1621,8 +1622,8 @@ mandatory payment card or count is prepared before those choices, without
 payment or movement. Selected cards stay reserved separately from targets
 and other costs. Targetless effects and nested alternatives or optional
 costs keep their own printed-order planning protocol. Energy-X uses the
-route's cost modifications; Offering and the event alternative fix printed
-energy-X to zero. An independent additional count-X cost can still bind X
+route's cost modifications; Offering, the event alternative, and a card-defined
+alternative without its own energy-X fix printed energy-X to zero. An independent additional count-X cost can still bind X
 when the printed energy cost has no X.
 Every payment in the same plan agrees with that binding.
 A variable void banish binds X to the chosen count the same way, but its

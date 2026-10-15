@@ -51,6 +51,7 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
   const instance = instanceOf(state, card);
   const side = instance.controller;
   const definition = instanceCard(catalog, instance);
+  const declared = definition.abilities(instance.variant);
   const origin = instanceOrigin(instance);
   const purpose = (ability: number, role: PromptRole) => purposeOf(card, origin, ability, role);
   let route: PlayRoute = routes[0] ?? "hand";
@@ -62,7 +63,7 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
       options: routes.map((option, index) => ({
         mode: index,
         ...(routes.includes("eventAlternative") || routes.includes("alternativeCost") ? { route: option === "hand" || option === "permission" ? "normal" as const : option } : {}),
-        ...(option === "alternativeCost" ? { costs: definition.abilities(instance.variant).find(ability => ability.kind === "alternativeCost")!.costs } : {}),
+        ...(option === "alternativeCost" ? { costs: declared.find(ability => ability.kind === "alternativeCost")!.costs } : {}),
         legal: routePayable(state, catalog, side, card, option),
       })),
     });
@@ -70,7 +71,13 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
   }
   const costs = routeCosts(state, catalog, card, route);
   const modifier = routeCostModifier(state, catalog, side, card, route);
-  const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === (route === "alternativeCost" ? "alternativeCost" : "additionalCost")));
+  const costAbility = Math.max(0, declared.findIndex((ability) => ability.kind === (route === "alternativeCost" ? "alternativeCost" : "additionalCost")));
+  // Each root keeps its declaration's position, including equal or shared descriptors.
+  const costAbilities = route === "alternativeCost" ? [
+    ...declared.find(ability => ability.kind === "alternativeCost")!.costs.map(() => costAbility),
+    ...declared.flatMap((ability, index) => ability.kind === "additionalCost" ? ability.costs.map(() => index) : []),
+  ] : undefined;
+  const costPurpose = (role: PromptRole, index?: number) => purpose(index === undefined ? costAbility : costAbilities?.[index] ?? costAbility, role);
   let preparedPayments: readonly PlannedCost[] = [];
   let x: number | null;
   let choices: readonly EffectChoices[];
@@ -81,14 +88,14 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
   } else {
     // Replacement bases without their own energy-X fix printed X at zero; a separate count-only X is prepared normally.
     const abilities = eventAbilities(definition, instance.variant);
-    const prepared = prepareCostX(ctx, side, card, costs, (role) => purpose(role === "chooseX" ? 0 : costAbility, role),
+    const prepared = prepareCostX(ctx, side, card, costs, (role, index) => role === "chooseX" ? purpose(0, role) : costPurpose(role, index),
       abilities.some(({ effect }) => targetsNeedX(effect)), { modifier, excluded: [card],
         ...((route === "offering" || route === "eventAlternative" || route === "alternativeCost" && xCost(costs) === null) && xCost(definition.costs) !== null ? { fixedX: 0 } : {}) });
     x = prepared.x;
     preparedPayments = prepared.payments;
     if (abilities.some(({ effect }) => targetsNeedOptionalCost(effect))) {
       // Payment choices bind the restriction; every debit and move still follows target selection and commitment.
-      const plan = planCosts(ctx, side, card, costs, x, (role) => purpose(costAbility, role), [card], modifier,
+      const plan = planCosts(ctx, side, card, costs, x, costPurpose, [card], modifier,
         { selectorX: x ?? 0, preparedPayments });
       choices = choosePlayTime(ctx, abilities, side, card, purpose, plan.x ?? 0,
         { optionalPaid: plan.optionalPaid, excluded: plan.payments.flatMap(payment => payment.cards) });
@@ -97,7 +104,7 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
     choices = choosePlayTime(ctx, abilities, side, card, purpose, x ?? 0);
   }
   const targets = choices.flatMap((choice) => choice.targets.flat());
-  const plan = planCosts(ctx, side, card, costs, x, (role) => purpose(costAbility, role), [card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0, preparedPayments });
+  const plan = planCosts(ctx, side, card, costs, x, costPurpose, [card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0, preparedPayments });
   return { route, plan, choices, modifier };
 }
 

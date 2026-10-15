@@ -289,27 +289,28 @@ export interface PreparedCostX {
  * and target before the commit point. Targetless protocols retain
  * their printed-order card choices. Energy-X, counter-X and abandon-X preparation use
  * chooseX in either case. Nested choices keep their own planning protocol.
+ * Captured-card purposes receive the cost's top-level index; shared numeric X has none.
  */
 export function prepareCostX(
   ctx: StepContext,
   side: Side,
   source: AbilitySource,
   costs: readonly Cost[],
-  purpose: (role: PromptRole) => PromptPurpose,
+  purpose: (role: PromptRole, costIndex?: number) => PromptPurpose,
   targetsNeedX: boolean,
   options: { readonly modifier?: CostModifier; readonly fixedX?: number; readonly excluded?: readonly InstanceId[] } = {},
 ): PreparedCostX {
   let x = options.fixedX ?? chooseX(ctx, side, costs, purpose("chooseX"), options.modifier);
   const payments: PlannedCost[] = [];
   if (!targetsNeedX) return { x, payments };
-  for (const cost of costs) {
+  for (const [index, cost] of costs.entries()) {
     if (cost.cost !== "discard" && cost.cost !== "abandon") continue;
     const capturesSpark = cost.cost === "abandon" && cost.captureSpark === true;
     if (cost.captureCost !== true && !capturesSpark) continue;
     const candidates = cardCandidates(ctx.state, ctx.catalog, side, source, cost, x ?? undefined)
       .filter(id => !options.excluded?.includes(id) && !payments.some(payment => payment.cards.includes(id)));
     const selected = ctx.choose<ChooseCardsPrompt>({
-      kind: "chooseCards", side, purpose: purpose(CARD_ROLE[cost.cost]), candidates, min: 1, max: 1,
+      kind: "chooseCards", side, purpose: purpose(CARD_ROLE[cost.cost], index), candidates, min: 1, max: 1,
     });
     const cards = candidates.filter(id => selected.includes(id));
     const value = capturesSpark ? effectiveSpark(ctx.state, ctx.catalog, cards[0]) : copiableCostOf(ctx.state, ctx.catalog, cards[0]);
@@ -356,6 +357,7 @@ export function prepareCostX(
  * use the source card's stored X. `preparedPayments` carries mandatory
  * copiable-cost or effective-spark captures selected before immediate targeting; these cards
  * must still be available and distinct from targets and earlier payments.
+ * Payment purposes receive their owning top-level cost index, including nested leaves.
  */
 export function planCosts(
   ctx: StepContext,
@@ -363,7 +365,7 @@ export function planCosts(
   source: AbilitySource,
   costs: readonly Cost[],
   x: number | null,
-  purpose: (role: PromptRole) => PromptPurpose,
+  purpose: (role: PromptRole, costIndex?: number) => PromptPurpose,
   excluded: readonly InstanceId[],
   modifier: CostModifier = NO_COST_MODIFIER,
   options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: readonly PlannedCost[] } = {},
@@ -426,7 +428,7 @@ export function planCosts(
   };
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
-  const plan = (cost: PaymentCost | AbandonXCost, nested: boolean, isLast = false): void => {
+  const plan = (cost: PaymentCost | AbandonXCost, nested: boolean, costIndex: number, isLast = false): void => {
     if (cost.cost === "revealSource" && payments.some(payment => discardsHand(payment.cost))) {
       throw new Infeasible("Source reveal cannot follow a chosen whole-hand discard");
     }
@@ -479,7 +481,7 @@ export function planCosts(
     const selected = prepared?.cards ?? ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
-      purpose: purpose(CARD_ROLE[cost.cost]),
+      purpose: purpose(CARD_ROLE[cost.cost], costIndex),
       candidates: remaining,
       min: count ?? leastCount(cost),
       // Too few candidates for the least X is an empty prompt, a dead end like a short fixed count.
@@ -510,23 +512,23 @@ export function planCosts(
         const choice = ctx.choose<ChooseModePrompt>({
           kind: "chooseMode",
           side,
-          purpose: purpose("chooseCost"),
+          purpose: purpose("chooseCost", index),
           costOptions: cost.options,
           options: cost.options.map((option, index) => ({ mode: index, legal: affordable(option) })),
         });
-        for (const part of cost.options[choice] ?? []) plan(part, true);
+        for (const part of cost.options[choice] ?? []) plan(part, true, index);
         break;
       }
       case "optional": {
         const pays =
           affordable(cost.costs) &&
-          ctx.choose<ConfirmPrompt>({ kind: "confirm", side, purpose: purpose("optionalCost") });
+          ctx.choose<ConfirmPrompt>({ kind: "confirm", side, purpose: purpose("optionalCost", index) });
         optionalPaid.push(pays);
-        if (pays) for (const part of cost.costs) plan(part, true);
+        if (pays) for (const part of cost.costs) plan(part, true, index);
         break;
       }
       default:
-        plan(cost, false, index === costs.length - 1);
+        plan(cost, false, index, index === costs.length - 1);
     }
   }
   const total = adjustedEnergy(baseEnergy, modifier);

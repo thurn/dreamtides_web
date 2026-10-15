@@ -930,7 +930,8 @@ your void offers one play as that instruction resolves, even outside a normal
 play window or while another item is resolving. Only matching characters in the
 void you own are covered, with a cost criterion reading their copiable cost.
 You may decline. The character must pass play restrictions, reserved battlefield
-capacity and payable costs. You choose its normal costs or available Reclaim;
+capacity and payable costs. You choose its normal costs, available Reclaim or
+its available card-defined alternative cost;
 X, cost changes and additional costs apply normally. Offering applies from hand.
 This instruction creates no lasting permission and uses no other permission's
 allowance.

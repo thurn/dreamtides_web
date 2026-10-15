@@ -1,0 +1,783 @@
+{
+  "bead": "hv-umm2.702",
+  "base": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+  "status": "Parent acceptance complete; final evidence and cheap staged/schema verification before the single local commit. Parent owns candidate, core review, promotion and cleanup.",
+  "clock": {
+    "dispatch": "2026-10-15T00:07:23.636Z",
+    "setupInstallSecondsParent": 2.990540209,
+    "sampling": "UNKNOWN",
+    "includes": [
+      "source research",
+      "admission/ACK waits",
+      "implementation",
+      "checks",
+      "QA",
+      "commit"
+    ],
+    "gitTailReceiptOutsideCommit": "/tmp/worker702-20261015/final-git-v01.json",
+    "cutoffQualification": "implementWindow.end is the immediate precommit evidence cutoff. The actual subsequent Git tail and full dispatch-to-Git-end elapsed time are recorded outside the commit without a postcommit rewrite.",
+    "immediatePrecommitCutoff": "2026-10-15T00:33:45.662720+00:00",
+    "elapsedDispatchToCutoffMin": 26.367112000000002
+  },
+  "source": {
+    "src/engine/steps/kinds/play.ts": {
+      "sha256": "e31d21bc3469f71bf4c7fe45253295a1c9edda4fd34164031d7bfd58f3edb2a7",
+      "lines": 150
+    },
+    "src/engine/rules/costs.ts": {
+      "sha256": "0508941ca8bfa0e2ad81c9714fc72371f0d2ee6732f6b822a780704c5dd6baa6",
+      "lines": 685
+    },
+    "src/engine/effects/primitives/contracts/alternative-cost-provenance.contracts.ts": {
+      "sha256": "220dfff4458a7956148023b0aeba90ebe18b372b3a774a2567b62fe4698116aa",
+      "lines": 170
+    },
+    "src/engine/effects/primitives/contracts/alternative-cost-provenance-support.ts": {
+      "sha256": "78b74e97bb99962daea12df3dda644bf9673b12e454865d8e0bbbc7916b43ceb",
+      "lines": 56
+    },
+    "src/engine/effects/primitives/contracts/alternative-cost-recovery.contracts.ts": {
+      "sha256": "a484c709c0193071bb2786f79d27a53e474b8310f69395496a2a944df7af7fc8",
+      "lines": 119
+    },
+    "docs/rules.md": {
+      "sha256": "d6d3922a29460f7b01826ac1f9fe84f00930ac90b5096a34b104c379538ed57e",
+      "lines": 3158
+    },
+    "docs/plan/engine-design.md": {
+      "sha256": "c5d3a0fa3a3fcc96378daed4d1d5b54201247602f9437a25a8b9f648ca898196",
+      "lines": 2999
+    }
+  },
+  "findingDispositions": [
+    {
+      "finding": "Greedy preference",
+      "disposition": "accepted",
+      "proof": "Existing both-legal assertion uses isLegalAnswer; forced-only-mode-1 and old cases retained."
+    },
+    {
+      "finding": "ImmediatePlay route mirror",
+      "disposition": "accepted",
+      "proof": "Existing list includes available own card-defined alternative, settled by rules Card-defined alternative costs and RD-103."
+    },
+    {
+      "finding": "Prompt visibility and printed X mirrors",
+      "disposition": "accepted",
+      "proof": "Mirrors option.costs privacy and own no-energy-X replacement behavior; no gameplay rule added."
+    },
+    {
+      "finding": "Composed alternative payment producer",
+      "disposition": "accepted direct public purpose defect",
+      "proof": "Baseline Engine/fold purposes all use alternative declaration; corrected root indexes distinguish additional declarations. Explicit engine.promptOpened ability-field claim rejected: its schema omits ability."
+    }
+  ],
+  "compatibility": {
+    "fixtureSha256": "78b74e97bb99962daea12df3dda644bf9673b12e454865d8e0bbbc7916b43ceb",
+    "fixtureSourceRetained": "/tmp/worker702-20261015/baseline-fixture-source.ts",
+    "baselineCapture": "/tmp/worker702-20261015/base-prefixes-v01.json",
+    "baselineCaptureSha256": "ce5ef50a8bdf41f99863472e1349304645b66d56f63beb3cf0144f84f50a1b3e",
+    "currentProof": "/tmp/worker702-20261015/current-prefix-proof-v02.json",
+    "currentProofSha256": "ba32acdc2a1b5bc03339f30f095cc67b9658857ab1a53b8636e5053142b61640",
+    "sameExactFixtureSource": true,
+    "actualBaseColdReloadedSnapshots": 58,
+    "currentColdReloadedSnapshots": 58,
+    "crossSourceOldSnapshotResults": {
+      "exact": 38,
+      "reconstructed-changed-prompt": 6,
+      "refused-boundary-restored": 14
+    },
+    "qualification": "38 exact old snapshots include all normal and shipped alternative prefixes; six reconstruct to a corrected not-yet-answered prompt; fourteen genuinely changed answered synthetic prefixes fail strict replay and recover the step boundary with engine.error and no published failure events. Refusal is not successful legacy migration. No alias, schema or fingerprint tolerance added. Current optional-payment-dependent targeting also cold-reloads in public contracts.",
+    "shippedAudit": "At the inspected base only a56e0f68-30b6-404e-9b83-a7584177f21e declares alternativeCost in content; its energy(0)+giveOpponentPoints(5) has no prompting base or additionalCost. Static audit is qualified source evidence, not a mutable-catalog CI test.",
+    "currentProofEpoch": "Final frozen runtime and immutable fixture source; actual same-base saved bytes reused",
+    "finalStateQualification": "Normal/shipped full final hashes match. Changed synthetic final full hashes differ only in actual stored loop action answer fingerprints, as expected from corrected purposes; all other committed fields byte-identical. Refused changed synthetic answered prefixes are safe boundary restoration, not successful migration. Existing strict saved decision matching unchanged. Initial parent assertion of all10 full finalhash equality rejected by actual evidence; no product change or AC waiver.",
+    "independentFinalStateAudit": {
+      "baseReceiptSha256": "ce5ef50a8bdf41f99863472e1349304645b66d56f63beb3cf0144f84f50a1b3e",
+      "currentReceiptSha256": "ba32acdc2a1b5bc03339f30f095cc67b9658857ab1a53b8636e5053142b61640",
+      "snapshotsBase": 58,
+      "snapshotsCurrent": 58,
+      "sameImmutableFixtureVerified": true,
+      "allPaymentAndBoardStateFieldsIdentical": true,
+      "rows": [
+        {
+          "side": "player",
+          "kind": "composite",
+          "route": "normal",
+          "fullStateHashIdentical": true,
+          "changedFields": []
+        },
+        {
+          "side": "player",
+          "kind": "composite",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": false,
+          "changedFields": [
+            ".loops.actions[0].steps[0].answers[4].fingerprint",
+            ".loops.actions[0].steps[0].answers[5].fingerprint",
+            ".loops.actions[0].steps[0].answers[6].fingerprint",
+            ".loops.actions[0].steps[0].answers[7].fingerprint",
+            ".loops.actions[0].steps[0].answers[8].fingerprint",
+            ".loops.actions[0].steps[0].answers[9].fingerprint",
+            ".loops.actions[0].steps[0].answers[10].fingerprint"
+          ]
+        },
+        {
+          "side": "player",
+          "kind": "capture",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": false,
+          "changedFields": [
+            ".loops.actions[0].steps[0].answers[1].fingerprint"
+          ]
+        },
+        {
+          "side": "player",
+          "kind": "count",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": false,
+          "changedFields": [
+            ".loops.actions[0].steps[0].answers[3].fingerprint"
+          ]
+        },
+        {
+          "side": "player",
+          "kind": "shipped",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": true,
+          "changedFields": []
+        },
+        {
+          "side": "enemy",
+          "kind": "composite",
+          "route": "normal",
+          "fullStateHashIdentical": true,
+          "changedFields": []
+        },
+        {
+          "side": "enemy",
+          "kind": "composite",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": false,
+          "changedFields": [
+            ".loops.actions[0].steps[0].answers[4].fingerprint",
+            ".loops.actions[0].steps[0].answers[5].fingerprint",
+            ".loops.actions[0].steps[0].answers[6].fingerprint",
+            ".loops.actions[0].steps[0].answers[7].fingerprint",
+            ".loops.actions[0].steps[0].answers[8].fingerprint",
+            ".loops.actions[0].steps[0].answers[9].fingerprint",
+            ".loops.actions[0].steps[0].answers[10].fingerprint"
+          ]
+        },
+        {
+          "side": "enemy",
+          "kind": "capture",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": false,
+          "changedFields": [
+            ".loops.actions[0].steps[0].answers[1].fingerprint"
+          ]
+        },
+        {
+          "side": "enemy",
+          "kind": "count",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": false,
+          "changedFields": [
+            ".loops.actions[0].steps[0].answers[3].fingerprint"
+          ]
+        },
+        {
+          "side": "enemy",
+          "kind": "shipped",
+          "route": "alternativeCost",
+          "fullStateHashIdentical": true,
+          "changedFields": []
+        }
+      ],
+      "normalAndShippedAllExact": true,
+      "crossSourceResults": {
+        "exact": 38,
+        "reconstructed-changed-prompt": 6,
+        "refused-boundary-restored": 14
+      },
+      "qualification": "Normal/shipped full final hashes match. Changed synthetic final full hashes differ only in actual stored loop action answer fingerprints, as expected from corrected purposes; all other committed fields byte-identical. Refused changed synthetic answered prefixes are safe boundary restoration, not successful migration. Existing strict saved decision matching unchanged. Initial parent assertion of all10 full finalhash equality rejected by actual evidence; no product change or AC waiver."
+    }
+  },
+  "negativeWitnesses": {
+    "initialRed": {
+      "log": "/tmp/worker702-20261015/initial-red-v01.log",
+      "wallSecondsTool": 6.342768459,
+      "result": "6 expected public attribution failures, 6 passing new cases; no import/runtime failure"
+    },
+    "restoredFaults": [
+      {
+        "fault": "composite-producer",
+        "path": "src/engine/steps/kinds/play.ts",
+        "beforeSha256": "e31d21bc3469f71bf4c7fe45253295a1c9edda4fd34164031d7bfd58f3edb2a7",
+        "faultSha256": "f00a33b2043764d9cd327cdffa6293791dcc62c7fb92c0259d5e2d48dee6a62f",
+        "restoredSha256": "e31d21bc3469f71bf4c7fe45253295a1c9edda4fd34164031d7bfd58f3edb2a7",
+        "exit": 1,
+        "wallSeconds": 7.3705314170219935,
+        "assertionFailures": 2,
+        "filter": "attributes base and additional nested payments"
+      },
+      {
+        "fault": "nested-root",
+        "path": "src/engine/rules/costs.ts",
+        "beforeSha256": "0508941ca8bfa0e2ad81c9714fc72371f0d2ee6732f6b822a780704c5dd6baa6",
+        "faultSha256": "a90e7381abaa88261274ab8f6446aa3c68613c736f3f830b6f70949634e4cf26",
+        "restoredSha256": "0508941ca8bfa0e2ad81c9714fc72371f0d2ee6732f6b822a780704c5dd6baa6",
+        "exit": 1,
+        "wallSeconds": 8.757288708991837,
+        "assertionFailures": 2,
+        "filter": "attributes base and additional nested payments"
+      }
+    ],
+    "restoration": "Both files restored byte-identically to pre-fault hashes before full focused validation."
+  },
+  "validation": [
+    {
+      "name": "focused-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/rules/costs-discard-hand.test.ts",
+        "src/engine/rules/costs-discard.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/rules/costs-search.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+      "start": "2026-10-15T00:20:22.594735+00:00",
+      "end": "2026-10-15T00:20:53.378187+00:00",
+      "exit": 0,
+      "wallSeconds": 30.78270058298949,
+      "childCpuSeconds": 39.323840000000004,
+      "hostLoad": "{ 25.60 17.35 15.48 }",
+      "workers": 2
+    },
+    {
+      "name": "review-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+      "start": "2026-10-15T00:21:37.591466+00:00",
+      "end": "2026-10-15T00:23:06.650291+00:00",
+      "exit": 0,
+      "wallSeconds": 89.05797337502008,
+      "childCpuSeconds": 247.312318,
+      "hostLoad": "{ 17.58 16.67 15.38 }",
+      "workers": 2
+    },
+    {
+      "name": "knip-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+      "start": "2026-10-15T00:23:09.810922+00:00",
+      "end": "2026-10-15T00:23:17.409972+00:00",
+      "exit": 0,
+      "wallSeconds": 7.598796458041761,
+      "childCpuSeconds": 7.665512,
+      "hostLoad": "{ 26.30 20.53 17.04 }",
+      "workers": 2
+    },
+    {
+      "name": "review-v02",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+      "start": "2026-10-15T00:23:46.374673+00:00",
+      "end": "2026-10-15T00:24:53.705912+00:00",
+      "exit": 0,
+      "wallSeconds": 67.33039208303671,
+      "childCpuSeconds": 184.862267,
+      "hostLoad": "{ 19.25 19.41 16.77 }",
+      "workers": 2
+    },
+    {
+      "name": "schema-v02",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+      "start": "2026-10-15T00:25:54.032941+00:00",
+      "end": "2026-10-15T00:25:54.169198+00:00",
+      "exit": 0,
+      "wallSeconds": 0.13607016601599753,
+      "childCpuSeconds": 0.096446,
+      "hostLoad": "{ 8.53 15.33 15.51 }",
+      "workers": 2
+    }
+  ],
+  "D19": {
+    "newTestEntrypoints": 0,
+    "newPlainContractModules": 1,
+    "newPrivateFixtureModules": 1,
+    "testLineDelta": 227,
+    "nodeEnvironment": true,
+    "largestNewContractLines": 170,
+    "noNewProductionDataPolicyCopyTimingPrivateHelperAssertions": true
+  },
+  "fallout": {
+    "declared": [
+      "prepareCostX callback arity",
+      "planCosts callback arity"
+    ],
+    "editedImporters": [],
+    "unchangedConsumers": [
+      "activate.ts",
+      "pay-to.ts",
+      "manual cost fixtures",
+      "immediate-play.ts"
+    ]
+  },
+  "failurePaths": {
+    "midStepError": "leaves no partial payment when a later public payment answer fails; existing postpayment cloned-runner rollback retained",
+    "reload": "reconstructs every current decision on a cold reload; optional-dependent-target cold reload; actual base/current prefix receipt",
+    "partialWrite": "Committed state hash unchanged at every pending decision and after cancellation/error; actual payment once on completion",
+    "invalidStale": "cancels an attributed payment and rejects invalid, stale, foreign and competing intents",
+    "competingActors": "Both actors, foreign answer/cancel, competing action, duplicate completion public fold outcomes"
+  },
+  "resources": {
+    "workers": 2,
+    "heavyCommands": [],
+    "browser": "Root completed four source-identical owned native MCP invocations; all exact context/server groups settled. Shared service untouched.",
+    "helperDelegation": false
+  },
+  "review": "Parent-owned normal fresh Claude core review; temporary Sol policy expired",
+  "sourceFreeze": "Seven admitted code/doc/test hashes unchanged through parent QA/source acceptance. Entire commitCardPlay/run and payCosts suffixes byte-identical to base per root/read-only-body-audit-v01.json.",
+  "validationNotes": {
+    "focused": "11 files / 5092 tests passed; includes full eager primitive runner and affected cost/fold/replay suites",
+    "reviewV02": "Final frozen test/source epoch: 306 files /8758 tests passed, lint, two typechecks, cycles, friction schema. V01 also passed; repeated because the new-contract import/fixture-use cleanup happened after V01 started.",
+    "knip": "Passed on same final code/test source; its receipt predates V02, with no later code edits. No unused export/file introduced."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v02 wrapper start immediately before npm run review; see exact command receipt"
+      }
+    }
+  },
+  "sourceAcceptanceArchive": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.702/source-acceptance-v01",
+    "manifestSHA256": "c780ee6b53c6c0c438cd343a5a3c684753d222759f3210a037b94167ceb38991",
+    "files": 205,
+    "bytes": 30211432,
+    "purpose": "Immutable raw source/native/check/compatibility/caller/custody evidence. Paths below also resolve under archive root/ or worker/."
+  },
+  "browserAcceptance": {
+    "qualification": "Four complete judged cells assembled from source-identical v03 completed desktop alternative note and v04 three remaining cells. All raw failures retained.3 images max,2x headers verified/root visually inspected. Full game JSONL eachcell preserved, exactstate/pending replay, actual payment/cancel/retry/order/physical UUID/control geometry and emptyCaps. Not a numeric-composite UI witness.",
+    "sourceUnchanged": true,
+    "sourceFreezeSHA256": "dad0d6f174356a0ceef77ee2f85bbc6375e073681616723b748fddb811103c1c",
+    "cells": [
+      {
+        "bead": "hv-umm2.702",
+        "mode": "judged",
+        "entityKind": "card",
+        "uuid": "a56e0f68-30b6-404e-9b83-a7584177f21e",
+        "variant": "base",
+        "as": "player",
+        "viewport": "desktop",
+        "workflow": "shipped-alternative",
+        "attempt": 3,
+        "effective": true,
+        "verdict": "pass",
+        "commit": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+        "invocation": "invocations/run-PdGvg1",
+        "evidenceDir": "invocations/run-PdGvg1",
+        "rawReport": "invocations/run-PdGvg1/qa-alternative-provenance-v03.result.json",
+        "rawReportSHA256": "e3c640c1bb4c77d3d8312984d45bc4e0f8f393453aba1926ba780ea839c340d7",
+        "sourceFreezeSHA256": "dad0d6f174356a0ceef77ee2f85bbc6375e073681616723b748fddb811103c1c",
+        "callerSHA256": "721aa1e9ae440af3348095ad620c6ade64d84fd44f8777b1f5b920b15805a5f2",
+        "gameId": "bf2i5a",
+        "sourceInstance": "i1",
+        "persistedLog": {
+          "path": "/tmp/root702-20261015/cell-logs-v01/desktop-shipped-alternative.jsonl",
+          "sha256": "e4ee38b7081a9b3fcd4999a8879aa5968ad75c56169b1c3d78a57f7fed16e429",
+          "rows": 69
+        },
+        "cellProof": {
+          "path": "/tmp/root702-20261015/desktop-shipped-alternative-cell-v01.json",
+          "sha256": "b54e5fe535afbcce7500417174f431fa2b5c0b99ff30bb9ca1be5f27809f916e"
+        },
+        "caps": [],
+        "fullReplay": true,
+        "notes": "Existing actual-app regression. Numeric composite attribution separately proven with public Engine/fold synthetic contracts; no changed-composite UI claim. Prior v03 shipped desktop cell completed before unrelated later normal selector failure; retained completed-cell note is full proof, no whole failed invocation pass claim."
+      },
+      {
+        "bead": "hv-umm2.702",
+        "mode": "judged",
+        "entityKind": "card",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f01",
+        "variant": "base",
+        "as": "player",
+        "viewport": "desktop",
+        "workflow": "normal-optional",
+        "attempt": 4,
+        "effective": true,
+        "verdict": "pass",
+        "commit": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+        "invocation": "invocations/run-6Rb8R8",
+        "evidenceDir": "invocations/run-6Rb8R8",
+        "rawReport": "invocations/run-6Rb8R8/qa-alternative-provenance-v04.result.json",
+        "rawReportSHA256": "f0f59ebda77601da1ad63c35eb3fa83c0a947f6ea0650b72046f77c1cfc77fc7",
+        "sourceFreezeSHA256": "dad0d6f174356a0ceef77ee2f85bbc6375e073681616723b748fddb811103c1c",
+        "callerSHA256": "af461748939232e70056f75a1ed74789e455f05e3803eddaa27e9119d0735ce4",
+        "gameId": "a3xagr",
+        "sourceInstance": "i2",
+        "persistedLog": {
+          "path": "/tmp/root702-20261015/cell-logs-v01/desktop-normal-optional.jsonl",
+          "sha256": "c8f1f64865372629c4c6b0a56c02409e5070fe21c08919ba090670f3509223f4",
+          "rows": 59
+        },
+        "cellProof": {
+          "path": "/tmp/root702-20261015/desktop-normal-optional-cell-v01.json",
+          "sha256": "e5ece3ba8a323714ec1eb208cd5d85cc2aecb6f183c52c21d3705f74ed329c86"
+        },
+        "caps": [],
+        "fullReplay": true,
+        "notes": "Remaining existing-app regression passed in successful v04 invocation; no changed-composite UI claim."
+      },
+      {
+        "bead": "hv-umm2.702",
+        "mode": "judged",
+        "entityKind": "card",
+        "uuid": "a56e0f68-30b6-404e-9b83-a7584177f21e",
+        "variant": "base",
+        "as": "player",
+        "viewport": "mobile",
+        "workflow": "shipped-alternative",
+        "attempt": 4,
+        "effective": true,
+        "verdict": "pass",
+        "commit": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+        "invocation": "invocations/run-6Rb8R8",
+        "evidenceDir": "invocations/run-6Rb8R8",
+        "rawReport": "invocations/run-6Rb8R8/qa-alternative-provenance-v04.result.json",
+        "rawReportSHA256": "f0f59ebda77601da1ad63c35eb3fa83c0a947f6ea0650b72046f77c1cfc77fc7",
+        "sourceFreezeSHA256": "dad0d6f174356a0ceef77ee2f85bbc6375e073681616723b748fddb811103c1c",
+        "callerSHA256": "af461748939232e70056f75a1ed74789e455f05e3803eddaa27e9119d0735ce4",
+        "gameId": "24cseh",
+        "sourceInstance": "i1",
+        "persistedLog": {
+          "path": "/tmp/root702-20261015/cell-logs-v01/mobile-shipped-alternative.jsonl",
+          "sha256": "514d0182481385446919706b4e27319fac5c722e33371a3ba96ebcbd85115db5",
+          "rows": 71
+        },
+        "cellProof": {
+          "path": "/tmp/root702-20261015/mobile-shipped-alternative-cell-v01.json",
+          "sha256": "37c98a4c3cb66a57bbe0a78dbc04f556e7204763b7fac36fa976f021dd0d5cb9"
+        },
+        "caps": [],
+        "fullReplay": true,
+        "notes": "Remaining existing-app regression passed in successful v04 invocation; no changed-composite UI claim."
+      },
+      {
+        "bead": "hv-umm2.702",
+        "mode": "judged",
+        "entityKind": "card",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f01",
+        "variant": "base",
+        "as": "player",
+        "viewport": "mobile",
+        "workflow": "normal-optional",
+        "attempt": 4,
+        "effective": true,
+        "verdict": "pass",
+        "commit": "5d3e36879dc74526b6ebcb04c498412fe0661d14",
+        "invocation": "invocations/run-6Rb8R8",
+        "evidenceDir": "invocations/run-6Rb8R8",
+        "rawReport": "invocations/run-6Rb8R8/qa-alternative-provenance-v04.result.json",
+        "rawReportSHA256": "f0f59ebda77601da1ad63c35eb3fa83c0a947f6ea0650b72046f77c1cfc77fc7",
+        "sourceFreezeSHA256": "dad0d6f174356a0ceef77ee2f85bbc6375e073681616723b748fddb811103c1c",
+        "callerSHA256": "af461748939232e70056f75a1ed74789e455f05e3803eddaa27e9119d0735ce4",
+        "gameId": "952oc6",
+        "sourceInstance": "i2",
+        "persistedLog": {
+          "path": "/tmp/root702-20261015/cell-logs-v01/mobile-normal-optional.jsonl",
+          "sha256": "73bdeb4f18dada23d2cbb5d386672b232c36b9e0ecb255d5c300a98826f7dcdb",
+          "rows": 60
+        },
+        "cellProof": {
+          "path": "/tmp/root702-20261015/mobile-normal-optional-cell-v01.json",
+          "sha256": "77cce82ae00d24843f16fbc85a922d84338237b915ae21916bf1c3e96318592f"
+        },
+        "caps": [],
+        "fullReplay": true,
+        "notes": "Remaining existing-app regression passed in successful v04 invocation; no changed-composite UI claim."
+      }
+    ],
+    "images": [
+      {
+        "path": "invocations/run-GcNCIM/payment-alternative-chooser-desktop-2x.png",
+        "sha256": "374bbea98078e0094c456217a321702956a9f4c99cea10bc1005346f160361fb",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "rootViewed": true,
+        "qualification": "Valid frozen-source capture at completed state; original invocation/cell provenance retained."
+      },
+      {
+        "path": "invocations/run-R8wXMS/payment-alternative-settled-desktop-2x.png",
+        "sha256": "f1c7daf595208f88bfaa633982dc539b631654e462fc3161d3bf335b0f4729aa",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "rootViewed": true,
+        "qualification": "Valid frozen-source capture at completed state; original invocation/cell provenance retained."
+      },
+      {
+        "path": "invocations/run-6Rb8R8/payment-alternative-settled-mobile-2x.png",
+        "sha256": "4d32394c47ff4ff920fbcd0eaa0dfc3ebc34f619609d4de50f0ceffd35813cb2",
+        "pixels": [
+          780,
+          1688
+        ],
+        "rootViewed": true,
+        "qualification": "Valid frozen-source capture at completed state; original invocation/cell provenance retained."
+      }
+    ],
+    "failures": [
+      {
+        "invocation": "run-GcNCIM",
+        "reason": "Scratch URL helper outside browser scope",
+        "effective": false
+      },
+      {
+        "invocation": "run-R8wXMS",
+        "reason": "Synthetic fixture incorrectly requested through production card-lab",
+        "effective": false
+      },
+      {
+        "invocation": "run-PdGvg1",
+        "reason": "Normal candidate selector joined ancestor/descendant attributes on same node; desktop alternative cell independently complete",
+        "effective": false
+      }
+    ],
+    "runtimeCleanup": {
+      "1": {
+        "at": "2026-10-15T00:26:34.279961+00:00",
+        "runnerReceipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root702-20261015/qa-alternative-provenance-v01.mjs",
+            "--bead",
+            "hv-umm2.702",
+            "--port",
+            "5174",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "900"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+          "start": "2026-10-15T00:26:22.571029+00:00",
+          "end": "2026-10-15T00:26:34.088129+00:00",
+          "exit": 1,
+          "wallSeconds": 11.516945084033068,
+          "pid": 88099,
+          "pgid": 88099,
+          "load": "{ 8.29 14.61 15.24 }",
+          "groupRemainingAtExit": []
+        },
+        "sourceFilesUnchanged": true,
+        "sessionsCaptured": 1,
+        "records": [
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": true,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": true,
+            "ownServerGroups": [
+              88196
+            ]
+          }
+        ],
+        "ownGroups": [
+          88099,
+          88196
+        ],
+        "ownGroupsRemaining": [],
+        "providerCompletion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+      },
+      "2": {
+        "at": "2026-10-15T00:27:51.311251+00:00",
+        "runnerReceipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root702-20261015/qa-alternative-provenance-v02.mjs",
+            "--bead",
+            "hv-umm2.702",
+            "--port",
+            "5174",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "900"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+          "start": "2026-10-15T00:27:12.031630+00:00",
+          "end": "2026-10-15T00:27:51.071064+00:00",
+          "exit": 1,
+          "wallSeconds": 39.03899029199965,
+          "pid": 91970,
+          "pgid": 91970,
+          "load": "{ 17.26 15.87 15.66 }",
+          "groupRemainingAtExit": []
+        },
+        "sourceFilesUnchanged": true,
+        "sessionsCaptured": 1,
+        "records": [
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": true,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": true,
+            "ownServerGroups": [
+              92075
+            ]
+          }
+        ],
+        "ownGroups": [
+          91970,
+          92075
+        ],
+        "ownGroupsRemaining": [],
+        "providerCompletion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+      },
+      "3": {
+        "at": "2026-10-15T00:29:33.851423+00:00",
+        "runnerReceipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root702-20261015/qa-alternative-provenance-v03.mjs",
+            "--bead",
+            "hv-umm2.702",
+            "--port",
+            "5174",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "900"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+          "start": "2026-10-15T00:29:05.215756+00:00",
+          "end": "2026-10-15T00:29:33.500108+00:00",
+          "exit": 1,
+          "wallSeconds": 28.28403325000545,
+          "pid": 57193,
+          "pgid": 57193,
+          "load": "{ 12.12 15.28 15.52 }",
+          "groupRemainingAtExit": []
+        },
+        "sourceFilesUnchanged": true,
+        "sessionsCaptured": 1,
+        "records": [
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": true,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": true,
+            "ownServerGroups": [
+              57292
+            ]
+          }
+        ],
+        "ownGroups": [
+          57193,
+          57292
+        ],
+        "ownGroupsRemaining": [],
+        "providerCompletion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+      },
+      "4": {
+        "at": "2026-10-15T00:30:57.980974+00:00",
+        "runnerReceipt": {
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/root702-20261015/qa-alternative-provenance-v04.mjs",
+            "--bead",
+            "hv-umm2.702",
+            "--port",
+            "5174",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "900"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-alternative-payment-provenance702",
+          "start": "2026-10-15T00:30:15.194920+00:00",
+          "end": "2026-10-15T00:30:57.702622+00:00",
+          "exit": 0,
+          "wallSeconds": 42.50731795805041,
+          "pid": 61941,
+          "pgid": 61941,
+          "load": "{ 9.81 14.15 15.08 }",
+          "groupRemainingAtExit": []
+        },
+        "sourceFilesUnchanged": true,
+        "sessionsCaptured": 1,
+        "records": [
+          {
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "originalTokenGone": true,
+            "currentRecordAbsent": true,
+            "activeProviderRetained": true,
+            "serverPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "originalServerTokensGone": true,
+            "serverRecordAbsent": true,
+            "ownServerGroups": [
+              62043
+            ]
+          }
+        ],
+        "ownGroups": [
+          61941,
+          62043
+        ],
+        "ownGroupsRemaining": [],
+        "providerCompletion": "Native runner terminal result and exact own owner/server tokens cleared; audited managedclose clears owner only after confirmed browser_close, active RPC drain and no uncertain call, closes own transport, stops own server PG and releases lease. Shared service/other records untouched."
+      }
+    },
+    "persistedJSONLRows": 259,
+    "allCapsEmpty": true,
+    "allFourOwnedRuntimesSettled": true,
+    "narrowJusticiarRecovery": {
+      "nativeReceipt": "root/qa-justiciar-recovery-ack-v03-native.stdout",
+      "qualification": "Root repaired scratch caller URL scope, navigated the existing canonical optional-cost prompt lab after the production card-lab refused the synthetic UUID, then corrected a candidate locator. Three failed invocations remain failed; only the completed v03 desktop alternative cell and three v04 cells are accepted. Actual three-target paid surface is the existing fixture. No product/fixture/QA infrastructure/policy source change, deadline, approval or acceptance waiver."
+    }
+  }
+}

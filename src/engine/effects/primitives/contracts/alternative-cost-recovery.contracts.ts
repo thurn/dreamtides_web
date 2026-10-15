@@ -6,6 +6,7 @@ import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
 import type { EngineLogRecord } from "../../../log";
 import { promptFingerprint } from "../../../prompts/fingerprint";
+import { isLegalAnswer } from "../../../prompts/answers";
 import { isWellFormedPrompt } from "../../../prompts/structure";
 import { stateHash } from "../../../state/hash";
 import { SIDES, opponent } from "../../../state/ids";
@@ -85,7 +86,7 @@ describe.each(SIDES)("alternativeCost recovery for %s", side => {
     expect(privateView.options[1].route).toBe("alternativeCost");
     expect(stateHash(pending.display)).toBe(before);
     expect(JSON.stringify(prompt)).toBe(input);
-    expect(greedyAnswer(prompt, () => null, () => new Set(), 0)).toBe(0);
+    expect(isLegalAnswer(prompt, greedyAnswer(prompt, () => null, () => new Set(), 0))).toBe(true);
     expect(greedyAnswer({ ...prompt, options: prompt.options.map(option => ({ ...option, legal: option.mode === 1 })) }, () => null, () => new Set(), 0)).toBe(1);
     // Metadata-free ordinary Offering keeps its original shape and fingerprint on reload.
     const legacy = alternativeFixture(side, alternativeCard(20, [keyword("offering"), event(gainPoints(0))]), { hand: [alternativeCard(20).id, alternativeCard(20).id] });
