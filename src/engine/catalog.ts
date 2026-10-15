@@ -1,3 +1,4 @@
+import { remapAbilityTypes } from "./dsl/type-remap";
 import { BATTLE } from "../content/battle";
 import type { CardSubtype } from "../types/card-identity";
 import type { CharacteristicsMemo } from "./continuous/characteristics";
@@ -86,6 +87,8 @@ export type EngineDreamsignDefinition = EngineEmblemDefinition<DreamsignId>;
 
 /** A figment type (rules § Figments): a character that exists only in play, costing 0● (C13). */
 export interface EngineFigmentDefinition {
+  /** Explicit canonical C12 target; false excludes special same-subtype figments. */
+  readonly typeRemapTarget?: boolean;
   readonly id: FigmentId;
   readonly subtype: CardSubtype;
   /** The catalog base spark, used when the creating text gives none. */
@@ -248,10 +251,10 @@ function hasStaticOutsidePlay(abilities: readonly Ability[]): boolean {
 
 /**
  * Whether an instance's abilities are its printing's base or amplified ones:
- * a figment, or a card with no transfigurations or deck mods.
+ * a figment, or a card with no transfigurations, deck mods or ability type remap.
  */
 export function plainVariant({ printing, variant }: CardInstance): boolean {
-  return printing.kind === "figment" || (variant.transfigurations === undefined && variant.deckMods === undefined);
+  return printing.kind === "figment" || (variant.transfigurations === undefined && variant.deckMods === undefined && variant.typeRemap === undefined);
 }
 
 /** The catalog card a printing names, for prompt purposes and logs; `null` for a figment. */
@@ -286,7 +289,13 @@ export function createCatalog(
     cardIds.add(id);
   }
   const figmentsById = new Map(figments.map((definition) => [definition.id, definition]));
-  const cardsById = new Map(cards.map((definition) => [definition.id, definition]));
+  const cardsById = new Map(cards.map((definition) => [definition.id, {
+    ...definition,
+    abilities: (variant: Variant) => {
+      const abilities = definition.abilities(variant);
+      return variant.typeRemap === undefined ? abilities : remapAbilityTypes(abilities, variant.typeRemap, figments);
+    },
+  }]));
   const dreamwellById = new Map(
     dreamwellCards.map((definition) => [definition.id, definition]),
   );

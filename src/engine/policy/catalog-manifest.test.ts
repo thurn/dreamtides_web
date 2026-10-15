@@ -82,7 +82,12 @@ describe("the policy worker's catalog", () => {
     };
     const rebuilt = manifestCatalog(JSON.parse(JSON.stringify(altered)) as CatalogManifest);
     for (const side of ["player", "enemy"] as const) {
-      for (const { cardId } of init.decks[side]) expect(rebuilt.card(cardId)).toEqual(source.card(cardId));
+      for (const { cardId } of init.decks[side]) {
+        const { abilities: rebuiltAbilities, ...rebuiltData } = rebuilt.card(cardId);
+        const { abilities: sourceAbilities, ...sourceData } = source.card(cardId);
+        expect(rebuiltData).toEqual(sourceData);
+        expect(rebuiltAbilities(BASE_VARIANT)).toEqual(sourceAbilities(BASE_VARIANT));
+      }
       const avatar = init.avatars?.[side];
       if (avatar !== undefined) expect(rebuilt.avatar(avatar)).toEqual(source.avatar(avatar));
       for (const dreamsign of init.dreamsigns?.[side] ?? []) expect(rebuilt.dreamsign(dreamsign)).toEqual(source.dreamsign(dreamsign));

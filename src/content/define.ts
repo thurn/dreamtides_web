@@ -142,6 +142,8 @@ interface DreamwellCardFields {
 export type DreamwellCardDefinition = DreamwellCardFields & ContentStatus;
 
 interface FigmentFields {
+  /** Whether C12 chooses this canonical figment for its printed subtype. */
+  readonly typeRemapTarget?: boolean;
   readonly name: string;
   readonly id: Uuid;
   readonly subtype: KnownCardSubtype;

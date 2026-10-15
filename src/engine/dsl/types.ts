@@ -33,14 +33,16 @@ export const NO_DECK_MODS: DeckMods = { sparkBonus: 0, costReduction: 0, fast: f
 
 /**
  * The variant a card instance is played as: the amplified flag, the journey
- * transfigurations of its deck entry, and its deck-entry modifications.
+ * transfigurations of its deck entry, its deck-entry modifications and ability type remap.
  * Transfigurations other than Amplified are carried for Phase 5.7a's
- * ability transforms; an instance without them omits both optional fields.
+ * ability transforms. Unused optional fields are omitted.
  */
 export interface Variant {
   readonly amplified: boolean;
   readonly transfigurations?: readonly TransfigurationType[];
   readonly deckMods?: DeckMods;
+  /** C12 literal ability references, independent of this card’s own subtype. */
+  readonly typeRemap?: CardSubtype;
 }
 
 export const BASE_VARIANT: Variant = { amplified: false };

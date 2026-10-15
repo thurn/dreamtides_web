@@ -1,3 +1,4 @@
+import { isTypeRemap } from "../../engine/dsl/type-remap";
 import { hasUnknownScoreGroup } from "./score-group-state";
 import { hasUnknownFirstEventHistory } from "./first-event-last-turn-state";
 import { hasUnknownLastTurnScoring } from "./last-turn-scoring-state";
@@ -540,7 +541,8 @@ function isEngineDeckEntry(value: unknown): boolean {
     parses(parseCardId)(value.cardId) &&
     optional(isBoolean)(value.amplified) &&
     optional(arrayOf(oneOf(TRANSFIGURATION_TYPES)))(value.transfigurations) &&
-    optional(isDeckMods)(value.deckMods)
+    optional(isDeckMods)(value.deckMods) &&
+    optional(isTypeRemap)(value.typeRemap)
   );
 }
 
@@ -565,7 +567,8 @@ function isVariant(value: unknown): boolean {
     isPlainRecord(value) &&
     isBoolean(value.amplified) &&
     optional(arrayOf(oneOf(TRANSFIGURATION_TYPES)))(value.transfigurations) &&
-    optional(isDeckMods)(value.deckMods)
+    optional(isDeckMods)(value.deckMods) &&
+    optional(isTypeRemap)(value.typeRemap)
   );
 }
 
@@ -935,7 +938,7 @@ function hasConsistentPoolCandidates(value: Record<string, unknown>): boolean {
     const candidates = instance.poolCandidates;
     if (candidates === undefined) return true;
     if (!instance.status.created || instance.printing.kind !== "card" || instance.variant.amplified ||
-      instance.variant.transfigurations !== undefined || instance.variant.deckMods !== undefined ||
+      instance.variant.transfigurations !== undefined || instance.variant.deckMods !== undefined || instance.variant.typeRemap !== undefined ||
       !candidates.includes(instance.printing.cardId) || !["hand", "stack", "play"].includes(instance.zone)) return false;
     const available = [...(state.draftPools?.[instance.owner] ?? [])];
     for (const cardId of candidates) {
@@ -947,7 +950,7 @@ function hasConsistentPoolCandidates(value: Record<string, unknown>): boolean {
     return SIDES.every((side) => (state.rememberedCards?.[side] ?? []).every((record) =>
       record.instance !== instance.id || (record.owner === instance.owner && record.status.created &&
         record.printing.kind === "card" && record.printing.cardId === cardId && !record.variant.amplified &&
-        record.variant.transfigurations === undefined && record.variant.deckMods === undefined)));
+        record.variant.transfigurations === undefined && record.variant.deckMods === undefined && record.variant.typeRemap === undefined)));
   });
 }
 
@@ -1218,7 +1221,7 @@ function isLinkedBanishedCards(value: unknown): boolean {
 function isHandCopyContext(value: unknown): boolean {
   return isPlainRecord(value) && Object.keys(value).every(key => ["printing", "variant", "ephemeral", "copier", "originalHiddenFrom"].includes(key)) &&
     isPlainRecord(value.printing) && Object.keys(value.printing).every(key => key === "kind" || key === "cardId") && value.printing.kind === "card" && parses(parseCardId)(value.printing.cardId) &&
-    isVariant(value.variant) && isPlainRecord(value.variant) && Object.keys(value.variant).every(key => ["amplified", "transfigurations", "deckMods"].includes(key)) &&
+    isVariant(value.variant) && isPlainRecord(value.variant) && Object.keys(value.variant).every(key => ["amplified", "transfigurations", "deckMods", "typeRemap"].includes(key)) &&
     (value.variant.deckMods === undefined || isPlainRecord(value.variant.deckMods) && Object.keys(value.variant.deckMods).every(key => ["sparkBonus", "costReduction", "fast", "reclaim", "typeChange"].includes(key)) &&
       (value.variant.deckMods.typeChange === null || isPlainRecord(value.variant.deckMods.typeChange) && Object.keys(value.variant.deckMods.typeChange).every(key => key === "cardType" || key === "subtype"))) &&
     isBoolean(value.ephemeral) && isSide(value.copier) && isArrayOf(value.originalHiddenFrom, isSide) &&
@@ -1232,7 +1235,7 @@ function isAbandonedCopyContext(value: unknown): boolean {
   const printing = value.printing;
   const keys = printing.kind === "card" ? ["kind", "cardId"] : printing.kind === "figment" ? ["kind", "figment", "spark"] : ["kind", "cardId", "spark"];
   return hasOnlyFields(printing, keys) &&
-    hasOnlyFields(value.variant, ["amplified", "transfigurations", "deckMods"]) &&
+    hasOnlyFields(value.variant, ["amplified", "transfigurations", "deckMods", "typeRemap"]) &&
     (value.variant.deckMods === undefined || isPlainRecord(value.variant.deckMods) &&
       hasOnlyFields(value.variant.deckMods, ["sparkBonus", "costReduction", "fast", "reclaim", "typeChange"]) &&
       (value.variant.deckMods.typeChange === null || isPlainRecord(value.variant.deckMods.typeChange) && hasOnlyFields(value.variant.deckMods.typeChange, ["cardType", "subtype"])));
@@ -1371,7 +1374,7 @@ function isPlayedCopiable(value: unknown): boolean {
     !isPrinting(value.printing) || !isPlainRecord(value.printing) || !isVariant(value.variant) || !isPlainRecord(value.variant)) return false;
   const printingKeys = value.printing.kind === "figment" ? ["kind", "figment", "spark"] : value.printing.kind === "figmentCopy" ? ["kind", "cardId", "spark"] : ["kind", "cardId"];
   if (Object.keys(value.printing).some(key => !printingKeys.includes(key)) ||
-    Object.keys(value.variant).some(key => !["amplified", "transfigurations", "deckMods"].includes(key))) return false;
+    Object.keys(value.variant).some(key => !["amplified", "transfigurations", "deckMods", "typeRemap"].includes(key))) return false;
   const mods = value.variant.deckMods;
   return mods === undefined || isPlainRecord(mods) && Object.keys(mods).every(key => ["sparkBonus", "costReduction", "fast", "reclaim", "typeChange"].includes(key)) &&
     (mods.typeChange === null || isPlainRecord(mods.typeChange) && Object.keys(mods.typeChange).every(key => key === "cardType" || key === "subtype"));

@@ -1,0 +1,451 @@
+{
+  "bead": "hv-umm2.723",
+  "base": "0efc1dbc74ce12cfed73a4cbfc1a6a1feca66227",
+  "scope": "Internal copiable Variant/catalog capability; original270 retains production UUID/journey/UI/display/inventory/full300/preflight/sweep/D21 joins.",
+  "clock": {
+    "claimCall": "2026-10-15T06:38:57.550299+00:00",
+    "claimACK": "2026-10-15T06:38:57.694001Z",
+    "dispatch": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/dispatch-observation.json",
+      "sha256": "3bb56d3c261b532ef57b41f4de8c605d4c17417b2c383781cbfafa9805a08188"
+    },
+    "preGitCutoff": "2026-10-15T07:13:26.399511+00:00",
+    "actualGitEnd": null,
+    "qualification": "Committed window ends at the observed pre-Git cutoff; future Git endpoint UNKNOWN. External final-commit-receipt.json supplies actual inclusive endpoint/tail; no backdated sampling time."
+  },
+  "source": {
+    "manifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/final-source-manifest.json",
+      "sha256": "cd99fbd32527c5c7fd824f3d2cb5b71b4c8ba5f970d4d60191c53a2a7e5ea11e"
+    },
+    "metadata": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/canonical-metadata-verification.json",
+      "sha256": "f50470b4335ab851c2ebfdcb9a15bd226dfaa2a4516df2b14bb9fc0c782f35bc"
+    },
+    "normativeBeforeRuntime": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/normative-write.json",
+      "sha256": "779e7f22acfef990cce2bd62ed6dd6e5234508966bc0f28f452dfddabeea9595"
+    },
+    "guardAfterFull": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/final-source-guard.json",
+      "sha256": "4425e1732199704155e1a00eaeb50d8f2ada245487b61a0138cf2d896c91fd22"
+    },
+    "epochQualification": "Prior full10670/394, five restored source faults and pre-integration checks bind original ce1a6505 (old source manifest833860a5\u2026). Three narrow comments were the only differences before that full. Combined focus/review/Knip bind the new base and composed create.ts; no second full or faults were run for this independent-validation merge.",
+    "parentCanonicalAudit": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/parent-canonical-metadata-audit.json",
+      "sha256": "4e30421228b360cfd6dcb532e045a80ac2908801a9eed4491e4a57d4c882e438"
+    },
+    "combinedReconstruction": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/combined-source-reconstruction.json",
+      "sha256": "3c10769661148562ebc71de0eba9485986aa88a72a3fe4a1cee8458220531198"
+    },
+    "combinedGuard": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/combined-source-guard.json",
+      "sha256": "d10995ecc2e5ffbf7882f3cac7475f8496cd4c6cb56a8615293b38344b7781fa"
+    }
+  },
+  "checks": [
+    {
+      "label": "typecheck-initial",
+      "epoch": "original-source-before-integration",
+      "exit": 2,
+      "wallS": 20.355919166002423,
+      "group": 52617,
+      "receiptSHA256": "e35c422df9e1f6c06b9c2435ce5ca814eacd4d3fcd9e124a7342fb16a0aac58d",
+      "stdoutSHA256": "469033fe3925e695352e912a050abfd242102bc60ffae5f8a56b73a2337d3f72",
+      "summary": []
+    },
+    {
+      "label": "typecheck-traversal",
+      "epoch": "original-source-before-integration",
+      "exit": 2,
+      "wallS": 7.434314667014405,
+      "group": 59418,
+      "receiptSHA256": "8e07306c380c82d38b9feb7899ed535d964348e132cd9b7dad2c8a7e6e01d142",
+      "stdoutSHA256": "a42bf3b00d60f8d12f0946d246212c62e90fd177d91b96068b0b99f1cd6565d7",
+      "summary": []
+    },
+    {
+      "label": "focus-initial",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 5.356621583050583,
+      "group": 62658,
+      "receiptSHA256": "628dd43dfba5d5e08fe42368302ecfaabb06413968eaa4123444cebb62bfb7cf",
+      "stdoutSHA256": "a4c684a0efa3efd1904424e58c52e63ee92f3d5ef6925c8c128623193d2cc390",
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed | 16 passed (20)"
+      ]
+    },
+    {
+      "label": "focus-transport-initial",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 8.008340374974068,
+      "group": 68184,
+      "receiptSHA256": "9e6631c178635dc66ac1bc514eecd2e782d94eafcbd8fac9cba2144c4589fa90",
+      "stdoutSHA256": "d71c7bb4e127b82d2666cfb56cb1d81642af0a6c41b4201f11c5bf12b285f64d",
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  22 failed (22)"
+      ]
+    },
+    {
+      "label": "focus-canonical",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 8.982875082991086,
+      "group": 70899,
+      "receiptSHA256": "131513f4718cb095b77150f3193ea59e70f868492d53c4316c6a886f3115e701",
+      "stdoutSHA256": "577504780a1c5065b490ffaed4cecd9a81acf438fe4786718e716b280c4e5044",
+      "summary": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  4 failed | 42 passed (46)"
+      ]
+    },
+    {
+      "label": "focus-corrected",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 6.267628124973271,
+      "group": 7712,
+      "receiptSHA256": "a557d3e7c93110d127ab42fa6666f2125df754a885965f5695d56f17fe180ff9",
+      "stdoutSHA256": "20efdcab886e35a6c4e6e512690e5f61db5f0f563e9392de5a2f68842ab56e5e",
+      "summary": [
+        "Test Files  2 passed (2)",
+        "Tests  46 passed (46)"
+      ]
+    },
+    {
+      "label": "typecheck-public",
+      "epoch": "original-source-before-integration",
+      "exit": 2,
+      "wallS": 14.571896208042745,
+      "group": 10096,
+      "receiptSHA256": "ef7ca81519eff135c1aef53c28fb4029de3080468eaac9f86f9074dd6c57fafa",
+      "stdoutSHA256": "c3d29b9f1b7e63b7a33c4ab42469adc301468c07a3b9598aeb09321937d34282",
+      "summary": []
+    },
+    {
+      "label": "focus-final",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 4.77677966596093,
+      "group": 10944,
+      "receiptSHA256": "19bd6f294725ec842daa899d04c19fff39daae80cf2b496f5e539272a5ab4ff5",
+      "stdoutSHA256": "1ea4bb94f2cfe34ee5a6fc707862d703b64b76f473dec0e7e3e14a7313ce45c7",
+      "summary": [
+        "Test Files  2 passed (2)",
+        "Tests  46 passed (46)"
+      ]
+    },
+    {
+      "label": "typecheck-stable",
+      "epoch": "original-source-before-integration",
+      "exit": 2,
+      "wallS": 4.53806483396329,
+      "group": 11270,
+      "receiptSHA256": "3d09c8141ae597ee0e8a68130c2b3197021f9ed4dbd057347612c3287b6ab225",
+      "stdoutSHA256": "e6cbc7f88e4cef5ce63af3c16368ca1ce31b1e7214827f058a418abd81a70b1d",
+      "summary": []
+    },
+    {
+      "label": "focus-integration",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 21.034273458993994,
+      "group": 12218,
+      "receiptSHA256": "5b1210f7ba3a59a7d8f683b06f6d3ccf2a71a0522b54e43e7c9aedfb065ffb44",
+      "stdoutSHA256": "8d4701e4eac7c9d14cf5950c38a3fec29347cecb637cd46e3adde2cd73e67a1a",
+      "summary": [
+        "Test Files  9 passed (9)",
+        "Tests  5931 passed (5931)"
+      ]
+    },
+    {
+      "label": "review-initial",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 65.10433054197347,
+      "group": 12751,
+      "receiptSHA256": "587fdb87383b1c660bf5f7950204f98abebd650fb043436abf220e1225b3a392",
+      "stdoutSHA256": "3c77bf96a8223463b934035b00c608208cb2d602127d695a0e1fc1ac5a33817d",
+      "summary": [
+        "Test Files  1 failed | 313 passed (314)",
+        "Tests  1 failed | 9675 passed (9676)"
+      ]
+    },
+    {
+      "label": "CF1",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 6.826520167000126,
+      "group": 14476,
+      "receiptSHA256": "4eade5dbf8065ddd1947712d0d112fd376b3adf43999e64d1b9f73136fd30f0b",
+      "stdoutSHA256": "ebb842f09326501cc76c2843f7ff21aa6156732e0d91e6453289e7b50f5391a5",
+      "summary": [
+        "Test Files  2 failed (2)",
+        "Tests  28 failed | 20 passed (48)"
+      ]
+    },
+    {
+      "label": "CF2",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 4.701923249987885,
+      "group": 14687,
+      "receiptSHA256": "53e4e9c77070ae94030f618348618e5d17a6a324c7de7958e6c23b56674344a1",
+      "stdoutSHA256": "21ff5c73aca7e5814b4885862756bb027d2364369114d47ea20c1486ddf6c14d",
+      "summary": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  2 failed | 46 passed (48)"
+      ]
+    },
+    {
+      "label": "CF3",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 4.729888124973513,
+      "group": 14863,
+      "receiptSHA256": "661ef846f6560da864cdb17662009def51f28f5c2464d84f0d4f8ef10254e8c0",
+      "stdoutSHA256": "7a031aba166374b137607fb4adf311f08491c7105b45d28b57ef65621628bffb",
+      "summary": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  8 failed | 40 passed (48)"
+      ]
+    },
+    {
+      "label": "CF4",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 4.682900457992218,
+      "group": 14992,
+      "receiptSHA256": "bafbf10b8c76cbb943d8b93550ce33a27bb66982289a3aad938337fb9f91e5d9",
+      "stdoutSHA256": "25fec42c5a498b0ccfe426d32c1e2bb56feed318d65f0b4081635d95b3e9a655",
+      "summary": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  2 failed | 46 passed (48)"
+      ]
+    },
+    {
+      "label": "CF5",
+      "epoch": "original-source-before-integration",
+      "exit": 1,
+      "wallS": 5.580594500002917,
+      "group": 15127,
+      "receiptSHA256": "611730c2197de6f89b4b365f2412ae4028a8592670f46a565afad3b90ac71001",
+      "stdoutSHA256": "9613979d1c537c5c0c5010dc0c66868ce4ea7b08db4de58367c507194a7d963c",
+      "summary": [
+        "Test Files  2 failed (2)",
+        "Tests  30 failed | 18 passed (48)"
+      ]
+    },
+    {
+      "label": "knip",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 4.843731416971423,
+      "group": 15793,
+      "receiptSHA256": "68b00f5aa6684794691072ad9ffd460fa07d8fa1b287f53d21d62191e8a0734c",
+      "stdoutSHA256": "746f528761df81143231f5fe247f96298cc9acd98f729d15da83ae8f2b0126c6",
+      "summary": []
+    },
+    {
+      "label": "focus-manifest-corrected",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 4.753601458971389,
+      "group": 16524,
+      "receiptSHA256": "04585fdd600beb04060e7f41104acee4d119d490ead549d3613c1fd696ec8a08",
+      "stdoutSHA256": "8812a1105e35cd64f96cb2428c16790d37aab1598736f4cb4dd2ed5981701031",
+      "summary": [
+        "Test Files  4 passed (4)",
+        "Tests  72 passed (72)"
+      ]
+    },
+    {
+      "label": "review-corrected",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 59.67007766698953,
+      "group": 17430,
+      "receiptSHA256": "d7719ab7f635b9699a0f54539792123c3359049796b0d93bfc81aedb49ba7d39",
+      "stdoutSHA256": "7ad63e583adcb0aefca2ec06a11567177c7f27e1285d969de22ab56b8b01b8f5",
+      "summary": [
+        "Test Files  314 passed (314)",
+        "Tests  9676 passed (9676)"
+      ]
+    },
+    {
+      "label": "knip-corrected",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 6.287449416995514,
+      "group": 80406,
+      "receiptSHA256": "7a835f35ca4d7f7ce00c2c157631d1ec6d916d3af8e1ffb587a04f4729f813bd",
+      "stdoutSHA256": "a8fd9300cac04601c9e2f7c5a8439674bd61a5500008dfa765f64808ede7c6cf",
+      "summary": []
+    },
+    {
+      "label": "review-full",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 134.53149687498808,
+      "group": 82257,
+      "receiptSHA256": "d34ca2af41ce1f690b752256d638e4102616c948d84f60214baac74267deec43",
+      "stdoutSHA256": "a8d30683d751d7924b45de8f43abb654c88a0e007e53702d370ec1a50fff745b",
+      "summary": [
+        "Test Files  394 passed (394)",
+        "Tests  10670 passed (10670)"
+      ]
+    },
+    {
+      "label": "schema-final",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 0.14395516703370959,
+      "group": 43278,
+      "receiptSHA256": "a39d7afcbbbda8e64bd2f576731a7cb767af1d2e019ac106cd8485b4b6af2d11",
+      "stdoutSHA256": "6354358db0f4ffd40b60c399a619e11dbab93cc3de64cab8a032025988163cc5",
+      "summary": []
+    },
+    {
+      "label": "staged-whitespace",
+      "epoch": "original-source-before-integration",
+      "exit": 0,
+      "wallS": 0.016360624984372407,
+      "group": 43295,
+      "receiptSHA256": "1c72e07c972335146cfed5ba9b684130c24219bad96128007cad9e5e5ca375bb",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": []
+    },
+    {
+      "label": "combined-focus",
+      "epoch": "combined-new-base",
+      "exit": 0,
+      "wallS": 24.405930042034015,
+      "group": 84929,
+      "receiptSHA256": "ca2530b80c6808387d8a635f08bb931616f91ebf68237b2cc9284dcfb82de447",
+      "stdoutSHA256": "82c0ae1cdc1bb06746e7eab4b5fdfb4074021f0083a8f1af0fd792ea5788f33c",
+      "summary": [
+        "Test Files  10 passed (10)",
+        "Tests  5940 passed (5940)"
+      ]
+    },
+    {
+      "label": "combined-knip",
+      "epoch": "combined-new-base",
+      "exit": 0,
+      "wallS": 6.877428333973512,
+      "group": 87561,
+      "receiptSHA256": "588d2ece0b87e84b27e0593a69a9f78953ddea1b7e1bb9a8279e77741d3bceba",
+      "stdoutSHA256": "ec24e7dd2c8a528f455cec448230bfffc23b2dc4da3aed25031499fcf25306fc",
+      "summary": []
+    },
+    {
+      "label": "combined-review",
+      "epoch": "combined-new-base",
+      "exit": 0,
+      "wallS": 76.32176429202082,
+      "group": 87562,
+      "receiptSHA256": "9cf4ccc1b0a281862d61ad3f0e7c30037187ca60ab138fc42b7f0061a29a2717",
+      "stdoutSHA256": "06b88c1329e39338befd2fc7cbbbd728bc1be03ee50bd071bfb495485490e6ca",
+      "summary": [
+        "Test Files  320 passed (320)",
+        "Tests  9731 passed (9731)"
+      ]
+    }
+  ],
+  "counterfactuals": {
+    "raw": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/counterfactual-summary.json",
+      "sha256": "c5e9df842e87e8c3c56a91111979207f9f9222a460e2c5190a5e785b43443839"
+    },
+    "qualifications": [
+      "All five faults exited1 and restored exact bytes. CF1/CF5 include public intent refusal and result mismatches; they are not assertion-only.",
+      "CF2 changes notSubtype only; CF3 changes original figment spark preservation only; CF4 drops DAG memo reuse and observes0 instead of4. They do not individually prove every remapped field."
+    ],
+    "parentAudit": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/parent-fault-audit.json",
+      "sha256": "6a0b2fdab47fdb5c6fa5b51b74e0504ad4a066a9dffe62e391f933e5a0379754"
+    },
+    "epoch": "Original ce1a6505 only; exact restored originals, not repeated on combined base."
+  },
+  "corrections": [
+    "Four initial typecheck failures came from own union/discriminant typing and synthetic fixture annotations; all raw receipts retained.",
+    "Initial focus:16PASS/4FAIL; paired fixture double-executed erode and ambiguity refused during setup before expected play boundary. Initial transport:22 setup failures due invalid synthetic side-turn counts. Corrected canonical focus42PASS/4FAIL used JSON property order and wrong decision-side assumptions; structural clone equality/hash and public runStep rollback with a success control replace those assertions.",
+    "Parent corrected prior too-broad same-subtype ambiguity rule: explicit canonical targets override unmarked synthetic candidates; false excludes Legionnaire, preserving all original metadata bytes. Normative/RD correction preceded its runtime code/expectations.",
+    "Initial review9675PASS/1FAIL compared ability callback pointer identity across catalogs. Exact separately admitted test-only correction compares non-function data and evaluated BASE_VARIANT public ability outputs; no runtime cache or production remap matrix added.",
+    "One integration invocation included nonexistent src/content/coverage.test.ts as an ignored filter; only nine real suites/5931PASS were claimed. Actual src/engine/content-gates.test.ts then ran explicitly in the72PASS corrected focused result; final review/full also include actual gates.",
+    "Owned scratch resource packaging first rejected the parent install receipt's different result schema; corrected parser filters command receipts and retains setup separately. Actual groups were independently checked absent; no product/runtime repair."
+  ],
+  "failureFamilies": {
+    "invalid": "Malformed optional scalar rejected before battle allocation without setup and by saved-state guards, both actors.",
+    "reloadReplay": "Public pending prompt is JSON-restored, answered deterministically and re-folded; full engine events/state hash agree. Clone data equality and hash agree; both-view sampling preserves view and variant multiplicity without claiming hidden physical assignment.",
+    "staleConcurrentRefusalCancel": "Foreign side, stale prompt, competing action and repeated answer bounce; valid cancellation preserves committed state. Mandatory journey choice cancellation is original270 scope.",
+    "partialError": "Declared synthetic event executes gainPoints then invalid static-only instruction through public runStep; failed resolution leaves prior committed remapped play/payment intact. Successful control awards9. This is transaction sensitivity, not a new production hook.",
+    "identityPrivacy": "Actual captured-hand and figment copies retain remap; independent sameUUID creation is plain; own subtype unchanged. Known and blind reconstructed views remain coherent; hidden unknown position is not asserted."
+  },
+  "coverage": {
+    "newPublicCases": 48,
+    "testModules": 2,
+    "configuredEntrypointChanges": 0,
+    "discoveredTestFilesAdded": 2,
+    "testLineNet": 302,
+    "newJsdom": 0,
+    "figments": "Synthetic explicit/implicit, false exclusion, true precedence in both orders, original/explicit spark, no-target and genuine duplicate canonical refusal; no mutable production gate.",
+    "zeroSpark": "Real materialize remapped void filter preserves delivered zeroSpark instruction.",
+    "emblems": "Actual ordinary emblem activation retains literal type while the deck-card ability remaps.",
+    "combinedFocus": "5940PASS/10files including own48, actual opening-hand guarantees, all primitive contracts, saved fold, clone, views, manifest and content gates."
+  },
+  "QA": {
+    "disposition": "N/A internal engine API. Integration composes independent pre-allocation validations and introduces no player workflow. Original270 retains journey/UI/browser/weighted300 joins.",
+    "browserSessions": 0,
+    "ownedQAResources": []
+  },
+  "resources": {
+    "settlement": "resource-settlement.json external final ledger includes original and combined command groups, original full-check fixture union and parking/original Git groups, checked absent. Final amend group separately settled by final-commit-receipt.json.",
+    "fullFixtureQualification": "review:full may create isolated temporary synthetic QA test servers/providers; those are check fixtures, not feature browser QA.",
+    "afterFull": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/resource-settlement-after-full.json",
+      "sha256": "c3b775399c3e0228ad08318b66084e78a0815f5661b2078f90d2aad63366c6e2"
+    },
+    "packagingCorrection": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/resource-settlement-initial-error.json",
+      "sha256": "77fde8fc4028c0e38b045fd2871555f50ac37933f04bc1d8bf46734e779a4722"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual combined ordinary review command start",
+        "value": 12.18310546875
+      },
+      "implementWindow": {
+        "endMeaning": "Observed pre-Git cutoff; actual Git endpoint separately receipted."
+      }
+    }
+  },
+  "integration": {
+    "originalSource": "ce1a6505c4bc6c09052a9f5f96639dea610c6660",
+    "originalBase": "0413252fa709666342810f58ffd5f30d987848ed",
+    "newBase": "0efc1dbc74ce12cfed73a4cbfc1a6a1feca66227",
+    "candidate": "01a13e61-c57f-7e72-b231-ff2d0fd49ec7",
+    "candidateOutcome": "terminal merge-conflict, unapproved",
+    "failedNativeUpdate": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/update-first-failure-inspection.json",
+      "sha256": "af107c929f609fe079ac8a33c501831e2d62355828488c08dd6127e391e6a570"
+    },
+    "parking": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/parking-commit-receipt.json",
+      "sha256": "8b271feba28013a67613b73e66566c02f53ba9482479bdf28970563ee5aaada3"
+    },
+    "successfulNativeUpdate": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/type-remap-engine723/parking-update-parent-proof.json",
+      "sha256": "696815efdf678ddee0b9fb9078c1a9184bad0f96747c2a0708808380cf0f308a"
+    },
+    "composition": "Exact saved create delta plus exact peer opening-hand validator import/call; isolated scratch-index reversal reconstructs new base tree before evidence changes. Other19 original owned paths preserved.",
+    "reviewDisposition": "Original reviewer interrupted and snapshot removed; no review clearance claimed. Parent owns fresh exact replacement-source review after terminal."
+  }
+}

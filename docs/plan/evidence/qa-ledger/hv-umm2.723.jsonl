@@ -1,0 +1,2 @@
+{"bead": "hv-umm2.723", "mode": "engine-contracts", "verdict": "pass", "notes": "Original48 synthetic cases and five source faults remain original-epoch proof; combined focus5940PASS includes own48 plus new opening guarantees and save/copy/clone/view consumers. Raw epoch-bound receipts in measurements."}
+{"bead": "hv-umm2.723", "mode": "browser", "verdict": "not-applicable", "notes": "Internal API and independent-validation integration add no player workflow or production UUID. Original270 owns journey/browser/weighted300 acceptance."}

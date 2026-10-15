@@ -3,6 +3,7 @@ import { sparkModifier } from "../../engine/effects/primitives/spark-modifier";
 import { figment } from "../define";
 
 export default figment({
+  typeRemapTarget: false,
   name: "Legionnaire",
   id: "e757b306-5bab-4a5a-8493-28c0f3aa6440",
   subtype: "Warrior",

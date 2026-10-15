@@ -101,6 +101,7 @@ export function contentFigmentDefinitions(): EngineFigmentDefinition[] {
   return FIGMENTS.map((figment) => ({
     id: parseFigmentId(figment.id),
     subtype: figment.subtype,
+    typeRemapTarget: figment.typeRemapTarget !== false,
     spark: figment.spark,
     status: contentState(figment),
     abilities: figment.abilities ?? NO_ABILITIES,

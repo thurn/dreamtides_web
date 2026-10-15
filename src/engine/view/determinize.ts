@@ -1164,7 +1164,7 @@ interface HiddenSlot {
 /** A card's printing and variant, as a key: cards with the same key have the same abilities. */
 function identity({ printing, variant }: CardInstance): string {
   const printed = printing.kind === "figment" ? `figment:${printing.figment}` : printing.cardId;
-  const plain = variant.transfigurations === undefined && variant.deckMods === undefined;
+  const plain = variant.transfigurations === undefined && variant.deckMods === undefined && variant.typeRemap === undefined;
   return `${printed}|${plain ? String(variant.amplified) : JSON.stringify(variant)}`;
 }
 

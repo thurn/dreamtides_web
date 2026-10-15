@@ -1,4 +1,5 @@
 import { validOpeningHandGuarantees } from "./opening-hand-guarantees";
+import { isTypeRemap } from "../dsl/type-remap";
 import { BATTLE } from "../../content/battle";
 import { DREAMWELL_RULES } from "../../content/dreamwell-rules";
 import type { TransfigurationType } from "../../types/journey";
@@ -33,8 +34,8 @@ function emptySide(): SideState {
 }
 
 /**
- * The variant a deck entry is played as. An entry without transfigurations
- * or deck modifications plays the plain `{ amplified }` variant.
+ * The variant a deck entry is played as. Optional transfigurations, deck
+ * modifications and an ability type remap accompany its amplified flag.
  */
 export function variantOf(entry: DeckEntry): Variant {
   const amplified = entry.amplified === true;
@@ -46,9 +47,10 @@ export function variantOf(entry: DeckEntry): Variant {
     deckMods.fast ||
     deckMods.reclaim !== null ||
     deckMods.typeChange !== null;
-  if (transfigurations.length === 0 && !modified) return { amplified };
+  if (transfigurations.length === 0 && !modified) return { amplified, ...(entry.typeRemap === undefined ? {} : { typeRemap: entry.typeRemap }) };
   return {
     amplified,
+    ...(entry.typeRemap === undefined ? {} : { typeRemap: entry.typeRemap }),
     transfigurations: [...transfigurations],
     deckMods: { ...deckMods, typeChange: deckMods.typeChange === null ? null : { ...deckMods.typeChange } },
   };
@@ -140,7 +142,8 @@ function finite(value: unknown): value is number {
 }
 
 function validEntry(entry: DeckEntry): boolean {
-  if (!fields(entry, ["cardId", "amplified", "transfigurations", "deckMods"]) ||
+  if (entry.typeRemap !== undefined && !isTypeRemap(entry.typeRemap)) return false;
+  if (!fields(entry, ["cardId", "amplified", "transfigurations", "deckMods", "typeRemap"]) ||
       (entry.amplified !== undefined && typeof entry.amplified !== "boolean") ||
       (entry.transfigurations !== undefined && (!Array.isArray(entry.transfigurations) ||
         !entry.transfigurations.every((type) => typeof type === "string" && Object.prototype.hasOwnProperty.call(TRANSFIGURATIONS, type))))) return false;
@@ -256,6 +259,9 @@ function validateDraftPools(pools: BattleInit["draftPools"], catalog: EngineCata
  */
 export function initialState(init: BattleInit, catalog: EngineCatalog): BattleState {
   if (!validOpeningHandGuarantees(init.guaranteedOpeningHand, init)) throw new Error("Invalid guaranteed opening hand");
+  for (const side of SIDES) for (const entry of init.decks[side]) {
+    if (entry.typeRemap !== undefined && !isTypeRemap(entry.typeRemap)) throw new Error("Invalid card ability type remap");
+  }
   const config = battleConfig(init);
   validateDraftPools(init.draftPools, catalog);
   validateSetup(init, catalog, config);

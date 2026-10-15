@@ -79,6 +79,8 @@ export interface DeckEntry {
   readonly transfigurations?: readonly TransfigurationType[];
   /** The entry's deck-entry modifications. */
   readonly deckMods?: DeckMods;
+  /** C12 chosen type carried into this physical card’s copiable variant. */
+  readonly typeRemap?: CardSubtype;
 }
 
 /**
