@@ -378,6 +378,7 @@ const CARD_STATUS_BADGES = {
   x: null,
   // Historical play provenance has no active status indicator.
   playedViaReclaim: null,
+  playedViaAlternativeCost: null,
   // Each `abilities` floating change it mirrors badges the card with the card it gained the abilities of.
   gainedAbilities: null,
   // Each `loseAbilities` floating change it mirrors badges the card while its abilities are lost.

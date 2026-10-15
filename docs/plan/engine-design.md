@@ -153,7 +153,8 @@ interface CardInstance {
   readonly journeyDeck?: boolean;     // immutable physical input-deck membership; omitted means unknown
   readonly poolCandidates?: readonly CardId[]; // immutable eligible copies captured by pool creation
   status: { exhausted: boolean; gainedSpark: number; counters: number; created: boolean;
-            reclaimed: boolean; playedViaReclaim: boolean; offering: boolean; ephemeral: boolean;
+            reclaimed: boolean; playedViaReclaim: boolean; playedViaAlternativeCost?: boolean;
+            offering: boolean; ephemeral: boolean;
             x: number | null;          // X paid to play it, kept while in play (variable spark)
             gainedAbilities?: { cardId: CardId; variant: Variant }[] };  // mirrors its `abilities` changes
   enteredZoneAt: number;               // timestamp for layer ordering
@@ -1744,6 +1745,24 @@ base payments; a concealed viewer receives neither route identity nor payment
 metadata. Saved steps reconstruct the prompt and compare its existing
 fingerprint, whose options include those payments.
 
+`conditionalAlternativeCost(condition, costs, { materializesAwakened: true })`
+qualifies only the card's replacement route, using a public `StaticCondition`.
+The entry option is optional and belongs to the actual selected payment;
+`commitCardPlay` captures it on the card stack item and resolution passes it
+to the ordinary entry readiness parameter. Copies omit it.
+
+`sourceWasAlternativePlayed()` is a resolving condition reading the source's
+optional `playedViaAlternativeCost` boolean: fresh instances and actual
+non-alternative plays record false, an actual card-defined alternative records
+true, and an absent legacy fact is unknown and refuses evaluation. Clone,
+structural hash and saved validation retain those distinctions. Zone and
+controller changes keep the latest recorded method.
+The Reclaim and card-alternative method flags update together after payment
+and before synchronous stack-transition announcements. The reclaimed
+replacement status retains its own zone-change protocol.
+Saved prompt continuations reconstruct actual route decisions; the log replay's exact target-hash check
+is not a migration of an older unknown snapshot.
+
 **Primitive registry.** Each primitive lives in its own module under
 `src/engine/effects/primitives/`, exporting its node type, its
 `PrimitiveDefinition`, and its builder. The definition, exported as
@@ -1930,7 +1949,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X, a `countCards` zone count, or `thisCharacterSpark()` (RD-hv-umm2.501-1), or `storedCounters()` (rules § Counters), figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X, and for `fromVoid` also a zone count, `thisCharacterSpark()` or `storedCounters()`: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `fromVoid` also accepts `thisTurn` for successful current-turn physical membership, checked at offer and resolution; `topOfDeck`, `randomIn`, `thisCardIn`) | |
 | Values | `storedCounters()` (the source's live in-play count, or the same activation's own payment-departure count, RD-hv-umm2.95-1), `triggerSubjectSpark()` (the abandoned or dissolved lookback subject’s effective predeparture spark; captured zero stays zero, resolving without a binding reads 0, static scopes reject it; the public scalar survives subject cessation and sampling while its ability source is identifiable), `triggerSubjectCost()` (the trigger subject’s captured copiable cost; resolving null reads 0, static scopes reject it), constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, its retained last-known ✦ once it has left play, RD-hv-umm2.460-1) | turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
-| Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `turnOf(player)` (the named controller-relative player's active turn, including extra turns; resolving and static), `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `playedAnotherEventThisTurn()` (another physical event played by the resolving effect's controller this turn; excluded from `StaticCondition`), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`), `topCardMatches(filter = {}, player = "you")` (resolving; excluded from `StaticCondition`) | |
+| Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `turnOf(player)` (the named controller-relative player's active turn, including extra turns; resolving and static), `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceWasAlternativePlayed()` (the source’s latest recorded actual play used its card-defined alternative; resolving-only, unrecorded legacy history refuses evaluation), `playedAnotherEventThisTurn()` (another physical event played by the resolving effect's controller this turn; excluded from `StaticCondition`), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`), `topCardMatches(filter = {}, player = "you")` (resolving; excluded from `StaticCondition`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
 | Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenPlayFromVoid(player, filter)` (a play from the void by Reclaim or a permission, by the stack item's `playedFromVoid` record), `whenMaterialize(subject, nth?)` (with `nth` an exact count or `{ atLeast }` of the turn log's matching materializations, the triggering character included), `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenReclaim(player, filter)`, `whenReclaimSelf()` (works from the stack), `whenAbandon`, `whenLeavesPlay`, `whenReturn(selector, { toYourHand? })` (a `leftPlay` for a hand, as the character last was in play), `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
 

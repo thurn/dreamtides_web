@@ -11,7 +11,7 @@ import type { BattleConfig, BattleInit, BattleState, CardInstance, CardStatus, D
 
 /** The status of a card new to the battle: ready, unchanged, and not created unless `created`. */
 export function freshStatus(created = false): CardStatus {
-  return { exhausted: false, gainedSpark: 0, counters: 0, created, reclaimed: false, playedViaReclaim: false, offering: false, ephemeral: false, x: null };
+  return { exhausted: false, gainedSpark: 0, counters: 0, created, reclaimed: false, playedViaReclaim: false, playedViaAlternativeCost: false, offering: false, ephemeral: false, x: null };
 }
 
 function emptySide(): SideState {

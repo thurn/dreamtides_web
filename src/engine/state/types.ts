@@ -181,6 +181,8 @@ export interface CardStatus {
   reclaimed: boolean;
   /** The latest actual committed play used Reclaim; independent of the mutable zone-change replacement status. */
   playedViaReclaim: boolean;
+  /** Latest actual card-defined alternative play; absent when legacy history is unknown. */
+  playedViaAlternativeCost?: boolean;
   /** Played by Offering; it is banished during each Ending, wherever it is. */
   offering: boolean;
   /** Drawn or created with Ephemeral; it is banished during Ending while it is in a hand. */
@@ -296,6 +298,8 @@ export interface CardStackItem extends StackItemBase {
    * (RD-hv-umm2.93-1); absent for a play from a hand and for a copy.
    */
   readonly playedFromVoid?: true;
+  /** Entry readiness captured from the actual selected alternative; copies omit it. */
+  readonly materializesAwakened?: true;
 }
 
 /**

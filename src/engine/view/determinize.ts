@@ -1181,6 +1181,9 @@ function reconcileDisabling(state: BattleState, view: BattleView, catalog: Engin
   const observed = new Set((state.rememberedCards?.[view.viewer] ?? []).map((record) => record.instance));
   let uncertainReclaim = new Set(combined.flatMap((effect) => effect.change.kind === "disableTriggers" && effect.change.while?.cond === "sourceWasReclaimed" &&
     typeof effect.source === "string" && hiddenSet.has(effect.source) && !observed.has(effect.source) ? [effect.source] : []));
+  const alternativeUnknown = () => new Set(combined.flatMap((effect) => effect.change.kind === "disableTriggers" && effect.change.while?.cond === "sourceWasAlternativePlayed" &&
+    typeof effect.source === "string" && hiddenSet.has(effect.source) && !observed.has(effect.source) ? [effect.source] : []));
+  let uncertainAlternative = alternativeUnknown();
   // Place source members first; ordinary hidden cards then fill the counts.
   let cards = [...hidden.filter((id) => sourceIds.has(id)), ...hidden.filter((id) => !sourceIds.has(id))];
   const originalBin = new Map(hidden.map((id) => [id, bins.find((bin) => bin.original.includes(id))]));
@@ -1190,7 +1193,7 @@ function reconcileDisabling(state: BattleState, view: BattleView, catalog: Engin
     const effects = combined.filter((effect) => effect.change.kind === "disableTriggers" && effect.change.instance === id);
     // Other predicates can depend on the completed hidden-zone partition.
     if (effects.some((effect) => effect.change.kind === "disableTriggers" && effect.change.while !== undefined &&
-      effect.change.while.cond !== "sourceIn" && effect.change.while.cond !== "sourceWasReclaimed")) return true;
+      effect.change.while.cond !== "sourceIn" && effect.change.while.cond !== "sourceWasReclaimed" && effect.change.while.cond !== "sourceWasAlternativePlayed")) return true;
     if (effects.some((effect) => typeof effect.source === "string" && hiddenSet.has(effect.source) && !placed.has(effect.source))) return true;
     return abilitiesDisabled(state, catalog, id, "activated") === disabled.has(id);
   });
@@ -1208,7 +1211,7 @@ function reconcileDisabling(state: BattleState, view: BattleView, catalog: Engin
     }
     const id = cards[index];
     const instance = state.instances[id];
-    const before = { zone: instance.zone, controller: instance.controller, playedViaReclaim: instance.status.playedViaReclaim };
+    const before = { zone: instance.zone, controller: instance.controller, playedViaReclaim: instance.status.playedViaReclaim, playedViaAlternativeCost: instance.status.playedViaAlternativeCost };
     const choices = bins.filter((bin) => bin.cards.length < bin.capacity &&
       (bin.zone !== "deck" || (instance.owner === bin.side && !instance.status.created)))
       .sort((a, b) => Number(b === originalBin.get(id)) - Number(a === originalBin.get(id)));
@@ -1222,12 +1225,22 @@ function reconcileDisabling(state: BattleState, view: BattleView, catalog: Engin
         : [before.playedViaReclaim];
       for (const status of statuses) {
         instance.status.playedViaReclaim = status;
-        if (sourcePredicatesAgree() && search(index + 1)) return true;
+        const alternatives = uncertainAlternative.has(id)
+          ? random() < 0.5 ? [false, true] : [true, false]
+          : [before.playedViaAlternativeCost];
+        for (const alternative of alternatives) {
+          if (alternative === true && status === true) continue;
+          if (alternative === undefined) delete instance.status.playedViaAlternativeCost;
+          else instance.status.playedViaAlternativeCost = alternative;
+          if (sourcePredicatesAgree() && search(index + 1)) return true;
+        }
       }
       bin.cards.pop();
       placed.delete(id);
       Object.assign(instance, { zone: before.zone, controller: before.controller });
       instance.status.playedViaReclaim = before.playedViaReclaim;
+      if (before.playedViaAlternativeCost === undefined) delete instance.status.playedViaAlternativeCost;
+      else instance.status.playedViaAlternativeCost = before.playedViaAlternativeCost;
     }
     return false;
   };
@@ -1245,6 +1258,7 @@ function reconcileDisabling(state: BattleState, view: BattleView, catalog: Engin
       sourceIds = new Set(combined.flatMap((effect) => typeof effect.source === "string" && hiddenSet.has(effect.source) ? [effect.source] : []));
       uncertainReclaim = new Set(combined.flatMap((effect) => effect.change.kind === "disableTriggers" && effect.change.while?.cond === "sourceWasReclaimed" &&
         typeof effect.source === "string" && hiddenSet.has(effect.source) && !observed.has(effect.source) ? [effect.source] : []));
+      uncertainAlternative = alternativeUnknown();
       cards = [...hidden.filter((id) => sourceIds.has(id)), ...hidden.filter((id) => !sourceIds.has(id))];
       return search(0);
     }

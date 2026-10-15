@@ -119,12 +119,15 @@ export function commitCardPlay(ctx: StepContext, card: InstanceId, prepared: Pre
   const definition = instanceCard(catalog, instance);
   const cardId = printedCardId(instance.printing);
   const { route, plan, modifier } = prepared;
+  const materializesAwakened = route === "alternativeCost" && definition.abilities(instance.variant)
+    .find(ability => ability.kind === "alternativeCost")?.materializesAwakened === true;
   payCosts(ctx, side, card, plan);
   endFloating(ctx, (effect) => modifier.consumes.includes(effect.id) || effect.id === options.permission?.consumes);
   if (options.permission?.oncePerTurn !== undefined) state.oncePerTurn.push(options.permission.oncePerTurn);
-  moveToStack(ctx, card, side, { choices: prepared.choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(options.slot === undefined ? {} : { slot: options.slot }) });
-  if (route === "reclaim") instance.status.reclaimed = true;
   instance.status.playedViaReclaim = route === "reclaim";
+  instance.status.playedViaAlternativeCost = route === "alternativeCost";
+  moveToStack(ctx, card, side, { choices: prepared.choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(materializesAwakened ? { materializesAwakened: true } : {}), ...(options.slot === undefined ? {} : { slot: options.slot }) });
+  if (route === "reclaim") instance.status.reclaimed = true;
   if (route === "offering") instance.status.offering = true;
   recordPlayed(state, catalog, side, card);
   ctx.emit({ kind: "cardPlayed", side, instance: card });

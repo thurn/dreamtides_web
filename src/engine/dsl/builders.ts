@@ -208,6 +208,11 @@ export function alternativeCost(...costs: readonly Cost[]): AlternativeCostAbili
   return { kind: "alternativeCost", costs };
 }
 
+/** A conditional replacement payment; its optional readiness applies to this actual selected play’s entry. */
+export function conditionalAlternativeCost(condition: StaticCondition, costs: readonly Cost[], options: { readonly materializesAwakened?: true } = {}): AlternativeCostAbility {
+  return { kind: "alternativeCost", condition, costs, ...(options.materializesAwakened === true ? { materializesAwakened: true } : {}) };
+}
+
 /** Give the payer’s opponent N points as a cost, without spending the payer’s score. */
 export function giveOpponentPointsCost(amount: number): PaymentCost {
   if (!Number.isSafeInteger(amount) || amount < 1) throw new Error("giveOpponentPointsCost amount must be a positive safe integer");
@@ -273,6 +278,11 @@ export function turnOf(player: PlayerRef): Extract<Condition, { readonly cond: "
 /** "If this card was reclaimed": its latest actual committed play used Reclaim, independent of its replacement status. */
 export function sourceWasReclaimed(): Extract<Condition, { readonly cond: "sourceWasReclaimed" }> {
   return { cond: "sourceWasReclaimed" };
+}
+
+/** Whether this physical source’s latest recorded play used its card-defined alternative. */
+export function sourceWasAlternativePlayed(): Extract<Condition, { readonly cond: "sourceWasAlternativePlayed" }> {
+  return { cond: "sourceWasAlternativePlayed" };
 }
 
 /** Another physical event played by this effect's controller during the current turn, read at resolution. */

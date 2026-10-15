@@ -255,7 +255,7 @@ describe("presentation completeness", () => {
       return badges.length > 0 && badges.every((badge) => badge.label.length > 0);
     });
     expect(badgesOf(plain, id)).toEqual([]);
-    expect(flags.filter((flag) => !badged.includes(flag))).toEqual(["exhausted", "playedViaReclaim"]);
+    expect(flags.filter((flag) => !badged.includes(flag))).toEqual(["exhausted", "playedViaReclaim", "playedViaAlternativeCost"]);
   });
 });
 

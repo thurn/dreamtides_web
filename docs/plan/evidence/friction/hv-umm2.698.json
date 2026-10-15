@@ -1,0 +1,47 @@
+{
+  "bead": "hv-umm2.698",
+  "phase": 5,
+  "implementMin": 177.53268905000002,
+  "implementWindow": {
+    "start": "2026-10-14T23:30:40.431Z",
+    "end": "2026-10-15T02:28:12.392343+00:00"
+  },
+  "localValidationS": {
+    "focusedNewV2": 7.549165292002726,
+    "review": 67.33934033301193,
+    "knip": 6.76428899995517,
+    "focusedRestored": 33.45129662496038,
+    "presentation": 9.58897420798894,
+    "replay": 5.511315583018586,
+    "focused": 21.30396429199027,
+    "reviewPrePair": 70.0424877909827,
+    "knipPrePair": 6.071079374989495,
+    "conditional-qa-v3": 100.90048191702226,
+    "fuzz-300-pair": 1285.126071125036,
+    "knip-v2": 6.76428899995517,
+    "pair-restored-focused": 21.30396429199027,
+    "review-full-pair": 468.17448795901146,
+    "review-v4": 67.33934033301193,
+    "npm-integration-review": 71.11093166697538,
+    "npm-integration-knip": 4.610967957996763,
+    "node-integration-qa": 66.93852066603722
+  },
+  "hostLoad": 19.40625,
+  "testDelta": {
+    "files": 3,
+    "lines": 490,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "own-play-method-order",
+      "minutes": 0.24367472778443092,
+      "note": "Measured two-actor failing and repaired focused-command walls only, including preparation; total inclusive window also includes source research/refinement/wait/editing. Old new-marker placement suppressed empty-hand watcher admission; only own marker moved after payment before moveToStack."
+    },
+    {
+      "tag": "history-pair-order",
+      "minutes": 0.3975749701339131,
+      "note": "Measured public diagnostic/red/pass/isolated old-order counterfactual command walls only; real Reclaim-not-banished return exposed stale old method during synchronous empty-hand admission. Full original dispatch window includes research, waits, repair and checks."
+    }
+  ]
+}

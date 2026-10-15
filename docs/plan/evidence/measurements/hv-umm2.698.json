@@ -1,0 +1,2060 @@
+{
+  "bead": "hv-umm2.698",
+  "base": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+  "dispatch": "2026-10-14T23:30:40.431Z",
+  "samplingSeconds": "UNKNOWN",
+  "takeover": {
+    "thread": "01a13d5b-b86f-7773-a40c-2cd33e7e95e5",
+    "formerThread": "01a13331-4b79-7b33-8595-0ff593a6b8b1",
+    "authority": "Explicit human request to investigate and take over this bead and worktree; former task notLoaded with model-capacity failures, no active writer/candidate. Native claim transferred before source work.",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-conditional-alternative698",
+    "branch": "codex/conditional-alternative698",
+    "preservedSourceBindings": 28,
+    "codeChangesDuringTakeover": 0
+  },
+  "sourceCheckpointSha256": "5b4a1599e8ef6be8bee170460c80a5a3fffafd1072c3a41880d5769b2169dcee",
+  "finalBehaviorChecks": [
+    "pair-restored-focused",
+    "review-v4",
+    "knip-v2",
+    "review-full-pair",
+    "fuzz-300-pair",
+    "conditional-qa-v3"
+  ],
+  "checks": [
+    {
+      "label": "caller-syntax-v2",
+      "argv": [
+        "node",
+        "--check",
+        "/tmp/codex-698/conditional-alternative-qa.mjs"
+      ],
+      "start": "2026-10-15T00:37:15.558350+00:00",
+      "end": "2026-10-15T00:37:15.598083+00:00",
+      "wallS": 0.039666624972596765,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "caller-syntax-v3",
+      "argv": [
+        "node",
+        "--check",
+        "/tmp/codex-698/conditional-alternative-qa.mjs"
+      ],
+      "start": "2026-10-15T00:38:02.570546+00:00",
+      "end": "2026-10-15T00:38:02.626565+00:00",
+      "wallS": 0.05588104197522625,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "caller-syntax",
+      "argv": [
+        "node",
+        "--check",
+        "/tmp/codex-698/conditional-alternative-qa.mjs"
+      ],
+      "start": "2026-10-15T00:33:38.433143+00:00",
+      "end": "2026-10-15T00:33:38.482034+00:00",
+      "wallS": 0.04878891597036272,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "cf-guard",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "qualifies only the alternative"
+      ],
+      "start": "2026-10-15T00:15:46.208482+00:00",
+      "end": "2026-10-15T00:15:53.990578+00:00",
+      "wallS": 7.781999542028643,
+      "exitCode": 1,
+      "stdoutSha256": "6c0f78d6dee80ccaeee583e1cb413ab483894e80d8e62c6ac61202a621b44275",
+      "stderrSha256": "45b3fa5067386cded96f310ecf68fe955e9abb71605f3648b01dcea20b99172d"
+    },
+    {
+      "label": "cf-method",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "refuses a physical legacy unknown"
+      ],
+      "start": "2026-10-15T00:16:01.224409+00:00",
+      "end": "2026-10-15T00:16:09.582848+00:00",
+      "wallS": 8.358298332954291,
+      "exitCode": 1,
+      "stdoutSha256": "8e543b4dbfd65942eca692ed8394da59891eb664343af39d08f0e5713be72de7",
+      "stderrSha256": "5fceac17f23dc0884aeebb10737d78487ba99fc898b5167d2d6ab550970f9ffa"
+    },
+    {
+      "label": "cf-privacy",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reconstructs unobserved alternative-method producers"
+      ],
+      "start": "2026-10-15T00:17:04.244140+00:00",
+      "end": "2026-10-15T00:17:11.639396+00:00",
+      "wallS": 7.395125375012867,
+      "exitCode": 1,
+      "stdoutSha256": "524f63e8ba418e04dd1e112523b8a2f8f6c23628bc6673e9aedb6def0b682cb8",
+      "stderrSha256": "176e1bc527d101fbec7e2153f2ee7c808514b56832a6eff77cf42057465a6130"
+    },
+    {
+      "label": "conditional-qa-v1",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-698/conditional-alternative-qa.mjs",
+        "--bead",
+        "hv-umm2.698",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-15T01:41:28.193303+00:00",
+      "end": "2026-10-15T01:41:37.601092+00:00",
+      "wallS": 9.407623292005155,
+      "exitCode": 1,
+      "stdoutSha256": "52a1945a009adde6e0316d52ef356e0a323b40aa4ff1493f2a0a7128f84a46af",
+      "stderrSha256": "021d3309db66b7e900f7655be582e5cd93bc9f14be4581858f87d4b61a11ab00"
+    },
+    {
+      "label": "conditional-qa-v2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-698/conditional-alternative-prompt-lab-qa.mjs",
+        "--bead",
+        "hv-umm2.698",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-15T02:13:45.559985+00:00",
+      "end": "2026-10-15T02:15:19.496123+00:00",
+      "wallS": 93.93591775000095,
+      "exitCode": 1,
+      "stdoutSha256": "9faa69267c1e34a15bbe4390bc66875791da0a6afe5179df5d143b2043d85512",
+      "stderrSha256": "b34dc34d1ab5528571c440163ec3e12d78af9cda69f525620410ce5b3657c18a"
+    },
+    {
+      "label": "conditional-qa-v3",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-698/conditional-alternative-render-ready-qa.mjs",
+        "--bead",
+        "hv-umm2.698",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-15T02:21:26.888372+00:00",
+      "end": "2026-10-15T02:23:07.789085+00:00",
+      "wallS": 100.90048191702226,
+      "exitCode": 0,
+      "stdoutSha256": "0f4c3ff47482be4bb4d04b3a757d35e448614114756408be744ba864a8161979",
+      "stderrSha256": "17f75fd80e20d2f2688bf7a707b5b0c5f8b01afa7225932d382c0b2b106e3587"
+    },
+    {
+      "label": "empty-hand-after",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "empty hand admission boundary"
+      ],
+      "start": "2026-10-15T00:07:02.048441+00:00",
+      "end": "2026-10-15T00:07:08.511399+00:00",
+      "wallS": 6.462858250015415,
+      "exitCode": 0,
+      "stdoutSha256": "b0240ded4d9c59ed2688e42a4178c79a0264c5d7b7f4492d64f304ee677d87a8",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "empty-hand-before",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "empty hand admission boundary"
+      ],
+      "start": "2026-10-15T00:06:36.716538+00:00",
+      "end": "2026-10-15T00:06:44.874277+00:00",
+      "wallS": 8.15762541705044,
+      "exitCode": 1,
+      "stdoutSha256": "ef1182f018e41c87d8ada1b57c4f2a5557f8295bf36c92dd96b92d307f346ecf",
+      "stderrSha256": "28d85374469023d9315636a52d49e6f34ee1b7d4694bce3b16cecf38811e25f5"
+    },
+    {
+      "label": "fallout-derived-hash-proof",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-698/fallout/hash-proof.mjs"
+      ],
+      "start": "2026-10-15T00:29:29.067689+00:00",
+      "end": "2026-10-15T00:29:32.063240+00:00",
+      "wallS": 2.9954092920525,
+      "exitCode": 0,
+      "stdoutSha256": "998d9e86cc4994bd0ac93979bee989096921baf7d2c3d9e248fd383f6868f14e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "fallout-hash-proof-capture",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-698/fallout/hash-proof.mjs"
+      ],
+      "start": "2026-10-15T00:27:33.605043+00:00",
+      "end": "2026-10-15T00:27:37.990086+00:00",
+      "wallS": 4.384926375001669,
+      "exitCode": 1,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "4c422b9d872fe0d6c6c1da4d4142ba024785b841f8ab8551a65637b36d924f30"
+    },
+    {
+      "label": "fallout-hash-proof",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-698/fallout/hash-proof.mjs"
+      ],
+      "start": "2026-10-15T00:27:10.436923+00:00",
+      "end": "2026-10-15T00:27:12.837033+00:00",
+      "wallS": 2.400058875035029,
+      "exitCode": 1,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "6d1484dba0c5233ef737c0b737c04487c5f306d6d8f1b49c051f93d02c9a71a4"
+    },
+    {
+      "label": "fallout-presentation",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "start": "2026-10-15T00:28:18.162095+00:00",
+      "end": "2026-10-15T00:28:27.751348+00:00",
+      "wallS": 9.58897420798894,
+      "exitCode": 0,
+      "stdoutSha256": "9945bb0acda14f1141f2f006ab8faa071022245071cf9a0a0e10b009f05cf78c",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "fallout-replay",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/replay/replay.test.ts"
+      ],
+      "start": "2026-10-15T00:30:17.629944+00:00",
+      "end": "2026-10-15T00:30:23.141386+00:00",
+      "wallS": 5.511315583018586,
+      "exitCode": 0,
+      "stdoutSha256": "6f382bf87b723bc7cb590aab52b996ea576fb604c8c70dab33c3679b3f8a890f",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "focus-new-v1",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional alternative"
+      ],
+      "start": "2026-10-15T00:10:51.794309+00:00",
+      "end": "2026-10-15T00:10:58.892291+00:00",
+      "wallS": 7.097884791030083,
+      "exitCode": 0,
+      "stdoutSha256": "33bbe387e21cdbd436916bfca33a3c4de0876f5cbaaef51ed8c2fa937c38ae76",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "focus-new-v2",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "conditional alternative"
+      ],
+      "start": "2026-10-15T00:14:55.956586+00:00",
+      "end": "2026-10-15T00:15:03.505875+00:00",
+      "wallS": 7.549165292002726,
+      "exitCode": 0,
+      "stdoutSha256": "2430b26e17f66f54d37a288048a7e116233b2a9b7c01f67910e6335ed8c51aa4",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "focus-restored-all",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/state/clone.test.ts",
+        "src/engine/view/hidden-card-status.test.ts",
+        "src/engine/view/static-play-permissions.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "scripts/content-inventory.test.ts"
+      ],
+      "start": "2026-10-15T00:18:34.651473+00:00",
+      "end": "2026-10-15T00:19:08.103021+00:00",
+      "wallS": 33.45129662496038,
+      "exitCode": 0,
+      "stdoutSha256": "d0bab0bd631f1c211e32ef42377ae8c7d20fb4ed4ea5225ce7ff346d71964e03",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "friction-schema-v1",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-15T00:32:58.088468+00:00",
+      "end": "2026-10-15T00:32:58.411695+00:00",
+      "wallS": 0.3231451250030659,
+      "exitCode": 0,
+      "stdoutSha256": "9fc7da76760e81861d9a571d9a478d32a02019fb7421384e9b99f76c00dbe3e8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "friction-schema-v2",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-15T00:33:38.510873+00:00",
+      "end": "2026-10-15T00:33:38.798408+00:00",
+      "wallS": 0.2874384999740869,
+      "exitCode": 0,
+      "stdoutSha256": "9fc7da76760e81861d9a571d9a478d32a02019fb7421384e9b99f76c00dbe3e8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "fuzz-300-pair",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "conditional-alt698",
+        "--interactive-every",
+        "10"
+      ],
+      "start": "2026-10-15T01:15:39.048005+00:00",
+      "end": "2026-10-15T01:37:04.168123+00:00",
+      "wallS": 1285.126071125036,
+      "exitCode": 0,
+      "stdoutSha256": "6af08416c6440569af35a36be8c848858986c49d19d93b8dc9389e420497614e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "fuzz-300-v1",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "conditional-alt698",
+        "--interactive-every",
+        "10"
+      ],
+      "start": "2026-10-15T00:40:55.408490+00:00",
+      "end": "2026-10-15T00:54:38.509526+00:00",
+      "wallS": 823.0642821670044,
+      "exitCode": 0,
+      "stdoutSha256": "9835f47b8dd74abf985eb86a099762748fc59ff90bf553b9f82e6a648260c9c6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "inventory-regenerate",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "start": "2026-10-15T00:11:48.690780+00:00",
+      "end": "2026-10-15T00:11:52.787860+00:00",
+      "wallS": 4.096930750005413,
+      "exitCode": 0,
+      "stdoutSha256": "f8bff2705bc1be8b5bbe555c229c08260bdb4a265470efe9d879e3d518fc22ac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "knip-v1",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T00:30:39.336206+00:00",
+      "end": "2026-10-15T00:30:45.407415+00:00",
+      "wallS": 6.071079374989495,
+      "exitCode": 0,
+      "stdoutSha256": "7172a2b25fa6b9588644657cc66e27b8ace668b14a055ab24b4d2327c64f68d5",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "knip-v2",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T00:59:55.114708+00:00",
+      "end": "2026-10-15T01:00:01.879181+00:00",
+      "wallS": 6.76428899995517,
+      "exitCode": 0,
+      "stdoutSha256": "2cf9d1e9d5f3cdb3341dd48cecbfe48e9fd95e9bde711f65390a936c994ff17c",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "pair-four-after",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "records a coherent Reclaim and alternative method pair"
+      ],
+      "start": "2026-10-15T00:57:17.871620+00:00",
+      "end": "2026-10-15T00:57:23.987513+00:00",
+      "wallS": 6.115736416017171,
+      "exitCode": 0,
+      "stdoutSha256": "c31785896dda349567de457b409f8f5caa9036544595e1a3c2404bbdab45c9d3",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "pair-four-before",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "records a coherent Reclaim and alternative method pair"
+      ],
+      "start": "2026-10-15T00:56:26.100092+00:00",
+      "end": "2026-10-15T00:56:32.777699+00:00",
+      "wallS": 6.677413667028304,
+      "exitCode": 1,
+      "stdoutSha256": "df647f45c24e0144c3dc50d97220aef7e2c6ef3a03513d0bac26d6bce08eeb61",
+      "stderrSha256": "3caf337d14d82889d9b1243aa4cad6a1dcac6fd043b77a0ea9e5eb663557036f"
+    },
+    {
+      "label": "pair-friction-schema",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-15T01:02:37.075352+00:00",
+      "end": "2026-10-15T01:02:37.394020+00:00",
+      "wallS": 0.3185641249874607,
+      "exitCode": 0,
+      "stdoutSha256": "9fc7da76760e81861d9a571d9a478d32a02019fb7421384e9b99f76c00dbe3e8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "pair-old-order-counterfactual",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "records a coherent Reclaim and alternative method pair"
+      ],
+      "start": "2026-10-15T00:57:56.502664+00:00",
+      "end": "2026-10-15T00:58:04.599022+00:00",
+      "wallS": 8.096055458008777,
+      "exitCode": 1,
+      "stdoutSha256": "7fea5acd2b1861123146f2789295733ca4a55e70f7775cb80e6832c94c420b3b",
+      "stderrSha256": "3caf337d14d82889d9b1243aa4cad6a1dcac6fd043b77a0ea9e5eb663557036f"
+    },
+    {
+      "label": "pair-restored-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/state/clone.test.ts",
+        "src/engine/view/hidden-card-status.test.ts",
+        "src/engine/view/static-play-permissions.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "scripts/content-inventory.test.ts",
+        "src/rules/replay/replay.test.ts"
+      ],
+      "start": "2026-10-15T00:58:43.287511+00:00",
+      "end": "2026-10-15T00:59:04.591911+00:00",
+      "wallS": 21.30396429199027,
+      "exitCode": 0,
+      "stdoutSha256": "6cdc42d16e0bdac180c51a24e7c5a482f8461978a1edf46b119bbf62eba7f623",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "prompt-lab-caller-syntax",
+      "argv": [
+        "node",
+        "--check",
+        "/tmp/codex-698/conditional-alternative-prompt-lab-qa.mjs"
+      ],
+      "start": "2026-10-15T01:45:03.003407+00:00",
+      "end": "2026-10-15T01:45:03.044942+00:00",
+      "wallS": 0.04143154196208343,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "reclaim-boundary-diagnostic",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-698/reclaim-boundary/diagnostic.mjs"
+      ],
+      "start": "2026-10-15T00:50:33.523364+00:00",
+      "end": "2026-10-15T00:50:36.488792+00:00",
+      "wallS": 2.965292666980531,
+      "exitCode": 1,
+      "stdoutSha256": "42f34ff9aca76edd3895ccd1c87f8f0e2af0da4df4b7ed0d6207774df0e5d602",
+      "stderrSha256": "80ad005bccb2ee919451ce9b9c101deda10be669771948f8f04dac312f9e178e"
+    },
+    {
+      "label": "replay-regenerate-first",
+      "argv": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "start": "2026-10-15T00:29:43.645898+00:00",
+      "end": "2026-10-15T00:29:45.093948+00:00",
+      "wallS": 1.4479407090111636,
+      "exitCode": 0,
+      "stdoutSha256": "15404e1e71c3acda48b5ac4a96c91e7c1db0146eee11fcaa7b8b57c74a68e603",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "replay-regenerate-second",
+      "argv": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "start": "2026-10-15T00:30:07.805240+00:00",
+      "end": "2026-10-15T00:30:09.196397+00:00",
+      "wallS": 1.391081458015833,
+      "exitCode": 0,
+      "stdoutSha256": "15404e1e71c3acda48b5ac4a96c91e7c1db0146eee11fcaa7b8b57c74a68e603",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "review-full-pair",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T01:05:04.468643+00:00",
+      "end": "2026-10-15T01:12:52.651319+00:00",
+      "wallS": 468.17448795901146,
+      "exitCode": 0,
+      "stdoutSha256": "6166aca6067842e34e7d3b940ed12bad674635dce3ef2ba374cc3e18df7b2cb8",
+      "stderrSha256": "9eff504d9a277fc3d8da21fd0eae7a41bfd2d222e249c1bd23a209adbb29d1a6"
+    },
+    {
+      "label": "review-full-v1",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-15T00:37:33.175759+00:00",
+      "end": "2026-10-15T00:39:31.786416+00:00",
+      "wallS": 118.60976091696648,
+      "exitCode": 0,
+      "stdoutSha256": "cb96fd9e789cc8a1a1463e2b121e6eb3f384361bb6f08072167c5680e1bc9a15",
+      "stderrSha256": "73dacb2e0697c43193261ab0b568a6499ded91d8ef6646cfe7f5c08f6edfb8d2"
+    },
+    {
+      "label": "review-v1",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T00:19:33.346082+00:00",
+      "end": "2026-10-15T00:20:58.216330+00:00",
+      "wallS": 84.86962566699367,
+      "exitCode": 2,
+      "stdoutSha256": "7f75a16e9afb8cd5ef42ae04deaee7096884a979b9f90f4a63f42c869fa0a2ca",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "review-v2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T00:21:12.688599+00:00",
+      "end": "2026-10-15T00:22:38.109602+00:00",
+      "wallS": 85.42033770802664,
+      "exitCode": 1,
+      "stdoutSha256": "f605effbb940aac27d62900e6d7240b64dd9ae19b20178dae82b04a373a5d266",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "review-v3",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T00:30:39.336309+00:00",
+      "end": "2026-10-15T00:31:49.379672+00:00",
+      "wallS": 70.0424877909827,
+      "exitCode": 0,
+      "stdoutSha256": "967069c98edbe03ff5a4cd7f45129b40e6513e666df2238dee6e6b4ff1f5bcc0",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    },
+    {
+      "label": "review-v4",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T00:59:55.114714+00:00",
+      "end": "2026-10-15T01:01:02.455326+00:00",
+      "wallS": 67.33934033301193,
+      "exitCode": 0,
+      "stdoutSha256": "9bb3ed8ca58a14db44894fca4b382e0c8b8063c68156bef3396cb092925d2c43",
+      "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+    }
+  ],
+  "checkQualifications": [
+    "Final pair-source full and 300-game fuzz passed; prior full/fuzz receipts apply to their pre-repair source only. Command walls include heavy-lock waits. Final fuzz actual wall391.3s/CPU416.0s, 300 games102714steps7500prompts762interactive reruns, zero failures, four bounded prompt feasibility checks. This is unweighted engine regression, not production consumer coverage.",
+    "Current runtime modules match the retained whole-file source hashes. Required review and Knip were inherited after independently verifying receipts/output hashes and final source bytes; added evidence receives schema/whitespace validation.",
+    "Counterfactual guard, latest-method and hidden-sampling changes failed their focused checks and were restored before accepted aggregate checks. Reclaim pair-order counterfactual failed all four cases, restored final play SHA2100b848194daf438afcb915ffcff58b651a8af089935c8fad8abe32c774f9f0.",
+    "New saved optional method absence is UNKNOWN; clone/hash preserve its absent legacy shape. A physical unknown resolving predicate refuses either branch within existing fold rollback. Replay target-hash migration is not provided. Canonical adversarial finalHash is derived from knownfalse fresh statuses; retained proof recovers exact prior hash when only those newfalse fields are deleted."
+  ],
+  "browser": {
+    "invocation": "run-omC6rT",
+    "report": "invocations/run-omC6rT/conditional-alternative-render-ready-qa.result.json",
+    "reportSha256": "433545ae9a0cd9d75f1f6d06a3a7d6feb5c487cd79fc7f66d61123b4090ef675",
+    "callerSha256": "79c8bcdf48ba324f459900be48d9ff966e5ccb67837806a773c8c4131fb942e6",
+    "wallMs": {
+      "browserLeaseWait": 8,
+      "serve": 2304,
+      "scenario": 64106,
+      "total": 66474
+    },
+    "caps": [],
+    "captures": [
+      "invocations/run-omC6rT/conditional-hand-alternative-desktop-chooser.png",
+      "invocations/run-omC6rT/conditional-hand-alternative-desktop-materialized.png",
+      "invocations/run-omC6rT/conditional-void-alternative-desktop-chooser.png",
+      "invocations/run-omC6rT/conditional-void-alternative-desktop-materialized.png",
+      "invocations/run-omC6rT/conditional-hand-normal-desktop-chooser.png",
+      "invocations/run-omC6rT/conditional-hand-normal-desktop-materialized.png",
+      "invocations/run-omC6rT/conditional-void-denied-desktop-denied.png",
+      "invocations/run-omC6rT/conditional-hand-unqualified-desktop-materialized.png",
+      "invocations/run-omC6rT/conditional-hand-alternative-mobile-chooser.png",
+      "invocations/run-omC6rT/conditional-hand-alternative-mobile-materialized.png",
+      "invocations/run-omC6rT/conditional-void-alternative-mobile-chooser.png",
+      "invocations/run-omC6rT/conditional-void-alternative-mobile-materialized.png",
+      "invocations/run-omC6rT/conditional-hand-normal-mobile-chooser.png",
+      "invocations/run-omC6rT/conditional-hand-normal-mobile-materialized.png",
+      "invocations/run-omC6rT/conditional-void-denied-mobile-denied.png",
+      "invocations/run-omC6rT/conditional-hand-unqualified-mobile-materialized.png"
+    ],
+    "cases": [
+      {
+        "mode": "hand-alternative",
+        "zone": "hand",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i2",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "aktcp7",
+        "observations": {
+          "cancellations": 1,
+          "reloads": 1,
+          "geometry": [
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-0\"]",
+              "x": 868.65625,
+              "y": 597,
+              "width": 126.296875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-1\"]",
+              "x": 1002.953125,
+              "y": 597,
+              "width": 237.546875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-testid=\"battle-prompt-cancel\"]",
+              "x": 826.625,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "played": [
+            {
+              "seq": 5,
+              "index": 2,
+              "kind": "cardPlayed",
+              "instance": "i2",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i2"
+              },
+              "cards": {
+                "i2": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 348,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": false,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts"
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": true,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 4,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "aktcp7",
+          "version": 0,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [
+            {
+              "fingerprint": "llcipxuvd8",
+              "value": 1
+            }
+          ],
+          "timestamp": "2026-10-15T02:27:04.926Z",
+          "event": "engine.action",
+          "seq": 12
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "desktop",
+        "rawJsonlRows": 49,
+        "rawJsonlSha256": "13f7c6dfa43229baa385a28b2820a58c7a1b3947e88d4b1e192809a1e35440ed"
+      },
+      {
+        "mode": "void-alternative",
+        "zone": "void",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i8",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "2rjpei",
+        "observations": {
+          "cancellations": 1,
+          "reloads": 1,
+          "geometry": [
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-0\"]",
+              "x": 868.65625,
+              "y": 597,
+              "width": 126.296875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-1\"]",
+              "x": 1002.953125,
+              "y": 597,
+              "width": 237.546875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-testid=\"battle-prompt-cancel\"]",
+              "x": 826.625,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "played": [
+            {
+              "seq": 5,
+              "index": 2,
+              "kind": "cardPlayed",
+              "instance": "i8",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i8"
+              },
+              "cards": {
+                "i8": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i8\"]",
+              "x": 348,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": false,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts"
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": true,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 4,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "2rjpei",
+          "version": 0,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i8",
+            "from": "void"
+          },
+          "answers": [
+            {
+              "fingerprint": "14sqb3blv4f",
+              "value": 1
+            }
+          ],
+          "timestamp": "2026-10-15T02:27:13.385Z",
+          "event": "engine.action",
+          "seq": 10
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "desktop",
+        "rawJsonlRows": 48,
+        "rawJsonlSha256": "96b7a1069139cabc53c7b8c52d2df1ab53204e297fbd8b47287c055f30dda0e0"
+      },
+      {
+        "mode": "hand-normal",
+        "zone": "hand",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i2",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "4ecgof",
+        "observations": {
+          "cancellations": 0,
+          "reloads": 0,
+          "geometry": [
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-0\"]",
+              "x": 868.65625,
+              "y": 597,
+              "width": 126.296875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-1\"]",
+              "x": 1002.953125,
+              "y": 597,
+              "width": 237.546875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-testid=\"battle-prompt-cancel\"]",
+              "x": 826.625,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "played": [
+            {
+              "seq": 3,
+              "index": 2,
+              "kind": "cardPlayed",
+              "instance": "i2",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i2"
+              },
+              "cards": {
+                "i2": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 348,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": true,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts"
+        },
+        "status": {
+          "exhausted": true,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 1,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "4ecgof",
+          "version": 0,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [
+            {
+              "fingerprint": "llcipxuvd8",
+              "value": 0
+            }
+          ],
+          "timestamp": "2026-10-15T02:27:19.347Z",
+          "event": "engine.action",
+          "seq": 31
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "desktop",
+        "rawJsonlRows": 37,
+        "rawJsonlSha256": "512cd59d1589a4666b087281f0d8f9a2707d89f9d580dd1c93c9176e15a78f87"
+      },
+      {
+        "mode": "void-denied",
+        "zone": "void",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i8",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "5ukvhn",
+        "observations": {
+          "cancellations": 0,
+          "reloads": 0,
+          "geometry": [
+            {
+              "selector": "[data-card-zone-browser=\"viewer:void\"]",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ]
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 5,
+          "enemy": 2
+        },
+        "storedAction": null,
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "desktop",
+        "rawJsonlRows": 31,
+        "rawJsonlSha256": "c515f2d0f4e6c343326460e6ac8100fc126b73cf2104fb79d6f57089dbd65336"
+      },
+      {
+        "mode": "hand-unqualified",
+        "zone": "hand",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i2",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "xq4oax",
+        "observations": {
+          "cancellations": 0,
+          "reloads": 0,
+          "geometry": [],
+          "renderedHandReady": {
+            "source": "i2",
+            "provider": "i1",
+            "handCount": 2,
+            "role": "button",
+            "playable": true,
+            "box": {
+              "x": 626.599365234375,
+              "y": 731.552978515625,
+              "width": 141.18115234375,
+              "height": 189.02117919921875
+            }
+          },
+          "singleNormalRoute": true,
+          "played": [
+            {
+              "seq": 4,
+              "index": 1,
+              "kind": "cardPlayed",
+              "instance": "i2",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i2"
+              },
+              "cards": {
+                "i2": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": true,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts",
+          "routeRecording": "One legal route uses existing default selection; no route RecordedAnswer exists"
+        },
+        "status": {
+          "exhausted": true,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 1,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "xq4oax",
+          "version": 2,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [],
+          "timestamp": "2026-10-15T02:27:29.106Z",
+          "event": "engine.action",
+          "seq": 34
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "desktop",
+        "rawJsonlRows": 41,
+        "rawJsonlSha256": "25c9402b6eaa19a9884a7c6c2adcd1eff954d507e67d9cfd7a5147b8cf9191e8"
+      },
+      {
+        "mode": "hand-alternative",
+        "zone": "hand",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i2",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "pnkcb9",
+        "observations": {
+          "cancellations": 1,
+          "reloads": 1,
+          "geometry": [
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-0\"]",
+              "x": 255.703125,
+              "y": 522.828125,
+              "width": 126.296875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-1\"]",
+              "x": 144.453125,
+              "y": 572.828125,
+              "width": 237.546875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-testid=\"battle-prompt-cancel\"]",
+              "x": 269.125,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "played": [
+            {
+              "seq": 5,
+              "index": 2,
+              "kind": "cardPlayed",
+              "instance": "i2",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i2"
+              },
+              "cards": {
+                "i2": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": false,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts"
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": true,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 4,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "pnkcb9",
+          "version": 0,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [
+            {
+              "fingerprint": "llcipxuvd8",
+              "value": 1
+            }
+          ],
+          "timestamp": "2026-10-15T02:27:36.617Z",
+          "event": "engine.action",
+          "seq": 11
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "mobile",
+        "rawJsonlRows": 49,
+        "rawJsonlSha256": "8e650116d2a319967375ef13895b8e6d557c154670e4380622daba966220da0d"
+      },
+      {
+        "mode": "void-alternative",
+        "zone": "void",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i8",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "jepbbj",
+        "observations": {
+          "cancellations": 1,
+          "reloads": 1,
+          "geometry": [
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-0\"]",
+              "x": 10.15625,
+              "y": 522.828125,
+              "width": 126.296875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-1\"]",
+              "x": 144.453125,
+              "y": 522.828125,
+              "width": 237.546875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-testid=\"battle-prompt-cancel\"]",
+              "x": 269.125,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "played": [
+            {
+              "seq": 5,
+              "index": 2,
+              "kind": "cardPlayed",
+              "instance": "i8",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i8"
+              },
+              "cards": {
+                "i8": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i8\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": false,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts"
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": true,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 4,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "jepbbj",
+          "version": 0,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i8",
+            "from": "void"
+          },
+          "answers": [
+            {
+              "fingerprint": "14sqb3blv4f",
+              "value": 1
+            }
+          ],
+          "timestamp": "2026-10-15T02:27:42.998Z",
+          "event": "engine.action",
+          "seq": 10
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "mobile",
+        "rawJsonlRows": 48,
+        "rawJsonlSha256": "49c49bb3099314b70a36502599fd9fcf1970ebeb6ab3a09bac44af23809f117f"
+      },
+      {
+        "mode": "hand-normal",
+        "zone": "hand",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i2",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "4iptnx",
+        "observations": {
+          "cancellations": 0,
+          "reloads": 0,
+          "geometry": [
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-0\"]",
+              "x": 255.703125,
+              "y": 522.828125,
+              "width": 126.296875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-battle-choice-prompt-controls] [data-testid=\"battle-choice-prompt-option-1\"]",
+              "x": 144.453125,
+              "y": 572.828125,
+              "width": 237.546875,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            },
+            {
+              "selector": "[data-testid=\"battle-prompt-cancel\"]",
+              "x": 269.125,
+              "y": 20.75,
+              "width": 88.375,
+              "height": 42,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "played": [
+            {
+              "seq": 3,
+              "index": 2,
+              "kind": "cardPlayed",
+              "instance": "i2",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i2"
+              },
+              "cards": {
+                "i2": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 81.265625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": true,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts"
+        },
+        "status": {
+          "exhausted": true,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 1,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "4iptnx",
+          "version": 0,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [
+            {
+              "fingerprint": "llcipxuvd8",
+              "value": 0
+            }
+          ],
+          "timestamp": "2026-10-15T02:27:47.594Z",
+          "event": "engine.action",
+          "seq": 31
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "mobile",
+        "rawJsonlRows": 37,
+        "rawJsonlSha256": "216f5fefa05c005974235636af2be238f11e1fce401736fd582b896ad364c38a"
+      },
+      {
+        "mode": "void-denied",
+        "zone": "void",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i8",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "g42hkk",
+        "observations": {
+          "cancellations": 0,
+          "reloads": 0,
+          "geometry": [
+            {
+              "selector": "[data-card-zone-browser=\"viewer:void\"]",
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ]
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 5,
+          "enemy": 2
+        },
+        "storedAction": null,
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "mobile",
+        "rawJsonlRows": 31,
+        "rawJsonlSha256": "4e702dbfc73bbaf966cdb660d9548ec26c2d2cc76c8eabb999bd35c71d0d4fda"
+      },
+      {
+        "mode": "hand-unqualified",
+        "zone": "hand",
+        "card": "5e5e5e5e-0000-4000-8000-000000069800",
+        "source": "i2",
+        "provider": "i1",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "gameId": "d6g9a4",
+        "observations": {
+          "cancellations": 0,
+          "reloads": 0,
+          "geometry": [],
+          "renderedHandReady": {
+            "source": "i2",
+            "provider": "i1",
+            "handCount": 2,
+            "role": "button",
+            "playable": true,
+            "box": {
+              "x": 63.52015686035156,
+              "y": 666.8659057617188,
+              "width": 170.82589721679688,
+              "height": 224.12811279296875
+            }
+          },
+          "singleNormalRoute": true,
+          "played": [
+            {
+              "seq": 4,
+              "index": 1,
+              "kind": "cardPlayed",
+              "instance": "i2",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i2"
+              },
+              "cards": {
+                "i2": "5e5e5e5e-0000-4000-8000-000000069800"
+              }
+            }
+          ],
+          "settledGeometry": [
+            {
+              "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "dpr": 2
+            }
+          ],
+          "renderedEntry": {
+            "exhausted": true,
+            "keywordBadges": 0
+          },
+          "keywordObservation": "No granted-keyword badge on this keyword-free synthetic printing; exact engine-view keyword absence is covered by public contracts",
+          "routeRecording": "One legal route uses existing default selection; no route RecordedAnswer exists"
+        },
+        "status": {
+          "exhausted": true,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "playedViaAlternativeCost": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        },
+        "energies": {
+          "player": 1,
+          "enemy": 2
+        },
+        "storedAction": {
+          "gameId": "d6g9a4",
+          "version": 2,
+          "side": "player",
+          "action": {
+            "kind": "play",
+            "card": "i2",
+            "from": "hand"
+          },
+          "answers": [],
+          "timestamp": "2026-10-15T02:27:59.498Z",
+          "event": "engine.action",
+          "seq": 34
+        },
+        "logEvidence": "original stored-game JSONL read; final viewport export by runner, earlier case lines preserved here",
+        "viewport": "mobile",
+        "rawJsonlRows": 41,
+        "rawJsonlSha256": "bd8f6b409660b333121e2cd2329764d7d9617e0c2949d43040c52a4e38f57221"
+      }
+    ],
+    "gameLogExports": [
+      {
+        "viewport": "desktop",
+        "path": "conditional-alternative-render-ready-qa-desktop.jsonl",
+        "gameId": "xq4oax",
+        "selectedBy": "url",
+        "rows": 41,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "conditional-alternative-render-ready-qa-mobile.jsonl",
+        "gameId": "d6g9a4",
+        "selectedBy": "url",
+        "rows": 41,
+        "reason": null
+      }
+    ],
+    "qualification": "Five cells per viewport; final cell exported by native runner, first four original stored-game JSONL retained in successful result/case notes. Captures manually inspected at desktop/mobile chooser and materialized states: controls readable and contained, correct ready/exhausted poses; keyword-free source has no granted-keyword badge.",
+    "priorAttempts": [
+      {
+        "label": "conditional-qa-v1",
+        "failure": "Unknown synthetic CardLab primary UUID before payment workflow; no coverage claimed."
+      },
+      {
+        "label": "conditional-qa-v2",
+        "failure": "Desktop fifth-case caller ignored absent pointer hit while waiting only on committed provider state; mobile not started. Earlier four cases are qualified to partial run; corrected caller waits for rendered actionable source and records completed case notes."
+      }
+    ]
+  },
+  "resources": {
+    "mcp": "http://localhost:8931/mcp",
+    "port": 5274,
+    "runnerGroup": 72690,
+    "serverGroup": 72729,
+    "settlement": {
+      "clock": "2026-10-15T02:28:01.623047+00:00",
+      "exitCode": 0,
+      "callerSha256Before": "79c8bcdf48ba324f459900be48d9ff966e5ccb67837806a773c8c4131fb942e6",
+      "callerSha256After": "79c8bcdf48ba324f459900be48d9ff966e5ccb67837806a773c8c4131fb942e6",
+      "resources": [
+        {
+          "serverGroup": 72729,
+          "remainingProcesses": [],
+          "matchingRecords": []
+        }
+      ]
+    },
+    "qualification": "Owned context/server cleanup completed. Shared service and foreign sessions untouched."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step / partial payment",
+      "coverage": "refuses a physical legacy unknown resolving method without choosing either effect branch; actual fold error retains committed state. Cancellation/invalid answers preserve payment/history. Existing cloned-step atomicity owns partial writes; no new persistence writer."
+    },
+    {
+      "path": "reload/restart mid-operation",
+      "coverage": "cold reloads, cancels and refuses invalid route inputs without recording a new method; cold public browser reloads same game in hand/void route prompts."
+    },
+    {
+      "path": "invalid/stale/duplicate input",
+      "coverage": "cold reloads, cancels and refuses invalid route inputs without recording a new method: illegal/stale/duplicate route answers and in-flight play bounce."
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "Same recovery contract rejects other-side prompt answer. Both actors run actual legality/payment/entry/history/privacy contracts."
+    },
+    {
+      "path": "interruption/prevention",
+      "coverage": "keeps payment but produces no entry when an actual Interrupt prevents the chosen play; copies omit captured play flag."
+    },
+    {
+      "path": "qualifier removed/route changed",
+      "coverage": "captures entry readiness without granting a keyword, including a payment consuming qualification; both-actor latest Reclaim/alternative method-pair empty-hand witnesses and restored counterfactual."
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Retained review-v4 validation group, prior scope preserved; browser hostLoad separate",
+        "value": 19.40625
+      }
+    }
+  },
+  "implementWindowQualification": "Original dispatch includes research, parent/helper coordination and capacity waits, failed and passing checks, QA repairs, takeover and final commit tail. End is the pre-commit evidence cutoff within one minute of automatic Git commit; final exact commit timestamp recorded in native bead notes.",
+  "originalBrowser": {
+    "invocation": "run-ami0MF",
+    "report": "invocations/run-ami0MF/conditional-alternative-render-ready-qa.result.json",
+    "reportSha256": "0f4c3ff47482be4bb4d04b3a757d35e448614114756408be744ba864a8161979",
+    "sourceBase": "8eb2e0d1e5d27737375e9b6cf619be49c5b5dffd",
+    "verdict": "pass10cells/16captures"
+  },
+  "integration": {
+    "deliveryBase": "84d6670ffd6484d72d38eb8705a2c194b1dfb8f0",
+    "originalCheckpoint": "fbb1ba9d0eac5c466ad21569a806cbf585b6531b",
+    "update": "Initial native update conflict only in generated inventory; source restored clean by Tollgate. Original delta/file archived in /tmp/takeover-698. Inventory parked in temporary amended checkpoint, native update rebased remaining source cleanly; canonical generator reapplied on combined source. Never submitted incomplete checkpoint.",
+    "inventoryAudit": {
+      "UUIDCount": 1209,
+      "sameUUIDSet": true,
+      "immutablePrintedFieldsEqual": true,
+      "changedFields": {
+        "routing": 27,
+        "requiredPrimitives": 2,
+        "cardIssues": 1,
+        "status": 10,
+        "tags": 1
+      },
+      "qualification": "Canonical source regeneration includes peer-authored status/card issue refresh; no native consumer ownership changes."
+    },
+    "checks": [
+      {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-conditional-alternative698",
+        "pid": 66353,
+        "pgid": 66353,
+        "start": "2026-10-15T02:25:34.689903+00:00",
+        "end": "2026-10-15T02:26:45.801008+00:00",
+        "durationSeconds": 71.11093166697538,
+        "exitCode": 0,
+        "workers": 2,
+        "stdout": "/tmp/codex-698/checks/integration-review.stdout",
+        "stderr": "/tmp/codex-698/checks/integration-review.stderr",
+        "stdoutSha256": "e8e54b0f892011f498ef8633c0fd3c8d26fb994528f85b9ff7050b713ec2df68",
+        "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-conditional-alternative698",
+        "pid": 70284,
+        "pgid": 70284,
+        "start": "2026-10-15T02:26:20.972136+00:00",
+        "end": "2026-10-15T02:26:25.583189+00:00",
+        "durationSeconds": 4.610967957996763,
+        "exitCode": 0,
+        "workers": 2,
+        "stdout": "/tmp/codex-698/checks/integration-knip.stdout",
+        "stderr": "/tmp/codex-698/checks/integration-knip.stderr",
+        "stdoutSha256": "d7215bb90f2fc6b1772228b2f50e7ea7727036482fd4e4b73f97c4c048dd0ef9",
+        "stderrSha256": "3182e8eb005ced491722ce7d0ac96ba24f4d5e664d51777d4efcf7ca2be5119e"
+      },
+      {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/codex-698/conditional-alternative-render-ready-qa.mjs",
+          "--bead",
+          "hv-umm2.698",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-conditional-alternative698",
+        "pid": 72690,
+        "pgid": 72690,
+        "start": "2026-10-15T02:26:54.660439+00:00",
+        "end": "2026-10-15T02:28:01.599211+00:00",
+        "durationSeconds": 66.93852066603722,
+        "exitCode": 0,
+        "workers": 2,
+        "stdout": "/tmp/codex-698/checks/integration-qa.stdout",
+        "stderr": "/tmp/codex-698/checks/integration-qa.stderr",
+        "stdoutSha256": "433545ae9a0cd9d75f1f6d06a3a7d6feb5c487cd79fc7f66d61123b4090ef675",
+        "stderrSha256": "679a0c66e7c802c1e550e8d83315637bcc819778ac66857446412617bfc1fe2a"
+      }
+    ],
+    "sourceBindings": [
+      {
+        "path": "scripts/content-inventory.ts",
+        "sha256": "dfcf9ec7ca9cdba85aa7d4934b15b36d69ce2886a408368ed76c4bf872fdf05c"
+      },
+      {
+        "path": "src/engine/dsl/builders.ts",
+        "sha256": "6f0608b0f38db1d5dcbf8c04901a9d4b7cf3df9f4e7f455d124fe496ce123d88"
+      },
+      {
+        "path": "src/engine/dsl/conditions.ts",
+        "sha256": "9a56070f997cdd58361dd59a7be333de835ba0b014566376cd27f11fe616bfee"
+      },
+      {
+        "path": "src/engine/dsl/types.ts",
+        "sha256": "843e7ee5e6cb10c6275cb3598001c9fede99eb04280923d56d4355e334ec4ef0"
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/conditional-alternative-cost-privacy.contracts.ts",
+        "sha256": "92226f99b16ed265488e06bd4f235782e6c87f917192fb242f403337b99cd6f6"
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/conditional-alternative-cost-recovery.contracts.ts",
+        "sha256": "81455f4d038da98eee6b02f5770fbf1a9623651989e9ec5302122139d635da95"
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/conditional-alternative-cost-support.ts",
+        "sha256": "3382d8abb1bed0a2bf69dbf11106d59df2e567c0402b5c26bf1339e05b2284a1"
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/conditional-alternative-cost.contracts.ts",
+        "sha256": "7c269c0a21009f11375950360de8b13aa7fc4a2b08b0af6a0be970f0c1552537"
+      },
+      {
+        "path": "src/engine/rules/timing.ts",
+        "sha256": "9b7d373404628a9172db48872fa110cafb411ef74bc756db9d0ab5bf32bc8a61"
+      },
+      {
+        "path": "src/engine/rules/zones.ts",
+        "sha256": "cde768cb17715dbc37fbf946d8aec2d7a06a93c1c2b2f0707fd77b5700d4f5a6"
+      },
+      {
+        "path": "src/engine/state/clone.ts",
+        "sha256": "1ce7fba41e2110d718ebdaf2ba276ba2292b7a8fef9ecb63e7a125c226b5e569"
+      },
+      {
+        "path": "src/engine/state/create.ts",
+        "sha256": "fdfa7f9eff0536d68c825f13718b8b49b29442a7efe00760838cab5895fde726"
+      },
+      {
+        "path": "src/engine/state/hash.ts",
+        "sha256": "aaac491fbd2556064b09d7d29b1655e9577e40f83fb7c446785040c90a600cd9"
+      },
+      {
+        "path": "src/engine/state/types.ts",
+        "sha256": "b1e34a7593dcb80cac3e006383b06ad51ab35020d10d52e56f51e0d88faab277"
+      },
+      {
+        "path": "src/engine/steps/kinds/play.ts",
+        "sha256": "cea68bdbc1da5785dd95c544fbd0349987b9a048e666d8e496449c9d1c5e8442"
+      },
+      {
+        "path": "src/engine/steps/kinds/resolve-top.ts",
+        "sha256": "7cf2690ca74f4adc9a2556a859362c34f06960bee9ecb615aa8284fba3171210"
+      },
+      {
+        "path": "src/engine/testing/prompt-lab.ts",
+        "sha256": "d74504e9ddd0729bd96ad6c44db4a46ff8ed27091267dececc6ad4b89e22d198"
+      },
+      {
+        "path": "src/engine/view/determinize.ts",
+        "sha256": "de9cbf719c41c9b22ec625ce947b29ad03098ab27802c2e46721bf7ae8acc505"
+      },
+      {
+        "path": "src/rules/battle/fold.ts",
+        "sha256": "c3612503bbc29827a941759c2edb75b206b35be9a18d2ac184256ce040720cf3"
+      },
+      {
+        "path": "src/rules/replay/fixtures/adversarial.json",
+        "sha256": "3b00c2505d90b399c032c0947b1636c5da1fafb1bbd552a9df85152f9addc5c3"
+      },
+      {
+        "path": "src/screens/cumulus_adapters/engine-battle-presentation.test.ts",
+        "sha256": "459bc826389f05bab89e7eaaec6a9cacf53224aee2b73e3932f3c5c9abb64806"
+      },
+      {
+        "path": "src/screens/cumulus_adapters/engine-battle-view-model.ts",
+        "sha256": "c3c984d3340d4345f5b679edb8eff1f28bce0ff7d61347f1fffe3e7d72d60092"
+      }
+    ],
+    "scope": "Own diff preserved against new base, landed peer branches retained. Integration quick review307files9038tests; Knip0. Earlier full and300 retain original source qualification; combined public contracts and repeated ten-cell QA confirm nearby payment/entry changes."
+  }
+}

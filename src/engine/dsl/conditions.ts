@@ -52,6 +52,14 @@ export function conditionHoldsWith(
       const instance = sourceInstance(scope.source);
       return instance !== null && state.instances[instance]?.status.playedViaReclaim === true;
     }
+    case "sourceWasAlternativePlayed": {
+      const id = sourceInstance(scope.source);
+      const instance = id === null ? undefined : state.instances[id];
+      if (instance === undefined) return false;
+      const recorded = instance.status.playedViaAlternativeCost;
+      if (recorded === undefined) throw new Error("The source’s latest alternative play method is unrecorded");
+      return recorded;
+    }
     case "sourceIn": {
       const instance = sourceInstance(scope.source);
       return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;

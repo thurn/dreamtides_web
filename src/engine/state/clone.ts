@@ -68,6 +68,7 @@ function copyStatus(status: CardStatus): CardStatus {
     created: status.created,
     reclaimed: status.reclaimed,
     playedViaReclaim: status.playedViaReclaim,
+    ...(status.playedViaAlternativeCost === undefined ? {} : { playedViaAlternativeCost: status.playedViaAlternativeCost }),
     offering: status.offering,
     ephemeral: status.ephemeral,
     x: status.x,

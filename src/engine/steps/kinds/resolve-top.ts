@@ -47,7 +47,7 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
     } else {
       // A variable-spark character keeps the X paid for it while in play.
       instance.status.x = item.x;
-      enterPlay(ctx, item.instance, item.controller, slot);
+      enterPlay(ctx, item.instance, item.controller, slot, item.materializesAwakened === true);
     }
   } else if (state.instances[item.instance]?.zone === "stack") {
     moveInstance(ctx, item.instance, "void");

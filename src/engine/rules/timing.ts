@@ -64,7 +64,11 @@ function ownAlternativeCost(state: BattleState, catalog: EngineCatalog, id: Inst
     (ability): ability is AlternativeCostAbility => ability.kind === "alternativeCost",
   );
   if (alternatives.length > 1) throw new Error("A card has more than one alternative-cost declaration");
-  return alternatives[0] ?? null;
+  const alternative = alternatives[0];
+  if (alternative === undefined) return null;
+  return alternative.condition === undefined || conditionHolds(state, catalog, alternative.condition, {
+    controller: instance.controller, source: id, optionalPaid: [],
+  }) ? alternative : null;
 }
 
 /** Cost changes for the selected route; explicit replacement routes exclude own base setters. */

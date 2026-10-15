@@ -86,6 +86,7 @@ const STATUS_FIELDS = {
   created: true,
   reclaimed: true,
   playedViaReclaim: true,
+  playedViaAlternativeCost: true,
   offering: true,
   ephemeral: true,
   x: true,
@@ -265,7 +266,7 @@ class StructuralHasher {
 
   private instance(instance: CardInstance): void {
     const { status } = instance;
-    const arity = INSTANCE_ARITY + (instance.poolCandidates === undefined ? 0 : 1) + (instance.journeyDeck === undefined ? 0 : 1);
+    const arity = INSTANCE_ARITY - (status.playedViaAlternativeCost === undefined ? 1 : 0) + (instance.poolCandidates === undefined ? 0 : 1) + (instance.journeyDeck === undefined ? 0 : 1);
     this.seqA = TAG_INSTANCE ^ arity;
     this.seqB = Math.imul(TAG_INSTANCE, 0x9e3779b1) ^ arity;
     this.feed(instance.id);
@@ -283,6 +284,7 @@ class StructuralHasher {
     this.feed(status.created);
     this.feed(status.reclaimed);
     this.feed(status.playedViaReclaim);
+    if (status.playedViaAlternativeCost !== undefined) this.feed(status.playedViaAlternativeCost);
     this.feed(status.offering);
     this.feed(status.ephemeral);
     this.feed(status.x);

@@ -426,6 +426,8 @@ export type Condition =
   | { readonly cond: "costPaid"; readonly optional: number }
   /** Whether the source's latest actual committed play used Reclaim; a created stack copy was not played. */
   | { readonly cond: "sourceWasReclaimed" }
+  /** The source’s latest recorded play used its card-defined alternative; legacy absence is unknown. */
+  | { readonly cond: "sourceWasAlternativePlayed" }
   /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
   | { readonly cond: "sourceIn"; readonly zone: Zone }
   /** The non-empty deck's top card matches the filter when the condition is checked, without revealing it. */
@@ -456,7 +458,7 @@ type StaticCountBounds =
 
 /** A live static condition uses public inputs; optional payments and hidden-card filters require a resolving effect. */
 export type StaticCondition =
-  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" | "topOfDeck" | "playedAnotherEventThisTurn" }>
+  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" | "topOfDeck" | "playedAnotherEventThisTurn" | "sourceWasAlternativePlayed" }>
   | { readonly cond: "controls"; readonly selector: StaticCharacterSelector; readonly atLeast: number; readonly atMost?: number }
   | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "void"; readonly filter?: CardFilter } & StaticCountBounds)
   | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "hand" | "deck"; readonly filter?: never } & StaticCountBounds);
@@ -647,6 +649,10 @@ export interface AdditionalCostAbility {
 export interface AlternativeCostAbility {
   readonly kind: "alternativeCost";
   readonly costs: readonly Cost[];
+  /** Qualifies this replacement route before payment, leaving normal routes intact. */
+  readonly condition?: StaticCondition;
+  /** This selected play enters ready without granting an Awakened keyword. */
+  readonly materializesAwakened?: true;
 }
 
 /** The named (▸) triggers: each concerns the ability's own card or its controller's phase. */

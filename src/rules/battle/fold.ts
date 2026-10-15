@@ -907,6 +907,8 @@ function isCardStatus(value: unknown): boolean {
     isFiniteNumber(value.counters) &&
     isBoolean(value.created) &&
     isBoolean(value.reclaimed) &&
+    optional(isBoolean)(value.playedViaAlternativeCost) &&
+    !(value.playedViaAlternativeCost === true && value.playedViaReclaim === true) &&
     isBoolean(value.offering) &&
     isBoolean(value.ephemeral) &&
     nullable(isFiniteNumber)(value.x) &&
@@ -980,6 +982,7 @@ function isStackItem(value: unknown): boolean {
     return (
       isInstanceId(value.instance) &&
       isArrayOf(value.choices, isEffectChoices) &&
+      optional((flag) => flag === true)(value.materializesAwakened) &&
       optional((slot) => slotFromUnknown(slot) !== null)(value.slot)
     );
   }

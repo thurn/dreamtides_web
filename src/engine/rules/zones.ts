@@ -298,6 +298,7 @@ export function moveToStack(
     readonly choices: readonly EffectChoices[];
     readonly x: number | null;
     readonly optionalPaid: readonly boolean[];
+    readonly materializesAwakened?: true;
     readonly slot?: Slot;
   } = { choices: [], x: null, optionalPaid: [] },
 ): void {
@@ -319,6 +320,7 @@ export function moveToStack(
     optionalPaid: [...played.optionalPaid],
     ...(played.slot === undefined ? {} : { slot: played.slot }),
     ...(fromVoid ? { playedFromVoid: true } : {}),
+    ...(played.materializesAwakened === true ? { materializesAwakened: true } : {}),
   });
   announceEmptyHand(ctx, hand);
 }

@@ -1029,6 +1029,32 @@ that alternative's X is chosen normally. An additional count or captured X
 can bind normally when the printed energy has no X. Payments sharing an X
 fixed at zero must be compatible with that value.
 
+**Conditional card alternatives:** A condition on an alternative payment is
+checked against the player playing that physical card before its costs are
+paid. It qualifies only that alternative: the normal route remains available
+under its ordinary requirements. The chosen payment stays chosen when paying
+an additional cost removes a character that supplied the condition. Access
+from a void or deck requires its own permission; a conditional permission
+names the cards and condition it covers independently.
+
+**If played this way:** An effect checking whether its source was played by
+its card-defined alternative reads that physical card's latest actual
+committed play. Its method is recorded after costs are paid and before its
+stack movement announces an empty hand. Reclaim and card-alternative methods
+are recorded together, so synchronous stack-transition announcements read
+one coherent latest play. A later play replaces that method, and changing zones or
+control keeps it. Copies are not played and begin without an alternative play.
+An existing saved card whose historical method is unrecorded supplies an
+unknown result; evaluating this check refuses to choose either effect branch.
+A fresh card or a recorded non-alternative play supplies a false result.
+
+An alternative that says the character materializes with awakened captures
+that entry option when the payment is committed. The resulting played card
+enters without the exhausted status, even if the qualifying condition changes
+or its current definition changes before resolution. It gains no Awakened
+keyword. A copy and a later materialization by an effect receive no entry
+option from that play.
+
 **Giving the opponent ⍟ as a cost:** "By giving the opponent N⍟" creates
 that many points for the opponent of the player playing the card. It spends
 none of the payer's points and needs no points in their score. Choose the
