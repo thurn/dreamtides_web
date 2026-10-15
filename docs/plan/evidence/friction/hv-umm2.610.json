@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.610",
+  "phase": 5,
+  "implementMin": 20.1348834,
+  "implementWindow": {
+    "start": "2026-10-15T02:18:56.702488+00:00",
+    "end": "2026-10-15T02:39:04.795492+00:00"
+  },
+  "localValidationS": {
+    "focused1": 10.019150374981109,
+    "focused2": 9.277649666997604,
+    "cf1-catalog-membership": 8.779314332990907,
+    "cf2-controller-membership": 7.77231920894701,
+    "cf3-printed-cost": 7.576193959044758,
+    "cf4-post-entry-delay": 7.531618209031876,
+    "cf5-missing-strict-recognition": 9.3737344580004,
+    "integration": 5.925008082995191,
+    "review1": 76.05617737496505,
+    "knip": 5.214162666001357
+  },
+  "hostLoad": 26.10400390625,
+  "testDelta": {
+    "files": 1,
+    "lines": 249,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "friction": []
+}

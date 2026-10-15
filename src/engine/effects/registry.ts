@@ -105,6 +105,7 @@ import {
   shuffleIntoPrimitive,
   sparkModifierPrimitive,
   journeyDeckSparkModifierPrimitive,
+  journeyDeckKeywordPrimitive,
   storeCountersPrimitive,
   takeExtraTurnPrimitive,
   takeFromAmongPrimitive,
@@ -369,6 +370,7 @@ const DEFINITIONS = {
     return shuffleIntoPrimitive;
   },
   get journeyDeckSparkModifier() { return journeyDeckSparkModifierPrimitive; },
+  get journeyDeckKeyword() { return journeyDeckKeywordPrimitive; },
   get sparkModifier() {
     return sparkModifierPrimitive;
   },

@@ -81,6 +81,7 @@ export * from "./set-base-spark";
 export * from "./shuffle-into";
 export * from "./spark-modifier";
 export * from "./journey-deck-spark-modifier";
+export * from "./journey-deck-keyword";
 export * from "./store-counters";
 export * from "./take-extra-turn";
 export * from "./take-from-among";

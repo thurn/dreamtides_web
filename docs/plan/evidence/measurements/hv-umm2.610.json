@@ -1,0 +1,534 @@
+{
+  "bead": "hv-umm2.610",
+  "base": "27b273d6253bfbb028d84a312b6f1b04f33bfc35",
+  "timing": {
+    "actualInclusiveStart": "2026-10-15T02:18:56.702488+00:00",
+    "preGitCutoff": "2026-10-15T02:39:04.795492+00:00",
+    "actualGitStart": "UNKNOWN at immutable pre-Git evidence",
+    "actualGitEnd": "UNKNOWN at immutable pre-Git evidence",
+    "actualEndpointReceipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/final-commit-receipt.json",
+    "scope": "Whole current claim/setup/source-first/parent audit/admission/implementation/failures/CF/checks/cleanup/evidence through actual Git; no productive-only shortening."
+  },
+  "scope": {
+    "publicForm": "journeyDeckKeyword(player:PlayerRef,filter:CardFilter,keyword:awakened), staticOnly layer3 existing keyword changes",
+    "changedSources": [
+      "src/engine/effects/primitives/journey-deck-keyword.ts",
+      "src/engine/effects/primitives/contracts/journey-deck-keyword.contracts.ts",
+      "src/engine/continuous/layers.ts",
+      "src/engine/effects/types.ts",
+      "src/engine/effects/primitives/index.ts",
+      "src/engine/effects/registry.ts",
+      "src/rules/battle/journey-deck-spark-state.ts"
+    ],
+    "productionGrossLines": 53,
+    "noProductionUUIDTransferred": true,
+    "conditionalFallout": "Exactly StaticEnv callback, primitive index/export+registry getter, and one-op strict provenance predicate; seven source paths total. Existing bodies byte-preserved by reverse-addition audit.",
+    "c4OldBodiesAndConsumerBytePreserved": true,
+    "newStateSchemaOrEvent": false,
+    "sourceManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/implementation-source-manifest.json",
+      "sha256": "eca43a89093d8fe6ba7344b58fb1ceb69726bda46bbf6e65f71d10ac5b04f057"
+    },
+    "sourceBindingCounts": {
+      "ownChanged": 7,
+      "readOnly": 41
+    },
+    "nativeAdmission": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/finite-admission.json",
+      "sha256": "33c9a59f5732a5c787e06a6fe03cbbc2ce2d04a3dd45178ceeaff28460dcf627"
+    }
+  },
+  "checks": {
+    "receipts": [
+      {
+        "label": "focused1",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/focused1.receipt.json",
+        "sha256": "9215b5b0dd2b3d2f58856df0ab3a231bfd491567eb14e7cc64f48e777fd41515",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "journey-deck"
+        ],
+        "start": "2026-10-15T02:31:17.578814+00:00",
+        "end": "2026-10-15T02:31:27.598080+00:00",
+        "wallS": 10.019150374981109,
+        "pgid": 238,
+        "hostLoadStart": [
+          8.93017578125,
+          11.650390625,
+          12.09326171875
+        ],
+        "exit": 1,
+        "stdoutSHA256": "02059e6469f83f35c650f53732ae03be201ea62003f4ce3924bdbb127ba36f42"
+      },
+      {
+        "label": "focused2",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/focused2.receipt.json",
+        "sha256": "39b03ba90e5583d3266b4ed0de416c10a389cc0d9535a13c096cc0791fc20a22",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "journey-deck"
+        ],
+        "start": "2026-10-15T02:32:15.699709+00:00",
+        "end": "2026-10-15T02:32:24.977506+00:00",
+        "wallS": 9.277649666997604,
+        "pgid": 42102,
+        "hostLoadStart": [
+          13.5595703125,
+          12.50244140625,
+          12.37939453125
+        ],
+        "exit": 0,
+        "stdoutSHA256": "cd07e25bd88767a6ff9d4b98deb02c5aaa23858f17c905282538701d4aafae70"
+      },
+      {
+        "label": "cf1-catalog-membership",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf1-catalog-membership.receipt.json",
+        "sha256": "f5e14a6b237308a4e635a9e06a227aad613e874aa8f53aab6bb175333cf2c6dd",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "excludes created same-printing"
+        ],
+        "start": "2026-10-15T02:33:21.617751+00:00",
+        "end": "2026-10-15T02:33:30.397184+00:00",
+        "wallS": 8.779314332990907,
+        "pgid": 97367,
+        "hostLoadStart": [
+          11.28662109375,
+          12.2255859375,
+          12.29541015625
+        ],
+        "exit": 1,
+        "stdoutSHA256": "be4698a46493c40affca8458a6561f1395681530c2e6131acc3486e9222ad2bc"
+      },
+      {
+        "label": "cf2-controller-membership",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf2-controller-membership.receipt.json",
+        "sha256": "453c6e672ca0709e0496cc65aae285d76d2e9967de90f7ba1340469d403a970f",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "keeps original-owner membership"
+        ],
+        "start": "2026-10-15T02:33:30.432744+00:00",
+        "end": "2026-10-15T02:33:38.205248+00:00",
+        "wallS": 7.77231920894701,
+        "pgid": 97994,
+        "hostLoadStart": [
+          10.9951171875,
+          12.134765625,
+          12.26220703125
+        ],
+        "exit": 1,
+        "stdoutSHA256": "4122b58df10323e5c195fb278610004b2134bbe7d86e1675545841d2d8f0db5c"
+      },
+      {
+        "label": "cf3-printed-cost",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf3-printed-cost.receipt.json",
+        "sha256": "37ab17c7c69942246d7c6661871e268d42fa5b4e6f10de5a05a56cecfe5aff28",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "uses variant and D39 copiable boundary"
+        ],
+        "start": "2026-10-15T02:33:38.237331+00:00",
+        "end": "2026-10-15T02:33:45.813660+00:00",
+        "wallS": 7.576193959044758,
+        "pgid": 98571,
+        "hostLoadStart": [
+          10.5146484375,
+          12.01611328125,
+          12.21923828125
+        ],
+        "exit": 1,
+        "stdoutSHA256": "46083a71bef74edb4b0a2b1f87f7f8fcd3ad3df41e55b6393f2c3d8a1da6855b"
+      },
+      {
+        "label": "cf4-post-entry-delay",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf4-post-entry-delay.receipt.json",
+        "sha256": "6d25b68020b2f2894cdd742f3344f3a0b2a682d12baa0fd41debf5ed2f7be7a6",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "is present on the real stack and ready"
+        ],
+        "start": "2026-10-15T02:33:45.844589+00:00",
+        "end": "2026-10-15T02:33:53.376317+00:00",
+        "wallS": 7.531618209031876,
+        "pgid": 99119,
+        "hostLoadStart": [
+          10.59521484375,
+          11.982421875,
+          12.20458984375
+        ],
+        "exit": 1,
+        "stdoutSHA256": "e10f5a1df0fc4d027115ac9194fcc5b2d25f55ca15e055f1063e63064040dd0d"
+      },
+      {
+        "label": "cf5-missing-strict-recognition",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf5-missing-strict-recognition.receipt.json",
+        "sha256": "4b0b56f3469ce1c2489a96036cb4e71cfb77823657866386973aa5f5363e6b48",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rejects missing and inconsistent required provenance|uses persisted genesis and event replay"
+        ],
+        "start": "2026-10-15T02:33:53.410597+00:00",
+        "end": "2026-10-15T02:34:02.784458+00:00",
+        "wallS": 9.3737344580004,
+        "pgid": 99899,
+        "hostLoadStart": [
+          10.46728515625,
+          11.9326171875,
+          12.185546875
+        ],
+        "exit": 1,
+        "stdoutSHA256": "274a4e2c6e4b5543e51a66b1c9ad50c00e10da77737d48851c4251fdfea99703"
+      },
+      {
+        "label": "integration",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/integration.receipt.json",
+        "sha256": "7d2ea283abc31d2b27458cbaefbdff9ebf931cbf94de4bc52563ffe216aca4bd",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts",
+          "src/engine/continuous/continuous.test.ts",
+          "src/engine/continuous/continuous-zones.test.ts",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/view-knowledge.test.ts"
+        ],
+        "start": "2026-10-15T02:34:16.056153+00:00",
+        "end": "2026-10-15T02:34:21.981291+00:00",
+        "wallS": 5.925008082995191,
+        "pgid": 2782,
+        "hostLoadStart": [
+          18.87451171875,
+          13.82373046875,
+          12.861328125
+        ],
+        "exit": 0,
+        "stdoutSHA256": "804372762df650042b228f3c2a1b87cfcabe3203ebad339f07621940237c68c8"
+      },
+      {
+        "label": "review1",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/review1.receipt.json",
+        "sha256": "10a463fe3b1fa9871d562fb68a0249d1bc024430cf56efdd560dc5d23a29db46",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-15T02:34:54.169339+00:00",
+        "end": "2026-10-15T02:36:10.225747+00:00",
+        "wallS": 76.05617737496505,
+        "pgid": 17088,
+        "hostLoadStart": [
+          26.10400390625,
+          16.1806640625,
+          13.75732421875
+        ],
+        "exit": 0,
+        "stdoutSHA256": "9c2be921c8bd2861d28d1015a2b6979d0f12e3b98fb9de13f2c566cd88cf3e4e"
+      },
+      {
+        "label": "knip",
+        "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/knip.receipt.json",
+        "sha256": "9b2e2babe1a13f0ee18c1ffac9576b5f8123d040eb394805104816ae653c3798",
+        "argv": [
+          "/opt/homebrew/bin/npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-15T02:36:21.543858+00:00",
+        "end": "2026-10-15T02:36:26.767910+00:00",
+        "wallS": 5.214162666001357,
+        "pgid": 71453,
+        "hostLoadStart": [
+          16.90966796875,
+          16.4228515625,
+          14.14306640625
+        ],
+        "exit": 0,
+        "stdoutSHA256": "f33d0b80709b72f65380d0eb371c47047c2d60192300cf44452ddc5bd634e0a3"
+      }
+    ],
+    "successfulFocus": {
+      "tests": 94,
+      "newKeywordCases": 20,
+      "existingJourneyDeckCases": 74,
+      "entrypoints": 1
+    },
+    "integration": {
+      "tests": 100,
+      "files": 5
+    },
+    "ordinaryReview": {
+      "tests": 8975,
+      "files": 306,
+      "typechecks": 0,
+      "lint": 0,
+      "importCycles": 0,
+      "hostLoadScope": "hostLoad in friction is actual review command start; nested checks logged own times/load in raw stdout"
+    },
+    "knip": 0,
+    "fullNotRun": "Finite existing-architecture primitive/callback/one-op guard addition; no state/setup/privacy/view/checkpoint algorithm, infrastructure or config changes. Parent finite admission confirms focused integration instead.",
+    "fuzzNotRun": "No owned production UUID; unweighted engine would not exercise new form. Full original246 acceptance retained.",
+    "noGreenRepeats": true
+  },
+  "actualFailure": {
+    "receipt": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/focused1.receipt.json",
+      "sha256": "9215b5b0dd2b3d2f58856df0ab3a231bfd491567eb14e7cc64f48e777fd41515"
+    },
+    "result": "90 PASS/4 FAIL, two fixture assumptions parameterized both sides",
+    "cause": "Figment copies have figment-copy semantics via public isFigment; materialized event observation precedes triggerQueue matching.",
+    "repair": "Only own contract assertions: public isFigment and earliest materialized keyword/readiness/score0, followed by ready-vs-exhausted watcher score11; created-copy hidden reconstruction also checked. No production repair.",
+    "failedContract": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/focused1-contract.source.txt",
+      "sha256": "f48817f5927671522a888cc3874149316aa07810fdf3293d95aee4a27d482e96",
+      "reconstruction": "Exact initial write-contract.py literal plus actual pre-first-run NonNullable annotation; repaired live source kept separately."
+    },
+    "successfulFinalSource": {
+      "path": "src/engine/effects/primitives/contracts/journey-deck-keyword.contracts.ts",
+      "sha256": "43ad7793b0c4fc426ad28a2ddd9c4cf70980fcdf2bdeff407c993c899c197c29",
+      "bytes": 22509
+    }
+  },
+  "counterfactuals": {
+    "resultManifest": {
+      "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/counterfactual-results.json",
+      "sha256": "cfbadfbe54b27aec87dcc8847e5a44681609d8dfc684ba4fa5a0fc2b9e5bc4f0"
+    },
+    "faults": [
+      {
+        "label": "cf1-catalog-membership",
+        "path": "src/engine/continuous/layers.ts",
+        "baselineSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "mutatedSHA256": "d580e81e850ad82e1dea8f4bf7ce1f2680bb2df24615038aa8338ed16201b015",
+        "exit": 1,
+        "assertionWitness": true,
+        "test": "excludes created same-printing",
+        "restoreSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "coverageQualification": "Own new reader body only",
+        "receipt": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf1-catalog-membership.receipt.json",
+          "sha256": "f5e14a6b237308a4e635a9e06a227aad613e874aa8f53aab6bb175333cf2c6dd"
+        }
+      },
+      {
+        "label": "cf2-controller-membership",
+        "path": "src/engine/continuous/layers.ts",
+        "baselineSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "mutatedSHA256": "01d60d92f10d3cb55d16e3d3e79ca99d483f01d6bb16a7b4f33e25d0ec5c41b2",
+        "exit": 1,
+        "assertionWitness": true,
+        "test": "keeps original-owner membership",
+        "restoreSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "coverageQualification": "Own new reader body only",
+        "receipt": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf2-controller-membership.receipt.json",
+          "sha256": "453c6e672ca0709e0496cc65aae285d76d2e9967de90f7ba1340469d403a970f"
+        }
+      },
+      {
+        "label": "cf3-printed-cost",
+        "path": "src/engine/continuous/layers.ts",
+        "baselineSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "mutatedSHA256": "d371659caa60c870885f67ab7ecc953235ea572bacbd027f7c839b04f6023f73",
+        "exit": 1,
+        "assertionWitness": true,
+        "test": "uses variant and D39 copiable boundary",
+        "restoreSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "coverageQualification": "Own new reader body only",
+        "receipt": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf3-printed-cost.receipt.json",
+          "sha256": "37ab17c7c69942246d7c6661871e268d42fa5b4e6f10de5a05a56cecfe5aff28"
+        }
+      },
+      {
+        "label": "cf4-post-entry-delay",
+        "path": "src/engine/continuous/layers.ts",
+        "baselineSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "mutatedSHA256": "e914e9e35ce3de1ddb95c9808154d00dde385e3fc6d0a8a4c1738a736f4c0ae0",
+        "exit": 1,
+        "assertionWitness": true,
+        "test": "is present on the real stack and ready",
+        "restoreSHA256": "b36339d879bc0307dbb17b53f36684155cbe7a24a051cc81756193ceaea11417",
+        "coverageQualification": "Own new reader body only",
+        "receipt": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf4-post-entry-delay.receipt.json",
+          "sha256": "6d25b68020b2f2894cdd742f3344f3a0b2a682d12baa0fd41debf5ed2f7be7a6"
+        }
+      },
+      {
+        "label": "cf5-missing-strict-recognition",
+        "path": "src/rules/battle/journey-deck-spark-state.ts",
+        "baselineSHA256": "babd26c10f9bbfd14fb0c588669b5cb4bf83f443651f1717654e2bbbdeb68da8",
+        "mutatedSHA256": "88dce97d230386e889190c3742a2d13b1b459583772eadd6c117b05c67d91526",
+        "exit": 1,
+        "assertionWitness": true,
+        "test": "rejects missing and inconsistent required provenance|uses persisted genesis and event replay",
+        "restoreSHA256": "babd26c10f9bbfd14fb0c588669b5cb4bf83f443651f1717654e2bbbdeb68da8",
+        "coverageQualification": "CF5 proves strict origin/recovery recognition, not duplicate-specific mutation",
+        "receipt": {
+          "path": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journey-keyword610/cf5-missing-strict-recognition.receipt.json",
+          "sha256": "4b0b56f3469ce1c2489a96036cb4e71cfb77823657866386973aa5f5363e6b48"
+        }
+      }
+    ],
+    "restoration": "Every changed file restored byte-exact after each own-source fault before integration/review/Knip.",
+    "qualification": "CF5 proves strict provenance/recovery recognition, not duplicate-specific mutation. Duplicate source and hidden original/created reconstruction have positive public contracts."
+  },
+  "failureFamilies": [
+    {
+      "family": "error mid-resolution / partial write",
+      "proof": "rolls back a resolution prefix when a malformed event resolves the static-only node",
+      "qualification": "Deliberately invalid synthetic event runs real createCard prefix then staticOnly resolver; separate resolution transaction rolls back, prior committed play remains."
+    },
+    {
+      "family": "reload/restart",
+      "proof": "uses persisted genesis and event replay to recover a new-op checkpoint with missing origins",
+      "qualification": "Real memory repository checkpoints and GAME_ENGINE_CONFIG decoder; genesis/event fallback yields original final encoding. No ad-hoc config."
+    },
+    {
+      "family": "invalid/stale/refused input",
+      "proof": "preserves membership through public refusal, pending reload, stale inputs and cancel",
+      "qualification": "Ordinary target activation supplies public suspended operation; new static form itself has no input or prompt."
+    },
+    {
+      "family": "concurrent actors / cancel",
+      "proof": "same public fold contract rejects wrong actor during pending operation and replays/cancels without changing membership, committed state or knowledge",
+      "qualification": "Serialized intents, not a threaded race or new protocol."
+    },
+    {
+      "family": "originality/privacy/entry readiness",
+      "proof": "same-printing creation exclusions; owner-control transfer; event-time observation and ready-vs-exhausted watcher; one/two held copies and both-viewer reconstruction",
+      "qualification": "Deterministic synthetic physical identities and explicit costs; no production defaults, strings, timing, statistics or private caches."
+    }
+  ],
+  "logging": {
+    "newEvents": 0,
+    "reason": "Pure static derived keyword emits no effectStarted or private membership list. Existing UUID/physical action/materialized/trigger logs plus declared source and original provenance reconstruct behavior; fixtures verify event-time state and replay."
+  },
+  "qaDisposition": {
+    "bead": "hv-umm2.610",
+    "kind": "capability-qa-disposition",
+    "browserQA": "not-applicable",
+    "reason": "Static-only original physical-deck keyword API consumed by public synthetic engine contracts. No authored production UUID, new UI workflow, prompt, status kind or visual form; existing readiness/view rendering is reused.",
+    "productionUUIDsTransferred": [],
+    "originalAcceptanceOwner": "hv-umm2.246",
+    "originalConsumerUUID": "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+    "originalRecipeRetained": "Full entity authoring/weighted300/preflight/sweep/D21 belongs to246; no local fuzzer or browser invocation can exercise an unauthored production form.",
+    "executedBrowserCalls": 0,
+    "captures": 0,
+    "nativeExports": 0
+  },
+  "resources": {
+    "runtime": [
+      {
+        "label": "focused1",
+        "pgid": 238,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "focused2",
+        "pgid": 42102,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "cf1-catalog-membership",
+        "pgid": 97367,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "cf2-controller-membership",
+        "pgid": 97994,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "cf3-printed-cost",
+        "pgid": 98571,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "cf4-post-entry-delay",
+        "pgid": 99119,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "cf5-missing-strict-recognition",
+        "pgid": 99899,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "integration",
+        "pgid": 2782,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "review1",
+        "pgid": 17088,
+        "settled": true,
+        "collector": "collected"
+      },
+      {
+        "label": "knip",
+        "pgid": 71453,
+        "settled": true,
+        "collector": "collected"
+      }
+    ],
+    "parentSetupGroupsAbsent": [
+      81782,
+      82304
+    ],
+    "newBrowserProviderOrServer": false,
+    "remaining": [],
+    "qualification": "Review-related tests ran under own command group; stdout reports no detached fixture/server group IDs. No feature QA session, observer or heavy command was launched."
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 249,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "review": {
+    "required": "fresh normal Claude Opus5.5 cold core review",
+    "owner": "parent root after exact one commit detached snapshot",
+    "status": "Pending parent asynchronous review, not claimed complete"
+  },
+  "preExistingIssues": []
+}

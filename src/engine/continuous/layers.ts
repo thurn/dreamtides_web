@@ -35,12 +35,13 @@
  * floating spark without consulting the keyword or spark layers for eligibility.
  */
 import { fixedEnergy } from "../dsl/energy";
+import { filterSubjectOf, matchesFilter } from "./characteristics";
 import { assertJourneyDeckSparkCondition } from "../effects/primitives/journey-deck-spark-modifier";
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { namedTriggersOf, worksInZone } from "../dsl/abilities";
-import { matchesCharacterWith, matchingCharactersWith, zoneCountWith, type CharacteristicsReader } from "../dsl/selectors";
-import type { Ability, CharacterRef, Keyword, NamedTrigger, StaticAbility, StaticCondition } from "../dsl/types";
+import { matchesCharacterWith, matchingCharactersWith, zoneCountWith, resolvePlayer, type CharacteristicsReader } from "../dsl/selectors";
+import type { Ability, CardFilter, CharacterRef, Keyword, NamedTrigger, StaticAbility, StaticCondition } from "../dsl/types";
 import { conditionHoldsWith } from "../dsl/conditions";
 import { evaluateValue } from "../dsl/values";
 import { chosenSubtypeOf, mentionsChosenSubtype, withChosenSubtype } from "../effects/primitives/choose-subtype";
@@ -457,6 +458,7 @@ export class Layers {
       controller: entry.controller,
       characters,
       journeyDeckCharacters: (costAtMost) => this.journeyDeckCharacters(entry.controller, costAtMost),
+      journeyDeckCards: (player, filter) => this.journeyDeckKeywordCards(resolvePlayer(entry.controller, player), filter, read),
       read,
       value: (expr) =>
         evaluateValue(state, expr, {
@@ -478,6 +480,15 @@ export class Layers {
           this.through(instance.id, 1).cardType !== "character" || fixedEnergy(instanceCard(this.catalog, instance).costs) > costAtMost) return [];
       if (instance.journeyDeck === undefined) throw new Error("Unknown original journey-deck provenance");
       return instance.journeyDeck ? [instance.id] : [];
+    });
+  }
+
+  /** Keyword eligibility reads the earlier layers and copiable cost, preserving physical owner-origin. */
+  private journeyDeckKeywordCards(owner: Side, filter: CardFilter, read: CharacteristicsReader): InstanceId[] {
+    return Object.values(this.state.instances).flatMap(instance => {
+      if (instance.owner !== owner || instance.status.created || instance.printing.kind !== "card") return [];
+      if (instance.journeyDeck === undefined) throw new Error("Unknown original journey-deck provenance");
+      return instance.journeyDeck && matchesFilter(filterSubjectOf(this.state, this.catalog, instance.id, read(instance.id)), filter) ? [instance.id] : [];
     });
   }
 

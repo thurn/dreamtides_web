@@ -1,4 +1,4 @@
-/** C4-only declaration boundary: required physical origins agree with immutable battle init. */
+/** Original-deck static declaration boundary: physical origins agree with immutable battle init. */
 import { createCatalog, type EngineCatalog } from "../../engine/catalog";
 import { contentAvatarDefinitions, contentCardDefinitions, contentDreamsignDefinitions } from "../../engine/content-catalog";
 import { instanceOrigin, originAbilities } from "../../engine/rules/activation";
@@ -9,7 +9,7 @@ import type { EngineBattleFold } from "./fold";
 import { getBattleInitProvider } from "./journey-battle";
 
 function sourceHasC4(abilities: readonly Ability[]): boolean {
-  return abilities.some(ability => ability.kind === "static" && ability.effect.op === "journeyDeckSparkModifier");
+  return abilities.some(ability => ability.kind === "static" && (ability.effect.op === "journeyDeckSparkModifier" || ability.effect.op === "journeyDeckKeyword"));
 }
 
 function currentCatalog(): EngineCatalog {

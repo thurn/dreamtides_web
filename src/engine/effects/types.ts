@@ -6,6 +6,8 @@ import type { AbandonedPosition, AbilityOrigin, LinkedSourceContext, BattleState
 import type { StepContext } from "../steps/types";
 import type { CharacteristicsReader } from "../dsl/selectors";
 import type {
+  CardFilter,
+  PlayerRef,
   CharacterRef,
   PlayTimeTarget,
   SelfSpec,
@@ -203,6 +205,8 @@ export interface StaticEnv {
   characters(ref: CharacterRef): InstanceId[];
   /** Original physical journey characters, by effective type and copiable cost, in every zone. */
   journeyDeckCharacters(costAtMost: number): InstanceId[];
+  /** Original physical cards owned by the named player, matching the earlier layers in every zone. */
+  journeyDeckCards(player: PlayerRef, filter: CardFilter): InstanceId[];
   value(expr: ValueExpr): number;
   /**
    * Any card's characteristics after the layers before this primitive's own,
