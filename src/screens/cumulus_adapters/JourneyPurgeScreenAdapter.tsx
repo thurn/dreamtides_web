@@ -7,8 +7,9 @@ import { buildJourneyPurgeView } from "./journey-purge-view-model";
 export function JourneyPurgeScreenAdapter() {
   const { state, mutations, journeyContent } = useJourney();
   const view = useMemo(() => buildJourneyPurgeView(state, journeyContent), [state, journeyContent]);
+  const earnedSeq = state.screen.type === "journeyPurge" && state.screen.choice.kind === "beforeBattle" ? state.screen.choice.earnedSeq : undefined;
   if (view === null) return null;
-  return <JourneyPurgeScreen key={`${view.siteId}:${String(view.heldIndex)}:${String(view.choiceIndex)}`}
+  return <JourneyPurgeScreen key={`${view.siteId}:${String(view.heldIndex)}:${String(view.choiceIndex)}:${String(earnedSeq)}`}
     view={view} onPurge={(ids) => mutations.resolveJourneyPurge(view.siteId, view.dreamsignId,
-      view.heldIndex, view.choiceIndex, ids)} onCollect={() => mutations.acceptEssenceSite(view.siteId)} />;
+      view.heldIndex, view.choiceIndex, ids, earnedSeq)} onCollect={() => mutations.acceptEssenceSite(view.siteId)} />;
 }

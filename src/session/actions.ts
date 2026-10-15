@@ -135,7 +135,7 @@ export interface GameActions {
   resolveJourneyDuplication: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, entryId: DeckEntryId | null) => Promise<number>;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
   resolveStarterPurge: (dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
-  resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
+  resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[], earnedSeq?: number) => Promise<number>;
   purgeDeckCards: (
     siteId: SiteId,
     entryIds: readonly DeckEntryId[],
@@ -538,8 +538,8 @@ export function makeActions(append: AppendFn): GameActions {
       emit("RESOLVE_JOURNEY_TRANSFIGURATION", { siteId, dreamsignId, heldIndex, choiceIndex, entryIds: [...entryIds] }),
     resolveStarterPurge: (dreamsignId, heldIndex, choiceIndex, permissionSeq, entryIds) =>
       emit("RESOLVE_STARTER_PURGE", { dreamsignId, heldIndex, choiceIndex, permissionSeq, entryIds: [...entryIds] }),
-    resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
-      emit("RESOLVE_JOURNEY_PURGE", { siteId, dreamsignId, heldIndex, choiceIndex, entryIds: [...entryIds] }),
+    resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds, earnedSeq) =>
+      emit("RESOLVE_JOURNEY_PURGE", { siteId, dreamsignId, heldIndex, choiceIndex, entryIds: [...entryIds], ...(earnedSeq === undefined ? {} : { earnedSeq }) }),
     purgeDeckCards: (siteId, entryIds) =>
       emit("PURGE_DECK_CARDS", {
         siteId,

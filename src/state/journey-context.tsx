@@ -373,7 +373,7 @@ export interface JourneyMutations {
   resolveJourneyDuplication: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, earnedSeq: number, entryId: DeckEntryId | null) => void;
   resolveJourneyTransfiguration: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;
   resolveStarterPurge: (dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, permissionSeq: number, entryIds: readonly DeckEntryId[]) => void;
-  resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;
+  resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[], earnedSeq?: number) => void;
   purgeDeckCards: (
     siteId: SiteId,
     entryIds: readonly DeckEntryId[],

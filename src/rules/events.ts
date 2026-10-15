@@ -135,7 +135,7 @@ export interface EventPayloads {
   RESOLVE_AFTER_BATTLE_DREAMSIGN: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; earnedSeq: number; offeredDreamsignId: DreamsignId | null; purgeIndex?: number };
   RESOLVE_DREAMSIGN_COPY: { sourceDreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; targetHeldIndex: number; expectedTargetDreamsignId: DreamsignId };
   RESOLVE_STARTER_PURGE: { dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; permissionSeq: number; entryIds: DeckEntryId[] };
-  RESOLVE_JOURNEY_PURGE: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; entryIds: DeckEntryId[] };
+  RESOLVE_JOURNEY_PURGE: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; entryIds: DeckEntryId[]; earnedSeq?: number };
   PURGE_DECK_CARDS: { siteId: SiteId; entryIds: DeckEntryId[] };
   DUPLICATE_DECK_ENTRY: { entryId: DeckEntryId };
   SET_DECK_ENTRY_STAT_OVERRIDE: { entryId: DeckEntryId; override: unknown };

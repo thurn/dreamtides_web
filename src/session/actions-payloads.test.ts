@@ -22,6 +22,13 @@ import { testCardId, testDreamsignId, testExplorationActionId, testTutorialActio
 import { AUGURY_DECLINE } from "./actions.fixtures";
 
 describe("game actions facade", () => {
+  it("forwards earning identity only when supplied for a purge permission", () => {
+    const captured: EventDraft[] = [], actions = makeActions((draft) => { captured.push(draft); return Promise.resolve(captured.length); });
+    const siteId = parseSiteId("before729-site"), dreamsignId = testDreamsignId("before729-source");
+    void actions.resolveJourneyPurge(siteId, dreamsignId, 2, 0, [], 19);
+    void actions.resolveJourneyPurge(siteId, dreamsignId, 2, 0, []);
+    expect(captured.map((draft) => draft.payload)).toEqual([{ siteId, dreamsignId, heldIndex: 2, choiceIndex: 0, entryIds: [], earnedSeq: 19 }, { siteId, dreamsignId, heldIndex: 2, choiceIndex: 0, entryIds: [] }]);
+  });
   it("writes physical Dreamsign permission identities and ordinals without widening optional fields", () => {
     const captured: EventDraft[] = [], actions = makeActions((draft) => { captured.push(draft); return Promise.resolve(captured.length); });
     const source = testDreamsignId("permission-source"), target = testDreamsignId("permission-target"), siteId = parseSiteId("earned-site");

@@ -1,3 +1,4 @@
+import { finishBeforeBattlePurge, prepareBeforeBattlePurge } from "./journey/journey-before-battle-purge";
 import { duplicationSiteQuote, journeyDuplicationRecord, resolveJourneyDuplication } from "./journey/journey-duplication";
 import { deckEntryIdFromUnknown } from "../types/identifiers";
 import { journeyDreamsignGains } from "./journey/journey-dreamsign-gains";
@@ -122,7 +123,7 @@ export function reduceGameEvent(
     return ctx.rng(index);
   } };
   const result = routeDomain(state, event, domainContext, modifiers);
-  return finishTransition(state, event, result, modifiers, ctx.seq, () => {
+  return finishTransition(state, event, result, modifiers, ctx, () => {
     const drawIndex = nextRandomIndex++;
     return { value: ctx.rng(drawIndex), drawIndex };
   });
@@ -139,9 +140,11 @@ function finishTransition(
   event: GameEvent,
   result: ReduceResult,
   modifiers: JourneyModifierRegistry,
-  seq: number,
+  ctx: EventContext,
   random: () => { readonly value: number; readonly drawIndex: number },
 ): ReduceResult {
+  const seq = ctx.seq;
+  if (event.type === "BEGIN_BATTLE" && result.outcome === "applied" && result.state.battle === null && result.state.journey.screen.type === "journeyPurge" && result.state.journey.screen.choice.kind === "beforeBattle") return enforceInvariants(event, result, modifiers);
   if (
     result.outcome === "applied" &&
     result.state.journey !== before.journey &&
@@ -199,6 +202,14 @@ function finishTransition(
         ? {}
         : { logRecords: [...(result.logRecords ?? []), ...records, ...applied.logRecords] }),
     };
+  }
+  if (result.outcome === "applied" && event.type === "RESOLVE_JOURNEY_PURGE" && before.journey.screen.type === "journeyPurge" && before.journey.screen.choice.kind === "beforeBattle") {
+    const finalJourney = result.state.journey;
+    const transition = finishBeforeBattlePurge(result.state, before.journey.screen.choice, ctx);
+    if (transition === null || transition.state.battle === null) return bounce(before);
+    const committed = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: transition.state.battle.init.battleId, siteId: transition.state.battle.init.siteId, seq, steps: transition.committedSteps });
+    result = { ...result, state: { ...transition.state, journey: committed.journey }, logRecords: [...(result.logRecords ?? []), ...committed.logRecords,
+      { event: "journey_before_battle_started", fields: { siteId: before.journey.screen.choice.siteId, earnedSeq: before.journey.screen.choice.earnedSeq, battleId: transition.state.battle.init.battleId, entryIds: finalJourney.deck.map(({ entryId }) => entryId), essence: finalJourney.essence, dreamsignIds: finalJourney.dreamsigns.map(({ id }) => id) } }] };
   }
   return enforceInvariants(event, result, modifiers);
 }
@@ -451,10 +462,11 @@ export function routeDomain(
     case "RESOLVE_JOURNEY_TRANSFIGURATION":
       return journeyCase(state, resolveJourneyTransfiguration(journey, payload, ctx, modifiers));
     case "RESOLVE_JOURNEY_PURGE": {
+      if (journey.screen.type === "journeyPurge" && journey.screen.choice.kind === "beforeBattle" && journey.screen.choice.earnedSeq >= ctx.seq) return bounce(state);
       const result = journeyPurgeCase(state, resolveJourneyPurge(journey, payload, modifiers));
       return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_purge_resolved",
         fields: { siteId: payload.siteId, dreamsignId: payload.dreamsignId, heldIndex: payload.heldIndex,
-          choiceIndex: payload.choiceIndex, purges: result.purges ?? [] } }] };
+          choiceIndex: payload.choiceIndex, ...(journey.screen.type === "journeyPurge" && journey.screen.choice.kind === "beforeBattle" ? { earnedSeq: journey.screen.choice.earnedSeq, minimumDeckSize: journey.screen.choice.minimumDeckSize } : {}), purges: result.purges ?? [] } }] };
     }
     case "PURGE_DECK_CARDS":
       return journeyPurgeCase(state, sites.purgeDeckCards(journey, payload));
@@ -676,6 +688,11 @@ export function routeDomain(
       return journeyCase(state, deck.setDreamsignPool(journey, payload));
     // --- battle lifecycle (create / tear down the battle slice) ---
     case "BEGIN_BATTLE": {
+      const prepared = prepareBeforeBattlePurge(state, payload, ctx, modifiers);
+      if (prepared !== null && prepared.journey.screen.type === "journeyPurge" && prepared.journey.screen.choice.kind === "beforeBattle") {
+        const choice = prepared.journey.screen.choice;
+        return { state: prepared, outcome: "applied", logRecords: [{ event: "journey_before_battle_purge_prepared", fields: { ...choice, deckSize: journey.deck.length } }] };
+      }
       const transition = journeyBattle.beginBattleWithCommits(state, payload, ctx);
       if (transition === null || transition.state.battle === null) return bounce(state);
       const applied = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: transition.state.battle.init.battleId, siteId: transition.state.battle.init.siteId, seq: ctx.seq, steps: transition.committedSteps });

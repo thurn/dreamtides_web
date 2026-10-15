@@ -1,3 +1,4 @@
+import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import type { JourneyContent } from "../../data/journey-content";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyPurgeView } from "../../cumulus/screens/JourneyPurgeScreen";
@@ -15,8 +16,8 @@ export function buildJourneyPurgeView(state: JourneyState, content: JourneyConte
   const choice = state.screen.choice;
   const source = currentPurgeSource(choice);
   if (source === undefined) return null;
-  const limit = choice.kind === "essenceSite" ? choice.count : source.maxCount;
-  const instruction = choice.kind === "essenceSite"
+  const limit = choice.kind === "beforeBattle" ? Math.max(0, state.deck.length - choice.minimumDeckSize) : choice.kind === "essenceSite" ? choice.count : currentPurgeSource(choice)!.maxCount;
+  const instruction = choice.kind === "beforeBattle" ? JOURNEY_SITE_MESSAGES.beforeBattlePurgeInstruction(limit) : choice.kind === "essenceSite"
     ? `You may forgo this site's essence to purge ${String(limit)} cards.`
     : `You may purge up to ${String(limit)} cards after this battle.`;
   const node = Object.values(state.atlas.nodes).find((candidate) => candidate.sites.some((site) => site.id === choice.siteId)) ?? null;

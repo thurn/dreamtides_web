@@ -3265,6 +3265,18 @@ Essence, the earned cursor, nor modifier rewards.
 
 ## Journey Purge Effects
 
+A valid journey battle start earns an optional pre-battle purge when the deck
+exceeds a held source's printed minimum. You may purge distinct current deck
+entries, including Bane cards, for free while leaving at least that minimum.
+Choosing zero declines. Held permissions share one window: their legal selections
+form a union, using the lowest applicable minimum and the first held source at
+that minimum for attribution. Copies do not multiply the allowance. The earned
+source, minimum and original battle-start intent persist through source loss,
+later acquisitions and reload. The battle initializes only after the choice and
+all genuine purge observers succeed, using the resulting deck, Essence and
+holdings. A failed choice or battle start commits none of that transaction;
+the same earned permission remains available for retry.
+
 A journey card purge is an authored purge operation on a concrete deck entry.
 Bane cards are eligible unless the effect restricts them. Purging multiple
 entries with the same card UUID counts once for each entry. A purge inside a

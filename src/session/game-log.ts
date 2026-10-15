@@ -117,6 +117,9 @@ export function attachGameLog(
       if (event.type === "BEGIN_BATTLE") {
         settleDeferredOpponentLog(seq, outcome === "applied");
       }
+      if (event.type === "RESOLVE_JOURNEY_PURGE" && record.stateBefore.journey.screen.type === "journeyPurge" && record.stateBefore.journey.screen.choice.kind === "beforeBattle") {
+        settleDeferredOpponentLog(record.stateBefore.journey.screen.choice.earnedSeq, outcome === "applied" && record.stateBefore.battle === null && journeyBattleOf(record.stateAfter.battle) !== null);
+      }
       if (outcome === "applied" && event.type === "END_BATTLE") {
         logBattleVictory(seq, record.stateBefore, record.stateAfter);
       }

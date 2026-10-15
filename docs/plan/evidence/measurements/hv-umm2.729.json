@@ -1,0 +1,891 @@
+{
+  "bead": "hv-umm2.729",
+  "sourceBase": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+  "checkpointUTC": "2026-10-15T08:52:18.116690+00:00",
+  "clockStatus": "Measured uncommitted checkpoint; refresh immediately before the normal Git invocation. Parent retains actual Git end and final measured gap; no forced dates or clock reset.",
+  "dispatch": {
+    "utc": "2026-10-15T07:41:19.415000+00:00",
+    "hostOrdinal": 80644,
+    "rawSHA256": "9c13e6a5a9b3884cec47b4afb7b406e47277cf5679f1b9193b9f8aa6540fd406",
+    "proofSHA256": "2924d3eaddeaccfadf8abd42ce94ba98deed886b2c7a3389b291f4dffbffee78"
+  },
+  "sampling": "UNKNOWN",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "worker-integration-review01 starting load"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "worker-integration-focused01",
+        "exit": 0,
+        "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260"
+      },
+      "localValidationS.review": {
+        "measuredFor": "worker-integration-review01",
+        "exit": 0,
+        "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260"
+      },
+      "localValidationS.knip": {
+        "measuredFor": "worker-integration-knip01",
+        "exit": 0,
+        "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260"
+      },
+      "localValidationS.full": {
+        "measuredFor": "worker-full01",
+        "exit": 0,
+        "sourceOID": "d39e12ec7b7b3484157e9006565c6759459c0b9f",
+        "baseOID": "9f07b24c712e25a3de74ba37886c8291304021eb",
+        "qualification": "Original pre-integration full suite; retained at its actual source OID, not claimed against the combined base."
+      },
+      "localValidationS.negative": {
+        "measuredFor": "worker-negative-suite02",
+        "exit": 0
+      }
+    }
+  },
+  "testDelta": {
+    "files": 3,
+    "lines": 346,
+    "jsdomFiles": 0
+  },
+  "commandReceipts": [
+    {
+      "label": "worker-diff01",
+      "receiptSHA256": "653cce333d07fd2a48970f7c83b6106fcf31cf774ab892f3f42c7d244e463c4f",
+      "argv": [
+        "git",
+        "diff",
+        "--",
+        "src/rules/events.ts",
+        "src/session/actions.ts",
+        "src/state/journey-context.tsx",
+        "src/state/game-journey-context.tsx",
+        "src/screens/cumulus_adapters/JourneyPurgeScreenAdapter.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:16:19.335049+00:00",
+      "end": "2026-10-15T08:16:19.346799+00:00",
+      "exit": 0,
+      "wallSeconds": 0.011636791983619332,
+      "pid": 71964,
+      "pgid": 71964,
+      "load": "{ 5.07 6.27 7.35 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "6e055559182c1e9d4b686755dfe221aeecc4a90d9c945a8dfbc4536e849d2553",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-evidence01",
+      "receiptSHA256": "6c67d1ed99cdc580f89f79d0c634de5b82c66725fb6a8935a2d9b8b2a802076d",
+      "argv": [
+        "python3",
+        "/tmp/worker729-20261015/evidence.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:19:03.261252+00:00",
+      "end": "2026-10-15T08:19:03.345660+00:00",
+      "exit": 0,
+      "wallSeconds": 0.08433641702868044,
+      "pid": 75654,
+      "pgid": 75654,
+      "load": "{ 4.17 5.54 6.87 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "ac74a3dfad7812d6615c57ff2e8904192b2f5b051882d5e09f74c4b3bbdd0f3c",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-focused01",
+      "receiptSHA256": "c6d0cf29001ba0cc039bf026207fb823fc23fe2ebe31375a227d3480a9c7a5af",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:08:03.394824+00:00",
+      "end": "2026-10-15T08:08:12.858796+00:00",
+      "exit": 1,
+      "wallSeconds": 9.463725375011563,
+      "pid": 85450,
+      "pgid": 85450,
+      "load": "{ 10.63 7.27 7.92 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "189bb273cb17d80a5e16666270f3ed1fcd11a5c057af36d0fa0d5cf99823b4bd",
+      "stderrSHA256": "aee519d288a324c7a4c14481572585e63374736f922955a5ae5b528415e80b3d"
+    },
+    {
+      "label": "worker-focused02",
+      "receiptSHA256": "681c8a9fdd9dc1cc3cdcc399c2c2415948f3797392d6a0e0b5699224201053bb",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:09:27.884550+00:00",
+      "end": "2026-10-15T08:09:36.202240+00:00",
+      "exit": 1,
+      "wallSeconds": 8.317472750029992,
+      "pid": 47818,
+      "pgid": 47818,
+      "load": "{ 11.61 9.05 8.58 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "5ac2e9e174725aeb3d7c4fd0e00028ee5b92fed31f6e05e5cb4c900969e4bc66",
+      "stderrSHA256": "b8357a49bf89636548d95766af8235daf9104fc48f73f8d95d1146f769a892bd"
+    },
+    {
+      "label": "worker-focused03",
+      "receiptSHA256": "c175a02394480daa10e387fbf1ef599300840b7e4caa97583a0bc8c417ab4ca1",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:10:42.167514+00:00",
+      "end": "2026-10-15T08:10:47.830381+00:00",
+      "exit": 0,
+      "wallSeconds": 5.662691125005949,
+      "pid": 52759,
+      "pgid": 52759,
+      "load": "{ 6.89 8.20 8.30 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "352ead2cd24c86d94aed0d41dec64b5834e184661430259e02ff664d5f112401",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-focused04",
+      "receiptSHA256": "b86959238538ccb8ee715807dc0436ed10998443654c9e0e0576a05ef6200e07",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:13:22.762764+00:00",
+      "end": "2026-10-15T08:13:32.636446+00:00",
+      "exit": 0,
+      "wallSeconds": 9.873507499985863,
+      "pid": 63285,
+      "pgid": 63285,
+      "load": "{ 6.72 7.44 7.95 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "da3f2c473885e90a91777651acdfe8ea52010bf15989c9058add0aab3e7bbe63",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-focused05",
+      "receiptSHA256": "9e6c91bc1967e345f64b61f36ca44f81bd5e8cd1dfe76124d27e3299f0954101",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:14:30.324525+00:00",
+      "end": "2026-10-15T08:14:36.536233+00:00",
+      "exit": 1,
+      "wallSeconds": 6.211570167040918,
+      "pid": 67658,
+      "pgid": 67658,
+      "load": "{ 5.11 6.83 7.68 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "8ea236a610d39bf22145845c9bb79050f45b4909c757f48bab2efd5d287b5302",
+      "stderrSHA256": "7a6416616c25c251966e2826f5d97d0dc889e0f8404c40754030dd4dc1831158"
+    },
+    {
+      "label": "worker-focused06",
+      "receiptSHA256": "46063030e8a7f1f2bade87071287f0cb495a525727c94941ae39315d010738c0",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-purge-prohibition.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:15:27.821761+00:00",
+      "end": "2026-10-15T08:15:34.137129+00:00",
+      "exit": 0,
+      "wallSeconds": 6.3152166249929,
+      "pid": 70761,
+      "pgid": 70761,
+      "load": "{ 4.85 6.45 7.48 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "3aa17c5c747935c22b083b14930e49ac19a40baf6aa1053506cb9e1def1659e4",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-focused07",
+      "receiptSHA256": "5f4666588412f2780d0da409e81f165dab21a4ee6181d826b75d2b3b287769a3",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:17:14.360226+00:00",
+      "end": "2026-10-15T08:17:20.696098+00:00",
+      "exit": 0,
+      "wallSeconds": 6.33571195800323,
+      "pid": 73288,
+      "pgid": 73288,
+      "load": "{ 4.90 6.04 7.20 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d772956ce6de3108a57f0336ac79ce5e950fa8f10290e004fa7e66ff07f6f809",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-focused08",
+      "receiptSHA256": "9594f850353aa02e48e4314c078306b06e1d30991026d5c43ff1de35aacd6a9d",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:20:20.997951+00:00",
+      "end": "2026-10-15T08:20:26.250446+00:00",
+      "exit": 0,
+      "wallSeconds": 5.25237266701879,
+      "pid": 77400,
+      "pgid": 77400,
+      "load": "{ 3.51 5.12 6.60 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0ae9372adeec776a6d84896fe89aecc9bae1fbe4bc575370ea8444ee995bf5ea",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-full01",
+      "receiptSHA256": "66ad10125526277020ebb8638e917982f7f668bd0d755c062537c382989ee360",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:23:26.797344+00:00",
+      "end": "2026-10-15T08:25:10.717409+00:00",
+      "exit": 0,
+      "wallSeconds": 103.91885979200015,
+      "pid": 81679,
+      "pgid": 81679,
+      "load": "{ 3.15 4.50 6.06 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "6e1a99ec8b1da43dc0de0caece18227866c9aa32384283c85ae63a8acd1fe443",
+      "stderrSHA256": "45adc5b1e8dbbe9f1bf99d2ce894e6fc10ad211dac64fc33ca2a03ebe92188f5"
+    },
+    {
+      "label": "worker-initial-read",
+      "receiptSHA256": "3cd7164a9e4903aaadd748cca5bfbc1d12799e77fb19c438d3c439143240a7db",
+      "argv": [
+        "python3",
+        "-c",
+        "from pathlib import Path; print(Path(\"/tmp/root729-20261015/native-scope-v01.json\").read_text()); print(Path(\"AGENTS.md\").read_text()); print(Path(\"docs/plan/README.md\").read_text()); print(Path(\"docs/plan/engine-design.md\").read_text())"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T07:41:25.560399+00:00",
+      "end": "2026-10-15T07:41:25.584789+00:00",
+      "exit": 0,
+      "wallSeconds": 0.024295207986142486,
+      "pid": 4742,
+      "pgid": 4742,
+      "load": "{ 18.44 14.01 13.31 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d7e81798a009e8eb594880701a3ebcfb8cac0b4dc81a9266870b5ef09bf1c295",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-install",
+      "receiptSHA256": "58d8dff8a102ed9792e47ce4f27de7a7600bb6446a807592f3ca9d631a785bba",
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T07:41:52.252060+00:00",
+      "end": "2026-10-15T07:41:54.985071+00:00",
+      "exit": 0,
+      "wallSeconds": 2.7328832920175046,
+      "pid": 6467,
+      "pgid": 6467,
+      "load": "{ 14.09 13.34 13.09 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-inventory",
+      "receiptSHA256": "21d300b8905853ad085ae54ebcd87ce3a5c0b40ec68341035226440eadff720b",
+      "argv": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,json; paths=[\"AGENTS.md\",\"docs/plan/README.md\",\"docs/plan/engine-design.md\",\"docs/plan/decisions.md\",\"docs/plan/workflow.md\",\"docs/plan/phase-5-content.md\",\"docs/rules.md\",\"src/types/journey.ts\",\"src/rules/reducer.ts\",\"src/rules/battle/journey-battle.ts\",\"src/rules/journey/journey-purge.ts\",\"src/rules/journey/lifecycle.ts\",\"src/rules/invariants.ts\",\"src/rules/replay/replay.ts\",\"src/screens/cumulus_adapters/journey-purge-view-model.ts\",\"src/runtime/journey-site-messages.ts\"]; print(json.dumps([{ \"path\":p,\"bytes\":Path(p).stat().st_size,\"sha256\":hashlib.sha256(Path(p).read_bytes()).hexdigest()} for p in paths if Path(p).exists()],indent=2)); print(Path(\"/Users/dthurn/dreamtides_web/.llms/skills/cumulus/SKILL.md\").read_text()); print(Path(\"/Users/dthurn/.llms/skills/wt/SKILL.md\").read_text())"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T07:41:53.419593+00:00",
+      "end": "2026-10-15T07:41:53.660057+00:00",
+      "exit": 0,
+      "wallSeconds": 0.2403829999966547,
+      "pid": 6543,
+      "pgid": 6543,
+      "load": "{ 14.09 13.34 13.09 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "d57d18eba9551ec16279a5e39f789660c3d9cbac22726a95d0e4498a4740ab13",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-knip01",
+      "receiptSHA256": "8c89c90f7dd46771e678f83c3d9896696d71180e132183c69ceed4ebf5b20503",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:22:16.186587+00:00",
+      "end": "2026-10-15T08:22:20.861852+00:00",
+      "exit": 0,
+      "wallSeconds": 4.6751311250263825,
+      "pid": 80302,
+      "pgid": 80302,
+      "load": "{ 4.83 5.06 6.39 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "1c1fa696f343aa9894c4bcc55ac4823a213c0ab23ccb967991069177bdc0d916",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-negative-preparation01",
+      "receiptSHA256": "4a52f7a7206faabcb5e9eb9d8f811bdf1f580727f3db07adea00131f2da93bf0",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "-t",
+        "starts once after free concrete selection"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:17:54.923288+00:00",
+      "end": "2026-10-15T08:18:04.536910+00:00",
+      "exit": 1,
+      "wallSeconds": 9.613442707981449,
+      "pid": 74323,
+      "pgid": 74323,
+      "load": "{ 5.40 6.06 7.15 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "03de4c638f3fe4f7b40f669bb8c34e1968d0432baf5a9a5bd300cea662acdee3",
+      "stderrSHA256": "bda1caa5ef7ad113ddfd296276e8c64b3f07877cc36921db4aebb79ec9c7bca8"
+    },
+    {
+      "label": "worker-negative-preparation02",
+      "receiptSHA256": "8c12d73fdfbe3bdc3827e4088050651a402faf1353fd7ba7c34fc387a76606de",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "-t",
+        "starts once after free concrete selection"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:23:13.202363+00:00",
+      "end": "2026-10-15T08:23:20.792803+00:00",
+      "exit": 1,
+      "wallSeconds": 7.590282000019215,
+      "pid": 81334,
+      "pgid": 81334,
+      "load": "{ 3.48 4.63 6.13 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "14bcf02563928d50aef5507926c56516562f8245cb2c9bda0883a893d89c1c98",
+      "stderrSHA256": "bda1caa5ef7ad113ddfd296276e8c64b3f07877cc36921db4aebb79ec9c7bca8"
+    },
+    {
+      "label": "worker-negative-receipts01",
+      "receiptSHA256": "33b6964263f2ba7e8472772da3aee206948c1908930d9bb673f8858a2a0c18bf",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "-t",
+        "retains live prohibition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:18:04.616739+00:00",
+      "end": "2026-10-15T08:18:12.460681+00:00",
+      "exit": 1,
+      "wallSeconds": 7.843605791975278,
+      "pid": 74532,
+      "pgid": 74532,
+      "load": "{ 5.28 6.01 7.12 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "bbb759558a88039804b1350e94f2f607c766bf4be4a72af10a9988c543e929a9",
+      "stderrSHA256": "9cf952971c4291575c4e4e253d06b225d100ec36cd5386165fd92ca2a79d51fb"
+    },
+    {
+      "label": "worker-negative-receipts02",
+      "receiptSHA256": "4abd411aebce3e655a57d3dcdb9fb3cfbb97421b7f0fbb277b777f53b48b1847",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "-t",
+        "retains live prohibition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:23:20.858369+00:00",
+      "end": "2026-10-15T08:23:26.690238+00:00",
+      "exit": 1,
+      "wallSeconds": 5.831472833000589,
+      "pid": 81496,
+      "pgid": 81496,
+      "load": "{ 3.28 4.57 6.10 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "63d4bcd7645649b76b3506b20e494dc88ac9b0b8c1db1d63fbb45115eac0186c",
+      "stderrSHA256": "4c73224cfbf64c9b6bffa75872aeca46d7b7d75d1cfa9f12aed39265e128cbbe"
+    },
+    {
+      "label": "worker-negative-suite01",
+      "receiptSHA256": "bc3272a779fdbd9ffc201bcfb285d0d514b7d2b036b40ab89078d58ac0e80527",
+      "argv": [
+        "python3",
+        "/tmp/worker729-20261015/negative-controls.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:17:54.877453+00:00",
+      "end": "2026-10-15T08:18:12.510342+00:00",
+      "exit": 0,
+      "wallSeconds": 17.63245662499685,
+      "pid": 74320,
+      "pgid": 74320,
+      "load": "{ 5.40 6.06 7.15 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "9135228f7338a34762e33aab176d5b5631d60f442f00c9a8a93636898b784bec",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-negative-suite02",
+      "receiptSHA256": "65b31b3bd1bc2e2ea194521466e84c9c0542554e95a21342fed7dc30accf68b7",
+      "argv": [
+        "python3",
+        "/tmp/worker729-20261015/negative-controls.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:23:13.157196+00:00",
+      "end": "2026-10-15T08:23:26.737069+00:00",
+      "exit": 0,
+      "wallSeconds": 13.579649874998722,
+      "pid": 81331,
+      "pgid": 81331,
+      "load": "{ 3.48 4.63 6.13 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "1e3b3e39c89679bf98e0813d1c4daa18a04a6a2cf7947c75278e5d5dbf4f8296",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-prepare01",
+      "receiptSHA256": "d40c35d86d2a72d2d4c01f829f3e7a3e68fa8e91cef76c3b812ef8429eb1f310",
+      "argv": [
+        "npm",
+        "run",
+        "prepare-workspace"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:06:42.726951+00:00",
+      "end": "2026-10-15T08:06:44.973790+00:00",
+      "exit": 0,
+      "wallSeconds": 2.2467340829898603,
+      "pid": 82356,
+      "pgid": 82356,
+      "load": "{ 4.55 6.09 7.63 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0556fc3308ddcdb86b9408eae5a78859ab4a23e775dd2bde5b44446ae4107104",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-review01",
+      "receiptSHA256": "1304b9942810f7e8cbe3fe4330dd911b43dd3d36479155e692b3f9fee509f3ce",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:11:55.378522+00:00",
+      "end": "2026-10-15T08:12:41.710571+00:00",
+      "exit": 2,
+      "wallSeconds": 46.34085766598582,
+      "pid": 57661,
+      "pgid": 57661,
+      "load": "{ 5.25 7.45 8.01 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "fd22c627c17e33a7c6fe527be097061e8503958dc7dc1de9f24add30d6cdbbcf",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-review02",
+      "receiptSHA256": "f95ea0e0e1ba22c98472f1215044fb6c5eec9dcff168aef327c5292e12f9a21d",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:19:03.408019+00:00",
+      "end": "2026-10-15T08:19:44.135509+00:00",
+      "exit": 2,
+      "wallSeconds": 40.726969916024245,
+      "pid": 75659,
+      "pgid": 75659,
+      "load": "{ 4.17 5.54 6.87 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "0987a860d841432732f20eb9fcf3a8359243a0076e2310a87b514533f1682849",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-review03",
+      "receiptSHA256": "9937387dfad352941a88aaed6038c99f97c98750401440c67190229233606d24",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:20:26.313307+00:00",
+      "end": "2026-10-15T08:21:04.550510+00:00",
+      "exit": 2,
+      "wallSeconds": 38.23671149997972,
+      "pid": 77567,
+      "pgid": 77567,
+      "load": "{ 3.51 5.07 6.57 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "7ee84d649b667f64a90d1e17181c77467bdc6cf26e38e5b208a3d3cf935fd8a9",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-review04",
+      "receiptSHA256": "1b638beb994bd165f2171e6d27691bdab5d44335a94f24c0e9ccc4fda9ba04a5",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:21:37.729041+00:00",
+      "end": "2026-10-15T08:22:16.127170+00:00",
+      "exit": 0,
+      "wallSeconds": 38.39765591698233,
+      "pid": 79374,
+      "pgid": 79374,
+      "load": "{ 4.05 4.94 6.40 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "1349450495235bd1bb8856f8b614455d35ac81d8479898dfd1f21ab8fb0d3c34",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-stage1-baseline",
+      "receiptSHA256": "91d1d67776e65cf9662fe58589fbf50a6022f2bf98187850591a67fd4c81e91a",
+      "argv": [
+        "python3",
+        "/tmp/worker729-20261015/baseline.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T07:52:42.460888+00:00",
+      "end": "2026-10-15T07:52:43.068594+00:00",
+      "exit": 0,
+      "wallSeconds": 0.6076079590129666,
+      "pid": 66747,
+      "pgid": 66747,
+      "load": "{ 6.04 8.50 10.55 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "a4c9d9115938f22c286c42041b0c63449ccacf754d15ca9cced95e6434aa0a2e",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-stage1-status",
+      "receiptSHA256": "05171b6647e4be1ed41372f404b90b434d7dc6530184a7cac69aeab055857ae5",
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T07:49:18.843187+00:00",
+      "end": "2026-10-15T07:49:18.888530+00:00",
+      "exit": 0,
+      "wallSeconds": 0.04514420795021579,
+      "pid": 52568,
+      "pgid": 52568,
+      "load": "{ 12.00 11.12 11.83 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-typecheck01",
+      "receiptSHA256": "0a1c2b09236404c48efa5db936bcd7a39ef12f20917676bc9da6e64f2c1b2c64",
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:06:08.974670+00:00",
+      "end": "2026-10-15T08:06:19.324203+00:00",
+      "exit": 2,
+      "wallSeconds": 10.349266291013919,
+      "pid": 81825,
+      "pgid": 81825,
+      "load": "{ 3.11 6.04 7.68 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "7c40c693ef67788674297936a8dc126853e061d0e6102bf5e3f63eb37c75d117",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "worker-typecheck02",
+      "receiptSHA256": "98ecb5d15dc19d49ffadbca6f126b16f363c18da2d21a6df1e17d26801d23170",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:08:28.590721+00:00",
+      "end": "2026-10-15T08:08:49.391093+00:00",
+      "exit": 2,
+      "wallSeconds": 20.799927500018384,
+      "pid": 24659,
+      "pgid": 24659,
+      "load": "{ 16.94 9.02 8.53 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "cf1d52abd6ec7f16496efe26b4db739ea90cb2c41bc5db10df1330b97461c1ba",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-integration-focused01",
+      "receiptSHA256": "e13fc5ed8f5b68fe17606b5095a9431ebc7e96303065bf7d340e51641b9ce71a",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-before-battle-purge.test.ts",
+        "src/rules/journey/journey-before-battle-purge-persistence.test.ts",
+        "src/session/game-log-before-battle-purge.test.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.test.ts",
+        "src/session/actions-payloads.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/rules/journey/journey-purge-prohibition.test.ts",
+        "src/rules/journey/journey-battle-essence.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-starter-acquisition.test.ts",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts",
+        "src/engine/dsl/type-remap-targets.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:41:52.090783+00:00",
+      "end": "2026-10-15T08:41:59.860097+00:00",
+      "exit": 0,
+      "wallSeconds": 7.769151208980475,
+      "pid": 72815,
+      "pgid": 72815,
+      "load": "{ 5.61 5.02 5.08 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "e736255be4fbab2b581f3caca8f34341d34a0dd946551894a4bae099f2dd0997",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-integration-review01",
+      "receiptSHA256": "bc5385a4c5d1de91779f41bc6402aecd635fd99b61f7d83a25868b4623976ad2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:42:56.038893+00:00",
+      "end": "2026-10-15T08:43:38.613711+00:00",
+      "exit": 0,
+      "wallSeconds": 42.57427037495654,
+      "pid": 74459,
+      "pgid": 74459,
+      "load": "{ 3.84 4.64 4.94 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "6cc21ef3aa60d85d7afbce6d4a5fb9f8fed3a4c84fa41498822b1b6ade5b2283",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-integration-knip01",
+      "receiptSHA256": "74ec0a0eb4cd1ed989c75c997f1cd6217a98e302af499af01d34387556f26606",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:43:38.681192+00:00",
+      "end": "2026-10-15T08:43:43.880714+00:00",
+      "exit": 0,
+      "wallSeconds": 5.1992547499830835,
+      "pid": 75214,
+      "pgid": 75214,
+      "load": "{ 4.69 4.76 4.97 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "30aa86442ea6db1f39d3ba23dfcc91bfcc90b1d095957be8ba03721b165d208b",
+      "stderrSHA256": "72974ca5b99b9ef8eafaa09e87d37fb6ef4d02a9f68b659292d6fd093f44fe6b"
+    },
+    {
+      "label": "worker-integration-reapply01",
+      "receiptSHA256": "367a1aab38deac2e10d2bde63f6ac8c9e4138c9e572fc1328dc9afbd872ad1ec",
+      "argv": [
+        "python3",
+        "/tmp/worker729-20261015/integration-reapply-v02.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-prebattle-purge729",
+      "start": "2026-10-15T08:41:37.466322+00:00",
+      "end": "2026-10-15T08:41:37.852625+00:00",
+      "exit": 0,
+      "wallSeconds": 0.3861977080232464,
+      "pid": 72302,
+      "pgid": 72302,
+      "load": "{ 5.38 4.95 5.06 }",
+      "groupRemainingAtExit": [],
+      "stdoutSHA256": "a100caac333c5158fedd56a1dc96ff14a833d60cf5224b158ffe96c7ba64df58",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceFirst": {
+    "proposalSHA256": "ca1270a640d43025f05c381f99b3d47ef9ccbce9a51cc4b1e67a926e2bbd368a",
+    "correctedManifestSHA256": "26ba72bdcf61cf5c6802d58cb405ed51d12427d33c4127b03ccdb51baf30647d",
+    "writeACKSHA256": "3cc17d1f286634e06ceb4298795466177323d14587e92a8b416ed30a9427f7a4",
+    "locationCorrection": "Initial own setup reads and install are retained. Later direct reads omitted workdir and reached primary; those attempts are superseded and provide no owned coverage. Corrected full mandatory documents and source inventory explicitly bind OWNWT/base. No primary application writes or probes occurred. The correction, source-first work, admission, and waits all remain inside the original dispatch window.",
+    "mechanicalCorrections": "Initial broad first-match edits temporarily touched the sibling Transfiguration optional parameter/event declaration. Exact sibling bytes were restored; final payload diff is PURGE only. Initial tsc-before-prepare and test setup/type failures are retained in receipts."
+  },
+  "semanticNegatives": [
+    {
+      "label": "worker-negative-preparation02",
+      "expectedNonzero": true,
+      "exit": 1,
+      "originalSHA256": "fc891b263a952d093f490adf8c669b0abe85bc306982bfe612a5190da62a5274",
+      "mutatedSHA256": "e8e2930709bfb1e9f69d986344513465776f26fef0b44dabe1df0965c4a3d1b0",
+      "restoredSHA256": "fc891b263a952d093f490adf8c669b0abe85bc306982bfe612a5190da62a5274"
+    },
+    {
+      "label": "worker-negative-receipts02",
+      "expectedNonzero": true,
+      "exit": 1,
+      "originalSHA256": "fc891b263a952d093f490adf8c669b0abe85bc306982bfe612a5190da62a5274",
+      "mutatedSHA256": "9346dd559a9f6d03d977b76f766b53f5fc4ed855ebb8ec24c1140a460d317eed",
+      "restoredSHA256": "fc891b263a952d093f490adf8c669b0abe85bc306982bfe612a5190da62a5274"
+    }
+  ],
+  "qaAccounting": {
+    "own": "Public synthetic reducer/local-log/fold, real engine/provider, production deferred-provider host logging, LOAD and actual GAME codec, existing picker projection/action forwarding. Cumulus screen/picker unchanged.",
+    "production": "No actual beforeBattle production browser workflow claimed. Production Scorpion leaf/registration is exclusively273 and absent at this base. Enabled site/browser and original all-four-UUID/P8/weighted/full-recipe/final acceptance remain mandatory273 final join. No private enablement or runtime harness added.",
+    "opening269": "Parent native08:14 audit:269 in_progress, no landed mapping/candidate/C2. Own physical removed-entry plus same-UUID surviving deck contract is proved at final ordinary provider boundary; actual269 guarantee integration remains conditional final join."
+  },
+  "integrationHistory": {
+    "originalSourceOID": "d39e12ec7b7b3484157e9006565c6759459c0b9f",
+    "originalBaseOID": "9f07b24c712e25a3de74ba37886c8291304021eb",
+    "originalCandidate": "01a13eb2-9a7d-7c43-850b-ddcc7bbf151c",
+    "originalCandidateTerminal": "merge-conflict; cancel returned already-terminal; no authorization or promotion",
+    "originalReview": "Fresh reviewer cold_prebattle_purge729 interrupted before a complete report; no accepted review or scope credit. Final updated range requires a new fresh reviewer.",
+    "parkedCheckpointOID": "aa31ef52874e494db74f2308df9ae3bb3a68c44d",
+    "updatedTemporaryCheckpointOID": "b0a36e75a0179d8cbb41785ce32b97fe8cd69f86",
+    "newCertifiedBaseOID": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+    "temporaryCheckpoints": "Unsubmittable recovery checkpoints retained; final normal amendment authorized by the parent independent audit and native final-amend ACK. Actual final Git outcome and timing gap are external final-proof-v02 evidence.",
+    "certifiedPeerChanges": "731 remapped target-reference memo and732 committed Four-Suit prevention. Own reapply restores only lifecycle import/LOAD assertion and replay import/decode assertion; exact original23 product added/deleted lines match after subtracting the new base. Peer guards remain intact.",
+    "sourceAuthority": {
+      "path": "/tmp/root729-20261015/integration-conflict-v01/park-authority-v01.json",
+      "sha256": "bfc21625604fc476d26e207e600961a07c24d332dbf6a37eb7864196e9850a10"
+    },
+    "reapplyACK": {
+      "path": "/tmp/root729-20261015/integration-reapplyack-v01-native.stdout",
+      "sha256": "14dbfd1d741bb01c57a9c1528dc7f200dd6c78d92a344c11d9fece3f0b3a02d8"
+    },
+    "contributionProof": {
+      "path": "/tmp/worker729-20261015/integration-reapply-proof-v02.json",
+      "sha256": "e7fa3293bd0e45f7b111ef9a55670ad04cfb905af35c8e09377fa560568d5fe7"
+    },
+    "clock": "Original07:41:19.415Z dispatch includes source-first work, corrections, admission, checks, original commit, failed integration, park/update, reapply, coordination and all waits through the eventual final amendment. No reset or date override.",
+    "finalAmendACK": {
+      "path": "/tmp/root729-20261015/integration-final-amendack-v01-native.stdout",
+      "sha256": "a792edc9f7f2d9dae83601e393355a4107d028b1650b38c0782873a9adf36524",
+      "nativeUTC": "2026-10-15T08:49:24.209733Z"
+    },
+    "finalAmendAudit": {
+      "path": "/tmp/root729-20261015/integration-independent-audit-v01.json",
+      "sha256": "9c28172671855db10abf7d703304c67f5a2d93bb22a6e66aef91454dd5a042ab"
+    }
+  },
+  "validationScopes": {
+    "originalFull": {
+      "label": "worker-full01",
+      "sourceOID": "d39e12ec7b7b3484157e9006565c6759459c0b9f",
+      "baseOID": "9f07b24c712e25a3de74ba37886c8291304021eb",
+      "testFiles": 407,
+      "tests": 10842,
+      "productionBundle": "passed",
+      "qualification": "Workflow892-929 retains this original full evidence. Additive guard integration received focused combined checks and ordinary review; no duplicate heavy full or new combined-full claim."
+    },
+    "combined": {
+      "baseOID": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+      "focusedLabel": "worker-integration-focused01",
+      "focusedFiles": 12,
+      "focusedTests": 167,
+      "reviewFiles": 153,
+      "reviewTests": 7339,
+      "scope": "Own47 plus legacy purge/prohibition/acquisition/272, landed732 checkpoint and731 remap targets; ordinary review and Knip on the combined product bytes.",
+      "productContributionProofSHA256": "e7fa3293bd0e45f7b111ef9a55670ad04cfb905af35c8e09377fa560568d5fe7",
+      "productFreezeSHA256": "292816435ea243defcf523475ff44d95a9656920f46246d2a192ec69af4da164"
+    }
+  }
+}

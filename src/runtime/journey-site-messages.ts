@@ -1,5 +1,6 @@
 /** Player-facing journey copy shared by screen builders and Cumulus controls. */
 export const JOURNEY_SITE_MESSAGES = {
+  beforeBattlePurgeInstruction: (count: number) => `You may purge up to ${String(count)} cards before this battle.`,
   starterPurgeTitle: "Purge Starter Cards",
   starterPurgeInstruction: (count: number) => `You may purge up to ${String(count)} starter cards from your deck.`,
   purgeCount: (count: number) => `Purge ${String(count)}`,

@@ -182,6 +182,7 @@ export interface CardSourceDebugState {
 
 /** Printed journey purge permissions and validated domain occurrences. */
 export type JourneyPurgeEffect =
+  | { readonly kind: "beforeBattlePurge"; readonly minimumDeckSize: number }
   | { readonly kind: "afterBattlePurge"; readonly maxCount: number }
   | { readonly kind: "replaceEssenceWithPurge"; readonly count: number }
   | { readonly kind: "preventPurge" };
@@ -315,7 +316,23 @@ export interface AfterBattlePurgeSource {
   readonly maxCount: number;
 }
 
+export interface BeforeBattleJourneyPurgeChoice {
+  readonly kind: "beforeBattle";
+  readonly siteId: SiteId;
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly minimumDeckSize: number;
+  readonly earnedSeq: number;
+  readonly seed: JourneyState["seed"];
+  readonly seedOverride: number | null;
+  readonly timestamp: string;
+  readonly nodeId: JourneyState["currentDreamscape"];
+  readonly completionLevel: number;
+  readonly continuation: Extract<Screen, { type: "site" }>;
+}
+
 export type JourneyPurgeChoice =
+  | BeforeBattleJourneyPurgeChoice
   | AfterBattleJourneyChoice
   | { readonly kind: "essenceSite"; readonly siteId: SiteId;
       readonly dreamsignId: DreamsignId; readonly heldIndex: number; readonly count: number };

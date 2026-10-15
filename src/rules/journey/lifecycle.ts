@@ -1,4 +1,5 @@
 import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
+import { assertBeforeBattlePurgeCheckpoint } from "./journey-before-battle-purge";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey-starter-acquisition";
 import { validJourneyDuplicationScreen } from "./journey-duplication";
 import { validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey-on-gain";
@@ -461,6 +462,7 @@ export function validateLoadedState(
   const snapshot = payload.snapshot;
   if (!isJourneyStateShape(snapshot, registry)) return null;
   if (snapshot.seed !== state.journey.seed) return null;
+  try { assertBeforeBattlePurgeCheckpoint({ journey: snapshot, battle: payload.battle ?? null }); } catch { return null; }
 
   const before = state.journey;
   if (before.avatar != null && snapshot.avatar == null) return null;
