@@ -1,0 +1,241 @@
+{
+  "bead": "hv-umm2.288",
+  "scope": "Evidence-only original smaller-hand/cost-discount acceptance",
+  "sourceBase": "da48bc109028422917d7d2fdc369cb44f90e2a13",
+  "implementDispatch": "2026-10-15T20:25:45.561Z",
+  "evidenceCutoff": "2026-10-15T21:15:31.521795+00:00",
+  "clockQualification": "Original native implementation dispatch through this actual metadata cutoff includes all research, admission waits, runtime, checks, helper authorship and parent evidence clarification. Final fast checks and the actual parent amend are externally measured from this cutoff through actual Git completion. Final repository bytes are fixed before their checks; actual Git wall/CPU and the full dispatch-inclusive interval are retained externally.",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.288",
+  "acceptanceJoin": "final-v01/acceptance-join.json",
+  "artifactManifest": "final-v01/artifact-manifest.json",
+  "sourceProof": "final-v01/source-proof.json",
+  "resourceProof": "final-v01/resource-absence-proof.json",
+  "actualCommandReceipts": "final-v01/command-receipts.json",
+  "parentProofs": "final-v01/parent-proof-index.json",
+  "visualJudgment": "final-v01/visual-judgment.json",
+  "finalValidationIndex": "final-v01/validation/final-validation-index.json",
+  "authorTail": "final-v03/author-git-tail.json",
+  "coverage": {
+    "authoredActions": 29,
+    "publicProducerSeatComparisons": 58,
+    "controlledDesktop": 40,
+    "eligibleBaseUUIDEachController": 20,
+    "mobileExtra": 1,
+    "genuineWorkflows": 1,
+    "nativeGames": 42,
+    "nativeLogRows": 2069
+  },
+  "sample": "stage1/sample20-proposal.json",
+  "qualifications": [
+    "All controlled sampled physical cards are base variants. Child639 supplies separate synthetic Amplified/nonzero/stacked/cancellation coverage.",
+    "Controlled original source entries have permanent energy reduction printedCost minus one; isolated temporary DTO contributes exactly one more. Baseline1 at0energy is unpayable; actual ordinaryplay costs0, emits cardPlayed/resolved, and emits no nonzero energyChanged payment. Real postplay gains remain.",
+    "Each public comparison records all forty affected entries with the intended cost-reduction delta of one and ordered four-card hand versus five; the retained fifth card moves to the deck. Their printing, identity and permanent variant fields are preserved. All forty opposite physical objects and effective costs match the baseline, allowing only enteredZoneAt event-order offsets.",
+    "Controlled persisted public no-setup start uses one disclosed LOAD_STATE and normal UI/AI payment. Enemy policy declares actual source play then challenge/publicpass.",
+    "Genuine scene retains its original23deckentries padded to46physicalentries, actual UIchoice and nativeBEGIN_BATTLE. Only prechoice siblingvisitation/derivedrunId preparation is administrative; no postreward LOAD_STATE.",
+    "Explicit DEBUGterminal victory checks ordinary END_BATTLE consumption/refusals only; no naturalvictory or fulljourney claim.",
+    "Stocklab230pass170ineligibleSkip is control only. Qualified historical300 uses exactsame20/runtimeclosure and randomdeckmods, not nextBattleDTO; it supplies no current execution or DTO/UI/D21credit and its1144.851154s is outside current totals."
+  ],
+  "historicalEvidence": {
+    "at": "2026-10-15T20:28:23.399725+00:00",
+    "historicalSource": "7fbaab35c0bfaa869848225e4ca4ceb499bf34b9",
+    "currentSource": "da48bc109028422917d7d2fdc369cb44f90e2a13",
+    "existingFrozenFilesVerified": 2693,
+    "mismatches": [],
+    "additionalFiles": [
+      "src/battle/integration/deck-mods/fast.contracts.ts",
+      "src/battle/integration/deck-mods/reclaim.contracts.ts"
+    ],
+    "sameOrdered20UuidSample": true,
+    "uuidSample": [
+      "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+      "7dd2214f-8d16-453a-9f28-62712e64eae1",
+      "7ffb1179-6c94-4f80-9613-ece2b799f19d",
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+      "06a4709d-fbef-4ea2-aa5e-caa2beac80ab",
+      "7947e9db-a85e-4277-a42a-8d45f7475295",
+      "5a747998-7219-4e23-be42-b8cb3be12348",
+      "29c4c45d-33df-42ac-bf28-387eb00264aa",
+      "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+      "3cc9253a-4db6-4b02-92d6-a37805d192fb",
+      "45e3d703-7efc-4dc2-b854-33211f8d4f11",
+      "fbf32510-0bad-4567-859f-b3db6d7be5d5",
+      "491e4233-0911-46ed-bced-0498e69b5bba",
+      "dcaba429-6fbc-4ea5-b063-871134ccd03b",
+      "acefcfcf-cba5-46ec-913e-32f1091afbda",
+      "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+      "08fe3190-f559-4152-941d-33ec4180f509",
+      "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+      "cc98441a-a8f9-421f-9895-423bd7fc31b4"
+    ],
+    "artifacts": {
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/harness-v01/weighted300.packet.json": "eacb4d1f506978a9c75af0bc5f8b30f29e2714e6706dcd550fa0e079b6b30fba",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/harness-v01/weighted300.receipt.json": "2a4ef6f1a831fae74e7175707345387f03bd61fdfdb6277fa70beef80f00f275",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/harness-v01/weighted300.stdout": "798cfa8a70a5887cc5dc9dd65ac382a602252fe037997a253b8c3b3d857a2edd",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/harness-v01/weighted300.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/harness-v01/functional-freeze.json": "1c020fc6b8265e446d00f321cc5fa832f9dc3a95d33dab449108fb6fe3921283",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.287/stage1/sample20-proposal.json": "dc4814c3e7a2b26d69d50471dd914b51aef5f725e89e8e05a0bd530384925522"
+    },
+    "qualification": "Proposed source-qualified reuse of actual prior 300-game weighted random deck-mod run only. Same exact weighted UUID sample, all existing runtime/config/content frozen bytes unchanged; additions are two test-only contract modules. Historical run is not a current execution and supplied no smaller-hand DTO, UI, real producer, lifetime or D21 credit."
+  },
+  "staticAuthoringDiagnostics": "stage1/static-authoring-diagnostics.json",
+  "runtimeNegativeEpochs": [],
+  "ordinaryFoundationAvailability": {
+    "unavailable": 1,
+    "actionId": "92feb9c6-efb6-48da-ba52-936841f17de8",
+    "encounterCardId": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+    "evidence": "harness-v02/baseline-availability.json",
+    "qualification": "Public actual29producer fixture expands fixedpool to8copies and appends20real sample entries so sibling actions have legitimate offer candidates; all29resolved. Ordinaryfoundation availability is diagnostic, no repair inference."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual final review wrapper start2026-10-15T21:00:33.414533Z",
+        "value": 4.78
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "syntax-run-browser",
+      "start": "2026-10-15T20:35:53.223827+00:00",
+      "load": 13.48
+    },
+    {
+      "command": "stock-lab-control",
+      "start": "2026-10-15T20:36:08.242138+00:00",
+      "load": 12.08
+    },
+    {
+      "command": "syntax-genuine-smaller",
+      "start": "2026-10-15T20:35:52.635588+00:00",
+      "load": 13.48
+    },
+    {
+      "command": "focused",
+      "start": "2026-10-15T20:35:56.775301+00:00",
+      "load": 12.8
+    },
+    {
+      "command": "syntax-network-observer",
+      "start": "2026-10-15T20:35:52.927053+00:00",
+      "load": 13.48
+    },
+    {
+      "command": "syntax-controlled-smaller",
+      "start": "2026-10-15T20:35:52.338864+00:00",
+      "load": 13.48
+    },
+    {
+      "command": "browser-command",
+      "start": "2026-10-15T20:38:41.526745+00:00",
+      "load": 7.18
+    },
+    {
+      "command": "node-public",
+      "start": "2026-10-15T20:36:18.047485+00:00",
+      "load": 10.83
+    },
+    {
+      "command": "review",
+      "start": "2026-10-15T21:00:33.414533+00:00",
+      "load": 4.78
+    },
+    {
+      "command": "knip",
+      "start": "2026-10-15T21:00:37.898274+00:00",
+      "load": 5.36
+    },
+    {
+      "command": "friction-schema",
+      "start": "2026-10-15T21:00:47.442128+00:00",
+      "load": 5.61
+    },
+    {
+      "command": "owned-evidence",
+      "start": "2026-10-15T21:00:47.797152+00:00",
+      "load": 5.61
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "rulesDecisions": [],
+  "sourceRepairs": [],
+  "reviewDisposition": "Parent assessed actual four evidence files only, noncore/no primitive/prompt/phasegate; no formal cold code review required.",
+  "delivery": "Parent owns exact-source candidate submission, authorization and certified delivery. The final unsubmitted source remains one Conventional Commit above the original base.",
+  "finalValidation": {
+    "index": "final-v01/validation/final-validation-index.json",
+    "indexSha256": "37516f7df691618ce67ec97f7044b8748f87526d3dafa7e8c4f20ba5c9864b61",
+    "actualScope": {
+      "review": "docs-aware friction-records schema only",
+      "knip": "whole-repository unused-code check after prepare, followed by live asset restoration",
+      "friction-schema": "allrecords schema only",
+      "owned-evidence": "exactfour staged paths,2JSON/82JSONLrows,whitespace"
+    },
+    "commands": {
+      "review": {
+        "receipt": "final-v01/validation/review.receipt.json",
+        "sha256": "b444ee63dfdf40a53faad1ad3b7e743adba897d4d758029d4d0a22049ea2cf3f",
+        "exit": 0,
+        "wallS": 0.4533237079740502,
+        "userS": 0.23054299999999997,
+        "systemS": 0.19650199999999998
+      },
+      "knip": {
+        "receipt": "final-v01/validation/knip.receipt.json",
+        "sha256": "eeab75a025f6168e963c24fe39eeb79e307ff4d33754808332f740fc5c59f4b9",
+        "exit": 0,
+        "wallS": 5.3302745840046555,
+        "userS": 4.448526,
+        "systemS": 1.681187
+      },
+      "friction-schema": {
+        "receipt": "final-v01/validation/friction-schema.receipt.json",
+        "sha256": "6658a5c072f6b2f6b7bb8e0eab95efe7a2451d6118a1a38398621f52d9774986",
+        "exit": 0,
+        "wallS": 0.24368608300574124,
+        "userS": 0.08914,
+        "systemS": 0.08916199999999999
+      },
+      "owned-evidence": {
+        "receipt": "final-v01/validation/owned-evidence.receipt.json",
+        "sha256": "127e0b45f067c2cb07e5661a23d4c9f9efceeb6db0477038ed8691db6c3845fb",
+        "exit": 0,
+        "wallS": 0.17247995897196233,
+        "userS": 0.05466699999999999,
+        "systemS": 0.111937
+      }
+    },
+    "qualification": "Actual pre-tail metadata epoch. Exact original packet input bytes are preserved by independently matching four reconstructed snapshots to every recorded input hash. Review, Knip and initial schema/JSON/whitespace were not rerun; final metadata schema and exact-four-file checks have their separate external index."
+  },
+  "currentLocalCommandTotals": {
+    "count": 12,
+    "wallS": 1077.412609916937,
+    "userS": 291.74082000000004,
+    "systemS": 133.959892,
+    "qualification": "Actual original twelve-command epoch only; wallsum excludes gaps, admissions and research, which remain in the implementation interval. Historical300wall1144.851154s excluded. The final-v02 and final-v03 metadata check receipts and actual wall/CPU are published in their separate external indices."
+  },
+  "warnings": {
+    "setupAdvisories": 17,
+    "focusedIsolatedCacheMissingArtWarnings": 259,
+    "knipIsolatedCacheMissingArtWarnings": 259,
+    "liveAssetRestoration": "both actual restore steps linked full564card/32portrait/32cutout/153dreamsign/226journey/521exploration assets",
+    "qualification": "Isolated cached fixture warnings are recorded separately from actual browser art/geometry/Caps conclusions."
+  },
+  "finalResourceProof": "final-v02/final-resource-absence-proof.json",
+  "finalGenerationIndex": "final-v03/final-generation-index.json",
+  "finalMetadataValidationIndex": "final-v03/validation-index.json",
+  "metadataGenerationManifest": "final-v03/artifact-manifest.json",
+  "priorValidationInputs": "final-v02/prior-validation-inputs/index.json",
+  "metadataRepair": {
+    "previousUnsubmittedSource": "9d621892d11a9b8aea52a47e1ef6b652e3115fff",
+    "scope": "Clarify affected versus opposite physical comparison wording and refresh the actual pre-Git cutoff. Runtime/source/test behavior and every accepted result are unchanged.",
+    "preservedPreRepairSourceSnapshots": "final-v03/pre-repair-source/",
+    "priorAuthorTail": "final-v02/author-git-tail.json",
+    "finalAuthorTail": "final-v03/author-git-tail.json",
+    "qualification": "One unsubmitted local source is amended before any candidate operation; final source remains one commit above its original base. Original dispatch clock includes parent repair and all admission waits."
+  }
+}
