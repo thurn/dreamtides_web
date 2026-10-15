@@ -1,0 +1,951 @@
+{
+  "bead": "hv-qgxa",
+  "phase": 5,
+  "sourceBase": "b42f44c7b19044b609cc333c0aeaadc5da9974fa",
+  "previousRetrospective": "hv-umm2.752",
+  "covers": [
+    "hv-jxsl",
+    "hv-kjgt",
+    "hv-umm2.271",
+    "hv-umm2.275",
+    "hv-umm2.279",
+    "hv-umm2.280",
+    "hv-umm2.281",
+    "hv-umm2.282",
+    "hv-umm2.286",
+    "hv-umm2.287",
+    "hv-umm2.292",
+    "hv-umm2.293",
+    "hv-umm2.294",
+    "hv-umm2.631",
+    "hv-umm2.632",
+    "hv-umm2.633",
+    "hv-umm2.634",
+    "hv-umm2.738",
+    "hv-umm2.749",
+    "hv-umm2.751",
+    "hv-umm2.752",
+    "hv-umm2.753",
+    "hv-umm2.754",
+    "hv-umm2.756",
+    "hv-umm2.757",
+    "hv-umm2.759"
+  ],
+  "originalAuditDispatch": "2026-10-15T20:49:33.665Z",
+  "sampling": "UNKNOWN",
+  "recordCutoff": "2026-10-15T21:02:36.720215+00:00",
+  "auditKind": "Sole read-only Sage; all26 compactfrictionactualreturnedrecords and78hashes independently verified; all52 measurement/native structural and relevantsemantic inspection, no blanketnestedfixturebyteclaim",
+  "scopePacketSHA256": "025fdae5244223318dbc3e4ed78b441785db7858d1e2d42fde2db5bf4b410fa2",
+  "inputHashes": [
+    {
+      "bead": "hv-jxsl",
+      "frictionSHA256": "c4b69edd6559554586571081ed7e0eca1ee777a8e21790fd9a5d64cb6ef8ab9e",
+      "measurementsSHA256": "5737b26f66dbeb2674c26ef003fd0c63ed1b82eb779616802fa1718a6a93e81b",
+      "nativeSHA256": "2bb79312c227f2b4b3334ea7fd7a33109b2d3e63b1ca2f056b5aa6c9f39e7ac2"
+    },
+    {
+      "bead": "hv-kjgt",
+      "frictionSHA256": "567f994b77a975a5bed52a55e7183a927e8668138a993517d1cd93f4bef39724",
+      "measurementsSHA256": "08f9cee2d2a72fba1a4ab1ae815b3cad68df147eca3c4510489dd33334a4e228",
+      "nativeSHA256": "19756b94c5b207fd7c0471049bcec110278f33ef1c8e684c43621647355e5aa4"
+    },
+    {
+      "bead": "hv-umm2.271",
+      "frictionSHA256": "f95e36e9f92385cc95664e6755973379f8e957fd20178b12ab8b53aed18b10cb",
+      "measurementsSHA256": "f3c850d206c4b56ef24dbe6ae48303178b0dbba90c7ab21e350123e43f58bb67",
+      "nativeSHA256": "fd5a8fc0a51a38a2c7ca60f5707cdf17abed6906dc0d44376a4228805d0d4b74"
+    },
+    {
+      "bead": "hv-umm2.275",
+      "frictionSHA256": "c19525fe55236064754f4b668ff27f9d731fb9eee6fe96c4e87475008fbed6da",
+      "measurementsSHA256": "298cd59fff2cfecdc99920d7f49b459e7a49644367e119bd200800eab6c25c22",
+      "nativeSHA256": "7c00b000c970e94596ea3181ba31014dd83e58fb5ea0258ff70818e67a1705c8"
+    },
+    {
+      "bead": "hv-umm2.279",
+      "frictionSHA256": "5209a58c2745e6bd9a1c52b048c7d1da845c3419f8d9e8bf2c8f9137ace6afd9",
+      "measurementsSHA256": "bc80d24dbb2474540ac51f2a719cacc974e4ad1b7c9a7fb924f5163b1ae765d1",
+      "nativeSHA256": "2fd65b25aa586aae43448ef8562b3950587692363bd1a66ec40f52a6f7805172"
+    },
+    {
+      "bead": "hv-umm2.280",
+      "frictionSHA256": "60e0399d45950d4fc6fa11962bbc34e8fe92ca593f55c2ee4a5f1b46c0a41c5d",
+      "measurementsSHA256": "22f6f0aed980e4dfabf0248284ea83774dae2da0460361677acd0d0bd1735b49",
+      "nativeSHA256": "fdc690e8a1a1e5a6aa3cfd5ad4202a6fbfc18fdf97b706ac4d563346be158f09"
+    },
+    {
+      "bead": "hv-umm2.281",
+      "frictionSHA256": "9abba71f4aff1d9057304d37ea192abfce6bcbdc252ebb8219526cbc68e1aab1",
+      "measurementsSHA256": "17f6c095ae00419cdd4d13265c9e262104032ee00e593627e8e0d3c7adc6a683",
+      "nativeSHA256": "26511bd2bd169843da89c63096c89f428ad0413307bde8c143ea0db3c62f42b7"
+    },
+    {
+      "bead": "hv-umm2.282",
+      "frictionSHA256": "61432ddc50ba0fa1f606c7cab7b3d2df74dfc963911f40557bf8b2364bda52e0",
+      "measurementsSHA256": "b20dcc31ebf1beea37212e3e424e646d51f14a7c20817083cfea5c024472d821",
+      "nativeSHA256": "424a5ebd44e5f5d63a647a9121cbbb412f676e0ee037b28084ea929d4f4daa8e"
+    },
+    {
+      "bead": "hv-umm2.286",
+      "frictionSHA256": "20036d1c54ab38e2e88bfd85efe8477a49131c094ace07b05dd731b998ae0a5e",
+      "measurementsSHA256": "baaf060019c31b035d5baee89a4a1b8c0a18b6a2f2f4e16866dac4b7506b0085",
+      "nativeSHA256": "85350f93dd41d1424ec6c744b799ef01be672a1f6ec80262b7477d4d1ea56f52"
+    },
+    {
+      "bead": "hv-umm2.287",
+      "frictionSHA256": "f04cae49da46553341bbaeeaad186a803b085aad70d5f96881ff17bad4689ecc",
+      "measurementsSHA256": "8f282b6e7a153b7b2b9cf4597ff4e705f92a646c67ae9a6b858e0f161de4afad",
+      "nativeSHA256": "d989bcb4ebd1b03ba6e1eb41f7470dd6cde10496310e58ef64a7af625c0d9129"
+    },
+    {
+      "bead": "hv-umm2.292",
+      "frictionSHA256": "bd311bed5a526dbc628bc6289163878bc952011c483fbcdc2ed02079c5fab43d",
+      "measurementsSHA256": "e6e3e2aa91e04c70db9bff4095ccce69fc21a17eb4dcfadc969cc4ac4c093d8d",
+      "nativeSHA256": "b76ae6260d05c2fb23472da102b6ad89556204857448de1e5ef0e497f1b4ad0f"
+    },
+    {
+      "bead": "hv-umm2.293",
+      "frictionSHA256": "d05154e68939e9f056d5d887df0d77c2b37af50bad43174dc07c6a5db1cb7f4d",
+      "measurementsSHA256": "80274d5e1af1baa30859a8655984e28660699fd9579d4199faea4e25ffd7b456",
+      "nativeSHA256": "7402f7a3217ccab68f1068fcba20b30f6e2a6977ad54b4db97b00ad9a79cefc5"
+    },
+    {
+      "bead": "hv-umm2.294",
+      "frictionSHA256": "d38dddf8772a8d72bd3f75a57b6fecdd0172fadf2dba3012d057b3afec911096",
+      "measurementsSHA256": "3e29bd6a5c48214e5211b167df69c3e6018bce763c9ae014a67357566533ed49",
+      "nativeSHA256": "ac8b0f5c260cceff79bdd63c07abfb1fd2f6ffa30a937c4114399d3449fe8b49"
+    },
+    {
+      "bead": "hv-umm2.631",
+      "frictionSHA256": "c27616d37c38372595fbad57e87684c8098bd2bc8029d11a715adac13d6e62db",
+      "measurementsSHA256": "40dbbabc4fb8faa7d0fb79911271f231836cc9c5e3d3ca9f6839323f32d2ec5d",
+      "nativeSHA256": "f693df13471423da9c9cf9f1b0e8b4ba8127212724f9bd86703b191f6f6425a6"
+    },
+    {
+      "bead": "hv-umm2.632",
+      "frictionSHA256": "48f76ed787578259d7c054cf7ae85b8ca13151f320529fd44101f2554ae1da4b",
+      "measurementsSHA256": "8a3541ba82d643edfef3731e8c29f138b83cceb98e93fca1367bb6d88e5c40d0",
+      "nativeSHA256": "ff2ed12e0d89cc76197d3e744e0271ba3b581fdbed2ff1cead99f26262f3902b"
+    },
+    {
+      "bead": "hv-umm2.633",
+      "frictionSHA256": "d2434745b56c4ab8a19a51ebf69e1019b4bca3c6e3a4dfde155c80739704fb4b",
+      "measurementsSHA256": "8b6b6250441cd2d750065e49a04369fee717f81ad671c3b2d259d72f860d435d",
+      "nativeSHA256": "0fa3914858c343fa5d2636d90ec17fb15a19d697f00a7e5db248904593cad603"
+    },
+    {
+      "bead": "hv-umm2.634",
+      "frictionSHA256": "f20d9d81b9594921431df48c8f55d277fb9aaab85fcff0fd23ffc540db57af02",
+      "measurementsSHA256": "4575c3b8b93d850c211da99dea30017c6a062aa37272c350d07d2e8fc8672b24",
+      "nativeSHA256": "3b8c9dc002f767d5a77857ba7808cc9c80986a8a471596ea58782b923bc9c902"
+    },
+    {
+      "bead": "hv-umm2.738",
+      "frictionSHA256": "015f3dd3f449ffc4b8d63b5214e58adb2dd66c4fb76e05e345a676708daf28c6",
+      "measurementsSHA256": "1e8c0b8d7ba746b4f5e32516852c63e13ebed12a598593a1443f73eee935ff2b",
+      "nativeSHA256": "2b8e37a7e25baba0dc62fa23fd5dc227f79f2515dd9ef0bfca5a150c185e9e86"
+    },
+    {
+      "bead": "hv-umm2.749",
+      "frictionSHA256": "07ffffa025e674a270efedaf920d8464251c9640e0410abfc2b104b2efdb641f",
+      "measurementsSHA256": "bedbb2132208c78eab1679dfcee19fda3381468a0247312c4f3cce4ed4adae29",
+      "nativeSHA256": "c9942731706b6fb7b763550724280960f10f2c9372058e614019cab4672953b0"
+    },
+    {
+      "bead": "hv-umm2.751",
+      "frictionSHA256": "bb22476517d0d265e778bdd21b8785df0fdd0289eda5ade0b959ba4203c14daa",
+      "measurementsSHA256": "3f350e1b27a8255c0af5530035d9dcea7814747dc6674a2ba5506c4c925dca0a",
+      "nativeSHA256": "b54ae4785243a5e1f664a81903c737060f4ece1416a6f866d3e1eb9477f7eb8b"
+    },
+    {
+      "bead": "hv-umm2.752",
+      "frictionSHA256": "5ec52be63863efae51f2b416d35dd46ca07becf58b8022e9dde835aec5fdc252",
+      "measurementsSHA256": "9da2bbdefad52ec30bd3ef1a39003e685d261a50c7273c8a4f015a01b6ead91f",
+      "nativeSHA256": "20677331c545e2eef2f54a666192ca7a9ced39ba3bf9e9bb4e4079d6331a8c22"
+    },
+    {
+      "bead": "hv-umm2.753",
+      "frictionSHA256": "bc907a93b532145e49272ebbd7c1c0dcba3a2f52d8406b8d18ddb02be3e342e2",
+      "measurementsSHA256": "fb8489baba69d1cd25382447dd662b08da9953b758379a8cd881f8b1bb1a889f",
+      "nativeSHA256": "c39f91e31dd93be1860e40fdaa384ce0a13b62fb5cc29d4ed8cec3aaf2d792f7"
+    },
+    {
+      "bead": "hv-umm2.754",
+      "frictionSHA256": "3e2158a89f563313da7d27337d105d117a8e60ba55ffc373d6aba559175b9c04",
+      "measurementsSHA256": "86555b7e50747f2f6d55e9805b0867e26080a44bf3b22467d9d3f7e8d67c9a12",
+      "nativeSHA256": "53b1a9eeabb598c0c15a5386dce751fa112ef24bdde4a075da10b95bc6e11368"
+    },
+    {
+      "bead": "hv-umm2.756",
+      "frictionSHA256": "4847c923fa0d7c7473f06b067cd468118f9f37054d2d1d37e5094918b4f96142",
+      "measurementsSHA256": "3c71e8a531c305b9455dbc76085e2143f9db273498d8bf0c8be70b4360a17c6a",
+      "nativeSHA256": "25b57bbc072b68e39970bd0138b7120bc33f348320b71f6eb506621ecc7fff6f"
+    },
+    {
+      "bead": "hv-umm2.757",
+      "frictionSHA256": "702b853a02012e272ae8f56be867676f417788dbe6b28b6b6c742fc2a58c09ac",
+      "measurementsSHA256": "832dc5c2649f18a64065329847c39fdb50ec21af09dacbbbc0f70977986512fe",
+      "nativeSHA256": "eac9d87cbd3adefe9947c5bee999fed59acb76492dea427ba27ec32e7340debb"
+    },
+    {
+      "bead": "hv-umm2.759",
+      "frictionSHA256": "0a7fd83a7437b8710f4eea3c65332295c629726903da2fc6631818c9ace6492d",
+      "measurementsSHA256": "251af169b3430bba2ca26a847f52375877cbb8f71b5d373f4965dfcf4443323f",
+      "nativeSHA256": "99256e742882e60d7dbad78780c2ea0a003ffdc153cb7a3c720eef374fd1f4b7"
+    }
+  ],
+  "gate": {
+    "rows": [
+      {
+        "bead": "hv-jxsl",
+        "candidate": "01a14030-7899-7da3-a4ce-f66affdb4b6f",
+        "source": "1748e0cd91e8baf98a531e23b69b60d41c68e8e9",
+        "gateS": 107.408,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4358,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            103050,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-kjgt",
+        "candidate": "01a14083-0fa4-75f1-93d8-8dad6c4e4ae5",
+        "source": "cc429a5eb6509a6cc2cbe418df7939d7d284f5da",
+        "gateS": 22.275,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4478,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            17797,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.271",
+        "candidate": "01a14025-6ec0-7881-87b1-d0cdb5bad9f5",
+        "source": "9e23ed1ab19dd6a454264b772c33e1b5aacca4c4",
+        "gateS": 105.266,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4530,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            100736,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.275",
+        "candidate": "01a1405d-0eea-7401-a253-82a1058aacc5",
+        "source": "31e36194c65d874447cb037942259643f57a31b2",
+        "gateS": 109.428,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4733,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            104695,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.279",
+        "candidate": "01a1408d-f32b-78a3-83f0-4a2afece1789",
+        "source": "209c4aed540ee9d2004730042f5fe2603cc54a07",
+        "gateS": 32.97,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4834,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            28136,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.280",
+        "candidate": "01a140e0-fb4b-7762-92c0-2cb30417875b",
+        "source": "707f3ec49898a2695280c41cbd40bc70c6c3cfdd",
+        "gateS": 24.194,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4944,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            19250,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.281",
+        "candidate": "01a14117-3400-7a20-a70c-e53b4267a69f",
+        "source": "95c796d8ae7a52c2651d7e52295423db4af87bdc",
+        "gateS": 32.57,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4662,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            27908,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.282",
+        "candidate": "01a14140-fc60-7c30-9e95-4be89258b694",
+        "source": "57504e96e24e07dcbd0a0958d520bfa67425581f",
+        "gateS": 20.418,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4784,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            15634,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.286",
+        "candidate": "01a140f0-e977-7523-a2fb-2f7e32add717",
+        "source": "45381e6ded97a1587b72fd9168dea6e9a8b01dd2",
+        "gateS": 22.562,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            5027,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            17535,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.287",
+        "candidate": "01a14137-f034-7fa1-92d8-e450d8f5093c",
+        "source": "b84dfc2fd5db233cef93e388cace92f37f162cec",
+        "gateS": 21.994,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4713,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            17281,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.292",
+        "candidate": "01a14078-5b64-70a0-ad70-d7d9afb00af1",
+        "source": "94711add2bf077aeb63c4e127ad364d99ff3b3a4",
+        "gateS": 106.921,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4524,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            102397,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.293",
+        "candidate": "01a140a5-f033-7c00-a4eb-718e5162c5fb",
+        "source": "cb2dba13d7cecc3c5c617f87acdbfa672d8a44a0",
+        "gateS": 117.643,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            5151,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            112492,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.294",
+        "candidate": "01a1402a-64a7-7a52-9d21-8d89226e8078",
+        "source": "5f1b45bd9e22f8c736e1c716e3a4a6230a639682",
+        "gateS": 106.637,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4538,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            102099,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.631",
+        "candidate": "01a1409c-3b11-7380-b46f-3a50d24d343e",
+        "source": "0bb22d34e14326d7f67fa7e56c0b7845a627525e",
+        "gateS": 30.028,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            5919,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            24109,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.632",
+        "candidate": "01a140ba-2106-78c3-ad29-088ac8f5cf1f",
+        "source": "1c35c12119bfee58d151b58dd04132f5a2392ac7",
+        "gateS": 24.513,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4692,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            19821,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.633",
+        "candidate": "01a14106-7f0d-7b41-8c22-f6726a1cdf2c",
+        "source": "0505e7602b6d47ce139122aa032854d6a5c9bcf8",
+        "gateS": 24.839,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4810,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            20029,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.634",
+        "candidate": "01a14134-6f5e-7193-9bfe-1678041604aa",
+        "source": "53518bddd71800c5e6bb77b211a251ece3b73ecd",
+        "gateS": 23.806,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4822,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            18984,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.751",
+        "candidate": "01a14019-3534-7d31-9e83-00159e0007b8",
+        "source": "c62821ef6e776baa0d67c4d9fc3fa73d043941ce",
+        "gateS": 115.42,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4960,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            110460,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.752",
+        "candidate": "01a1400b-25e6-78f1-8b21-11e82d5a61ed",
+        "source": "d0d2dca7e5356b3e341e3bf34723da83305e8e94",
+        "gateS": 21.12,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4588,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            16532,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.753",
+        "candidate": "01a14044-d26f-7033-aae2-caa9c24426ce",
+        "source": "54a1e0b14b0b618ea7ad72a6fa21fd71584b151d",
+        "gateS": 112.287,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4671,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            107616,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.754",
+        "candidate": "01a140b3-c88e-7e92-90f0-d46532d73896",
+        "source": "c87516ee45ef443697f687d1cc37a19c6d466cab",
+        "gateS": 116.12,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4782,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            111338,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.756",
+        "candidate": "01a140df-3b37-7e82-8d24-cf9eb3b1fbe7",
+        "source": "0cd2377be0be7060b37e49ba603c1b3992aac4e6",
+        "gateS": 22.805,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4595,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            18210,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.757",
+        "candidate": "01a14141-1a2d-7023-bafd-7c31b72b4340",
+        "source": "021baaf2cfbde5f032cfdfa43da5c566578ff988",
+        "gateS": 109.827,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4319,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            105508,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.759",
+        "candidate": "01a14151-379c-7441-ae75-8df4927db3c0",
+        "source": "b42f44c7b19044b609cc333c0aeaadc5da9974fa",
+        "gateS": 20.839,
+        "codeOrTest": false,
+        "steps": [
+          [
+            "dependencies",
+            4430,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            16409,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.738",
+        "candidate": "01a1403a-59a0-7ba0-8d49-3ee0d63374a1",
+        "source": "959c979d2fc272cb468c65774b03e2c36d5f8ff0",
+        "gateS": 118.192,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4898,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            113294,
+            "success",
+            null
+          ]
+        ]
+      },
+      {
+        "bead": "hv-umm2.749",
+        "candidate": "01a14007-ff52-7bd1-92c1-8f5e235e9c21",
+        "source": "a06c3309e5b127564d7f8ccc6a0c540351076e41",
+        "gateS": 48.952,
+        "codeOrTest": true,
+        "steps": [
+          [
+            "dependencies",
+            4641,
+            "success",
+            null
+          ],
+          [
+            "review-gate",
+            44311,
+            "success",
+            null
+          ]
+        ]
+      }
+    ],
+    "stats": {
+      "all": {
+        "n": 26,
+        "medianS": 32.769999999999996,
+        "rangeS": [
+          20.418,
+          118.192
+        ],
+        "over60": 11,
+        "over90": 11
+      },
+      "codeTest": {
+        "n": 17,
+        "medianS": 106.921,
+        "rangeS": [
+          22.275,
+          118.192
+        ],
+        "over60": 11,
+        "over90": 11
+      },
+      "docs": {
+        "n": 9,
+        "medianS": 22.562,
+        "rangeS": [
+          20.418,
+          32.97
+        ],
+        "over60": 0,
+        "over90": 0
+      }
+    },
+    "gitTrailersVerified": true,
+    "sourceClassification": "Exactsourcecommitdiff path begins src/ orscripts/; otherchanges docs evidence only",
+    "stepsAreActualUnreusedSuccessfulFinalAttempts": true
+  },
+  "release": {
+    "n": 11,
+    "stepSumMedianS": 1080.247,
+    "rangeS": [
+      1030.941,
+      1152.494
+    ],
+    "componentMedianS": {
+      "dependencies": 4.487,
+      "review-full": 134.461,
+      "fuzz": 937.257
+    },
+    "matchedEventItemIDs": [
+      "01a1407a-1b7b-7292-bedb-95c10d74f70f",
+      "01a14084-c106-76e1-b003-18096f2b86d9",
+      "01a1408e-9cef-7de0-823c-7c993e22afc2",
+      "01a140a7-e090-7921-ad6c-132d3b0d04fc",
+      "01a140ba-f5a6-75b1-9b05-d8754080b039",
+      "01a140df-d5bc-7db0-aa82-27e8f0cc86fd",
+      "01a140e1-aa62-7640-be55-b334000923a9",
+      "01a140f1-87bf-78c3-9a8e-196ea275b661",
+      "01a14107-3941-70b2-bd25-1d8fc0b9c91c",
+      "01a14117-e526-7bf2-b6a4-885700d73772",
+      "01a14135-22f0-7da2-ba1f-1ce7a0259013"
+    ],
+    "historyEvents": 500,
+    "historySequences": [
+      32929,
+      33428
+    ],
+    "historyStartUTC": "2026-10-15T16:58:38.189534Z",
+    "historyEndUTC": "2026-10-15T20:48:02.411554Z",
+    "observedPromotions": 16,
+    "observedSupersessions": 4,
+    "observedReleaseFailures": 0,
+    "completeSincePreviousRetrospectiveHistory": false,
+    "snapshotState": "pending",
+    "snapshotLagCommits": 4,
+    "holds": [],
+    "promotionPause": null,
+    "publicationClaim": false
+  },
+  "localKeySummary": {
+    "review": {
+      "n": 23,
+      "medianS": 14.235
+    },
+    "focused": {
+      "n": 21,
+      "medianS": 7.48
+    },
+    "knip": {
+      "n": 20,
+      "medianS": 5.086
+    },
+    "qualification": "Heterogeneous literal friction keys; not uniformfinal-commandbenchmarks.754 review424.78867225s sums5epochs; finalsuccess80.823s."
+  },
+  "grossImplementationMinutesSum": 2269.98,
+  "grossClockQualification": "Overlapping sessions, prerequisites, failures and verification; not additive projectelapsed, idleloss, productive editing, modeltime orCPU. Completeusage-limitandidle-lanewaitUNKNOWN.",
+  "D19": {
+    "currentNormative": "decisions.md D19: file count is not a budget; test modules under~500lines, nodeengine/content, fullsuite60s at2workers andlowload. Historical metricstables retain theirsourceepochs.",
+    "observedFullTestSteps": [
+      {
+        "bead": "hv-umm2.271",
+        "seconds": 85.7,
+        "files": 423,
+        "tests": 11159,
+        "testStartLoad": 5.831
+      },
+      {
+        "bead": "hv-umm2.754",
+        "seconds": 89.1,
+        "files": 424,
+        "tests": 11317,
+        "testStartLoad": 6.958,
+        "wholeCommandLoad": [
+          5.982,
+          18.942
+        ]
+      },
+      {
+        "bead": "hv-umm2.757",
+        "seconds": 93.7,
+        "files": 425,
+        "tests": 11481,
+        "testStartLoad": 24.789,
+        "wholeCommandLoad": [
+          26.988,
+          11.804
+        ]
+      }
+    ],
+    "qualification": "Observed60s overruns; continuous comparablelowload absent, controlledcurrentcompliance unestablished. Historical345-file46.4s result is a separate sourceepoch. Gate46 retainscontrolledcurrentmeasurement and requiredtest-cutresponse if60s exceeded. No controlledregression/capacityclaim or budgetwaiver."
+  },
+  "filedImprovementIDs": [
+    "hv-umm2.760"
+  ],
+  "newCause": {
+    "cause": "Oversized ad hoc source-output construction and prepared-versus-observedreadcustody confusion",
+    "evidence": {
+      "754": "21paths/2152lines repaired43completeboundedreads; separate569review-policy/rule lines",
+      "756": "3policy readrepairs8068/8689/10469bytes",
+      "757": "18paths/1338lines;69.535515s literalrepair;3clippedcoldreviewcalls excludedandcompleted"
+    },
+    "repairScope": "760 opt-in boundedread-onlysourcepacketCLI, exactsourceidentity/encodedsize/UTF8/longlines/preparationmarker; actualreturnedreadverification remainsmandatory; no speedup/providerdefect claim. Gate46 explicitlyjoins760andqgxa; nativegraphacyclic."
+  },
+  "existingCauseHomes": {
+    "weightedFuzz": "hv-umm2.742;19\u201326min weighted300differentUUID/source/workloads, no attribution proof or acceptancewaiver; release200differentworkload",
+    "heavyAdmission": "hv-lf7t;queue/launcher/guard envelopes separatelyqualified; no schedulercause established",
+    "qaObserver": "279LOAD/probe/helper assumptions and281enemy paymentepoch/capture-rest are distinct;failedcellsuncredited",
+    "navigation": "hv-kjgt source-causalledger/Tailwind/reload repair, no retroattribution of275/286 unknowns",
+    "providerOOM": "hv-umm2.756 demonstrates2process-boundincidents;dominantretaininggraph/historicalinstalledhash/growthrate/causeUNKNOWN",
+    "reviewFindings": "271P2\u2192753;275P2\u2192hv-jxsl+combinedacceptance;757P3\u2192759; nativedispositions report noremainingdebt, rawreviewtranscripts not replayed",
+    "policyInterruptions": "293 original18-gamecheckpoint and294 cancelledseed3attempts incomplete;prerequisitepolicyrepairs/currentacceptance separate"
+  },
+  "triggerDispositionLines": [],
+  "budgetRevision": null,
+  "acceptanceWaiver": false,
+  "parentProofs": {
+    "readProofSHA256": "a66a653db8c315e9cb0285e01f48dd3611246fb9d46a557a171a37f06a717cac",
+    "acceptanceProofSHA256": "dc09aafa0d09271959c33c6c7e3e2208762bd44f354232f316b2dc412e754851",
+    "sageReportSHA256": "4fbbdfac9d189982d52d2403abe73f588434008f839fe428df34498c31cc6f47",
+    "actualTraceSHA256": "65c7149c47bd9bb8cdfb5863cd12f23058791ed088e75003f5bc844435f99113"
+  },
+  "limitations": [
+    "Historylatest500only; no wholeintervalfailureabsence claim.",
+    "Nativefinalsuccessful votingstepsfresh;282 earlierinvalidatedemptyattempt and293 terminalmergeconflict preserved.",
+    "Eachcoveredrecorddifferentworkload/source/load; no threeconsecutivecomparableloadbudgettrigger established.",
+    "Parentbroad qgxa consolebatches clipped and excluded; narrow/structural replacement reads retained.",
+    "Actual8clippedSagereturns excluded and repaired via completechunks; all26compactrecords exactmatched.",
+    "Retrospectivecloseswith760ready;phasegatewaitsforboth."
+  ],
+  "validation": {
+    "review": {
+      "start": "2026-10-15T21:01:42.911617+00:00",
+      "end": "2026-10-15T21:01:43.178205+00:00",
+      "wall_seconds": 0.2665102499886416,
+      "exit": 0,
+      "stdout_sha256": "3072c5c29dd07e2e38d8466163f3bb2569c031669a21dd97d1293e6dac7b344c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "knip": {
+      "start": "2026-10-15T21:01:43.203760+00:00",
+      "end": "2026-10-15T21:01:48.878804+00:00",
+      "wall_seconds": 5.6749108750373125,
+      "exit": 0,
+      "stdout_sha256": "7c2d4f7840528976cf2f00a6a16ff913081920df13c49b5202bc98aa6f2b5da9",
+      "stderr_sha256": "253e9645f5797184d3963f75d5ed2935ce9de2e64966c601939d1848ea47b1f8"
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "runtimeLedger": [],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review friction-records start",
+        "value": 4.9814453125
+      }
+    }
+  },
+  "precommitQualifications": [
+    "OwnKnip prepare emitted temporary missing-art warnings while swapping materializations; Knip0 and restore-local-assets complete. Alltracked code payloads matchbase.",
+    "760 exactscope corrected beforeclaim/sourcewriter to currentD19 dedicated nodeCLI test module; no unrelated review-plan harness import or inventedfilecountbudget.",
+    "Precommit evidencecutoff followed by finalschema/whitespace/Git; actualtail external."
+  ]
+}
