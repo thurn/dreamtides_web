@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.733",
+  "phase": 5,
+  "implementMin": 43.86442468333333,
+  "implementWindow": {
+    "start": "2026-10-15T08:09:07.995547+00:00",
+    "end": "2026-10-15T08:52:59.861028+00:00"
+  },
+  "localValidationS": {
+    "red-before": 11.158059625013266,
+    "focused": 10.40528520900989,
+    "review": 37.820530667027924,
+    "review-final": 35.69572166696889,
+    "typecheck-fixture": 10.881791667023208,
+    "review-final2": 30.164638916030526,
+    "knip": 4.735669667017646,
+    "red-final-valid": 5.531864457996562,
+    "browser": 8.938801832962781,
+    "browser-repository": 7.4989919170038775,
+    "browser-handler": 242.5373285000096,
+    "browser-final": 10.40127858298365,
+    "browser-complete-opening": 8.774920500000007,
+    "browser-resumed": 25.177938250009902,
+    "focused-resumed": 6.187492917000782,
+    "gain-owner-resumed": 6.552370749996044,
+    "review-resumed": 32.79320404102327,
+    "knip-resumed": 4.362099332967773
+  },
+  "hostLoad": 6.86328125,
+  "testDelta": {
+    "files": 1,
+    "lines": 110,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 37.8954535,
+      "note": "Inclusive overlapping browser setup, provider incident recovery and prerequisite734 landing/update interval through final evidence cutoff. Failed setup is retained; restored-runtime prerequisite completed and tagged-copy workflow passed run-MyBFWc. This elapsed window is not additive productive time."
+    }
+  ]
+}

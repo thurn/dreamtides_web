@@ -1,0 +1,1093 @@
+{
+  "bead": "hv-umm2.733",
+  "base": "7b81984ba2061e812f41b8a2a13039bd0adc4640",
+  "clock": {
+    "originalClaimAcknowledged": "2026-10-15T08:09:07.995547+00:00",
+    "evidenceCutoff": "2026-10-15T08:52:59.861028+00:00",
+    "inclusiveElapsedMin": 43.86442468333333,
+    "qualification": "Continuous original claim clock includes prior implementation, failed browser setup, bounded provider recovery, checkpoint, prerequisite734 and native update, final integration validation and browser acceptance. These intervals overlap prerequisite elapsed and are not added as productive time. Actual final Git-return timestamp and cutoff tail are retained in a separate scratch receipt."
+  },
+  "scope": {
+    "base": "ffb17a6ee49515f5a15e0fe19a3e6f81067ce260",
+    "readOnlyBindings": {
+      "src/rules/journey/gamble/four-suit-reprise.ts": {
+        "baseSHA256": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "currentSHA256": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "unchanged": false
+      },
+      "src/rules/journey/deck.ts": {
+        "baseSHA256": "8c0e91db63b2d1a548ef0edc3749bbf58120f664d323bda3e89a8a16cfcd83d8",
+        "currentSHA256": "8c0e91db63b2d1a548ef0edc3749bbf58120f664d323bda3e89a8a16cfcd83d8",
+        "unchanged": true
+      },
+      "src/rules/journey/modifier-registry.ts": {
+        "baseSHA256": "5baa25c71ecacfbbce4f55380eda16d032b9239276188dd89759aba9d89d9f12",
+        "currentSHA256": "5baa25c71ecacfbbce4f55380eda16d032b9239276188dd89759aba9d89d9f12",
+        "unchanged": true
+      },
+      "src/rules/journey/journey-purge-prohibition.ts": {
+        "baseSHA256": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "currentSHA256": "ee5aa84094919beb59196b90d20c21fdacfe5e4a0329e98dc6c0753b56d8c877",
+        "unchanged": true
+      },
+      "src/types/journey.ts": {
+        "baseSHA256": "228630deb239fd21cfe9ef90fe80423f3ea03b0804a228d901f3dc0e2e5020e6",
+        "currentSHA256": "228630deb239fd21cfe9ef90fe80423f3ea03b0804a228d901f3dc0e2e5020e6",
+        "unchanged": true
+      }
+    },
+    "outsideAdmittedDuplicationArmAndUnusedImportsByteIdentical": true,
+    "productionSHA256": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+    "testSHA256": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+  },
+  "checks": {
+    "red-before": {
+      "label": "red-before",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-four-suit-copy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:12:28.825655+00:00",
+      "end": "2026-10-15T08:12:39.939246+00:00",
+      "wallS": 11.158059625013266,
+      "userS": 7.327757,
+      "sysS": 3.390356,
+      "hostLoad": [
+        6.5390625,
+        7.53857421875,
+        8.0166015625
+      ],
+      "workers": 2,
+      "pid": 59724,
+      "pgid": 59724,
+      "exitCode": 1,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ab2e24a80944b01da056e30d02d81daa5ba975c0d679e4e4dd0adb819fccca44"
+      },
+      "rawLogSha256": "c24acd6a8a597e1491634f46ee3be68cff8228a63a329c58bc3db0e732e40d4c"
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-four-suit-copy.test.ts",
+        "src/rules/journey/gamble/four-suit-reprise.test.ts",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:12:58.493533+00:00",
+      "end": "2026-10-15T08:13:08.858991+00:00",
+      "wallS": 10.40528520900989,
+      "userS": 8.676911,
+      "sysS": 3.435183,
+      "hostLoad": [
+        7.04150390625,
+        7.56494140625,
+        8.0078125
+      ],
+      "workers": 2,
+      "pid": 61729,
+      "pgid": 61729,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "33620dd87754df43be856c657aa8c4732eeb18f4d68d26ddc69c7bec63a1cb69"
+      },
+      "rawLogSha256": "97e52b075528d82ec05b0dea503fd5248c8223b13769e024ffbc1b19e7ed9384"
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:15:15.733286+00:00",
+      "end": "2026-10-15T08:15:53.513029+00:00",
+      "wallS": 37.820530667027924,
+      "userS": 100.053435,
+      "sysS": 9.347824,
+      "hostLoad": [
+        4.6181640625,
+        6.49072265625,
+        7.51220703125
+      ],
+      "workers": 2,
+      "pid": 70428,
+      "pgid": 70428,
+      "exitCode": 2,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "4e1bcb0224a8ea9cb91d023f8be9485aa82de557e604e57366ed167998efd1fb"
+      },
+      "rawLogSha256": "76dcf7e520daa138a3b0733fce60100f8ba4e1947ab9d95193f2dcf97388fa6a"
+    },
+    "review-final": {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:17:43.416078+00:00",
+      "end": "2026-10-15T08:18:19.072791+00:00",
+      "wallS": 35.69572166696889,
+      "userS": 77.081019,
+      "sysS": 10.280646,
+      "hostLoad": [
+        5.66259765625,
+        6.13037109375,
+        7.19287109375
+      ],
+      "workers": 2,
+      "pid": 74028,
+      "pgid": 74028,
+      "exitCode": 2,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "b99dda64c0a0a3cfc2d2a744b51477a3bde584b65b9211335dbcd78373482fcc"
+      },
+      "rawLogSha256": "c455a784d6903cf89f3bc1127a19ea1d0a0d46a0616ce67f08320ba12ff12515"
+    },
+    "typecheck-fixture": {
+      "label": "typecheck-fixture",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:18:55.287548+00:00",
+      "end": "2026-10-15T08:19:06.129428+00:00",
+      "wallS": 10.881791667023208,
+      "userS": 15.034477,
+      "sysS": 0.603495,
+      "hostLoad": [
+        4.1259765625,
+        5.57421875,
+        6.89697265625
+      ],
+      "workers": 2,
+      "pid": 75438,
+      "pgid": 75438,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "review-final2": {
+      "label": "review-final2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:20:59.534610+00:00",
+      "end": "2026-10-15T08:21:29.661618+00:00",
+      "wallS": 30.164638916030526,
+      "userS": 74.292091,
+      "sysS": 8.63864,
+      "hostLoad": [
+        3.49169921875,
+        4.91748046875,
+        6.458984375
+      ],
+      "workers": 2,
+      "pid": 78389,
+      "pgid": 78389,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "32137f7e15e127999a9000b9d8ea2d24b8160681b224a2258052cdba074089c3"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:22:03.789751+00:00",
+      "end": "2026-10-15T08:22:08.483683+00:00",
+      "wallS": 4.735669667017646,
+      "userS": 4.207735,
+      "sysS": 1.596163,
+      "hostLoad": [
+        4.97998046875,
+        5.10107421875,
+        6.4140625
+      ],
+      "workers": 2,
+      "pid": 80047,
+      "pgid": 80047,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "54f0831b9a1d2984858c7bc89caf2d626311228d0e2936c4cdfb5307f0d92c63"
+    },
+    "red-final-valid": {
+      "label": "red-final-valid",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-four-suit-copy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:25:10.224912+00:00",
+      "end": "2026-10-15T08:25:15.719265+00:00",
+      "wallS": 5.531864457996562,
+      "userS": 4.954881,
+      "sysS": 1.993313,
+      "hostLoad": [
+        4.6103515625,
+        4.6650390625,
+        5.94921875
+      ],
+      "workers": 2,
+      "pid": 15991,
+      "pgid": 15991,
+      "exitCode": 1,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c9d3e59dba648b70535aaf34de1e6bd7be6758822f9fc45ade6690ac3732acad",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "cedb4250b6feace43c586f54e0ad398a3fb21c3613bd317b0476ada669d8200d"
+    },
+    "browser": {
+      "label": "browser",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "four-suit-copy",
+        "--bead",
+        "hv-umm2.733",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:15:06.133818+00:00",
+      "end": "2026-10-15T08:15:15.034180+00:00",
+      "wallS": 8.938801832962781,
+      "userS": 5.490826,
+      "sysS": 2.964388,
+      "hostLoad": [
+        4.5849609375,
+        6.51611328125,
+        7.52734375
+      ],
+      "workers": 2,
+      "pid": 69985,
+      "pgid": 69985,
+      "exitCode": 2,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "33620dd87754df43be856c657aa8c4732eeb18f4d68d26ddc69c7bec63a1cb69"
+      },
+      "rawLogSha256": "44afdc63d2e7d741d111fe4e772e23ceb009ddd566cd756698e09c36ea277238"
+    },
+    "browser-repository": {
+      "label": "browser-repository",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "four-suit-copy",
+        "--bead",
+        "hv-umm2.733",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:16:22.964523+00:00",
+      "end": "2026-10-15T08:16:30.421953+00:00",
+      "wallS": 7.4989919170038775,
+      "userS": 5.684703,
+      "sysS": 2.687913,
+      "hostLoad": [
+        5.30029296875,
+        6.29638671875,
+        7.35595703125
+      ],
+      "workers": 2,
+      "pid": 72029,
+      "pgid": 72029,
+      "exitCode": 2,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "b99dda64c0a0a3cfc2d2a744b51477a3bde584b65b9211335dbcd78373482fcc"
+      },
+      "rawLogSha256": "38667eb7ec0036690813419169c579c53d22d3bbbf8a338d32db143931ad2c3a"
+    },
+    "browser-handler": {
+      "label": "browser-handler",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "four-suit-copy",
+        "--bead",
+        "hv-umm2.733",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:17:20.735278+00:00",
+      "end": "2026-10-15T08:21:23.233898+00:00",
+      "wallS": 242.5373285000096,
+      "userS": 5.808089,
+      "sysS": 2.713619,
+      "hostLoad": [
+        5.22802734375,
+        6.0927734375,
+        7.2119140625
+      ],
+      "workers": 2,
+      "pid": 73444,
+      "pgid": 73444,
+      "exitCode": 130,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "b99dda64c0a0a3cfc2d2a744b51477a3bde584b65b9211335dbcd78373482fcc"
+      },
+      "rawLogSha256": "f0b6493661c021bff2596b32f1a122a8d26e3eb94a068435ede7c2631ee84b9b"
+    },
+    "browser-final": {
+      "label": "browser-final",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "four-suit-copy",
+        "--bead",
+        "hv-umm2.733",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:25:15.784468+00:00",
+      "end": "2026-10-15T08:25:26.148886+00:00",
+      "wallS": 10.40127858298365,
+      "userS": 5.224753,
+      "sysS": 2.439652,
+      "hostLoad": [
+        4.56103515625,
+        4.65380859375,
+        5.9375
+      ],
+      "workers": 2,
+      "pid": 16162,
+      "pgid": 16162,
+      "exitCode": 1,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "5a860f20b85e621761b8dd8bbc01a6e9bc2a6273ec92f68045cc0279ebf1e719"
+    },
+    "browser-complete-opening": {
+      "label": "browser-complete-opening",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "four-suit-copy",
+        "--bead",
+        "hv-umm2.733",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:26:50.046935+00:00",
+      "end": "2026-10-15T08:26:58.778468+00:00",
+      "wallS": 8.774920500000007,
+      "userS": 5.047083,
+      "sysS": 2.536562,
+      "hostLoad": [
+        4.0556640625,
+        4.49072265625,
+        5.73828125
+      ],
+      "workers": 2,
+      "pid": 19064,
+      "pgid": 19064,
+      "exitCode": 1,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "e7f4b6481f0c752d26012b93eb359e40e2ad2b09de97f42e0cfb9c5d85770cd6"
+    },
+    "browser-resumed": {
+      "label": "browser-resumed",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "four-suit-copy",
+        "--bead",
+        "hv-umm2.733",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:50:02.048951+00:00",
+      "end": "2026-10-15T08:50:27.188272+00:00",
+      "wallS": 25.177938250009902,
+      "userS": 6.282802,
+      "sysS": 2.7990049999999997,
+      "hostLoad": [
+        7.9052734375,
+        9.2314453125,
+        7.2470703125
+      ],
+      "workers": 2,
+      "pid": 54237,
+      "pgid": 54237,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "dc7c4eedd432e66140a8a8e0b9bd31bd8c76b3765fc16513883da1234bd6f3f3"
+    },
+    "focused-resumed": {
+      "label": "focused-resumed",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-four-suit-copy.test.ts",
+        "src/rules/journey/gamble/four-suit-reprise.test.ts",
+        "src/rules/journey/journey-committed-purge-prevention.test.ts",
+        "src/rules/journey/journey-gain-modifiers.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:50:29.985643+00:00",
+      "end": "2026-10-15T08:50:36.132394+00:00",
+      "wallS": 6.187492917000782,
+      "userS": 8.296961,
+      "sysS": 2.610419,
+      "hostLoad": [
+        7.5732421875,
+        9.04345703125,
+        7.248046875
+      ],
+      "workers": 2,
+      "pid": 56091,
+      "pgid": 56091,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "0215e3ccd7b02e239d7d1edf424248b8132e685fa593cffe7d388721cc2c5a00"
+    },
+    "gain-owner-resumed": {
+      "label": "gain-owner-resumed",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-dreamsign-gains.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:51:02.642753+00:00",
+      "end": "2026-10-15T08:51:09.150472+00:00",
+      "wallS": 6.552370749996044,
+      "userS": 6.502762,
+      "sysS": 2.191246,
+      "hostLoad": [
+        7.091796875,
+        8.78369140625,
+        7.21484375
+      ],
+      "workers": 2,
+      "pid": 58382,
+      "pgid": 58382,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "47923479cd70655e5465c15a27c7221add295fef826da41000d1554378c2cd91"
+    },
+    "review-resumed": {
+      "label": "review-resumed",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:50:50.271521+00:00",
+      "end": "2026-10-15T08:51:23.025062+00:00",
+      "wallS": 32.79320404102327,
+      "userS": 81.406869,
+      "sysS": 8.818949,
+      "hostLoad": [
+        6.86328125,
+        8.794921875,
+        7.2001953125
+      ],
+      "workers": 2,
+      "pid": 57505,
+      "pgid": 57505,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "4b1b36a1df719c0c455d63afada6010486d6bd2f86489a926f31ec801beb260c"
+    },
+    "knip-resumed": {
+      "label": "knip-resumed",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:51:29.876160+00:00",
+      "end": "2026-10-15T08:51:34.182282+00:00",
+      "wallS": 4.362099332967773,
+      "userS": 4.262997,
+      "sysS": 1.51588,
+      "hostLoad": [
+        7.26806640625,
+        8.685546875,
+        7.23388671875
+      ],
+      "workers": 2,
+      "pid": 60084,
+      "pgid": 60084,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "35faccc013c11fdfd50df913889440374c746ed1915697ca78e2ec704cd4a788"
+    },
+    "final-schema": {
+      "label": "final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:53:19.446750+00:00",
+      "end": "2026-10-15T08:53:19.601686+00:00",
+      "wallS": 0.198724125046283,
+      "userS": 0.062979,
+      "sysS": 0.039625,
+      "hostLoad": [
+        7.1923828125,
+        8.1416015625,
+        7.1904296875
+      ],
+      "workers": 2,
+      "pid": 68579,
+      "pgid": 68579,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "44373a638e44995eb04fc5fb3b027e5ad24b38280f93070fcd690c21c2a67371"
+    },
+    "final-whitespace": {
+      "label": "final-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/four-suit-copy-733",
+      "start": "2026-10-15T08:53:19.674779+00:00",
+      "end": "2026-10-15T08:53:19.696753+00:00",
+      "wallS": 0.06613895896589383,
+      "userS": 0.004568,
+      "sysS": 0.053408,
+      "hostLoad": [
+        7.1923828125,
+        8.1416015625,
+        7.1904296875
+      ],
+      "workers": 2,
+      "pid": 68590,
+      "pgid": 68590,
+      "exitCode": 0,
+      "remainingGroupMembers": [],
+      "sourceHashes": {
+        "src/rules/journey/gamble/four-suit-reprise.ts": "c50d3541fad125ba54b2bae37dd62af49049585f3c64f90bd15234a2f2a3eee7",
+        "src/rules/journey/journey-four-suit-copy.test.ts": "ed2dfd5207f52cbb6465bfa7bcb978678abeae579aecf7495c2e83429c2d6d5b"
+      },
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 110,
+    "jsdomFiles": 0
+  },
+  "redWitness": {
+    "exactFinalValidTest": "red-final-valid",
+    "outcome": "All3public contracts fail on the exact delivered source for missing copied permanent values/inherited Warrior gain. Final production bytes restored in finally and equal source-scope-proof hash.",
+    "earlierQualification": "Initial red-before had authoring-only invalid boolean setReclaim and later type/fixture annotations; it remains retained and is not the final valid witness."
+  },
+  "validation": {
+    "focused": "Final focused-resumed:41tests/3actual files,6.187493s (own3 contracts, existing FourSuit3, protectedpurge35). Its extra journey-gain-modifiers.test.ts selector did not exist and selected no file; separately gain-owner-resumed exercises actual journey-dreamsign-gains.test.ts12tests/1file,6.552371s.",
+    "ordinary": "Combined prerequisite734 base:review-resumed6613tests/79files plus types/lint/cycles/schema,32.793204s; exact final production/test hashes.",
+    "knip": "knip-resumed terminal0,4.362099s; exact final production/test epoch.",
+    "full": "Not run: bounded canonical-helper reuse without testinfra/config/crosscutting architecture changes.",
+    "browser": "run-MyBFWc passed actual tagged-copy normal UI draw/settle/reload/Leave, UUID log, geometry and accumulated empty Caps.",
+    "fuzzSweep": "No content or primitive change; original271 retains all production-content acceptance."
+  },
+  "providerIncident": {
+    "at": "2026-10-15T08:24:48.739Z",
+    "bead": "hv-umm2.733",
+    "authority": "same-task justiciar bounded incident workflow in README and shared repair",
+    "originalState": "call-and-close-unconfirmed",
+    "originalRecordSha256": "4ed5bb73bba99225c4fcf49a1a766bf04a8b6ec8552d57b450482a36f31308c4",
+    "archived": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json.incident-settled-hv-umm2.733-58c177e5.json",
+    "oldTransportAbsent": true,
+    "ownRunnerServerGroupsAbsent": true,
+    "ownServerRecordAbsent": true,
+    "ownPortFree": true,
+    "automatedBrowserProcesses": [],
+    "actualCause": "Own ignored async callback Buffer ReferenceError killed old provider; launchd restarted service73697, old execution/browser process census settled",
+    "oldProviderPid": "not captured; not invented",
+    "completionReceiptForged": false,
+    "sharedLiveServiceChanged": false,
+    "otherOwnerRecordsTouched": false,
+    "replacement": "existing public createLocalGame/loadState declared staging; actual workflow acceptance retained"
+  },
+  "browserReports": [
+    {
+      "report": "invocations/run-KRrqqW/four-suit-copy.result.json",
+      "sha256": "e0dba45a22fe4b51531e4846c9fe99244ef9201ff9867d124bf8f9a74da6c440",
+      "ok": false,
+      "error": "Error: waitVisible [data-testid=\"gamble-four-suit-card-deck-1\"]: __caps recorded {\"errors\":[{\"msg\":\"[ErrorBoundary:screen:site] Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.\",\"src\":\"at GambleSiteScreenAdapter (http://localhost:5274/src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx:36:3)\",\"scope\":\"screen:site\"}],\"rejections\":[],\"consoleErrors\":[\"Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.\",\"%o\\n\\n%s\\n\\n%s\\n | Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops. | The above error occurred in the <GambleSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.\"]}\n    at poll (evalmachine.<anonymous>:275:40)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async fourSuitCopy (evalmachine.<anonymous>:1720:3)\n    at async evalmachine.<anonymous>:1764:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+      "caps": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?game=qa733copymv99x5xb&debug=1",
+          "caps": {
+            "errors": [
+              {
+                "msg": "[ErrorBoundary:screen:site] Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.",
+                "src": "at GambleSiteScreenAdapter (http://localhost:5274/src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx:36:3)",
+                "scope": "screen:site"
+              }
+            ],
+            "rejections": [],
+            "consoleErrors": [
+              "Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+              "%o\n\n%s\n\n%s\n | Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops. | The above error occurred in the <GambleSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
+            ]
+          }
+        }
+      ],
+      "result": null,
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 16191,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1956,
+        "scenario": 7835,
+        "total": 9885
+      },
+      "invocation": "run-KRrqqW"
+    },
+    {
+      "report": "invocations/run-SqZomA/four-suit-copy.result.json",
+      "sha256": "d1b3b6219edb4c24b076550c9d081ca8ca4feb0f9e37c10b267e335114f341f7",
+      "ok": false,
+      "error": "Error: waitVisible [data-testid=\"gamble-four-suit-card-deck-1\"]: __caps recorded {\"errors\":[{\"msg\":\"[ErrorBoundary:screen:site] Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.\",\"src\":\"at GambleSiteScreenAdapter (http://localhost:5274/src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx:36:3)\",\"scope\":\"screen:site\"}],\"rejections\":[],\"consoleErrors\":[\"Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.\",\"%o\\n\\n%s\\n\\n%s\\n | Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops. | The above error occurred in the <GambleSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.\"]}\n    at poll (evalmachine.<anonymous>:275:40)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async fourSuitCopy (evalmachine.<anonymous>:1727:3)\n    at async evalmachine.<anonymous>:1771:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+      "caps": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?game=qa733copymv99z5z6&gambleGame=four-suit-reprise&debug=1",
+          "caps": {
+            "errors": [
+              {
+                "msg": "[ErrorBoundary:screen:site] Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.",
+                "src": "at GambleSiteScreenAdapter (http://localhost:5274/src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx:36:3)",
+                "scope": "screen:site"
+              }
+            ],
+            "rejections": [],
+            "consoleErrors": [
+              "Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.",
+              "%o\n\n%s\n\n%s\n | Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops. | The above error occurred in the <GambleSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
+            ]
+          }
+        }
+      ],
+      "result": null,
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 19095,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1664,
+        "scenario": 6527,
+        "total": 8260
+      },
+      "invocation": "run-SqZomA"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "result": {
+        "verdict": "pass",
+        "origin": "http://localhost:5274",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "declaration": {
+          "entryId": "deck-1",
+          "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          "cardNumber": 510,
+          "source": {
+            "entryId": "deck-1",
+            "cardNumber": 510,
+            "transfiguration": null,
+            "isBane": false,
+            "sparkBonus": 4,
+            "typeChange": {
+              "predicateId": "qa-733-current-type",
+              "cardType": "Character",
+              "subtype": "Warrior",
+              "label": ""
+            },
+            "keywordModification": {
+              "fast": true,
+              "reclaim": 2,
+              "setReclaim": 1,
+              "energyCostReduction": 1
+            },
+            "statOverride": {
+              "energyCost": 9,
+              "spark": 91
+            }
+          },
+          "controlledCard": {
+            "rank": "7",
+            "suit": "hearts"
+          },
+          "retainedCommitment": "dce3ad9b85a69d6a",
+          "stagedEssence": 200,
+          "staging": "Existing native Gamble scene is replayed read-only into a declared ready runtime, then loaded directly into a distinct local game. Only selected source sparkBonus=4, Character/Warrior typeChange, fast/reclaim=2/setReclaim=1/energyCostReduction=1, debug statOverride energyCost=9/spark=91, first committed Hearts7 and affordability floor are staged; no OPEN_SITE, pre-opening or future-run intent key is created in that game.",
+          "ingress": {
+            "gameId": "qa733copymv9at1wd",
+            "seq": 1,
+            "type": "LOAD_STATE",
+            "openSiteEvents": 0,
+            "runId": "journey:1",
+            "readyRuntimePreserved": true
+          }
+        },
+        "siteId": "site-1",
+        "source": {
+          "entryId": "deck-1",
+          "cardNumber": 510,
+          "transfiguration": null,
+          "isBane": false,
+          "sparkBonus": 4,
+          "typeChange": {
+            "predicateId": "qa-733-current-type",
+            "cardType": "Character",
+            "subtype": "Warrior",
+            "label": ""
+          },
+          "keywordModification": {
+            "fast": true,
+            "reclaim": 2,
+            "setReclaim": 1,
+            "energyCostReduction": 1
+          },
+          "statOverride": {
+            "energyCost": 9,
+            "spark": 91
+          }
+        },
+        "copy": {
+          "entryId": "deck-3-0",
+          "cardNumber": 510,
+          "transfiguration": null,
+          "typeChange": {
+            "predicateId": "qa-733-current-type",
+            "cardType": "Character",
+            "subtype": "Warrior",
+            "label": ""
+          },
+          "keywordModification": {
+            "fast": true,
+            "reclaim": 2,
+            "setReclaim": 1,
+            "energyCostReduction": 1
+          },
+          "sparkBonus": 4,
+          "isBane": false
+        },
+        "round": {
+          "roundNumber": 1,
+          "shuffleCommitment": "dce3ad9b85a69d6a",
+          "card": {
+            "rank": "7",
+            "suit": "hearts"
+          },
+          "targetEntryId": "deck-1",
+          "targetCardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          "costPaid": 25,
+          "outcome": "duplication",
+          "resultRevealed": true,
+          "resultSettled": true,
+          "essenceGained": 0,
+          "duplicatedEntryId": "deck-3-0"
+        },
+        "essence": {
+          "before": 200,
+          "after": 175
+        },
+        "beforeGeometry": [
+          {
+            "selector": "[data-testid=\"gamble-four-suit-draw\"]",
+            "width": 124.578125,
+            "height": 42,
+            "inside": true,
+            "hit": true
+          }
+        ],
+        "afterGeometry": [
+          {
+            "selector": "[data-testid=\"gamble-four-suit-leave-after-result\"]",
+            "width": 80.59375,
+            "height": 42,
+            "inside": true,
+            "hit": true
+          }
+        ],
+        "reload": true,
+        "continuation": {
+          "type": "dreamscape"
+        },
+        "gameId": "qa733copymv9at1wd",
+        "openingIntents": 0,
+        "retainedGame": true,
+        "logRowsBeforeReload": 9,
+        "persistedLogRows": 19,
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 54284,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2908,
+        "scenario": 21607,
+        "total": 24581
+      },
+      "invocation": "run-MyBFWc",
+      "report": "invocations/run-MyBFWc/four-suit-copy.result.json",
+      "sha256": "f18d2a68323d08556b2acaa333d2995f0942b6d98e57ee14fa8f09a8c1c657a7"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-resumed start, os.getloadavg one-minute value; raw wall/user/sys/load and source-bound command receipts retained."
+      }
+    }
+  },
+  "acceptance": {
+    "publicCopyContract": "passed",
+    "runtime": "passed",
+    "sourceBoundary": "verified; only duplication arm/imports differ from certified prerequisite base",
+    "promotion": "Parent submits exact final amended commit after independent source/evidence verification; helper has no native promotion authority"
+  },
+  "rulesDecisions": [],
+  "preExistingIssue": "hv-umm2.734, completed prerequisite; concrete failed attempts retained",
+  "measurementsUnknowns": [
+    "Old provider PID not captured before own callback exception; concrete restarted lifetime73697 and no automated browser/context descendants established bounded settlement.",
+    "No performance conclusion from concurrent host timings."
+  ],
+  "runtimeLedger": {
+    "at": "2026-10-15T08:52:59.861028+00:00",
+    "commands": [
+      {
+        "label": "browser-resumed",
+        "pid": 54237,
+        "pgid": 54237,
+        "exitCode": 0,
+        "start": "2026-10-15T08:50:02.048951+00:00",
+        "end": "2026-10-15T08:50:27.188272+00:00"
+      },
+      {
+        "label": "focused-resumed",
+        "pid": 56091,
+        "pgid": 56091,
+        "exitCode": 0,
+        "start": "2026-10-15T08:50:29.985643+00:00",
+        "end": "2026-10-15T08:50:36.132394+00:00"
+      },
+      {
+        "label": "gain-owner-resumed",
+        "pid": 58382,
+        "pgid": 58382,
+        "exitCode": 0,
+        "start": "2026-10-15T08:51:02.642753+00:00",
+        "end": "2026-10-15T08:51:09.150472+00:00"
+      },
+      {
+        "label": "review-resumed",
+        "pid": 57505,
+        "pgid": 57505,
+        "exitCode": 0,
+        "start": "2026-10-15T08:50:50.271521+00:00",
+        "end": "2026-10-15T08:51:23.025062+00:00"
+      },
+      {
+        "label": "knip-resumed",
+        "pid": 60084,
+        "pgid": 60084,
+        "exitCode": 0,
+        "start": "2026-10-15T08:51:29.876160+00:00",
+        "end": "2026-10-15T08:51:34.182282+00:00"
+      }
+    ],
+    "browser": {
+      "invocation": "run-MyBFWc",
+      "slot": 1,
+      "port": 5274,
+      "serverPid": 54284,
+      "context": "isolated Playwright MCP client; runner terminal0 after confirmed browser close and record clear",
+      "serverCleanup": "runner log confirms group54284 cleanup and port free",
+      "slotRecords": {
+        "owner": "absent",
+        "server": "absent"
+      }
+    },
+    "actualGroupCensus": {
+      "75438": [],
+      "73472": [],
+      "78389": [],
+      "16191": [],
+      "19064": [],
+      "70016": [],
+      "57505": [],
+      "72066": [],
+      "80047": [],
+      "16162": [],
+      "54284": [],
+      "15991": [],
+      "56091": [],
+      "74028": [],
+      "60084": [],
+      "58382": [],
+      "73444": [],
+      "19095": [],
+      "61729": [],
+      "72029": [],
+      "69985": [],
+      "54237": [],
+      "25079": [],
+      "70428": [],
+      "59724": []
+    },
+    "priorCheckpointSettlement": "checkpoint-runtime-ledger.json; justiciar-provider-incident-settlement.json",
+    "retainedLiveOwnedResources": []
+  },
+  "integration": {
+    "checkpoint": "264f89711251ef8724054b0113790bc6b15cf30b",
+    "updatedCheckpoint": "867f44190fa487ffcceb1e7ee5d18e4e06d0bdfb",
+    "certifiedPrerequisiteBase": "7b81984ba2061e812f41b8a2a13039bd0adc4640",
+    "proof": {
+      "head": "867f44190fa487ffcceb1e7ee5d18e4e06d0bdfb",
+      "base": "7b81984ba2061e812f41b8a2a13039bd0adc4640",
+      "stage": "7b81984ba2061e812f41b8a2a13039bd0adc4640",
+      "clean": true,
+      "all8CheckpointOwnedBlobsIdentical": true,
+      "doctorHealthy": true,
+      "clockContinues": "2026-10-15T08:09:07.995547+00:00"
+    },
+    "reasonForNewChecks": "Actual prerequisite734 integration; prior green epochs remain preserved and qualified."
+  },
+  "preExistingLogAttribution": {
+    "witness": "invocations/run-MyBFWc/four-suit-copy-desktop.jsonl",
+    "storedGameId": "qa733copymv9at1wd",
+    "catalogGameId": "four-suit-reprise",
+    "event": "gamble_wager_settled",
+    "selectedEntryId": "deck-1",
+    "selectedCardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+    "duplicatedEntryId": "deck-3-0",
+    "cause": "Existing gambleCatalogLogFields emits gameId:runtime.gameId; game-log-capture.ts100 spreads fields after context gameId, so catalog gameId overrides per-game context.",
+    "disposition": "Independent pre-existing attribution defect reported to parent for bounded filing; logger is read-only here. Per-game export metadata and correctly attributed game_event rows identify the stored game, and physical selected/copy IDs reconstruct the asserted copy flow. No claim that every presentation row has correct top-level run gameId."
+  }
+}

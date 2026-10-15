@@ -9,7 +9,6 @@ import {
 } from "../../../data/four-suit-reprise";
 import type { EventContext } from "../../../eventlog/types";
 import type {
-  DeckEntry,
   FourSuitRepriseRound,
   FourSuitRepriseSiteRuntime,
   JourneyState,
@@ -21,7 +20,7 @@ import {
   shuffleCommitmentFromUnknown,
   siteIdFromUnknown,
 } from "../../../types/identifiers";
-import { mintEntryId } from "../deck";
+import { duplicateDeckEntry } from "../deck";
 import { asString, configuredGame, runtimeFor, withRuntime } from "./shared";
 
 function fourSuitRuntimeFor(
@@ -167,14 +166,10 @@ export function settleFourSuitReprise(
       essenceGained: game.economy.essenceReward,
     };
   } else if (round.outcome === "duplication") {
-    const duplicatedEntryId = mintEntryId(journey.deck, ctx.seq, 0);
-    const copy: DeckEntry = {
-      entryId: duplicatedEntryId,
-      cardNumber: target.cardNumber,
-      transfiguration: null,
-      isBane: false,
-    };
-    nextJourney = { ...journey, deck: [...journey.deck, copy] };
+    const duplicated = duplicateDeckEntry(journey, { entryId: round.targetEntryId }, ctx);
+    if (duplicated === null) return null;
+    nextJourney = duplicated;
+    const duplicatedEntryId = duplicated.deck[duplicated.deck.length - 1].entryId;
     nextRound = {
       ...nextRound,
       resultSettled: true,
