@@ -1,0 +1,850 @@
+{
+  "bead": "hv-kjgt",
+  "phase": 5,
+  "sourceBase": "d3c94c8f7cae7a2d1fccf95c8a39a2383faa6130",
+  "sourceFiles": {
+    "vite.config.ts": {
+      "sha256": "f7eb68aa2c70da6cca90c2aa3ae358706a0806f951ba07d502aacb5bb2bada41",
+      "lines": 140
+    },
+    "scripts/dev-watch.test.ts": {
+      "sha256": "b1e6268944eac20d5b3f87adab5b7b91921a89ceff107f67256437e236ad46bd",
+      "lines": 48
+    }
+  },
+  "claimClock": {
+    "start": "2026-10-15T16:23:17.618025Z",
+    "claimAcknowledgedAt": "2026-10-15T16:23:17.746885Z",
+    "qualification": "Original exact claim interval includes setup/source audit/admissions/probe/QA/final checks/waits. Final precommit evidence cutoff is exact; actual Git PID/start/end are retained externally after commit, with no clock reset."
+  },
+  "scope": "Vite development watch ignores the canonical live QA-ledger subtree. Tailwind scanner/class generation, application source/CSS HMR, engine, fixtures, user controls, automatic retry/deadline and native resource protocol retain their existing contracts.",
+  "sourceProof": {
+    "canonicalWriter": "scripts/qa/card-sweep.mjs main::record appends per-cell JSONL while sweepCards retains the active native session.",
+    "consumer": "Tailwind4.2.1 default source Scanner registers tracked QA-ledger file as an asset import of src/index.css; its synchronous hotUpdate emits bare full-reload for that changed asset.",
+    "deterministicContract": "12 synthetic public watch-config matcher cases: baseline2false-to-true assertion failures/10pass; fixed12pass, with source/CSS/neighbors and existing nested-worktree semantics covered.",
+    "historicalQualification": "Five original275 unknown failures and one freshToll unknown retain their source epochs and absent original initiator evidence. This bead directly reproduces the current ledger-triggered reload, not each old failure or every possible navigation cause."
+  },
+  "commands": {
+    "scannerMembership": {
+      "startedAt": "2026-10-15T16:31:25.152135+00:00",
+      "finishedAt": "2026-10-15T16:31:25.641717+00:00",
+      "wallSeconds": 0.4894746249774471,
+      "pid": 6526,
+      "exitCode": 0,
+      "scriptSha256": "deb0b6b74e9b3b6dc471868f6661f154b83e5a7d232344a78fad8f39c2450d7c",
+      "stdoutSha256": "4592869dbf8141e85aa97c943bfabad7b0e20a9283a31a747954b80717af1760",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "baselineRed": {
+      "startedAt": "2026-10-15T16:44:47.176461+00:00",
+      "finishedAt": "2026-10-15T16:44:51.062480+00:00",
+      "wallSeconds": 3.8859530000481755,
+      "pid": 61495,
+      "exitCode": 1,
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "scripts/dev-watch.test.ts"
+      ],
+      "stdoutSha256": "ce9e6afc6ee6e870c1829b82addc3f9d7d25eca15d6172aa4a1a80a39b73bfd0",
+      "stderrSha256": "a00b3eb14103297b7f482de002aaca8228d12069a9e3fcfd2a710bbc1cfb8861",
+      "testSha256": "b1e6268944eac20d5b3f87adab5b7b91921a89ceff107f67256437e236ad46bd",
+      "configSha256": "38dd41f8c01b6f76aef055b5e40a636a4bb7c458dca45e9318caf5e185bcfca2"
+    },
+    "focusedGreen": {
+      "startedAt": "2026-10-15T16:45:04.380889+00:00",
+      "finishedAt": "2026-10-15T16:45:07.862471+00:00",
+      "wallSeconds": 3.481465750024654,
+      "pid": 62713,
+      "exitCode": 0,
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "scripts/dev-watch.test.ts",
+        "scripts/dev.test.mjs",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/prelude-navigation.test.mjs"
+      ],
+      "stdoutSha256": "1564bbc6144e11d6d6d9507e6c769d8f06b0f5d6c06fd2b4e86ed32a813fa5f2",
+      "stderrSha256": "bbc6b367d19cd859a48c6dcba7a15dcfba8172811274c49f594140b5a5cf020a",
+      "testSha256": "b1e6268944eac20d5b3f87adab5b7b91921a89ceff107f67256437e236ad46bd",
+      "configSha256": "f7eb68aa2c70da6cca90c2aa3ae358706a0806f951ba07d502aacb5bb2bada41"
+    },
+    "review": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "startedAt": "2026-10-15T16:53:48.136063+00:00",
+      "finishedAt": "2026-10-15T16:54:02.375539+00:00",
+      "wallSeconds": 14.235130250046495,
+      "pid": 35646,
+      "exitCode": 0,
+      "hostLoad": 10.76,
+      "stdoutSha256": "2900c88ddcdfbc025cb6f357fcfc40167ce6af5dbc7953d770f57e6e1137f79d",
+      "stderrSha256": "7cddcac75ff7c40d5f2b353fcca047fa619a7b5c2d7f75c8a3f4a4e41db5fc78"
+    },
+    "knip": {
+      "command": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "startedAt": "2026-10-15T16:54:27.426990+00:00",
+      "finishedAt": "2026-10-15T16:54:31.706346+00:00",
+      "wallSeconds": 4.279237958020531,
+      "pid": 38552,
+      "exitCode": 0,
+      "stdoutSha256": "18997c83e2947d683eca5567b4bb0073989be0a7312291a93ce6eee4e165fa28",
+      "stderrSha256": "7cddcac75ff7c40d5f2b353fcca047fa619a7b5c2d7f75c8a3f4a4e41db5fc78"
+    },
+    "reviewFull": {
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review:full"
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "startedAt": "2026-10-15T16:54:54.786542+00:00",
+      "firstChildOutputAt": "2026-10-15T16:54:54.875381+00:00",
+      "finishedAt": "2026-10-15T16:56:54.146629+00:00",
+      "wallSeconds": 119.35830091603566,
+      "requestToFirstOutputS": 0.08876499999314547,
+      "afterFirstOutputS": 119.26953591604251,
+      "waitQualification": "Request-to-first-npm-output includes lock wait and npm startup; exact lock acquisition and pure execution start are not separately observable. afterFirstOutput is a lower bound of execution wall.",
+      "pid": 40532,
+      "exitCode": 0,
+      "stdoutSha256": "6f431099fb06fc058140dda2b962786ea309e0dbf7b27789ee67a70a9b5d583e",
+      "stderrSha256": "ced1c8c8c10a45e0ab11121918ae04938d8087a9c1b6d7b7e1e3c4be227be4de"
+    }
+  },
+  "diagnostic": {
+    "receipt": {
+      "startedAt": "2026-10-15T16:38:02.979435+00:00",
+      "finishedAt": "2026-10-15T16:38:23.985281+00:00",
+      "wallSeconds": 21.005589917011093,
+      "pid": 33672,
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a332999289dd0cebab27f927e2a941a872fe4be563462c89dd39ef22feab0d1c",
+      "identities": [
+        {
+          "event": "kjgt.session.identity",
+          "at": 1792082288281,
+          "serverPid": 33715,
+          "port": 5274,
+          "slot": 1,
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "leasePath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+          "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-xnflXH/run-Av65Wj",
+          "owner": {
+            "token": "81ee3158-9bfc-41de-ad5c-891db7d9c09f",
+            "pid": 33672,
+            "bead": "hv-kjgt",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-navigation-kjgt-root",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-15T16:38:08.199Z",
+            "providerState": "active",
+            "mcpSessionId": "b0d1c63f-508b-437a-9f78-0d1d44e4d23e",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "identityObservationError": null
+        }
+      ],
+      "resources": [
+        {
+          "serverPid": 33715,
+          "serverGroupMembers": "",
+          "pgrepExit": 1,
+          "ownerRecordExists": false,
+          "identityBindingValid": true,
+          "closeReturned": true
+        }
+      ],
+      "normalSettlementAndRestoration": true,
+      "originalConfigRestored": true,
+      "post5781BaselineDelta": []
+    },
+    "rawArtifacts": "invocations/sweep-xnflXH/run-Av65Wj",
+    "sourceEpoch": "Baseline config with exact temporary Tailwind send/stack observer; restored exact baseline after normal settlement.",
+    "directChain": {
+      "ledgerAppendAt": 1792082296393,
+      "viteFileChangeAt": 1792082296506,
+      "tailwindSendAt": 1792082296509,
+      "webSocketReceivedAt": 1792082296599,
+      "clientReloadAt": 1792082296601,
+      "stack": "Installed @tailwindcss/vite/dist/index.mjs:1:3247 via Vite FSWatcher; browser @vite/client zero-based802:12.",
+      "payload": {
+        "type": "full-reload"
+      },
+      "assetImporter": "src/index.css",
+      "cellsPassed": 2,
+      "nativeRows": 58,
+      "caps": []
+    },
+    "controlledPrecondition": "Own empty tracked-path QA ledger created before CSS startup, without a fabricated verdict row. Probe previously confirmed275existing ledger scanner membership.",
+    "priorFailureArtifacts": {
+      "attuned-original-failures.json": "2a6b5f814ed426aa038f66a380a77293e2a35ed1575947e300ce6f59daedcad9",
+      "perfected-original-failures.json": "468dc52cb10216ca5ef22950328ad7d5775e206bc5cc8a637b8d78f2152967fb"
+    }
+  },
+  "qa": {
+    "receipt": {
+      "finishedAt": "2026-10-15T16:50:54.466410+00:00",
+      "allExpectedRuns": true,
+      "allSemanticPass": true,
+      "allNormal": true,
+      "frozenSourceDelta": [],
+      "finalFixedConfigRestored": true,
+      "post5781Delta": [
+        "vite.config.ts"
+      ],
+      "newTestSha256": "b1e6268944eac20d5b3f87adab5b7b91921a89ceff107f67256437e236ad46bd",
+      "originalLedgerPrefixRetained": true,
+      "originalLedgerPrefixSha256": "f13d400e2b8d17fd2f7dfbfa6f14551ac266c783b1edbbc8086bcf2a8aad6a5e",
+      "ledgerBytes": 28642,
+      "qualification": "Source-audited canonical close-returned confirms normal browser/RPC/transport/selected lease operations returned; actual identity binding, selected provider/server records and server group observed settled. No raw wire or uncaptured lockholder PID claim."
+    },
+    "runs": [
+      {
+        "label": "A-sequential",
+        "startedAt": "2026-10-15T16:49:29.252901+00:00",
+        "finishedAt": "2026-10-15T16:50:30.339867+00:00",
+        "wallSeconds": 61.08602270897245,
+        "pid": 72318,
+        "exitCode": 0,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/canonical-sweep-observer-v03.mjs",
+          "--bead",
+          "hv-kjgt",
+          "--cards",
+          "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+          "--variants",
+          "perfected",
+          "--as",
+          "both",
+          "--timeout",
+          "60"
+        ],
+        "DEBUG": "vite:hmr,vite:deps",
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "fd49f49c61dbe08252896240eec875c913274ebfaf24d95b3dd02ebd3b38b316",
+        "identities": [
+          {
+            "event": "kjgt.session.identity",
+            "at": 1792082971481,
+            "serverPid": 72348,
+            "port": 5274,
+            "slot": 1,
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "leasePath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+            "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu",
+            "owner": {
+              "token": "d7221b45-c8a1-4beb-80eb-6912e1c6eee5",
+              "pid": 72318,
+              "bead": "hv-kjgt",
+              "label": "card-sweep",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-navigation-kjgt-root",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-15T16:49:31.422Z",
+              "providerState": "active",
+              "mcpSessionId": "60dbe14d-8c68-45f6-9686-5d5f8d145e42",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            },
+            "identityObservationError": null
+          }
+        ],
+        "resources": [
+          {
+            "serverPid": 72348,
+            "selectedSlotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+            "slot": 1,
+            "serverGroupMembers": "",
+            "pgrepExit": 1,
+            "ownerRecordExists": false,
+            "serverRecordExists": false,
+            "identityBindingValid": true,
+            "closeReturned": true
+          }
+        ],
+        "normalSettlement": true,
+        "semanticPass": true,
+        "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu",
+        "serverLogSha256": "69b15e9287b0570c6cf0db6a67ef431524ba0143f756a39474bf5fd2e1e0f61c",
+        "serverLogBytes": 68994,
+        "observedFullReloadSends": 0,
+        "observedLedgerHotUpdates": 0,
+        "cells": [
+          {
+            "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-base-enemy-attempt-1.result.json",
+            "reportSha256": "a5e6b48e18321f7698ac062b5e09ef7ec6b7966029ac16595ef6d35e5c727e95",
+            "gameId": "atho3p",
+            "selectedBy": "url",
+            "nativePath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-base-enemy-attempt-1.jsonl",
+            "nativeSha256": "502cb07979adeaa4967721877bf97f2c7a5bc58b103ea533f3220e797d9486c4",
+            "nativeRows": 29,
+            "nativeGameIds": [
+              "atho3p"
+            ],
+            "navigationBefore": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=perfected&as=player&seed=1&debug=1&game=vhroed",
+            "navigationExpected": "http://localhost:5274/?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=base&as=enemy&seed=1&debug=1",
+            "observerFailures": [],
+            "observerDrops": 0,
+            "verdict": "pass",
+            "caps": [],
+            "error": null,
+            "lab": {
+              "card": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+              "variant": "base",
+              "side": "enemy",
+              "stage": null,
+              "requestedMods": null,
+              "deckMods": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "inspired",
+                "enduring",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Event"
+            },
+            "zone": "void",
+            "resolvedEvents": [
+              "energyChanged",
+              "cardPlayed",
+              "promptAutoAnswered",
+              "handEmptied",
+              "resolved",
+              "enteredVoid",
+              "prevented"
+            ],
+            "observedBrowserReloads": 0
+          },
+          {
+            "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-base-player-attempt-1.result.json",
+            "reportSha256": "1c168d9c8412556b4d2d806b7a8184bcc9f5a50901e8e800bded1f10032f016e",
+            "gameId": "y535zt",
+            "selectedBy": "url",
+            "nativePath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-base-player-attempt-1.jsonl",
+            "nativeSha256": "fe35812bf1f08c78e661bb3db230082c00370c13f086c8d121da9eb84f399608",
+            "nativeRows": 34,
+            "nativeGameIds": [
+              "y535zt"
+            ],
+            "navigationBefore": "about:blank",
+            "navigationExpected": "http://localhost:5274/?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=base&as=player&seed=1&debug=1",
+            "observerFailures": [],
+            "observerDrops": 0,
+            "verdict": "pass",
+            "caps": [],
+            "error": null,
+            "lab": {
+              "card": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "requestedMods": null,
+              "deckMods": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "inspired",
+                "enduring",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Event"
+            },
+            "zone": "void",
+            "resolvedEvents": [
+              "energyChanged",
+              "handEmptied",
+              "cardPlayed",
+              "promptAutoAnswered",
+              "resolved",
+              "enteredVoid",
+              "prevented",
+              "challengersDesignated",
+              "phaseChanged"
+            ],
+            "observedBrowserReloads": 0
+          },
+          {
+            "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-perfected-enemy-attempt-1.result.json",
+            "reportSha256": "2d8fcf7d176085448713dd3a86fbf67de05ef7bf31c5d996dade06d5907e7d09",
+            "gameId": "dxkgkp",
+            "selectedBy": "url",
+            "nativePath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-perfected-enemy-attempt-1.jsonl",
+            "nativeSha256": "ea2b6eca8dab26e855810f963a83b9145175dcbdfbc0d018f04ba99e13441ac9",
+            "nativeRows": 29,
+            "nativeGameIds": [
+              "dxkgkp"
+            ],
+            "navigationBefore": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=base&as=enemy&seed=1&debug=1&game=atho3p",
+            "navigationExpected": "http://localhost:5274/?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=perfected&as=enemy&seed=1&debug=1",
+            "observerFailures": [],
+            "observerDrops": 0,
+            "verdict": "pass",
+            "caps": [],
+            "error": null,
+            "lab": {
+              "card": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+              "variant": "perfected",
+              "side": "enemy",
+              "stage": null,
+              "requestedMods": null,
+              "deckMods": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "inspired",
+                "enduring",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Event"
+            },
+            "zone": "void",
+            "resolvedEvents": [
+              "energyChanged",
+              "cardPlayed",
+              "promptAutoAnswered",
+              "handEmptied",
+              "resolved",
+              "enteredVoid",
+              "prevented",
+              "cardDrawn"
+            ],
+            "observedBrowserReloads": 0
+          },
+          {
+            "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-perfected-player-attempt-1.result.json",
+            "reportSha256": "9c86e4c2028c681882a09b1562d7cfac45709fb00249d0c71b2386d362d8f2e3",
+            "gameId": "vhroed",
+            "selectedBy": "url",
+            "nativePath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/sweep-fJx6eX/run-VIi6Gu/sweep-0fde04ac-8552-45ce-83a3-5ab2384b36da-perfected-player-attempt-1.jsonl",
+            "nativeSha256": "55b4d8d5098e6b08931797e706f6f6394814c2295852643e7277c74b7cae8326",
+            "nativeRows": 34,
+            "nativeGameIds": [
+              "vhroed"
+            ],
+            "navigationBefore": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=base&as=player&seed=1&debug=1&game=y535zt",
+            "navigationExpected": "http://localhost:5274/?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=perfected&as=player&seed=1&debug=1",
+            "observerFailures": [],
+            "observerDrops": 0,
+            "verdict": "pass",
+            "caps": [],
+            "error": null,
+            "lab": {
+              "card": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+              "variant": "perfected",
+              "side": "player",
+              "stage": null,
+              "requestedMods": null,
+              "deckMods": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "inspired",
+                "enduring",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Event"
+            },
+            "zone": "void",
+            "resolvedEvents": [
+              "energyChanged",
+              "handEmptied",
+              "cardPlayed",
+              "promptAutoAnswered",
+              "resolved",
+              "enteredVoid",
+              "prevented",
+              "cardDrawn",
+              "challengersDesignated",
+              "phaseChanged"
+            ],
+            "observedBrowserReloads": 0
+          }
+        ]
+      },
+      {
+        "label": "B-fresh-base",
+        "startedAt": "2026-10-15T16:50:30.357841+00:00",
+        "finishedAt": "2026-10-15T16:50:42.074000+00:00",
+        "wallSeconds": 11.716057500045281,
+        "pid": 18829,
+        "exitCode": 0,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/fresh-control-v01.mjs",
+          "base"
+        ],
+        "DEBUG": "vite:hmr,vite:deps",
+        "stdoutSha256": "b7ae1869ba70e52ec559d0f489b8b9e5e66db32e50cdf0777054424d53783984",
+        "stderrSha256": "5fa55533fcdb0e508e4bd83db2b3e02bc56f5c2e5a00ec1b968a3a17d4778d1b",
+        "identities": [
+          {
+            "event": "kjgt.session.identity",
+            "at": 1792083032474,
+            "label": "fresh-base",
+            "serverPid": 19340,
+            "port": 5274,
+            "slot": 1,
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "selectedSlotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+            "baseAdmissionPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+            "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-W0LIG1",
+            "owner": {
+              "token": "94009afd-70ce-46c7-8245-153330c66caf",
+              "pid": 18829,
+              "bead": "hv-kjgt",
+              "label": "fresh-base",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-navigation-kjgt-root",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-15T16:50:32.442Z",
+              "providerState": "active",
+              "mcpSessionId": "b5f5c86b-35b1-4f55-ae59-2a26d1783542",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            },
+            "identityObservationError": null
+          }
+        ],
+        "resources": [
+          {
+            "serverPid": 19340,
+            "selectedSlotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+            "slot": 1,
+            "serverGroupMembers": "",
+            "pgrepExit": 1,
+            "ownerRecordExists": false,
+            "serverRecordExists": false,
+            "identityBindingValid": true,
+            "closeReturned": true
+          }
+        ],
+        "normalSettlement": true,
+        "semanticPass": true,
+        "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-W0LIG1",
+        "serverLogSha256": "f328383da61d7a77f35db67008475d3d2cf8f8788bc016b04fbe0f9c6688685d",
+        "serverLogBytes": 29838,
+        "observedFullReloadSends": 0,
+        "observedLedgerHotUpdates": 0,
+        "cells": [
+          {
+            "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-W0LIG1/fresh-base.result.json",
+            "reportSha256": "cd36548ba61da2a54a727fbfc42beecce3e0e1ba43e87a4299b7502c0d93963d",
+            "gameId": "sa3cni",
+            "selectedBy": "url",
+            "nativePath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-W0LIG1/fresh-base-desktop.jsonl",
+            "nativeSha256": "0a1ae4502fb67714a627f297fd0a9e425e31c133a5b831b0b2c6e4f918409562",
+            "nativeRows": 29,
+            "nativeGameIds": [
+              "sa3cni"
+            ],
+            "navigationBefore": "about:blank",
+            "navigationExpected": "http://localhost:5274/?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=base&as=enemy&seed=1&debug=1",
+            "observerFailures": null,
+            "observerDrops": null,
+            "verdict": "pass",
+            "caps": [],
+            "error": null,
+            "lab": {
+              "card": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+              "variant": "base",
+              "side": "enemy",
+              "stage": null,
+              "requestedMods": null,
+              "deckMods": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "inspired",
+                "enduring",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Event"
+            },
+            "zone": "void",
+            "resolvedEvents": [
+              "energyChanged",
+              "cardPlayed",
+              "promptAutoAnswered",
+              "handEmptied",
+              "resolved",
+              "enteredVoid",
+              "prevented"
+            ],
+            "observedBrowserReloads": null
+          }
+        ]
+      },
+      {
+        "label": "C-fresh-perfected",
+        "startedAt": "2026-10-15T16:50:42.090051+00:00",
+        "finishedAt": "2026-10-15T16:50:54.158807+00:00",
+        "wallSeconds": 12.068632583017461,
+        "pid": 32455,
+        "exitCode": 0,
+        "command": [
+          "/opt/homebrew/bin/node",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/fresh-control-v01.mjs",
+          "perfected"
+        ],
+        "DEBUG": "vite:hmr,vite:deps",
+        "stdoutSha256": "9f849f8a7a30880cc62a55c05309169357a7cd4f8ef4554b06323886068210cc",
+        "stderrSha256": "bea855be1be77cdb1117a87c3092de34f729bc9f0e608c98671bd4a6176d00ee",
+        "identities": [
+          {
+            "event": "kjgt.session.identity",
+            "at": 1792083044218,
+            "label": "fresh-perfected",
+            "serverPid": 32505,
+            "port": 5274,
+            "slot": 1,
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "selectedSlotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+            "baseAdmissionPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+            "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-e91guS",
+            "owner": {
+              "token": "88aa0a26-016c-40d1-a6d4-c60cdf50e867",
+              "pid": 32455,
+              "bead": "hv-kjgt",
+              "label": "fresh-perfected",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-navigation-kjgt-root",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-15T16:50:44.188Z",
+              "providerState": "active",
+              "mcpSessionId": "f5c5733d-90fb-4bce-89f4-f6e0a4034e12",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            },
+            "identityObservationError": null
+          }
+        ],
+        "resources": [
+          {
+            "serverPid": 32505,
+            "selectedSlotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+            "slot": 1,
+            "serverGroupMembers": "",
+            "pgrepExit": 1,
+            "ownerRecordExists": false,
+            "serverRecordExists": false,
+            "identityBindingValid": true,
+            "closeReturned": true
+          }
+        ],
+        "normalSettlement": true,
+        "semanticPass": true,
+        "captureDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-e91guS",
+        "serverLogSha256": "75e5b7b90d01878ab9510671b0f1f68b90780eb25408ac01216efb7836b053f7",
+        "serverLogBytes": 28332,
+        "observedFullReloadSends": 0,
+        "observedLedgerHotUpdates": 0,
+        "cells": [
+          {
+            "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-e91guS/fresh-perfected.result.json",
+            "reportSha256": "4f25b4e2db490c28482e04f80fe30dc9bc2152cb631d492ed50e2868ca325e80",
+            "gameId": "ritcne",
+            "selectedBy": "url",
+            "nativePath": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-kjgt/invocations/run-e91guS/fresh-perfected-desktop.jsonl",
+            "nativeSha256": "f2131114f60821cdf6c131479521865f75591241c0457200fe2dac912e5fd061",
+            "nativeRows": 29,
+            "nativeGameIds": [
+              "ritcne"
+            ],
+            "navigationBefore": "about:blank",
+            "navigationExpected": "http://localhost:5274/?goto=card-lab&card=0fde04ac-8552-45ce-83a3-5ab2384b36da&variant=perfected&as=enemy&seed=1&debug=1",
+            "observerFailures": null,
+            "observerDrops": null,
+            "verdict": "pass",
+            "caps": [],
+            "error": null,
+            "lab": {
+              "card": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+              "variant": "perfected",
+              "side": "enemy",
+              "stage": null,
+              "requestedMods": null,
+              "deckMods": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "inspired",
+                "enduring",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Event"
+            },
+            "zone": "void",
+            "resolvedEvents": [
+              "energyChanged",
+              "cardPlayed",
+              "promptAutoAnswered",
+              "handEmptied",
+              "resolved",
+              "enteredVoid",
+              "prevented",
+              "cardDrawn"
+            ],
+            "observedBrowserReloads": null
+          }
+        ]
+      }
+    ],
+    "qualification": "Postrepair observed canonical sequence has four actual positive cells and two distinct virgin canonical-session controls. No observed ledger hotUpdate/full-reload in these bounded runs supports workflow verification; stable deterministic old-config RED/new-config GREEN proves configured watcher boundary. It is not a universal timing/absence proof or retroattribution of historical unknowns.",
+    "sourceEpoch": "final fixed config f7eb68aa2c70da6cca90c2aa3ae358706a0806f951ba07d502aacb5bb2bada41 with temporary own observer config3f12a8d1bea59400798f549581e253f032f3fe0d4ef9abd2ceba8caa48102673; unchanged engine/app/card fixtures; fully restored afterward",
+    "nativeGameRows": 184,
+    "exactOwnLedgerPrefixPreserved": {
+      "bytes": 9762,
+      "sha256": "f13d400e2b8d17fd2f7dfbfa6f14551ac266c783b1edbbc8086bcf2a8aad6a5e"
+    },
+    "controls": "Two distinct first-application about:blank canonical-session controls use unchanged cardLabPlay/session.runPlan, not the stock CLI which prepends base.",
+    "images": "No presentation/responsive change; no screenshot acceptance required."
+  },
+  "resourceCustody": {
+    "normalMethod": "Actual awaited canonical close returned after browser_close, local RPC drain, transport shutdown, own records/server settlement, port diagnostic, selected lease and evidence-lock release.",
+    "selectedSlot": "Actual slot1 lock derived from native holding line and own provider ownerPath, distinct from baseAdmissionPath artifacts/browser-qa.lock.",
+    "qualification": "No raw wire transcript or uncaptured lockholder PID-level proof claimed. Actual published runner/bead/WT/slot/port/MCP identities bound and terminal own provider/server records and server groups observed absent. Shared8931 retained; no foreign/reused signals."
+  },
+  "failurePaths": [
+    {
+      "path": "error/interrupt during canonical run",
+      "contract": "Existing timeout-only automatic retry, original unknown verdict and native finally cleanup remain unchanged. No new application transition or persisted state."
+    },
+    {
+      "path": "reload/restart",
+      "contract": "Stable watcher exclusion prevents tracked sweep-output updates from entering source HMR. Native metadata/Caps/game identity/export mechanisms retain their contracts; direct pre-repair reload and current sequential/virgin controls are source-qualified."
+    },
+    {
+      "path": "concurrent sessions",
+      "contract": "Absolute own-root glob preserves neighboring source; native slots, queue fairness, provider/server records and per-run ownership unchanged. Existing two nested-worktree excludes preserved."
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-15T16:53:08.947931+00:00",
+      "measuredFor": "pre-final-validation evidence write",
+      "command": "sysctl -n vm.loadavg",
+      "raw": "{ 14.79 11.39 8.81 }",
+      "oneMinute": 14.79
+    },
+    {
+      "at": "2026-10-15T16:53:48.136063+00:00",
+      "measuredFor": "actual final npm run review start",
+      "command": "sysctl -n vm.loadavg",
+      "raw": "{ 10.76 10.78 8.70 }",
+      "oneMinute": 10.76
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "actual final npm run review start",
+        "at": "2026-10-15T16:53:48.136063+00:00"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 48,
+    "jsdomFiles": 0
+  },
+  "frictionTriggerDisposition": {
+    "dispatch": "Parent actualGREEN0/0.179448s",
+    "dueDuties": "Parent dispatch Phase5 9/25since752, Phase6 9/10, Phase7 2/10; no due duty at dispatch."
+  },
+  "orchestrationQualifications": [
+    "Pre-admission scanner proposal corrected package metadata resolution under a new retained version; hash guard rejected stale authority before any execution. Original88ce proposal nonexecuted, exactdeb0 read-onlyprobe executed once.",
+    "Python wrapper syntax typo before RED parsed before any script effects; corrected admitted first test invocation ran once.",
+    "Missing-art warnings during test fixture materialization are retained; prepare and restore returned0 and final564links reported. No production data repair or new cause inferred."
+  ],
+  "finalChecks": {
+    "review": "Passed14.235130s: bothtypechecks, imports, lint, friction schema and12relatedtests/1entry; related scope is not full-suite coverage.",
+    "knip": "Passed4.279238s.",
+    "reviewFull": "Passed119.358301s under heavylock at2workers;425files/11276tests, full lint/imports/bothtypechecks/Knip/frictionschema/production-bundle assertion. Request\u2192firstchildoutput0.088765s includes lockwait+startup, exactlock-acquisition timestamp not retained.",
+    "schemaWhitespace": "Final schema and working/staged whitespace must pass after the actual final-clock refresh before this source is committed; source-bound terminal receipts are retained externally."
+  },
+  "workspaceSetup": {
+    "npmInstallS": 2.382,
+    "pid": 22200,
+    "scope": "Parent required fresh-WT setup before helper dispatch, terminalgreen; no reinstall by helper."
+  },
+  "finalCommitWindow": {
+    "start": "2026-10-15T16:23:17.618025Z",
+    "end": "2026-10-15T17:01:10.490216+00:00",
+    "scope": "Original exact claim start through immediate precommit evidence cutoff, including setup/research/admissions/diagnostics/QA/checks/waits. Fast schema/working/staged whitespace and actual Git span follow this cutoff and are retained externally; no inferred future timestamp or clock reset."
+  },
+  "artifactIndex": {
+    "filename": "artifact-index-v01.json",
+    "sha256": "65141b62b7e830d9d12590fc6ef271fe9e7ab51c6c4efc5356292b0bbe1ba19a",
+    "fileCount": 38,
+    "bytes": 609495,
+    "qualification": "Immutable ignored diagnosis/postrepair raw artifacts and caller/observer custody captured before final commit; exact SHA256 per file. No image files."
+  },
+  "knownTerminalCommandPids": {
+    "6526": "",
+    "33672": "",
+    "61495": "",
+    "62713": "",
+    "72318": "",
+    "18829": "",
+    "32455": "",
+    "35646": "",
+    "38552": "",
+    "40532": ""
+  }
+}

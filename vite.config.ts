@@ -132,6 +132,8 @@ export default defineConfig({
       ignored: [
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
+        // Sweeps append verdicts between cells while this server is active.
+        path.resolve(path.join(__dirname, "docs", "plan", "evidence", "qa-ledger")) + "/**",
       ],
     },
   },
