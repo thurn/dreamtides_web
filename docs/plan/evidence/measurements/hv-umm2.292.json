@@ -1,0 +1,416 @@
+{
+  "bead": "hv-umm2.292",
+  "status": "LOCAL_ACCEPTANCE_COMPLETE_READY_FOR_NATIVE_DELIVERY",
+  "base": "a2e068e78b42ae40a9dc929582aa965f23cd35e2",
+  "checkpointHead": "46e7e6d90d89a9acefe744d0c5a8e2e23df2e94c",
+  "dispatch": {
+    "task": "apollyon_pair292",
+    "nativeDispatch": "2026-10-15T11:51:10.747Z",
+    "call_id": "call_28d20aaaa41e40fdb7f231cb7ae354f7",
+    "oneBasedOrdinal": 66729,
+    "recordSHA256": "d731c0696325a9644c96e4f77ddd47af9597ffec99320006b66b307d6a9e3d29",
+    "fork_turns": "all (default)",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+  },
+  "continuationDispatch": {
+    "timestamp": "2026-10-15T15:33:57.958Z",
+    "ordinal": 70769,
+    "callId": "call_8ce718e8d74842b19b9281ea764e7784",
+    "rawSHA256": "cce9f1d77c98cb5c0735577976159e73085001c6e577a563d6a71eec393cfef5",
+    "forkTurns": "none",
+    "agent": "/root/apollyon_pair292_resume"
+  },
+  "clock": {
+    "originalGrossStart": "2026-10-15T11:51:10.747000+00:00",
+    "observedEvidenceCutoff": "2026-10-15T16:49:18.922681+00:00",
+    "grossMinutesAtCutoff": 298.13626135,
+    "finalGitEndpoint": null,
+    "openThroughFinalGit": true,
+    "qualification": "Original continuous dispatch window includes ALL source holds,744/290 prerequisite work, root294 work, checkpoint/park/update recovery, continuation, checks, QA, coordination and waiting. No reset/exclusion. Final finite ACK refreshes only observed cutoff in this JSON and friction JSON immediately before Git; actual Git endpoint/gap is recorded externally after reaping, never fabricated."
+  },
+  "source": {
+    "sha256": {
+      "src/content/apollyon/design.ts": "727d01f3f98fee9f2617fa1bba6ab9022ee0d3f21fab2cb05b7d2cf981500af1",
+      "docs/design.md": "42f1f3636dae8606f15f88094cf59f22e3ef911f8b49f096f97a715b5c69117a"
+    },
+    "ownedIncarnationAspectPairs": {
+      "8890b892-0634-4b8a-bfc0-018adfa979a7": "d5599cfc-eb2b-465d-8e1b-076cb118ac59",
+      "9a1bf275-2763-4db9-ad10-86d8f7e7efdf": "8c8bc6a5-6ece-4ba2-a360-f93619373bbf"
+    },
+    "scope": "Only2ownedAspectvalues/existingAbilityListadoption+2additiveimports/soleunusedconditionCardCounts removal; existingexpectedVerifiedText import reused. Exactly2owneddesignrows. All8otherentries/10recipes/Dreamsigns and sharedmixed-statusintro unchanged. No new primitive/API/state/prompt/status or test.",
+    "reapplyProof": {
+      "path": "/tmp/root-292/resume/reapply-v1/proposal.json",
+      "sha256": "85a66b25cbe64fe7f32258d154f2706226c033267d3cb41fd82bdf3115b59357"
+    },
+    "runtimeManifest": {
+      "path": "/tmp/root-292/resume/runtime-source-before.json",
+      "sha256": "c07fc2e427ce2cea4a4db4ac5b04a302ecd0593c20a72a3707bbf011c74fdee7"
+    },
+    "runtimeRegularPaths": 5764,
+    "symlinks": {
+      ".claude/skills": "../.llms/skills",
+      ".codex/skills": "../.llms/skills"
+    },
+    "currentBasePreservation": "Parentbaseline5760paths includes2ownedsourcepaths; everyotherbaselinepath byte-identical. Own4evidence separate; finalpacket freezesallcurrenttrackedbytes.",
+    "recovery": {
+      "originalUnvalidatedCheckpoint": "3fc5511aa5f5f6a5e0702e229a9a189914a8480b",
+      "originalBase": "031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2",
+      "parkedTemporaryCheckpoint": "853c25762cd62d3fc5e31790a067cf8962b10748",
+      "updatedCheckpoint": "46e7e6d90d89a9acefe744d0c5a8e2e23df2e94c",
+      "updatedBase": "a2e068e78b42ae40a9dc929582aa965f23cd35e2",
+      "proof": {
+        "path": "/tmp/root-292/resume/update-success-verified.json",
+        "sha256": "452f2a53ebe5963a44f255a0a501144ae332f1c2dbfd3ca2d15110c8d4525583"
+      },
+      "qualification": "Parent alone ran native failed update/clean rollback/Doctor/parked update. Original2sources/base/patch/all6SHA preserved. Current2previews reapplied after exact parent ACK; allcurrent acceptance rerun. No checkpoint candidate/promotion credit."
+    }
+  },
+  "checks": {
+    "focused-reapplied": {
+      "exitCode": 0,
+      "wallSeconds": 8.981223125010729,
+      "cpuSeconds": 10.030194999999999,
+      "receipt": {
+        "path": "/tmp/root-292/resume/focused-reapplied.receipt.json",
+        "sha256": "e89acf3a66c4f10078976158a40485386f846fbec6460a24a42464b913ee0eff"
+      },
+      "stdoutSHA256": "219f630ad3b40579e8bf3638cdb558b953761a01ed7603a7219418f026a070f9"
+    },
+    "validation-review": {
+      "exitCode": 0,
+      "wallSeconds": 69.21818104200065,
+      "cpuSeconds": 205.702064,
+      "receipt": {
+        "path": "/tmp/root-292/resume/validation-review.receipt.json",
+        "sha256": "aa1d0428d0035cdc3c49279e45841d27b4bd97e12b9cd0928baae5034653ec75"
+      },
+      "stdoutSHA256": "4f7ab357c2d99590902e80335e5eaea2b87aec5a4e6678fc45f526f9e0ba9652"
+    },
+    "validation-knip": {
+      "exitCode": 0,
+      "wallSeconds": 4.310254874988459,
+      "cpuSeconds": 5.366273,
+      "receipt": {
+        "path": "/tmp/root-292/resume/validation-knip.receipt.json",
+        "sha256": "ec0b1d6d75d616e6a8457b8e608efc9089a7cad9009d5ced29a1f17ca9d7dc35"
+      },
+      "stdoutSHA256": "112415c5fffdedf452f401d93384266b58f3eadeebf12b813349fd65c93f4bc6"
+    },
+    "validation-friction-schema": {
+      "exitCode": 0,
+      "wallSeconds": 0.5981636249925941,
+      "cpuSeconds": 0.11813499999999999,
+      "receipt": {
+        "path": "/tmp/root-292/resume/validation-friction-schema.receipt.json",
+        "sha256": "9532b2a97916a026c808990fa49774f71cdbd25740fd56c4a6833e96cb86d5a5"
+      },
+      "stdoutSHA256": "e668472c57e5fdf60958f0be53ba9c39cbc348bfcf266a00543a74f35985e488"
+    },
+    "validation-friction-triggers": {
+      "exitCode": 0,
+      "wallSeconds": 0.38873508299002424,
+      "cpuSeconds": 0.21881599999999998,
+      "receipt": {
+        "path": "/tmp/root-292/resume/validation-friction-triggers.receipt.json",
+        "sha256": "cf6b357b0251b51fe76f21755039d74c571fd94d2ff3dbfb6b3b51f2cc2d5b01"
+      },
+      "stdoutSHA256": "fcb18713475a026f08217c861e0eed43a4dfe62f9419e6c2b9587cd7ab269484"
+    },
+    "validation-whitespace": {
+      "exitCode": 0,
+      "wallSeconds": 0.17970862501533702,
+      "cpuSeconds": 0.073942,
+      "receipt": {
+        "path": "/tmp/root-292/resume/validation-whitespace.receipt.json",
+        "sha256": "d77d5731b4fefcee8c843796cd876300b078a48b1a68677dc4551345e417088e"
+      },
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "focusedCoverage": {
+    "files": 3,
+    "tests": 61,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    }
+  },
+  "review": {
+    "ordinaryTests": 9257,
+    "ordinaryTestFiles": 286,
+    "coreReviewRequired": false,
+    "functionalCodeAdded": 5,
+    "functionalCodeDeleted": 3,
+    "qualification": "No core-review label/new capability; exact leaf consumer delta8functional lines below100 threshold. Existing642public both-actor permanent-emblem contracts readonly; D20 composition requires no duplicate scenario. No review:full required for this content leaf."
+  },
+  "greedySmoke": {
+    "actualCompleted": 40,
+    "perIncarnation": {
+      "8890b892-0634-4b8a-bfc0-018adfa979a7": 20,
+      "9a1bf275-2763-4db9-ad10-86d8f7e7efdf": 20
+    },
+    "matchingPublicReplay": 40,
+    "decisions": 2523,
+    "actions": 2782,
+    "proof": {
+      "path": "/tmp/root-292/resume/greedy40-acceptance-audit.json",
+      "sha256": "bfad513598eaa9d5f93c51183a197a273792a1460e1aae29a7af6fa1afedd8f8"
+    },
+    "parentProof": {
+      "path": "/tmp/root-292/resume/parent-greedy40-audit.json",
+      "sha256": "b00232d254ca0c5c252592485ab08f2a1dddaac2e69f3d3972063e9eae002d07"
+    },
+    "scope": "Full30recipe/randomfill/realpool150/3UUIDpins/Dreamsign versus actual30Starter public foundation; bothGreedy scale1 iterations256/64. No balance or295/champion layer6matrix claim.",
+    "seed179": {
+      "currentCompleted": true,
+      "decisions": 155,
+      "actions": 110,
+      "publicReplayHash": "3d81deb27b57a256e19591eaaf9f8f64909fa1b8cec549b58accae7b3c6923fb",
+      "proof": {
+        "path": "/tmp/root-292/resume/seed179-audit.json",
+        "sha256": "c99b5394475dbc3335c50e5671a4b0b17b62750f5ba4de0c37d1d789c188b8fb"
+      },
+      "oldComparison": "Only2actuallysavedpublicreconstructionrows match excludingtimestampseq. Fullold179init/spec/outcome unavailable. EarliercauseUNKNOWN/143cancel remains qualified; no745/746causalityproof."
+    }
+  },
+  "weightedFuzz": {
+    "actualGames": 300,
+    "steps": 78258,
+    "failures": 0,
+    "prompts": 6220,
+    "interactiveReruns": 577,
+    "targetCoverage": [
+      {
+        "kind": "avatar",
+        "uuid": "d5599cfc-eb2b-465d-8e1b-076cb118ac59",
+        "included": 300,
+        "exercised": 209
+      },
+      {
+        "kind": "avatar",
+        "uuid": "8c8bc6a5-6ece-4ba2-a360-f93619373bbf",
+        "included": 300,
+        "exercised": 537
+      }
+    ],
+    "actualCommandSeconds": 1417.1316676249844,
+    "actualCommandCPUSeconds": 1484.1890449999999,
+    "nativeEngineRoundedSeconds": 1414.1,
+    "nativeEngineRoundedCPUSeconds": 1482.0,
+    "outerToInnerSeconds": 695.897887,
+    "outerToInnerQualification": "Elapsed outer Popen to inner Popen includes lock wait plus guards/startup; exact lock acquisition instant not observed.",
+    "proof": {
+      "path": "/tmp/root-292/resume/weighted300-acceptance-audit.json",
+      "sha256": "c10f7b643cd850603d6c9b4fdf1b0b84d724985b74d950d88fc3e137330c088c"
+    },
+    "parentProof": {
+      "path": "/tmp/root-292/resume/parent-weighted300-final-audit.json",
+      "sha256": "6b92dd26083b34fb088d1c11afde3d243ec65ee82c707742eb2f107619121466"
+    },
+    "sourceClosure": {
+      "path": "/tmp/root-292/resume/fuzz-read-closure.json",
+      "sha256": "1114bd0c74c8e524ad57106d9969427aa72f9037f00735e2833609d5622b189a"
+    },
+    "closureFiles": 1181,
+    "qualification": "Literaldefault300/currentKindledRandomworkload; Greedy/decide absent fromactualASTclosure. Source/cost attributionUNKNOWN;742doesnotwaiveD19/full300. Native0/resourcesettled, no old292or294borrowedcredit."
+  },
+  "canonicalBrowser": {
+    "NodePreflight": {
+      "pass": 4,
+      "skip": 36
+    },
+    "sweep": {
+      "pass": 4,
+      "skip": 36
+    },
+    "canonicalRows": 40,
+    "baseExercised": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "productionViewportPasses": 4,
+    "productionCases": {
+      "8890b892-0634-4b8a-bfc0-018adfa979a7": 25,
+      "9a1bf275-2763-4db9-ad10-86d8f7e7efdf": 14
+    },
+    "persistedGameLogRows": [
+      148,
+      148,
+      152,
+      152
+    ],
+    "capsErrors": 0,
+    "captures": 0,
+    "proof": {
+      "path": "/tmp/root-292/resume/qa-acceptance-audit.json",
+      "sha256": "68de5454af088ae318f944a044565e8529e43ad96447e990cf6bb52bcd4350b0"
+    },
+    "parentProof": {
+      "path": "/tmp/root-292/resume/parent-qa-final-audit.json",
+      "sha256": "a1c5d20288184693647503e042680a92b564905579f32b68dfba87861f1f3d86"
+    },
+    "scope": "NormalproductionBEGIN_BATTLE/full30/pool150/pins3/Dreamsign/ordinaryenemyplay, geometry andsamebattleUUID/nonregressingreload desktop+mobile. Publicread-onlyprobe awaitedbeforeevents. No debugstaging/privatewrites. Canonicalexercisedfalse isinitializationonly."
+  },
+  "d21": {
+    "source": {
+      "path": "/tmp/root-292/entities.stdout",
+      "sha256": "00eadfe6c9b5daddfd1fa2b968a25b9f4d2a514984c1584d52a6b6208925f094"
+    },
+    "firstBytes": {
+      "8890b892-0634-4b8a-bfc0-018adfa979a7": 234,
+      "9a1bf275-2763-4db9-ad10-86d8f7e7efdf": 53
+    },
+    "sampled": 0,
+    "newKinds": 0,
+    "judgedPasses": 0,
+    "disposition": "Bothoriginalincarnationsunsampled/existingcomposition; no automaticjudgedpass or extraimage requirement."
+  },
+  "priorEpoch": {
+    "originalSource": {
+      "src/content/apollyon/design.ts": "0604ba80c4fbd7cf7124afcd4b8cc87e72af15dec47e432eb7ba6efd0080b919",
+      "docs/design.md": "7ba0fb472bc418c28c52895502862ca242ae11bfa295a9970c3d0a357d5e4dc0"
+    },
+    "oldMeasurement": {
+      "path": "/tmp/root-292/resume/evidence-before-final/docs/plan/evidence/measurements/hv-umm2.292.json",
+      "sha256": "dfb5c27b0f30b802a24edeeec57272f4d3dec89c63531bbdd5bb210f6686ed3d"
+    },
+    "partialCompleted": 31,
+    "counts": [
+      17,
+      14
+    ],
+    "oldPartialCurrentCredit": 0,
+    "rawGamesSHA256": {
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-14.json": "2c51a72070e41702ce9317dbfc40389684ef22065bd79ff0ea0c5130633936e9",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-15.json": "7cffcbb0d899352db919cde02946fc936e9400c576460a4d2a8f850d1102f06a",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-25.json": "4db52409bca31bef3bbcccea0912d04651f605928bc857d3699182816e67c1d9",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-34.json": "beb6ba58935b3a8feebafcd240ed014e21a6cec3cf0b6c1ab714f60af842de24",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-42.json": "abc375d92b0ca3c16af6d5c7e93b06cc7dae2d8b90223c0a39305eaa8fbf2cf9",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-59.json": "270a4b0751eb7e0c0f8b3a5df129a499601c3cacb6b0bed6bd472f1a7eed6f93",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-60.json": "e9b0a2001b4dd627ea74a03193287a30a5a5c5d409d151d4925e81a7abf8cc0a",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-63.json": "85562bfd3b3afa336824f21cb2c6b52a4ff88c283e7f2513a9a73ef6157e5ae1",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-65.json": "276f81db6a89847d2b3a9aa6a3aba101c151948727efc2a5bd17594d959958e4",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-70.json": "bb841473d0254e0eca0f6f3c406915e0a632c701b0449294e8bb0aa9c9e6d21b",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-72.json": "99d979cd09890929f718a76216a6476a3dbcfa6abaa9528f5f69fa2d4496024d",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-89.json": "da4e0d72a91442fd29845f2db6caebe2a6e2f59d01c69a88c51617dac71d094b",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-100.json": "a04b3712871ebb25457de90090c762cd0f2dcb211bf5d5b1a99ab5884c875e93",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-102.json": "d2f67270437dec6efd3e4d9dcfbbe6e6aa0d3107076534d57a6d4a1a8fe665f8",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-103.json": "2219a0b48521060fc464ccf1c62191efd71bc75c60e81692d3feeadbfe3367c3",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-107.json": "ddb9e2720a2f047b5f441cf6fafe053088ae65d1bc005eae0e4a2f05c9991e5e",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-110.json": "261f937edb9eeb1b45a62d4d8b745dd97341b134568cb687a291323e3b95cf7c",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-111.json": "a473055d2da90e97101fef55e79ff2442549c59a90d762f3bc5899ca3ba8339f",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-116.json": "99ce747b84b7a8a666355def68f5e13eabe4cb0c45867d75dbb22675456e42da",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-120.json": "513ff9700ad5ba0f95aa8f661ee1021fe5fe2c7ba0a81ad33aecb709d2a2e2c4",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-121.json": "34bad01665b9af1cb7c9d6a894d08d89850bee4fd02e3f2b8dd98d9628bdf4a9",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-123.json": "f9b459d5dbac18b6ee883923010bebe64f7bb6b25ef9485002110fc41a42631a",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-136.json": "2f6c9b0551cd2d840ccb723b50076181d85d62ee9cb7fb356a517750936fb1cc",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-137.json": "122ddf63240f2d179605df9147978ba183cf0602211f322452dfdabf23308066",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-140.json": "fc0a966f4c59fda22c553e0ee6a38953658077816a81675732864e641e63b384",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-141.json": "e55a95d5004fd9e0b34f01bf64439716ba5835b9d157c77a07cd06241b0a405a",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-142.json": "3daa55804f56ea483edb96b1033663cc2903c1cf0c120d5238f21ed86b2f3550",
+      "greedy-9a1bf275-2763-4db9-ad10-86d8f7e7efdf-144.json": "228508a98bd59256ecb68c7f40a0a5b9169e07de629a9b707b7ce761e8e1e809",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-168.json": "3086ba952fd718362f73fb6f9e01e81be36b0330ae34338400412a6bce38f661",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-170.json": "a3a31c5ca52e11aa5ad0cd0026c530f7720d605805aa7527ca96c979c4cd5a2f",
+      "greedy-8890b892-0634-4b8a-bfc0-018adfa979a7-172.json": "3f27e3de8cff901db21627864b991d0d30ddfba83d5a737368990eab953252f9"
+    },
+    "interruptedCommand": {
+      "receipt": {
+        "path": "/tmp/root-292/helper/greedy-smoke-v2.receipt.json",
+        "sha256": "85e06f0dffd1f1827467a9ebdac04f32e17b1dc5ab55aefe4543e1a050acdcaf"
+      },
+      "exitCode": 143,
+      "timedOut": false,
+      "wallSeconds": 873.422129332961,
+      "cpuSeconds": 940.5966050000001,
+      "remainingGroupMembers": [],
+      "seed179Outcome": "UNKNOWN/cancelled; no success/infinitebug claim"
+    },
+    "sample": {
+      "file": {
+        "path": "/tmp/root-292/helper/greedy-seed179-native-sample.txt",
+        "sha256": "38272be3b99b503cb35d87ddec884e508d0c308b886e6d050f2fe9707d8bd377"
+      },
+      "receipt": {
+        "path": "/tmp/root-292/helper/greedy-seed179-native-sample.receipt.json",
+        "sha256": "f028e518fbb21857ca3f5dfc53aa15806a04045d5ec1848d1a909c30f5d7bd4a"
+      },
+      "qualification": "Bounded5sV8/JITsample uninformativeforattribution, overheadretained"
+    },
+    "failedNodePreflight": {
+      "receipt": {
+        "path": "/tmp/root-292/helper/node-preflight.receipt.json",
+        "sha256": "c75af6f4761266de4a9f356fd540ad6445142b77ea8392e7f26108ecf4319c83"
+      },
+      "exitCode": 1,
+      "games": 0,
+      "qualification": "Browsergenesis import.meta.env failure beforegames; corrected scratch publicparseJourneySeed seam, productionmodulesreadonly."
+    },
+    "rawScratchRetention": "All oldcallers/failedreceipts/stdout/nativecancellation/sample/sourcecheckpoints preserved under/tmp/root-292/helper andparentrawproofs. All currentactualoutcomes/fullstartedinput/replay proofs retained under/tmp/root-292/resume."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Current ordinary npm run review starting 2026-10-15T16:34:46.976164Z; observed1-minuteos.getloadavg value from actualPopenreceipt."
+      }
+    }
+  },
+  "runtime": {
+    "allOwnedResourcesSettled": true,
+    "GreedyLedger": {
+      "path": "/tmp/root-292/resume/live-resources.json",
+      "sha256": "e1d9a8ffcae3acac4e9d121e303983d8701ee211c1b4b672b347cd3aa3c5820f"
+    },
+    "QALedger": {
+      "path": "/tmp/root-292/resume/qa-live-resources.json",
+      "sha256": "3356463ba0d634191a8f7be244ec1b3852af0d1fe123a1348a22fa14714dcec2"
+    },
+    "heavyReceipt": {
+      "path": "/tmp/root-292/resume/weighted300-lock.receipt.json",
+      "sha256": "a17113f9e7275db7f982504c53167ad5bac62f88455db199e0cdb3aba8c0812a"
+    },
+    "browserSessions": [
+      [
+        "0fe57df0-a3de-46fa-85a9-1e37426f30aa"
+      ],
+      [
+        "bd110a23-0d73-4ed9-b54f-a3b45d08ef6a"
+      ],
+      [
+        "74d9ebc1-64bb-468b-a9f1-af42c1315145"
+      ]
+    ],
+    "nativePort": 5274,
+    "ownProviderServerRecordsRetained": 0,
+    "allOwnedGroupsRemaining": [],
+    "sharedPlaywrightService": "left running; managed closes owncontexts/servers only"
+  },
+  "remainingDelivery": [
+    "Actual final Git endpoint, process receipt and clean one-commit proof are recorded externally after reaping; committed clock is the observed pre-Git cutoff.",
+    "Parent alone exact candidate/approve/certification/cleanup/closure; not claimed landed."
+  ],
+  "finalMetadataValidation": {
+    "status": "passed",
+    "receipts": {
+      "final-evidence-schema": {
+        "path": "/tmp/root-292/resume/final-evidence-schema.receipt.json",
+        "sha256": "320602cc15c7569389e7e594ce1e88696eaf0e40f853714670110565d0bed3c0"
+      },
+      "final-evidence-triggers": {
+        "path": "/tmp/root-292/resume/final-evidence-triggers.receipt.json",
+        "sha256": "ffc1233bf8070b908fcd856b25d8cb4bb9d14bf11a828d63089bc6b5308305c9"
+      },
+      "final-evidence-json-preservation": {
+        "path": "/tmp/root-292/resume/final-evidence-json-preservation.receipt.json",
+        "sha256": "05cdbd388384486efb811f2d375b32e55e580631c61267e5ff73b9bb407c65b2"
+      },
+      "final-evidence-whitespace": {
+        "path": "/tmp/root-292/resume/final-evidence-whitespace.receipt.json",
+        "sha256": "5f733546cbfd05dd634cfd76e83d904157eaf7f7e092c2102aec32d6b765a6e8"
+      }
+    },
+    "qualification": "Actual evidence-only schema/triggers/JSON/rawhash/preservation/whitespace checks passed. Finalpacket carries a final current-source quick check after recording these receipts; only observed2JSONclock refresh remains before Git. No source/test rerun required for receipt metadata."
+  }
+}

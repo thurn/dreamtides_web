@@ -1,5 +1,5 @@
 /** Provisional D6 specifications. Pair-authoring beads adopt and verify the live abilities. */
-import { all, characterYouControl, conditionCardCounts, randomIn, staticAbility } from "../../engine/dsl/builders";
+import { all, characterYouControl, randomIn, staticAbility } from "../../engine/dsl/builders";
 import { onDawn, triggered, triggeringCard, whenAbandon, whenDiscard, whenYouPlay } from "../../engine/dsl/triggers";
 import * as p from "../../engine/effects/primitives";
 import { smallEnemyDissolveAspectAbilities } from "./aspects/aspect-ccc0385e-ff00-4be3-a807-99e4def47d2d";
@@ -10,6 +10,8 @@ import type { ApollyonIncarnationId } from "../../types/identifiers";
 import type { Uuid } from "../define";
 import type { ApollyonDesign } from "./types";
 import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { dawnReclaimAspectAbilities } from "./aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7";
+import { secondEventWarriorAspectAbilities } from "./aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf";
 import { spiritAnimalAspectAbilities } from "./aspects/aspect-1380edc9-09ed-44df-ad09-ab4cbfc081b5";
 import { secondEventAspectAbilities } from "./aspects/aspect-3fe26475-8023-46d3-b13b-86673b92e3d0";
 import { dawnRecoveryAspectAbilities } from "./aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1";
@@ -84,7 +86,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["9aaed05a-2223-42f2-9b9d-81a53eab811c"],
   }],
   [parseApollyonIncarnationId("8890b892-0634-4b8a-bfc0-018adfa979a7"), {
-    aspect: { id: "d5599cfc-eb2b-465d-8e1b-076cb118ac59", renderedText: "▸Dawn: If there are 7 or more cards in your void, a random character in your void gains reclaim.", proposedAbilities: () => [triggered(onDawn(), p.ifThen(conditionCardCounts("void", 7), p.grantReclaim(randomIn("void", 1, { cardType: "character" }))))], pending: true },
+    aspect: { id: "d5599cfc-eb2b-465d-8e1b-076cb118ac59", renderedText: "▸Dawn: If there are 7 or more cards in your void, a random character in your void gains reclaim.", proposedAbilities: dawnReclaimAspectAbilities, abilities: dawnReclaimAspectAbilities, verifiedText: expectedVerifiedText("▸Dawn: If there are 7 or more cards in your void, a random character in your void gains reclaim.") },
     deckRecipe: {
       poolAvatarId: "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
       archetypeTideIds: ["f7072be7-f12b-482a-b9e1-4d3925622eb2", "d5cf7078-48ae-402d-837e-dde02b1a7153"],
@@ -102,7 +104,7 @@ export const APOLLYON_DESIGNS: ReadonlyMap<ApollyonIncarnationId, ApollyonDesign
     dreamsignIds: ["3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"],
   }],
   [parseApollyonIncarnationId("9a1bf275-2763-4db9-ad10-86d8f7e7efdf"), {
-    aspect: { id: "8c8bc6a5-6ece-4ba2-a360-f93619373bbf", renderedText: "When you play your second event each turn, awaken warriors you control.", proposedAbilities: () => [triggered(whenYouPlay({ cardType: "event" }, 2), p.awaken(all(characterYouControl({ subtype: "Warrior" }))))], pending: true },
+    aspect: { id: "8c8bc6a5-6ece-4ba2-a360-f93619373bbf", renderedText: "When you play your second event each turn, awaken warriors you control.", proposedAbilities: secondEventWarriorAspectAbilities, abilities: secondEventWarriorAspectAbilities, verifiedText: expectedVerifiedText("When you play your second event each turn, awaken warriors you control.") },
     deckRecipe: {
       poolAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
       archetypeTideIds: ["80e3d33f-6b21-4739-9050-be8d28de28a6", "4b01b6c1-ccca-4e19-848a-d799d46088b2"],

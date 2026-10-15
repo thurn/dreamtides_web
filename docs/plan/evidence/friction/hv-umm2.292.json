@@ -1,0 +1,45 @@
+{
+  "bead": "hv-umm2.292",
+  "phase": 5,
+  "implementMin": 298.13626135,
+  "implementWindow": {
+    "start": "2026-10-15T11:51:10.747000+00:00",
+    "end": "2026-10-15T16:49:18.922681+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.981223125010729,
+    "greedySeed179": 53.778679249982815,
+    "greedyRemaining39": 415.1999133750214,
+    "weighted300": 1417.1316676249844,
+    "NodeAspectPreflight": 3.1566507080569863,
+    "avatarSweep": 42.09997812501388,
+    "productionDawn": 73.55258791701635,
+    "productionFrenzy": 75.40777129097842,
+    "review": 69.21818104200065,
+    "knip": 4.310254874988459,
+    "oldInterruptedGreedy": 873.422129332961
+  },
+  "hostLoad": 5.47802734375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.5615747833333333,
+      "note": "Gross observed V1 Node browser-genesis import failure to V2 successful preflight, includes scratch repair, parent byte admission and preflight execution; zero V1 games. Exact public URL-seed serialization uses parseJourneySeed; production source/environment unchanged."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 11.598298116666665,
+      "note": "Measured outer-start to actual inner-start 695.897887s includes shared heavy capacity, guards and startup; exact acquisition instant UNKNOWN. Actual 1417.131668s execution is separate. Existing hv-lf7t disposition; no scheduler defect inferred."
+    },
+    {
+      "tag": "weighted-fuzz-duration",
+      "minutes": 23.618861127083072,
+      "note": "Current literal300 actual command1417.131668s/native1414.1s/78258steps; exact new Random/Kindled/Aspect source epoch. Existing742 audit is source-qualified precedent, not a diagnosis of this batch. Attribution UNKNOWN; no matched-load A/B, unavoidable-cost claim or D19/full-fuzz waiver."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Pre-existing observations for hv-umm2.292
+
+The current base contains certified `hv-umm2.744`, which admits the registered distinct Apollyon Aspect UUIDs in the canonical browser avatar lab and presents their metadata. The source-audited selectable-roster guard at original base `031188f3d276d8a8faf622d24bd7e7ad2c5e1bd2` was the bounded prerequisite; the current canonical sweep and both production workflows pass on the combined source. This is a source-qualified resolved prerequisite, not an executed old sweep failure.
+
+The first scratch Node preflight failed before games because browser genesis reached `import.meta.env.DEV` outside Vite. The retained corrected caller uses the public `parseJourneySeed` URL-seed seam. The original failed receipt, output and caller remain under `/tmp/root-292/helper/`, with zero game credit.
+
+The original Greedy command has 31 completed, exactly replayed outcomes (17/14) on its old source. Natural seed 179 had an unknown outcome when the parent terminated the verified owned group once; its observer reaped exit 143 with `timedOut: false` and no remaining group. Its bounded five-second V8/JIT sample has no reliable source attribution. The current run completes seed 179 at the original budgets with a matching full public replay, then completes 20 current games per incarnation. Only the two actually saved old public reconstruction records match the current case; the full old input is unavailable. The old cause stays UNKNOWN, with no product-hang, policy-fix causality or retroactive pass claim.
+
+The current literal weighted300 run completes 78,258 steps with zero failures. Its 695.897887-second outer-to-inner interval includes capacity waiting, guards and startup; its actual execution is 1417.131668 seconds. Existing `hv-umm2.742` provides a source-qualified duration audit for other batches. Attribution for this batch remains UNKNOWN; all D19/full-fuzz requirements remain binding.
