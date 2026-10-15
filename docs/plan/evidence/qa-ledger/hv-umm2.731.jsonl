@@ -1,0 +1,3 @@
+{"bead": "hv-umm2.731", "mode": "public-engine-regression", "verdict": "fail", "notes": "Actual broken-before source:8FAIL/4PASS; all8 shared witnesses offer2 target-role prompts. Independent equal-reference controls pass. Raw hashes/receipts retained."}
+{"bead": "hv-umm2.731", "mode": "public-engine-regression", "verdict": "pass", "notes": "Same12tests after bounded memo plus48existing remap cases pass; actual physical selections and continuations asserted, both actors."}
+{"bead": "hv-umm2.731", "mode": "browser", "verdict": "not-applicable", "notes": "Internal reference-binding repair; no new player workflow or production UUID. Original270 full recipe retained."}

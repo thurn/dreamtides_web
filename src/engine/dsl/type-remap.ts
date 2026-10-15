@@ -23,6 +23,8 @@ export function remapAbilityTypes(abilities: readonly Ability[], type: CardSubty
   if (distinct.size > 1) throw new Error("Ambiguous canonical figment type");
   const replacement = matches[0];
   const memo = new WeakMap<EffectNode, EffectNode>();
+  type Reference = CardRef | CharacterRef | MovedCardRef | CapturedCardsSpec | ReclaimCards | CardsInZone;
+  const references = new WeakMap<Reference, Reference>();
   const literal = (value: CardSubtype) => value === CHOSEN_SUBTYPE ? value : type;
   const filter = <T extends CardFilter>(value: T): T => value.subtype === undefined ? value : { ...value, subtype: literal(value.subtype) };
   function mappedValue(v: ValueExpr): ValueExpr {
@@ -73,7 +75,16 @@ export function remapAbilityTypes(abilities: readonly Ability[], type: CardSubty
       default: return c;
     }
   };
-  const reference = <T extends CardRef | CharacterRef | MovedCardRef | CapturedCardsSpec | ReclaimCards | CardsInZone>(r: T): T => {
+  const reference = <T extends Reference>(r: T): T => {
+    const previous = references.get(r);
+    if (previous !== undefined) return previous as T;
+    const output = { ...r };
+    // Register before following references back into their instruction graph.
+    references.set(r, output);
+    Object.assign(output, mappedReference(r));
+    return output;
+  };
+  const mappedReference = <T extends Reference>(r: T): T => {
     switch (r.kind) {
       case "target": return { ...r, selector: selector(r.selector), ...(r.when === undefined ? {} : { when: { condition: condition(r.when.condition), otherwise: selector(r.when.otherwise) } }) };
       case "all": case "supported": case "randomCharacter": return { ...r, selector: selector(r.selector) };

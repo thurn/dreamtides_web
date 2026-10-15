@@ -1,0 +1,250 @@
+{
+  "bead": "hv-umm2.731",
+  "base": "443cd6806bbe3b9f60af67acaca26a12b3bacf1e",
+  "clock": {
+    "claimCall": "2026-10-15T07:29:35.082665+00:00",
+    "claimACK": "2026-10-15T07:29:35.193350Z",
+    "preGitCutoff": "2026-10-15T07:40:24.951123+00:00",
+    "actualGitEnd": null,
+    "qualification": "Inclusive original claim clock covers setup, source inspection, coordination, broken-before run, checks and packaging. Future endpoint UNKNOWN in committed evidence; external final-commit-receipt.json supplies actual Git endpoint and tail."
+  },
+  "source": {
+    "manifest": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/remap-targets731/final-source-manifest.json",
+      "sha256": "1ae575fc4902ed9be51ee4c4bf9bcd59ac9f4ebbb7dc9a45611eef91b1ae77f6"
+    },
+    "exactOldBodyPreservation": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/remap-targets731/source-change-proof.json",
+      "sha256": "d4d617aa63856e38f7db6d26b48b7180dd2f78953cbdcf39984086e5469196a9"
+    },
+    "brokenBeforeProof": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/remap-targets731/broken-before-source-proof.json",
+      "sha256": "83206f9717ee21d2bfc09f167d7c1cfb42542841093d0becf412daaf5239ebb4"
+    },
+    "finiteNativeAdmission": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/remap-targets731/finite-write-admission.json",
+      "sha256": "262404c8d832fa003bb9a8eafdfa417d3936bc393a5e2dba07a2065793315859"
+    },
+    "finalGuard": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/remap-targets731/final-source-guard.json",
+      "sha256": "de2558d0e73a630f7fde20a9b61fad139ed3f3a6ac95c2f7db8325b44e9f373f"
+    }
+  },
+  "checks": [
+    {
+      "label": "broken-before",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/dsl/type-remap-targets.test.ts"
+      ],
+      "start": "2026-10-15T07:35:19.257177+00:00",
+      "end": "2026-10-15T07:35:26.346766+00:00",
+      "wallS": 7.089377249998506,
+      "loadStart": [
+        12.8310546875,
+        12.84228515625,
+        12.78759765625
+      ],
+      "exit": 1,
+      "group": 64062,
+      "receiptSHA256": "f9dba22e591dcaf7f9d2dba56276478b5cc592f971994b7bd7caeedc939b0f88",
+      "stdoutSHA256": "cf898c2992fe265374c2ccc5eca697005a7e4295c831ac891525ee4dd7b4d456",
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  8 failed | 4 passed (12)"
+      ]
+    },
+    {
+      "label": "focus-fixed",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/dsl/type-remap-targets.test.ts",
+        "src/engine/dsl/type-remap.test.ts",
+        "src/engine/dsl/type-remap-state.test.ts"
+      ],
+      "start": "2026-10-15T07:35:59.108022+00:00",
+      "end": "2026-10-15T07:36:07.102182+00:00",
+      "wallS": 7.993917041982058,
+      "loadStart": [
+        20.62744140625,
+        14.625,
+        13.4287109375
+      ],
+      "exit": 0,
+      "group": 78557,
+      "receiptSHA256": "3ba4dd55d5728c030c7ec3ad0ea5dcb6c324e969cfb2b34dcee4ac148c1470e6",
+      "stdoutSHA256": "9638ecc03774c6b783464cbd4529c8b1045665dd91c707728af91af86bc570e8",
+      "summary": [
+        "Test Files  3 passed (3)",
+        "Tests  60 passed (60)"
+      ]
+    },
+    {
+      "label": "affected",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "start": "2026-10-15T07:36:33.174147+00:00",
+      "end": "2026-10-15T07:36:58.009865+00:00",
+      "wallS": 24.835205290990416,
+      "loadStart": [
+        20.12255859375,
+        15.17529296875,
+        13.6748046875
+      ],
+      "exit": 0,
+      "group": 27328,
+      "receiptSHA256": "24a56049c17d16aaee3860cb646cc8e9a7f5fbab9847ad7fc3a5ebec816fcc52",
+      "stdoutSHA256": "f2a284ea3e6f3987969775eac0e665b2c81a9c61bf8da7a26c6821b60b6b6a03",
+      "summary": [
+        "Test Files  3 passed (3)",
+        "Tests  5785 passed (5785)"
+      ]
+    },
+    {
+      "label": "review",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T07:37:14.668004+00:00",
+      "end": "2026-10-15T07:38:25.633469+00:00",
+      "wallS": 70.96423062501708,
+      "loadStart": [
+        14.66552734375,
+        14.49267578125,
+        13.50390625
+      ],
+      "exit": 2,
+      "group": 31970,
+      "receiptSHA256": "00f4ea965cbde5c7873251581385b27855b6654e844b2bfb6a2d8f0efbccacda",
+      "stdoutSHA256": "1380ef37f942074a0a19433b8abcccdbb94ff5e865549884d3569af3fe44f7a6",
+      "summary": [
+        "Test Files  323 passed (323)",
+        "Tests  9760 passed (9760)"
+      ]
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T07:37:14.668026+00:00",
+      "end": "2026-10-15T07:37:20.994163+00:00",
+      "wallS": 6.325956124986988,
+      "loadStart": [
+        14.66552734375,
+        14.49267578125,
+        13.50390625
+      ],
+      "exit": 0,
+      "group": 31971,
+      "receiptSHA256": "3f0fca83f3bf451128b5c0a9994f5e4e0003fc0b7d6f15d973860c502c970add",
+      "stdoutSHA256": "2dcc648fe58c4fd9a4620c3695028e51f72d8db5311eeb5a67fa07a4a910e2ce",
+      "summary": []
+    },
+    {
+      "label": "review-corrected",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-15T07:39:02.399681+00:00",
+      "end": "2026-10-15T07:40:10.182619+00:00",
+      "wallS": 67.78174274996854,
+      "loadStart": [
+        7.95849609375,
+        12.41943359375,
+        12.82177734375
+      ],
+      "exit": 0,
+      "group": 39258,
+      "receiptSHA256": "b6f976d682399b6218be1721882077527de26af8c9ea0e24ca6c37c815925cd2",
+      "stdoutSHA256": "6fba4721efa25c58e639a79d2647c72d747c4b5e418d0ff1e538442d7b9a010d",
+      "summary": [
+        "Test Files  323 passed (323)",
+        "Tests  9760 passed (9760)"
+      ]
+    },
+    {
+      "label": "knip-corrected",
+      "argv": [
+        "/opt/homebrew/bin/npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-15T07:39:02.399683+00:00",
+      "end": "2026-10-15T07:39:09.908189+00:00",
+      "wallS": 7.508253042004071,
+      "loadStart": [
+        7.95849609375,
+        12.41943359375,
+        12.82177734375
+      ],
+      "exit": 0,
+      "group": 39259,
+      "receiptSHA256": "7092bb43c275b7d50b9d43d78598a5aa97626b12aa5ccfd5b69732c5f5cbe6a2",
+      "stdoutSHA256": "719350436366b229cc105dba01a99845007464ae13f1bda83fa043e5b99c7d84",
+      "summary": []
+    }
+  ],
+  "regression": {
+    "brokenBefore": "12public cases executed on exact base mapper SHA7a3a4fd8\u2026;8FAIL/4PASS. All8 shared character/void/nested witnesses observed2 actual target-role prompts rather than1; independent-reference controls allPASS. These are actual observed failures, not a predicted count.",
+    "fixed": "Initial fixed run used exact baseline test bytes e1652024\u2026;60PASS=12new+48existing in three files. Final corrected-review epoch includes only the separately receipted type-only fixture correction. Selected physical IDs receive paired effects, independent targets retain distinct choices, and trailing3point continuations/invariants/immutable input hold.",
+    "fixtureCorrections": [
+      {
+        "proof": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/remap-targets731/test-annotation-correction.json",
+          "sha256": "2824ec88be7e06e3b1c0d4becd445de8268d93d4020c373810b9658a78464a7f"
+        },
+        "qualification": "Initial review behavior9760PASS/323files, but fixture EffectNode annotation was too broad for event(Effect). Exact two type-only lines corrected; runtime/assertion bytes reverse-verify to initial test."
+      }
+    ],
+    "sourceFaultDisposition": "The genuine unmodified-source regression already discriminates this exact bug; no redundant same-source counterfactual run.",
+    "affected": "Actual primitive contracts, catalog manifest and saved engine intents passed5785tests/3files.",
+    "testUnits": {
+      "newActualVitestEntrypoints": 1,
+      "newPhysicalTestFiles": 1,
+      "newPlainContractModules": 0,
+      "newJsdom": 0,
+      "netTestLines": 112,
+      "newCases": 12
+    },
+    "limitations": "Broken tests stop at the extra-prompt assertion before later physical assertions; do not claim those later assertions failed. Fixed executions and four before/after independent controls verify physical effects. No raw runtime snapshot or browser export is claimed."
+  },
+  "failureFamilies": {
+    "refusalCancelStaleConcurrentReload": "Existing read-only type-remap-state.test.ts covers JSON-restored pending public choices, wrong actor, stale IDs, competing actions, cancellation, duplicate answers and replay/hash equivalence; included in60PASS focus.",
+    "partialError": "Existing public runStep failing-resolution and successful-control contracts retain the earlier committed remapped payment and rollback later partial work; included in60PASS. No synthetic failure hook or extra exception introduced.",
+    "invalid": "Existing malformed scalar and canonical figment ambiguity refusal contracts remain read-only and passed; new literal target fixtures exclude physical Warrior decoys after Mage remapping.",
+    "privacyCopyIdentity": "Existing sameUUID physical copy/plain creation, known/blind sampling, clone/hash/replay contracts remain read-only and passed. New target assertions use physical IDs, never names.",
+    "aliasSemantics": "Exact existing typed reference switch/effect memo/selector/filter/value/figment code preserved. Shared targets bind one object; independently authored equal specs remain separate. Nested choosePlayer/ifThen inherits existing selection."
+  },
+  "QA": {
+    "verdict": "not-applicable",
+    "scope": "Bounded internal reference identity memo adds no UI, prompt kind, status, workflow or production UUID. Original270 retains all journey/UI/weighted300/preflight/sweep/D21 acceptance.",
+    "browserSessions": 0,
+    "fullOrFuzz": "No localfull or weighted300: no architecture/config/step runner/fuzzer change. All commands use two Vitest workers; no heavy slot required."
+  },
+  "resources": {
+    "settlement": "resource-settlement.json external scratch ledger; final exact SHA bound by external commit receipt. No shared browser/provider/server or foreign signals.",
+    "captured": "Every command receipt retains actual isolated PG/argv/start/end/load/stdoutSHA/source-before-after. Parent install PG26714/handle75974 separately qualified."
+  },
+  "review": "Parent owns fresh read-only Codex core review of exact immutable commit after helper terminal; no review clearance claimed.",
+  "schemaNormalization": {
+    "hostLoad": "Actual ordinary review command start, not a controlled low-load or performance measurement.",
+    "testDelta": "New owning .test.ts is+1 actual Vitest entrypoint and file,0jsdom; no config or shared runner edits."
+  }
+}
