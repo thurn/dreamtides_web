@@ -1,0 +1,420 @@
+{
+  "bead": "hv-umm2.634",
+  "base": "de82b3d1b767f2b128fc72c3e03c38b642910035",
+  "qualification": "Public synthetic preparation only; original283 retains full real-content acceptance. Source audit is not formal review.",
+  "scope": {
+    "privateModule": "src/battle/integration/deck-mods/reclaim.contracts.ts",
+    "moduleSha256": "866db9b10e3e9b42482963e20fa69253e9007307aad91697bf7c00ae8b69f694",
+    "moduleLines": 448,
+    "newReclaimCases": 96,
+    "canonicalRunnerTotal": 437,
+    "runnerWrite": false,
+    "runtimeSourceWrites": false,
+    "newProductionTransitions": 0,
+    "productionUUIDsAuthored": [],
+    "normativeRulesWrite": false,
+    "rulesRecord": "docs/plan/evidence/rules-decisions/RD-hv-umm2.634-1.md",
+    "rulesRecordSha256": "b7fce0db0069a708d7c171e1620738a03f8285325860a381f5044f9eb99aa8ec"
+  },
+  "authority": {
+    "stage1Brief": {
+      "path": "/tmp/dreamtides-634-01a13a7a/stage1-brief.md",
+      "sha256": "805100b76ff18cc7f9e1f9024e0994206105223ca56ddba3b53f2dc56e8d1f7b"
+    },
+    "proposal": {
+      "path": "/tmp/dreamtides-634-01a13a7a/stage1-proposal.md",
+      "sha256": "52c04137b8d36a2ad148a7160329e364f94eac3ee46397eccaf95d4039e4466d"
+    },
+    "semanticBindings": {
+      "path": "/tmp/dreamtides-634-01a13a7a/stage1-source-bindings.json",
+      "sha256": "96449a4234db611f2f8d49de2d60e2be1b358eb9db85b14366ffc168da352923",
+      "files": 68,
+      "scope": "Exact current semantic read ranges and hashes; not whole-tree semantic read."
+    },
+    "allBaseBindings": {
+      "path": "/tmp/dreamtides-634-01a13a7a/base-all-bindings.json",
+      "sha256": "6a3b3bb2287c26f873aa217822c789c86b3ce34631f043e545ad2e340a82957c",
+      "entries": 5838,
+      "scope": "Every original tracked file/symlink payload remains unchanged, independently checked at authoring scope checkpoint."
+    },
+    "finiteAck": {
+      "path": "/tmp/dreamtides-634-01a13a7a/finite-ack.json",
+      "sha256": "f06601c65a9bd366316cce9ba77da11bd624a1e68beb279ce7e2f84a43fd96b3"
+    },
+    "historicalPrototype": {
+      "object": "03efe7bf5495a7600910aae76b8cd463b2b232b4",
+      "path": "src/card-type-change.ts",
+      "fileSha256": "57909540536ca4975e6fbd74121e35edf09db58bd092d399254243f692e8a2a5",
+      "semanticReadRanges": [
+        {
+          "start": 1,
+          "end": 202,
+          "sha256": "57909540536ca4975e6fbd74121e35edf09db58bd092d399254243f692e8a2a5"
+        }
+      ],
+      "byteIdenticalToCurrent": true,
+      "purpose": "Exact 605-source actual prototype merge/normalization; not behavioral validation"
+    },
+    "existingConsumer": "Existing2-line eager import.meta.glob in deck-mods.test.ts consumes this plain module. Vitest discovers only the runner; no new entrypoint/registry/waiver."
+  },
+  "readOnlyBoundarySha256": {
+    "docs/plan/decisions.md": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+    "docs/rules.md": "309bd00d189873bf390fbeeda0f9d4cbacd3fdb5d9ca58ba5351bf7fa8b3a59f",
+    "src/battle/integration/deck-mods.test.ts": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+    "src/battle/integration/engine-battle-init.ts": "d6019ca174c1f9de6474ac124a46e08725eee8c6c9fd757fe620f0391f9a7c05",
+    "src/card-type-change.ts": "57909540536ca4975e6fbd74121e35edf09db58bd092d399254243f692e8a2a5",
+    "src/rules/journey/reward-effects.ts": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+    "src/session/providers/exploration-provider.ts": "39ed8f9a05494ef7279ae6362385e2c5b4cefce1ed5c3a810f42b9dff4936903",
+    "src/engine/catalog.ts": "1fcb5371bfad5c7d3c7206a8bb56d2ccbdc9a3b288edec6be365bc0949d3728d",
+    "src/engine/state/create.ts": "022f20ff1822bf7572c858d98922c5c5fe72067410233deb18846b0b427c16f8",
+    "src/engine/steps/kinds/begin-battle.ts": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+    "src/engine/transfigurations.ts": "e3d227eb521b8a715e5cc220b34289ebd0d4755253aa86b2e6a13b47ad3dd4c1",
+    "src/engine/rules/timing.ts": "c172a9b59bfcc20ee3d980369f50b6151b0923f2acfa85e100bc4458cf6af9bc",
+    "src/engine/steps/kinds/play.ts": "ed6b97f4946e0c35b0234cf68c8e0100a172a6601a3efe4d039a27e9f30b07c1",
+    "src/engine/fold/slice.ts": "48acb92592836664be8dd454a6f216efd6e6da657d53165c2ea9be39a2c2886c"
+  },
+  "contracts": [
+    "Both actors: real reward grant2+3 records5; set clears accumulated grant, later grant remains subordinate to set, set0 survives nonzero grant; normal hand7 remains separate.",
+    "New grants on both Character and Event without printed Reclaim; printed9/nonenergy2 replacement and unchanged sameUUID physical copies/actor controls; ordinary real init/deal and immutable inputs/printings.",
+    "Hand and void routes preserve mandatory2/discard; explicit0 still pays those additional costs. Short energy/missing cards/wrong zone/actor refuse unchanged. Floating+2/-1 adjusts chosen normal/reclaim total independently of persistent normal reduction2.",
+    "56 explicit actor/form/stack rows cover all9 applicable actual forms: hand7->floor3->minus2=1, fixed void3, authored score/draw/speed/spark, stable activated indices, normal Dissolved versus reclaimed banishment. No transformed AST snapshots or production-data oracle.",
+    "Enduring/Perfected without an explicit override retain their transformed normal Reclaim price; opposite-type modifications preserve original form eligibility and Event->Character zero spark.",
+    "Hand X and fixed deck Reclaim; chronological Inspired/Amplified order with0/1draw, Perfected then Inspired2draw, repeated Kindled/Empowered/Kindled before permanent bonus/reduction/price.",
+    "Runtime explicit6 then4 and plain gain use latest4, while persistent entry3 remains recorded; this is distinct from numeric journey accumulation.",
+    "Physical lifetime through return/normal replay/dissolve/reclaim, turn boundary, clone, saved reload and cold engine/battle recreation; existing owner coverage removes replacement status while retaining actual Reclaim provenance and entry price.",
+    "Actual synthetic exploration build/resolve purges sameUUID duplicates and sets unique Empowered/reduced survivor to resolved2, then real engine start/payment. Wrong action/version/encounter/reroll and resolved replay refuse; same unresolved log input deterministically reproduces outcome.",
+    "Concrete reward entry/UUID/number mismatch and valid-then-invalid composite refuse atomically; missing bridge mapping refuses.",
+    "Actual void Reclaim optional-payment/discard prompts: foreign/competing/invalid/stale/duplicate intents refuse; cancellation pays nothing; save on second prompt and cold replay commit one debit/play. Illegal saved answer value retains its actual fingerprint, recovers with engine_error, clears in-flight and preserves committed gameplay/variant."
+  ],
+  "failureObligations": {
+    "droppedDTO": "Actual reward->mapper->ordinary init and selected-route debit; changing/dropping the explicit3 would fail public quote/payment and physical-copy expectations.",
+    "wrongSideVariantType": "Both public actor seatings, sameUUID copy and owner controls, authored selection, opposite-type/chronological cases and unchanged input/printing checks.",
+    "transformPaymentOrder": "Hand7->3->1 versus fixed void3; mandatory/nonenergy cost separation and real+2/-1 floating adjustments; additional draw and activation/spark public witnesses. Expectations are explicit rules facts, not calculated from transformed ASTs.",
+    "invalidStaleReplay": "Actual provider transaction guards plus fold foreign/competing/stale/illegal/cancel/duplicate/reload/error paths preserve committed gameplay and one debit.",
+    "syntheticSubstitution": "Native final join is administrative, not a fabricated runtime count test: original283 retains all58 filed exploration-action UUIDs, recipes, weighted300/preflight/base+Amplified both-controller sweep, at least20 stratified real eligible cards per controller, one judged verdict, D21/coverage and full acceptance. No card-QA success is claimed."
+  },
+  "failurePaths": {
+    "errorMidStep": "Illegal recorded choice on a saved precommit attempt returns engine_error and unchanged committed state; no private throwing hook.",
+    "reload": "Persist on the real second payment prompt, resume through new engine/fold; exact final state hash matches.",
+    "partialWrite": "No new durable writer. Existing composite reward atomicity and suspended/cancelled/failed precommit payment keep input/committed gameplay intact.",
+    "invalidStaleInput": "Wrong targets/actor/zone/version, prompt ID, answer, duplicate response and resolved offer are covered.",
+    "concurrentActors": "Competing sequential fold intents and foreign answers refuse. D3 has one local writer; no parallel database/network race claim."
+  },
+  "checks": [
+    {
+      "name": "focus01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-mods-634",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "de82b3d1b767f2b128fc72c3e03c38b642910035"
+      },
+      "pid": 94923,
+      "pgid": 94923,
+      "startUtc": "2026-10-15T20:08:20.225248+00:00",
+      "endUtc": "2026-10-15T20:08:31.550875+00:00",
+      "elapsedS": 11.325352500018198,
+      "userCpuS": 9.935784,
+      "systemCpuS": 3.230716,
+      "startHostLoad": [
+        11.8486328125,
+        11.1240234375,
+        11.20703125
+      ],
+      "endHostLoad": [
+        11.97705078125,
+        11.169921875,
+        11.2216796875
+      ],
+      "exit": 0,
+      "log": "/tmp/dreamtides-634-01a13a7a/focus01.log",
+      "logSha256": "34b56ea4090195b5b38e52c3560832c9b7940e6291756ea6fb21ee72e7f29f24",
+      "sourceManifest": "/tmp/dreamtides-634-01a13a7a/focus01.source-manifest.json",
+      "sourceManifestSha256": "bfce3b51f1c598063c8a862b6c6e1221b48ea2d53bb8ff8c9c23046328a3ad5f",
+      "remainingOwnedProcessGroup": [],
+      "receiptPath": "/tmp/dreamtides-634-01a13a7a/focus01.receipt.json",
+      "receiptSha256": "d9c4c494f5d2b373a7e83cd2a5dcf53a89e78af813317094073702b1ea7432bf"
+    },
+    {
+      "name": "review01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-mods-634",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "de82b3d1b767f2b128fc72c3e03c38b642910035"
+      },
+      "pid": 99664,
+      "pgid": 99664,
+      "startUtc": "2026-10-15T20:09:14.132832+00:00",
+      "endUtc": "2026-10-15T20:09:32.039284+00:00",
+      "elapsedS": 17.906176040996797,
+      "userCpuS": 55.769597,
+      "systemCpuS": 7.213472,
+      "startHostLoad": [
+        9.6181640625,
+        10.7119140625,
+        11.052734375
+      ],
+      "endHostLoad": [
+        9.49755859375,
+        10.61572265625,
+        11.009765625
+      ],
+      "exit": 2,
+      "log": "/tmp/dreamtides-634-01a13a7a/review01.log",
+      "logSha256": "97a78f4db4828ef7d11f6ed528546d9bf16773025250035d066c4715adef8229",
+      "sourceManifest": "/tmp/dreamtides-634-01a13a7a/review01.source-manifest.json",
+      "sourceManifestSha256": "946ed84b0f48949dd3d6718e79d5cdceb36b6871cf46a28c56f094ae4d3c44d5",
+      "remainingOwnedProcessGroup": [],
+      "receiptPath": "/tmp/dreamtides-634-01a13a7a/review01.receipt.json",
+      "receiptSha256": "5c5d7b084af69691ef9898156c5dfa5aa02988d9c2b65b067e3f35499ec211e1"
+    },
+    {
+      "name": "focus02",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/deck-mods.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-mods-634",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "de82b3d1b767f2b128fc72c3e03c38b642910035"
+      },
+      "pid": 4305,
+      "pgid": 4305,
+      "startUtc": "2026-10-15T20:10:07.849464+00:00",
+      "endUtc": "2026-10-15T20:10:14.443411+00:00",
+      "elapsedS": 6.593830041994806,
+      "userCpuS": 7.365663,
+      "systemCpuS": 1.898692,
+      "startHostLoad": [
+        8.3837890625,
+        10.251953125,
+        10.86279296875
+      ],
+      "endHostLoad": [
+        8.27294921875,
+        10.19775390625,
+        10.83984375
+      ],
+      "exit": 0,
+      "log": "/tmp/dreamtides-634-01a13a7a/focus02.log",
+      "logSha256": "272b862b8305d07ee5f003bc74364d18e5923528fc769e198221bed3c43fc899",
+      "sourceManifest": "/tmp/dreamtides-634-01a13a7a/focus02.source-manifest.json",
+      "sourceManifestSha256": "9a887e5d2571301422e985cca662db64b58c0e4ac00142f208a178bac211db5f",
+      "remainingOwnedProcessGroup": [],
+      "receiptPath": "/tmp/dreamtides-634-01a13a7a/focus02.receipt.json",
+      "receiptSha256": "2a52aa0efa0df203efec899f2cc4a6a50a9e6d276c388ad771a4c77d13ceef48"
+    },
+    {
+      "name": "review02",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-mods-634",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "de82b3d1b767f2b128fc72c3e03c38b642910035"
+      },
+      "pid": 8639,
+      "pgid": 8639,
+      "startUtc": "2026-10-15T20:11:01.619283+00:00",
+      "endUtc": "2026-10-15T20:11:14.636377+00:00",
+      "elapsedS": 13.01676770899212,
+      "userCpuS": 34.049805,
+      "systemCpuS": 6.283427,
+      "startHostLoad": [
+        7.5859375,
+        9.75439453125,
+        10.64013671875
+      ],
+      "endHostLoad": [
+        7.8505859375,
+        9.744140625,
+        10.62646484375
+      ],
+      "exit": 0,
+      "log": "/tmp/dreamtides-634-01a13a7a/review02.log",
+      "logSha256": "17c583d371c9d10eb9cdac2771eadc19fba595630a55dcf3645e37590c65a11e",
+      "sourceManifest": "/tmp/dreamtides-634-01a13a7a/review02.source-manifest.json",
+      "sourceManifestSha256": "c7f29b2e05bbe92871afcb297833a2684724d8fa3bedc10d84265cddecfb4be7",
+      "remainingOwnedProcessGroup": [],
+      "receiptPath": "/tmp/dreamtides-634-01a13a7a/review02.receipt.json",
+      "receiptSha256": "bc17a009b6cc082ad6d0b5b85be74ac925b18e7b410fcccc560e634dcc93bce7"
+    },
+    {
+      "name": "knip01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/reclaim-mods-634",
+      "env": {
+        "JOURNEY_TEST_WORKERS": "2",
+        "JOURNEY_REVIEW_BASE": "de82b3d1b767f2b128fc72c3e03c38b642910035"
+      },
+      "pid": 10613,
+      "pgid": 10613,
+      "startUtc": "2026-10-15T20:11:29.302760+00:00",
+      "endUtc": "2026-10-15T20:11:34.041404+00:00",
+      "elapsedS": 4.7385150420013815,
+      "userCpuS": 4.108574,
+      "systemCpuS": 1.351718,
+      "startHostLoad": [
+        7.34814453125,
+        9.54248046875,
+        10.5390625
+      ],
+      "endHostLoad": [
+        7.07958984375,
+        9.4501953125,
+        10.50048828125
+      ],
+      "exit": 0,
+      "log": "/tmp/dreamtides-634-01a13a7a/knip01.log",
+      "logSha256": "e4363fa2bb30739b2edfb07a0722009343a24759883ae6a57116b866c3e9237c",
+      "sourceManifest": "/tmp/dreamtides-634-01a13a7a/knip01.source-manifest.json",
+      "sourceManifestSha256": "c7f29b2e05bbe92871afcb297833a2684724d8fa3bedc10d84265cddecfb4be7",
+      "remainingOwnedProcessGroup": [],
+      "receiptPath": "/tmp/dreamtides-634-01a13a7a/knip01.receipt.json",
+      "receiptSha256": "fb0d406b6d7292cd00041cbab1d2b7480b6ec1e0be2afc4d6bea3e3cd23d6ec4"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focus01",
+      "at": "2026-10-15T20:08:20.225248+00:00",
+      "oneFiveFifteen": [
+        11.8486328125,
+        11.1240234375,
+        11.20703125
+      ],
+      "scope": "Actual command start sample"
+    },
+    {
+      "command": "review01",
+      "at": "2026-10-15T20:09:14.132832+00:00",
+      "oneFiveFifteen": [
+        9.6181640625,
+        10.7119140625,
+        11.052734375
+      ],
+      "scope": "Actual command start sample"
+    },
+    {
+      "command": "focus02",
+      "at": "2026-10-15T20:10:07.849464+00:00",
+      "oneFiveFifteen": [
+        8.3837890625,
+        10.251953125,
+        10.86279296875
+      ],
+      "scope": "Actual command start sample"
+    },
+    {
+      "command": "review02",
+      "at": "2026-10-15T20:11:01.619283+00:00",
+      "oneFiveFifteen": [
+        7.5859375,
+        9.75439453125,
+        10.64013671875
+      ],
+      "scope": "Actual command start sample"
+    },
+    {
+      "command": "knip01",
+      "at": "2026-10-15T20:11:29.302760+00:00",
+      "oneFiveFifteen": [
+        7.34814453125,
+        9.54248046875,
+        10.5390625
+      ],
+      "scope": "Actual command start sample"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review actual typecheck/lint/test/friction group start2026-10-15T20:11:03.146Z, matching command-start1minute7.5859375. No performance comparison claimed."
+      },
+      "implementMin": {
+        "measuredFor": "Parent-required inclusive original claim19:48:12.196895Z through frozen evidence cutoff below, including setup/install/source audit/coordination/authoring/all validation attempts. Actual Git tail is saved externally after committing, to avoid a recursive timing rewrite."
+      }
+    }
+  },
+  "clock": {
+    "start": "2026-10-15T19:48:12.196895Z",
+    "evidenceCutoff": "2026-10-15T20:13:15.615939+00:00",
+    "scope": "Inclusive original claim and every setup/audit/admission/authoring/check/wait through this actual cutoff. Frozen metadata/schema/whitespace/actual Git tail is separately measured by terminal scratch receipts; no future Git timestamp is asserted."
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 448,
+    "jsdomFiles": 0
+  },
+  "resources": {
+    "servers": 0,
+    "browserContexts": 0,
+    "heavyCommands": 0,
+    "testWorkers": 2,
+    "commandProcessGroups": [
+      {
+        "name": "focus01",
+        "pid": 94923,
+        "pgid": 94923,
+        "remaining": []
+      },
+      {
+        "name": "review01",
+        "pid": 99664,
+        "pgid": 99664,
+        "remaining": []
+      },
+      {
+        "name": "focus02",
+        "pid": 4305,
+        "pgid": 4305,
+        "remaining": []
+      },
+      {
+        "name": "review02",
+        "pid": 8639,
+        "pgid": 8639,
+        "remaining": []
+      },
+      {
+        "name": "knip01",
+        "pid": 10613,
+        "pgid": 10613,
+        "remaining": []
+      }
+    ],
+    "active": []
+  },
+  "dispositions": {
+    "review01": "Failed exit2 for own test-fixture TypeScript placement-union inference and Array.at outside configured target; all435 runtime cases passed at that source epoch. Fixed solely within the unique private module; focus02 and review02 passed at final module source. No shared implementation gap found.",
+    "preExisting": "Fresh unchanged npm install17 advisories recorded in own pre-existing evidence; disposable art warnings followed by successful full local link restoration. No dependency edits/audit fix.",
+    "rules": "Own RD FIRST applies existing D39/Reclaim/Transfigurations/RD78; exact58 original affected UUID sequence retained by original283. No new ladder ruling or rules writer required.",
+    "formalReview": "Not required for present test-only/noncore/nongate scope, per native labels and phase5 primitive/prompt rule. Source audit and root collection are not formal review. Any required future review uses new fresh read-only Codex fork:none.",
+    "coverageQA": "No production entity/status/text or new workflow/infrastructure changed; full coverage/fuzz/QA acceptance stays original283 and phase gates. No local full/heavy/browser checks justified."
+  },
+  "receiptCustody": "/tmp/dreamtides-634-01a13a7a",
+  "finalMetadataVerification": {
+    "sequence": "Freeze these files, run exact friction schema and staged whitespace checks, verify5-path scope/all5838 old payloads, make one authorized detailed ConventionalCommit, record actual Git time/CPU/empty ownedPG/clean status and inclusive claim-through-Git tail outside the commit.",
+    "rootDelivery": "Native lifecycle/worktree/candidate/promotion belongs to root."
+  }
+}
