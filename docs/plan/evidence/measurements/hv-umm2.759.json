@@ -1,0 +1,55 @@
+{
+  "bead": "hv-umm2.759",
+  "phase": 5,
+  "reviewOf": "hv-umm2.757",
+  "reviewHead": "021baaf2cfbde5f032cfdfa43da5c566578ff988",
+  "findingDisposition": "accepted; evidence example corrected",
+  "selfImplementationStart": "2026-10-15T20:45:35.094236+00:00",
+  "publicDiagnostic": {
+    "script": "/tmp/759-root/ordering-diagnostic.ts",
+    "sourceSHA256": "89a18eea51622c2fb09d298bc9152ef7bcfdc99007d3ffa435fc0d3b56159a99",
+    "output": [
+      "{\"mode\":\"spark\",\"mobile\":4,\"canonical\":4}",
+      "{\"mode\":\"cost\",\"mobile\":2,\"canonical\":1}"
+    ],
+    "exit": 0,
+    "role": "scratch public synthetic diagnostic; not a CI test"
+  },
+  "validation": {
+    "review": {
+      "start": "2026-10-15T20:46:00.811404+00:00",
+      "end": "2026-10-15T20:46:01.062106+00:00",
+      "wall_seconds": 0.25062158302171156,
+      "exit": 0,
+      "stdout_sha256": "757be92a692ab40b73a13a2238ba5cc030b790a98f37476b47b8d80f66902c1e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "knip": {
+      "start": "2026-10-15T20:46:02.814530+00:00",
+      "end": "2026-10-15T20:46:08.217570+00:00",
+      "wall_seconds": 5.40288883401081,
+      "exit": 0,
+      "stdout_sha256": "4a163402400cd2645cc648b9eff5d51cbb9b964dd7564e257c6fbed630fd7d13",
+      "stderr_sha256": "9fa4f72f9e19c10f1a657a827fbf856186d66c3f6cc40ee05a459fe642d3052c"
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "runtimeLedger": [],
+  "limits": [
+    "Documentation-only change; browser QA and full review are not required.",
+    "Diagnostic exact inner wall time was not sampled.",
+    "Final commit tail is recorded externally after Git completes."
+  ],
+  "commitEvidenceCutoff": "2026-10-15T20:46:25.546341+00:00",
+  "hostLoadSamples": [
+    {
+      "measuredFor": "review friction-records start",
+      "load1": 7.9140625
+    }
+  ],
+  "knipQualification": "Workspace preparation emitted temporary missing-art warnings while swapping local asset materializations; Knip returned0 and restore-local-assets relinked full local art. No tracked generated payload changed."
+}
