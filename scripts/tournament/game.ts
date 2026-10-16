@@ -17,7 +17,7 @@ import type { DecisionLog, GameOutcome, MatchSpec, PlayedAction, TournamentConfi
 import SETTINGS from "./catalog.json";
 
 /** A complete inline game; a failed step stays a failure, with its replay prefix retained. */
-export function playGame(engine: Engine, spec: MatchSpec, budgets: TournamentConfig["budgets"]): GameOutcome {
+export function playGame(engine: Engine, spec: Pick<MatchSpec, "init" | "policies">, budgets: TournamentConfig["budgets"]): GameOutcome {
   const logs: (EngineLogRecord | DecisionLog)[] = [{ event: "engine.battleStarted", version: 0, init: spec.init, policies: spec.policies }];
   const actions: PlayedAction[] = [];
   let startAnswers: GameOutcome["startAnswers"] = [];

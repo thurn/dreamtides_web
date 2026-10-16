@@ -82,7 +82,7 @@ it("reproduces engine outcomes and recorded prompt answers without spending poli
     if (seen.sides[side].hand.count !== state.sides[side].hand.length) throw new Error("Policy view omits an earlier same-step discard");
     return seen;
   } };
-  const played = playGame(checkingEngine, promptSpec, config.budgets);
+  const played = playGame(checkingEngine, { init: promptSpec.init, policies: promptSpec.policies }, config.budgets);
   if (played.status !== "completed") throw new Error(played.failure);
   expect(played.status).toBe("completed");
   expect(replayGame(engine, promptSpec, played)).toBe(played.finalStateHash);
