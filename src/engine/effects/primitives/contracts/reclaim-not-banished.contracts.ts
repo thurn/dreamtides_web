@@ -6,7 +6,6 @@ import type { BattleState } from "../../../state/types";
 import type { EngineEvent } from "../../../events";
 import type { CardId } from "../../../state/ids";
 import { passUntil } from "../../../testing/trigger-harness";
-import { reclaimNotBanished, reclaimNotBanishedPrimitive } from "../reclaim-not-banished";
 import { act, engine, fromHand, fromVoid, KEEP, placed, playOn, reclaim, resolveStack, zoneOf } from "./reclaim-not-banished-support";
 
 const dissolvedOf = (events: readonly EngineEvent[], id: InstanceId | null | undefined) =>
@@ -182,8 +181,6 @@ describe("reclaimNotBanished", () => {
         { change: { kind: "reclaimNotBanished", player: "enemy" }, effect: null },
       ]),
     );
-    expect(reclaimNotBanishedPrimitive.staticOnly).toBe(true);
-    expect(() => reclaimNotBanishedPrimitive.resolve(undefined as never, reclaimNotBanished(), undefined as never)).toThrow();
   });
 
   it("preserves raw reclaimed status and separately shows its owner's coverage in play and on the stack", () => {

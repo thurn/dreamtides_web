@@ -152,7 +152,7 @@ export interface EffectEnv {
  * interpreted, and tested in its own module and listed by one line in
  * effects/primitives/index.ts.
  */
-export interface PrimitiveDefinition<N extends EffectNode> {
+interface PrimitiveMetadata<N extends EffectNode> {
   readonly op: N["op"];
   /** A conditional's branch choices are prepared when its instruction is reached during resolution. */
   readonly deferConditionalChoices?: true;
@@ -171,22 +171,37 @@ export interface PrimitiveDefinition<N extends EffectNode> {
   modes?(node: N): readonly EffectNode[];
   /** Target specs held directly by this node, in order. */
   targets?(node: N): readonly PlayTimeTarget[];
-  resolve(ctx: StepContext, node: N, env: EffectEnv): void;
   /**
    * Whether resolving the node puts characters into play: a card or ability
    * holding one cannot be played or activated while its controller's back
    * rank would be full (rules § Battlefield Capacity).
    */
   readonly entersPlay?: boolean;
-  /**
-   * Whether only a static ability may hold the node, as its whole effect: a
-   * static "have" that never resolves, so `resolve` throws. The content
-   * gate rejects one anywhere else in an ability.
-   */
-  readonly staticOnly?: boolean;
-  /** For a continuous primitive, the layer it applies in and its changes while a static ability holds it. */
-  readonly continuous?: ContinuousDefinition<N>;
 }
+
+export interface ResolvingPrimitiveDefinition<N extends EffectNode> extends PrimitiveMetadata<N> {
+  resolve(ctx: StepContext, node: N, env: EffectEnv): void;
+  readonly staticOnly?: false;
+  readonly continuous?: never;
+}
+
+export interface StaticPrimitiveDefinition<N extends EffectNode> extends PrimitiveMetadata<N> {
+  readonly staticOnly: true;
+  readonly continuous: ContinuousDefinition<N>;
+  readonly resolve?: never;
+}
+
+export interface DualPrimitiveDefinition<N extends EffectNode> extends PrimitiveMetadata<N> {
+  resolve(ctx: StepContext, node: N, env: EffectEnv): void;
+  readonly continuous: ContinuousDefinition<N>;
+  readonly staticOnly?: false;
+}
+
+/** Execution capabilities of a primitive, independent of its serialized node. */
+export type PrimitiveDefinition<N extends EffectNode> =
+  | ResolvingPrimitiveDefinition<N>
+  | StaticPrimitiveDefinition<N>
+  | DualPrimitiveDefinition<N>;
 
 /**
  * The layers of the continuous-effects evaluation, in order (engine-design §
@@ -241,7 +256,16 @@ export function cardTarget(ref: CardRef | CapturedCardsSpec): readonly PlayTimeT
   return ref.kind === "target" || ref.kind === "stackTarget" || (ref.kind === "inZone" && ref.pick === "target") ? [ref] : [];
 }
 
-/** Declares a primitive; the identity keeps the node type checked. */
+/** Declares a primitive, preserving its execution capability and object identity. */
+export function definePrimitive<N extends EffectNode>(
+  definition: StaticPrimitiveDefinition<N>,
+): StaticPrimitiveDefinition<N>;
+export function definePrimitive<N extends EffectNode>(
+  definition: DualPrimitiveDefinition<N>,
+): DualPrimitiveDefinition<N>;
+export function definePrimitive<N extends EffectNode>(
+  definition: ResolvingPrimitiveDefinition<N>,
+): ResolvingPrimitiveDefinition<N>;
 export function definePrimitive<N extends EffectNode>(
   definition: PrimitiveDefinition<N>,
 ): PrimitiveDefinition<N> {

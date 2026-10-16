@@ -1431,10 +1431,11 @@ owns) whose layer-2 type and subtype, and final spark, match the filter has
 the keyword while it is there (RD-hv-umm2.52-1, RD-hv-umm2.464-1). It reads
 layer 2, and the final spark of cards outside play, through `StaticEnv.read`,
 so a fresh evaluation, such as the invariant check's, never consults a
-memoized one. It is static only (`staticOnly`): its `resolve` throws, since a
-floating record naming a card in a hidden zone would name it in the public
-`effectStarted` event, and the content gate rejects it anywhere but as a
-static ability's whole effect. A dreamsign's "your deck" (C4) is a separate
+memoized one. Its static-only declaration (`staticOnly`) provides continuous
+changes and excludes resolving execution. The runtime dispatcher rejects malformed
+resolving ingress before any floating announcement: a hidden-zone card must not
+be named in a public `effectStarted` event. The content gate accepts it only as
+a static ability's whole effect. A dreamsign's "your deck" (C4) is a separate
 reference that `cardsIn` does not express. `journeyDeckSparkModifier(costAtMost,
 amount)` is its static-only numeric spark form. Immutable optional
 `CardInstance.journeyDeck` records true for declared physical originals, false
@@ -1826,12 +1827,17 @@ is not a migration of an older unknown snapshot.
 `targets`, an optional `deferred` hook naming effects that run later and so
 are excluded from play-time target collection, `entersPlay` for a primitive
 that puts characters into play, a `continuous` hook for a continuous
-primitive, `staticOnly` for a primitive only a static ability holds, and
-`resolve`. A primitive holding a character or card reference
+primitive, and `resolve` for resolving execution. `PrimitiveDefinition` has
+resolving-only, static-only, and dual-capability arms; a static-only definition
+requires `staticOnly: true` and `continuous`, while resolving and dual definitions
+require `resolve`. `definePrimitive` retains the declared capability. A primitive holding a character or card reference
 declares it with the `characterTarget` or `cardTarget` helper. The registry
 finds each definition by that name at call time. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
-the `Effect` union and the op lookup from it, so adding a primitive touches
+the `Effect`, `StaticEffect`, and `ResolvingEffect` unions and the op lookup
+from it. Static ability roots consume `StaticEffect`; event, activated, triggered,
+and resolving flow or deferred child fields consume `ResolvingEffect`. A static
+rule modifier can hold a resolving deferred Dawn child. Adding a primitive touches
 only its module, its plain contract module under `primitives/contracts/`,
 one index line, and one getter in the registry's op table, which its
 `satisfies` clause requires. `primitives/contracts.test.ts` eagerly discovers
@@ -2315,7 +2321,8 @@ and figment. Each check names every offending entity:
   `journeyDeckSparkModifier`)
   appears only as a static
   ability's whole effect, never in an event, triggered, or activated ability
-  or nested in another node, since resolving it throws.
+  or nested in a resolving node. Its declaration excludes resolving capability;
+  the runtime dispatcher rejects malformed resolving ingress at resolution time.
 - **Undeclared targets.** Every play-time target spec a primitive holds is
   declared by its `targets` hook (`undeclaredAbilityTargets`,
   `testing/target-audit.ts`), so play-time choices never miss one.

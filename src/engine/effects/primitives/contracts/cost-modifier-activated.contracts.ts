@@ -5,7 +5,7 @@ import { activated, abandonSelfCost, choiceCost, costPaid, countersCost, discard
 import type { Ability, Cost, Variant } from "../../../dsl/types";
 import { createFoldAdapter, type BattleIntent, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { EngineLogRecord } from "../../../log";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import type { Answer, Prompt } from "../../../prompts/types";
 import { SIDES, opponent, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
@@ -25,7 +25,7 @@ const deck = Array.from({ length: 8 }, () => v.vanilla1.id);
 function card(index: number, abilities: (variant: Variant) => readonly Ability[], fields: Partial<EngineCardDefinition> = {}): EngineCardDefinition {
   return { ...v.vanilla1, ...fields, id: fields.id ?? syntheticId(0x630100 + index), status: "authored", costs: fields.costs ?? [energy(3)], abilities };
 }
-function payer(index = 0, costs: readonly Cost[] = [energy(3)], effect: Effect = p.gainPoints(1), options: Parameters<typeof activated>[2] = {}) {
+function payer(index = 0, costs: readonly Cost[] = [energy(3)], effect: ResolvingEffect = p.gainPoints(1), options: Parameters<typeof activated>[2] = {}) {
   return card(index, () => [activated(costs, effect, options)]);
 }
 function modifier(index: number, amount: number, player: "you" | "opponent" = "you", zone: "play" | "hand" | "any" = "play") {

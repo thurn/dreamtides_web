@@ -12,17 +12,12 @@ import { materializeFigments } from "../materialize-figments";
 import { draw } from "../draw";
 import { gainPoints } from "../gain-points";
 import { playFromZone } from "../play-from-zone";
-import { ruleModifier, ruleModifierPrimitive } from "../rule-modifier";
 import { sequence } from "../sequence";
 import { SIGN, applied, card, deck, restored, sliceOf, step, world } from "./rule-modifier-support";
 
 const spell = card(0, draw(1));
 
 describe("ruleModifier optional event route", () => {
-  it("is a static-only form with a deferred threshold child", () => {
-    expect(ruleModifierPrimitive.staticOnly).toBe(true);
-    expect(() => ruleModifierPrimitive.resolve(undefined as never, ruleModifier({ rule: "carryEnergy" }), undefined as never)).toThrow();
-  });
   it.each(SIDES.flatMap(side => (["fast", "interrupt", "standard"] as const).map(speed => ({ side, speed }))))("offers the fixed base only for $side $speed events", ({ side, speed }) => {
     const subject = { ...spell, speed };
     const w = world(side, [subject], { [side]: { hand: [subject.id], dreamsigns: [SIGN.apple], energy: 1, deck } });

@@ -8,7 +8,6 @@ export interface PreserveEphemeralHandNode {
 export const preserveEphemeralHandPrimitive = definePrimitive<PreserveEphemeralHandNode>({
   op: "preserveEphemeralHand",
   staticOnly: true,
-  resolve() { throw new Error("preserveEphemeralHand belongs to a static ability"); },
   continuous: {
     layer: 6,
     changes(_node, env) { return [{ kind: "preserveEphemeralHand", player: env.controller }]; },

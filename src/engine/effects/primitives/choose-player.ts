@@ -1,17 +1,18 @@
+import type { ResolvingEffect } from "../registry";
 import type { PlayerRef } from "../../dsl/types";
 import type { ChooseModePrompt } from "../../prompts/types";
 import { resolveChosenEffect } from "../interpreter";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition } from "../types";
 
 /** A controller-relative player choice made as the effect resolves. */
 export interface ChoosePlayerNode {
   readonly op: "choosePlayer";
   /** The effect for each selected player; "you" inside either branch retains the ability's controller. */
-  readonly you: EffectNode;
-  readonly opponent: EffectNode;
+  readonly you: ResolvingEffect;
+  readonly opponent: ResolvingEffect;
 }
 
-export const choosePlayerPrimitive = definePrimitive<ChoosePlayerNode>({
+export const choosePlayerPrimitive: ResolvingPrimitiveDefinition<ChoosePlayerNode> = definePrimitive<ChoosePlayerNode>({
   op: "choosePlayer",
   deferred: (node) => [node.you, node.opponent],
   resolve(ctx, node, env) {
@@ -30,6 +31,6 @@ export const choosePlayerPrimitive = definePrimitive<ChoosePlayerNode>({
  * the selected relative player. The choice changes who the named effects
  * affect, while the ability's source, controller and meaning of "you" stay fixed.
  */
-export function choosePlayer(effect: (player: PlayerRef) => EffectNode): ChoosePlayerNode {
+export function choosePlayer(effect: (player: PlayerRef) => ResolvingEffect): ChoosePlayerNode {
   return { op: "choosePlayer", you: effect("you"), opponent: effect("opponent") };
 }

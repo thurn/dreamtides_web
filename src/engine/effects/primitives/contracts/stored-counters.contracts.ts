@@ -19,7 +19,7 @@ import { boardState } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { unannouncedChanges } from "../../../testing/announced-changes";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { draw } from "../draw";
 import { delayed } from "../floating-trigger";
 import { materialize } from "../materialize";
@@ -39,10 +39,10 @@ const response: EngineCardDefinition = { ...v.interruptEvent, id: syntheticId(0x
   abilities: () => [event(returnToHand(target(enemyCharacter())))] };
 const reenterResponse: EngineCardDefinition = { ...v.interruptEvent, id: syntheticId(0x950fe), costs: [energy(0)], status: "authored",
   abilities: () => [event(materialize(everyIn("void", {}, { player: "opponent" })))] };
-function definition(costs: readonly Cost[], effect: Effect): EngineCardDefinition {
+function definition(costs: readonly Cost[], effect: ResolvingEffect): EngineCardDefinition {
   return { ...v.vanilla1, id: syntheticId(0x95000), status: "authored", abilities: () => [activated(costs, effect)] };
 }
-function fixture(side: Side, costs: readonly Cost[] = [countersXCost(0)], effect: Effect = dissolve(exact), count = 4, responseCard = response) {
+function fixture(side: Side, costs: readonly Cost[] = [countersXCost(0)], effect: ResolvingEffect = dissolve(exact), count = 4, responseCard = response) {
   const card = definition(costs, effect);
   const engine = createEngine(testCatalog([card, responseCard]));
   const other = opponent(side);

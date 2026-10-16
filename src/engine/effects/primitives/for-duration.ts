@@ -1,7 +1,8 @@
+import type { ResolvingEffect } from "../registry";
 import type { Duration } from "../../dsl/types";
 import { sharedDuration } from "../../rules/durations";
 import { resolveNode } from "../interpreter";
-import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition, type EffectEnv } from "../types";
 
 /**
  * "Until end of turn, …": the continuous primitives inside resolve as
@@ -13,10 +14,10 @@ import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
 export interface ForDurationNode {
   readonly op: "forDuration";
   readonly duration: Duration;
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
 }
 
-export const forDurationPrimitive = definePrimitive<ForDurationNode>({
+export const forDurationPrimitive: ResolvingPrimitiveDefinition<ForDurationNode> = definePrimitive<ForDurationNode>({
   op: "forDuration",
   children: (node) => [node.effect],
   resolve(ctx, node, env) {
@@ -33,6 +34,6 @@ export const forDurationPrimitive = definePrimitive<ForDurationNode>({
   },
 });
 
-export function forDuration(duration: Duration, effect: EffectNode): ForDurationNode {
+export function forDuration(duration: Duration, effect: ResolvingEffect): ForDurationNode {
   return { op: "forDuration", duration, effect };
 }

@@ -10,7 +10,7 @@ import { Answers, endTurn, engine, F, handCard, play, setup } from "../../engine
 import { deck } from "../../engine/effects/primitives/contracts/cards-support";
 import { draw } from "../../engine/effects/primitives/draw";
 import { delayed } from "../../engine/effects/primitives/floating-trigger";
-import type { Effect } from "../../engine/effects/registry";
+import type { ResolvingEffect } from "../../engine/effects/registry";
 import type { BattleState } from "../../engine/state/types";
 import { boardState } from "../../engine/testing/board";
 import { syntheticId, SYNTHETIC, testCatalog } from "../../engine/testing/synthetic-cards";
@@ -101,7 +101,7 @@ describe("engineStatuses for a delayed ability with captured cards", () => {
 });
 
 const momentId = (index: number) => syntheticId(0xe1e100 + index);
-const spell = (index: number, effect: Effect): EngineCardDefinition => ({
+const spell = (index: number, effect: ResolvingEffect): EngineCardDefinition => ({
   id: momentId(index), cardType: "event", costs: [energy(0)], spark: null, subtype: "", speed: "standard", status: "authored", abilities: () => [event(effect)],
 });
 const M = {

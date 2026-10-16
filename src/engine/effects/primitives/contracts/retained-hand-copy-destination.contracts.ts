@@ -18,16 +18,16 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { determinize } from "../../../view/determinize";
 import { parseDreamsignId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import type { CopyCardTimesNode } from "../copy-card";
 import * as p from "../index";
 import { decklists } from "./with-materialized-support";
 
 const id = (n: number) => syntheticId(0x8ddd00 + n);
-const spell = (n: number, effect: Effect): EngineCardDefinition => ({
+const spell = (n: number, effect: ResolvingEffect): EngineCardDefinition => ({
   ...v.event0, id: id(n), status: "authored", costs: [energy(2)], abilities: () => [event(effect)],
 });
-const sign = (effect: Effect, options: Parameters<typeof triggered>[2] = {}): EngineDreamsignDefinition => ({
+const sign = (effect: ResolvingEffect, options: Parameters<typeof triggered>[2] = {}): EngineDreamsignDefinition => ({
   id: parseDreamsignId("5e5e5e5e-0000-4000-8000-0000008ddd10"), status: "authored",
   abilities: () => [triggered(whenCopyTrigger("opponent", { cardType: "event" }), effect, options)],
 });
@@ -49,7 +49,7 @@ function world(side: Side, watcher: EngineDreamsignDefinition, cards: readonly E
     [other]: { energy: 20, deck, dreamsigns: [watcher.id], ...theirs },
   }) };
 }
-function handOccasion(side: Side, effect: Effect, ephemeral = true, options: Parameters<typeof triggered>[2] = {}) {
+function handOccasion(side: Side, effect: ResolvingEffect, ephemeral = true, options: Parameters<typeof triggered>[2] = {}) {
   const subject = spell(1, p.createCopyInHand(self(), { ephemeral }));
   const maker = spell(2, p.createCard(subject.id));
   const watcher = sign(effect, options);

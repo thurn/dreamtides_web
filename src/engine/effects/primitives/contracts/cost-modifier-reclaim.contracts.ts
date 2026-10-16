@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../../registry";
 import { describe, expect, it } from "vitest";
 import { activated, additionalCost, all, characterYouControl, controls, energy, energyX, event, everyIn, keyword, optionalCost, pointsCost, reclaim, self, staticAbility, x } from "../../../dsl/builders";
 import { NO_DECK_MODS, type Ability, type FunctionalZone } from "../../../dsl/types";
@@ -280,7 +281,8 @@ it("Reclaim modifier construction rejects invalid energy amounts and resolving m
     expect(() => p.costModifierReclaim("you", { set: amount })).toThrow();
     expect(() => p.costModifierReclaim("you", { reduce: amount })).toThrow();
   }
-  const invalid = reclaimCard(18, { costs: [energy(0)], abilities: () => [event(p.costModifierReclaim("you", { set: 0 }))] });
+  // Deliberately malformed runtime ingress: resolution must fail after the play commits.
+  const invalid = reclaimCard(18, { costs: [energy(0)], abilities: () => [event(p.costModifierReclaim("you", { set: 0 }) as unknown as ResolvingEffect)] });
   const f = reclaimFixture("player", [invalid], { hand: [invalid.id] });
   const before = stateHash(f.state);
   expect(() => f.engine.apply(f.state, "player", { kind: "play", card: f.ids.player.hand[0], from: "hand" }, NO_PROMPTS)).toThrow();

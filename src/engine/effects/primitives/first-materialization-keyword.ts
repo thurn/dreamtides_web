@@ -13,7 +13,6 @@ export interface FirstMaterializationKeywordNode {
 export const firstMaterializationKeywordPrimitive = definePrimitive<FirstMaterializationKeywordNode>({
   op: "firstMaterializationKeyword",
   staticOnly: true,
-  resolve() { throw new Error("First-materialization keywords belong to a static ability"); },
   continuous: {
     layer: 3,
     changes(_node, env) {

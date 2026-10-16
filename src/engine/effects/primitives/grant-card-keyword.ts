@@ -38,9 +38,6 @@ const LAYER: Layer = 3;
 export const grantCardKeywordPrimitive = definePrimitive<GrantCardKeywordNode>({
   op: "grantCardKeyword",
   staticOnly: true,
-  resolve() {
-    throw new Error("grantCardKeyword is a static ability's 'have' and never resolves");
-  },
   continuous: {
     layer: LAYER,
     changes(node, env) {

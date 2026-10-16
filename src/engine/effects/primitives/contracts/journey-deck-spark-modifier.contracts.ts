@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../../registry";
 /** Public C4 physical-origin, all-zone spark, privacy and recovery contracts. */
 import { afterEach, describe, expect, it } from "vitest";
 import { characteristicsOf } from "../../../continuous/characteristics";
@@ -330,7 +331,8 @@ describe("journey-deck spark", () => {
     expect(adapter.reduce(cold, { kind: "cancel", side, promptId: parsePromptId("999:999:999") }).kind).toBe("bounced");
     const cancelled = adapter.reduce(cold, { kind: "cancel", side, promptId: prompt.prompt.id }); if (cancelled.kind !== "applied") throw Error("cancel rejected");
     expect(serializeState(cancelled.slice.committed)).toBe(before);
-    const broken = { ...v.event0, id: syntheticId(0x589011), status: "authored" as const, abilities: () => [event(sequence(createCard(v.vanilla1.id), bonus(2, 1)))] };
+  // Deliberately malformed runtime ingress: resolution must fail after the play commits.
+    const broken = { ...v.event0, id: syntheticId(0x589011), status: "authored" as const, abilities: () => [event(sequence(createCard(v.vanilla1.id), bonus(2, 1) as unknown as ResolvingEffect))] };
     const brokenEngine = createEngine(testCatalog([...allCards, broken]));
     const other = opponent(side); const brokenInit: BattleInit = { ...init, dreamsigns: undefined, decks: { ...init.decks, [side]: init.decks[side].map((card, index) => index === 1 ? entry(broken) : card), [other]: [...init.decks[other], entry(response)] }, setup: { ...init.setup, placements: [...init.setup.placements, { side: other, deckIndex: 2, zone: "hand" }] } };
     const badAdapter = createFoldAdapter(brokenEngine), badStart = badAdapter.start(brokenInit); if (badStart.kind !== "applied" || badStart.error !== null) throw Error("bad fixture start rejected");

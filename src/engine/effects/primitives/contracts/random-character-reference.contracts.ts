@@ -21,7 +21,7 @@ import { eventRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { passUntil } from "../../../testing/trigger-harness";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const STREAM = "random:selection";
@@ -35,10 +35,10 @@ function applied(result: IntentOutcome) {
   if (result.kind !== "applied" || result.error !== null) throw new Error(JSON.stringify(result));
   return result;
 }
-function spell(effect: Effect, index = 0x583004): EngineCardDefinition {
+function spell(effect: ResolvingEffect, index = 0x583004): EngineCardDefinition {
   return { ...v.event0, id: syntheticId(index), status: "authored", abilities: () => [event(effect)] };
 }
-function world(side: Side, effect: Effect = gain(), setup: SideSetup = {}, other: SideSetup = {}, cards: readonly EngineCardDefinition[] = []) {
+function world(side: Side, effect: ResolvingEffect = gain(), setup: SideSetup = {}, other: SideSetup = {}, cards: readonly EngineCardDefinition[] = []) {
   const source = spell(effect);
   const engine = createEngine(testCatalog([protectedCard, source, ...cards], {}, [figment]));
   return { engine, source, ...boardState(engine.catalog, { active: side, phase: "day", [side]: { hand: [source.id], deck: [v.vanilla5.id, v.vanilla5.id], ...setup }, [opponent(side)]: { deck: [v.vanilla5.id, v.vanilla5.id], ...other } }) };
@@ -51,7 +51,7 @@ function cast(engine: Engine, state: BattleState, side: Side, card: InstanceId) 
   expect(eventRedactionViolations(result.events, state, result.state)).toEqual([]);
   return result;
 }
-function watcher(effect: Effect): EngineDreamsignDefinition {
+function watcher(effect: ResolvingEffect): EngineDreamsignDefinition {
   return { id: signId, status: "authored", abilities: () => [triggered(whenYouPlay({ cardType: "event" }), effect)] };
 }
 

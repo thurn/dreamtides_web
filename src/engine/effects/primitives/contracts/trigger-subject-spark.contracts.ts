@@ -22,7 +22,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import { parseBattleId, parseDreamsignId, parseOpponentId, parseSiteId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const WARRIORS = all(characterYouControl({ subtype: "Warrior" }));
@@ -45,9 +45,9 @@ function step(engine: Engine, state: BattleState, action: Step, answers: Constru
 interface Options {
   kind?: "ordinary" | "created" | "copy" | "figment";
   mode?: "plain" | "boosted" | "zero" | "base";
-  body?: Effect;
+  body?: ResolvingEffect;
   cardSource?: boolean;
-  after?: Effect;
+  after?: ResolvingEffect;
   floating?: boolean;
   dissolved?: boolean;
 }

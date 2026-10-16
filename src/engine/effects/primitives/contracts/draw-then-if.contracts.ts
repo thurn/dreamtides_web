@@ -23,7 +23,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { ZONE } from "../../../testing/zone-cards";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { chooseOne } from "../choose-one";
 import { drawThenIf } from "../draw-then-if";
 import { gainEnergy } from "../gain-energy";
@@ -34,7 +34,7 @@ import { optional } from "../optional";
 import { repeat } from "../repeat";
 import { sequence } from "../sequence";
 
-function fixture(index: number, effect: Effect): EngineCardDefinition {
+function fixture(index: number, effect: ResolvingEffect): EngineCardDefinition {
   return { ...v.event0, id: syntheticId(0x21610 + index), status: "authored", abilities: () => [event(effect)] };
 }
 const source = DSL.drawThenIfCharacter;

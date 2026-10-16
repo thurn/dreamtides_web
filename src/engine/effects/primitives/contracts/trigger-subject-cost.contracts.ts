@@ -21,7 +21,7 @@ import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synth
 import { comparableView } from "../../../testing/determinization-fidelity";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import { parseAvatarId, parseBattleId, parseOpponentId, parseSiteId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 function step(engine: Engine, state: BattleState, action: Step, answers: ConstructorParameters<typeof ScriptedSource>[0] = []) {
@@ -32,7 +32,7 @@ function step(engine: Engine, state: BattleState, action: Step, answers: Constru
   expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
   return result;
 }
-function world(side: Side, copy: boolean, body: Effect = p.gainPoints(triggerSubjectCost()), cost = 3, modified = false) {
+function world(side: Side, copy: boolean, body: ResolvingEffect = p.gainPoints(triggerSubjectCost()), cost = 3, modified = false) {
   const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x560001), subtype: "Explorer", abilities: () => [triggered(whenDissolved(characterYouControl({ subtype: "Warrior" })), body)] };
   const subject: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(0x560002), costs: [energy(cost), energyX(0)], subtype: "Warrior" };
   const prepare: EngineCardDefinition = { ...v.event0, id: syntheticId(0x560003), abilities: () => [event(p.materialize(everyIn("hand", { cardType: "character" })))] };

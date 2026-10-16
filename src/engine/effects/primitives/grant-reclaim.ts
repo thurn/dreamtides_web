@@ -1,10 +1,11 @@
+import type { ResolvingEffect } from "../registry";
 import { startContinuous } from "../../continuous/resolve";
 import type { Cost, Duration, SubjectSpec, ZoneCardSpec } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
 import type { ContinuousChange } from "../../state/types";
 import type { StepContext } from "../../steps/types";
 import { resolveCards } from "../interpreter";
-import { cardTarget, definePrimitive, type EffectEnv, type EffectNode } from "../types";
+import { cardTarget, definePrimitive, type ResolvingPrimitiveDefinition, type EffectEnv } from "../types";
 
 /**
  * "Erode 1. That card gains reclaim": the nested effect resolves first, and
@@ -13,7 +14,7 @@ import { cardTarget, definePrimitive, type EffectEnv, type EffectNode } from "..
  */
 export interface ReclaimMovedBy {
   readonly kind: "movedBy";
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
 }
 
 /**
@@ -47,7 +48,7 @@ export interface GrantReclaimNode {
   readonly duration: Duration | null;
 }
 
-export const grantReclaimPrimitive = definePrimitive<GrantReclaimNode>({
+export const grantReclaimPrimitive: ResolvingPrimitiveDefinition<GrantReclaimNode> = definePrimitive<GrantReclaimNode>({
   op: "grantReclaim",
   children: (node) => (node.cards.kind === "movedBy" ? [node.cards.effect] : []),
   targets: (node) => (node.cards.kind === "movedBy" ? [] : cardTarget(node.cards)),
@@ -69,7 +70,7 @@ export const grantReclaimPrimitive = definePrimitive<GrantReclaimNode>({
 });
 
 /** The cards `effect` puts into a void as it resolves, in the order they arrive. */
-function movedIntoVoid(ctx: StepContext, effect: EffectNode, env: EffectEnv): InstanceId[] {
+function movedIntoVoid(ctx: StepContext, effect: ResolvingEffect, env: EffectEnv): InstanceId[] {
   const since = ctx.state.clock;
   env.run(effect);
   return Object.values(ctx.state.instances)
@@ -79,7 +80,7 @@ function movedIntoVoid(ctx: StepContext, effect: EffectNode, env: EffectEnv): In
 }
 
 /** "<effect>. That card …": the cards `effect` puts into a void. */
-export function reclaimMovedBy(effect: EffectNode): ReclaimMovedBy {
+export function reclaimMovedBy(effect: ResolvingEffect): ReclaimMovedBy {
   return { kind: "movedBy", effect };
 }
 

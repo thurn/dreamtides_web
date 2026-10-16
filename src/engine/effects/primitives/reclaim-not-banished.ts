@@ -22,9 +22,6 @@ export interface ReclaimNotBanishedNode {
 export const reclaimNotBanishedPrimitive = definePrimitive<ReclaimNotBanishedNode>({
   op: "reclaimNotBanished",
   staticOnly: true,
-  resolve() {
-    throw new Error("reclaimNotBanished is a static ability's 'have' and never resolves");
-  },
   continuous: {
     layer: 6,
     changes(node, env) {

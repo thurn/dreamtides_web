@@ -58,7 +58,7 @@ export function purgePayload(journey: JourneyState, entryIds: readonly unknown[]
   const choice = journey.screen.choice, source = choice.sources[choice.index];
   return { dreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.index, permissionSeq: choice.permissionSeq, entryIds };
 }
-export function battleWorld(options: { held?: readonly DreamsignId[]; effect?: import("../../engine/effects/registry").Effect; challenge?: boolean; cascade?: boolean; openingRemoval?: boolean; fail?: boolean; discard?: boolean } = {}) {
+export function battleWorld(options: { held?: readonly DreamsignId[]; effect?: import("../../engine/effects/registry").ResolvingEffect; challenge?: boolean; cascade?: boolean; openingRemoval?: boolean; fail?: boolean; discard?: boolean } = {}) {
   const spell: EngineCardDefinition = { ...v.event0, id: syntheticId(0x272001), status: "authored", abilities: () => [ability(options.fail ? effects.sequence(effects.dissolve(target(anyCharacter())), effects.gainAdditionalSpark(self(), 1)) : options.discard ? effects.sequence(effects.dissolve(target(anyCharacter())), effects.discard(1)) : options.effect ?? effects.dissolve(target(anyCharacter())))] };
   const signs = options.held ?? [BONE, SKULL];
   const engine = createEngine(testCatalog([spell], { dreamsigns: [...new Set(signs)].map((id) => ({ id, status: "authored", abilities: () => id === SKULL ? options.openingRemoval ? [triggered(onDawn(), effects.dissolve(all(enemyCharacter())))] : options.cascade ? [triggered(whenDissolvesEnemyInChallenge(), effects.dissolve(all(enemyCharacter())))] : [] : [] })) }));

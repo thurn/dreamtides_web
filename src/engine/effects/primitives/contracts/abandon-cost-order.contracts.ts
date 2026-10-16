@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCost, activated, characterYouControl, choiceCost, countersCost, energy, exhaustSelf, optionalCost, target } from "../../../dsl/builders";
 import type { Cost } from "../../../dsl/types";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { EngineLogRecord } from "../../../log";
@@ -25,7 +25,7 @@ import { sequence } from "../sequence";
 const deck = Array.from({ length: 4 }, () => v.vanilla1.id);
 const resources = [exhaustSelf(), countersCost(1)];
 const matrix = SIDES.flatMap((side) => resources.map((resource) => [side, resource] as const));
-function fixture(index: number, costs: readonly Cost[], effect: Effect = gainPoints(1)): EngineCardDefinition {
+function fixture(index: number, costs: readonly Cost[], effect: ResolvingEffect = gainPoints(1)): EngineCardDefinition {
   return { id: syntheticId(0x39400 + index), cardType: "character", costs: [energy(0)], spark: 1, subtype: "Mage", speed: "standard", status: "authored", abilities: () => [activated(costs, effect)] };
 }
 function setup(engine: ReturnType<typeof createEngine>, side: Side, card: EngineCardDefinition, companions: readonly typeof card.id[] = []) {

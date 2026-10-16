@@ -4,7 +4,7 @@ import type { EngineCardDefinition } from "../../../catalog";
 import { all, anyCharacter, event, everyIn, keyword, randomIn } from "../../../dsl/builders";
 import type { PlayerRef, ZoneEverySpec } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { SIDES, opponent, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
 import { InlineSource } from "../../../steps/sources";
@@ -15,7 +15,7 @@ import { at, passUntil } from "../../../testing/trigger-harness";
 import * as p from "../index";
 
 const STREAM = "random:selection";
-const make = (n: number, effect: Effect): EngineCardDefinition => ({ ...v.event0, id: syntheticId(0x253000 + n), abilities: () => [event(effect)] });
+const make = (n: number, effect: ResolvingEffect): EngineCardDefinition => ({ ...v.event0, id: syntheticId(0x253000 + n), abilities: () => [event(effect)] });
 const subject: EngineCardDefinition = { ...v.vanilla2, id: syntheticId(0x253010), abilities: () => [keyword("cannotBeTargeted")] };
 const abandon = make(1, p.abandon());
 const dissolve = make(2, p.dissolve(all(anyCharacter())));

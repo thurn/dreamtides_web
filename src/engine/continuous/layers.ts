@@ -45,8 +45,8 @@ import type { Ability, CardFilter, CharacterRef, Keyword, NamedTrigger, StaticAb
 import { conditionHoldsWith } from "../dsl/conditions";
 import { evaluateValue } from "../dsl/values";
 import { chosenSubtypeOf, mentionsChosenSubtype, withChosenSubtype } from "../effects/primitives/choose-subtype";
-import { primitiveDefinition } from "../effects/registry";
-import type { EffectNode, Layer, StaticEnv } from "../effects/types";
+import { primitiveDefinition, type StaticEffect } from "../effects/registry";
+import type { Layer, StaticEnv } from "../effects/types";
 import { gainedGroupAbilities, instanceOrigin, originAbilities } from "../rules/activation";
 import { charactersInPlay } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, Side, Zone } from "../state/ids";
@@ -126,7 +126,7 @@ interface StaticEntry {
   readonly ability: number;
   readonly source: AbilitySource;
   readonly controller: Side;
-  readonly node: EffectNode;
+  readonly node: StaticEffect;
   readonly layer: Layer;
   readonly timestamp: number;
   readonly order: number;

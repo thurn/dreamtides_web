@@ -17,7 +17,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations } from "../../../testing/redaction";
 import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { passUntil, type Observed } from "../../../testing/trigger-harness";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { banishCards } from "../banish-cards";
 import { costModifier } from "../cost-modifier";
 import { dissolve } from "../dissolve";
@@ -35,7 +35,7 @@ import { capturedCards, withMaterialized } from "../with-materialized";
 import { deck, v } from "./cards-support";
 
 const id = (index: number) => syntheticId(0xe0e000 + index);
-const spell = (index: number, effect: Effect, costs: readonly CardCost[] = [energy(0)], speed: "standard" | "interrupt" = "standard"): EngineCardDefinition => ({
+const spell = (index: number, effect: ResolvingEffect, costs: readonly CardCost[] = [energy(0)], speed: "standard" | "interrupt" = "standard"): EngineCardDefinition => ({
   id: id(index), cardType: "event", costs, spark: null, subtype: "", speed, status: "authored", abilities: () => [event(effect)],
 });
 const watcher = (index: number, effect: Parameters<typeof triggered>[0]): EngineCardDefinition => ({
@@ -45,7 +45,7 @@ const watcher = (index: number, effect: Parameters<typeof triggered>[0]): Engine
 
 const characters: CardFilter = { cardType: "character" };
 /** "Materialize each character in your void whose cost is at most `bound`. Banish them at end of turn." */
-const borrowing = (bound?: ZoneEverySpec["costAtMost"], then: Effect = banishCards([capturedCards()])) =>
+const borrowing = (bound?: ZoneEverySpec["costAtMost"], then: ResolvingEffect = banishCards([capturedCards()])) =>
   withMaterialized(materialize(everyIn("void", characters, bound === undefined ? {} : { costAtMost: bound })), delayed(atEndOfTurn(), then));
 
 export const F = {

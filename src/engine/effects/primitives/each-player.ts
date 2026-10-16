@@ -1,7 +1,8 @@
+import type { ResolvingEffect } from "../registry";
 import { opponent } from "../../state/ids";
 import { everyNode, everyTarget, resolveNode } from "../interpreter";
 import { primitiveDefinition } from "../registry";
-import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition, type EffectEnv } from "../types";
 
 /**
  * "Each player …": `effect` resolves once for each player, the active player
@@ -15,10 +16,10 @@ import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
  */
 export interface EachPlayerNode {
   readonly op: "eachPlayer";
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
 }
 
-export const eachPlayerPrimitive = definePrimitive<EachPlayerNode>({
+export const eachPlayerPrimitive: ResolvingPrimitiveDefinition<EachPlayerNode> = definePrimitive<EachPlayerNode>({
   op: "eachPlayer",
   children: (node) => [node.effect],
   resolve(ctx, node, env) {
@@ -36,7 +37,7 @@ export const eachPlayerPrimitive = definePrimitive<EachPlayerNode>({
   },
 });
 
-export function eachPlayer(effect: EffectNode): EachPlayerNode {
+export function eachPlayer(effect: ResolvingEffect): EachPlayerNode {
   if (everyTarget(effect).length > 0) throw new Error("eachPlayer cannot hold a play-time target");
   if (everyNode(effect).some((node) => primitiveDefinition(node.op).modes !== undefined)) {
     throw new Error("eachPlayer cannot hold a modal choice");

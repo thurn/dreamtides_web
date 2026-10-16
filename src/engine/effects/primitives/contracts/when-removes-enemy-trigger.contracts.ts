@@ -18,21 +18,21 @@ import { comparableView } from "../../../testing/determinization-fidelity";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { at, passUntil } from "../../../testing/trigger-harness";
 import { parseDreamsignId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const id = (n: number) => syntheticId(0x229000 + n);
 const emblem = (n: number, abilities: readonly Ability[]): EngineDreamsignDefinition => ({
   id: parseDreamsignId(`5e5e5e5e-0000-4000-8000-${(0x229100 + n).toString(16).padStart(12, "0")}`), status: "authored", abilities: () => abilities,
 });
-const watcher = (n: number, trigger: Trigger, effect: Effect = p.gainPoints(1), once = false) => emblem(n, [triggered(trigger, effect, { oncePerTurn: once })]);
+const watcher = (n: number, trigger: Trigger, effect: ResolvingEffect = p.gainPoints(1), once = false) => emblem(n, [triggered(trigger, effect, { oncePerTurn: once })]);
 const victim: EngineCardDefinition = { ...v.vanilla5, id: id(2), spark: 3 };
 const actor: EngineCardDefinition = { ...v.vanilla3, id: id(3), costs: [energy(4)], spark: 3 };
-const spell = (n: number, effect: Effect, speed: "standard" | "interrupt" = "standard"): EngineCardDefinition => ({
+const spell = (n: number, effect: ResolvingEffect, speed: "standard" | "interrupt" = "standard"): EngineCardDefinition => ({
   ...v.event0, id: id(n), status: "authored", speed, abilities: () => [event(effect)],
 });
 const deck = Array.from({ length: 8 }, () => v.vanilla1.id);
-function world(effect: Effect, signs = [watcher(1, whenRemovesEnemy())], side: Side = "player", extra: readonly EngineCardDefinition[] = [], foeDefinition = victim) {
+function world(effect: ResolvingEffect, signs = [watcher(1, whenRemovesEnemy())], side: Side = "player", extra: readonly EngineCardDefinition[] = [], foeDefinition = victim) {
   const cast = spell(1, effect);
   const engine = createEngine(testCatalog([cast, foeDefinition, actor, ...extra], { dreamsigns: signs }));
   const foe = opponent(side);

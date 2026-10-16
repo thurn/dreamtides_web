@@ -11,7 +11,6 @@ export interface RevealDeckTopNode {
 export const revealDeckTopPrimitive = definePrimitive<RevealDeckTopNode>({
   op: "revealDeckTop",
   staticOnly: true,
-  resolve() { throw new Error("revealDeckTop belongs to a static ability"); },
   continuous: {
     layer: 6,
     changes(node, env) { return [{ kind: "revealDeckTop", player: resolvePlayer(env.controller, node.player) }]; },

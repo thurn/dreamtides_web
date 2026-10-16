@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCost, abandonCostCapture, abandonSparkCapture, additionalCost, event, keyword, activated, characterYouControl, banishXCost, discardCost, discardCostFilter, energy, energyX, enemyCharacter, fromVoid, target, x } from "../../../dsl/builders";
 import type { AdditionalCost, Cost } from "../../../dsl/types";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { isLegalAnswer } from "../../../prompts/answers";
@@ -36,7 +36,7 @@ const forms = {
 type Form = keyof typeof forms;
 const isCapture = (form: Form) => form === "discardCapture" || form === "abandonCapture";
 const deck = [v.vanilla1.id, v.vanilla1.id];
-function fixture(form: Form, side: Side = "player", options: { stored?: number | null; priced?: boolean; effect?: Effect; costs?: readonly Cost[]; onlyTwo?: boolean; ownTwos?: boolean } = {}) {
+function fixture(form: Form, side: Side = "player", options: { stored?: number | null; priced?: boolean; effect?: ResolvingEffect; costs?: readonly Cost[]; onlyTwo?: boolean; ownTwos?: boolean } = {}) {
   const card: EngineCardDefinition = {
     ...v.vanilla1, id: syntheticId(0x50b50), status: "authored",
     abilities: () => [activated([energy(1), ...(options.priced ? [energyX(0)] : []), ...(options.costs ?? [forms[form]])], options.effect ?? dissolve(target(exact)))],
@@ -331,7 +331,7 @@ describe("cost-captured X replay and atomic payment", () => {
 });
 
 /** Played events use the same preparation while reserving their own physical card. */
-function played(side: Side, options: { cost?: AdditionalCost; effect?: Effect; priced?: boolean; offering?: boolean; zero?: boolean; ownTarget?: boolean } = {}) {
+function played(side: Side, options: { cost?: AdditionalCost; effect?: ResolvingEffect; priced?: boolean; offering?: boolean; zero?: boolean; ownTarget?: boolean } = {}) {
   const effect = options.effect ?? dissolve(target(options.ownTarget ? characterYouControl({ sparkAtLeast: x(), sparkAtMost: x() }) : exact));
   const card: EngineCardDefinition = { ...v.event0, id: syntheticId(0x60902), status: "authored", costs: [energy(1), ...(options.priced ? [energyX(0)] : [])],
     abilities: () => [event(effect), ...(options.offering ? [keyword("offering")] : []), additionalCost(options.cost ?? abandonSparkCapture())] };

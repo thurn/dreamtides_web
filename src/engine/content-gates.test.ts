@@ -64,7 +64,7 @@ import { optional } from "./effects/primitives/optional";
 import { repeat } from "./effects/primitives/repeat";
 import { sequence } from "./effects/primitives/sequence";
 import { sparkModifier } from "./effects/primitives/spark-modifier";
-import { primitiveDefinition, type Effect } from "./effects/registry";
+import { primitiveDefinition, type ResolvingEffect, type StaticEffect } from "./effects/registry";
 import { misplacedMovedCardReads } from "./testing/moved-card-audit";
 import { undeclaredAbilityTargets } from "./testing/target-audit";
 
@@ -212,11 +212,11 @@ describe("content gates", () => {
 
   it("rejects a moved-card read whose node is later, on another branch, unrelated, in another resolution, or read statically", () => {
     /** Each shape gets a fresh payment node and the value that reads it. */
-    const shape = (build: (payment: Effect, read: Effect) => Effect): Effect => {
+    const shape = (build: (payment: ResolvingEffect, read: ResolvingEffect) => ResolvingEffect): ResolvingEffect => {
       const payment = discard(1);
       return build(payment, gainPoints(costOf(cardsMovedBy(payment))));
     };
-    const accepted: readonly Effect[] = [
+    const accepted: readonly ResolvingEffect[] = [
       shape((payment, read) => sequence(payment, read)),
       shape((payment, read) => sequence(draw(1), payment, draw(1), read)),
       shape((payment, read) => sequence(optional(payment), read)),
@@ -235,7 +235,7 @@ describe("content gates", () => {
       expect(misplacedMovedCardReads([triggered(onMaterialized(), effect)]), JSON.stringify(effect)).toEqual([]);
     }
 
-    const rejected: readonly Effect[] = [
+    const rejected: readonly ResolvingEffect[] = [
       shape((payment, read) => sequence(read, payment)),
       shape((payment, read) => sequence(sequence(read, draw(1)), payment)),
       shape((payment, read) => sequence(draw(1), sequence(read, payment))),
@@ -264,8 +264,8 @@ describe("content gates", () => {
     expect(staticReferenceFailures([staticAbility(sparkModifier(triggeringCard(), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(highestSpark(), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(lastMaterialized(), 1))])).toHaveLength(1);
-    expect(staticReferenceFailures([staticAbility(createCopyInHand(lastPlayed({ cardType: "character", subtype: "Warrior" })))])).toHaveLength(1);
-    expect(staticReferenceFailures([staticAbility(createCopyInHand(fromVoid()))])).toHaveLength(1);
+    expect(staticReferenceFailures([staticAbility(createCopyInHand(lastPlayed({ cardType: "character", subtype: "Warrior" })) as unknown as StaticEffect)])).toHaveLength(1);
+    expect(staticReferenceFailures([staticAbility(createCopyInHand(fromVoid()) as unknown as StaticEffect)])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(all(characterYouControl()), thisCharacterSpark()))])).toHaveLength(1);
   });
 
@@ -288,12 +288,14 @@ describe("content gates", () => {
   it("rejects a static-only primitive anywhere but as a static ability's whole effect", () => {
     const grant = grantCardKeyword(cardsIn("hand"), "offering");
     expect(primitiveFailures([staticAbility(grant), staticAbility(grant, { zone: "void" })])).toEqual([]);
+    // Unsafe synthetic ingress keeps the runtime placement gate exercised.
+    const resolvingGrant = grant as unknown as ResolvingEffect;
     const misplaced: readonly Ability[] = [
-      event(grant),
-      event(sequence(draw(1), grant)),
-      event(chooseOne(draw(1), grant)),
-      triggered(onMaterialized(), grant),
-      activated([energy(1)], grant),
+      event(resolvingGrant),
+      event(sequence(draw(1), resolvingGrant)),
+      event(chooseOne(draw(1), resolvingGrant)),
+      triggered(onMaterialized(), resolvingGrant),
+      activated([energy(1)], resolvingGrant),
     ];
     for (const ability of misplaced) expect(primitiveFailures([ability]), ability.kind).toHaveLength(1);
   });

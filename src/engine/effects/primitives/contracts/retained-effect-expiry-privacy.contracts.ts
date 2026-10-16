@@ -15,11 +15,11 @@ import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import { boardState } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import type { EffectNode } from "../../types";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const friendly = all(characterYouControl());
-const forms: readonly { readonly name: string; readonly make: (duration: Duration) => EffectNode; readonly count: number; readonly publicCard: boolean }[] = [
+const forms: readonly { readonly name: string; readonly make: (duration: Duration) => ResolvingEffect; readonly count: number; readonly publicCard: boolean }[] = [
   { name: "loss", make: duration => p.loseAllAbilities(friendly, { duration }), count: 2, publicCard: true },
   { name: "cardCost", make: duration => p.sequence(
     p.modifyCardCost(p.returnToHand(all(characterYouControl({ another: true }))), { set: 0 }, { duration }),

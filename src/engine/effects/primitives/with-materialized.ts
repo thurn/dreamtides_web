@@ -1,7 +1,8 @@
+import type { ResolvingEffect } from "../registry";
 import type { InstanceId } from "../../state/ids";
 import type { BattleState } from "../../state/types";
 import { resolveNode } from "../interpreter";
-import { definePrimitive, type CapturedCardsSpec, type EffectEnv, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition, type CapturedCardsSpec, type EffectEnv } from "../types";
 import type { MaterializeNode } from "./materialize";
 import type { MaterializeChosenNode } from "./materialize-chosen";
 import type { MaterializeFigmentsNode } from "./materialize-figments";
@@ -23,7 +24,7 @@ import type { MaterializeFigmentsNode } from "./materialize-figments";
 export interface WithMaterializedNode {
   readonly op: "withMaterialized";
   readonly materialize: MaterializeNode | MaterializeFigmentsNode | MaterializeChosenNode;
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
 }
 
 /** The cards in play that entered play after `since`, in the order they entered. */
@@ -34,7 +35,7 @@ function enteredPlaySince(state: BattleState, since: number): InstanceId[] {
     .map((instance) => instance.id);
 }
 
-export const withMaterializedPrimitive = definePrimitive<WithMaterializedNode>({
+export const withMaterializedPrimitive: ResolvingPrimitiveDefinition<WithMaterializedNode> = definePrimitive<WithMaterializedNode>({
   op: "withMaterialized",
   children: (node) => [node.materialize, node.effect],
   resolve(ctx, node, env) {
@@ -52,7 +53,7 @@ export const withMaterializedPrimitive = definePrimitive<WithMaterializedNode>({
 });
 
 /** Resolves `materialize`, then `effect` with the characters it materialized as `capturedCards()`. */
-export function withMaterialized(materialize: MaterializeNode | MaterializeFigmentsNode | MaterializeChosenNode, effect: EffectNode): WithMaterializedNode {
+export function withMaterialized(materialize: MaterializeNode | MaterializeFigmentsNode | MaterializeChosenNode, effect: ResolvingEffect): WithMaterializedNode {
   return { op: "withMaterialized", materialize, effect };
 }
 

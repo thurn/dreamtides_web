@@ -12,7 +12,6 @@ export interface JourneyDeckKeywordNode {
 export const journeyDeckKeywordPrimitive = definePrimitive<JourneyDeckKeywordNode>({
   op: "journeyDeckKeyword",
   staticOnly: true,
-  resolve() { throw new Error("Journey-deck keywords belong to a static ability"); },
   continuous: {
     layer: 3,
     changes(node, env) {

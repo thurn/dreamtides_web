@@ -16,7 +16,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import { parseBattleId, parseDreamsignId, parseOpponentId, parseSiteId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { draw } from "../draw";
 import { ruleModifier } from "../rule-modifier";
 
@@ -28,7 +28,7 @@ export const signs: readonly EngineDreamsignDefinition[] = [
   { id: SIGN.hourglass, status: "authored", abilities: () => [staticAbility(ruleModifier({ rule: "dawnThreshold", count: 3, effect: draw(1) }))] },
 ];
 export const deck = Array.from({ length: 12 }, () => v.vanilla1.id);
-export function card(index: number, effect: Effect, extra: Partial<EngineCardDefinition> = {}): EngineCardDefinition {
+export function card(index: number, effect: ResolvingEffect, extra: Partial<EngineCardDefinition> = {}): EngineCardDefinition {
   return { ...v.event0, id: syntheticId(0x236100 + index), status: "authored", costs: [energy(4)],
     speed: "fast", abilities: () => [event(effect)], ...extra };
 }

@@ -33,7 +33,7 @@ import { effectiveSpark } from "../rules/spark";
 import { charactersInPlay } from "../rules/zones";
 import type { BanishCardsNode, BanishNamedCardsNode } from "./primitives/banish-cards";
 import type { MaterializeNode } from "./primitives/materialize";
-import { primitiveDefinition } from "./registry";
+import { primitiveDefinition, resolvePrimitiveUnchecked } from "./registry";
 import type { CapturedCardsSpec, CardRef, EffectEnv, EffectNode, MovedCards, ResolutionChoiceScope } from "./types";
 
 /** The mode chosen at play time for each modal node of an effect. */
@@ -947,7 +947,7 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
 
 /** Resolves one node of an effect in `env`, tracking the cards it moves (`MovedCards`). */
 export function resolveNode(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
-  const resolve = (): void => primitiveDefinition(node.op).resolve(ctx, node, env);
+  const resolve = (): void => resolvePrimitiveUnchecked(ctx, node, env);
   const windows = deckRemovalWindows(ctx, node, env);
   env.moved.track(node, windows === null ? resolve : () =>
     ctx.settlingKnowledge(randomDeckRemovalSettler(ctx.state, windows.bounds, windows.unordered), resolve));

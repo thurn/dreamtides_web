@@ -8,7 +8,6 @@ export interface OfferingDiscardPaymentOptionNode {
 export const offeringDiscardPaymentOptionPrimitive = definePrimitive<OfferingDiscardPaymentOptionNode>({
   op: "offeringDiscardPaymentOption",
   staticOnly: true,
-  resolve() { throw new Error("offeringDiscardPaymentOption belongs to a static ability"); },
   continuous: {
     layer: 6,
     changes(_node, env) { return [{ kind: "offeringDiscardPaymentOption", player: env.controller }]; },

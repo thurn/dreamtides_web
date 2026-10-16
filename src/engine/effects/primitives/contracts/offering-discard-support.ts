@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../../registry";
 import type { EngineCardDefinition } from "../../../catalog";
 import { activated, additionalCost, conditionCardCounts, fromVoid, discardCost, energy, energyX, event, keyword, optionalCost, pointsCost, reclaim, staticAbility } from "../../../dsl/builders";
 import type { Ability } from "../../../dsl/types";
@@ -27,7 +28,8 @@ export const definitions = {
   abandon: card(4, [keyword("offering"), additionalCost({ cost: "abandon", count: 1, selector: { controller: "you" } })]),
   void: card(5, [keyword("offering"), reclaim(energy(2)), staticAbility(p.playSelfFromZone("void"), { zone: "void" })]),
   banisher: card(6, [activated([{ cost: "banishFromHand", count: 1 }], p.gainPoints(1))]),
-  invalid: card(7, [event(p.sequence(p.gainPoints(1), p.offeringDiscardPaymentOption()))], true),
+  // Deliberately malformed runtime ingress: resolution must fail after the play commits.
+  invalid: card(7, [event(p.sequence(p.gainPoints(1), p.offeringDiscardPaymentOption() as unknown as ResolvingEffect))], true),
   tax: card(8, [staticAbility(p.costModifier("you", {}, 2))]),
   targeted: card(9, [keyword("offering"), additionalCost({ cost: "banishFromVoid", count: 1, filter: {} }), event(p.returnFromVoid(fromVoid()))], true),
 };

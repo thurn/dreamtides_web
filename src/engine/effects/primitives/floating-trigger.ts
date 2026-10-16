@@ -1,9 +1,10 @@
+import type { ResolvingEffect } from "../registry";
 import type { Duration, Trigger } from "../../dsl/types";
 import { sourceInstance } from "../../state/ids";
 import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
 import { everyNode } from "../interpreter";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition } from "../types";
 
 /**
  * "Until end of turn, when …, …" (a floating trigger) or "The next time …,
@@ -14,12 +15,12 @@ import { definePrimitive, type EffectNode } from "../types";
 export interface FloatingTriggerNode {
   readonly op: "floatingTrigger";
   readonly trigger: Trigger;
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
   readonly once: boolean;
   readonly duration: Duration;
 }
 
-export const floatingTriggerPrimitive = definePrimitive<FloatingTriggerNode>({
+export const floatingTriggerPrimitive: ResolvingPrimitiveDefinition<FloatingTriggerNode> = definePrimitive<FloatingTriggerNode>({
   op: "floatingTrigger",
   deferred: (node) => [node.effect],
   resolve(ctx, node, env) {
@@ -46,11 +47,11 @@ export const floatingTriggerPrimitive = definePrimitive<FloatingTriggerNode>({
 });
 
 /** "Until end of turn, when `trigger`, `effect`": triggers each time while it lasts. */
-export function floating(trigger: Trigger, effect: EffectNode, duration: Duration = "untilEndOfTurn"): FloatingTriggerNode {
+export function floating(trigger: Trigger, effect: ResolvingEffect, duration: Duration = "untilEndOfTurn"): FloatingTriggerNode {
   return { op: "floatingTrigger", trigger, effect, once: false, duration };
 }
 
 /** "The next time `trigger`, `effect`": triggers once, if it does before `duration` ends. */
-export function delayed(trigger: Trigger, effect: EffectNode, duration: Duration = "permanent"): FloatingTriggerNode {
+export function delayed(trigger: Trigger, effect: ResolvingEffect, duration: Duration = "permanent"): FloatingTriggerNode {
   return { op: "floatingTrigger", trigger, effect, once: true, duration };
 }

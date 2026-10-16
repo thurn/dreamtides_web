@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCost, abandonCostCapture, abandonSparkCapture, abandonXCost, activated, additionalCost, all, characterYouControl, choiceCost, energy, energyX, enemyCharacter, event, optionalCost, staticAbility, supported, target, x } from "../../../dsl/builders";
 import { NO_DECK_MODS, type Cost } from "../../../dsl/types";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { isLegalAnswer } from "../../../prompts/answers";
@@ -31,7 +31,7 @@ const deck = [v.vanilla1.id, v.vanilla1.id, v.vanilla1.id];
 const capture = abandonSparkCapture();
 interface Setup {
   readonly costs?: readonly Cost[];
-  readonly effect?: Effect;
+  readonly effect?: ResolvingEffect;
   readonly targeted?: boolean;
   readonly gained?: number;
   readonly timed?: number;

@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../../registry";
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { anyCharacter, conditionCardCounts, energy, event, everyIn, staticAbility, target } from "../../../dsl/builders";
@@ -34,7 +35,8 @@ const conditional = card(3, [staticAbility(p.preserveEphemeralHand(), { while: c
 const dissolve = card(4, [event(p.dissolve(target(anyCharacter())))], "event");
 const lose = card(5, [event(p.loseAllAbilities(target(anyCharacter())))], "event");
 const banishHand = card(6, [event(p.banishCards([everyIn("hand")]))], "event");
-const invalid = card(7, [event(p.preserveEphemeralHand())], "event");
+// Deliberately malformed runtime ingress: resolution must fail after the play commits.
+const invalid = card(7, [event(p.preserveEphemeralHand() as unknown as ResolvingEffect)], "event");
 const avatar = parseAvatarId("5e5e5e5e-0000-4000-8000-000000620101");
 const sign = parseDreamsignId("5e5e5e5e-0000-4000-8000-000000620102");
 const engine = createEngine(testCatalog([keeper, handKeeper, conditional, dissolve, lose, banishHand, invalid], {

@@ -1,10 +1,11 @@
+import type { ResolvingEffect } from "../registry";
 import { startContinuous } from "../../continuous/resolve";
 import type { Duration, SelfSpec, SubjectSpec, ZoneRandomSpec } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
 import type { CardCostMode } from "../../state/types";
 import type { StepContext } from "../../steps/types";
 import { resolveCards } from "../interpreter";
-import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition, type EffectEnv } from "../types";
 
 /**
  * "Return an enemy to hand. It costs 2● more", "Draw a ≤2● cost card. It
@@ -21,13 +22,13 @@ import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
  */
 export interface ModifyCardCostNode {
   readonly op: "modifyCardCost";
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
   readonly mode: CardCostMode;
   readonly amount: number;
   readonly duration: Duration | null;
 }
 
-export const modifyCardCostPrimitive = definePrimitive<ModifyCardCostNode>({
+export const modifyCardCostPrimitive: ResolvingPrimitiveDefinition<ModifyCardCostNode> = definePrimitive<ModifyCardCostNode>({
   op: "modifyCardCost",
   children: (node) => [node.effect],
   resolve(ctx, node, env) {
@@ -43,7 +44,7 @@ export const modifyCardCostPrimitive = definePrimitive<ModifyCardCostNode>({
 });
 
 /** The cards `effect` puts into a hand as it resolves, in the order they arrive. */
-function movedIntoHand(ctx: StepContext, effect: EffectNode, env: EffectEnv): InstanceId[] {
+function movedIntoHand(ctx: StepContext, effect: ResolvingEffect, env: EffectEnv): InstanceId[] {
   const since = ctx.state.clock;
   const eventStart = ctx.events.length;
   env.run(effect);
@@ -73,7 +74,7 @@ function costChange(cost: CardCostChange): [CardCostMode, number] {
  * a hand: a return to hand or a draw.
  */
 export function modifyCardCost(
-  effect: EffectNode,
+  effect: ResolvingEffect,
   cost: CardCostChange,
   options: { readonly duration?: Duration } = {},
 ): ModifyCardCostNode {
@@ -104,7 +105,7 @@ export interface ChangeCardCostNode {
   readonly duration: Duration | null;
 }
 
-export const changeCardCostPrimitive = definePrimitive<ChangeCardCostNode>({
+export const changeCardCostPrimitive: ResolvingPrimitiveDefinition<ChangeCardCostNode> = definePrimitive<ChangeCardCostNode>({
   op: "changeCardCost",
   resolve(ctx, node, env) {
     const ids = resolveCards(ctx, node.card, env);

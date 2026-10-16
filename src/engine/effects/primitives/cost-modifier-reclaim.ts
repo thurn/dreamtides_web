@@ -13,9 +13,6 @@ export interface CostModifierReclaimNode {
 export const costModifierReclaimPrimitive = definePrimitive<CostModifierReclaimNode>({
   op: "costModifierReclaim",
   staticOnly: true,
-  resolve() {
-    throw new Error("costModifierReclaim is a static ability and never resolves");
-  },
   continuous: {
     layer: 6,
     changes(node, env) {

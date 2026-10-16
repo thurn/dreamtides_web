@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../effects/registry";
 /**
  * Shared synthetic fixtures for the continuous-effect tests: anthems, cost
  * modifiers, and "until the opponent pays" cards, the engine over them, and
@@ -103,7 +104,8 @@ export const voidVengeful = fixture(0xa8d, "character", 1, () => [staticAbility(
 export const dissolveAlly = fixture(0xa8e, "event", 0, () => [event(p.dissolve(target(characterYouControl())))]);
 /** A malformed event that dissolves an ally, then resolves a static-only primitive, which throws. */
 export const dissolveAllyThenFail = fixture(0xa8f, "event", 0, () => [
-  event(p.sequence(p.dissolve(target(characterYouControl())), p.grantCardKeyword(p.cardsIn("hand"), "offering"))),
+  // Deliberately malformed runtime ingress: resolution must fail after the play commits.
+  event(p.sequence(p.dissolve(target(characterYouControl())), p.grantCardKeyword(p.cardsIn("hand"), "offering") as unknown as ResolvingEffect)),
 ]);
 
 export const engine = createEngine(

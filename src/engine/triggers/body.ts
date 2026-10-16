@@ -3,7 +3,7 @@ import type { EngineCatalog } from "../catalog";
 import { abilityEffect } from "../dsl/abilities";
 import type { Condition, NamedTrigger, Trigger } from "../dsl/types";
 import { everyNode } from "../effects/interpreter";
-import { primitiveDefinition } from "../effects/registry";
+import { primitiveDefinition, type ResolvingEffect } from "../effects/registry";
 import type { FloatingTriggerNode } from "../effects/primitives/floating-trigger";
 import type { EffectNode } from "../effects/types";
 import { originAbilities } from "../rules/activation";
@@ -12,7 +12,7 @@ import type { AbilityOrigin } from "../state/types";
 /** What a trigger resolves: its effect, the ability's whole effect tree, and its intervening "if". */
 export interface TriggerBody {
   readonly trigger: Trigger;
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
   readonly root: EffectNode;
   readonly condition: Condition | null;
 }
@@ -33,7 +33,7 @@ export function triggerBody(
   if (definition === undefined || root === null) throw new Error(`Ability ${String(ability)} of its origin has no effect`);
   if (node === null) {
     if (definition.kind !== "triggered") throw new Error(`Ability ${String(ability)} is not a triggered ability`);
-    return { trigger: definition.trigger, effect: root, root, condition: definition.condition ?? null };
+    return { trigger: definition.trigger, effect: definition.effect, root, condition: definition.condition ?? null };
   }
   const found = everyNode(root)[node];
   if (found?.op !== "floatingTrigger") throw new Error(`Node ${String(node)} of ability ${String(ability)} is not a floating trigger`);

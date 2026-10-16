@@ -22,7 +22,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { at, passUntil } from "../../../testing/trigger-harness";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const SUBJECT = { ...v.vanilla2, id: syntheticId(0x648001), costs: [energy(0)] };
@@ -31,7 +31,7 @@ const CREATE = { ...v.event0, id: syntheticId(0x648003), abilities: () => [event
 const SOURCE = { ...v.vanilla1, id: syntheticId(0x648004), costs: [energy(0)] };
 const signId = parseDreamsignId("00000000-0000-0000-0000-000000648001");
 const gain = (amount = 2, duration: Duration = "untilEndOfTurn") => p.gainSpark(all(characterYouControl()), amount, duration);
-function world(side: Side, trigger: Trigger, effect: Effect, setup: SideSetup, extra: readonly EngineCardDefinition[] = [], cardSource = false) {
+function world(side: Side, trigger: Trigger, effect: ResolvingEffect, setup: SideSetup, extra: readonly EngineCardDefinition[] = [], cardSource = false) {
   const watcher: EngineDreamsignDefinition = { id: signId, status: "authored", abilities: () => [triggered(trigger, effect)] };
   const producer = { ...SOURCE, abilities: watcher.abilities };
   const engine = createEngine(testCatalog([SUBJECT, DRAW, CREATE, producer, ...extra], { dreamsigns: [watcher] }));

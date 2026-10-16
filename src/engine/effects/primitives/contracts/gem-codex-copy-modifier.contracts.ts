@@ -22,7 +22,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations, promptRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { parseAvatarId, parseDreamsignId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const id = (n: number) => syntheticId(0x654000 + n);
@@ -32,9 +32,9 @@ const sign = (n: number, abilities: readonly Ability[]): EngineDreamsignDefiniti
 const modifier = sign(1, [additionalEventCopy()]);
 const card = (n: number, abilities: readonly Ability[], extra: Partial<EngineCardDefinition> = {}): EngineCardDefinition =>
   ({ ...v.event0, id: id(n), status: "authored", abilities: () => abilities, ...extra });
-const spell = (n: number, effect: Effect, extra: Partial<EngineCardDefinition> = {}) => card(n, [event(effect)], extra);
+const spell = (n: number, effect: ResolvingEffect, extra: Partial<EngineCardDefinition> = {}) => card(n, [event(effect)], extra);
 const points = spell(1, p.gainPoints(1), { costs: [energy(2)] });
-const echo = (n = 2, times = 1, suffix?: Effect) => card(n, [
+const echo = (n = 2, times = 1, suffix?: ResolvingEffect) => card(n, [
   triggered(whenYouPlay(), suffix === undefined ? p.copyCardTimes(triggeringCard(), times) : p.sequence(p.copyCard(triggeringCard()), suffix)),
 ], { cardType: "character", spark: 1 });
 const hand = spell(3, p.modifyCardCost(p.createCopyInHand(self(), { ephemeral: true }), { set: 0 }), { costs: [energy(2)] });

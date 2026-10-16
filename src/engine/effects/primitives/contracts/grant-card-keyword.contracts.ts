@@ -1,3 +1,6 @@
+import type { ResolvingEffect } from "../../registry";
+import { ruleModifier } from "../rule-modifier";
+import { reclaimNotBanished } from "../reclaim-not-banished";
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
@@ -43,20 +46,21 @@ const deckCharactersVengeful: EngineCardDefinition = {
   abilities: () => [staticAbility(grantCardKeyword(cardsIn("deck", { cardType: "character" }), "vengeful"))],
 };
 
-/** A malformed event that resolves the static-only primitive. */
-const resolvesCardKeyword: EngineCardDefinition = {
-  id: syntheticId(922),
-  cardType: "event",
-  costs: [energy(0)],
-  spark: null,
-  subtype: "",
-  speed: "standard",
-  status: "authored",
-  abilities: () => [event(grantCardKeyword(cardsIn("hand"), "offering"))],
-};
+/** Unsafe synthetic ingress preserves resolution-time refusal after a committed play. */
+const resolvingMisuse = [
+  { id: syntheticId(922), effect: grantCardKeyword(cardsIn("hand"), "offering") },
+  { id: syntheticId(0x764001), effect: ruleModifier({ rule: "carryEnergy" }) },
+  { id: syntheticId(0x764002), effect: reclaimNotBanished() },
+].map(({ id, effect }) => {
+  const card: EngineCardDefinition = {
+    id, cardType: "event", costs: [energy(0)], spark: null, subtype: "", speed: "standard", status: "authored",
+    abilities: () => [event(effect as unknown as ResolvingEffect)],
+  };
+  return { card, op: effect.op };
+});
 
 describe("grantCardKeyword", () => {
-  const zones = createEngine(zoneCatalog([opponentHandOffering, resolvesCardKeyword, deckCharactersVengeful]));
+  const zones = createEngine(zoneCatalog([opponentHandOffering, ...resolvingMisuse.map(({ card }) => card), deckCharactersVengeful]));
   const filler = Array.from({ length: 6 }, () => v.vanilla1.id);
   const setup = (player: SideSetup, enemy: SideSetup = {}): BoardSetup => ({
     active: "player",
@@ -238,8 +242,8 @@ describe("grantCardKeyword", () => {
     expect(offered.slice.committed.instances[ids.player.hand[0]]?.status.offering).toBe(true);
   });
 
-  it("never resolves: an effect holding it fails its resolution step, which commits nothing", () => {
-    const { state, ids } = placed(setup({ back: [DSL.handOffering.id], hand: [resolvesCardKeyword.id, v.vanilla1.id] }));
+  it.each(resolvingMisuse)("$op refuses resolving ingress after committing the play", ({ card, op }) => {
+    const { state, ids } = placed(setup({ back: [DSL.handOffering.id], hand: [card.id, v.vanilla1.id] }));
     const fold = createFoldAdapter(zones, { checkEventPrefix: true });
     const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
     const played = fold.reduce(start, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
@@ -248,7 +252,7 @@ describe("grantCardKeyword", () => {
     expect(route.prompt.purpose.role).toBe("playRoute");
     const outcome = fold.reduce(played.slice, { kind: "answer", side: "player", promptId: route.prompt.id, value: 0 });
     if (outcome.kind !== "applied" || outcome.error === null) throw new Error("expected an engine error");
-    expect(outcome.error.message).toMatch(/grantCardKeyword/);
+    expect(outcome.error.message).toContain(op);
     // The play commits; its resolution, which fails, commits and publishes nothing, so the card waits on the stack.
     expect(outcome.published.map((event) => event.kind)).toEqual(["cardPlayed"]);
     const after = outcome.slice.committed;

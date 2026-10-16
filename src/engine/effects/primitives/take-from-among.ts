@@ -1,10 +1,11 @@
+import type { ResolvingEffect } from "../registry";
 import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "../../continuous/characteristics";
 import type { CardFilter } from "../../dsl/types";
 import type { ChooseCardsPrompt, ConfirmPrompt } from "../../prompts/types";
 import { instanceOf, moveToHand } from "../../rules/zones";
 import { opponent, type InstanceId, type Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
-import { definePrimitive, type EffectEnv, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition, type EffectEnv } from "../types";
 
 /** The cards a take chooses among. */
 export type AmongSource =
@@ -13,7 +14,7 @@ export type AmongSource =
    * and the cards it put into a void or the Banished zone are the ones
    * chosen among. Both zones are public, so both sides see the choice.
    */
-  | { readonly kind: "movedBy"; readonly effect: EffectNode }
+  | { readonly kind: "movedBy"; readonly effect: ResolvingEffect }
   /**
    * "Look at the opponent's hand. Put a card from it …": the controller
    * alone looks at the whole hand, whichever cards the filter and cost bound
@@ -47,7 +48,7 @@ export interface TakeFromAmongNode {
   readonly optional: boolean;
 }
 
-export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
+export const takeFromAmongPrimitive: ResolvingPrimitiveDefinition<TakeFromAmongNode> = definePrimitive<TakeFromAmongNode>({
   op: "takeFromAmong",
   children: (node) => (node.among.kind === "movedBy" ? [node.among.effect] : []),
   resolve(ctx, node, env) {
@@ -80,7 +81,7 @@ export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
 });
 
 /** The cards `effect` puts into a void or the Banished zone as it resolves, in the order they arrive. */
-function cardsMovedBy(ctx: StepContext, effect: EffectNode, env: EffectEnv): InstanceId[] {
+function cardsMovedBy(ctx: StepContext, effect: ResolvingEffect, env: EffectEnv): InstanceId[] {
   const since = ctx.state.clock;
   env.run(effect);
   return Object.values(ctx.state.instances)
@@ -103,7 +104,7 @@ function take(ctx: StepContext, id: InstanceId, side: Side): void {
 }
 
 /** The cards `effect` moves: "<effect>. … from among those cards …". */
-export function movedBy(effect: EffectNode): AmongSource {
+export function movedBy(effect: ResolvingEffect): AmongSource {
   return { kind: "movedBy", effect };
 }
 

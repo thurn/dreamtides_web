@@ -18,7 +18,6 @@ function checkCount(count: number): void {
 export const additionalDrawPhaseCardsPrimitive = definePrimitive<AdditionalDrawPhaseCardsNode>({
   op: "additionalDrawPhaseCards",
   staticOnly: true,
-  resolve() { throw new Error("additionalDrawPhaseCards belongs to a static ability"); },
   continuous: {
     layer: 6,
     changes(node, env) {

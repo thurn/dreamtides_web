@@ -1,10 +1,11 @@
+import type { ResolvingEffect } from "../registry";
 import { parseCardSubtype, type CardSubtype } from "../../../types/card-identity";
 import { startContinuous } from "../../continuous/resolve";
 import type { ChooseModePrompt } from "../../prompts/types";
 import { sourceInstance, type AbilitySource } from "../../state/ids";
 import type { BattleState } from "../../state/types";
 import { resolveChosenEffect } from "../interpreter";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition, type EffectNode } from "../types";
 
 /**
  * "Choose a character type" (rules § Keywords and Effects → Choose a
@@ -25,7 +26,7 @@ import { definePrimitive, type EffectNode } from "../types";
  */
 export interface ChooseSubtypeNode {
   readonly op: "chooseSubtype";
-  readonly then: EffectNode | null;
+  readonly then: ResolvingEffect | null;
   readonly self: boolean;
 }
 
@@ -36,7 +37,7 @@ export interface ChooseSubtypeNode {
  */
 export const CHOSEN_SUBTYPE: CardSubtype = parseCardSubtype("{chosen character type}");
 
-export const chooseSubtypePrimitive = definePrimitive<ChooseSubtypeNode>({
+export const chooseSubtypePrimitive: ResolvingPrimitiveDefinition<ChooseSubtypeNode> = definePrimitive<ChooseSubtypeNode>({
   op: "chooseSubtype",
   deferred: (node) => (node.then === null ? [] : [node.then]),
   resolve(ctx, node, env) {
@@ -97,6 +98,6 @@ export function chosenSubtypeOf(state: BattleState, source: AbilitySource): Card
 }
 
 /** "Choose a character type. <then, naming CHOSEN_SUBTYPE>", or "… This character is that character type." */
-export function chooseSubtype(use: { readonly then: EffectNode } | { readonly self: true }): ChooseSubtypeNode {
+export function chooseSubtype(use: { readonly then: ResolvingEffect } | { readonly self: true }): ChooseSubtypeNode {
   return "then" in use ? { op: "chooseSubtype", then: use.then, self: false } : { op: "chooseSubtype", then: null, self: true };
 }

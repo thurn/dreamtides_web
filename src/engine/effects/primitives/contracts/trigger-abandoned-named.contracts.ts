@@ -1,6 +1,6 @@
 /** Retained abandonment contracts through public steps, views and saved folds. */
 import { describe, expect, it } from "vitest";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import type { EngineCardDefinition } from "../../../catalog";
 import { activated, all, characterYouControl, discardCost, energy, everyIn, randomIn, self, triggerSubjectCost } from "../../../dsl/builders";
 import { either, onDawn, onDissolved, onMaterialized, triggered, whenAbandon, whenNamedAbilityTriggered } from "../../../dsl/triggers";
@@ -27,7 +27,7 @@ const card = (n: number, abilities: EngineCardDefinition["abilities"], subtype: 
   ({ ...v.vanilla1, id: syntheticId(0x616000 + n), abilities, subtype });
 const mages = all(characterYouControl({ subtype: "Mage" }));
 const named = p.triggerAbandonedNamed;
-const reader = (n: number, body: Effect = p.sequence(named("materialized"), named("dawn"))) => card(n, () => [triggered(whenAbandon("you", { subtype: "Mage" }), body)]);
+const reader = (n: number, body: ResolvingEffect = p.sequence(named("materialized"), named("dawn"))) => card(n, () => [triggered(whenAbandon("you", { subtype: "Mage" }), body)]);
 const starter = card(0, () => [activated([], p.abandon("you", { subtype: "Mage" }))]);
 function world(side: Side, cards: readonly EngineCardDefinition[], own: SideSetup, other: SideSetup = {}) {
   const engine = createEngine(testCatalog(cards));

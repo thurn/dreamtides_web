@@ -23,7 +23,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { parseDreamsignId } from "../../../../types/identifiers";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { copyCardTimes } from "../copy-card";
 import { gainPoints } from "../gain-points";
 import { grantReclaim } from "../grant-reclaim";
@@ -38,7 +38,7 @@ const plain = grantReclaim(everyIn("void"));
 function spell(index: number, abilities: readonly Ability[] = [event(gainPoints(0))], cost = 3): EngineCardDefinition {
   return { ...v.event0, id: syntheticId(0x612000 + index), costs: [energy(cost)], abilities: () => abilities, status: "authored" };
 }
-function fixture(side: Side, effect: Effect = grant(), before: readonly Effect[] = [], abilities: readonly Ability[] = [], duplicates = 1) {
+function fixture(side: Side, effect: ResolvingEffect = grant(), before: readonly ResolvingEffect[] = [], abilities: readonly Ability[] = [], duplicates = 1) {
   const subject = spell(1, [event(gainPoints(0)), ...abilities]);
   const emblem: EngineDreamsignDefinition = { id: emblemId, status: "authored", abilities: () => [
     ...before.map(body => triggered(whenYouPlay({ cardType: "event" }, 2), body)),

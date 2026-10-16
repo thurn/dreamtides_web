@@ -16,9 +16,6 @@ function reductionAmount(amount: number): number {
 export const selfCostReductionPrimitive = definePrimitive<SelfCostReductionNode>({
   op: "selfCostReduction",
   staticOnly: true,
-  resolve() {
-    throw new Error("selfCostReduction is a static ability and never resolves");
-  },
   continuous: {
     layer: 6,
     changes(node, env) {

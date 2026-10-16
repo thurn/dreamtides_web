@@ -65,9 +65,6 @@ export interface CostModifierNthNode {
 export const costModifierNthPrimitive = definePrimitive<CostModifierNthNode>({
   op: "costModifierNth",
   staticOnly: true,
-  resolve() {
-    throw new Error("costModifierNth is a static ability and never resolves");
-  },
   continuous: {
     layer: 6,
     changes(node, env) {

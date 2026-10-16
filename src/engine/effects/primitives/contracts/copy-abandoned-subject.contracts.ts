@@ -21,7 +21,7 @@ import { boardState, type SideSetup } from "../../../testing/board";
 import { determinizationDivergences } from "../../../testing/determinization-fidelity";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 import { decklists } from "./with-materialized-support";
 
@@ -30,7 +30,7 @@ const copy = () => p.copyAbandonedSubjectAsFigment({ zeroSpark: true });
 const token: EngineFigmentDefinition = { id: parseFigmentId(id(30)), subtype: "Mage", spark: 3, status: "authored", abilities: () => [keyword("vengeful")] };
 const donor: EngineCardDefinition = { ...v.vanilla3, id: id(1), subtype: "Mage", status: "authored",
   abilities: variant => [keyword(variant.amplified ? "awakened" : "vengeful"), activated([], p.storeCounters(2))] };
-const spell = (n: number, effect: Effect): EngineCardDefinition => ({ ...v.event0, id: id(n), status: "authored", abilities: () => [event(effect)] });
+const spell = (n: number, effect: ResolvingEffect): EngineCardDefinition => ({ ...v.event0, id: id(n), status: "authored", abilities: () => [event(effect)] });
 const cut = spell(2, p.abandon("you", { subtype: "Mage" }));
 const seize = spell(3, p.gainControl(all({ controller: "opponent", subtype: "Mage" })));
 const buff = spell(4, p.sequence(p.gainSpark(all(characterYouControl({ subtype: "Mage" })), 7), p.setBaseSpark(all(characterYouControl({ subtype: "Mage" })), 12),
@@ -40,7 +40,7 @@ const paid: EngineCardDefinition = { ...v.vanilla1, id: id(8), status: "authored
 const deck = Array.from({ length: 8 }, () => v.vanilla1.id);
 const figures = (events: readonly EngineEvent[]) => events.flatMap(e => e.kind === "cardCreated" ? [e.instance] : []);
 const sourceOf = (state: BattleState, side: Side) => state.sides[side].backRank.filter((x): x is InstanceId => x !== null);
-function world(side: Side, effect: Effect = copy(), mine: SideSetup = {}, theirs: SideSetup = {}, extra: readonly EngineCardDefinition[] = [], signs = 1, oncePerTurn = false) {
+function world(side: Side, effect: ResolvingEffect = copy(), mine: SideSetup = {}, theirs: SideSetup = {}, extra: readonly EngineCardDefinition[] = [], signs = 1, oncePerTurn = false) {
   const sign: EngineDreamsignDefinition = { id: parseDreamsignId(id(20)), status: "authored", abilities: () => [triggered(whenAbandon(), effect, { oncePerTurn })] };
   const engine = createEngine(testCatalog([donor, cut, seize, buff, invalid, paid, ...extra], { dreamsigns: [sign] }, [token]));
   return { engine, side, sign, ...boardState(engine.catalog, { active: side, phase: "day", scoreToWin: 100,

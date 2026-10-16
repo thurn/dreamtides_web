@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../../registry";
 /** Original physical journey-deck Awakened, through public engine/fold/persistence APIs. */
 import { afterEach, describe, expect, it } from "vitest";
 import { createEngine, type Engine } from "../../../engine";
@@ -56,7 +57,8 @@ const thief = fixture(6, 4, () => [activated([], gainControl(target(anyCharacter
 const banisher = fixture(7, 0, () => [event(banish(target(anyCharacter())))], "event");
 const killer = fixture(8, 0, () => [activated([], dissolve(target(anyCharacter())))], "character");
 const response = { ...fixture(9, 0, () => [event(gainPoints(0))], "event"), speed: "interrupt" as const };
-const broken = fixture(10, 0, () => [event(sequence(createCard(high.id), journeyDeckKeyword("you", {}, "awakened")))], "event");
+// Deliberately malformed runtime ingress: resolution must fail after the play commits.
+const broken = fixture(10, 0, () => [event(sequence(createCard(high.id), journeyDeckKeyword("you", {}, "awakened") as unknown as ResolvingEffect))], "event");
 const watcher = fixture(11, 0, () => [triggered(whenMaterialize(characterYouControl({ exhausted: false })), gainPoints(10)),
   triggered(whenMaterialize(characterYouControl({ exhausted: true })), gainPoints(100))]);
 const cards = [high, low, costly, spell, copier, thief, banisher, killer, response, broken, watcher];

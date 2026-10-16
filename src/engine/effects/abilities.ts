@@ -1,12 +1,12 @@
 import type { PrintedCard } from "../catalog";
 import type { Ability, PlayTimeTarget, Variant } from "../dsl/types";
-import type { Effect } from "./registry";
+import type { ResolvingEffect } from "./registry";
 import { everyTarget } from "./interpreter";
 
 /** An event ability with its index in the card's ability list. */
 export interface EventAbility {
   readonly ability: number;
-  readonly effect: Effect;
+  readonly effect: ResolvingEffect;
 }
 
 /** A card's event abilities for a variant, in printed order. */

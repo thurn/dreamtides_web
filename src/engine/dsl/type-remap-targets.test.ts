@@ -3,7 +3,7 @@ import { parseCardSubtype } from "../../types/card-identity";
 import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import * as p from "../effects/primitives";
-import type { Effect } from "../effects/registry";
+import type { ResolvingEffect } from "../effects/registry";
 import type { ChooseTargetsPrompt } from "../prompts/types";
 import { serializeState } from "../state/hash";
 import { opponent, SIDES, type Side } from "../state/ids";
@@ -20,7 +20,7 @@ const mage: EngineCardDefinition = {
   subtype: MAGE, speed: "standard", status: "vanilla", abilities: () => [],
 };
 const warrior = { ...mage, id: syntheticId(0x73102), subtype: WARRIOR };
-function world(side: Side, body: Effect) {
+function world(side: Side, body: ResolvingEffect) {
   const source: EngineCardDefinition = {
     ...mage, id: syntheticId(0x73100), cardType: "event", costs: [energy(1)], spark: null,
     subtype: parseCardSubtype(""), status: "authored", abilities: () => [event(body)],

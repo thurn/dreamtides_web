@@ -7,7 +7,7 @@ import { NO_DECK_MODS, type ValueExpr } from "../../../dsl/types";
 import { triggered, whenDiscard, whenDiscardBatch } from "../../../dsl/triggers";
 import { createEngine, type Engine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { stateHash } from "../../../state/hash";
 import { opponent, type InstanceId, type Side } from "../../../state/ids";
@@ -19,7 +19,7 @@ import { SYNTHETIC as v, SYNTHETIC_CARDS, syntheticId } from "../../../testing/s
 import * as p from "../index";
 
 const sourceId = syntheticId(0xade000);
-function makeEngine(build: () => Effect, additions: readonly EngineCardDefinition[] = [], payment = false): Engine {
+function makeEngine(build: () => ResolvingEffect, additions: readonly EngineCardDefinition[] = [], payment = false): Engine {
   const source: EngineCardDefinition = { ...v.event0, id: sourceId, status: "authored", abilities: () => [...(payment ? [additionalCost(discardCost())] : []), event(build())] };
   const changed = new Set(additions.map(c => c.id));
   return createEngine(createCatalog([...SYNTHETIC_CARDS.filter(c => !changed.has(c.id)), ...additions, source], []));

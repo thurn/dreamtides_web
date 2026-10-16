@@ -9,7 +9,6 @@ export interface FirstPlayedSparkSetterNode {
 export const firstPlayedSparkSetterPrimitive = definePrimitive<FirstPlayedSparkSetterNode>({
   op: "firstPlayedSparkSetter",
   staticOnly: true,
-  resolve() { throw new Error("First-played spark setting belongs to a static ability"); },
   continuous: {
     layer: 4,
     changes(node, env) {

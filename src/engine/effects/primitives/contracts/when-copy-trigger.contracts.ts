@@ -25,7 +25,7 @@ import { at, passUntil } from "../../../testing/trigger-harness";
 import { determinize } from "../../../view/determinize";
 import { parseDreamsignId } from "../../../../types/identifiers";
 import { parseEngineBattleFold } from "../../../../rules/battle/fold";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 import { decklists } from "./with-materialized-support";
 
@@ -33,9 +33,9 @@ const id = (n: number) => syntheticId(0x233000 + n);
 const sign = (n: number, abilities: readonly Ability[]): EngineDreamsignDefinition => ({
   id: parseDreamsignId(`5e5e5e5e-0000-4000-8000-${(0x233100 + n).toString(16).padStart(12, "0")}`), status: "authored", abilities: () => abilities,
 });
-const watcher = (n: number, effect: Effect = p.gainPoints(1), options: { player?: "you" | "opponent"; filter?: CardFilter; once?: boolean } = {}) =>
+const watcher = (n: number, effect: ResolvingEffect = p.gainPoints(1), options: { player?: "you" | "opponent"; filter?: CardFilter; once?: boolean } = {}) =>
   sign(n, [triggered(whenCopyTrigger(options.player ?? "you", options.filter ?? { cardType: "event" }), effect, { oncePerTurn: options.once })]);
-const spell = (n: number, effect: Effect, extras: Partial<EngineCardDefinition> = {}): EngineCardDefinition => ({ ...v.event0, id: id(n), status: "authored", abilities: () => [event(effect)], ...extras });
+const spell = (n: number, effect: ResolvingEffect, extras: Partial<EngineCardDefinition> = {}): EngineCardDefinition => ({ ...v.event0, id: id(n), status: "authored", abilities: () => [event(effect)], ...extras });
 const points = spell(1, p.gainPoints(1));
 const handSelf = spell(2, p.modifyCardCost(p.createCopyInHand(self(), { ephemeral: true }), { set: 0 }), { costs: [energy(2)] });
 const echo: EngineCardDefinition = { ...v.vanilla1, id: id(3), status: "authored", abilities: () => [triggered(whenYouPlay(), p.copyCard(triggeringCard()))] };
@@ -58,7 +58,7 @@ function step(engine: Engine, state: BattleState, action: Step, answers: readonl
 const play = (card: InstanceId): Step => ({ kind: "play", card, from: "hand" });
 const copied = (events: readonly EngineEvent[]) => events.filter(event => event.kind === "cardCopied");
 const slice = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
-function handOccasion(side: Side, times = 1, effect: Effect = p.copyCardTimes(triggeringCard(), times)) {
+function handOccasion(side: Side, times = 1, effect: ResolvingEffect = p.copyCardTimes(triggeringCard(), times)) {
   // Initial stack copies see an empty hand. A resolving copied event creates a
   // hand copy and ceases before FIFO drains; its new hand enables the watcher.
   const gem = sign(1, [triggered(whenCopyTrigger("you", { cardType: "event" }), effect,
@@ -290,7 +290,7 @@ it("replays a copied-card target prompt, rejects stale/cancel input, and rolls b
 
 /** Real public copy occasions, with synthetic permanent emblems and passive backgrounds. */
 function continuation(side: Side, hand: boolean, ephemeral = false, options: {
-  body?: (copy: Effect) => Effect; extra?: readonly Ability[]; created?: boolean; temporary?: boolean; banished?: boolean;
+  body?: (copy: ResolvingEffect) => ResolvingEffect; extra?: readonly Ability[]; created?: boolean; temporary?: boolean; banished?: boolean;
   deckGuard?: { player: PlayerRef; cards: readonly EngineCardDefinition["id"][] };
 } = {}) {
   const repeated = p.copyCard(triggeringCard());

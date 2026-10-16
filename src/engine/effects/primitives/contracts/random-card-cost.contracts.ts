@@ -21,7 +21,7 @@ import { eventRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { at, passUntil } from "../../../testing/trigger-harness";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const STREAM = "random:selection";
@@ -31,9 +31,9 @@ const figment: EngineFigmentDefinition = { id: parseFigmentId("5e5e5e5e-0000-400
 const setter = (amount = 1) => p.changeCardCost(randomIn("hand", 1), { set: amount }, { duration: "untilEndOfTurn" });
 const priced: EngineCardDefinition = { ...v.event0, id: syntheticId(0x61303), costs: [energy(5)],
   abilities: () => [additionalCost(energy(2))] };
-const source = (effect: Effect): EngineCardDefinition => ({ ...v.vanilla0, id: syntheticId(0x61304),
+const source = (effect: ResolvingEffect): EngineCardDefinition => ({ ...v.vanilla0, id: syntheticId(0x61304),
   status: "authored", abilities: () => [activated([], effect)] });
-function world(side: Side, effect: Effect = setter(), options: {
+function world(side: Side, effect: ResolvingEffect = setter(), options: {
   hand?: readonly EngineCardDefinition["id"][]; copies?: number; activated?: boolean; validFigment?: boolean;
 } = {}) {
   const card = source(effect);

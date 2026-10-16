@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../../registry";
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { activated, anyCharacter, enemyCharacter, characterYouControl, count, energy, event, fromVoid, keyword, staticAbility, target, times } from "../../../dsl/builders";
@@ -197,7 +198,8 @@ describe("selfCostReduction public contracts", () => {
   });
 
   it.each([false, true])("rejects resolving misuse (nested=$nested) and recovers without static records", (nested) => {
-    const effect = selfCostReduction(1);
+    // Deliberately malformed runtime ingress exercises direct and nested resolution refusal.
+    const effect = selfCostReduction(1) as unknown as ResolvingEffect;
     const invalid = { ...v.event0, id: syntheticId(0x55530 + Number(nested)), status: "authored", abilities: () => [event(nested ? sequence(gainEnergy(1), effect) : effect)] } satisfies EngineCardDefinition;
     const bad = createEngine(testCatalog([invalid]));
     const { state, ids } = boardState(bad.catalog, { active: "player", phase: "day", player: { hand: [invalid.id], energy: 2 } });

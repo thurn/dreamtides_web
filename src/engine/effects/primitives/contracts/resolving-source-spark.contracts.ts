@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonSelfCost, activated, controls, energy, energyX, enemyCharacter, event, everyIn, self, stackItem } from "../../../dsl/builders";
 import { thisCharacterSpark } from "../../../dsl/values";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Answer, Prompt } from "../../../prompts/types";
@@ -55,10 +55,10 @@ class Answers implements AnswerSource {
   }
   exhausted(): void { expect(this.next).toBe(this.values.length); }
 }
-function readers(count: number): Effect {
+function readers(count: number): ResolvingEffect {
   return sequence(ifThen({ ...controls(enemyCharacter(bound), count), atMost: count }, gainPoints(1)), abandon("you", { ...bound, another: true }));
 }
-function fixture(side: Side, effect: Effect, departedCost = false, chosenX: number | null = null, interrupt = false) {
+function fixture(side: Side, effect: ResolvingEffect, departedCost = false, chosenX: number | null = null, interrupt = false) {
   const sourceCard: EngineCardDefinition = {
     ...v.vanilla2, spark: departedCost ? "x" : 2, id: syntheticId(0x7500), subtype: "Mage", status: "authored",
     abilities: () => [activated([chosenX === null ? energy(1) : energyX(0), ...(departedCost ? [abandonSelfCost()] : [])], effect,

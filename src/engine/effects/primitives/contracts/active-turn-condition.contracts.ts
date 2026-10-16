@@ -17,7 +17,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { at, passUntil, type Observed } from "../../../testing/trigger-harness";
 import { conditionHolds } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { banishUntil } from "../banish-until";
 import { chooseOne } from "../choose-one";
 import { eachPlayer } from "../each-player";
@@ -30,7 +30,7 @@ import { takeExtraTurn } from "../take-extra-turn";
 import { decklists } from "./with-materialized-support";
 
 const REFS = ["you", "opponent"] as const;
-const spell = (index: number, effect: Effect): EngineCardDefinition => ({
+const spell = (index: number, effect: ResolvingEffect): EngineCardDefinition => ({
   ...v.interruptEvent, id: syntheticId(0x62600 + index), costs: [energy(0)], status: "authored", abilities: () => [event(effect)],
 });
 const branch = (ref: PlayerRef) => ifThen(turnOf(ref), gainPoints(1), gainPoints(2));

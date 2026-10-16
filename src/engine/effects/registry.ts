@@ -120,13 +120,28 @@ import {
   winTheGamePrimitive,
   withMaterializedPrimitive,
 } from "./primitives";
-import type { EffectNode, PrimitiveDefinition } from "./types";
+import type { EffectEnv, EffectNode, PrimitiveDefinition, StaticEnv } from "./types";
+import type { StepContext } from "../steps/types";
 
 type Exports = typeof primitives;
 
-/** Every DSL effect node. */
-export type Effect = {
-  [K in keyof Exports]: Exports[K] extends PrimitiveDefinition<infer N> ? N : never;
+/** Infer a registered node from its actual executable or continuous hook. */
+type PrimitiveNode<Definition> =
+  Definition extends { resolve(ctx: StepContext, node: infer N extends EffectNode, env: EffectEnv): void } ? N
+    : Definition extends { continuous: { changes(node: infer N extends EffectNode, env: StaticEnv): unknown } } ? N
+      : never;
+
+/** Every DSL effect node, derived from the authoritative primitive exports. */
+export type Effect = { [K in keyof Exports]: PrimitiveNode<Exports[K]> }[keyof Exports];
+
+/** Every node whose primitive can execute during a resolution. */
+export type ResolvingEffect = {
+  [K in keyof Exports]: Exports[K] extends { resolve: unknown } ? PrimitiveNode<Exports[K]> : never;
+}[keyof Exports];
+
+/** Every node whose primitive supplies live continuous changes. */
+export type StaticEffect = {
+  [K in keyof Exports]: Exports[K] extends { continuous: unknown } ? PrimitiveNode<Exports[K]> : never;
 }[keyof Exports];
 
 const DEFINITIONS = {
@@ -416,8 +431,9 @@ function isPrimitive(value: unknown): value is PrimitiveDefinition<EffectNode> {
     typeof value === "object" &&
     value !== null &&
     "op" in value &&
-    "resolve" in value &&
-    typeof value.resolve === "function"
+    (("resolve" in value && typeof value.resolve === "function") ||
+      ("continuous" in value && typeof value.continuous === "object" && value.continuous !== null &&
+        "changes" in value.continuous && typeof value.continuous.changes === "function"))
   );
 }
 
@@ -427,6 +443,16 @@ export function primitiveDefinition(op: string): PrimitiveDefinition<EffectNode>
     throw new Error(`Unknown effect primitive ${op}`);
   }
   return definition;
+}
+
+/**
+ * The heterogeneous registry erases each hook's node parameter at lookup.
+ * Raw runtime ingress is checked here, at resolution, inside the caller's transaction.
+ */
+export function resolvePrimitiveUnchecked(ctx: StepContext, node: EffectNode, env: EffectEnv): void {
+  const definition = primitiveDefinition(node.op);
+  if (definition.resolve === undefined) throw new Error(node.op + " is a static ability and never resolves");
+  definition.resolve(ctx, node, env);
 }
 
 /** Every registered primitive op. */

@@ -1,13 +1,14 @@
+import type { ResolvingEffect } from "../registry";
 import type { ConfirmPrompt } from "../../prompts/types";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition } from "../types";
 
 /** "You may …": the controller confirms or declines when the effect resolves. */
 export interface OptionalNode {
   readonly op: "optional";
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
 }
 
-export const optionalPrimitive = definePrimitive<OptionalNode>({
+export const optionalPrimitive: ResolvingPrimitiveDefinition<OptionalNode> = definePrimitive<OptionalNode>({
   op: "optional",
   children: (node) => [node.effect],
   resolve(ctx, node, env) {
@@ -20,6 +21,6 @@ export const optionalPrimitive = definePrimitive<OptionalNode>({
   },
 });
 
-export function optional(effect: EffectNode): OptionalNode {
+export function optional(effect: ResolvingEffect): OptionalNode {
   return { op: "optional", effect };
 }

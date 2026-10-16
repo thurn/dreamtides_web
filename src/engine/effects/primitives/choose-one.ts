@@ -1,4 +1,5 @@
-import { definePrimitive, type EffectNode } from "../types";
+import type { ResolvingEffect } from "../registry";
+import { definePrimitive, type ResolvingPrimitiveDefinition } from "../types";
 
 /**
  * "Choose one:" — the controller picks a mode as the card is played or the
@@ -8,10 +9,10 @@ import { definePrimitive, type EffectNode } from "../types";
  */
 export interface ChooseOneNode {
   readonly op: "chooseOne";
-  readonly modes: readonly EffectNode[];
+  readonly modes: readonly ResolvingEffect[];
 }
 
-export const chooseOnePrimitive = definePrimitive<ChooseOneNode>({
+export const chooseOnePrimitive: ResolvingPrimitiveDefinition<ChooseOneNode> = definePrimitive<ChooseOneNode>({
   op: "chooseOne",
   children: (node) => node.modes,
   modes: (node) => node.modes,
@@ -23,6 +24,6 @@ export const chooseOnePrimitive = definePrimitive<ChooseOneNode>({
   },
 });
 
-export function chooseOne(...modes: readonly EffectNode[]): ChooseOneNode {
+export function chooseOne(...modes: readonly ResolvingEffect[]): ChooseOneNode {
   return { op: "chooseOne", modes };
 }

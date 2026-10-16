@@ -19,7 +19,6 @@ function checkAmount(amount: number): void {
 export const firstPlayedCharacterEntrySparkPrimitive = definePrimitive<FirstPlayedCharacterEntrySparkNode>({
   op: "firstPlayedCharacterEntrySpark",
   staticOnly: true,
-  resolve() { throw new Error("First-play entry spark belongs to a static ability"); },
   continuous: {
     layer: 6,
     changes(node, env) {

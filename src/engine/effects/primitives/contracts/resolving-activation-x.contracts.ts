@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonSelfCost, activated, controls, count, energy, energyX, enemyCharacter, event, self, stackItem, staticAbility, target, x } from "../../../dsl/builders";
 import { createEngine } from "../../../engine";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { promptFingerprint } from "../../../prompts/fingerprint";
 import type { Answer, Prompt } from "../../../prompts/types";
@@ -36,7 +36,7 @@ function instance(id: InstanceId | null): InstanceId {
   if (id === null) throw new Error("Missing fixture instance");
   return id;
 }
-function fixture(effect: Effect, side: Side, chosen: number | null, depart = false, staticControl = false) {
+function fixture(effect: ResolvingEffect, side: Side, chosen: number | null, depart = false, staticControl = false) {
   const card: EngineCardDefinition = {
     id: syntheticId(0x7100), cardType: "character", costs: [], spark: 1, subtype: "Mage", speed: "standard", status: "authored",
     abilities: () => [activated([chosen === null ? energy(1) : energyX(0), ...(depart ? [abandonSelfCost()] : [])], effect),

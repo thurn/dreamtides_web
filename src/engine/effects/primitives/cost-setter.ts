@@ -13,9 +13,6 @@ export interface CostSetterNode {
 export const costSetterPrimitive = definePrimitive<CostSetterNode>({
   op: "costSetter",
   staticOnly: true,
-  resolve() {
-    throw new Error("costSetter is a static ability and never resolves");
-  },
   continuous: {
     layer: 6,
     changes(node, env) {

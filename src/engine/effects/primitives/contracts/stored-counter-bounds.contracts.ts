@@ -18,7 +18,7 @@ import { boardState } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { unannouncedChanges } from "../../../testing/announced-changes";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { abandon } from "../abandon";
 import { chooseOne } from "../choose-one";
 import { dissolve } from "../dissolve";
@@ -39,7 +39,7 @@ const response: EngineCardDefinition = { ...v.interruptEvent, id: syntheticId(0x
 const reenter: EngineCardDefinition = { ...response, id: syntheticId(0x693fe),
   abilities: () => [event(materialize(everyIn("void", {}, { player: "opponent" })))] };
 const below = () => enemyCharacter({ costAtMost: storedCounters() });
-function fixture(side: Side, effect: Effect, costs: readonly Cost[] = [], counters = 2, responseCard = response, interrupt = false) {
+function fixture(side: Side, effect: ResolvingEffect, costs: readonly Cost[] = [], counters = 2, responseCard = response, interrupt = false) {
   const card: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x69300), status: "authored", abilities: () => [activated(costs, effect, { speed: interrupt ? "interrupt" : "standard" })] };
   const engine = createEngine(testCatalog([card, responseCard]));
   const other = opponent(side);

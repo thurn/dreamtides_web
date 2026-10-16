@@ -19,7 +19,6 @@ export function assertJourneyDeckSparkCondition(condition: StaticCondition | und
 export const journeyDeckSparkModifierPrimitive = definePrimitive<JourneyDeckSparkModifierNode>({
   op: "journeyDeckSparkModifier",
   staticOnly: true,
-  resolve() { throw new Error("Journey-deck spark belongs to a static ability"); },
   continuous: {
     layer: 5,
     changes(node, env) {

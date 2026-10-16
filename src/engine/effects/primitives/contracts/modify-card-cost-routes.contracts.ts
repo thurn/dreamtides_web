@@ -22,7 +22,7 @@ import { playFromZone } from "../play-from-zone";
 import { sequence } from "../sequence";
 import { discard } from "../discard";
 import { returnFromVoid } from "../return-from-void";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 
 const deck = Array.from({ length: 8 }, () => v.vanilla1.id);
 function resolved(engine: Engine, initial: BattleState): BattleState {
@@ -39,8 +39,8 @@ interface SetupOptions {
   readonly costs?: readonly CardCost[];
   readonly set?: number;
   readonly more?: number;
-  readonly effects?: readonly Effect[];
-  readonly utility?: Effect;
+  readonly effects?: readonly ResolvingEffect[];
+  readonly utility?: ResolvingEffect;
   readonly keepInHand?: boolean;
   readonly displayedCost?: number;
 }

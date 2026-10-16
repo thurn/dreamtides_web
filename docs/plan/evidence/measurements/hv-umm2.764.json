@@ -1,0 +1,181 @@
+{
+  "bead": "hv-umm2.764",
+  "base": "d319cb10d6776c64862ebfa1e72e61d4fa8fe87d",
+  "originalClaim": "2026-10-16T06:48:52Z",
+  "originalHelperDispatch": "2026-10-16T06:51:53.242Z",
+  "stage2Dispatch": "UNKNOWN: exact followup timestamp is not exposed in retained journals",
+  "firstImplementationFileObservation": "2026-10-16T07:44:45.051253+00:00",
+  "endObservation": "2026-10-16T08:33:59.340270+00:00",
+  "inclusiveClaimElapsedMin": 105.68333333333334,
+  "helperElapsedMin": 102.66263333333333,
+  "clockQualification": "Original clocks span source research, bounded delivery, coordination, native admission waits, implementation, and validation; no continuation reset and no productive-time attribution. endObservation is the actual precommit evidence observation. implementWindow ends at the first successful implementation commit timestamp; the final evidence-only amendment retains that actual recorded Git timestamp. Amendment observation is retained in the delivery receipt.",
+  "samplingCPU": "UNKNOWN: no model sampling instrumentation",
+  "commandCPUQualification": "Actual os.times child CPU includes process-inventory helpers; no model CPU, productive CPU, speedup, performance, or D19-compliance claim.",
+  "sourceEvidence": {
+    "stage1": {
+      "index": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.764/stage1-final/index.json",
+      "sha256": "ce584e9e0fe4bd0eb0568193a873aa4c977f7ffc075e460987217f5daef4c100",
+      "qualification": "240 original literal packets; required27 ranges and bounded scope reread; actual full/partial classifications retained. Initial wrappers reached11090 bytes, utility payloads<=9994; initial oversized scope cat repaired by bounded reread. No discovery-only coverage claim."
+    },
+    "additional23": {
+      "index": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.764/additional23/index.json",
+      "sha256": "bfb580eb3ac3eda8cff11a9f470c9f76822ab9886fe236818561a06dc0acd6b5",
+      "qualification": "57 actual literal packets, explicit partial imports/helpers/diagnostic sites for21 mechanical annotations and complete affected public tests for2malformed ingresses. Unchanged unrelated callers were outside clarified prerequisite."
+    },
+    "grant": {
+      "original73SHA256": "ddca2a5c47131efbf9a8736bd030819cb14cc86724631ea0505d72b71f69f706",
+      "additional23SHA256": "3f72b4226d783f0bfeb03e85404ceb1983d1fc7bb4e455053dc1ae091a4f3ae8"
+    },
+    "final94CodeDocHashManifestSHA256": "6c3e4a28ca1ab18de49a1fb46ace9e843621bb218df9b92ac9294a52fc5d35d8",
+    "catalogQualification": "All6027 initial tracked literal payloads compared; only93 admitted tracked paths changed and content catalog paths unchanged. Three new admitted paths are compile contract and own evidence. Wire/state behavior checked through existing public contracts, with no content migration."
+  },
+  "validationEvidence": {
+    "index": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.764/stage2-validation/index.json",
+    "sha256": "f9b89e2bcdbf9599f3cd99afbf575367e8d71a30b79c3a7b02cf4884f2392ba4",
+    "results": {
+      "typecheck-7": {
+        "exitCode": 0,
+        "wallS": 5.339185875025578
+      },
+      "focused": {
+        "exitCode": 0,
+        "wallS": 22.526998707966413
+      },
+      "review": {
+        "exitCode": 0,
+        "wallS": 75.11688695801422
+      },
+      "knip": {
+        "exitCode": 0,
+        "wallS": 4.962542666995432
+      },
+      "fullreview": {
+        "exitCode": 0,
+        "wallS": 122.64965174999088
+      },
+      "fuzz200": {
+        "exitCode": 0,
+        "wallS": 834.3244785419665
+      }
+    },
+    "testScopes": {
+      "focused": "9files/5911tests; earlier compile contract positive type assertion corrected afterward, then final strict/review/fullreview passed",
+      "review": "354files/11177tests; lint and typecheck passed",
+      "fullreview": "436files/12203tests plus bundle; test step89.0s, start2026-10-16T08:17:57.639Z load5.00439453125",
+      "fuzz200": "Production catalog; games200; seedhv-umm2.764; interactive-every10; see complete CLI report and resource log"
+    },
+    "failedEpochs": "typecheck1\u20134: recursive registry inference then known fixture fallout; typecheck5\u20136: own new contract type-import/assertion corrections. No final validation credit. All source epochs and exact inputs retained.",
+    "exactSourceQualification": "Final94 code/doc hashes equal typecheck7, review, Knip, fullreview and fuzz input maps. Earlier focused differs only in the new compile contract type assertion; fullreview covers final code. New evidence was finalized after code checks and receives its schema validation before commit."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "explicit host-load sample during admitted fuzz200; ordinary/full review load samples are separately retained from os.getloadavg and test-step logs",
+        "at": "2026-10-16T08:21:52.015968+00:00",
+        "command": [
+          "sysctl",
+          "-n",
+          "vm.loadavg"
+        ]
+      },
+      "testDelta": {
+        "measuredFor": "All51 admitted test/contract/support fixture paths; new files minus removed files, source lines added minus deleted, explicit jsdom annotation file delta0"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "review": {
+      "start": [
+        2.74560546875,
+        2.67578125,
+        3.392578125
+      ],
+      "end": [
+        4.8466796875,
+        3.3828125,
+        3.6015625
+      ]
+    },
+    "fullreview": {
+      "start": [
+        4.23779296875,
+        3.3642578125,
+        3.587890625
+      ],
+      "end": [
+        6.25927734375,
+        4.4326171875,
+        3.97998046875
+      ]
+    },
+    "fuzz200": {
+      "start": [
+        4.6015625,
+        4.18798828125,
+        3.904296875
+      ],
+      "end": [
+        3.72412109375,
+        3.77001953125,
+        3.77197265625
+      ]
+    }
+  },
+  "resources": {
+    "workers": 2,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "innerTimeoutS": 1800,
+    "admission": {
+      "fullreview": {
+        "queuedAt": "2026-10-16T08:17:28.807134+00:00",
+        "admittedAt": "2026-10-16T08:17:28.835626+00:00",
+        "runnerPid": 75428,
+        "lockGroup": 75426,
+        "lockSurvivors": []
+      },
+      "fuzz200": {
+        "queuedAt": "2026-10-16T08:19:52.842910+00:00",
+        "admittedAt": "2026-10-16T08:19:52.866314+00:00",
+        "runnerPid": 12855,
+        "lockGroup": 12853,
+        "lockSurvivors": []
+      }
+    },
+    "settlement": "All recorded command groups and heavy lock groups have zero survivors. Fullreview observer also found all58 harness-reported detached synthetic server PGIDs absent. Original main-runner records recover PID/births for41 of58 harness-reported synthetic server labels; remaining17 are UNKNOWN because observer started late. Actual observed PGIDs may share the main group, distinct from synthetic harness labels. Main command/lock births recorded from start. Subsequent runner captures escaped descendant groups from start. Synthetic infrastructure scenarios are part of required fullreview, not application browser QA.",
+    "qualificationFile": "resource-output-qualification.json"
+  },
+  "acceptanceMap": {
+    "failure": "Three-row public malformed fold table in grant-card-keyword; play prefix commits and failed resolution publishes nothing.",
+    "interrupt": "rule-modifier transactional route/payment cancellation; abandon-cost and cost-modifier-activated interruption contracts.",
+    "reload": "draw-then-if and filtered-discard-count saved choice/capture replay; rule-modifier-dawn and strict rule-reaction descriptors.",
+    "partial": "journey-deck-keyword/spark allocation rollback, continuous-zones partial dissolve rollback, remapped committed play, draw-then-if partial child writes.",
+    "staleConcurrent": "Existing rule-modifier, filtered-discard-count, cost-captured-x, active-turn and copy/trigger public prefix contracts reject stale/wrong-side/repeated/competing input.",
+    "identityPrivacy": "Existing type-remap-targets, moved/choice contracts, continuous zones/live-snapshot, hidden audience and sparse ability index contracts remain green.",
+    "compile": "Real definePrimitive, root, sequence/modal, optional/delayed, nth-cost and static-parent/resolving-Dawn APIs carry positive/negative contracts."
+  },
+  "parentProcessQualifications": {
+    "classificationCorrection": "2.9833333333333334elapsed minutes; overlaps audit, not attributed delay or productive time. Retained parent receipt included in validation index.",
+    "releaseProjection": "Parent excluded/repaired clipped release history via savedJSON projection; elapsed UNKNOWN and no source/test credit. Receipt included when present.",
+    "auditClarification": "Parent relaxed its extra exhaustive unchanged-caller reading demand for mechanical21; no validation waiver or full-file coverage claim. Isolated overhead UNKNOWN."
+  },
+  "scope": {
+    "exactWriters": 96,
+    "ungrantedWrites": [],
+    "productionChangedLines": 330,
+    "testDelta": {
+      "files": 1,
+      "lines": 74,
+      "jsdomFiles": 0
+    },
+    "noPreexistingIssueFile": "No actual pre-existing code issue identified; only own diagnosed/fully repaired implementation errors.",
+    "testDeletion": "Only authorized wholly private rule test and two private reclaim assertions removed; useful public layer/events/floating coverage retained and resolving refusal consolidated into3publicrows."
+  },
+  "review": {
+    "ordinary": "passed",
+    "knip": "passed",
+    "freshCodexCore": "pending parent-owned fresh read-only review after helper terminates; no implementation helper self-review credit"
+  },
+  "performanceClaim": false,
+  "d19ComplianceClaim": false,
+  "implementationCommitTimestamp": "2026-10-16T01:34:33-07:00"
+}

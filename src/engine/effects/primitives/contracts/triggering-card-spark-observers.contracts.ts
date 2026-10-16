@@ -18,7 +18,7 @@ import { boardState, type SideSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { at, passUntil } from "../../../testing/trigger-harness";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 
 const SUBJECT = { ...v.vanilla2, id: syntheticId(0x646001), costs: [energy(0)] };
@@ -27,7 +27,7 @@ const PUMP = { ...v.event0, id: syntheticId(0x646003), abilities: () => [event(p
 const CREATE = { ...v.event0, id: syntheticId(0x646004), abilities: () => [event(p.createCard(SUBJECT.id))] };
 const sourceCard = { ...v.vanilla1, id: syntheticId(0x646005), costs: [energy(0)] };
 const signId = parseDreamsignId("00000000-0000-0000-0000-000000646001");
-function world(side: Side, trigger: Trigger, effect: Effect, setup: SideSetup, extra: readonly EngineCardDefinition[] = [], cardSource = false) {
+function world(side: Side, trigger: Trigger, effect: ResolvingEffect, setup: SideSetup, extra: readonly EngineCardDefinition[] = [], cardSource = false) {
   const watcher: EngineDreamsignDefinition = { id: signId, status: "authored", abilities: () => [triggered(trigger, effect)] };
   const producer = { ...sourceCard, abilities: watcher.abilities };
   const engine = createEngine(testCatalog([SUBJECT, DRAW, PUMP, CREATE, producer, ...extra], { dreamsigns: [watcher] }));

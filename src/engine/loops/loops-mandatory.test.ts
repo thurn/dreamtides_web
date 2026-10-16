@@ -19,7 +19,7 @@ import type { EngineCardDefinition } from "../catalog";
 import { all, enemyCharacter, energy, event, self, staticAbility, target, characterYouControl, winCondition } from "../dsl/builders";
 import { onMaterialized, triggered, triggeringCard, whenCopyTrigger, whenYouPlay } from "../dsl/triggers";
 import type { Ability, Condition } from "../dsl/types";
-import type { Effect } from "../effects/registry";
+import type { ResolvingEffect } from "../effects/registry";
 import * as p from "../effects/primitives";
 import { randomLegalAnswer } from "../prompts/answers";
 import type { Answer, Prompt } from "../prompts/types";
@@ -32,8 +32,8 @@ import { parseDreamsignId } from "../../types/identifiers";
 const COPY_LOOP_CONFIG = { mandatoryLoopCheckFrom: 8, mandatoryLoopWindow: 16, resolutionCap: 256 } as const;
 
 function copyChain(side: Side, hand: boolean, options: {
-  readonly body?: (effect: Effect) => Effect;
-  readonly starter?: (effect: Effect) => Effect;
+  readonly body?: (effect: ResolvingEffect) => ResolvingEffect;
+  readonly starter?: (effect: ResolvingEffect) => ResolvingEffect;
   readonly extra?: readonly Ability[];
   readonly once?: boolean;
   readonly condition?: Condition;
@@ -394,15 +394,15 @@ describe("closed mandatory copy continuations", () => {
     const limit = COPY_LOOP_CONFIG.mandatoryLoopCheckFrom + 5;
     const handBound = { cond: "cardsIn", player: "you", zone: "hand", atMost: limit } as const;
     const cases: (NonNullable<Parameters<typeof copyChain>[2]> & { readonly choose?: CopyDecision })[] = [
-      { body: (effect: Effect) => p.optional(effect), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "confirm" ? state.sides.player.hand.length <= limit : undefined },
-      { body: (effect: Effect) => p.chooseOne(effect, p.sequence()), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "chooseMode" && prompt.purpose.source === state.sides.player.backRank[0] ? (state.sides.player.hand.length <= limit ? 0 : 1) : undefined },
-      { body: (effect: Effect) => p.ifThen(handBound, effect) },
+      { body: (effect: ResolvingEffect) => p.optional(effect), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "confirm" ? state.sides.player.hand.length <= limit : undefined },
+      { body: (effect: ResolvingEffect) => p.chooseOne(effect, p.sequence()), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "chooseMode" && prompt.purpose.source === state.sides.player.backRank[0] ? (state.sides.player.hand.length <= limit ? 0 : 1) : undefined },
+      { body: (effect: ResolvingEffect) => p.ifThen(handBound, effect) },
       { condition: handBound },
       { once: true },
       { starter: renewal => p.sequence(p.disableTriggers(self(), "permanent", { cond: "cardsIn", player: "you", zone: "hand", atLeast: limit }), renewal) },
-      { body: (_effect: Effect) => p.sequence(p.createCopyInHand({ kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } }), p.triggerAbility(target(characterYouControl()), "materialized")),
+      { body: (_effect: ResolvingEffect) => p.sequence(p.createCopyInHand({ kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } }), p.triggerAbility(target(characterYouControl()), "materialized")),
         choose: (prompt: Prompt, state: BattleState) => prompt.kind === "chooseTargets" && prompt.purpose.source === state.sides.player.backRank[0] && prompt.candidates.includes(state.sides.player.backRank[0]!) ? [state.sides.player.backRank[state.sides.player.hand.length <= limit ? 0 : 1]!] : undefined },
-      { body: (effect: Effect) => p.ifThen(handBound, effect), extra: [triggered(onMaterialized(), p.gainSpark(self(), 1))] },
+      { body: (effect: ResolvingEffect) => p.ifThen(handBound, effect), extra: [triggered(onMaterialized(), p.gainSpark(self(), 1))] },
       { body: () => p.sequence(p.createCopyInHand({ kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } }), p.triggerAbility(target(characterYouControl()), "materialized")),
         extra: [staticAbility(p.grant(all(characterYouControl()), "cannotBeTargeted"), { while: { cond: "cardsIn", player: "you", zone: "hand", atLeast: limit } })],
         choose: (prompt, state) => prompt.kind === "chooseTargets" && prompt.purpose.source === state.sides.player.backRank[0] && prompt.candidates.includes(state.sides.player.backRank[0]!) ? [state.sides.player.backRank[0]!] : undefined },

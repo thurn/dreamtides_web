@@ -7,7 +7,7 @@
  */
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
-import type { Effect } from "../effects/registry";
+import type { ResolvingEffect, StaticEffect } from "../effects/registry";
 import type { EffectNode } from "../effects/types";
 import type { DiscardNode } from "../effects/primitives/discard";
 import type { Zone } from "../state/ids";
@@ -650,7 +650,7 @@ export type ActivationZone = Extract<FunctionalZone, "play" | "void" | "hand">;
 export interface ActivatedAbility {
   readonly kind: "activated";
   readonly costs: readonly Cost[];
-  readonly effect: Effect;
+  readonly effect: ResolvingEffect;
   readonly speed: Speed;
   readonly oncePerTurn?: boolean;
   /**
@@ -835,7 +835,7 @@ export type FunctionalZone = "play" | "void" | "hand" | "any";
 export interface TriggeredAbility {
   readonly kind: "triggered";
   readonly trigger: Trigger;
-  readonly effect: Effect;
+  readonly effect: ResolvingEffect;
   readonly zone: FunctionalZone;
   /** An intervening "if": checked when the ability triggers and again as it resolves. */
   readonly condition?: Condition;
@@ -852,7 +852,7 @@ export interface TriggeredAbility {
  */
 export interface StaticAbility {
   readonly kind: "static";
-  readonly effect: Effect;
+  readonly effect: StaticEffect;
   /** Where its card must be for it to apply: "If this card is in your void, …" works from "void" (RD-hv-umm2.53-1). */
   readonly zone: FunctionalZone;
   /** Applies only while this public condition holds, read against the layers before its effect. */
@@ -892,7 +892,7 @@ export interface PlayConditionAbility {
 }
 
 export type Ability =
-  | { readonly kind: "event"; readonly effect: Effect }
+  | { readonly kind: "event"; readonly effect: ResolvingEffect }
   | StaticAbility
   | WinConditionAbility
   | EventCopyModifierAbility

@@ -1,23 +1,23 @@
+import type { ResolvingEffect } from "../registry";
 import type { EngineCatalog } from "../../catalog";
 import { characteristics } from "../../continuous/characteristics";
 import { resolvePlayer } from "../../dsl/selectors";
 import type { PlayerRef } from "../../dsl/types";
 import type { Side } from "../../state/ids";
 import type { BattleState, RuleModifierInstruction } from "../../state/types";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type StaticPrimitiveDefinition } from "../types";
 
 /** The three player rules supplied by the battle Dreamsigns. */
 export type RuleModifierNode = { readonly op: "ruleModifier"; readonly player: PlayerRef } & (
   | Exclude<RuleModifierInstruction, { readonly rule: "dawnThreshold" }>
-  | (Extract<RuleModifierInstruction, { readonly rule: "dawnThreshold" }> & { readonly effect: EffectNode })
+  | (Extract<RuleModifierInstruction, { readonly rule: "dawnThreshold" }> & { readonly effect: ResolvingEffect })
 );
 
 /** Static rules read live; the threshold's child resolves later through the ordinary FIFO. */
-export const ruleModifierPrimitive = definePrimitive<RuleModifierNode>({
+export const ruleModifierPrimitive: StaticPrimitiveDefinition<RuleModifierNode> = definePrimitive<RuleModifierNode>({
   op: "ruleModifier",
   staticOnly: true,
   deferred: node => node.rule === "dawnThreshold" ? [node.effect] : [],
-  resolve() { throw new Error("ruleModifier is held only by a static ability"); },
   continuous: {
     layer: 6,
     changes(node, env) {
@@ -35,7 +35,7 @@ export const ruleModifierPrimitive = definePrimitive<RuleModifierNode>({
 export function ruleModifier(instruction: (
   | { readonly rule: "eventAlternative"; readonly energy: number }
   | { readonly rule: "carryEnergy" }
-  | { readonly rule: "dawnThreshold"; readonly count: number; readonly effect: EffectNode }
+  | { readonly rule: "dawnThreshold"; readonly count: number; readonly effect: ResolvingEffect }
 ), player: PlayerRef = "you"): RuleModifierNode {
   return { op: "ruleModifier", player, ...instruction };
 }

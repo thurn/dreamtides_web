@@ -19,7 +19,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { passUntil } from "../../../testing/trigger-harness";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { dissolve } from "../dissolve";
 import { gainPoints } from "../gain-points";
 import { materialize } from "../materialize";
@@ -44,7 +44,7 @@ function applied(outcome: IntentOutcome): BattleSlice {
   if (outcome.kind !== "applied" || outcome.error !== null) throw new Error(`failed intent ${JSON.stringify(outcome)}`);
   return outcome.slice;
 }
-function fixture(side: Side, effect: Effect = bounded(), options: { costs?: readonly Cost[]; trigger?: boolean; departureTrigger?: boolean; interrupt?: boolean; placed?: boolean } = {}) {
+function fixture(side: Side, effect: ResolvingEffect = bounded(), options: { costs?: readonly Cost[]; trigger?: boolean; departureTrigger?: boolean; interrupt?: boolean; placed?: boolean } = {}) {
   const card: EngineCardDefinition = { ...v.vanilla2, id: syntheticId(0x76501), costs: [energyX(0)], subtype: "Mage", status: "authored", abilities: () => options.trigger
     ? [triggered(onMaterialized(), effect)]
     : [activated(options.costs ?? [energy(1)], effect, { speed: options.interrupt ? "interrupt" : "standard" }), ...(options.departureTrigger ? [triggered(onDissolved(), gainPoints(x()))] : [])] };

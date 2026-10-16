@@ -1,3 +1,4 @@
+import type { ResolvingEffect } from "../effects/registry";
 import { describe, expect, it } from "vitest";
 import { parseCardSubtype, type CardSubtype } from "../../types/card-identity";
 import { parsePromptId } from "../../types/identifiers";
@@ -109,7 +110,8 @@ for (const side of SIDES) describe(`${side} remap transport`, () => {
   });
 
   it("rolls back a failing resolution while retaining the earlier committed remapped play", () => {
-    const w = world(side, () => [event(p.sequence(p.gainPoints(9), p.costSetter("you", {}, 0)))], true);
+  // Deliberately malformed runtime ingress: resolution must fail after the play commits.
+    const w = world(side, () => [event(p.sequence(p.gainPoints(9), p.costSetter("you", {}, 0) as unknown as ResolvingEffect))], true);
     const adapter = createFoldAdapter(w.engine), card = w.state.sides[side].hand[0];
     const played = applied(adapter.reduce(slice(w.state), { kind: "battleAction", side, action: { kind: "play", card, from: "hand" } }));
     const committed = played.slice.committed, before = serializeState(committed);

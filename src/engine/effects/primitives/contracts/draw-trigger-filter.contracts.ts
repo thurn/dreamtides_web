@@ -20,7 +20,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { at, passUntil } from "../../../testing/trigger-harness";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { resolveEffect } from "../../interpreter";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import { draw } from "../draw";
 import { gainPoints } from "../gain-points";
 import { changeCardCost } from "../modify-card-cost";
@@ -32,10 +32,10 @@ const reduction = () => changeCardCost(triggeringCard(), { reduce: 1 }, { durati
 function sign(trigger = whenDraw("you", undefined, { cardType: "character" }), oncePerTurn = true): EngineDreamsignDefinition {
   return { id: signId, status: "authored", abilities: () => [triggered(trigger, reduction(), { oncePerTurn })] };
 }
-function source(effect: Effect = draw(3)): EngineCardDefinition {
+function source(effect: ResolvingEffect = draw(3)): EngineCardDefinition {
   return { ...v.event0, id: syntheticId(0x235002), status: "authored", abilities: () => [event(effect)] };
 }
-function world(side: Side, options: { trigger?: Trigger; once?: boolean; effect?: Effect; setup?: SideSetup; other?: SideSetup; card?: EngineCardDefinition } = {}) {
+function world(side: Side, options: { trigger?: Trigger; once?: boolean; effect?: ResolvingEffect; setup?: SideSetup; other?: SideSetup; card?: EngineCardDefinition } = {}) {
   const card = options.card ?? source(options.effect), emblem = sign(options.trigger, options.once);
   const engine = createEngine(testCatalog([card], { dreamsigns: [emblem] }));
   return { engine, card, ...boardState(engine.catalog, { active: side, phase: "day",

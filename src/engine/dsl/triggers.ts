@@ -1,5 +1,5 @@
 /** Builders for triggered abilities, trigger matchers, conditions, and durations. */
-import type { Effect } from "../effects/registry";
+import type { ResolvingEffect } from "../effects/registry";
 import type { Zone } from "../state/ids";
 import type {
   CardFilter,
@@ -32,7 +32,7 @@ function concernsOwnArrival(trigger: Trigger): boolean {
  */
 export function triggered(
   trigger: Trigger,
-  effect: Effect,
+  effect: ResolvingEffect,
   options: { readonly zone?: FunctionalZone; readonly condition?: Condition; readonly oncePerTurn?: boolean } = {},
 ): TriggeredAbility {
   const zone = options.zone ?? "play";

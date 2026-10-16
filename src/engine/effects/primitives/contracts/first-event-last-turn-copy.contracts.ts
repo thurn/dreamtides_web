@@ -31,18 +31,18 @@ import { decodeGenesis, decodeEvent, isFoldableGenesis } from "../../../../event
 import { hashState } from "../../../../eventlog/hash";
 import type { FoldState } from "../../../../rules/fold-state";
 import { parseClientId, parseDreamsignId, parseGameId, parsePromptId } from "../../../../types/identifiers";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 import battleFixture from "../../../../rules/replay/fixtures/battle.json";
 import { decklists } from "./with-materialized-support";
 
 const id = (n: number) => syntheticId(0x622000 + n);
 const copy = () => p.copyFirstEventLastTurnToHand({ ephemeral: true });
-const spell = (n: number, effect: Effect): EngineCardDefinition => ({ ...v.event0, id: id(n), speed: "interrupt", status: "authored", abilities: () => [event(effect)] });
+const spell = (n: number, effect: ResolvingEffect): EngineCardDefinition => ({ ...v.event0, id: id(n), speed: "interrupt", status: "authored", abilities: () => [event(effect)] });
 const first = spell(1, p.gainEnergy(1)), later = spell(2, p.gainEnergy(2)), extra = spell(3, p.takeExtraTurn());
 const reader = spell(4, copy()), modal = spell(5, p.chooseOne(p.gainEnergy(1), p.gainEnergy(2)));
 const hide = spell(6, p.shuffleInto([everyIn("void")]));
-const bad: Effect = { op: "copyCardTimes", card: self(), times: -1 };
+const bad: ResolvingEffect = { op: "copyCardTimes", card: self(), times: -1 };
 const paused = spell(7, p.sequence(copy(), p.discard(1)));
 const broken = spell(7, p.sequence(copy(), p.discard(1), bad));
 const echo: EngineCardDefinition = { ...v.vanilla0, id: id(8), status: "authored", abilities: () => [triggered(whenYouPlay({ cardType: "event" }), p.copyCard(triggeringCard()))] };

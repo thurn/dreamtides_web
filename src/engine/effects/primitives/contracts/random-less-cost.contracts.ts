@@ -17,7 +17,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { passUntil } from "../../../testing/trigger-harness";
-import type { Effect } from "../../registry";
+import type { ResolvingEffect } from "../../registry";
 import * as p from "../index";
 import { mill } from "./random-selection-support";
 
@@ -29,7 +29,7 @@ function applied(result: IntentOutcome) {
   if (result.kind !== "applied" || result.error !== null) throw new Error(JSON.stringify(result));
   return result;
 }
-function card(body: Effect, index = 0x585001): EngineCardDefinition {
+function card(body: ResolvingEffect, index = 0x585001): EngineCardDefinition {
   return { ...v.event0, id: syntheticId(index), status: "authored", abilities: () => [event(body)] };
 }
 function resolve(engine: Engine, board: ReturnType<typeof boardState>, side: Side, answers: ConstructorParameters<typeof ScriptedSource>[0] = []) {
@@ -42,7 +42,7 @@ function resolve(engine: Engine, board: ReturnType<typeof boardState>, side: Sid
   expect(eventRedactionViolations(result.events, board.state, result.state)).toEqual([]);
   return result;
 }
-function subjectWorld(side: Side, copied: boolean, cost: number, body: Effect, modified = false) {
+function subjectWorld(side: Side, copied: boolean, cost: number, body: ResolvingEffect, modified = false) {
   const watcher = { id: parseDreamsignId("5e5e5e5e-0000-4000-8000-000000058501"), status: "authored" as const,
     abilities: () => [triggered(whenDissolved(characterYouControl({ subtype: "Warrior" })), body)] };
   const subject: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(0x585002), costs: [energy(cost), energyX(0)] };

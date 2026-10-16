@@ -1,15 +1,16 @@
+import type { ResolvingEffect } from "../registry";
 import type { ValueExpr } from "../../dsl/types";
 import { evaluate } from "../interpreter";
-import { definePrimitive, type EffectNode } from "../types";
+import { definePrimitive, type ResolvingPrimitiveDefinition } from "../types";
 
 /** "Do this N times." The count is locked when the effect resolves. */
 export interface RepeatNode {
   readonly op: "repeat";
   readonly times: ValueExpr;
-  readonly effect: EffectNode;
+  readonly effect: ResolvingEffect;
 }
 
-export const repeatPrimitive = definePrimitive<RepeatNode>({
+export const repeatPrimitive: ResolvingPrimitiveDefinition<RepeatNode> = definePrimitive<RepeatNode>({
   op: "repeat",
   children: (node) => [node.effect],
   resolve(ctx, node, env) {
@@ -18,6 +19,6 @@ export const repeatPrimitive = definePrimitive<RepeatNode>({
   },
 });
 
-export function repeat(times: ValueExpr, effect: EffectNode): RepeatNode {
+export function repeat(times: ValueExpr, effect: ResolvingEffect): RepeatNode {
   return { op: "repeat", times, effect };
 }

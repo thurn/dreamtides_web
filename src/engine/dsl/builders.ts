@@ -1,6 +1,6 @@
 /** Builders for abilities, targets, selectors, and values. Primitive builders live in their modules. */
 import type { CardSubtype } from "../../types/card-identity";
-import type { Effect } from "../effects/registry";
+import type { ResolvingEffect, StaticEffect } from "../effects/registry";
 import type { EffectNode } from "../effects/types";
 import type { DiscardNode } from "../effects/primitives/discard";
 import type {
@@ -63,7 +63,7 @@ export function additionalEventCopy(): EventCopyModifierAbility {
   return { kind: "eventCopyModifier" };
 }
 
-export function event(effect: Effect): Ability {
+export function event(effect: ResolvingEffect): Ability {
   return { kind: "event", effect };
 }
 
@@ -77,7 +77,7 @@ export function playCondition(condition: Condition): PlayConditionAbility {
  * have +1✦." Works in play unless `zone` names a functional zone: "If this
  * card is in your void, characters you control have +1✦" works from "void".
  */
-export function staticAbility(effect: Effect, options: { readonly zone?: FunctionalZone; readonly while?: StaticCondition } = {}): StaticAbility {
+export function staticAbility(effect: StaticEffect, options: { readonly zone?: FunctionalZone; readonly while?: StaticCondition } = {}): StaticAbility {
   return { kind: "static", effect, zone: options.zone ?? "play", ...(options.while === undefined ? {} : { while: options.while }) };
 }
 
@@ -89,7 +89,7 @@ export function staticAbility(effect: Effect, options: { readonly zone?: Functio
  */
 export function activated(
   costs: readonly Cost[],
-  effect: Effect,
+  effect: ResolvingEffect,
   options: { readonly speed?: Speed; readonly oncePerTurn?: boolean; readonly zone?: ActivationZone } = {},
 ): ActivatedAbility {
   return {
