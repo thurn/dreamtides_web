@@ -8,6 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { acquireBrowserLease, browserLeasePath, browserOwnerPath, browserSlotPath, serverRecordPath, tryBrowserLock } from "./browser-lease.mjs";
+import { reconcileProvider } from "./provider-ownership.mjs";
 
 const directories = /** @type {string[]} */ ([]);
 const servers = /** @type {import("node:http").Server[]} */ ([]);
@@ -162,7 +163,7 @@ describe("provider ownership reconciliation", () => {
       res.writeHead(200, { "Content-Type": kind === "json" ? "application/json" : "text/event-stream" });
       res.end(kind === "json" ? message : `event: message\ndata: ${message}\n\n`);
     });
-    expect((await startCli(f.slot).result).state).toBe("provider-present");
+    expect((await reconcileProvider(f.slot)).state).toBe("provider-present");
     expect(readFileSync(f.owner, "utf8")).toBe(f.raw);
     expect(f.requests.map((request) => request.body.method)).toEqual(["tools/list"]);
   });
@@ -175,7 +176,7 @@ describe("provider ownership reconciliation", () => {
       res.end(kind === "generic404" ? "Not Found" : kind === "sdk-error" ? '{"jsonrpc":"2.0","error":{"code":-32001,"message":"Session not found"},"id":null}'
         : kind === "wrong-id" ? '{"jsonrpc":"2.0","id":"other-session","result":{"tools":[]}}' : "malformed response");
     });
-    expect((await startCli(f.slot).result).state).toBe("provider-unknown");
+    expect((await reconcileProvider(f.slot)).state).toBe("provider-unknown");
     expect(readFileSync(f.owner, "utf8")).toBe(f.raw);
     expect(f.requests).toHaveLength(1);
   });
@@ -188,7 +189,7 @@ describe("provider ownership reconciliation", () => {
     if (kind === "port") value.port = 5173;
     const raw = kind === "partial" ? '{"pid":' : JSON.stringify(kind === "legacy" ? { pid: value.pid, token: value.token, port: value.port } : value);
     writeFileSync(f.owner, raw);
-    expect((await startCli(f.slot).result).state).toBe("unverified");
+    expect((await reconcileProvider(f.slot)).state).toBe("unverified");
     expect(readFileSync(f.owner, "utf8")).toBe(raw); expect(f.requests).toEqual([]);
   });
 
@@ -197,7 +198,7 @@ describe("provider ownership reconciliation", () => {
     const value = { ...f.record, ...(kind === "missing" ? { mcpExecutionCompleted: undefined } :
       kind === "false" ? { mcpExecutionCompleted: false } : { providerState: kind }) };
     const raw = JSON.stringify(value); writeFileSync(f.owner, raw);
-    expect((await startCli(f.slot).result).state).toBe("provider-completion-unconfirmed");
+    expect((await reconcileProvider(f.slot)).state).toBe("provider-completion-unconfirmed");
     expect(readFileSync(f.owner, "utf8")).toBe(raw); expect(f.requests).toEqual([]);
   });
 
@@ -205,7 +206,7 @@ describe("provider ownership reconciliation", () => {
     const f = await fixture();
     const raw = JSON.stringify({ ...f.record, pid: process.pid, startedAt: "different-lifetime" });
     writeFileSync(f.owner, raw);
-    expect((await startCli(f.slot).result).state).toBe("live-runner");
+    expect((await reconcileProvider(f.slot)).state).toBe("live-runner");
     expect(readFileSync(f.owner, "utf8")).toBe(raw); expect(f.requests).toEqual([]);
   });
 
@@ -214,7 +215,7 @@ describe("provider ownership reconciliation", () => {
     if (kind === "record") writeFileSync(serverRecordPath(f.slot), "partial server record");
     else writeFileSync(f.owner, JSON.stringify({ ...f.record, port: f.mcpPort }));
     const raw = readFileSync(f.owner, "utf8");
-    expect((await startCli(f.slot).result).state).toBe("server-unsettled");
+    expect((await reconcileProvider(f.slot)).state).toBe("server-unsettled");
     expect(readFileSync(f.owner, "utf8")).toBe(raw); expect(f.requests).toEqual([]);
   });
 
@@ -236,7 +237,7 @@ describe("provider ownership reconciliation", () => {
         listener = createServer(); servers.push(listener); listener.listen(f.record.port, "127.0.0.1", finish);
       } else finish();
     });
-    expect((await startCli(f.slot).result).state).toBe(kind === "owner" ? "record-changed" : "server-unsettled");
+    expect((await reconcileProvider(f.slot)).state).toBe(kind === "owner" ? "record-changed" : "server-unsettled");
     expect(readFileSync(f.owner, "utf8")).toBe(kind === "owner" ? "changed owner bytes" : f.raw);
     expect(readdirSync(f.directory).some((name) => name.includes(".reconciled-"))).toBe(false);
   });

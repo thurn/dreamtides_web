@@ -109,14 +109,20 @@ export function createQaSessionFixture(fixtureIo) {
     mkdirSync(join(root, "scripts"), { recursive: true });
     // A real child owns liveness until session cleanup, without a host TCP bind.
     writeFileSync(join(root, "scripts", "dev.mjs"), 'setInterval(() => {}, 60_000); process.send("ready");');
-    const git = (/** @type {string[]} */ args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: "pipe" });
     execFileSync("git", ["init", "-q", root], { encoding: "utf8" });
+    fixtureIo.gitCwd = root;
+    return { root, path: browserLeasePath(root) };
+  }
+
+  function linkedSessionFixture() {
+    const fixture = sessionFixture();
+    const { root } = fixture;
+    const git = (/** @type {string[]} */ args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: "pipe" });
     git(["add", "scripts/dev.mjs"]);
     git(["-c", "core.hooksPath=/dev/null", "-c", "commit.gpgSign=false", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "synthetic session process"]);
-    const worktree = join(directory, "linked-checkout");
+    const worktree = join(root, "..", "linked-checkout");
     git(["worktree", "add", "--detach", "--quiet", worktree, "HEAD"]);
-    fixtureIo.gitCwd = root;
-    return { root, worktree, path: browserLeasePath(root) };
+    return { ...fixture, worktree };
   }
 
   const fixtures = leaseFixtures();
@@ -125,5 +131,5 @@ export function createQaSessionFixture(fixtureIo) {
   /** Holds every browser slot, so the next waiter queues. @param {string} path */
   const holdEverySlot = (path) => Promise.all([acquireBrowserLease(path), acquireBrowserLease(path)]);
 
-  return { fixtures, notification, leaseFixture, sessionFixture, acquireBrowserLease, openQaSession, ownerOf, holdEverySlot };
+  return { fixtures, notification, leaseFixture, sessionFixture, linkedSessionFixture, acquireBrowserLease, openQaSession, ownerOf, holdEverySlot };
 }

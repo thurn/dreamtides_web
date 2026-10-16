@@ -1,0 +1,17 @@
+# hv-umm2.766: native QA contract setup cost
+
+Exact source base: `00a9521babd1d9b446f2ddac023c5593eacd6024`. The bounded writer scope contains three QA fixture/test modules and this bead's evidence. Production providers, leases, identity, server ownership, scenario runner, screenshot runtime, SDK, global test isolation and configuration retain their bytes. No fallout or pre-existing issue was found.
+
+The primary fixture creates a unique real Git repository and dev-child script for each use. An explicit linked fixture adds the original add/commit/detached checkout sequence for the one linked-checkout contract. Its common-Git/capture roots, unrelated listener and actual process containment assertions remain intact. Forty-three expanded nonlinked invocations omit three Git operations each (129 static operations; this is not a duration claim).
+
+Twenty-five provider state rows use the unchanged public `reconcileProvider(slot)`, with real HTTP/MCP headers, kernel locks, process/listener observations and exact owner byte guards. The seven changed invocation expressions retain every assertion. Thirty provider cases survive, including actual CLI archive/idempotent restart, busy lock, interruption/EOF cleanup, ignored archives and multislot diagnostics. All83 affected cases pass in both measured epochs.
+
+Primary full-command child CPU: 22.303094s before, 17.918859s after, 19.658% improvement. Wall:17.979390625s before,15.391693625s after (14.393% improvement). Start host load2.36/2.87; exact same four-file npm command and two workers. Baseline is the first focused command after install; after is warm. Both materialize stub art and restore local assets. Prepare3.3/2.9s; test command13.1/10.9s; restore1.3/1.4s. No cache flushing or aggregate assertion-time savings inference. This is a bounded observed pair, with cache-state qualification. Gate46 retains the60s full-suite target and complete acceptance.
+
+Source custody and raw results live in the primary ignored QA directory `artifacts/qa/hv-umm2.766/` and `/tmp/root766-20261016/`. Every verification dispatch retains exact15source copies/hashes, all6033tracked file hashes, base identity, UTC/monotonic/load, command CPU/wall/PG receipt and postcomparison. The focused run settled PG15789 with no members remaining; unchanged fixture teardown joins native descendants. Literal hashes and failure/recovery mapping are in the JSON companion.
+
+Local checks recorded so far: review=0 (21.986s), knip=0 (4.554s), full-inner=0 (120.624s), full=0 (120.905s). Ordinary checks and the one required heavy full run use the frozen three source files. Final evidence-only updates receive schema and whitespace verification. The root owns cold Codex review and certified delivery.
+
+The inclusive clock starts at the verified native claim09:42:24Z and ends at the real pre-Git cutoff2026-10-16T09:56:20.672735+00:00; 13.945minutes include all root/helper research, grants, measurements, checks and queues. Actual Git return/tail is an additive ignored receipt after the commit.
+
+Full validation passed 12,206 tests across436files, full lint/typechecks/import cycles/Knip/friction schema and production bundle. Actual inner execution120.623813s; outer admission+execution120.904735s. Start offset0.238650s includes admission, wrapper and source-snapshot startup; pure lock wait is unknown. Vitest87.48s (review test step88.1s) exceeds the60s target retained by gate46. Test-step start load3.993; bundle start load5.451. No before/after full-suite speed inference is made.

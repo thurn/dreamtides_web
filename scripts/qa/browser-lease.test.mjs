@@ -22,7 +22,7 @@ vi.mock("node:net", async (importOriginal) => {
   const { networkMocks } = await import("./qa-session-mocks.mjs");
   return networkMocks(/** @type {typeof import("node:net")} */ (await importOriginal()));
 });
-const { fixtures, notification, leaseFixture, sessionFixture, acquireBrowserLease, openQaSession, ownerOf, holdEverySlot } = createQaSessionFixture(fixtureIo);
+const { fixtures, notification, leaseFixture, sessionFixture, linkedSessionFixture, acquireBrowserLease, openQaSession, ownerOf, holdEverySlot } = createQaSessionFixture(fixtureIo);
 
 describe("repository browser lease", () => {
   it("serializes native processes through cleanup and composes with another lock", async () => {
@@ -49,7 +49,7 @@ describe("repository browser lease", () => {
     if (address === null || typeof address === "string") throw new Error("expected owned TCP listener");
     const port = address.port;
     try {
-      const { root, worktree, path } = sessionFixture();
+      const { root, worktree, path } = linkedSessionFixture();
       vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: "synthetic-session", url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25", disconnect: vi.fn().mockResolvedValue(undefined), call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
       const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port, prod: false, minify: false, cwd: root });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(primary.serverPid);

@@ -1,0 +1,448 @@
+{
+  "bead": "hv-umm2.766",
+  "base": "00a9521babd1d9b446f2ddac023c5593eacd6024",
+  "scope": {
+    "writers": [
+      "scripts/qa/qa-session-fixture.mjs",
+      "scripts/qa/browser-lease.test.mjs",
+      "scripts/qa/provider-ownership.test.mjs"
+    ],
+    "fallout": [],
+    "runtimeConfigSdkIsolationChanged": false,
+    "newTests": 0,
+    "deletedTests": 0,
+    "publicCases": 83,
+    "providerCases": 30,
+    "browserQa": "Not required: unchanged player presentation; real private HTTP/children/lock/signal fixtures cover acceptance.",
+    "coreReview": "Root dispatches fresh read-only Codex fork:none at exact committed head after helper returns."
+  },
+  "clock": {
+    "claimStart": "2026-10-16T09:42:24Z",
+    "recordCutoff": "2026-10-16T09:56:20.672735+00:00",
+    "inclusiveMinutesAtCutoff": 13.944545583333333,
+    "scope": "Includes root/helper research, finite grant, before/after measurements, coordination, queues, verification and evidence. Actual Git return/tail will be an additive ignored receipt after commit, without a future date or clock-only amend."
+  },
+  "sourceFreeze": {
+    "source": [
+      {
+        "path": "scripts/qa/qa-session-fixture.mjs",
+        "sha256": "45f0b5a5e24e210caf6ba6c330fcce051f0e5ff682e55450b7969830f037bb39",
+        "blob": "9a394691fa9ad1326a19eb3e5bd69cbb8a1683f5",
+        "currentSHA256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+        "equalsBase": false
+      },
+      {
+        "path": "scripts/qa/browser-lease.test.mjs",
+        "sha256": "cb8334218c73b5929a2bc8c115baf00c2d92f8fcdd2b2c1c15b1cd18bfce1bcb",
+        "blob": "6ead90c20508b4907fc0d6b75528c15b66a74afd",
+        "currentSHA256": "ff16d942dc7eef1042841a2c1b9a4cd56e688d9b9dd0229ddd6c7a29d2f3760d",
+        "equalsBase": false
+      },
+      {
+        "path": "scripts/qa/provider-ownership.test.mjs",
+        "sha256": "0912c158795f8690c3877ff76c35b45a3308e39a4606e527205df71d7fababa0",
+        "blob": "07be1f88ee44dc2783363e74894213aee922f212",
+        "currentSHA256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+        "equalsBase": false
+      },
+      {
+        "path": "scripts/qa/provider-ownership.mjs",
+        "sha256": "d25d666043d8797814bd5f66333934065188f27a8ab774e3e49b82597c5b7d33",
+        "blob": "624c57ca2b9fe3b9f4c22c41218293f5d6588b1c",
+        "currentSHA256": "d25d666043d8797814bd5f66333934065188f27a8ab774e3e49b82597c5b7d33",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/run-scenario-ownership.test.mjs",
+        "sha256": "3c17966e59b26b3ab8d4c728c08315a661f4a98b82cc2930d3f2ab73c9a722d2",
+        "blob": "b45cef9a8d26bbc2393eac8a70cbf8e60f734aa0",
+        "currentSHA256": "3c17966e59b26b3ab8d4c728c08315a661f4a98b82cc2930d3f2ab73c9a722d2",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/run-scenario-boundaries.test.mjs",
+        "sha256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+        "blob": "8904910eb2d6b1ce383a0a8de210ae3bf28d78ef",
+        "currentSHA256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/qa-session-mocks.mjs",
+        "sha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+        "blob": "96d29943645046364681482d56e66d8a025e3cfb",
+        "currentSHA256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/qa-signal-fixture.mjs",
+        "sha256": "d9457714d7847ce7032e7c694a965c5a5d9290e1aeee596b238266c3d700c1ad",
+        "blob": "733d706aa32359f908afd4fa8eac6b382c97151c",
+        "currentSHA256": "d9457714d7847ce7032e7c694a965c5a5d9290e1aeee596b238266c3d700c1ad",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/run-scenario.mjs",
+        "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "blob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+        "currentSHA256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/provider-identity.mjs",
+        "sha256": "e93e7b1608af202363a7c4deaa6eab173ced4a0abf9da7a4484ce5903c65d52e",
+        "blob": "b175842cfc31254a66b46546b29020d283eaab46",
+        "currentSHA256": "e93e7b1608af202363a7c4deaa6eab173ced4a0abf9da7a4484ce5903c65d52e",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/browser-lease.mjs",
+        "sha256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+        "blob": "7fc31c02a682fddc9f5c18a3168ed058ed9f814e",
+        "currentSHA256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/qa/server-ownership.mjs",
+        "sha256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+        "blob": "1c29998bfdeb0d209e27b2c29e98f7cc6a145fd4",
+        "currentSHA256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+        "equalsBase": true
+      },
+      {
+        "path": "scripts/screenshot-runtime.mjs",
+        "sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+        "blob": "86e55d22895170e609960f2fd58900bd391c0928",
+        "currentSHA256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+        "equalsBase": true
+      },
+      {
+        "path": "package.json",
+        "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+        "blob": "92f9bd25167dec9b7ca1cd899ac15e679f8b0b8c",
+        "currentSHA256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+        "equalsBase": true
+      },
+      {
+        "path": "vitest.config.ts",
+        "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "blob": "b817e62d2bfa87f77dbafa14ceac425f0356a1e9",
+        "currentSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "equalsBase": true
+      }
+    ],
+    "sourceEpoch": "helper-focused-after-v01-pre",
+    "all15UnchangedDuringFocused": true,
+    "protected12EqualBase": true,
+    "trackedInventoryCount": 6033,
+    "sourceCustody": "Each dispatch has exact15literal copies, SHA256, complete tracked byte inventory, base HEAD, UTC/monotonic/load and command receipt; post manifest compares to pre. Captures are immutable invocation-specific ignored QA files."
+  },
+  "assertionPreservation": {
+    "scripts/qa/browser-lease.test.mjs": {
+      "entireSourceEqualsBaseAfterReversingOnlyAdmittedImportAndCallWiring": true,
+      "expectSyntaxOccurrences": 56
+    },
+    "scripts/qa/provider-ownership.test.mjs": {
+      "entireSourceEqualsBaseAfterReversingOnlyAdmittedImportAndCallWiring": true,
+      "expectSyntaxOccurrences": 45
+    }
+  },
+  "fixtureCleanup54Through92Unchanged": true,
+  "nativeOperationMapping": {
+    "sessionFixture": "Every invocation creates a unique real temp directory, dev child script, primary git init, actual common-Git lease/evidence root; existing OS identities, locks and joined descendant cleanup remain.",
+    "linkedSessionFixture": "Calls sessionFixture, then original git add, config-qualified commit and detached worktree add. The sole linked-checkout contract uses it and preserves its unrelated listener, private common-Git/capture roots and containment assertions.",
+    "nonlinkedExpandedCalls": 43,
+    "avoidedGitOperationsStaticCount": 129,
+    "staticCountQualification": "43 * 3 is source attribution only, never measured CPU or wall savings.",
+    "providerPublicRows": {
+      "presentJsonSse": 2,
+      "unknownResponses": 6,
+      "malformedMetadata": 6,
+      "unconfirmedReceipt": 5,
+      "liveOrReusedPid": 1,
+      "unsettledServer": 2,
+      "duringProbeRaces": 3
+    },
+    "publicOperation": "Existing unchanged exported reconcileProvider(slot) runs real lockf, HTTP/MCP protocol headers, ps/lsof and exact byte guards. Seven invocation expressions expand to25 rows.",
+    "retainedCli": "Actual CLI archive/exactbytes/idempotentrestart, ignore-slot archive, busy lock, SIGTERM/EOF holder settlement and multislot diagnostic cases plus contained wrapper are unchanged."
+  },
+  "comparison": {
+    "primaryMetric": "Full-command RUSAGE_CHILDREN user+system CPU seconds",
+    "before": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/browser-lease.test.mjs",
+        "scripts/qa/provider-ownership.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:45:21.227325+00:00",
+      "end": "2026-10-16T09:45:39.206919+00:00",
+      "exit": 0,
+      "wallSeconds": 17.97939062502701,
+      "pid": 78278,
+      "pgid": 78278,
+      "load": "{ 2.36 2.80 3.05 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389456492922000,
+      "endedMonotonicNs": 389474472234125,
+      "cpuUserSeconds": 14.873511,
+      "cpuSystemSeconds": 7.429583
+    },
+    "after": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/browser-lease.test.mjs",
+        "scripts/qa/provider-ownership.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:49:43.970068+00:00",
+      "end": "2026-10-16T09:49:59.361985+00:00",
+      "exit": 0,
+      "wallSeconds": 15.391693624958862,
+      "pid": 15789,
+      "pgid": 15789,
+      "load": "{ 2.87 2.81 2.98 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389719233479291,
+      "endedMonotonicNs": 389734625113833,
+      "cpuUserSeconds": 12.106057,
+      "cpuSystemSeconds": 5.812802
+    },
+    "beforeCpuSeconds": 22.303094,
+    "afterCpuSeconds": 17.918858999999998,
+    "cpuImprovementPercent": 19.657519266161028,
+    "wallImprovementPercent": 14.392573441650002,
+    "counts": {
+      "before": {
+        "files": 4,
+        "passed": 83
+      },
+      "after": {
+        "files": 4,
+        "passed": 83
+      }
+    },
+    "conditions": "Same owned checkout/base, command, two workers, fixture contracts and actual native observations. Start load2.36 before /2.87 after, test-step2.3623 /2.9595. Fresh install completed before baseline. Baseline is first focused command in this worktree; after follows baseline and is warm. Both perform prepared stub-art materialization and local-art restore; prepare3.3s before/2.9s after, test command13.1s/10.9s, restore1.3s/1.4s. OS/file/import caches were not flushed. This bounded single pair meets the >=10% CPU target under observed comparable low load, with cache-state qualification; it is not a statistical benchmark or full-suite speed claim.",
+    "parentGate": "hv-umm2.46 retains60s low-load two-worker D19 target, complete final acceptance and any further justified cost repair."
+  },
+  "checks": {
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:51:24.995934+00:00",
+      "end": "2026-10-16T09:51:46.981961+00:00",
+      "exit": 0,
+      "wallSeconds": 21.985757292015478,
+      "pid": 36760,
+      "pgid": 36760,
+      "load": "{ 3.16 2.95 3.02 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389820258489791,
+      "endedMonotonicNs": 389842244189083,
+      "cpuUserSeconds": 65.192825,
+      "cpuSystemSeconds": 12.563149
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:51:53.014988+00:00",
+      "end": "2026-10-16T09:51:57.569220+00:00",
+      "exit": 0,
+      "wallSeconds": 4.554121875029523,
+      "pid": 56119,
+      "pgid": 56119,
+      "load": "{ 3.36 3.03 3.04 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389848277295041,
+      "endedMonotonicNs": 389852831361458,
+      "cpuUserSeconds": 3.970862,
+      "cpuSystemSeconds": 1.396974
+    },
+    "full-inner": {
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:52:16.514317+00:00",
+      "end": "2026-10-16T09:54:17.139213+00:00",
+      "exit": 0,
+      "wallSeconds": 120.62381341599394,
+      "pid": 56783,
+      "pgid": 56783,
+      "load": "{ 3.30 3.05 3.04 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389871776422666,
+      "endedMonotonicNs": 389992400181583,
+      "cpuUserSeconds": 278.76927,
+      "cpuSystemSeconds": 26.60115
+    },
+    "full": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root766-20261016/helper/heavy-inner-v01.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:52:16.275667+00:00",
+      "end": "2026-10-16T09:54:17.181487+00:00",
+      "exit": 0,
+      "wallSeconds": 120.90473516698694,
+      "pid": 56774,
+      "pgid": 56774,
+      "load": "{ 3.24 3.03 3.04 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389871537777041,
+      "endedMonotonicNs": 389992442461583,
+      "cpuUserSeconds": 278.808663,
+      "cpuSystemSeconds": 26.639305
+    }
+  },
+  "failurePaths": {
+    "errorMidStep": "Existing malformed metadata, unknown HTTP outcomes, unconfirmed receipts and terminal cleanup failure contracts; all assertions preserved.",
+    "restart": "Actual CLI exact archive/idempotent restart and absent second invocation remain.",
+    "partialWrite": "Existing partial metadata and owner/server changed-byte guards remain.",
+    "invalidOrStaleInput": "Existing unverified metadata, reused/live PID and receipt guards remain.",
+    "concurrentActors": "Real kernel contention, during-probe owner/server/listener races, interrupted waiters, real signal cleanup and linked checkout lease contract remain.",
+    "newProductionTransitions": "None; test invocation/setup changes only."
+  },
+  "runtimeLedger": {
+    "focusedPid": 15789,
+    "focusedPgid": 15789,
+    "focusedGroupRemainingAtExit": [],
+    "privateFixtureResources": "Each unchanged afterEach joins owned sessions/leases/children, verifies actual descendant lifetime absence, then deletes its own unique temp directories. No shared provider, record or unrelated process is changed."
+  },
+  "preExistingIssues": [],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting sample"
+      }
+    }
+  },
+  "fullValidation": {
+    "inner": {
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:52:16.514317+00:00",
+      "end": "2026-10-16T09:54:17.139213+00:00",
+      "exit": 0,
+      "wallSeconds": 120.62381341599394,
+      "pid": 56783,
+      "pgid": 56783,
+      "load": "{ 3.30 3.05 3.04 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389871776422666,
+      "endedMonotonicNs": 389992400181583,
+      "cpuUserSeconds": 278.76927,
+      "cpuSystemSeconds": 26.60115
+    },
+    "admissionAndExecution": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/root766-20261016/helper/heavy-inner-v01.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-native-cost766",
+      "start": "2026-10-16T09:52:16.275667+00:00",
+      "end": "2026-10-16T09:54:17.181487+00:00",
+      "exit": 0,
+      "wallSeconds": 120.90473516698694,
+      "pid": 56774,
+      "pgid": 56774,
+      "load": "{ 3.24 3.03 3.04 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 389871537777041,
+      "endedMonotonicNs": 389992442461583,
+      "cpuUserSeconds": 278.808663,
+      "cpuSystemSeconds": 26.639305
+    },
+    "testCounts": {
+      "files": 436,
+      "passed": 12206
+    },
+    "vitestDurationS": 87.48,
+    "reviewTestStepS": 88.1,
+    "stepWallS": {
+      "prepare": 1.3,
+      "fullLint": 26.4,
+      "typecheck": 2.0,
+      "nodeTypecheck": 1.1,
+      "importCycles": 2.0,
+      "knip": 1.4,
+      "frictionRecords": 0.1,
+      "test": 88.1,
+      "bundle": 3.4,
+      "restoreLocalAssets": 1.3
+    },
+    "testStepStartLoad": 3.9931640625,
+    "bundleStartLoad": 5.45068359375,
+    "outerStartToInnerStartS": 0.23865,
+    "nonExecutionOuterOverheadS": 0.2809217509930022,
+    "admissionQualification": "Outer lockf command includes admission and inner wrapper/source-snapshot startup; pure kernel-lock wait is not isolated. Inner receipt measures actual npm execution separately.",
+    "budget": "Vitest87.48s exceeds60s. Parent46 retains controlled full-suite D19/final acceptance and further cost repair; this focused repair grants no waiver or full-suite speed claim."
+  },
+  "sourceCustodyAdditional": {
+    "reviewIntermediateSnapshot": "helper-review-v01-post was sampled during local-art restoration before the command terminal receipt; it is retained as an intermediate observation. helper-review-v01-terminal-post is the actual terminal comparison.",
+    "finalChecksSourceFreeze": "Three source hashes are identical from focused pre through review, Knip and full terminal post. No source repair was needed.",
+    "baselineSourceGrant": "finite-authoring-grant-v01.json SHA256 d4cc14d80e41a33efa09ec67841350ac2bfd970b1cbc8d2093d4253172acec8b",
+    "sourceProtection": "The complete tracked inventory covers package-lock, source, configuration and test reset. No SDK write, dependency change, shared-provider call or ownership deletion was issued.",
+    "finalEvidenceOnly": "Clock/evidence finalization after all ordinary checks; final schema and Git-tail receipts are additive ignored evidence, without source changes or a clock-only amend."
+  },
+  "hostLoadSamples": {
+    "focusedBefore": {
+      "load": "{ 2.36 2.80 3.05 }",
+      "scope": "full command start",
+      "utc": "2026-10-16T09:45:21.227325+00:00"
+    },
+    "focusedAfter": {
+      "load": "{ 2.87 2.81 2.98 }",
+      "scope": "full command start",
+      "utc": "2026-10-16T09:49:43.970068+00:00"
+    },
+    "review": {
+      "load": "{ 3.16 2.95 3.02 }",
+      "scope": "full command start",
+      "utc": "2026-10-16T09:51:24.995934+00:00"
+    },
+    "knip": {
+      "load": "{ 3.36 3.03 3.04 }",
+      "scope": "full command start",
+      "utc": "2026-10-16T09:51:53.014988+00:00"
+    },
+    "full-inner": {
+      "load": "{ 3.30 3.05 3.04 }",
+      "scope": "full command start",
+      "utc": "2026-10-16T09:52:16.514317+00:00"
+    },
+    "full": {
+      "load": "{ 3.24 3.03 3.04 }",
+      "scope": "full command start",
+      "utc": "2026-10-16T09:52:16.275667+00:00"
+    }
+  }
+}
