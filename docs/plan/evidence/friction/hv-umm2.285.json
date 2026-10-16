@@ -1,0 +1,47 @@
+{
+  "bead": "hv-umm2.285",
+  "phase": 5,
+  "implementMin": 218.66380745,
+  "implementWindow": {
+    "start": "2026-10-15T22:15:16.972786+00:00",
+    "end": "2026-10-16T01:53:56.801233+00:00"
+  },
+  "localValidationS": {
+    "ordinaryNode": 27.118990790913813,
+    "weighted300": 1099.8525970830233,
+    "browserIncludingFailedAttempts": 3392.98650641687
+  },
+  "hostLoad": 8.68603515625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-admission-wait",
+      "minutes": 15.21997535,
+      "note": "Observed outer request to admitted recorder startup; includes queue and startup, not a pure lock-wait measurement."
+    },
+    {
+      "tag": "browser-provider-recovery",
+      "minutes": 12.127772966666667,
+      "note": "Failed canonical command terminal to first continuation start, including bounded incident investigation, guarded own-record archival and continuation preparation."
+    },
+    {
+      "tag": "qa-caller-source-contract",
+      "minutes": 14.62026165,
+      "note": "Initial enemy judgment failure terminal to corrected enemy attempt start; includes source audit, retained evidence and finite authority. Passed player cases were retained."
+    },
+    {
+      "tag": "slow-browser-matrix",
+      "minutes": 56.54977510694783,
+      "note": "Measured browser command wall across original partial sweep, exact owed continuation and judgments, including failed attempts and managed setup/cleanup; not pure execution CPU."
+    },
+    {
+      "tag": "full-replay-runtime",
+      "minutes": 18.33087661805039,
+      "note": "Required 300-game weighted run with full replay and configured interactive replay sampling."
+    }
+  ]
+}

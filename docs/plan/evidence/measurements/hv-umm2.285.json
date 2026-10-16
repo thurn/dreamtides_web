@@ -1,0 +1,233 @@
+{
+  "bead": "hv-umm2.285",
+  "sourceBase": "fbe58551464bd7aa3c6fb6841863ea9ec0b64586",
+  "scope": {
+    "evidenceOnly": true,
+    "filedExplorationEffect": "b59b7e6a-aa32-428a-9397-06766ebe9b7d",
+    "encounterCard": "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+    "realCardSample": 20,
+    "actors": 2,
+    "requestedCanonicalForms": 10,
+    "deliveredPrerequisites": [
+      "hv-n913",
+      "hv-umm2.573",
+      "hv-umm2.279",
+      "hv-umm2.636",
+      "hv-umm2.761"
+    ],
+    "prerequisiteQualification": "Synthetic coverage and effective-kind repair are prerequisites. Earlier diagnostic false verdict and recovery history remain in the raw archive; they are not current passing acceptance."
+  },
+  "clock": {
+    "originalClaimStartUTC": "2026-10-15T22:15:16.972786+00:00",
+    "dispatchUTC": null,
+    "recordedCutoffUTC": "2026-10-16T01:53:56.801233+00:00",
+    "recordedCutoffIsCommitEndpoint": false,
+    "actualCommitEndpointUTC": null,
+    "qualification": "Original claim clock includes prerequisites, recovery, source audit, coordination, queues, validation and evidence. This committed snapshot knows only its cutoff. Parent post-commit receipt closes the inclusive clock and reports the cutoff delta; no predicted commit timestamp."
+  },
+  "node": {
+    "focusedTests": 643,
+    "coverageTests": 20,
+    "plainCLI": {
+      "requested": 400,
+      "pass": 242,
+      "skip": 158,
+      "fail": 0,
+      "mods": "CLI has no modifier option; this is the plain baseline."
+    },
+    "modifiedPublicAPI": {
+      "requested": 800,
+      "pass": 484,
+      "skip": 316,
+      "fail": 0,
+      "modes": [
+        "type change only",
+        "type change with other permanent modifiers"
+      ],
+      "qualification": "All eligible plays resolved and left inputs/catalog unchanged; both actors and requested forms."
+    },
+    "chronology": {
+      "cells": 8,
+      "drawCountsPerActor": [
+        1,
+        2,
+        3,
+        3
+      ]
+    },
+    "producer": {
+      "origin": "Genuine Exploration site in a generated atlas",
+      "actorMappings": 4,
+      "physicalCopies": 12,
+      "invalidSelectionAttempts": 10,
+      "resolvedReplayRefusals": 2,
+      "qualification": "Per-mode validation totals are counted once before actor mapping. Complete journey-player deck DTO arrays are reseated on enemy; other side metadata is retained. This is not an enemy journey producer."
+    }
+  },
+  "browser": {
+    "uniqueRequestedCells": 400,
+    "resolvedPass": 242,
+    "ineligibleSkip": 158,
+    "resolvedFail": 0,
+    "rawAttemptRows": 402,
+    "rawVerdicts": {
+      "pass": 242,
+      "skip": 158,
+      "fail": 2
+    },
+    "perInvocationEffectiveRows": 401,
+    "canonicalLedgerBeforeJudgedAppend": {
+      "bytes": 1697807,
+      "sha256": "dc71fa5c0bb4cd65803662addd0439f7044ba7d804cadc7bb9563109c2b7780a"
+    },
+    "explicitSupersession": {
+      "cell": {
+        "uuid": "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+        "as": "enemy",
+        "variant": "base"
+      },
+      "oldRawReport": "invocations/sweep-hOSVPu/run-YhCmfV/sweep-eae700c9-5005-4627-b8d6-a5c2c273e61a-base-enemy-attempt-1.result.json",
+      "oldSHA256": "704c199307af94cc48808039c938a422ce3fbdecfb20cb13892f629e78cd2cca",
+      "newRawReport": "invocations/sweep-mZdvX4/run-1Y3YDj/sweep-eae700c9-5005-4627-b8d6-a5c2c273e61a-base-enemy-attempt-1.result.json",
+      "newSHA256": "17215fee734cef2e60f825fd48244a9cb84dc0c60683d40ed99f12c95af66840",
+      "qualification": "Only this incident-authorized replacement joins the failed original cell to a later pass. Original rows and effective flags remain unchanged; no blanket latest-wins masking."
+    },
+    "reportQualification": "Standard canonical reports emit UUID, form, actor, effective type, normalized modifiers, zone and event labels. Their source checks physical identity. Literal physical IDs come separately from producer, Node and judgment evidence.",
+    "judgment": {
+      "uuid": "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa",
+      "D21HashByte": 4,
+      "cases": 4,
+      "actualImageViews": 20,
+      "viewports": {
+        "desktop": [
+          1440,
+          900
+        ],
+        "mobile": [
+          390,
+          844
+        ]
+      },
+      "verdict": "pass",
+      "sourcePhysicalIds": {
+        "player": "i1",
+        "enemy": "i10"
+      },
+      "revivedPhysicalIds": {
+        "player": "i10",
+        "enemy": "i19"
+      },
+      "persistedLogRows": {
+        "player": [
+          35,
+          56
+        ],
+        "enemy": [
+          38,
+          52
+        ]
+      },
+      "persistedPrefixesRetained": true,
+      "visibleEffect": "Source and revived zero-spark target are visible on the correct rank after settling/reload. Actual visible battle log describes entry into play and a delayed ability. Target and transient marker disappear at end of turn while the source remains.",
+      "qualification": "All 20 actual images viewed. Early resolved captures are presentation in progress; settled target visibility is established by log/reloaded states. Existing generic lab auxiliary target is not a new real-content sample. Names are display text, not identity.",
+      "observationIndex": "scratch/resume-final-judgment-observations.json"
+    }
+  },
+  "weighted300": {
+    "games": 300,
+    "steps": 62714,
+    "prompts": 7400,
+    "wins": {
+      "player": 131,
+      "enemy": 169,
+      "draw": 0
+    },
+    "failures": 0,
+    "fullFinalHashReplayGames": 300,
+    "interactiveSelectedGames": 30,
+    "interactiveReruns": 803,
+    "includedPerSampleCardRange": [
+      602,
+      611
+    ],
+    "qualification": "Same 20 real card weights with normal random modifiers/forms. The filed Exploration effect is outside the fuzz target domain. This is not 300 forced type changes or 803 selected games; no unreported modifier counts or branch values are inferred."
+  },
+  "effectLimits": [
+    "Node first-legal X=0 rows show no positive Burst gain/score claim. Canonical enemy Burst base emits pointsScored; its amount and X are not emitted by the standard report.",
+    "Transfer is observed for the enemy base case; the Node player base has no transfer in either plain or modified mode. No optional-decline explanation is inferred.",
+    "Hand plays do not exercise reclaimed-only copies or authored Reclaim payments.",
+    "Existing canonical/lab public helpers supply auxiliary targets; no new fixture, harness or content source was written."
+  ],
+  "failedHistories": [
+    {
+      "attempt": "resume-producer-253a8afaff904870a263c86a1ad52959",
+      "outcome": "Browser-bound module import under Node failed before producer assertions. Corrected public producer passed; original raw failure retained."
+    },
+    {
+      "cell": "18979c10-39b8-42fb-ac1d-dd784da498d1/empowered/enemy",
+      "outcome": "One healthy navigation timeout was retained as non-effective; the existing automatic retry passed."
+    },
+    {
+      "attempt": "resume-sweep-960b23670c7745fab33c843e9742308e",
+      "outcome": "MCP timeout stopped the original sweep after 270 pass/skip cells and one failed cell. Bounded provider termination proof authorized exact own-record archival, followed by only the 130 owed cells."
+    },
+    {
+      "attempt": "resume-judge-enemy-a100b807343d4965a4a9a3c6ac07ae24",
+      "outcome": "Initial physical-source lookup failed before any capture. Failed predicate values and transient provider token/server birth were not captured. Corrected caller used canonical committed UUID/owner selection; only enemy was repeated."
+    }
+  ],
+  "custody": {
+    "completedCurrentEpochCommands": 15,
+    "baselinePayloadsPerGuard": 5923,
+    "allPrePostGuardsUnchanged": true,
+    "sourceHEAD": "fbe58551464bd7aa3c6fb6841863ea9ec0b64586",
+    "successfulBrowserResources": "Managed cleanup plus observed own tokens/server groups settled after both continuations and successful judgments. Original provider uncertainty was retired by bounded incident termination proof, not a fabricated positive close receipt.",
+    "initialEnemyFailureGap": "Transient provider/session/server birth was not observed during the short failed attempt; actual command/server PIDs, later group absence, absent records and successful managed cleanup were retained.",
+    "incidentProof": "scratch/parent-provider-incident-retirement.json"
+  },
+  "runtimeSummary": {
+    "ordinaryNode": {
+      "attempts": 7,
+      "failedRawExits": 1,
+      "innerWallS": 27.118990790913813,
+      "cpuUserS": 25.386995,
+      "cpuSystemS": 8.083051
+    },
+    "browserIncludingFailures": {
+      "attempts": 6,
+      "failedRawExits": 2,
+      "innerWallS": 3392.98650641687,
+      "cpuUserS": 97.232664,
+      "cpuSystemS": 35.863766999999996
+    },
+    "weighted300": {
+      "innerWallS": 1099.8525970830233,
+      "outerWallS": 1101.0373751660227,
+      "cpuUserS": 1149.025161,
+      "cpuSystemS": 9.064225
+    },
+    "nestedHeavyRequest": {
+      "outerWallS": 2014.4023818750284,
+      "requestToAdmissionAndStartupS": 913.198521,
+      "qualification": "Nested outer CPU includes the admitted run and is not added twice. Admission interval includes startup; pure kernel lock wait is not separately measured."
+    },
+    "detail": "Immutable per-attempt raw exits, CPU/wall, load, guards, identities and logs are under archive scratch/resume-attempts."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "start": "Original claim UTC; exact dispatch unknown.",
+        "end": "Recorded evidence cutoff; actual checks and commit endpoint are in subsequent external receipts."
+      },
+      "hostLoad": {
+        "measuredFor": "Actual coverage command starting one-minute load. Final review has not yet run at the recorded cutoff."
+      }
+    }
+  },
+  "rawProvenance": {
+    "archive": "resume-evidence-archive-2f734267c71f4c27bf63aeb521b95d46",
+    "indexSHA256": "49c624f4e9e6947802acdcc82cc592e22ba9b1af9fa12749f6357d7cc1cafe79",
+    "qaPayloadIndexSHA256": "6f0bb903f23d1fce9a4a9b32bdcf9d6ac4af6a8b9a32b4d4934eef305c96d68e",
+    "qualification": "Raw source/authority/prerequisite history, all failed attempts, runtime receipts, 20-image judgments and parent verification/incident proofs are in this ignored archive. Existing six QA invocation payloads are indexed by path/hash. Final check and Git receipts follow the cutoff in separately indexed custody."
+  }
+}
