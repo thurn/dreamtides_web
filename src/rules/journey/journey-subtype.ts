@@ -1,4 +1,4 @@
-import { validJourneyTransfigurationRecord } from "./journey-transfiguration";
+import { validJourneyTransfigurationOperation, validJourneyTransfigurationRecord } from "./journey-transfiguration";
 import { journeyOpeningHandEntries, validJourneyOpeningBindings } from "./journey-battle-init";
 import { cardIdFromUnknown, cardSubtypeFromUnknown, type CardSubtype } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, cardTypeChangePredicateIdFromUnknown, parseCardTypeChangePredicateId, siteIdFromUnknown } from "../../types/identifiers";
@@ -156,11 +156,19 @@ export function validJourneySubtypeScreen(screen: unknown, journey: JourneyState
       }
     } else if (choice.current.kind !== "typeRemap" || effect?.kind !== "typeRemapOnGain") return false;
     const transformedIds = new Set();
+    let priorOperation: import("../../types/journey").JourneyOperationCause | undefined;
     for (const occurrence of r.transfigurations) {
       if (!record(occurrence) || !validEntries([occurrence.entry]) || cardIdFromUnknown(occurrence.cardId) === null) return false;
       const entry = occurrence.entry as DeckEntry;
-      if (transformedIds.has(entry.entryId)) return false;
-      transformedIds.add(entry.entryId);
+      if (!validJourneyTransfigurationOperation(occurrence)) return false;
+      const operation = (occurrence as unknown as import("../../types/journey").JourneyTransfigurationOccurrence).operation;
+      const key = operation === undefined ? entry.entryId : JSON.stringify([operation.cause.causalSeq ?? operation.cause.eventSeq, operation.cause.ordinal]);
+      if (transformedIds.has(key)) return false;
+      transformedIds.add(key);
+      if (operation !== undefined) {
+        if (priorOperation !== undefined && ((operation.cause.causalSeq ?? operation.cause.eventSeq) < (priorOperation.causalSeq ?? priorOperation.eventSeq) || (operation.cause.causalSeq ?? operation.cause.eventSeq) === (priorOperation.causalSeq ?? priorOperation.eventSeq) && operation.cause.ordinal <= priorOperation.ordinal)) return false;
+        priorOperation = operation.cause;
+      }
       const card = journeyTransfigurationCard(entry);
       if (card?.cardId !== occurrence.cardId || card?.cardType !== occurrence.cardType || (occurrence.entry as DeckEntry).transfiguration === null) return false;
     }

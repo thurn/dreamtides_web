@@ -257,10 +257,18 @@ export interface AfterBattleDuplicationSource {
 }
 
 export type JourneyTransfigurationEffect =
+  | { readonly kind: "additionalRandomTransfiguration" }
   | { readonly kind: "copyTransfiguredEvent" }
   | { readonly kind: "afterBattleTransfiguration"; readonly maxCount: number };
 
+export interface JourneyTransfigurationOperation {
+  readonly cause: JourneyOperationCause;
+  readonly beforeEntry: Readonly<DeckEntry>;
+  readonly parentCause?: JourneyOperationCause;
+}
+
 export interface JourneyTransfigurationOccurrence {
+  readonly operation?: JourneyTransfigurationOperation;
   readonly entry: Readonly<DeckEntry>;
   readonly cardId: CardId;
   readonly cardType: CardType;
@@ -1577,7 +1585,7 @@ export interface TransfiguredSiteOfferModifier {
 }
 
 /** Actual original operation and physical source that earned an unexecuted child. */
-export interface JourneyOperationCause { readonly eventSeq: number; readonly ordinal: number; readonly entryId: DeckEntryId; readonly cardId: CardId; readonly applicationIndex: number }
+export interface JourneyOperationCause { readonly causalSeq?: number; readonly eventSeq: number; readonly ordinal: number; readonly entryId: DeckEntryId; readonly cardId: CardId; readonly applicationIndex: number }
 export type JourneyLoopBattleBinding = { readonly battleId: BattleId; readonly mode: "journey" } | { readonly battleId: BattleId; readonly mode: "tutorial"; readonly tutorialRunId: import("./identifiers").TutorialRunId };
 export interface JourneyEarnedLoopInstruction { readonly kind: "mandatoryOriginalTransfiguration"; readonly permissionSeq: number; readonly sourceObserverSources: readonly JourneyDreamsignGain[]; readonly cause: JourneyOperationCause; readonly parentEntry: Readonly<DeckEntry>; readonly source: JourneyDreamsignGain }
 export interface JourneyLoopPending {
@@ -1592,6 +1600,7 @@ export interface JourneyDraw {
   readonly kind: "mandatoryJourneyLoop";
   readonly result: "draw";
   readonly committedSeq: number;
+  readonly committedCausalSeq?: number;
   readonly cause: JourneyOperationCause;
   readonly earnedSource: JourneyDreamsignGain;
   readonly continuingSources: readonly JourneyDreamsignGain[];

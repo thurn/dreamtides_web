@@ -1,5 +1,5 @@
 import { currentTutorialPresentation } from "./battle/tutorial-checkpoints";
-import { observesJourneyLoops, journeyLoopSpec } from "./journey/journey-mandatory-loop";
+import { observesJourneyLoops } from "./journey/journey-mandatory-loop";
 import { commitJourneyLoopFold, journeyLoopBattleBinding } from "./journey/journey-loop-state";
 import { validJourneySubtypeIntent, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey/journey-subtype";
 import { resolveTypeRemap, validTypeRemapIntent, validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey/journey-type-remap";
@@ -60,7 +60,7 @@ import * as lifecycle from "./journey/lifecycle";
 import * as gamble from "./journey/gamble";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
-import { journeyTransfigurationCard, journeyTransfigurationOccurrences, resolveJourneyTransfiguration } from "./journey/journey-transfiguration";
+import { journeyTransfigurationCard, journeyTransfigurationOccurrences, journeyTransfigurationOperationOrder, resolveJourneyTransfiguration } from "./journey/journey-transfiguration";
 import { resolveStarterPurge, validStarterPurgeIntent } from "./journey/journey-starter-acquisition";
 import { resolveJourneyPurge } from "./journey/journey-purge";
 import { preventsJourneyPurge } from "./journey/journey-purge-prohibition";
@@ -169,16 +169,26 @@ function finishTransition(
     const siteId = siteIdFromUnknown(event.payload?.siteId) ??
       (before.journey.screen.type === "site" ? before.journey.screen.siteId : null);
     // Domain occurrences are frozen once; modifier-produced copies are not inputs.
-    const transfigurations = event.type !== "TRANSFIGURE_CARD" && result.state.journey.dreamsigns.some((sign) => modifiers.lookup(sign.id)?.journeyTransfiguration?.kind === "copyTransfiguredEvent" || journeyLoopSpec(modifiers.lookup(sign.id)) !== undefined)
-      ? journeyTransfigurationOccurrences(before.journey, result.state.journey) : [];
+    const domainRuntime = siteId === null ? undefined : result.state.journey.siteRuntime[siteId];
+    const previousRuntime = siteId === null ? undefined : before.journey.siteRuntime[siteId];
+    const previousResolution = previousRuntime?.kind === "exploration" ? previousRuntime.resolution : null;
+    const resolution = domainRuntime?.kind === "exploration" && domainRuntime.resolution !== previousResolution ? domainRuntime.resolution : null;
+    const applicationReceipts = [...(resolution?.cardTransfigurations ?? []), ...(resolution?.starterCardTransfigurations ?? [])];
+    const receiptOrder = (applicationReceipts.length > 0 ? applicationReceipts.map(item => item.entryId) : resolution?.chosenTransfiguration === undefined ? undefined : resolution.affectedEntryIds)?.filter(id => before.journey.deck.some(entry => entry.entryId === id));
+    const selectedOrder = event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" && Array.isArray(event.payload.entryIds) ? event.payload.entryIds.map(deckEntryIdFromUnknown).filter((id): id is NonNullable<typeof id> => id !== null) : receiptOrder;
+    const collectTransfigurations = event.type !== "TRANSFIGURE_CARD" && (observesJourneyLoops(result.state.journey, id => modifiers.lookup(id)) || result.state.journey.dreamsigns.some(sign => modifiers.lookup(sign.id)?.journeyTransfiguration?.kind === "copyTransfiguredEvent"));
+    const operationOrder = collectTransfigurations ? journeyTransfigurationOperationOrder(before.journey.pendingJourneyLoop?.instructions.map(item => item.cause) ?? [], seq) : { causalSeq: seq, ordinalStart: 0 };
+    const transfigurations = collectTransfigurations
+      ? journeyTransfigurationOccurrences(before.journey, result.state.journey, { eventSeq: seq, ordinalStart: operationOrder.ordinalStart, ...(operationOrder.causalSeq === seq ? {} : { causalSeq: operationOrder.causalSeq }), ...(selectedOrder === undefined ? {} : { orderedEntryIds: selectedOrder }) }) : [];
     const domain = result.state.journey;
     const records: ReducerLogRecord[] = [];
     if (event.type === "ACCEPT_TRANSFIGURATION_CHOICE" || event.type === "RESOLVE_JOURNEY_TRANSFIGURATION") {
-      const changed = domain.deck.filter((entry) => before.journey.deck.some((old) => old.entryId === entry.entryId && old.transfiguration === null) && entry.transfiguration !== null);
+      const changedEntries = domain.deck.filter((entry) => before.journey.deck.some((old) => old.entryId === entry.entryId && old.transfiguration === null) && entry.transfiguration !== null);
+      const changed = selectedOrder === undefined ? changedEntries : selectedOrder.map(id => changedEntries.find(entry => entry.entryId === id)).filter((entry): entry is NonNullable<typeof entry> => entry !== undefined);
       records.push({ event: "journey_transfiguration_resolved", fields: { eventType: event.type, siteId,
         ...(event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? { dreamsignId: event.payload.dreamsignId, heldIndex: event.payload.heldIndex, choiceIndex: event.payload.choiceIndex } : {}),
         selectedEntryIds: event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? event.payload.entryIds : [event.payload.entryId],
-        transformations: changed.map((entry) => {
+        transformations: changed.map((entry, index) => {
           const old = before.journey.deck.find((candidate) => candidate.entryId === entry.entryId)!;
           const runtime = siteId === null ? undefined : before.journey.siteRuntime[siteId];
           const offers = runtime?.kind === "cardChoice" && runtime.choiceKind === "transfiguration"
@@ -186,7 +196,9 @@ function finishTransition(
           const quote = offers.find((offer) => offer.type === entry.transfiguration);
           const details = event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? journeyTransfigurationCard(old) : null;
           return { entryId: entry.entryId, cardId: quote?.previewCard.id ?? details?.cardId ?? null, type: entry.transfiguration,
+            ...(event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" && transfigurations.some(item => item.entry.entryId === entry.entryId && item.operation !== undefined) ? { drawIndex: index } : {}),
             ...(entry.transfigurationApplications === undefined ? {} : { transfigurationApplications: entry.transfigurationApplications }),
+            ...(transfigurations.find(item => item.entry.entryId === entry.entryId)?.operation ?? {}),
             applicableForms: event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" && entry.transfigurationApplications !== undefined
               ? (details?.applicableForms ?? []).filter((form) => form !== "Perfected") : details?.forms ?? offers.map((offer) => offer.type), essenceCost: quote?.essenceCost ?? 0,
             ...(quote === undefined ? {} : { effectDetails: quote.effectDetails }) };

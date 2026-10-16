@@ -8,7 +8,7 @@ import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntry, JourneyDreamsignGain, JourneyEarnedLoopInstruction, JourneyLoopBattleBinding, JourneyLoopPending, JourneyState, JourneyTransfigurationOccurrence } from "../../types/journey";
 import type { ReducerLogRecord } from "../../eventlog/types";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
-import { canonicalJourneyTransfiguration, currentJourneyTransfigurationProvider, type JourneyTransfigurationProvider } from "./journey-transfiguration";
+import { canonicalJourneyTransfiguration, currentJourneyTransfigurationProvider, journeyTransfigurationOccurrences, journeyTransfigurationOperationOrder, validJourneyTransfigurationOperation, type JourneyTransfigurationProvider } from "./journey-transfiguration";
 import { canonicalJourneyDeckEntry, journeyDeckEntryGains } from "./journey-deck-entry";
 import { journeyLoopProviderSource } from "../../session/providers/journey-transfiguration-provider";
 
@@ -41,8 +41,19 @@ export function validateJourneyLoopRegistry(definitions: readonly JourneyModifie
     if (journeyLoopSpec(definition) === undefined && !canonicalJourneyTransfiguration(definition) && !canonicalJourneyDeckEntry(definition) && !canonicalJourneyOnGain(definition) && !canonicalJourneyPurge(definition) && !canonicalJourneyDraft(definition)) throw new RangeError("Untrusted closed journey sibling");
   }
 }
+/** Lookup consumes the current captured source without registering new proof authority. */
+export function journeyInstructionSource(definition: JourneyModifierDefinition | undefined, cardId: CardId): { readonly cardId: CardId; readonly provider: JourneyTransfigurationProvider } | undefined {
+  const fixed = journeyLoopSpec(definition);
+  if (fixed !== undefined) return fixed.cardId === cardId ? fixed : undefined;
+  if (definition?.journeyTransfiguration?.kind !== "additionalRandomTransfiguration" || !canonicalJourneyTransfiguration(definition)) return undefined;
+  const provider = currentJourneyTransfigurationProvider();
+  return provider !== null && journeyLoopProviderSource(provider, cardId) !== undefined ? { cardId, provider } : undefined;
+}
 export function observesJourneyLoops(journey: JourneyState, lookup: JourneyModifierRegistry["lookup"]): boolean {
-  return journey.dreamsigns.some(sign => journeyLoopSpec(lookup(sign.id)) !== undefined);
+  return journey.dreamsigns.some(sign => {
+    const definition = lookup(sign.id);
+    return journeyLoopSpec(definition) !== undefined || definition?.journeyTransfiguration?.kind === "additionalRandomTransfiguration";
+  });
 }
 
 /** Root occurrences are actual snapshots, not copies or arbitrary descriptor assertions. */
@@ -51,12 +62,18 @@ export function earnJourneyLoops(journey: JourneyState, occurrences: readonly Jo
   const instructions = [...(prior?.instructions ?? [])];
   occurrences.forEach((occurrence, ordinal) => {
     for (const source of observerSources) {
-      const spec = journeyLoopSpec(lookup(source.dreamsignId));
+      const definition = lookup(source.dreamsignId);
+      const spec = journeyInstructionSource(definition, occurrence.cardId);
+      if (definition?.journeyTransfiguration?.kind === "additionalRandomTransfiguration" && (spec === undefined || spec.provider !== currentJourneyTransfigurationProvider() || !journeyLoopFormsIntact())) throw new Error("Additional journey source is unavailable");
+      if (!validJourneyTransfigurationOperation(occurrence)) throw new Error("Invalid earned operation");
       if (spec === undefined || spec.cardId !== occurrence.cardId || spec.provider !== currentJourneyTransfigurationProvider() || !journeyLoopFormsIntact()) continue;
       const resolved = spec.provider.resolve(occurrence.entry);
-      if (resolved?.cardId !== spec.cardId || spec.provider.validateRecord?.(occurrence.entry) !== true) continue;
-      const cause = { eventSeq: seq, ordinal, entryId: occurrence.entry.entryId, cardId: occurrence.cardId, applicationIndex: (occurrence.entry.transfigurationApplications?.length ?? 1) - 1 };
-      if (instructions.some(instruction => instruction.cause.eventSeq === seq && instruction.cause.ordinal === ordinal && instruction.source.heldIndex === source.heldIndex)) continue; // The same paused operation resumes once.
+      if (resolved?.cardId !== spec.cardId || spec.provider.validateRecord?.(occurrence.entry) !== true) {
+        if (definition?.journeyTransfiguration?.kind === "additionalRandomTransfiguration") throw new Error("Invalid additional journey source record");
+        continue;
+      }
+      const cause = occurrence.operation?.cause ?? { eventSeq: seq, ordinal, entryId: occurrence.entry.entryId, cardId: occurrence.cardId, applicationIndex: (occurrence.entry.transfigurationApplications?.length ?? 1) - 1 };
+      if (instructions.some(instruction => (instruction.cause.causalSeq ?? instruction.cause.eventSeq) === (cause.causalSeq ?? cause.eventSeq) && instruction.cause.ordinal === cause.ordinal && instruction.source.heldIndex === source.heldIndex)) continue; // The same paused operation resumes once.
       const instruction: JourneyEarnedLoopInstruction = { kind: "mandatoryOriginalTransfiguration", permissionSeq: seq, sourceObserverSources: observerSources.map(source => ({ ...source })), cause, parentEntry: structuredClone(occurrence.entry), source: { ...source } };
       instructions.push(instruction);
       logRecords.push({ event: "journey_loop_instruction_earned", fields: { cause, source, parentEntry: instruction.parentEntry, siteId, permissionSeq: seq } });
@@ -70,15 +87,18 @@ function reachedChoice(journey: JourneyState): boolean {
 }
 
 /** All current-operation siblings/acquisition windows finish before this call. */
-export function settleJourneyLoops(journey: JourneyState, lookup: JourneyModifierRegistry["lookup"], seq: number, random: () => { value: number; drawIndex: number }, logRecords: ReducerLogRecord[], reservedEntries: readonly DeckEntry[]): JourneyState {
+export function settleJourneyLoops(journey: JourneyState, lookup: JourneyModifierRegistry["lookup"], seq: number, random: () => { value: number; drawIndex: number }, logRecords: ReducerLogRecord[], reservedEntries: readonly DeckEntry[], nextOperationOrdinal = 0): JourneyState {
   const pending = journey.pendingJourneyLoop;
   if (pending === undefined || reachedChoice(journey)) return journey;
   const { pendingJourneyLoop: _pending, ...rest } = journey;
   let next: JourneyState = rest;
   const reserved = new Map([...reservedEntries, ...next.deck].map(entry => [entry.entryId, entry]));
-  let ordinal = 0;
-  for (const instruction of pending.instructions) {
-    const spec = journeyLoopSpec(lookup(instruction.source.dreamsignId));
+  const operationOrder = journeyTransfigurationOperationOrder(pending.instructions.map(item => item.cause), seq);
+  let ordinal = Math.max(operationOrder.ordinalStart, nextOperationOrdinal);
+  const queue = [...pending.instructions];
+  for (const instruction of queue) {
+    if (!Number.isSafeInteger(ordinal) || ordinal < 0) throw new RangeError("Transfiguration operation ordinal overflow");
+    const spec = journeyInstructionSource(lookup(instruction.source.dreamsignId), instruction.cause.cardId);
     if (spec === undefined) throw new Error("Earned journey instruction is unavailable");
     const target = next.deck.find(entry => entry.entryId === instruction.cause.entryId);
     if (target === undefined) continue;
@@ -87,28 +107,40 @@ export function settleJourneyLoops(journey: JourneyState, lookup: JourneyModifie
     const forms = resolved.applicableForms ?? [];
     const anchor = source.definition.cardType === "character" ? "Kindled" as const : "Inspired" as const;
     const continuingSources = next.dreamsigns.flatMap(({ id }, heldIndex) => {
-      const current = journeyLoopSpec(lookup(id));
+      const current = journeyInstructionSource(lookup(id), instruction.cause.cardId);
       return current?.cardId === spec.cardId && current.provider === spec.provider && current.provider === currentJourneyTransfigurationProvider() ? [{ dreamsignId: id, heldIndex }] : [];
     });
+    if (forms.length === 0) continue;
+    // These are exactly the callbacks executed by a child, including those
+    // needed to preserve the captured closure. Opaque completed roots stay outside.
+    for (const { id } of next.dreamsigns) {
+      const definition = lookup(id);
+      if (definition?.journeyTransfiguration?.kind === "additionalRandomTransfiguration" || definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent") {
+        if (!canonicalJourneyTransfiguration(definition)) throw new Error("Unsupported child transfiguration context");
+      }
+      if (definition?.journeyDeckEntry !== undefined && !canonicalJourneyDeckEntry(definition)) throw new Error("Unsupported child gain context");
+    }
+    if (forms.length > 0 && (!journeyLoopFormsIntact() || !forms.includes(anchor))) throw new Error("Unsupported earned journey source proof");
     if (journeyLoopFormsIntact() && continuingSources.length > 0 && forms.includes(anchor)) {
       const proof = { kind: "canonicalTransfigurationTypeClosure" as const, cardType: source.card.cardType, anchor, applicableForms: [...forms] };
       logRecords.push({ event: "journey_mandatory_loop_proved", fields: { cause: instruction.cause, continuingSources, proof } });
-      const journeyDraw = { kind: "mandatoryJourneyLoop" as const, result: "draw" as const, committedSeq: seq, cause: instruction.cause, earnedSource: instruction.source, continuingSources, proof, abandonedBattle: pending.suspendedBattle };
+      const journeyDraw = { kind: "mandatoryJourneyLoop" as const, result: "draw" as const, committedSeq: seq, ...(operationOrder.causalSeq === seq ? {} : { committedCausalSeq: operationOrder.causalSeq }), cause: instruction.cause, earnedSource: instruction.source, continuingSources, proof, abandonedBattle: pending.suspendedBattle };
       logRecords.push({ event: "journey_draw_committed", fields: { ...journeyDraw } });
       return { ...next, screen: { type: "journeyFailed" }, journeyDraw };
     }
-    if (forms.length === 0) continue;
     // Preflight the complete current choice set before consuming its one draw.
     if (forms.some(candidate => spec.provider.apply?.(target, candidate).ok !== true)) throw new Error("Invalid earned journey application");
     const draw = random(), form = forms[Math.floor(draw.value * forms.length)];
     const appended = spec.provider.apply!(target, form);
     if (!appended.ok) throw new Error("Invalid earned journey application");
-    const cause = { eventSeq: seq, ordinal: ordinal++, entryId: target.entryId, cardId: instruction.cause.cardId, applicationIndex: appended.value.transfigurationApplications!.length - 1 };
+    const previousApplication = next;
     next = { ...next, deck: next.deck.map(entry => entry.entryId === target.entryId ? appended.value : entry) };
-    logRecords.push({ event: "journey_loop_finite_application", fields: { cause, parentCause: instruction.cause, form, applicableForms: forms, drawIndex: draw.drawIndex, before: target, after: appended.value } });
-    const occurrence = { entry: appended.value, cardId: instruction.cause.cardId, cardType: resolved.cardType };
+    const [occurrence] = journeyTransfigurationOccurrences(previousApplication, next, { eventSeq: seq, ...(operationOrder.causalSeq === seq ? {} : { causalSeq: operationOrder.causalSeq }), ordinalStart: ordinal++, parentCause: instruction.cause });
+    const cause = occurrence.operation!.cause;
+    const childObservers = next.dreamsigns.map(({ id }, heldIndex) => ({ dreamsignId: id, heldIndex }));
+    logRecords.push({ event: "journey_loop_finite_application", fields: { cause, ...(operationOrder.causalSeq === seq ? {} : { rngEventSeq: seq }), parentCause: instruction.cause, form, applicableForms: forms, drawIndex: draw.drawIndex, before: target, after: appended.value } });
     // Known Tome copies are finite; formed copies cannot trigger either Crystal.
-    for (const physical of next.dreamsigns.map(({ id }, heldIndex) => ({ id, heldIndex }))) {
+    for (const physical of childObservers.map(({ dreamsignId: id, heldIndex }) => ({ id, heldIndex }))) {
       const definition = lookup(physical.id);
       if (definition?.journeyTransfiguration?.kind !== "copyTransfiguredEvent") continue;
       const previous = next;
@@ -124,6 +156,12 @@ export function settleJourneyLoops(journey: JourneyState, lookup: JourneyModifie
         const gained = gainSource.definition!.afterJourneyEvent({ lookup, before: previous, journey: next, eventType: "RESOLVE_JOURNEY_TRANSFIGURATION", heldIndex: gainSource.heldIndex, seq, random, gains, transfigurations: [], siteId: pending.siteId });
         if (gained !== null) { next = gained.journey; logRecords.push({ event: "journey_modifier_applied", fields: { dreamsignId: gainSource.id, heldIndex: gainSource.heldIndex, hook: "after_journey_event", before: gained.before, after: gained.after, target: gained.target } }); }
       }
+    }
+    const earned = earnJourneyLoops(next, [occurrence], childObservers, lookup, seq, pending.siteId, pending.suspendedBattle, logRecords);
+    if (earned.pendingJourneyLoop !== undefined) {
+      queue.push(...earned.pendingJourneyLoop.instructions);
+      const { pendingJourneyLoop: _earned, ...settled } = earned;
+      next = settled;
     }
   }
   return next;

@@ -1,0 +1,3862 @@
+{
+  "bead": "hv-umm2.730",
+  "base": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+  "adoptedProposalSha256": "90771a99a51111b866b245eb61ba69e5f47555419c0cc9a295450acc56db057e",
+  "implementationClock": {
+    "start": "2026-10-15T16:26:19.174000+00:00",
+    "end": "2026-10-16T04:09:31.583707+00:00",
+    "inclusiveMinutes": 703.20682845,
+    "through": "current pre-amend evidence write; actual final amended-commit endpoint retained externally",
+    "sampling": "UNKNOWN",
+    "productiveModelCpu": "UNKNOWN",
+    "includes": "All original work, failed and queued attempts, admissions, conflict/park/update/reapply, import-clock diagnosis/repair and all current checks/QA; no reset"
+  },
+  "runtimeSourceHashes": {
+    "src/rules/journey/journey-additional-controls.contracts.ts": "1b1f015082de68807f9089f179bceb4c084fd4e0d6bc35d94a597cadbd431a95",
+    "src/rules/journey/journey-additional-domains.contracts.ts": "98518315e3bb5893ffac45a937d59b694453426c94c2b5378aa19a497542c78e",
+    "src/rules/journey/journey-additional-fifo.contracts.ts": "e6ff50ca38b28d604209e52b3d338fc7a39110f1baab5f545125752b1e66683c",
+    "src/rules/journey/journey-additional-operation.contracts.ts": "8e7f4f2de47444724c58cc6fe829f31e55c49e87482365732f67c8a33a1e661e",
+    "src/rules/journey/journey-additional-projection.contracts.ts": "5fb49207eaf28127b851101b68926b4b93a05126c3f22d8923423d61c0656b89",
+    "src/rules/journey/journey-additional-transfiguration.fixtures.ts": "94c0c78245cd5394ddc7bdc412940fce73626ce2516f384cd9ea3b541c35cca1",
+    "src/rules/journey/journey-loop-state-controls.contracts.ts": "fff9a4dec4dedfd1e107894926a23cbea12653cb71132fc326972e538579fd48",
+    "src/rules/journey/journey-loop-state.ts": "ef29775f27f51a8ac8977a1a521f605c8c0a5a935bacaadb7feb9a42cb6263c1",
+    "src/rules/journey/journey-mandatory-loop.ts": "4eb21d77d6a8d3b4b4491095799a9e65e2c7513e49f7bd6b20735441bd97d354",
+    "src/rules/journey/journey-on-gain.ts": "b7900ec1a9e233f3ac9c6bb764e193cc97c4e73c946183033cfb8ab173af84e7",
+    "src/rules/journey/journey-subtype.ts": "9ba5134b7a68a07af3a0c6bddda05e0a470e5fefdccb46f0b47e5126abebb182",
+    "src/rules/journey/journey-transfiguration.test.ts": "852ce5e2b07fafb1eea2bee4a54c6fd9155971450cd7c34187301b79f15f8aa8",
+    "src/rules/journey/journey-transfiguration.ts": "89e53093fa6bddaff472456a84ade68925b82151215e2ce18522529c0fa96b7c",
+    "src/rules/journey/modifier-registry.ts": "68e1db0b97b41817765aa26d13256413fd0aa3d1475ff8d6642e1a2b604a7bd0",
+    "src/rules/reducer.ts": "87c182b16444c251028dd1043326a36a2ed91b1ce984140de266e4e15019ec5e",
+    "src/session/journey-additional-recovery.contracts.ts": "6538496984f63fd3e760bdaa3efb93aeebbf482af0020f4b82513d4e617e01f5",
+    "src/session/local-game.test.ts": "3bf51e89eeefe90bba7a86a1a7622c3cebfd996c380478b5a721b45754bb3876",
+    "src/types/journey.ts": "65131ef0e03521d80c4c9b88cf1154e7296c51b57ae775eb921cb7da8ffce46a"
+  },
+  "testFiles": {
+    "src/rules/journey/journey-additional-controls.contracts.ts": 98,
+    "src/rules/journey/journey-additional-domains.contracts.ts": 265,
+    "src/rules/journey/journey-additional-fifo.contracts.ts": 102,
+    "src/rules/journey/journey-additional-operation.contracts.ts": 81,
+    "src/rules/journey/journey-additional-projection.contracts.ts": 105,
+    "src/rules/journey/journey-additional-transfiguration.fixtures.ts": 33,
+    "src/session/journey-additional-recovery.contracts.ts": 79
+  },
+  "testDelta": {
+    "files": 7,
+    "lines": 770,
+    "newFileLines": 763,
+    "runnerImports": 6,
+    "existingFixtureLineReplacement": 1,
+    "jsdomFiles": 0,
+    "newTestEntrypoints": 0
+  },
+  "runtimeDelta": {
+    "added": 245,
+    "removed": 61,
+    "gross": 306,
+    "newPublicApis": 6,
+    "additionalOptionalClockApis": 5,
+    "runtimeWriterPaths": 8
+  },
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "pid": 84712,
+      "startedAt": "2026-10-16T02:23:27.709205+00:00",
+      "exitCode": 1,
+      "wallSeconds": 7.897526741027832,
+      "rawLog": "focused-02.log",
+      "receipt": "focused-02.json",
+      "receiptSha256": "e7cb53ac6c6eacd68282e358b88a758cc92a87e5150121eb455e1411f4888e7f",
+      "rawLogSha256": "f745e2e0c58ba57a452952d42b41f72d872669173603f6e76a7f6490e199eaf4",
+      "manifestEntryCount": 14,
+      "preEqualsPost": true,
+      "manifestPreSha256": "a6b88b4aa519f6e33d3401f147e3aa90f0db9bde1eb3afa35ecf32024ff1cf41",
+      "manifestPostSha256": "a6b88b4aa519f6e33d3401f147e3aa90f0db9bde1eb3afa35ecf32024ff1cf41",
+      "testTerminal": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 131 passed (134)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "pid": 95427,
+      "startedAt": "2026-10-16T02:26:10.573709+00:00",
+      "exitCode": 1,
+      "wallSeconds": 7.024463176727295,
+      "rawLog": "focused-03.log",
+      "receipt": "focused-03.json",
+      "receiptSha256": "d82c00438fea4a3b722ec5faddf922d113ea1b8534a96f3ffcd42d32d5123cbe",
+      "rawLogSha256": "b321fd9f772e41e273bad457646d00df4a49f95a5e061bfd9b5b674f0bf1f450",
+      "manifestEntryCount": 16,
+      "preEqualsPost": true,
+      "manifestPreSha256": "a2ef4bdbb4e42cd7c736f9bb54e12ab0571a3e10309ae005c3e4801e5eb5b27d",
+      "manifestPostSha256": "a2ef4bdbb4e42cd7c736f9bb54e12ab0571a3e10309ae005c3e4801e5eb5b27d",
+      "testTerminal": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 147 passed (150)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "pid": 8795,
+      "startedAt": "2026-10-16T02:29:22.488306+00:00",
+      "exitCode": 2,
+      "wallSeconds": 13.799077987670898,
+      "rawLog": "typecheck-03.log",
+      "receipt": "typecheck-03.json",
+      "receiptSha256": "307f67f43f19fb1529f387ff9ac6d34bc437f7292ddc717477422b801cadbf58",
+      "rawLogSha256": "b0cc2cc84f9454674a5ec90da1c2c8c4609308e64f38815b37a9950ea5c6763a",
+      "manifestEntryCount": 17,
+      "preEqualsPost": true,
+      "manifestPreSha256": "565fc9627fe773969befcef663a493f1b2c9efcb6163b41a1bd39b410a5c9ab7",
+      "manifestPostSha256": "565fc9627fe773969befcef663a493f1b2c9efcb6163b41a1bd39b410a5c9ab7",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "pid": 10910,
+      "startedAt": "2026-10-16T02:29:55.112707+00:00",
+      "exitCode": 1,
+      "wallSeconds": 10.519792318344116,
+      "monotonicSeconds": 10.51977416704176,
+      "childUserSeconds": 7.845149999999999,
+      "childSystemSeconds": 2.75664,
+      "loadBefore": [
+        6.78369140625,
+        7.06591796875,
+        7.72607421875
+      ],
+      "loadAfter": [
+        7.11767578125,
+        7.12890625,
+        7.74072265625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-04-pre",
+      "rawLog": "focused-04.log",
+      "receipt": "focused-04.json",
+      "receiptSha256": "e1ef539325f02cd01b73ef22158b5946876ea05fa49675f8f3bb88e87fdefa78",
+      "rawLogSha256": "f56bd5ba71517dfe777816e81b08ba09680a453909a05641b10584a7cd263a9f",
+      "manifestEntryCount": 17,
+      "preEqualsPost": true,
+      "manifestPreSha256": "565fc9627fe773969befcef663a493f1b2c9efcb6163b41a1bd39b410a5c9ab7",
+      "manifestPostSha256": "565fc9627fe773969befcef663a493f1b2c9efcb6163b41a1bd39b410a5c9ab7",
+      "testTerminal": [
+        "Test Files  1 failed (1)",
+        "Tests  6 failed | 153 passed (159)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "pid": 45837,
+      "startedAt": "2026-10-16T02:30:59.322452+00:00",
+      "exitCode": 1,
+      "wallSeconds": 7.462140798568726,
+      "monotonicSeconds": 7.462128082988784,
+      "childUserSeconds": 7.3638200000000005,
+      "childSystemSeconds": 2.299186,
+      "loadBefore": [
+        6.48779296875,
+        6.9658203125,
+        7.64453125
+      ],
+      "loadAfter": [
+        6.81298828125,
+        7.0166015625,
+        7.654296875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-05-pre",
+      "rawLog": "focused-05.log",
+      "receipt": "focused-05.json",
+      "receiptSha256": "e276e8d2ada73738db170ebac3150508c43ddec5c0433b26e3c459e6e34caf50",
+      "rawLogSha256": "0355f2e61417f79aa7cbb007577494465d33b9e31f20726a830bb31985a2b0c2",
+      "manifestEntryCount": 17,
+      "preEqualsPost": true,
+      "manifestPreSha256": "58ba7e7fa28898c3bc2340cff690e5afd5875e6b8e60a2fa1b1b3eb546ff1e2a",
+      "manifestPostSha256": "58ba7e7fa28898c3bc2340cff690e5afd5875e6b8e60a2fa1b1b3eb546ff1e2a",
+      "testTerminal": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed | 156 passed (160)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "pid": 55511,
+      "startedAt": "2026-10-16T02:32:57.715685+00:00",
+      "exitCode": 0,
+      "wallSeconds": 13.150258302688599,
+      "monotonicSeconds": 13.150232249987312,
+      "childUserSeconds": 18.650651,
+      "childSystemSeconds": 0.723936,
+      "loadBefore": [
+        8.5771484375,
+        7.52734375,
+        7.7705078125
+      ],
+      "loadAfter": [
+        8.07373046875,
+        7.46826171875,
+        7.744140625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/typecheck-04-pre",
+      "rawLog": "typecheck-04.log",
+      "receipt": "typecheck-04.json",
+      "receiptSha256": "10018b4649fdf79ac9dc9b5e06d9467ea442b33e5a9e05c402cb2ee62f822f5d",
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "41201956d9ddfe2243199ab976e77806e2c924590ccad0914c431ce68c323166",
+      "manifestPostSha256": "41201956d9ddfe2243199ab976e77806e2c924590ccad0914c431ce68c323166",
+      "testTerminal": [],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 60030,
+      "startedAt": "2026-10-16T02:34:08.771149+00:00",
+      "exitCode": 1,
+      "wallSeconds": 11.15656590461731,
+      "monotonicSeconds": 11.156545292004012,
+      "childUserSeconds": 8.260807,
+      "childSystemSeconds": 3.104256,
+      "loadBefore": [
+        6.27783203125,
+        7.041015625,
+        7.564453125
+      ],
+      "loadAfter": [
+        7.21826171875,
+        7.20361328125,
+        7.61279296875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-06-pre",
+      "rawLog": "focused-06.log",
+      "receipt": "focused-06.json",
+      "receiptSha256": "a092d16ba601fd2c419cb3f80927e4a59da7c4a4c865bd2872977312ed98d280",
+      "rawLogSha256": "1407162d86bcd91a45d08a374d251e7f26d685b8e088f575a3a973fe14f1df2c",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "86ad1d84c604e06ee3df0bf33ea43ccc5dfe1f8509a35792f630ece53d5bb5d7",
+      "manifestPostSha256": "86ad1d84c604e06ee3df0bf33ea43ccc5dfe1f8509a35792f630ece53d5bb5d7",
+      "testTerminal": [
+        "Test Files  2 failed (2)",
+        "Tests  2 failed | 183 passed (185)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 65486,
+      "startedAt": "2026-10-16T02:35:33.997927+00:00",
+      "exitCode": 1,
+      "wallSeconds": 8.564001083374023,
+      "monotonicSeconds": 8.563985000015236,
+      "childUserSeconds": 7.84958,
+      "childSystemSeconds": 2.480892,
+      "loadBefore": [
+        6.05078125,
+        6.8935546875,
+        7.4638671875
+      ],
+      "loadAfter": [
+        6.369140625,
+        6.93017578125,
+        7.4697265625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-07-pre",
+      "rawLog": "focused-07.log",
+      "receipt": "focused-07.json",
+      "receiptSha256": "d8bff9846f9d13457c42f1211a6aaa168aa5209a00b4de5ca876c10a5d1c39e3",
+      "rawLogSha256": "aab6539f10361144f71f23fab6b7f6c258660d6afd00951a5a4d2aa4b0e7bf07",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "62f258c19a8da08567cc20752ae7373a71d3a4cd2a497efe2aa5e94d6ac76a88",
+      "manifestPostSha256": "62f258c19a8da08567cc20752ae7373a71d3a4cd2a497efe2aa5e94d6ac76a88",
+      "testTerminal": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  2 failed | 185 passed (187)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 69787,
+      "startedAt": "2026-10-16T02:37:20.050319+00:00",
+      "exitCode": 0,
+      "wallSeconds": 7.709676027297974,
+      "monotonicSeconds": 7.709662042034324,
+      "childUserSeconds": 7.517354999999999,
+      "childSystemSeconds": 2.275239,
+      "loadBefore": [
+        5.09326171875,
+        6.42333984375,
+        7.21533203125
+      ],
+      "loadAfter": [
+        5.24560546875,
+        6.4326171875,
+        7.2138671875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-08-pre",
+      "rawLog": "focused-08.log",
+      "receipt": "focused-08.json",
+      "receiptSha256": "09afbb7adf069f6b9cbd201cbd44341021a9ae256255d18cb7d769ea54308ce0",
+      "rawLogSha256": "606e8f9d517da0c3174cf8ae2d2311dd34ab5e67d7bfe4f54626c1dd8b21326d",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "0e08d8d142f2aa5b160b8c07b690ec07335775fc448f3bafa911fd03c5202121",
+      "manifestPostSha256": "0e08d8d142f2aa5b160b8c07b690ec07335775fc448f3bafa911fd03c5202121",
+      "testTerminal": [
+        "Test Files  2 passed (2)",
+        "Tests  189 passed (189)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 74713,
+      "startedAt": "2026-10-16T02:39:24.787518+00:00",
+      "exitCode": 1,
+      "wallSeconds": 7.8407628536224365,
+      "monotonicSeconds": 7.840748416027054,
+      "childUserSeconds": 6.955717,
+      "childSystemSeconds": 2.2943559999999996,
+      "loadBefore": [
+        4.45751953125,
+        5.77685546875,
+        6.8564453125
+      ],
+      "loadAfter": [
+        4.8603515625,
+        5.8173828125,
+        6.857421875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-09-pre",
+      "rawLog": "focused-09.log",
+      "receipt": "focused-09.json",
+      "receiptSha256": "7bddd5952395f724709e29b16cab137c0bac19fdd5351cc9daa5ef8335b0e457",
+      "rawLogSha256": "9f1d335de29c80176712d9c3fffce3546e50c7bb00ba29b094d0e627c61e6041",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "cff92637d8aa9df69e1a74fb3b246291992ff6c8c61746067e521a0d16d4621c",
+      "manifestPostSha256": "cff92637d8aa9df69e1a74fb3b246291992ff6c8c61746067e521a0d16d4621c",
+      "testTerminal": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  6 failed | 192 passed (198)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "pid": 75934,
+      "startedAt": "2026-10-16T02:40:10.795066+00:00",
+      "exitCode": 2,
+      "wallSeconds": 12.039731979370117,
+      "monotonicSeconds": 12.039708917029202,
+      "childUserSeconds": 17.125615,
+      "childSystemSeconds": 0.681258,
+      "loadBefore": [
+        4.29443359375,
+        5.5556640625,
+        6.71240234375
+      ],
+      "loadAfter": [
+        5.07177734375,
+        5.68408203125,
+        6.74462890625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/typecheck-05-pre",
+      "rawLog": "typecheck-05.log",
+      "receipt": "typecheck-05.json",
+      "receiptSha256": "6567f6aca900e7167c767a306e48320638b2eef890ec5d62ab11df9e4eb562ca",
+      "rawLogSha256": "8ff414a6019b1fbd6b9516c9c2862231cd302a2a2b7606557bff5177bed4ad4a",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d64ffae69edc722baeda35269a6b79a15e5c5e200e1f13086b3dacfe156b2ef5",
+      "manifestPostSha256": "d64ffae69edc722baeda35269a6b79a15e5c5e200e1f13086b3dacfe156b2ef5",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 79498,
+      "startedAt": "2026-10-16T02:41:04.004774+00:00",
+      "exitCode": 1,
+      "wallSeconds": 6.120655059814453,
+      "monotonicSeconds": 6.1206441660178825,
+      "childUserSeconds": 7.165837,
+      "childSystemSeconds": 2.104021,
+      "loadBefore": [
+        4.6484375,
+        5.48876953125,
+        6.623046875
+      ],
+      "loadAfter": [
+        4.6953125,
+        5.47216796875,
+        6.603515625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-10-pre",
+      "rawLog": "focused-10.log",
+      "receipt": "focused-10.json",
+      "receiptSha256": "65e6e794bc5387f0c99b361e33329a975c9e06fc7d40f1dc09f387e3588809d0",
+      "rawLogSha256": "000e53e27918aca9d4cb2f47682571480dae4cca478e0f2e1832a1305c28d684",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "311fc6765c0b5293ac989a876b278473fbad6c7d5a6614a75fa0f2e080f25e4b",
+      "manifestPostSha256": "311fc6765c0b5293ac989a876b278473fbad6c7d5a6614a75fa0f2e080f25e4b",
+      "testTerminal": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  4 failed | 196 passed (200)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 83453,
+      "startedAt": "2026-10-16T02:42:50.158681+00:00",
+      "exitCode": 0,
+      "wallSeconds": 6.023988962173462,
+      "monotonicSeconds": 6.0239784169825725,
+      "childUserSeconds": 7.198102,
+      "childSystemSeconds": 2.035229,
+      "loadBefore": [
+        3.7783203125,
+        4.841796875,
+        6.2255859375
+      ],
+      "loadAfter": [
+        3.9560546875,
+        4.86083984375,
+        6.22412109375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-11-pre",
+      "rawLog": "focused-11.log",
+      "receipt": "focused-11.json",
+      "receiptSha256": "0ef84af61c5641981a008fa2f9bae5056afcc0d990aef5e06ab6365f32ff3f3c",
+      "rawLogSha256": "262da726f93038536e24521a348d57533f008551fd74fcc0ac6f9a881f2d35d4",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "4c83058f807df9d4a92438e64fc3857e3065e37c8e5c226e1c09917546a096e7",
+      "manifestPostSha256": "4c83058f807df9d4a92438e64fc3857e3065e37c8e5c226e1c09917546a096e7",
+      "testTerminal": [
+        "Test Files  2 passed (2)",
+        "Tests  202 passed (202)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "pid": 85316,
+      "startedAt": "2026-10-16T02:43:33.524719+00:00",
+      "exitCode": 2,
+      "wallSeconds": 17.06403398513794,
+      "monotonicSeconds": 17.055847249983344,
+      "childUserSeconds": 22.790754,
+      "childSystemSeconds": 1.020704,
+      "loadBefore": [
+        7.10791015625,
+        5.490234375,
+        6.39404296875
+      ],
+      "loadAfter": [
+        8.291015625,
+        5.86328125,
+        6.505859375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/typecheck-06-pre",
+      "rawLog": "typecheck-06.log",
+      "receipt": "typecheck-06.json",
+      "receiptSha256": "9d56a38a5195c8bc9476d850b858bbf7b9b126d48bf3150ac00fdc883a26b15f",
+      "rawLogSha256": "5766fbd57328e74246f74c7594f376ce2f3420b7c5874e17647e36a0a6480fa2",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "4c83058f807df9d4a92438e64fc3857e3065e37c8e5c226e1c09917546a096e7",
+      "manifestPostSha256": "4c83058f807df9d4a92438e64fc3857e3065e37c8e5c226e1c09917546a096e7",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 4356,
+      "startedAt": "2026-10-16T02:43:50.652924+00:00",
+      "exitCode": 2,
+      "wallSeconds": 70.74305510520935,
+      "monotonicSeconds": 70.73806387500372,
+      "childUserSeconds": 178.078436,
+      "childSystemSeconds": 16.692454,
+      "loadBefore": [
+        8.291015625,
+        5.86328125,
+        6.505859375
+      ],
+      "loadAfter": [
+        12.59765625,
+        8.107421875,
+        7.33154296875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/review-01-pre",
+      "rawLog": "review-01.log",
+      "receipt": "review-01.json",
+      "receiptSha256": "145f92966311574ed68f3099a9202306f608a9d05a55cb4d30ff30efb4bc9f02",
+      "rawLogSha256": "93f27770a2071e3a15a9f4a14082397181eca97bf0310f7221caa72805bc7d05",
+      "manifestEntryCount": 20,
+      "preEqualsPost": false,
+      "manifestPreSha256": "4c83058f807df9d4a92438e64fc3857e3065e37c8e5c226e1c09917546a096e7",
+      "manifestPostSha256": "fb1d9c4ebc5e2eef72fba01488c1806a096ba7812c476419fa2578f4ee8b7d5c",
+      "testTerminal": [
+        "Test Files  3 failed | 154 passed (157)",
+        "Tests  5 failed | 8987 passed (8992)"
+      ],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts"
+      ],
+      "pid": 49116,
+      "startedAt": "2026-10-16T02:44:32.658321+00:00",
+      "exitCode": 1,
+      "wallSeconds": 13.470011234283447,
+      "monotonicSeconds": 13.469646041980013,
+      "childUserSeconds": 8.642285,
+      "childSystemSeconds": 3.276798,
+      "loadBefore": [
+        13.83447265625,
+        7.82373046875,
+        7.20751953125
+      ],
+      "loadAfter": [
+        13.5517578125,
+        8.0458984375,
+        7.296875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/stale-continuation-red-pre",
+      "rawLog": "stale-continuation-red.log",
+      "receipt": "stale-continuation-red.json",
+      "receiptSha256": "1a7546e20a425ce867c0783c4f0b8f8fb115311a592a223605119e9bc2ef1293",
+      "rawLogSha256": "fe8ba4f071bbe2461943aade5ecaee7163482ef9b65e2220bbb6af66af4b5d69",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "fb1d9c4ebc5e2eef72fba01488c1806a096ba7812c476419fa2578f4ee8b7d5c",
+      "manifestPostSha256": "fb1d9c4ebc5e2eef72fba01488c1806a096ba7812c476419fa2578f4ee8b7d5c",
+      "testTerminal": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 181 passed (182)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts",
+        "src/rules/journey/journey-on-gain.test.ts",
+        "src/rules/journey/journey-on-gain-nightmares.test.ts"
+      ],
+      "pid": 57280,
+      "startedAt": "2026-10-16T02:46:06.121655+00:00",
+      "exitCode": 0,
+      "wallSeconds": 8.50407099723816,
+      "monotonicSeconds": 8.503938833018765,
+      "childUserSeconds": 9.600732,
+      "childSystemSeconds": 2.664706,
+      "loadBefore": [
+        14.166015625,
+        9.26416015625,
+        7.81298828125
+      ],
+      "loadAfter": [
+        15.59375,
+        9.6416015625,
+        7.95458984375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-12-pre",
+      "rawLog": "focused-12.log",
+      "receipt": "focused-12.json",
+      "receiptSha256": "4dd6e1cd61c9c35bd0edec017a3ace22b76e3c9ad582d8efdd64db35508f7dac",
+      "rawLogSha256": "e3c3b0a610ccda2a8d58d7c0430af6afba4da5622640bbeb6a1b1b24af13f549",
+      "manifestEntryCount": 20,
+      "preEqualsPost": true,
+      "manifestPreSha256": "1db9c06f9e20599d349270b80f2677f61c520abe4f301dc9b7404030111dc3a5",
+      "manifestPostSha256": "1db9c06f9e20599d349270b80f2677f61c520abe4f301dc9b7404030111dc3a5",
+      "testTerminal": [
+        "Test Files  4 passed (4)",
+        "Tests  290 passed (290)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 19680,
+      "startedAt": "2026-10-16T02:47:35.644101+00:00",
+      "exitCode": 0,
+      "wallSeconds": 52.15057587623596,
+      "monotonicSeconds": 52.14975962502649,
+      "childUserSeconds": 137.038597,
+      "childSystemSeconds": 12.667593,
+      "loadBefore": [
+        12.37548828125,
+        10.4013671875,
+        8.42431640625
+      ],
+      "loadAfter": [
+        11.70947265625,
+        10.654296875,
+        8.63818359375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/review-02-pre",
+      "rawLog": "review-02.log",
+      "receipt": "review-02.json",
+      "receiptSha256": "abff26b7114aec0fe5f172804db1c96de0c791c772f39fc3b6def74780565ece",
+      "rawLogSha256": "34a94221da36b3b20f15bc05b6da534773855e4754fe889a5e75fdbda8be06cf",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "aaa7ae62030a5a90dd255b96d97d33cf8d47ebe73e2895d644bd26ef787a9e90",
+      "manifestPostSha256": "aaa7ae62030a5a90dd255b96d97d33cf8d47ebe73e2895d644bd26ef787a9e90",
+      "testTerminal": [
+        "Test Files  157 passed (157)",
+        "Tests  8993 passed (8993)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 26517,
+      "startedAt": "2026-10-16T02:49:09.561444+00:00",
+      "exitCode": 1,
+      "wallSeconds": 9.773677110671997,
+      "monotonicSeconds": 9.773525499971583,
+      "childUserSeconds": 5.061956,
+      "childSystemSeconds": 2.502933,
+      "loadBefore": [
+        9.6083984375,
+        10.2158203125,
+        8.56787109375
+      ],
+      "loadAfter": [
+        9.21337890625,
+        10.10986328125,
+        8.54931640625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/knip-01-pre",
+      "rawLog": "knip-01.log",
+      "receipt": "knip-01.json",
+      "receiptSha256": "cf6b947afb28b24cc651ea84d0e5fca050aced2ee893328ecbd1e165c36d9aac",
+      "rawLogSha256": "1fa4edc69814f188300229cdeac050452c3b6d691557ecdff2dfb9ff4a85d0d3",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "aaa7ae62030a5a90dd255b96d97d33cf8d47ebe73e2895d644bd26ef787a9e90",
+      "manifestPostSha256": "aaa7ae62030a5a90dd255b96d97d33cf8d47ebe73e2895d644bd26ef787a9e90",
+      "testTerminal": [],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/730-root/resume1/author-runtime/run.py",
+        "full-inner",
+        "timeout",
+        "1800",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 27360,
+      "startedAt": "2026-10-16T02:49:22.396113+00:00",
+      "exitCode": -15,
+      "wallSeconds": 27.945281982421875,
+      "monotonicSeconds": 27.944844457961153,
+      "childUserSeconds": 0.0006239999999999996,
+      "childSystemSeconds": 0.0014359999999999998,
+      "loadBefore": [
+        9.1162109375,
+        10.07470703125,
+        8.5458984375
+      ],
+      "loadAfter": [
+        8.8896484375,
+        9.9619140625,
+        8.55859375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/full-outer-pre",
+      "rawLog": "full-outer.log",
+      "receipt": "full-outer.json",
+      "receiptSha256": "354eec38f2b63a84341f7a671cb668cc539fe3d2afc6ec0e60066c4a637237dd",
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": false,
+      "manifestPreSha256": "aaa7ae62030a5a90dd255b96d97d33cf8d47ebe73e2895d644bd26ef787a9e90",
+      "manifestPostSha256": "5cbcd35aaf0c9ebb9dc4c9bcde8716ef1f2ecc7a8bcc8db7d3f8fc8f10578c06",
+      "testTerminal": [],
+      "wrapperExitCode": 241
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 51314,
+      "startedAt": "2026-10-16T02:49:51.087976+00:00",
+      "exitCode": 0,
+      "wallSeconds": 6.435245990753174,
+      "monotonicSeconds": 6.435146291973069,
+      "childUserSeconds": 4.700958,
+      "childSystemSeconds": 1.821805,
+      "loadBefore": [
+        8.8896484375,
+        9.9619140625,
+        8.55859375
+      ],
+      "loadAfter": [
+        9.05859375,
+        9.97900390625,
+        8.57275390625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/knip-02-pre",
+      "rawLog": "knip-02.log",
+      "receipt": "knip-02.json",
+      "receiptSha256": "c39483b5d593c44299f03d3a85741b29619a61c6c55e7758e0b6b303b748066e",
+      "rawLogSha256": "5a63fe65da2277797cd1b708c72ba4a69605e731bf5f5ebd1372c7f8b4fd0740",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "5cbcd35aaf0c9ebb9dc4c9bcde8716ef1f2ecc7a8bcc8db7d3f8fc8f10578c06",
+      "manifestPostSha256": "5cbcd35aaf0c9ebb9dc4c9bcde8716ef1f2ecc7a8bcc8db7d3f8fc8f10578c06",
+      "testTerminal": [],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/730-root/resume1/author-runtime/run.py",
+        "full-inner-02",
+        "timeout",
+        "1800",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 69409,
+      "startedAt": "2026-10-16T02:51:36.018215+00:00",
+      "exitCode": -15,
+      "wallSeconds": 155.0744230747223,
+      "monotonicSeconds": 155.07199208298698,
+      "childUserSeconds": 0.0006850000000000016,
+      "childSystemSeconds": 0.0014130000000000045,
+      "loadBefore": [
+        7.4052734375,
+        9.1298828125,
+        8.39404296875
+      ],
+      "loadAfter": [
+        18.60498046875,
+        12.357421875,
+        9.748046875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/full-outer-02-pre",
+      "rawLog": "full-outer-02.log",
+      "receipt": "full-outer-02.json",
+      "receiptSha256": "fce3d063bb93c5192eda6da0d83b48167fa79527ea8d2b965465d014b0efe7b0",
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": false,
+      "manifestPreSha256": "5cbcd35aaf0c9ebb9dc4c9bcde8716ef1f2ecc7a8bcc8db7d3f8fc8f10578c06",
+      "manifestPostSha256": "328673cd747308b675faea654489c44d358593de48b22401e679b3bebfd868d1",
+      "testTerminal": [],
+      "wrapperExitCode": 241
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 40272,
+      "startedAt": "2026-10-16T02:54:12.029572+00:00",
+      "exitCode": 1,
+      "wallSeconds": 12.932955980300903,
+      "monotonicSeconds": 12.932755374989938,
+      "childUserSeconds": 9.238019999999999,
+      "childSystemSeconds": 3.533551,
+      "loadBefore": [
+        18.60498046875,
+        12.357421875,
+        9.748046875
+      ],
+      "loadAfter": [
+        17.361328125,
+        12.2958984375,
+        9.7568359375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-13-pre",
+      "rawLog": "focused-13.log",
+      "receipt": "focused-13.json",
+      "receiptSha256": "62479ba3d1cac2b847ce13bf498f2bc1248f827674abfc21af9d4831b66271db",
+      "rawLogSha256": "5202f712c67a473993cfa9462868ecfbc282bd63b511f9bc2da6508db3ecf874",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "328673cd747308b675faea654489c44d358593de48b22401e679b3bebfd868d1",
+      "manifestPostSha256": "328673cd747308b675faea654489c44d358593de48b22401e679b3bebfd868d1",
+      "testTerminal": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  4 failed | 199 passed (203)"
+      ],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/730-root/resume1/author-runtime/run.py",
+        "full-inner-03",
+        "timeout",
+        "1800",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 43631,
+      "startedAt": "2026-10-16T02:54:36.169128+00:00",
+      "exitCode": -15,
+      "wallSeconds": 30.10492992401123,
+      "monotonicSeconds": 30.104460834001657,
+      "childUserSeconds": 0.0005770000000000011,
+      "childSystemSeconds": 0.0013639999999999972,
+      "loadBefore": [
+        16.00048828125,
+        12.24658203125,
+        9.783203125
+      ],
+      "loadAfter": [
+        16.830078125,
+        12.93603515625,
+        10.1259765625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/full-outer-03-pre",
+      "rawLog": "full-outer-03.log",
+      "receipt": "full-outer-03.json",
+      "receiptSha256": "a48912807dd671f3850a15f2e1137f53a2f240807ed08920ecc55719a67dd368",
+      "rawLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": false,
+      "manifestPreSha256": "328673cd747308b675faea654489c44d358593de48b22401e679b3bebfd868d1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 241
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/session/local-game.test.ts"
+      ],
+      "pid": 46608,
+      "startedAt": "2026-10-16T02:55:06.584050+00:00",
+      "exitCode": 0,
+      "wallSeconds": 11.063787937164307,
+      "monotonicSeconds": 11.063620000029914,
+      "childUserSeconds": 9.651781000000001,
+      "childSystemSeconds": 3.1925310000000002,
+      "loadBefore": [
+        16.830078125,
+        12.93603515625,
+        10.1259765625
+      ],
+      "loadAfter": [
+        20.46826171875,
+        13.8564453125,
+        10.48583984375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/focused-14-pre",
+      "rawLog": "focused-14.log",
+      "receipt": "focused-14.json",
+      "receiptSha256": "ff3542344e1e483b39ee0fd1752113b3ea2bb544adfef75b6780f60e2fcc4321",
+      "rawLogSha256": "7426eda80a4ead628ecb76f5ed62abe8bb8a752acaae4f9a68fde103e6bb746d",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [
+        "Test Files  2 passed (2)",
+        "Tests  203 passed (203)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/730-root/resume1/author-runtime/run.py",
+        "full-inner-04",
+        "timeout",
+        "1800",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 11399,
+      "startedAt": "2026-10-16T02:56:32.829138+00:00",
+      "exitCode": 0,
+      "wallSeconds": 138.56309700012207,
+      "monotonicSeconds": 138.5609253339935,
+      "childUserSeconds": 328.237907,
+      "childSystemSeconds": 33.535229,
+      "loadBefore": [
+        23.02587890625,
+        16.560546875,
+        11.82568359375
+      ],
+      "loadAfter": [
+        9.64990234375,
+        13.78466796875,
+        11.44091796875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/full-outer-04-pre",
+      "rawLog": "full-outer-04.log",
+      "receipt": "full-outer-04.json",
+      "receiptSha256": "a531672053f0c6fb23b084fafcf4119947fb42bf7ac5e283ee164e30914eafb0",
+      "rawLogSha256": "fff0758dc24bb12dd32d6109c9862b71e675e4be1b2e3d37d244e60a80256d48",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [
+        "Test Files  433 passed (433)",
+        "Tests  12161 passed (12161)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "timeout",
+        "1800",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 11424,
+      "startedAt": "2026-10-16T02:56:33.051763+00:00",
+      "exitCode": 0,
+      "wallSeconds": 138.13618421554565,
+      "monotonicSeconds": 138.13402383297216,
+      "childUserSeconds": 328.055953,
+      "childSystemSeconds": 33.273505,
+      "loadBefore": [
+        23.02587890625,
+        16.560546875,
+        11.82568359375
+      ],
+      "loadAfter": [
+        9.64990234375,
+        13.78466796875,
+        11.44091796875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/full-inner-04-pre",
+      "rawLog": "full-inner-04.log",
+      "receipt": "full-inner-04.json",
+      "receiptSha256": "db1cac2f772aea3b9f7d2bfc6d87527be30ce00dd70aa104b6647248eff8b987",
+      "rawLogSha256": "78778469f44790b753a6fa7958f047bcf507fbd605a5ff8220544c7d0b2b582f",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [
+        "Test Files  433 passed (433)",
+        "Tests  12161 passed (12161)"
+      ],
+      "wrapperExitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 58273,
+      "startedAt": "2026-10-16T02:59:18.361342+00:00",
+      "exitCode": 1,
+      "wallSeconds": 42.43226718902588,
+      "monotonicSeconds": 42.431603832985274,
+      "childUserSeconds": 6.284927,
+      "childSystemSeconds": 3.353704,
+      "loadBefore": [
+        8.5556640625,
+        13.216796875,
+        11.30419921875
+      ],
+      "loadAfter": [
+        7.15625,
+        12.18994140625,
+        11.0234375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-01-pre",
+      "rawLog": "qa-01.log",
+      "receipt": "qa-01.json",
+      "receiptSha256": "f6e833b937b16ede52e007c399e23a45abf103be0045635be081a0dfbf28dd19",
+      "rawLogSha256": "398d9a33bfe5b199fdf447ab8a2a55da542a5e2eae98f6f32268d22b9e19c9f6",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 63999,
+      "startedAt": "2026-10-16T03:00:40.597608+00:00",
+      "exitCode": 1,
+      "wallSeconds": 22.534965991973877,
+      "monotonicSeconds": 22.53461537498515,
+      "childUserSeconds": 5.767746,
+      "childSystemSeconds": 2.600045,
+      "loadBefore": [
+        5.59228515625,
+        11.16015625,
+        10.69921875
+      ],
+      "loadAfter": [
+        5.748046875,
+        10.83984375,
+        10.5947265625
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-02-pre",
+      "rawLog": "qa-02.log",
+      "receipt": "qa-02.json",
+      "receiptSha256": "36a2911805b01aa2e2a030f4884d7095801798e1d714b6caa66c9e5226cf48ec",
+      "rawLogSha256": "a0a8f6e140339ea8668f80e2646319d03d633c8084e74afce19621629bb75ccf",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 69981,
+      "startedAt": "2026-10-16T03:02:12.588412+00:00",
+      "exitCode": 1,
+      "wallSeconds": 22.217386960983276,
+      "monotonicSeconds": 22.217040791991167,
+      "childUserSeconds": 6.091784,
+      "childSystemSeconds": 2.579681,
+      "loadBefore": [
+        6.77880859375,
+        10.12548828125,
+        10.34521484375
+      ],
+      "loadAfter": [
+        7.240234375,
+        10.04345703125,
+        10.31201171875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-03-pre",
+      "rawLog": "qa-03.log",
+      "receipt": "qa-03.json",
+      "receiptSha256": "33269473c2a53158dea02ca14ed977c958c65e2da1b383d5071d0ef5c515023d",
+      "rawLogSha256": "38d12807bc4774d31db9d0974dc3d56340cc3595d8387e4a183c053c88d6dc83",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 77634,
+      "startedAt": "2026-10-16T03:04:04.905990+00:00",
+      "exitCode": 1,
+      "wallSeconds": 65.23605513572693,
+      "monotonicSeconds": 65.23503237502882,
+      "childUserSeconds": 6.881708000000001,
+      "childSystemSeconds": 3.373697,
+      "loadBefore": [
+        5.6806640625,
+        8.6904296875,
+        9.75537109375
+      ],
+      "loadAfter": [
+        7.3984375,
+        8.67138671875,
+        9.67138671875
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-04-pre",
+      "rawLog": "qa-04.log",
+      "receipt": "qa-04.json",
+      "receiptSha256": "8ddaeee9794903135011f7d1e3f3f01ddc975344c5e726c4ce82b809948455d7",
+      "rawLogSha256": "dd60a1fbbd47a30d00d7aebcf84fa6c15c2dff4debf9c67e87941fa5442764ce",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 1
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 82760,
+      "startedAt": "2026-10-16T03:08:02.431627+00:00",
+      "exitCode": 2,
+      "wallSeconds": 17.276127338409424,
+      "monotonicSeconds": 17.275856790947728,
+      "childUserSeconds": 6.109188,
+      "childSystemSeconds": 2.748937,
+      "loadBefore": [
+        6.7431640625,
+        9.0576171875,
+        9.76220703125
+      ],
+      "loadAfter": [
+        7.3359375,
+        9.08447265625,
+        9.75927734375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-05-pre",
+      "rawLog": "qa-05.log",
+      "receipt": "qa-05.json",
+      "receiptSha256": "06f978cdb3d040c06fc83c0cb1f130891963073f21ba94fd2eaca2731f2e721f",
+      "rawLogSha256": "a8d35e74cc573fabaa0e6421f52c731b9c030c2ca41a76dda93481b5c56b6f34",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 86836,
+      "startedAt": "2026-10-16T03:09:03.722452+00:00",
+      "exitCode": 2,
+      "wallSeconds": 30.957039833068848,
+      "monotonicSeconds": 30.9565562500502,
+      "childUserSeconds": 6.389413,
+      "childSystemSeconds": 3.277689,
+      "loadBefore": [
+        6.64306640625,
+        8.6884765625,
+        9.5791015625
+      ],
+      "loadAfter": [
+        6.74365234375,
+        8.52392578125,
+        9.48828125
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-06-pre",
+      "rawLog": "qa-06.log",
+      "receipt": "qa-06.json",
+      "receiptSha256": "5577fd3cc2105bb81c3c38adaca700a140a15c6df6f5512f486dd521adeb61eb",
+      "rawLogSha256": "d558dd09cf04996404caa17a673d6d0b4271786e3fcf16019e7e7a141b65b354",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 92781,
+      "startedAt": "2026-10-16T03:10:36.730193+00:00",
+      "exitCode": 2,
+      "wallSeconds": 18.876809120178223,
+      "monotonicSeconds": 18.876513750001322,
+      "childUserSeconds": 6.187938000000001,
+      "childSystemSeconds": 3.015067,
+      "loadBefore": [
+        5.88330078125,
+        7.94580078125,
+        9.19970703125
+      ],
+      "loadAfter": [
+        6.37060546875,
+        7.96142578125,
+        9.18359375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-07-pre",
+      "rawLog": "qa-07.log",
+      "receipt": "qa-07.json",
+      "receiptSha256": "587c1c2178279a2d503bff9d145d4264a0894946195f4d796c591d0509a48aa0",
+      "rawLogSha256": "20da7d0f5aa37739cfabc6518f1feba18969f37364f30d0e12a88337789d1c12",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 96816,
+      "startedAt": "2026-10-16T03:11:37.167191+00:00",
+      "exitCode": 2,
+      "wallSeconds": 16.588229179382324,
+      "monotonicSeconds": 16.587970625027083,
+      "childUserSeconds": 6.108684,
+      "childSystemSeconds": 2.7579459999999996,
+      "loadBefore": [
+        5.86865234375,
+        7.58154296875,
+        8.978515625
+      ],
+      "loadAfter": [
+        6.642578125,
+        7.6796875,
+        8.9892578125
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-08-pre",
+      "rawLog": "qa-08.log",
+      "receipt": "qa-08.json",
+      "receiptSha256": "c46e11235364c78324b3b4c1828f40bd5dd925231fecde5f5f657995776fab16",
+      "rawLogSha256": "024a5f1162fd90cb2d48cb1dbb04c084e9520fac947f35a3a9c38e31d821067f",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 2
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/730-root/resume1/author-runtime/qa-tome-slime.mjs",
+        "--bead",
+        "hv-umm2.730",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "pid": 99630,
+      "startedAt": "2026-10-16T03:12:18.105216+00:00",
+      "exitCode": 0,
+      "wallSeconds": 45.47390294075012,
+      "monotonicSeconds": 45.473192457982805,
+      "childUserSeconds": 6.711574,
+      "childSystemSeconds": 2.9733069999999997,
+      "loadBefore": [
+        6.18310546875,
+        7.49365234375,
+        8.88427734375
+      ],
+      "loadAfter": [
+        6.873046875,
+        7.51171875,
+        8.818359375
+      ],
+      "preSnapshot": "/tmp/730-root/resume1/author-runtime/qa-09-pre",
+      "rawLog": "qa-09.log",
+      "receipt": "qa-09.json",
+      "receiptSha256": "28aa1eaaf8684465f1f084182b57c173480952c7e8acae76896c455782441608",
+      "rawLogSha256": "e2d57e8f5734d6a86dca8078046005de86fcef8123a45a367e151655e74d7a03",
+      "manifestEntryCount": 5965,
+      "preEqualsPost": true,
+      "manifestPreSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "manifestPostSha256": "d007912da32dd79f12df5df3a3e0d14e54c1a538a0bb4c2f32369cd841d689c1",
+      "testTerminal": [],
+      "wrapperExitCode": 0
+    }
+  ],
+  "historicalQualification": {
+    "qualification": "Historical commands before source-bound runner. These are actual journal exits, not retroactively associated with current source hashes. Unretained wall/source/CPU are UNKNOWN.",
+    "runs": [
+      {
+        "name": "direct-typecheck-01",
+        "command": [
+          "npx",
+          "tsc",
+          "--noEmit",
+          "--pretty",
+          "false"
+        ],
+        "actualUnifiedExit": 2,
+        "sourceEpoch": "UNKNOWN",
+        "wallSeconds": "UNKNOWN",
+        "cpu": "UNKNOWN",
+        "output": "Journal return; disposable tokens initially absent, and two own ES target uses subsequently corrected."
+      },
+      {
+        "name": "focused-01",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts"
+        ],
+        "actualUnifiedExit": 1,
+        "tests": 126,
+        "passed": 124,
+        "failed": 2,
+        "sourceEpoch": "UNKNOWN",
+        "wallSeconds": "UNKNOWN",
+        "cpu": "UNKNOWN",
+        "output": "Journal return includes actual test summary and failures. Full raw log was not retained before wrapper; no full raw-output claim."
+      },
+      {
+        "name": "typecheck-02",
+        "command": [
+          "npx",
+          "tsc",
+          "--noEmit",
+          "--pretty",
+          "false"
+        ],
+        "actualUnifiedExit": 0,
+        "sourceEpoch": "UNKNOWN",
+        "wallSeconds": "UNKNOWN",
+        "cpu": "UNKNOWN",
+        "output": "typecheck-02.log is retained (empty successful output)."
+      }
+    ]
+  },
+  "epochQualifications": [
+    "focused02/03 retain actual raw returns and stable14/16-path hashes, but pre-source bytes were not retained; base reconstruction plus parent journal audit qualifies their coverage. Historical direct focused01=124/126 exit1 and initial tsc exit2/source/wall/CPU UNKNOWN; typecheck02 empty success log retains no source epoch.",
+    "focused04 onward retain changed/untracked pre-source/test bytes; unchanged base blobs reconstruct from exact base. Earlier wrappers cover17/20 admitted paths; review02 onward full regular-file manifests cover5965 entries. Two tracked directory symlinks are omitted by is_file(); parent independently checks all5959 original literal payloads, including links.",
+    "review01 had source changes during its run; pre/post differ and it is retained as a failed intermediate epoch, without current-source validation credit. Canceled outer waiters also span fixes and receive no inner credit.",
+    "review02 passed8993/157 on its own stable epoch; later removed own unused fixture export and narrowed observer RNG diagnostics, covered by focused14 plus final full and subsequent QA stable source. Final full reran typechecks/lint/Knip/cycles/schema/bundle and12161/433.",
+    "All5965 final-full regular payloads still matched at final source/resource settlement before evidence-only writes. No runtime/test source edits during final full or browser QA."
+  ],
+  "heavy": {
+    "source": "clock-runtime working manifest bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+    "workers": 2,
+    "innerTimeoutSeconds": 1800,
+    "timeoutStarts": "after heavy.lock admission",
+    "fullInnerExit": 0,
+    "fullOuterExit": 0,
+    "fullInnerWallSeconds": 123.69855999946594,
+    "fullOuterWallSeconds": 124.11169481277466,
+    "testStepSeconds": 86.3,
+    "tests": 12195,
+    "files": 434,
+    "queuePlusLauncherSeconds": 0.207751,
+    "pureKernelQueue": "UNKNOWN",
+    "initialHostOneMinuteLoad": 5.7958984375,
+    "budgetCompliance": "UNCLAIMED; actual test86.3s exceeds D19 60s budget. No automatic loaded-host label or waiver; owner Gate46 current-suite/test-cut duty retained.",
+    "sourcePrePostStable": true,
+    "newFailedOrCanceledInnerRuns": 0
+  },
+  "qa": {
+    "source": "clock-runtime working manifest bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+    "invocation": "run-AksBvH",
+    "reportSha256": "30082e48d66d0d52e15425193501af3e228b60cf76f359fcab3f2a6699c59278",
+    "driverPreSnapshot": "clock-runtime/qa-01-driver-dispatch.mjs",
+    "driverSha256": "3868a2bce0fff9d34da54d64744dca252213d1f0735233e23cd3a68d0b845888",
+    "driverByteExactOriginalSuccessfulQA09": true,
+    "hostChecker": "clock-runtime/verify-qa-files.py",
+    "hostCheckerSha256": "781aebc539d7a72e452afaca1a8bf8f1511d1a4e462736579aa36a9fecc6ae14",
+    "hostCheckerActualExit": 0,
+    "hostResult": "clock-runtime/qa-01-host-verification.json",
+    "hostResultSha256": "66a9f82d1220e98fcd1fad4bb2996ff1a3a751cde813f7489b4df91933fde012",
+    "viewports": [
+      "1440x900",
+      "390x844"
+    ],
+    "caps": [],
+    "captures": {
+      "730-earned-pending-desktop.png": {
+        "sha256": "9d5b97bb333e4cfddbf48936a9b4cacc10847eee34f28b562766f10dcc97399f",
+        "bytes": 4957679
+      },
+      "730-earned-pending-mobile.png": {
+        "sha256": "89873ca04e69313f2260fa4eee52ca7188301a655b78802c9ceb46fa5ed4053e",
+        "bytes": 1179473
+      },
+      "730-result-deck-desktop.png": {
+        "sha256": "52c697e5cbf23a368a03d924653fcffc5184a9b4ac46df901ce6bf2c355fc839",
+        "bytes": 2925125
+      },
+      "730-result-deck-mobile.png": {
+        "sha256": "ac062530c5e2a1370505ae9e62f4456e0db9e32f5cfd2f2c201ee87bb6f58859",
+        "bytes": 1056602
+      },
+      "730-selected-desktop.png": {
+        "sha256": "5d16f2d0b27d5e1d5d23db6ccf759c949ff880ba9fc67fae3b0851c174be954c",
+        "bytes": 4937703
+      },
+      "730-selected-mobile.png": {
+        "sha256": "62aac50491ec1170b959217ccea1c470532614332053a6625b63878160785504",
+        "bytes": 1176915
+      }
+    },
+    "imageDimensions": [
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH/730-earned-pending-desktop.png: PNG image data, 2880 x 1800, 8-bit/color RGB, non-interlaced",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH/730-earned-pending-mobile.png: PNG image data, 780 x 1688, 8-bit/color RGB, non-interlaced",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH/730-result-deck-desktop.png: PNG image data, 2880 x 1800, 8-bit/color RGB, non-interlaced",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH/730-result-deck-mobile.png: PNG image data, 780 x 1688, 8-bit/color RGB, non-interlaced",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH/730-selected-desktop.png: PNG image data, 2880 x 1800, 8-bit/color RGB, non-interlaced",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH/730-selected-mobile.png: PNG image data, 780 x 1688, 8-bit/color RGB, non-interlaced"
+    ],
+    "views": {
+      "desktop": {
+        "actualDeckIndices": [
+          11,
+          10
+        ],
+        "before": 12,
+        "after": 14,
+        "applications": [
+          {
+            "entryId": "deck-5-0",
+            "copyEntryId": "deck-18-0",
+            "form": "Hastened",
+            "applications": [
+              {
+                "form": "Hastened"
+              }
+            ]
+          },
+          {
+            "entryId": "deck-4-0",
+            "copyEntryId": "deck-18-1",
+            "form": "Inspired",
+            "applications": [
+              {
+                "form": "Inspired"
+              }
+            ]
+          }
+        ],
+        "deckAndRouteExactAfterImport": true,
+        "otherStateDifferences": [
+          "runId"
+        ],
+        "runIdBeforeImport": "journey:1",
+        "runIdAfterImport": "journey:19",
+        "causes": [
+          {
+            "eventSeq": 18,
+            "ordinal": 0,
+            "entryId": "deck-5-0",
+            "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+            "applicationIndex": 0
+          },
+          {
+            "eventSeq": 18,
+            "ordinal": 1,
+            "entryId": "deck-4-0",
+            "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+            "applicationIndex": 0
+          }
+        ],
+        "drawIndices": [
+          0,
+          1
+        ],
+        "forms": [
+          "Hastened",
+          "Inspired"
+        ],
+        "exportedLogRows": 75,
+        "retainedLogRows": 82,
+        "geometry": {
+          "before": {
+            "href": "http://localhost:5274/transfiguration/site-5?seed=730&debug=1&game=4bwdju",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "root": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900
+            },
+            "confirm": {
+              "x": 964.734375,
+              "y": 111.75,
+              "width": 105.265625,
+              "height": 42
+            },
+            "confirmHit": true,
+            "overflow": false
+          },
+          "selected": {
+            "href": "http://localhost:5274/transfiguration/site-5?seed=730&debug=1&game=4bwdju",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "root": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900
+            },
+            "confirm": {
+              "x": 931.265625,
+              "y": 111.75,
+              "width": 138.734375,
+              "height": 42
+            },
+            "confirmHit": true,
+            "overflow": false
+          },
+          "deck": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "overflow": false,
+            "dialogs": [
+              {
+                "x": 130,
+                "y": 20,
+                "width": 1180,
+                "height": 860
+              }
+            ]
+          }
+        }
+      },
+      "mobile": {
+        "actualDeckIndices": [
+          11,
+          10
+        ],
+        "before": 12,
+        "after": 14,
+        "applications": [
+          {
+            "entryId": "deck-5-0",
+            "copyEntryId": "deck-18-0",
+            "form": "Hastened",
+            "applications": [
+              {
+                "form": "Hastened"
+              }
+            ]
+          },
+          {
+            "entryId": "deck-4-0",
+            "copyEntryId": "deck-18-1",
+            "form": "Inspired",
+            "applications": [
+              {
+                "form": "Inspired"
+              }
+            ]
+          }
+        ],
+        "deckAndRouteExactAfterImport": true,
+        "otherStateDifferences": [
+          "runId"
+        ],
+        "runIdBeforeImport": "journey:1",
+        "runIdAfterImport": "journey:19",
+        "causes": [
+          {
+            "eventSeq": 18,
+            "ordinal": 0,
+            "entryId": "deck-5-0",
+            "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+            "applicationIndex": 0
+          },
+          {
+            "eventSeq": 18,
+            "ordinal": 1,
+            "entryId": "deck-4-0",
+            "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+            "applicationIndex": 0
+          }
+        ],
+        "drawIndices": [
+          0,
+          1
+        ],
+        "forms": [
+          "Hastened",
+          "Inspired"
+        ],
+        "exportedLogRows": 78,
+        "retainedLogRows": 86,
+        "geometry": {
+          "before": {
+            "href": "http://localhost:5274/transfiguration/site-5?seed=730&debug=1&game=oxgi54",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "root": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            },
+            "confirm": {
+              "x": 272.734375,
+              "y": 383.453125,
+              "width": 105.265625,
+              "height": 42
+            },
+            "confirmHit": true,
+            "overflow": false
+          },
+          "selected": {
+            "href": "http://localhost:5274/transfiguration/site-5?seed=730&debug=1&game=oxgi54",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "root": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            },
+            "confirm": {
+              "x": 239.265625,
+              "y": 383.453125,
+              "width": 138.734375,
+              "height": 42
+            },
+            "confirmHit": true,
+            "overflow": false
+          },
+          "deck": {
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "overflow": false,
+            "dialogs": []
+          }
+        }
+      }
+    },
+    "actualSavedBuildGitSha": {
+      "desktop": "4177447e0c26",
+      "mobile": "4177447e0c26"
+    },
+    "inspection": "All six fresh PNGs file-verified and visually viewed: pending, selected and result deck on both viewports. Selected outlines and reachable confirm intact; viewport scrolling/no horizontal overflow; actual14-card deck with two formed copies.",
+    "qualifications": [
+      "Real production Tome/Slime engine victory through ordinary END_BATTLE to genuinely earned picker; no Glow activation.",
+      "Actual Package Debug shared save/export and hidden-input import; native OS prompt/chooser painting untested; minimal temporary input click adapter restored exactly.",
+      "Deck/route and all saved journey values except legitimate LOAD runId journey:1 to journey:19 compare equal.",
+      "Build metadata HEAD4177447e0c26 identifies parked checkpoint; complete tested working source identified by manifest and final amended payload equivalence, never inferred from metadata."
+    ]
+  },
+  "resourceSettlement": {
+    "at": "2026-10-16T04:07:35.372923+00:00",
+    "regularPayloads": 5998,
+    "literalPayloads": 6000,
+    "manifestSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+    "fullQaHostRegularEpochExact": true,
+    "sourceHashes": {
+      "src/rules/journey/journey-additional-controls.contracts.ts": "1b1f015082de68807f9089f179bceb4c084fd4e0d6bc35d94a597cadbd431a95",
+      "src/rules/journey/journey-additional-domains.contracts.ts": "98518315e3bb5893ffac45a937d59b694453426c94c2b5378aa19a497542c78e",
+      "src/rules/journey/journey-additional-fifo.contracts.ts": "e6ff50ca38b28d604209e52b3d338fc7a39110f1baab5f545125752b1e66683c",
+      "src/rules/journey/journey-additional-operation.contracts.ts": "8e7f4f2de47444724c58cc6fe829f31e55c49e87482365732f67c8a33a1e661e",
+      "src/rules/journey/journey-additional-projection.contracts.ts": "5fb49207eaf28127b851101b68926b4b93a05126c3f22d8923423d61c0656b89",
+      "src/rules/journey/journey-additional-transfiguration.fixtures.ts": "94c0c78245cd5394ddc7bdc412940fce73626ce2516f384cd9ea3b541c35cca1",
+      "src/rules/journey/journey-loop-state-controls.contracts.ts": "fff9a4dec4dedfd1e107894926a23cbea12653cb71132fc326972e538579fd48",
+      "src/rules/journey/journey-loop-state.ts": "ef29775f27f51a8ac8977a1a521f605c8c0a5a935bacaadb7feb9a42cb6263c1",
+      "src/rules/journey/journey-mandatory-loop.ts": "4eb21d77d6a8d3b4b4491095799a9e65e2c7513e49f7bd6b20735441bd97d354",
+      "src/rules/journey/journey-on-gain.ts": "b7900ec1a9e233f3ac9c6bb764e193cc97c4e73c946183033cfb8ab173af84e7",
+      "src/rules/journey/journey-subtype.ts": "9ba5134b7a68a07af3a0c6bddda05e0a470e5fefdccb46f0b47e5126abebb182",
+      "src/rules/journey/journey-transfiguration.test.ts": "852ce5e2b07fafb1eea2bee4a54c6fd9155971450cd7c34187301b79f15f8aa8",
+      "src/rules/journey/journey-transfiguration.ts": "89e53093fa6bddaff472456a84ade68925b82151215e2ce18522529c0fa96b7c",
+      "src/rules/journey/modifier-registry.ts": "68e1db0b97b41817765aa26d13256413fd0aa3d1475ff8d6642e1a2b604a7bd0",
+      "src/rules/reducer.ts": "87c182b16444c251028dd1043326a36a2ed91b1ce984140de266e4e15019ec5e",
+      "src/session/journey-additional-recovery.contracts.ts": "6538496984f63fd3e760bdaa3efb93aeebbf482af0020f4b82513d4e617e01f5",
+      "src/session/local-game.test.ts": "3bf51e89eeefe90bba7a86a1a7622c3cebfd996c380478b5a721b45754bb3876",
+      "src/types/journey.ts": "65131ef0e03521d80c4c9b88cf1154e7296c51b57ae775eb921cb7da8ffce46a"
+    },
+    "ownPidsAndGroups": [
+      5784,
+      5800,
+      42948,
+      42988
+    ],
+    "liveMatches": [],
+    "recordsExist": {
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+    },
+    "port": 5274,
+    "connectExit": 61,
+    "sharedProvider": "untouched",
+    "liveBirthRecords": [
+      "qa-01-live-owned-runtime.json",
+      "qa-01-live-ps-supplement.json"
+    ],
+    "initialPsQualification": "First ps used wrong top-level pid; independent live supplement succeeded, actual nested server/runner birth records preserved."
+  },
+  "artifactRoot": "artifacts/qa/hv-umm2.730/",
+  "retainedRuntimeDirectory": "artifacts/qa/hv-umm2.730/author-integration1/clock-runtime/",
+  "ownerRemainingDuties": [
+    "Fresh read-only Codex core review and proportional visual review",
+    "Exact native delivery and certified Tollgate promotion",
+    "Original273 full4UUID/P8/recipe/weighted300+journey300/sweep/coverage/finaljoin; production Glow activation belongs273"
+  ],
+  "originalValidationEpoch": {
+    "source": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+    "base": "ebbe40dda2c7e32a65bfcdea2ec28c2e8c18736e",
+    "implementationClock": {
+      "start": "2026-10-15T16:26:19.174000+00:00",
+      "end": "2026-10-16T03:17:02.086357+00:00",
+      "inclusiveMinutes": 650.71520595,
+      "through": "precommit evidence write; actual commit terminal timestamp retained externally in author-resume1 delivery receipt",
+      "sampling": "UNKNOWN",
+      "productiveModelCpu": "UNKNOWN",
+      "includes": "All original attempt, audits, admission, waits, failures, validation and QA since original start; no reset"
+    },
+    "runtimeSourceHashes": {
+      "src/rules/journey/journey-additional-controls.contracts.ts": "db920305c930a718e9656a249d3caa151a9f33a7c8e850d5ab29e3c471210e0d",
+      "src/rules/journey/journey-additional-domains.contracts.ts": "28ef6d0cf3214ebc54acd8b6d7376a9c9f232e756a3bee322bc9ef1e6d49e4a6",
+      "src/rules/journey/journey-additional-fifo.contracts.ts": "979c7ac0b4a2cbaea3987db23102fce16aa9ad6949365fda755f4ca6ee232327",
+      "src/rules/journey/journey-additional-operation.contracts.ts": "887b1293ccaf75e8c4ae6d577f5cbe5964caf73d5ea7ac86ea05c522114f856a",
+      "src/rules/journey/journey-additional-projection.contracts.ts": "5fb49207eaf28127b851101b68926b4b93a05126c3f22d8923423d61c0656b89",
+      "src/rules/journey/journey-additional-transfiguration.fixtures.ts": "94c0c78245cd5394ddc7bdc412940fce73626ce2516f384cd9ea3b541c35cca1",
+      "src/rules/journey/journey-loop-state-controls.contracts.ts": "fff9a4dec4dedfd1e107894926a23cbea12653cb71132fc326972e538579fd48",
+      "src/rules/journey/journey-loop-state.ts": "810dda293d4399d9f4e9a77f3131ba9df327a0ec04a0666260c41b6bd3078ee5",
+      "src/rules/journey/journey-mandatory-loop.ts": "1e847c4a0d1efc374deb115bfd646878a72b923b916ff26d47ac989f39506c61",
+      "src/rules/journey/journey-on-gain.ts": "6868af85a9cd6365305ddb9121f76b198d9202268b330653d68d322d86c18949",
+      "src/rules/journey/journey-subtype.ts": "a33f1b44364cfa9013c7afd87be1ea825cec666eb82b34861fb44d6df51f3f45",
+      "src/rules/journey/journey-transfiguration.test.ts": "852ce5e2b07fafb1eea2bee4a54c6fd9155971450cd7c34187301b79f15f8aa8",
+      "src/rules/journey/journey-transfiguration.ts": "57cb37c515a33e42be8b71c1b56921cc2684f2073c39e8d630d4936218c91547",
+      "src/rules/journey/modifier-registry.ts": "568035d3bd2df97e14a0dde9fddf0d9461a403a834bbd98f079b4403d86de0e2",
+      "src/rules/reducer.ts": "095941aef55402618fcdbdefab96f286dd4dac8746ac21ea49aba368d69617ba",
+      "src/session/journey-additional-recovery.contracts.ts": "73710eb1ba9a6b8a63cf5eaca4387f0439664311e622335347a6bcdd10e15d9d",
+      "src/session/local-game.test.ts": "3bf51e89eeefe90bba7a86a1a7622c3cebfd996c380478b5a721b45754bb3876",
+      "src/types/journey.ts": "71e6a8d87f12d83ca43c5d6210b95160552f15b56c056573d6bab6b5ac8e9778"
+    },
+    "heavy": {
+      "workers": 2,
+      "timeoutSeconds": 1800,
+      "timeoutStarts": "after lock admission",
+      "testStepSeconds": 96.4,
+      "queuePlusLauncherSeconds": 0.222625,
+      "pureKernelWait": "UNKNOWN",
+      "fullInnerExit": 0,
+      "fullOuterExit": 0,
+      "budgetCompliance": "UNCLAIMED on loaded host; no D19 waiver; owner Gate46 duty retained",
+      "canceledChildren": [
+        -15,
+        -15,
+        -15
+      ],
+      "canceledWrappers": [
+        241,
+        241,
+        241
+      ],
+      "failedFullInnerCount": 0
+    },
+    "qa": {
+      "invocation": "run-luCG54",
+      "reportSha256": "f2cc0146ed4d701b7e7a153058f307707af0f63b46d82934c5ef3c2f4edd8339",
+      "driverPreSnapshot": "qa-09-driver-pre.mjs",
+      "driverSha256": "3868a2bce0fff9d34da54d64744dca252213d1f0735233e23cd3a68d0b845888",
+      "hostChecker": "verify-qa-files.py",
+      "hostCheckerSha256": "fac0f11a475843487e8dfaf6563bc7a6b0c5f7c0c05709d13a3b367d685a016d",
+      "hostResult": "qa-09-host-verification.json",
+      "hostResultSha256": "ec3e676e02bf05fa95c776907cbc95dbb1dd1c0cb18c9d2c43c973f124729a6d",
+      "viewports": [
+        "1440x900",
+        "390x844"
+      ],
+      "caps": [],
+      "captures": {
+        "730-earned-pending-desktop.png": {
+          "sha256": "970d653f1824e3fa369cebbf5b440657df8fdbfb0cce8681de74bd3862cca92c",
+          "bytes": 4957619
+        },
+        "730-earned-pending-mobile.png": {
+          "sha256": "75e53979cb1087546c292de3886d77ae1349b3dd3bb44dd2ebfa7db3c851d12b",
+          "bytes": 1179524
+        },
+        "730-result-deck-desktop.png": {
+          "sha256": "1a0efe778292e85257fe77e3f861afd1dd18e4201dcac99f5bf699ad634f1c72",
+          "bytes": 2924930
+        },
+        "730-result-deck-mobile.png": {
+          "sha256": "2e8a751479dd26bbb76cc5e32ec4b91cb0474561ff30dd68d4d850ffbeaba4b2",
+          "bytes": 1056924
+        },
+        "730-selected-desktop.png": {
+          "sha256": "b00bb311a8a745fbf2190330c8760ea41c99296467c28e221a3a580f28b5674b",
+          "bytes": 4937527
+        },
+        "730-selected-mobile.png": {
+          "sha256": "6cf2ceadfe334191b517cde837935e134c175a15a9800ff67815c7d5ae8a9caf",
+          "bytes": 1176905
+        }
+      },
+      "views": {
+        "desktop": {
+          "actualDeckIndices": [
+            11,
+            10
+          ],
+          "before": 12,
+          "after": 14,
+          "applications": [
+            {
+              "entryId": "deck-5-0",
+              "copyEntryId": "deck-18-0",
+              "form": "Hastened",
+              "applications": [
+                {
+                  "form": "Hastened"
+                }
+              ]
+            },
+            {
+              "entryId": "deck-4-0",
+              "copyEntryId": "deck-18-1",
+              "form": "Inspired",
+              "applications": [
+                {
+                  "form": "Inspired"
+                }
+              ]
+            }
+          ],
+          "deckAndRouteExactAfterImport": true,
+          "otherStateDifferences": [
+            "runId"
+          ],
+          "runIdBeforeImport": "journey:1",
+          "runIdAfterImport": "journey:19",
+          "causes": [
+            {
+              "eventSeq": 18,
+              "ordinal": 0,
+              "entryId": "deck-5-0",
+              "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+              "applicationIndex": 0
+            },
+            {
+              "eventSeq": 18,
+              "ordinal": 1,
+              "entryId": "deck-4-0",
+              "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+              "applicationIndex": 0
+            }
+          ],
+          "drawIndices": [
+            0,
+            1
+          ],
+          "forms": [
+            "Hastened",
+            "Inspired"
+          ],
+          "exportedLogRows": 75,
+          "retainedLogRows": 82
+        },
+        "mobile": {
+          "actualDeckIndices": [
+            11,
+            10
+          ],
+          "before": 12,
+          "after": 14,
+          "applications": [
+            {
+              "entryId": "deck-5-0",
+              "copyEntryId": "deck-18-0",
+              "form": "Hastened",
+              "applications": [
+                {
+                  "form": "Hastened"
+                }
+              ]
+            },
+            {
+              "entryId": "deck-4-0",
+              "copyEntryId": "deck-18-1",
+              "form": "Inspired",
+              "applications": [
+                {
+                  "form": "Inspired"
+                }
+              ]
+            }
+          ],
+          "deckAndRouteExactAfterImport": true,
+          "otherStateDifferences": [
+            "runId"
+          ],
+          "runIdBeforeImport": "journey:1",
+          "runIdAfterImport": "journey:19",
+          "causes": [
+            {
+              "eventSeq": 18,
+              "ordinal": 0,
+              "entryId": "deck-5-0",
+              "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+              "applicationIndex": 0
+            },
+            {
+              "eventSeq": 18,
+              "ordinal": 1,
+              "entryId": "deck-4-0",
+              "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+              "applicationIndex": 0
+            }
+          ],
+          "drawIndices": [
+            0,
+            1
+          ],
+          "forms": [
+            "Hastened",
+            "Inspired"
+          ],
+          "exportedLogRows": 75,
+          "retainedLogRows": 82
+        }
+      },
+      "inspection": "All six PNG files verified by file and visually viewed. Selected outlines and reachable confirm action visible; responsive scrolling stays within viewport. Result deck shows14 cards and exact two formed Event copies. Existing desktop deck scroll reveals lower rows; no new renderer work.",
+      "qualifications": [
+        "Native OS chooser and native prompt painting untested. Actual hidden file input used with exact temporary prototype restoration.",
+        "QA01\u201304 driver pre-copy unavailable: qa04 after-dispatch snapshot and exact journal writes retained, no retroactive pre-byte claim. QA05\u201309 exact driver pre-copy/hash retained.",
+        "QA05\u201308 missing-result causes UNKNOWN. Actual pending save succeeded, but unreturned step receives no later assertion credit.",
+        "Initial host whole-state equality check failed because LOAD assigns new runId. Final check proves deck/route and every other state field equal, with runIdjourney:1\u2192journey:19 explicitly retained.",
+        "Real production Tome/Slime END_BATTLE workflow only. No production Glow activation or browser additional-effect claim; finite/FIFO/loop/recovery combined coverage uses deterministic public contracts."
+      ]
+    },
+    "resourceSettlement": {
+      "observedAt": "2026-10-16T03:15:13.103217+00:00",
+      "frozenFullRegularPayloadCount": 5965,
+      "mismatches": [],
+      "pidsAndGroupsChecked": [
+        27360,
+        69409,
+        43631,
+        11399,
+        11424,
+        58309,
+        64046,
+        70015,
+        77680,
+        82804,
+        86873,
+        92818,
+        96852,
+        99665
+      ],
+      "liveMatches": [],
+      "port": 5274,
+      "connectExit": 61,
+      "slotRecordsExist": {
+        ".browser-qa.slot-1.lock.owner.json": false,
+        ".browser-qa.slot-1.lock.server.json": false
+      },
+      "qualification": "Post-settlement absence; final QA09 birth payload was not captured while live. Actual runner reports its PID/PG ownership and cleanup; QA04 prior live birth/owner payload retained. Shared MCP service untouched."
+    },
+    "commandsRemainBoundToOriginalEpoch": true,
+    "durableDirectory": "author-resume1",
+    "actualOriginalCommitWindow": "2026-10-15T16:26:19.174Z through2026-10-16T03:18:17.568382Z;651.9732397minutes"
+  },
+  "integration": {
+    "originalSource": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+    "failedCandidate": "01a142ba-9fcc-7641-adcd-98e74718917e",
+    "candidateState": "terminal merge-conflict; no tested OID or promotion authority",
+    "ownerUpdate1": "actual exit5; clean exact source rollback; doctor healthy/no pending update block",
+    "parkedCheckpoint": "8b4ee91495bd4a608551e070f241a891ae6c1ef2",
+    "ownerUpdate2": "actual0; updated checkpoint exact parent=current staging; clean/no rebase; doctor healthy",
+    "updatedCheckpoint": "4177447e0c26c9d49510f047af65bd692cc75c20",
+    "base": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+    "temporaryCheckpoints": "UNVALIDATED; never submit/approve",
+    "sourceRecovery": "Only saved original reducer finishTransition body and own import replacement restored; peer currentTutorialPresentation/battleGuidanceOf imports and routeDomain gate byte-preserved; every other24 original payload exact until own evidence writes",
+    "proofs": [
+      "reapply-proof.json",
+      "reapply-literal-scope-proof.json",
+      "pre-full-freeze-proof.json",
+      "full-terminal-proof.json",
+      "final-resource-and-source-settlement.json"
+    ],
+    "workingManifestSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+    "regularPayloads": 5998,
+    "literalPayloads": 6000,
+    "newbaseLiteralPayloads": 5987,
+    "manifestQualification": "Wrapper omits two directory symlinks; separate literal scope proof includes both. Retained25-path prebytes compare against newbase, unchanged blobs reconstruct from exact updated checkpoint/base.",
+    "buildMetadataQualification": "Build metadata HEAD4177447e0c26 identifies parked checkpoint; complete tested working source identified by manifest and final amended payload equivalence, never inferred from metadata.",
+    "commands": [
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 60035,
+        "startedAt": "2026-10-16T03:52:26.853310+00:00",
+        "exitCode": 1,
+        "wallSeconds": 7.620996713638306,
+        "monotonicSeconds": 7.6209401250234805,
+        "childUserSeconds": 7.111942,
+        "childSystemSeconds": 2.2075839999999998,
+        "loadBefore": [
+          4.66357421875,
+          5.90380859375,
+          6.84765625
+        ],
+        "loadAfter": [
+          5.435546875,
+          6.02294921875,
+          6.8779296875
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-01.log",
+        "receipt": "focused-01.json",
+        "receiptSha256": "e8947a3f5be4a901a6118f1b5703a9d338fce4b5c7595027c5813183a8d7c20e",
+        "rawLogSha256": "4e6feac452c6851e2e1a3c476aa8ae3f6f9167ae2ddb3dc094189a5e56ae8a77",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "143685edce22737e3f436af0f6d3d5807e615d124ead618a1514ec4967b2d6eb",
+        "manifestPostSha256": "143685edce22737e3f436af0f6d3d5807e615d124ead618a1514ec4967b2d6eb",
+        "testTerminal": [
+          "Test Files  1 failed | 1 passed (2)",
+          "Tests  1 failed | 204 passed (205)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 75610,
+        "startedAt": "2026-10-16T03:56:18.573336+00:00",
+        "exitCode": 1,
+        "wallSeconds": 7.9320549964904785,
+        "monotonicSeconds": 7.931995416991413,
+        "childUserSeconds": 7.234184,
+        "childSystemSeconds": 2.323643,
+        "loadBefore": [
+          4.36376953125,
+          5.09423828125,
+          6.2626953125
+        ],
+        "loadAfter": [
+          4.65478515625,
+          5.14208984375,
+          6.2724609375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-02-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-02.log",
+        "receipt": "focused-02.json",
+        "receiptSha256": "b816a3f3aac38ae900c316b2e0d24e62fb049fe411acbcbd17a056060817553e",
+        "rawLogSha256": "ccf5b0628c57cd3ee89a7e606f4049a1da2218d85c25dcbb3821556d156397f7",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "6191158ba90956823a0261a87f4a9a5ee1701d10d7078b6bbb3903853b1b00cc",
+        "manifestPostSha256": "6191158ba90956823a0261a87f4a9a5ee1701d10d7078b6bbb3903853b1b00cc",
+        "testTerminal": [
+          "Test Files  1 failed | 1 passed (2)",
+          "Tests  1 failed | 209 passed (210)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 78384,
+        "startedAt": "2026-10-16T03:57:00.529036+00:00",
+        "exitCode": 0,
+        "wallSeconds": 6.041116237640381,
+        "monotonicSeconds": 6.041075540997554,
+        "childUserSeconds": 7.199085,
+        "childSystemSeconds": 2.037247,
+        "loadBefore": [
+          4.7099609375,
+          5.0947265625,
+          6.2080078125
+        ],
+        "loadAfter": [
+          5.05322265625,
+          5.1591796875,
+          6.22412109375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-03-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-03.log",
+        "receipt": "focused-03.json",
+        "receiptSha256": "b43e73a2aebe2679068a316cb084434e50e54e13b3c79b246776f01fc71c7b4f",
+        "rawLogSha256": "0ab5e1ba6ac479beb488a7be92536b2f91677a706586990cd60c50725f52175a",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "c1eb623ae491f013ae249e4f611f9f4afc965ef70bc62605257881aeba2d3fbd",
+        "manifestPostSha256": "c1eb623ae491f013ae249e4f611f9f4afc965ef70bc62605257881aeba2d3fbd",
+        "testTerminal": [
+          "Test Files  2 passed (2)",
+          "Tests  210 passed (210)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts",
+          "src/rules/battle/journey-tutorial-guidance.test.ts",
+          "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+          "src/rules/battle/engine-battle.test.ts",
+          "src/battle/components/battle-presentation.test.tsx"
+        ],
+        "pid": 85486,
+        "startedAt": "2026-10-16T03:58:44.621276+00:00",
+        "exitCode": 0,
+        "wallSeconds": 8.982406854629517,
+        "monotonicSeconds": 8.981791125028394,
+        "childUserSeconds": 10.991818,
+        "childSystemSeconds": 3.09184,
+        "loadBefore": [
+          4.18798828125,
+          4.87060546875,
+          5.99365234375
+        ],
+        "loadAfter": [
+          4.61376953125,
+          4.93994140625,
+          6.0048828125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-04-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-04.log",
+        "receipt": "focused-04.json",
+        "receiptSha256": "dcbb0674c222a795538f8fd3b2e24101ca8f6885a56ae50a203792fb3cf63032",
+        "rawLogSha256": "16238047ed55d304950e0e5b1ef97db6f62abd24b74ab60059bbd3e260dad762",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "manifestPostSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "testTerminal": [
+          "Test Files  6 passed (6)",
+          "Tests  275 passed (275)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 89998,
+        "startedAt": "2026-10-16T03:59:51.521179+00:00",
+        "exitCode": 2,
+        "wallSeconds": 45.7352180480957,
+        "monotonicSeconds": 45.734520124970004,
+        "childUserSeconds": 141.22499,
+        "childSystemSeconds": 11.807969,
+        "loadBefore": [
+          4.419921875,
+          4.8505859375,
+          5.904296875
+        ],
+        "loadAfter": [
+          6.2392578125,
+          5.28662109375,
+          6.009765625
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/review-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/review-01.log",
+        "receipt": "review-01.json",
+        "receiptSha256": "781dc58338af62a3d6243093c961edcab63df0458f3b81812aa090234ac48873",
+        "rawLogSha256": "84c39544789473c8e2e924ad16f4f9d902c2178e087de2f3d6a7d0cbd49c8963",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "manifestPostSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "testTerminal": [
+          "Test Files  149 passed (149)",
+          "Tests  8918 passed (8918)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 93985,
+        "startedAt": "2026-10-16T04:00:53.652415+00:00",
+        "exitCode": 0,
+        "wallSeconds": 6.892411947250366,
+        "monotonicSeconds": 6.892311125004198,
+        "childUserSeconds": 7.293481,
+        "childSystemSeconds": 2.079082,
+        "loadBefore": [
+          5.81201171875,
+          5.25048828125,
+          5.97998046875
+        ],
+        "loadAfter": [
+          6.06689453125,
+          5.3125,
+          5.99755859375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-05-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-05.log",
+        "receipt": "focused-05.json",
+        "receiptSha256": "fdfea6961f64cfde995db7c14b0a50f77246e6adfb710e6ec2cbd2ec70206674",
+        "rawLogSha256": "b2b273ee52cebbef5ba4f02d9cf6dba70b369a65575910824c60f2f6dfe342e2",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  2 passed (2)",
+          "Tests  210 passed (210)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 99294,
+        "startedAt": "2026-10-16T04:02:11.470937+00:00",
+        "exitCode": 0,
+        "wallSeconds": 45.793395042419434,
+        "monotonicSeconds": 45.79271104099462,
+        "childUserSeconds": 115.625424,
+        "childSystemSeconds": 10.522654999999999,
+        "loadBefore": [
+          4.92431640625,
+          5.158203125,
+          5.8857421875
+        ],
+        "loadAfter": [
+          6.29345703125,
+          5.5029296875,
+          5.97509765625
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/review-02-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/review-02.log",
+        "receipt": "review-02.json",
+        "receiptSha256": "8d3d25b5dd0e48be4b8d2ff387f5f6c28944206e4374dfb86eaf8fd19bd064c2",
+        "rawLogSha256": "d723a7c64b308611a023bb1ce27900a74303a8d138346b57cc92b85e6b1e029c",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  149 passed (149)",
+          "Tests  8918 passed (8918)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 3695,
+        "startedAt": "2026-10-16T04:03:12.095387+00:00",
+        "exitCode": 0,
+        "wallSeconds": 7.981550931930542,
+        "monotonicSeconds": 7.981432207976468,
+        "childUserSeconds": 4.436875,
+        "childSystemSeconds": 2.209546,
+        "loadBefore": [
+          5.9384765625,
+          5.46142578125,
+          5.95166015625
+        ],
+        "loadAfter": [
+          6.04052734375,
+          5.49609375,
+          5.95751953125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/knip-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/knip-01.log",
+        "receipt": "knip-01.json",
+        "receiptSha256": "c625988abbaf3dff7213fc35a403913382ea7ea84034dbd490ee03d463c98fbb",
+        "rawLogSha256": "a2b75d3683430600a9483cf99fe9aa79d1cd8702440850bcbae35cd75ef3266f",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": []
+      },
+      {
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/730-root/integration1/clock-runtime/run.py",
+          "full-inner-01",
+          "timeout",
+          "1800",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 5784,
+        "startedAt": "2026-10-16T04:03:42.521931+00:00",
+        "exitCode": 0,
+        "wallSeconds": 124.11169481277466,
+        "monotonicSeconds": 124.1098383750068,
+        "childUserSeconds": 287.41769800000003,
+        "childSystemSeconds": 27.060047,
+        "loadBefore": [
+          5.7958984375,
+          5.47900390625,
+          5.93994140625
+        ],
+        "loadAfter": [
+          5.306640625,
+          5.59228515625,
+          5.93408203125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/full-outer-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/full-outer-01.log",
+        "receipt": "full-outer-01.json",
+        "receiptSha256": "cb53135d913b32f84c6565f829c2a79bd51e5f109c5e4fcc6dd529583c3d659a",
+        "rawLogSha256": "9a583a1b173725917d419ddc4943505daed3f2904fe8b8cdbd60d8b4ca8016b5",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  434 passed (434)",
+          "Tests  12195 passed (12195)"
+        ]
+      },
+      {
+        "command": [
+          "timeout",
+          "1800",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 5800,
+        "startedAt": "2026-10-16T04:03:42.729682+00:00",
+        "exitCode": 0,
+        "wallSeconds": 123.69855999946594,
+        "monotonicSeconds": 123.6967149580014,
+        "childUserSeconds": 287.238832,
+        "childSystemSeconds": 26.810795,
+        "loadBefore": [
+          5.7958984375,
+          5.47900390625,
+          5.93994140625
+        ],
+        "loadAfter": [
+          5.306640625,
+          5.59228515625,
+          5.93408203125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/full-inner-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/full-inner-01.log",
+        "receipt": "full-inner-01.json",
+        "receiptSha256": "0cfdd0c041f25f23836657af6fe968f3f7f161780faaf61641be5295413b9640",
+        "rawLogSha256": "9683004ac37ccbb46a64652b5bc2d7072844a72475437a549690d9353bbd2c1c",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  434 passed (434)",
+          "Tests  12195 passed (12195)"
+        ]
+      },
+      {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/730-root/integration1/clock-runtime/qa-tome-slime.mjs",
+          "--bead",
+          "hv-umm2.730",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "pid": 42948,
+        "startedAt": "2026-10-16T04:06:04.583554+00:00",
+        "exitCode": 0,
+        "wallSeconds": 52.134921073913574,
+        "monotonicSeconds": 52.134145624993835,
+        "childUserSeconds": 7.100368,
+        "childSystemSeconds": 2.922242,
+        "loadBefore": [
+          4.763671875,
+          5.4541015625,
+          5.87646484375
+        ],
+        "loadAfter": [
+          4.7900390625,
+          5.36328125,
+          5.818359375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/qa-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/qa-01.log",
+        "receipt": "qa-01.json",
+        "receiptSha256": "e5a83d9c2dcc4e5211249337ad2802011e20078bcbb14feb1b4063750b1f2aff",
+        "rawLogSha256": "21a8f4a351b23cd12e0b7bb5191b2bcbe45fee179014268aaf97ca747bb2e3c6",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": []
+      },
+      {
+        "command": [
+          "python3",
+          "/tmp/730-root/integration1/clock-runtime/verify-qa-files.py",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH"
+        ],
+        "pid": 44500,
+        "startedAt": "2026-10-16T04:07:06.132046+00:00",
+        "exitCode": 0,
+        "wallSeconds": 0.04797005653381348,
+        "monotonicSeconds": 0.04797016701195389,
+        "childUserSeconds": 0.027682000000000002,
+        "childSystemSeconds": 0.017925999999999997,
+        "loadBefore": [
+          4.43408203125,
+          5.26806640625,
+          5.779296875
+        ],
+        "loadAfter": [
+          4.43408203125,
+          5.26806640625,
+          5.779296875
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/qa-host-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/qa-host-01.log",
+        "receipt": "qa-host-01.json",
+        "receiptSha256": "5974353d297434d553497384cff88c2a24254353eee869868cede227f7282eb8",
+        "rawLogSha256": "41c074402644a7ad5a49d0d07074675abb0fd7e544ce0be8f6793870d15e9b99",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": []
+      }
+    ],
+    "cpuQualification": "Wrapper child aggregate includes actual command plus ps birth-observation subprocess; outer aggregate also includes inner wrapper children. Isolated command/model CPU UNKNOWN.",
+    "sourceFreeze": "Runtime/test bytes frozen across focused05/review02/Knip01/full/QA/host; evidence-only edits follow.",
+    "clockRepair": "See importClockRepair; original combined source/commands/QA remain in preClockIntegrationEpoch."
+  },
+  "originalRetainedRuntimeDirectory": "author-resume1",
+  "preClockIntegrationEpoch": {
+    "implementationClock": {
+      "start": "2026-10-15T16:26:19.174000+00:00",
+      "end": "2026-10-16T03:37:21.338865+00:00",
+      "inclusiveMinutes": 671.0360810833333,
+      "through": "current pre-amend evidence write; actual final amended-commit endpoint retained externally",
+      "sampling": "UNKNOWN",
+      "productiveModelCpu": "UNKNOWN",
+      "includes": "Original audit/attempt/admission/waits/failures/full/QA, conflict/native rollback and park/update/reapply, all combined validation and QA; no clock reset"
+    },
+    "runtimeSourceHashes": {
+      "src/rules/journey/journey-additional-controls.contracts.ts": "db920305c930a718e9656a249d3caa151a9f33a7c8e850d5ab29e3c471210e0d",
+      "src/rules/journey/journey-additional-domains.contracts.ts": "28ef6d0cf3214ebc54acd8b6d7376a9c9f232e756a3bee322bc9ef1e6d49e4a6",
+      "src/rules/journey/journey-additional-fifo.contracts.ts": "979c7ac0b4a2cbaea3987db23102fce16aa9ad6949365fda755f4ca6ee232327",
+      "src/rules/journey/journey-additional-operation.contracts.ts": "887b1293ccaf75e8c4ae6d577f5cbe5964caf73d5ea7ac86ea05c522114f856a",
+      "src/rules/journey/journey-additional-projection.contracts.ts": "5fb49207eaf28127b851101b68926b4b93a05126c3f22d8923423d61c0656b89",
+      "src/rules/journey/journey-additional-transfiguration.fixtures.ts": "94c0c78245cd5394ddc7bdc412940fce73626ce2516f384cd9ea3b541c35cca1",
+      "src/rules/journey/journey-loop-state-controls.contracts.ts": "fff9a4dec4dedfd1e107894926a23cbea12653cb71132fc326972e538579fd48",
+      "src/rules/journey/journey-loop-state.ts": "810dda293d4399d9f4e9a77f3131ba9df327a0ec04a0666260c41b6bd3078ee5",
+      "src/rules/journey/journey-mandatory-loop.ts": "1e847c4a0d1efc374deb115bfd646878a72b923b916ff26d47ac989f39506c61",
+      "src/rules/journey/journey-on-gain.ts": "6868af85a9cd6365305ddb9121f76b198d9202268b330653d68d322d86c18949",
+      "src/rules/journey/journey-subtype.ts": "a33f1b44364cfa9013c7afd87be1ea825cec666eb82b34861fb44d6df51f3f45",
+      "src/rules/journey/journey-transfiguration.test.ts": "852ce5e2b07fafb1eea2bee4a54c6fd9155971450cd7c34187301b79f15f8aa8",
+      "src/rules/journey/journey-transfiguration.ts": "57cb37c515a33e42be8b71c1b56921cc2684f2073c39e8d630d4936218c91547",
+      "src/rules/journey/modifier-registry.ts": "568035d3bd2df97e14a0dde9fddf0d9461a403a834bbd98f079b4403d86de0e2",
+      "src/rules/reducer.ts": "20b82550d018dc45c0a345710bf6e802008872bdd60d127c9802cd312d959782",
+      "src/session/journey-additional-recovery.contracts.ts": "73710eb1ba9a6b8a63cf5eaca4387f0439664311e622335347a6bcdd10e15d9d",
+      "src/session/local-game.test.ts": "3bf51e89eeefe90bba7a86a1a7622c3cebfd996c380478b5a721b45754bb3876",
+      "src/types/journey.ts": "71e6a8d87f12d83ca43c5d6210b95160552f15b56c056573d6bab6b5ac8e9778"
+    },
+    "testFiles": {
+      "src/rules/journey/journey-additional-controls.contracts.ts": 90,
+      "src/rules/journey/journey-additional-domains.contracts.ts": 228,
+      "src/rules/journey/journey-additional-fifo.contracts.ts": 61,
+      "src/rules/journey/journey-additional-operation.contracts.ts": 79,
+      "src/rules/journey/journey-additional-projection.contracts.ts": 105,
+      "src/rules/journey/journey-additional-transfiguration.fixtures.ts": 33,
+      "src/session/journey-additional-recovery.contracts.ts": 62
+    },
+    "testDelta": {
+      "files": 7,
+      "lines": 665,
+      "jsdomFiles": 0,
+      "newTestEntrypoints": 0
+    },
+    "runtimeDelta": {
+      "added": 221,
+      "removed": 53,
+      "gross": 274,
+      "newPublicApis": 6,
+      "runtimeWriterPaths": 8
+    },
+    "integration": {
+      "originalSource": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+      "failedCandidate": "01a142ba-9fcc-7641-adcd-98e74718917e",
+      "candidateState": "terminal merge-conflict; no tested OID or promotion authority",
+      "ownerUpdate1": "actual exit5; clean exact source rollback; doctor healthy/no pending update block",
+      "parkedCheckpoint": "8b4ee91495bd4a608551e070f241a891ae6c1ef2",
+      "ownerUpdate2": "actual0; updated checkpoint exact parent=current staging; clean/no rebase; doctor healthy",
+      "updatedCheckpoint": "4177447e0c26c9d49510f047af65bd692cc75c20",
+      "base": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "temporaryCheckpoints": "UNVALIDATED; never submit/approve",
+      "sourceRecovery": "Only saved original reducer finishTransition body and own import replacement restored; peer currentTutorialPresentation/battleGuidanceOf imports and routeDomain gate byte-preserved; every other24 original payload exact until own evidence writes",
+      "proofs": [
+        "reapply-proof.json",
+        "reapply-literal-scope-proof.json",
+        "pre-full-freeze-proof.json",
+        "full-terminal-proof.json",
+        "final-resource-and-source-settlement.json"
+      ],
+      "workingManifestSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+      "regularPayloads": 5998,
+      "literalPayloads": 6000,
+      "newbaseLiteralPayloads": 5987,
+      "manifestQualification": "Wrapper omits two directory symlinks; separate literal scope proof includes both. Retained25-path prebytes compare against newbase, unchanged blobs reconstruct from exact updated checkpoint/base.",
+      "buildMetadataQualification": "Tests/QA execute combined working reducer20b825... while Git HEAD/buildGitSha identify parked checkpoint4177447e0c26; that checkpoint does not contain tested reducer. Final amended payload equivalence is checked explicitly, not inferred from build metadata.",
+      "commands": [
+        {
+          "command": [
+            "npm",
+            "test",
+            "--",
+            "src/rules/journey/journey-transfiguration.test.ts",
+            "src/session/local-game.test.ts",
+            "src/rules/battle/journey-tutorial-guidance.test.ts",
+            "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+            "src/rules/battle/engine-battle.test.ts",
+            "src/battle/components/battle-presentation.test.tsx"
+          ],
+          "pid": 27049,
+          "startedAt": "2026-10-16T03:29:25.391666+00:00",
+          "exitCode": 0,
+          "wallSeconds": 12.56356692314148,
+          "monotonicSeconds": 12.56347137503326,
+          "childUserSeconds": 14.172803,
+          "childSystemSeconds": 3.859197,
+          "loadBefore": [
+            10.92236328125,
+            7.36083984375,
+            7.642578125
+          ],
+          "loadAfter": [
+            11.64111328125,
+            7.68701171875,
+            7.7529296875
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/focused-01-pre",
+          "rawLog": "focused-01.log",
+          "receipt": "focused-01.json",
+          "receiptSha256": "8adbaeec07d6cc721b80f605b5110eff38a2a6eef3e37f4108b148abe58ba8d3",
+          "rawLogSha256": "d6b58903935873e05e35b3706c387fd328c690b5b1daf962aeb868c1f60b29ac",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "focused-01-live-process.json",
+          "testTerminal": [
+            "Test Files  6 passed (6)",
+            "Tests  268 passed (268)"
+          ]
+        },
+        {
+          "command": [
+            "npm",
+            "run",
+            "review"
+          ],
+          "pid": 75864,
+          "startedAt": "2026-10-16T03:29:59.745057+00:00",
+          "exitCode": 0,
+          "wallSeconds": 52.681395053863525,
+          "monotonicSeconds": 52.68099866696866,
+          "childUserSeconds": 155.594901,
+          "childSystemSeconds": 13.273948,
+          "loadBefore": [
+            17.6455078125,
+            9.32275390625,
+            8.33837890625
+          ],
+          "loadAfter": [
+            17.23095703125,
+            10.85400390625,
+            8.98291015625
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/review-01-pre",
+          "rawLog": "review-01.log",
+          "receipt": "review-01.json",
+          "receiptSha256": "a28b795d9c4fb71dad99a939f4ce2a77c4cebac4088ddb797d4d6ec1b46580c6",
+          "rawLogSha256": "9a084bbad031719ef82fd86bc62ad26c30b5c17743f80ab6a6363fa591ac1034",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "review-01-live-process.json",
+          "testTerminal": [
+            "Test Files  149 passed (149)",
+            "Tests  8911 passed (8911)"
+          ]
+        },
+        {
+          "command": [
+            "npm",
+            "run",
+            "knip"
+          ],
+          "pid": 81396,
+          "startedAt": "2026-10-16T03:30:58.684038+00:00",
+          "exitCode": 0,
+          "wallSeconds": 4.3807289600372314,
+          "monotonicSeconds": 4.3806962089729495,
+          "childUserSeconds": 4.357550000000001,
+          "childSystemSeconds": 1.466054,
+          "loadBefore": [
+            16.09130859375,
+            10.72314453125,
+            8.94775390625
+          ],
+          "loadAfter": [
+            15.5234375,
+            10.6943359375,
+            8.94775390625
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/knip-01-pre",
+          "rawLog": "knip-01.log",
+          "receipt": "knip-01.json",
+          "receiptSha256": "2fdc63a02140512ce9bcaface104f25de1f83c5f19e34524ee2991cf3ab8cd5d",
+          "rawLogSha256": "f35ec2bc2123472ea356765c5c762a76319b39cd907dbc80e3b4392f99c457cb",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "knip-01-live-process.json",
+          "testTerminal": []
+        },
+        {
+          "command": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "python3",
+            "/tmp/730-root/integration1/author-runtime/run.py",
+            "full-inner-01",
+            "timeout",
+            "1800",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "npm",
+            "run",
+            "review:full"
+          ],
+          "pid": 83604,
+          "startedAt": "2026-10-16T03:31:28.674501+00:00",
+          "exitCode": 0,
+          "wallSeconds": 136.54352498054504,
+          "monotonicSeconds": 136.54248200001894,
+          "childUserSeconds": 312.674059,
+          "childSystemSeconds": 31.358045999999998,
+          "loadBefore": [
+            12.1162109375,
+            10.27001953125,
+            8.84375
+          ],
+          "loadAfter": [
+            7.22802734375,
+            9.1318359375,
+            8.60595703125
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/full-outer-01-pre",
+          "rawLog": "full-outer-01.log",
+          "receipt": "full-outer-01.json",
+          "receiptSha256": "04028db411150560a774874670e8e44ec1f988b50d26a3baf538a7e2a855fd53",
+          "rawLogSha256": "9c6897d767a5ebe027528daaba92951b5281dfbcf981e5a74685dfc3b96a6d74",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "full-outer-01-live-process.json",
+          "testTerminal": [
+            "Test Files  434 passed (434)",
+            "Tests  12188 passed (12188)"
+          ]
+        },
+        {
+          "command": [
+            "timeout",
+            "1800",
+            "env",
+            "JOURNEY_TEST_WORKERS=2",
+            "npm",
+            "run",
+            "review:full"
+          ],
+          "pid": 83620,
+          "startedAt": "2026-10-16T03:31:28.892886+00:00",
+          "exitCode": 0,
+          "wallSeconds": 136.11577010154724,
+          "monotonicSeconds": 136.11473274999298,
+          "childUserSeconds": 312.489926,
+          "childSystemSeconds": 31.090032,
+          "loadBefore": [
+            12.1162109375,
+            10.27001953125,
+            8.84375
+          ],
+          "loadAfter": [
+            7.22802734375,
+            9.1318359375,
+            8.60595703125
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/full-inner-01-pre",
+          "rawLog": "full-inner-01.log",
+          "receipt": "full-inner-01.json",
+          "receiptSha256": "e020437d86be3ce7761b9e07e93988026417506e4a332baa623019aea8626cf1",
+          "rawLogSha256": "a1cc6b1ec278cb4795d75f6540d9705de2bf4f15e466c4579b9f4c5513a891a5",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "full-inner-01-live-process.json",
+          "testTerminal": [
+            "Test Files  434 passed (434)",
+            "Tests  12188 passed (12188)"
+          ]
+        },
+        {
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/730-root/integration1/author-runtime/qa-tome-slime.mjs",
+            "--bead",
+            "hv-umm2.730",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "300"
+          ],
+          "pid": 26917,
+          "startedAt": "2026-10-16T03:34:08.419247+00:00",
+          "exitCode": 0,
+          "wallSeconds": 48.13604402542114,
+          "monotonicSeconds": 48.13567420898471,
+          "childUserSeconds": 7.165558,
+          "childSystemSeconds": 2.9643569999999997,
+          "loadBefore": [
+            6.29541015625,
+            8.75244140625,
+            8.48291015625
+          ],
+          "loadAfter": [
+            7.03125,
+            8.6591796875,
+            8.46533203125
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/qa-01-pre",
+          "rawLog": "qa-01.log",
+          "receipt": "qa-01.json",
+          "receiptSha256": "f8e344a5053a55264dc7f2952157d8a7fa90dd821657a302fe577169049aca3d",
+          "rawLogSha256": "3a9a7c5357338706829e68b12600a17f4c2affb1d93aaf0863c8ce1594498cdf",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "qa-01-live-process.json",
+          "testTerminal": []
+        },
+        {
+          "command": [
+            "python3",
+            "/tmp/730-root/integration1/author-runtime/verify-qa-files.py",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-vsArAW"
+          ],
+          "pid": 30438,
+          "startedAt": "2026-10-16T03:35:01.438847+00:00",
+          "exitCode": 0,
+          "wallSeconds": 0.05285787582397461,
+          "monotonicSeconds": 0.0528580840327777,
+          "childUserSeconds": 0.030636999999999998,
+          "childSystemSeconds": 0.019879999999999995,
+          "loadBefore": [
+            6.7080078125,
+            8.56494140625,
+            8.43310546875
+          ],
+          "loadAfter": [
+            6.7080078125,
+            8.56494140625,
+            8.43310546875
+          ],
+          "preSnapshot": "/tmp/730-root/integration1/author-runtime/qa-host-01-pre",
+          "rawLog": "qa-host-01.log",
+          "receipt": "qa-host-01.json",
+          "receiptSha256": "dd83370e4d87b776b5b0a382179c842b35f1c5141e8a0e984e520470d6963dff",
+          "rawLogSha256": "b51e689f3fcf772cdfe488ae1b26268d6d84c7515f36193252aeae69fc3d8c19",
+          "manifestRegularCount": 5998,
+          "preEqualsPost": true,
+          "manifestPreSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "manifestPostSha256": "8711db63cd8cf6445bb410255e7d1a42ffa84e1c68fdec106e165e9c510fc799",
+          "liveProcessReceipt": "qa-host-01-live-process.json",
+          "testTerminal": []
+        }
+      ],
+      "cpuQualification": "Measured wrapper child totals include each actual command and its ps birth-observation subprocess. Outer totals also include inner wrapper children; isolated command CPU is not asserted.",
+      "sourceFreeze": "No runtime/test edits during combined focused/review/Knip/full/QA/host checks; evidence-only updates follow."
+    },
+    "heavy": {
+      "source": "combined working manifest8711db... on newbase4e9e1a2",
+      "workers": 2,
+      "innerTimeoutSeconds": 1800,
+      "timeoutStarts": "after native heavy.lock admission",
+      "fullInnerExit": 0,
+      "fullOuterExit": 0,
+      "fullInnerWallSeconds": 136.11577010154724,
+      "fullOuterWallSeconds": 136.54352498054504,
+      "testStepSeconds": 97.2,
+      "tests": 12188,
+      "files": 434,
+      "queuePlusLauncherSeconds": 0.218385,
+      "pureKernelQueue": "UNKNOWN",
+      "initialHostOneMinuteLoad": 12.1162109375,
+      "budgetCompliance": "UNCLAIMED; loaded host, no D19 waiver; owner Gate46 duty retained",
+      "sourcePrePostStable": true,
+      "newFailedOrCanceledInnerRuns": 0
+    },
+    "qa": {
+      "source": "combined working manifest8711db...; metadata HEAD4177447e0c26",
+      "invocation": "run-vsArAW",
+      "reportSha256": "2fd283460f83c74f0a6a8e73b4560bc700173ac6ef50555c32516d2dcfe24e0e",
+      "driverPreSnapshot": "qa-01-driver-dispatch.mjs",
+      "driverSha256": "3868a2bce0fff9d34da54d64744dca252213d1f0735233e23cd3a68d0b845888",
+      "driverByteExactOriginalSuccessfulQA09": true,
+      "hostChecker": "verify-qa-files.py",
+      "hostCheckerSha256": "633e5b7caf99b90ed97f3ceb6c67e800c2f442ee0cfefd0b56f50ab47b6fb9f5",
+      "hostCheckerActualExit": 0,
+      "hostResult": "qa-01-host-verification.json",
+      "hostResultSha256": "9c57a22e96f5429355976b748cab472ae2e81c9d762510349918abe908d86227",
+      "viewports": [
+        "1440x900",
+        "390x844"
+      ],
+      "caps": [],
+      "captures": {
+        "730-earned-pending-desktop.png": {
+          "sha256": "f42b59ce2fd6f010f1a2604209eaf806f56b79ff0fb1c4e42eb6ee6ffde6443d",
+          "bytes": 4957658
+        },
+        "730-earned-pending-mobile.png": {
+          "sha256": "1505366b3cf9d2577dfc08582111d2239b55ca0ccdaee427bea97b0c79acb24d",
+          "bytes": 1179218
+        },
+        "730-result-deck-desktop.png": {
+          "sha256": "10624ea68b9048b2ef0a39c11d8e269aa5defaaba51a08151e1d0e22e3d2f835",
+          "bytes": 2924979
+        },
+        "730-result-deck-mobile.png": {
+          "sha256": "9b1ad446cf07191a26a7da699051692470998ed53ee4aabbf08662201791cfe5",
+          "bytes": 1056794
+        },
+        "730-selected-desktop.png": {
+          "sha256": "4887003c2ab07ce369593f7e420632dccce1fc258f396c4eff3d48aae99d53c4",
+          "bytes": 4937476
+        },
+        "730-selected-mobile.png": {
+          "sha256": "dbfa21974760c7be2991e5791f92da32333958796390cb09f84ae04d85db2edf",
+          "bytes": 1176917
+        }
+      },
+      "views": {
+        "desktop": {
+          "actualDeckIndices": [
+            11,
+            10
+          ],
+          "before": 12,
+          "after": 14,
+          "applications": [
+            {
+              "entryId": "deck-5-0",
+              "copyEntryId": "deck-18-0",
+              "form": "Hastened",
+              "applications": [
+                {
+                  "form": "Hastened"
+                }
+              ]
+            },
+            {
+              "entryId": "deck-4-0",
+              "copyEntryId": "deck-18-1",
+              "form": "Inspired",
+              "applications": [
+                {
+                  "form": "Inspired"
+                }
+              ]
+            }
+          ],
+          "deckAndRouteExactAfterImport": true,
+          "otherStateDifferences": [
+            "runId"
+          ],
+          "runIdBeforeImport": "journey:1",
+          "runIdAfterImport": "journey:19",
+          "causes": [
+            {
+              "eventSeq": 18,
+              "ordinal": 0,
+              "entryId": "deck-5-0",
+              "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+              "applicationIndex": 0
+            },
+            {
+              "eventSeq": 18,
+              "ordinal": 1,
+              "entryId": "deck-4-0",
+              "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+              "applicationIndex": 0
+            }
+          ],
+          "drawIndices": [
+            0,
+            1
+          ],
+          "forms": [
+            "Hastened",
+            "Inspired"
+          ],
+          "exportedLogRows": 75,
+          "retainedLogRows": 82
+        },
+        "mobile": {
+          "actualDeckIndices": [
+            11,
+            10
+          ],
+          "before": 12,
+          "after": 14,
+          "applications": [
+            {
+              "entryId": "deck-5-0",
+              "copyEntryId": "deck-18-0",
+              "form": "Hastened",
+              "applications": [
+                {
+                  "form": "Hastened"
+                }
+              ]
+            },
+            {
+              "entryId": "deck-4-0",
+              "copyEntryId": "deck-18-1",
+              "form": "Inspired",
+              "applications": [
+                {
+                  "form": "Inspired"
+                }
+              ]
+            }
+          ],
+          "deckAndRouteExactAfterImport": true,
+          "otherStateDifferences": [
+            "runId"
+          ],
+          "runIdBeforeImport": "journey:1",
+          "runIdAfterImport": "journey:19",
+          "causes": [
+            {
+              "eventSeq": 18,
+              "ordinal": 0,
+              "entryId": "deck-5-0",
+              "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+              "applicationIndex": 0
+            },
+            {
+              "eventSeq": 18,
+              "ordinal": 1,
+              "entryId": "deck-4-0",
+              "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+              "applicationIndex": 0
+            }
+          ],
+          "drawIndices": [
+            0,
+            1
+          ],
+          "forms": [
+            "Hastened",
+            "Inspired"
+          ],
+          "exportedLogRows": 77,
+          "retainedLogRows": 84
+        }
+      },
+      "actualSavedBuildGitSha": {
+        "desktop": "4177447e0c26",
+        "mobile": "4177447e0c26"
+      },
+      "inspection": "Six fresh PNG files file-verified and visually viewed: pending, selected and result deck on both viewports; outlines and reachable confirm intact, viewport scrolling and no horizontal overflow; actual14-card deck with two formed copies.",
+      "qualifications": [
+        "Real production Tome/Slime engine victory\u2192ordinary END_BATTLE\u2192earned picker; no Glow activated.",
+        "Actual Package Debug shared save/export and hidden-input import. Native OS prompt/chooser painting untested; temporary chooser click adapter restored exactly.",
+        "Deck, screen and all state fields except actual LOAD new runId compare equal; expected journey:1\u2192journey:19 retained.",
+        "Old original full/QA remain in originalValidationEpoch; this is a new actual combined execution."
+      ]
+    },
+    "resourceSettlement": {
+      "at": "2026-10-16T03:35:41.721841+00:00",
+      "currentRegularPayloads": 5998,
+      "currentLiteralPayloads": 6000,
+      "fullQaHostRegularEpochExact": true,
+      "onlyCheckpointLiteralDelta": [
+        "src/rules/reducer.ts"
+      ],
+      "ownPidsAndGroups": [
+        83604,
+        83620,
+        26917,
+        26954
+      ],
+      "liveMatches": [],
+      "recordsExist": {
+        "ownerRecord": false,
+        "serverRecord": false
+      },
+      "port": 5274,
+      "connectExit": 61,
+      "liveQaBirthAndOwnership": "qa-01-live-owned-runtime.json",
+      "sharedService": "untouched",
+      "metadataHead": "4177447e0c26c9d49510f047af65bd692cc75c20",
+      "workingReducerSha256": "20b82550d018dc45c0a345710bf6e802008872bdd60d127c9802cd312d959782"
+    }
+  },
+  "importClockRepair": {
+    "admission": "IMPORT CLOCK ACK02",
+    "ackSha256": "6a8393f2e620bae2cc0d822cf570a3024d9b863a3ed61e14659e53debc762bdd",
+    "proposalSha256": "e7f8d121a1996224b5d00ad8dea920358ce32fdfdedbbdfd9f6e1f3284d3aed0",
+    "redCommands": [
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/session/local-game.test.ts",
+          "-t",
+          "retries an atomic pending event"
+        ],
+        "pid": 47464,
+        "startedAt": "2026-10-16T03:38:49.727299+00:00",
+        "exitCode": 1,
+        "wallSeconds": 7.918429851531982,
+        "monotonicSeconds": 7.91837020899402,
+        "childUserSeconds": 5.9343390000000005,
+        "childSystemSeconds": 2.241912,
+        "loadBefore": [
+          12.345703125,
+          8.7880859375,
+          8.41650390625
+        ],
+        "loadAfter": [
+          14.2138671875,
+          9.318359375,
+          8.609375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/author-runtime/recovery-clock-red-01-pre",
+        "rawLog": "/tmp/730-root/integration1/author-runtime/recovery-clock-red-01.log",
+        "receipt": "recovery-clock-red-01.json",
+        "receiptSha256": "31106af74df4a432d17ebced33164f0e8591afe73d2603856bdea67c1d7959c3",
+        "rawLogSha256": "eb81581a9284aa60d5808051e7dbbfeae3c605d369f8da823301fc9c74cd461b",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "7470dd232c4e03e0eeb8244c22ad951e548ca6c4969376fc60034f524d6d9ecd",
+        "manifestPostSha256": "7470dd232c4e03e0eeb8244c22ad951e548ca6c4969376fc60034f524d6d9ecd",
+        "testTerminal": [
+          "Test Files  1 failed (1)",
+          "Tests  1 failed | 1 passed | 20 skipped (22)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "-t",
+          "retains actual half-deck selection order"
+        ],
+        "pid": 71588,
+        "startedAt": "2026-10-16T03:44:48.147490+00:00",
+        "exitCode": 1,
+        "wallSeconds": 7.432565927505493,
+        "monotonicSeconds": 7.432512792001944,
+        "childUserSeconds": 5.698372,
+        "childSystemSeconds": 2.176187,
+        "loadBefore": [
+          4.927734375,
+          6.28271484375,
+          7.345703125
+        ],
+        "loadAfter": [
+          5.01318359375,
+          6.27783203125,
+          7.33740234375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/author-runtime/subtype-clock-red-01-pre",
+        "rawLog": "/tmp/730-root/integration1/author-runtime/subtype-clock-red-01.log",
+        "receipt": "subtype-clock-red-01.json",
+        "receiptSha256": "94c520299f0d6fdfb207a5569f2a07a597a1ecb2f39fbdab7506e096d8371d21",
+        "rawLogSha256": "4e3edbf782c99c0628cac833e8f059d6886058a4fa79aa5ba001f05773f13b5f",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "d9d12d51956d30f8da0710af62f44747ce0b030e6a1a98d424b7871bdd1947d4",
+        "manifestPostSha256": "d9d12d51956d30f8da0710af62f44747ce0b030e6a1a98d424b7871bdd1947d4",
+        "testTerminal": [
+          "Test Files  1 failed (1)",
+          "Tests  1 failed | 1 passed | 181 skipped (183)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "-t",
+          "retains actual half-deck selection order"
+        ],
+        "pid": 76348,
+        "startedAt": "2026-10-16T03:45:59.058228+00:00",
+        "exitCode": 1,
+        "wallSeconds": 5.725696086883545,
+        "monotonicSeconds": 5.725653166999109,
+        "childUserSeconds": 5.668342,
+        "childSystemSeconds": 1.966495,
+        "loadBefore": [
+          5.06298828125,
+          6.06396484375,
+          7.1787109375
+        ],
+        "loadAfter": [
+          5.2177734375,
+          6.0791015625,
+          7.17724609375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/author-runtime/subtype-clock-red-02-pre",
+        "rawLog": "/tmp/730-root/integration1/author-runtime/subtype-clock-red-02.log",
+        "receipt": "subtype-clock-red-02.json",
+        "receiptSha256": "96676c7c0137b1d8dbfb9d4c1675562ca6fe482b565d721ae8a69ccd74306a51",
+        "rawLogSha256": "6f14ceb959d53c80936045b97284d3017263f55afa19c03e29dfac7dc8e6d0fd",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "e6712bae936cd213de0d15ed62cc14f7f90864813bc69cb4654f08f1bc12c46c",
+        "manifestPostSha256": "e6712bae936cd213de0d15ed62cc14f7f90864813bc69cb4654f08f1bc12c46c",
+        "testTerminal": [
+          "Test Files  1 failed (1)",
+          "Tests  1 failed | 1 passed | 181 skipped (183)"
+        ]
+      }
+    ],
+    "redAttribution": {
+      "recovery-clock-red-01": "Actual high source cause9 imported at LOAD1; finite child3 fails parent chronology; original0 branch passes.",
+      "subtype-clock-red-01": "Setup-only rejected LOAD from mismatched genesis seed; no causal-clock defect credit.",
+      "subtype-clock-red-02": "Correct source seed LOAD1 applied, original permission42 retained; subtype RESOLVE2 then actual journey_loop_inconsistent."
+    },
+    "model": "Optional causalSeq defaults to actual eventSeq; retained effective cause/permission clock sets ordinal floor across root/onGain/resume/finite continuation. committedCausalSeq preserves terminal logical order; actual event/permission/commit/RNG event values remain truthful. Fields omitted on ordinary five-field legacy path. No lifecycle, global counter, namespace, proof/result/reset or whole-codec rewrite.",
+    "contracts": "High-clock storage checkpoint/replay and source-loss finite recovery; exact original0 equality retained, independent actual RNG/form/copy assertions across source11/import3. Equal-clock old3/new3 uses next ordinal and current-batch logs. Actual subtype normal47/import2/import42 and saved mixed-clock continuation, high draw encode/decode/LOAD/reset, strict unknown/malformed clock guards, saved FIFO and effective-clock duplicate corruption rejection, overflow before dependent commit.",
+    "failedIntermediateAttribution": {
+      "focused-01": "Actual204pass1fail: high8 cross-game whole-deck equality was invalid across true RNG/mint11 versus3; original0 equality preserved.",
+      "focused-02": "Actual209pass1fail: test appended third captured WINDOW max1 but canonical fixture defines2; LOAD setup rejected; fixture corrected only.",
+      "review-01": "All8918 tests passed; own Object.hasOwn target and unbranded entryId type errors corrected only in tests."
+    },
+    "commands": [
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 60035,
+        "startedAt": "2026-10-16T03:52:26.853310+00:00",
+        "exitCode": 1,
+        "wallSeconds": 7.620996713638306,
+        "monotonicSeconds": 7.6209401250234805,
+        "childUserSeconds": 7.111942,
+        "childSystemSeconds": 2.2075839999999998,
+        "loadBefore": [
+          4.66357421875,
+          5.90380859375,
+          6.84765625
+        ],
+        "loadAfter": [
+          5.435546875,
+          6.02294921875,
+          6.8779296875
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-01.log",
+        "receipt": "focused-01.json",
+        "receiptSha256": "e8947a3f5be4a901a6118f1b5703a9d338fce4b5c7595027c5813183a8d7c20e",
+        "rawLogSha256": "4e6feac452c6851e2e1a3c476aa8ae3f6f9167ae2ddb3dc094189a5e56ae8a77",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "143685edce22737e3f436af0f6d3d5807e615d124ead618a1514ec4967b2d6eb",
+        "manifestPostSha256": "143685edce22737e3f436af0f6d3d5807e615d124ead618a1514ec4967b2d6eb",
+        "testTerminal": [
+          "Test Files  1 failed | 1 passed (2)",
+          "Tests  1 failed | 204 passed (205)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 75610,
+        "startedAt": "2026-10-16T03:56:18.573336+00:00",
+        "exitCode": 1,
+        "wallSeconds": 7.9320549964904785,
+        "monotonicSeconds": 7.931995416991413,
+        "childUserSeconds": 7.234184,
+        "childSystemSeconds": 2.323643,
+        "loadBefore": [
+          4.36376953125,
+          5.09423828125,
+          6.2626953125
+        ],
+        "loadAfter": [
+          4.65478515625,
+          5.14208984375,
+          6.2724609375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-02-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-02.log",
+        "receipt": "focused-02.json",
+        "receiptSha256": "b816a3f3aac38ae900c316b2e0d24e62fb049fe411acbcbd17a056060817553e",
+        "rawLogSha256": "ccf5b0628c57cd3ee89a7e606f4049a1da2218d85c25dcbb3821556d156397f7",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "6191158ba90956823a0261a87f4a9a5ee1701d10d7078b6bbb3903853b1b00cc",
+        "manifestPostSha256": "6191158ba90956823a0261a87f4a9a5ee1701d10d7078b6bbb3903853b1b00cc",
+        "testTerminal": [
+          "Test Files  1 failed | 1 passed (2)",
+          "Tests  1 failed | 209 passed (210)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 78384,
+        "startedAt": "2026-10-16T03:57:00.529036+00:00",
+        "exitCode": 0,
+        "wallSeconds": 6.041116237640381,
+        "monotonicSeconds": 6.041075540997554,
+        "childUserSeconds": 7.199085,
+        "childSystemSeconds": 2.037247,
+        "loadBefore": [
+          4.7099609375,
+          5.0947265625,
+          6.2080078125
+        ],
+        "loadAfter": [
+          5.05322265625,
+          5.1591796875,
+          6.22412109375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-03-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-03.log",
+        "receipt": "focused-03.json",
+        "receiptSha256": "b43e73a2aebe2679068a316cb084434e50e54e13b3c79b246776f01fc71c7b4f",
+        "rawLogSha256": "0ab5e1ba6ac479beb488a7be92536b2f91677a706586990cd60c50725f52175a",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "c1eb623ae491f013ae249e4f611f9f4afc965ef70bc62605257881aeba2d3fbd",
+        "manifestPostSha256": "c1eb623ae491f013ae249e4f611f9f4afc965ef70bc62605257881aeba2d3fbd",
+        "testTerminal": [
+          "Test Files  2 passed (2)",
+          "Tests  210 passed (210)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts",
+          "src/rules/battle/journey-tutorial-guidance.test.ts",
+          "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+          "src/rules/battle/engine-battle.test.ts",
+          "src/battle/components/battle-presentation.test.tsx"
+        ],
+        "pid": 85486,
+        "startedAt": "2026-10-16T03:58:44.621276+00:00",
+        "exitCode": 0,
+        "wallSeconds": 8.982406854629517,
+        "monotonicSeconds": 8.981791125028394,
+        "childUserSeconds": 10.991818,
+        "childSystemSeconds": 3.09184,
+        "loadBefore": [
+          4.18798828125,
+          4.87060546875,
+          5.99365234375
+        ],
+        "loadAfter": [
+          4.61376953125,
+          4.93994140625,
+          6.0048828125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-04-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-04.log",
+        "receipt": "focused-04.json",
+        "receiptSha256": "dcbb0674c222a795538f8fd3b2e24101ca8f6885a56ae50a203792fb3cf63032",
+        "rawLogSha256": "16238047ed55d304950e0e5b1ef97db6f62abd24b74ab60059bbd3e260dad762",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "manifestPostSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "testTerminal": [
+          "Test Files  6 passed (6)",
+          "Tests  275 passed (275)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 89998,
+        "startedAt": "2026-10-16T03:59:51.521179+00:00",
+        "exitCode": 2,
+        "wallSeconds": 45.7352180480957,
+        "monotonicSeconds": 45.734520124970004,
+        "childUserSeconds": 141.22499,
+        "childSystemSeconds": 11.807969,
+        "loadBefore": [
+          4.419921875,
+          4.8505859375,
+          5.904296875
+        ],
+        "loadAfter": [
+          6.2392578125,
+          5.28662109375,
+          6.009765625
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/review-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/review-01.log",
+        "receipt": "review-01.json",
+        "receiptSha256": "781dc58338af62a3d6243093c961edcab63df0458f3b81812aa090234ac48873",
+        "rawLogSha256": "84c39544789473c8e2e924ad16f4f9d902c2178e087de2f3d6a7d0cbd49c8963",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "manifestPostSha256": "d7e2ab8e15b5486e9ec269dd5e62b630d7b16d06953617b985ce6d348ca52a3d",
+        "testTerminal": [
+          "Test Files  149 passed (149)",
+          "Tests  8918 passed (8918)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-transfiguration.test.ts",
+          "src/session/local-game.test.ts"
+        ],
+        "pid": 93985,
+        "startedAt": "2026-10-16T04:00:53.652415+00:00",
+        "exitCode": 0,
+        "wallSeconds": 6.892411947250366,
+        "monotonicSeconds": 6.892311125004198,
+        "childUserSeconds": 7.293481,
+        "childSystemSeconds": 2.079082,
+        "loadBefore": [
+          5.81201171875,
+          5.25048828125,
+          5.97998046875
+        ],
+        "loadAfter": [
+          6.06689453125,
+          5.3125,
+          5.99755859375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/focused-05-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/focused-05.log",
+        "receipt": "focused-05.json",
+        "receiptSha256": "fdfea6961f64cfde995db7c14b0a50f77246e6adfb710e6ec2cbd2ec70206674",
+        "rawLogSha256": "b2b273ee52cebbef5ba4f02d9cf6dba70b369a65575910824c60f2f6dfe342e2",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  2 passed (2)",
+          "Tests  210 passed (210)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 99294,
+        "startedAt": "2026-10-16T04:02:11.470937+00:00",
+        "exitCode": 0,
+        "wallSeconds": 45.793395042419434,
+        "monotonicSeconds": 45.79271104099462,
+        "childUserSeconds": 115.625424,
+        "childSystemSeconds": 10.522654999999999,
+        "loadBefore": [
+          4.92431640625,
+          5.158203125,
+          5.8857421875
+        ],
+        "loadAfter": [
+          6.29345703125,
+          5.5029296875,
+          5.97509765625
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/review-02-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/review-02.log",
+        "receipt": "review-02.json",
+        "receiptSha256": "8d3d25b5dd0e48be4b8d2ff387f5f6c28944206e4374dfb86eaf8fd19bd064c2",
+        "rawLogSha256": "d723a7c64b308611a023bb1ce27900a74303a8d138346b57cc92b85e6b1e029c",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  149 passed (149)",
+          "Tests  8918 passed (8918)"
+        ]
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 3695,
+        "startedAt": "2026-10-16T04:03:12.095387+00:00",
+        "exitCode": 0,
+        "wallSeconds": 7.981550931930542,
+        "monotonicSeconds": 7.981432207976468,
+        "childUserSeconds": 4.436875,
+        "childSystemSeconds": 2.209546,
+        "loadBefore": [
+          5.9384765625,
+          5.46142578125,
+          5.95166015625
+        ],
+        "loadAfter": [
+          6.04052734375,
+          5.49609375,
+          5.95751953125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/knip-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/knip-01.log",
+        "receipt": "knip-01.json",
+        "receiptSha256": "c625988abbaf3dff7213fc35a403913382ea7ea84034dbd490ee03d463c98fbb",
+        "rawLogSha256": "a2b75d3683430600a9483cf99fe9aa79d1cd8702440850bcbae35cd75ef3266f",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": []
+      },
+      {
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/730-root/integration1/clock-runtime/run.py",
+          "full-inner-01",
+          "timeout",
+          "1800",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 5784,
+        "startedAt": "2026-10-16T04:03:42.521931+00:00",
+        "exitCode": 0,
+        "wallSeconds": 124.11169481277466,
+        "monotonicSeconds": 124.1098383750068,
+        "childUserSeconds": 287.41769800000003,
+        "childSystemSeconds": 27.060047,
+        "loadBefore": [
+          5.7958984375,
+          5.47900390625,
+          5.93994140625
+        ],
+        "loadAfter": [
+          5.306640625,
+          5.59228515625,
+          5.93408203125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/full-outer-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/full-outer-01.log",
+        "receipt": "full-outer-01.json",
+        "receiptSha256": "cb53135d913b32f84c6565f829c2a79bd51e5f109c5e4fcc6dd529583c3d659a",
+        "rawLogSha256": "9a583a1b173725917d419ddc4943505daed3f2904fe8b8cdbd60d8b4ca8016b5",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  434 passed (434)",
+          "Tests  12195 passed (12195)"
+        ]
+      },
+      {
+        "command": [
+          "timeout",
+          "1800",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 5800,
+        "startedAt": "2026-10-16T04:03:42.729682+00:00",
+        "exitCode": 0,
+        "wallSeconds": 123.69855999946594,
+        "monotonicSeconds": 123.6967149580014,
+        "childUserSeconds": 287.238832,
+        "childSystemSeconds": 26.810795,
+        "loadBefore": [
+          5.7958984375,
+          5.47900390625,
+          5.93994140625
+        ],
+        "loadAfter": [
+          5.306640625,
+          5.59228515625,
+          5.93408203125
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/full-inner-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/full-inner-01.log",
+        "receipt": "full-inner-01.json",
+        "receiptSha256": "0cfdd0c041f25f23836657af6fe968f3f7f161780faaf61641be5295413b9640",
+        "rawLogSha256": "9683004ac37ccbb46a64652b5bc2d7072844a72475437a549690d9353bbd2c1c",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": [
+          "Test Files  434 passed (434)",
+          "Tests  12195 passed (12195)"
+        ]
+      },
+      {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/730-root/integration1/clock-runtime/qa-tome-slime.mjs",
+          "--bead",
+          "hv-umm2.730",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "300"
+        ],
+        "pid": 42948,
+        "startedAt": "2026-10-16T04:06:04.583554+00:00",
+        "exitCode": 0,
+        "wallSeconds": 52.134921073913574,
+        "monotonicSeconds": 52.134145624993835,
+        "childUserSeconds": 7.100368,
+        "childSystemSeconds": 2.922242,
+        "loadBefore": [
+          4.763671875,
+          5.4541015625,
+          5.87646484375
+        ],
+        "loadAfter": [
+          4.7900390625,
+          5.36328125,
+          5.818359375
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/qa-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/qa-01.log",
+        "receipt": "qa-01.json",
+        "receiptSha256": "e5a83d9c2dcc4e5211249337ad2802011e20078bcbb14feb1b4063750b1f2aff",
+        "rawLogSha256": "21a8f4a351b23cd12e0b7bb5191b2bcbe45fee179014268aaf97ca747bb2e3c6",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": []
+      },
+      {
+        "command": [
+          "python3",
+          "/tmp/730-root/integration1/clock-runtime/verify-qa-files.py",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.730/invocations/run-AksBvH"
+        ],
+        "pid": 44500,
+        "startedAt": "2026-10-16T04:07:06.132046+00:00",
+        "exitCode": 0,
+        "wallSeconds": 0.04797005653381348,
+        "monotonicSeconds": 0.04797016701195389,
+        "childUserSeconds": 0.027682000000000002,
+        "childSystemSeconds": 0.017925999999999997,
+        "loadBefore": [
+          4.43408203125,
+          5.26806640625,
+          5.779296875
+        ],
+        "loadAfter": [
+          4.43408203125,
+          5.26806640625,
+          5.779296875
+        ],
+        "preSnapshot": "/tmp/730-root/integration1/clock-runtime/qa-host-01-pre",
+        "rawLog": "/tmp/730-root/integration1/clock-runtime/qa-host-01.log",
+        "receipt": "qa-host-01.json",
+        "receiptSha256": "5974353d297434d553497384cff88c2a24254353eee869868cede227f7282eb8",
+        "rawLogSha256": "41c074402644a7ad5a49d0d07074675abb0fd7e544ce0be8f6793870d15e9b99",
+        "manifestRegularCount": 5998,
+        "preEqualsPost": true,
+        "manifestPreSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "manifestPostSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+        "testTerminal": []
+      }
+    ],
+    "sourceRegularManifestSha256": "bc1ea52f9c6531c4fcc5a43220273623eb145f465eb5d7b2a5b1465905e69586",
+    "cpuQualification": "Wrapper child aggregate includes actual command plus ps birth-observation subprocess; outer aggregate also includes inner wrapper children. Isolated command/model CPU UNKNOWN.",
+    "noRuntimeEditsAfterFreeze": true
+  }
+}

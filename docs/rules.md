@@ -3323,6 +3323,8 @@ is an Event. The copy has a fresh deck-entry identity and carries the original's
 form and permanent entry modifications. Copies granted by this operation do not
 provide further transfiguration occurrences.
 
+An effect that grants an additional random transfiguration earns one instruction for each successful application to an original physical entry, including an application granted by that effect. Each physical source held for that occasion earns its instruction in held order. A prior form does not exclude that form when its conditions still hold. If the applicable set is empty, the instruction supplies neither an application nor a random draw. Copies use the completed parent application's values. Resolve the parent's finite sibling reactions and gains, including any earned choices, before its child instructions. Child instructions follow application order, then held-source order; newly earned instructions join the end of that queue. An earned instruction survives source loss. Its execution uses the surviving original target's current values and current applicable forms, and a successful child application captures fresh observer holdings. Journey mandatory-loop rules govern a child proved unable to finish.
+
 A replacement of a Transfiguration site's allowance with two cards is prepared
 with the site's initial offers and prices. Multiple copies set the same two-card
 allowance. Each accepted choice uses a distinct offered entry and its quoted

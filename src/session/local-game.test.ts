@@ -1,3 +1,4 @@
+import "./journey-additional-recovery.contracts";
 import "./journey-loop-recovery.contracts";
 import "./journey-transfiguration-record-recovery.contracts";
 import "./journey-transfiguration-record-persistence.contracts";

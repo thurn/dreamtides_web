@@ -30,7 +30,7 @@ import raven, { journeyDeckEntryEffect as ravenEffect } from "../../content/drea
 import acorn, { journeyDeckEntryEffect as acornEffect } from "../../content/dreamsigns/brown-acorn-9f34b5f6";
 import crystal, { journeyDeckEntryEffect as crystalEffect } from "../../content/dreamsigns/blue-crystal-c2af5460";
 import { journeyDeckEntry, journeyDeckEntryGains } from "./journey-deck-entry";
-import { journeyTransfigurationOccurrences } from "./journey-transfiguration";
+import { canonicalJourneyTransfiguration, journeyTransfigurationOccurrences, journeyTransfigurationOperationOrder } from "./journey-transfiguration";
 import starBadge, { journeyEssenceEffect as starEffect } from "../../content/dreamsigns/star-badge-af92858a";
 import pearlShell, { journeyEssenceEffect as pearlEffect } from "../../content/dreamsigns/pearl-shell-be59c0ba";
 import bandedWorm, { journeyEssenceEffect as wormEffect } from "../../content/dreamsigns/banded-worm-95a162c1";
@@ -153,6 +153,15 @@ function snapshot(values: Readonly<Record<string, number>>): Record<string, numb
 export function createJourneyModifierRegistry(
   definitions: readonly JourneyModifierDefinition[],
 ): JourneyModifierRegistry {
+  const validateAdditional = (definition: JourneyModifierDefinition) => {
+    const field = Object.getOwnPropertyDescriptor(definition, "journeyTransfiguration");
+    if (field !== undefined && !("value" in field)) throw new RangeError("Accessor journey transfiguration claim");
+    const effect: unknown = field?.value;
+    if (effect !== undefined && (typeof effect !== "object" || effect === null || Object.getPrototypeOf(effect) !== Object.prototype || Object.values(Object.getOwnPropertyDescriptors(effect)).some(item => !("value" in item)))) throw new RangeError("Invalid journey transfiguration claim");
+    const canonical = field === undefined ? false : canonicalJourneyTransfiguration(definition);
+    if (typeof effect === "object" && effect !== null && "kind" in effect && effect.kind === "additionalRandomTransfiguration" && !canonical) throw new RangeError("Untrusted additional journey source");
+  };
+  definitions.forEach(validateAdditional);
   validateJourneyLoopRegistry(definitions);
   const byId = new Map<DreamsignId, JourneyModifierDefinition>();
   for (const definition of definitions) {
@@ -162,6 +171,7 @@ export function createJourneyModifierRegistry(
     }
     byId.set(dreamsignId, Object.freeze({ ...definition, dreamsignId }));
   }
+  [...byId.values()].forEach(validateAdditional);
   validateJourneyLoopRegistry([...byId.values()]);
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
   const run = ({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null, loopBattleBinding = null }: Parameters<JourneyModifierRegistry["apply"]>[0], resume?: JourneySubtypeResume, rngEventSeq = seq) => {
@@ -176,7 +186,15 @@ export function createJourneyModifierRegistry(
       const held = observerSources.map(({ dreamsignId: id, heldIndex }) => ({ id, heldIndex, definition: byId.get(id) }));
       const entrySources = held.filter((source) => source.definition?.journeyDeckEntry !== undefined);
       const transformed = [...transfigurations];
-      const consumed = new Map<number, Set<import("../../types/identifiers").DeckEntryId>>();
+      const historicalCauses = [...(journey.pendingJourneyLoop?.instructions.map(item => item.cause) ?? []), ...(resume?.transfigurations.flatMap(item => item.operation === undefined ? [] : [item.operation.cause]) ?? [])];
+      const operationOrder = journeyTransfigurationOperationOrder(historicalCauses, rngEventSeq, seq);
+      let operationOrdinal = transformed.reduce((ordinal, item) => item.operation !== undefined && (item.operation.cause.causalSeq ?? item.operation.cause.eventSeq) === operationOrder.causalSeq ? Math.max(ordinal, item.operation.cause.ordinal + 1) : ordinal, operationOrder.ordinalStart);
+      const collect = (previous: Readonly<Pick<JourneyState, "deck">>, orderedEntryIds?: readonly DeckEntryId[]) => {
+        const occurrences = journeyTransfigurationOccurrences(previous, next, { eventSeq: rngEventSeq, ...(operationOrder.causalSeq === rngEventSeq ? {} : { causalSeq: operationOrder.causalSeq }), ordinalStart: operationOrdinal, ...(orderedEntryIds === undefined ? {} : { orderedEntryIds }) });
+        operationOrdinal += occurrences.length;
+        transformed.push(...occurrences);
+      };
+      const consumed = new Map<number, Set<string>>();
       const invoke = (source: typeof held[number], gains: readonly import("../../types/journey").JourneyDeckEntryGain[], occurrences = transfigurations, diagnostics = logRecords) => {
         const applied = source.definition?.afterJourneyEvent({ lookup, before, journey: next, eventType,
           heldIndex: source.heldIndex, seq, random, gains, reservedEntries: [...reservedEntries.values()], transfigurations: occurrences, siteId, ...(purges === undefined ? {} : { purges }) });
@@ -197,7 +215,7 @@ export function createJourneyModifierRegistry(
         const initialGains = journeyDeckEntryGains(before, next);
         for (const source of initialProhibitions) invoke(source, initialGains);
       }
-      const acquisition = prepareJourneyOnGain({ reservedEntries: [...reservedEntries.values()], beforeContext: resume?.before ?? journeySubtypeBefore(before), eventType, observerSources, battleBinding, purges: purges ?? [], domainTransfigurations: transfigurations, resume, journey: next, gains: resume?.sources ?? dreamsignGains, lookup, seq, random, siteId,
+      const acquisition = prepareJourneyOnGain({ operationEventSeq: rngEventSeq, ...(operationOrder.causalSeq === rngEventSeq ? {} : { operationCausalSeq: operationOrder.causalSeq }), operationOrdinalStart: operationOrdinal, reservedEntries: [...reservedEntries.values()], beforeContext: resume?.before ?? journeySubtypeBefore(before), eventType, observerSources, battleBinding, purges: purges ?? [], domainTransfigurations: transfigurations, resume, journey: next, gains: resume?.sources ?? dreamsignGains, lookup, seq, random, siteId,
         excludeAcquisitionAdditions(previous, tentative) {
           const diagnostics: ReducerLogRecord[] = [];
           next = tentative;
@@ -212,7 +230,15 @@ export function createJourneyModifierRegistry(
       next = acquisition.journey;
       logRecords.push(...acquisition.logRecords.map(row => resume === undefined ? row : { ...row, fields: { ...row.fields, rngEventSeq } }));
       transformed.splice(0, transformed.length, ...acquisition.transfigurations);
-      if (acquisition.paused) return { journey: earnJourneyLoops(next, transformed, observerSources, lookup, seq, siteId, loopBattleBinding, logRecords), logRecords };
+      operationOrdinal = transformed.reduce((ordinal, item) => item.operation !== undefined && (item.operation.cause.causalSeq ?? item.operation.cause.eventSeq) === operationOrder.causalSeq ? Math.max(ordinal, item.operation.cause.ordinal + 1) : ordinal, operationOrdinal);
+      const logOperations = () => {
+        if (!held.some(source => source.definition?.journeyLoopContinuation !== undefined || source.definition?.journeyTransfiguration?.kind === "additionalRandomTransfiguration")) return;
+        for (const occurrence of transformed) {
+          const operation = occurrence.operation;
+          if (operation?.cause.eventSeq === rngEventSeq && (operation.cause.causalSeq ?? operation.cause.eventSeq) === operationOrder.causalSeq && operation.cause.ordinal >= operationOrder.ordinalStart) logRecords.push({ event: "journey_transfiguration_operation", fields: { cause: operation.cause, before: operation.beforeEntry, after: occurrence.entry, ...(operation.parentCause === undefined ? {} : { parentCause: operation.parentCause }), siteId, permissionSeq: seq } });
+        }
+      };
+      if (acquisition.paused) { logOperations(); return { journey: earnJourneyLoops(next, transformed, observerSources, lookup, seq, siteId, loopBattleBinding, logRecords), logRecords }; }
       const gainWave = (previous: Readonly<Pick<JourneyState, "deck">>) => {
         if (entrySources.length === 0 || eventType === "START_JOURNEY") return;
         const gains = journeyDeckEntryGains(previous, next);
@@ -220,14 +246,15 @@ export function createJourneyModifierRegistry(
         for (const source of entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind === "preventNightmare")) invoke(source, gains);
         for (const source of entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind !== "preventNightmare")) {
           const prior = next;
-          if (invoke(source, gains) && (source.definition!.journeyDeckEntry!.kind === "randomTransfiguration" || source.definition!.journeyDeckEntry!.kind === "randomCharacterTransfiguration")) transformed.push(...journeyTransfigurationOccurrences(prior, next));
+          if (invoke(source, gains) && (source.definition!.journeyDeckEntry!.kind === "randomTransfiguration" || source.definition!.journeyDeckEntry!.kind === "randomCharacterTransfiguration")) collect(prior);
         }
       };
       const reactCopy = (source: typeof held[number]) => {
-        const seen = consumed.get(source.heldIndex) ?? new Set<import("../../types/identifiers").DeckEntryId>();
+        const seen = consumed.get(source.heldIndex) ?? new Set<string>();
         consumed.set(source.heldIndex, seen);
-        const fresh = transformed.filter((item) => !seen.has(item.entry.entryId));
-        for (const item of fresh) seen.add(item.entry.entryId);
+        const operationKey = (item: typeof transformed[number], index: number) => item.operation === undefined ? JSON.stringify([seq, index]) : JSON.stringify([item.operation.cause.causalSeq ?? item.operation.cause.eventSeq, item.operation.cause.ordinal]);
+        const fresh = transformed.filter((item, index) => !seen.has(operationKey(item, index)));
+        transformed.forEach((item, index) => seen.add(operationKey(item, index)));
         if (fresh.length === 0) return false;
         const previous = next;
         const changed = invoke(source, [], fresh);
@@ -240,7 +267,7 @@ export function createJourneyModifierRegistry(
         if (source.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent") { reactCopy(source); continue; }
         const previous = next;
         if (invoke(source, [])) {
-          if (source.definition?.journeyDraft?.kind === "firstDraftEventTransfiguration") transformed.push(...journeyTransfigurationOccurrences(previous, next));
+          if (source.definition?.journeyDraft?.kind === "firstDraftEventTransfiguration") collect(previous);
           gainWave(previous);
         }
       }
@@ -252,9 +279,10 @@ export function createJourneyModifierRegistry(
         copied = false;
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
+      logOperations();
       next = earnJourneyLoops(next, transformed, observerSources, lookup, seq, siteId, loopBattleBinding, logRecords);
       next = finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding, acquisition.openingHandAcquisitions, lookup);
-      return { journey: settleJourneyLoops(next, lookup, rngEventSeq, random, logRecords, [...reservedEntries.values()]), logRecords };
+      return { journey: settleJourneyLoops(next, lookup, rngEventSeq, random, logRecords, [...reservedEntries.values()], operationOrdinal), logRecords };
     };
   const registry: JourneyModifierRegistry = {
     lookup,

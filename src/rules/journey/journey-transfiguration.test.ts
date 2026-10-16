@@ -1,3 +1,8 @@
+import "./journey-additional-projection.contracts";
+import "./journey-additional-domains.contracts";
+import "./journey-additional-controls.contracts";
+import "./journey-additional-fifo.contracts";
+import "./journey-additional-operation.contracts";
 import "./journey-loop-before-battle.contracts";
 import "./journey-loop-acquisition.contracts";
 import "./journey-loop-battle-outcomes.contracts";

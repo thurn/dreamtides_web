@@ -19,12 +19,18 @@ const effectLog = (source: JourneyDreamsignGain, fields: Record<string, unknown>
 
 
 /** The concrete acquisition stage precedes the existing card-observer waves. */
-export function prepareJourneyOnGain(input: { reservedEntries?: readonly import("../../types/journey").DeckEntry[]; resume?: import("../../types/journey").JourneySubtypeResume; beforeContext: import("../../types/journey").JourneyModifierBefore; eventType: import("../events").GameplayEventType; observerSources: readonly JourneyDreamsignGain[]; battleBinding: JourneySuspendedBattle | null; purges: readonly import("../../types/journey").JourneyPurgeOccurrence[]; domainTransfigurations: readonly JourneyTransfigurationOccurrence[]; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null;
+export function prepareJourneyOnGain(input: { operationCausalSeq?: number; operationEventSeq?: number; operationOrdinalStart?: number; reservedEntries?: readonly import("../../types/journey").DeckEntry[]; resume?: import("../../types/journey").JourneySubtypeResume; beforeContext: import("../../types/journey").JourneyModifierBefore; eventType: import("../events").GameplayEventType; observerSources: readonly JourneyDreamsignGain[]; battleBinding: JourneySuspendedBattle | null; purges: readonly import("../../types/journey").JourneyPurgeOccurrence[]; domainTransfigurations: readonly JourneyTransfigurationOccurrence[]; journey: JourneyState; gains: readonly JourneyDreamsignGain[]; lookup: JourneyModifierRegistry["lookup"]; seq: number; random: () => { value: number; drawIndex: number }; siteId: SiteId | null;
   excludeAcquisitionAdditions: (previous: JourneyState, tentative: JourneyState) => { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } }) {
   let journey = input.journey;
   const starterSources = [...(input.resume?.starterSources ?? [])];
   const openingHandAcquisitions: JourneyOpeningHandAcquisition[] = [...(input.resume?.openingHandAcquisitions ?? [])];
   const transfigurations = [...(input.resume?.transfigurations ?? input.domainTransfigurations)], copySources = [...(input.resume?.copySources ?? [])], typeRemapSources: JourneyDreamsignGain[] = [], logRecords: ReducerLogRecord[] = [];
+  let operationOrdinal = input.operationOrdinalStart ?? 0;
+  const collect = (previous: JourneyState, orderedEntryIds?: readonly import("../../types/identifiers").DeckEntryId[]) => {
+    const occurrences = journeyTransfigurationOccurrences(previous, journey, { eventSeq: input.operationEventSeq ?? input.seq, ...(input.operationCausalSeq === undefined ? {} : { causalSeq: input.operationCausalSeq }), ordinalStart: operationOrdinal, ...(orderedEntryIds === undefined ? {} : { orderedEntryIds }) });
+    operationOrdinal += occurrences.length;
+    transfigurations.push(...occurrences);
+  };
   const attemptedEntries = [...(input.reservedEntries ?? input.resume?.attemptedEntries ?? [])];
   const mixed = input.resume !== undefined || input.gains.some(source => input.lookup(source.dreamsignId)?.journeyOnGain?.kind === "deckSubtypeOnGain");
   for (let sourceIndex = input.resume?.sourceIndex ?? 0; sourceIndex < input.gains.length; sourceIndex++) {
@@ -63,7 +69,7 @@ export function prepareJourneyOnGain(input: { reservedEntries?: readonly import(
       const previous = journey, prepared = prepareStarterAcquisition(journey, source, effect, input.seq, input.siteId);
       journey = prepared.journey;
       if (prepared.permission !== null) starterSources.push(prepared.permission);
-      transfigurations.push(...journeyTransfigurationOccurrences(previous, journey));
+      collect(previous);
       logRecords.push(prepared.log);
     }
     if (effect?.kind === "chooseOpeningHandEventOnGain") {
@@ -95,7 +101,7 @@ export function prepareJourneyOnGain(input: { reservedEntries?: readonly import(
     const byId = new Map(selections.map((selection) => [selection.entryId, selection.type]));
     const previous = journey;
     journey = { ...journey, deck: journey.deck.map((entry) => byId.has(entry.entryId) ? { ...entry, transfiguration: byId.get(entry.entryId)! } : entry) };
-    transfigurations.push(...journeyTransfigurationOccurrences(previous, journey));
+    collect(previous, selections.map(selection => selection.entryId));
     logRecords.push(effectLog(source, { siteId: input.siteId, permissionSeq: input.seq, before: { deckSize: previous.deck.length, eligible: eligible.length }, after: { requested, transformed: count }, eligibleEntryIds: eligible.map(({ entry }) => entry.entryId), transformations: selections }));
   }
   return { journey, transfigurations, copySources, openingHandAcquisitions, starterSources, typeRemapSources, logRecords, paused: false };

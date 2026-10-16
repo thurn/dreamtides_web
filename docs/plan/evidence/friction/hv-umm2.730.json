@@ -1,0 +1,68 @@
+{
+  "bead": "hv-umm2.730",
+  "phase": 5,
+  "implementMin": 703.20682845,
+  "implementWindow": {
+    "start": "2026-10-15T16:26:19.174000+00:00",
+    "end": "2026-10-16T04:09:31.583707+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.892411947250366,
+    "review": 45.793395042419434,
+    "knip": 7.981550931930542,
+    "full": 123.69855999946594,
+    "browser": 52.134921073913574,
+    "browserHostFiles": 0.04797005653381348
+  },
+  "hostLoad": 5.7958984375,
+  "testDelta": {
+    "files": 7,
+    "lines": 770,
+    "newFileLines": 763,
+    "runnerImports": 6,
+    "existingFixtureLineReplacement": 1,
+    "jsdomFiles": 0,
+    "newTestEntrypoints": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-lock-admission",
+      "minutes": 3.552077249685923,
+      "note": "Execution-only sum of three prematurely dispatched waiters, canceled before any inner start. Each actual lockf child -15 produced actual Python wrapper241. No full inner failed. Foreign holders untouched; queue/repair/coordination intervals remain in original clock."
+    },
+    {
+      "tag": "qa-harness-compatibility",
+      "minutes": 3.935314679145813,
+      "note": "Execution-only sum of eight retained failed QA attempts: actual-label locator, loaded-option/viewport setup, behind-victory-dialog click, and four unknown MCP missing-result returns after actual native-prompt save. Initial VM-reader attribution is unproved; later no-reader attempts had same boundary. Successful route uses actual Package Debug shared save. Between-run investigation is not sampled separately."
+    },
+    {
+      "tag": "worktree-clean-rollback",
+      "minutes": 6.512052499999999,
+      "note": "Captured park-input to exact reapply-proof window, including source reading, temporary checkpoint and parent native update2. Earlier candidate/update1, later combined checks and productive repair CPU are not separately sampled; all remain in original inclusive clock. Original receipts stay source-bound; final combined full/QA executed anew."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 22.180292133333335,
+      "note": "Inclusive high-import-clock diagnosis through final focused success, including parent admission, two real REDs, distinct seed/setup rejection, logical-clock repair and fixture/type corrections. Sampling/productive CPU UNKNOWN; current aggregate/QA follow separately; original inclusive clock retained."
+    }
+  ],
+  "originalLocalValidationS": {
+    "focused": 11.063787937164307,
+    "review": 52.15057587623596,
+    "knip": 6.435245990753174,
+    "full": 138.13618421554565,
+    "browser": 45.47390294075012
+  },
+  "originalPrecommitWindow": {
+    "start": "2026-10-15T16:26:19.174000+00:00",
+    "end": "2026-10-16T03:17:02.086357+00:00"
+  },
+  "preClockLocalValidationS": {
+    "focused": 12.56356692314148,
+    "review": 52.681395053863525,
+    "knip": 4.3807289600372314,
+    "full": 136.11577010154724,
+    "browser": 48.13604402542114,
+    "browserHostFiles": 0.05285787582397461
+  }
+}

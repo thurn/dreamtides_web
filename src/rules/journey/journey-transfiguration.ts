@@ -1,9 +1,9 @@
 import { isDeckEntryTransfigurationRecord, type TransfigurationRecordResult } from "../../transfiguration/deck-entry-transfigurations";
 import type { EventContext } from "../../eventlog/types";
-import type { CardId } from "../../types/card-identity";
+import { cardIdFromUnknown, cardSubtypeFromUnknown, type CardId } from "../../types/card-identity";
 import type { CardType } from "../../types/cards";
-import { deckEntryIdFromUnknown, type DreamsignId } from "../../types/identifiers";
-import type { DeckEntry, JourneyState, JourneyTransfigurationEffect, JourneyTransfigurationOccurrence, TransfigurationType } from "../../types/journey";
+import { deckEntryIdFromUnknown, cardTypeChangePredicateIdFromUnknown, type DeckEntryId, type DreamsignId } from "../../types/identifiers";
+import type { DeckEntry, JourneyState, JourneyTransfigurationEffect, JourneyTransfigurationOccurrence, JourneyOperationCause, TransfigurationType } from "../../types/journey";
 import { mintEntryId } from "./deck";
 import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
@@ -22,15 +22,93 @@ export function currentJourneyTransfigurationProvider(): JourneyTransfigurationP
 
 export function journeyTransfigurationCard(entry: Readonly<DeckEntry>) { return provider?.resolve(entry) ?? null; }
 
-/** Only original physical entries modified by this domain operation are occurrences. */
-export function journeyTransfigurationOccurrences(before: JourneyState, after: JourneyState): readonly JourneyTransfigurationOccurrence[] {
-  const original = new Map(before.deck.map((entry) => [entry.entryId, entry]));
-  return after.deck.flatMap((entry) => {
-    if (original.get(entry.entryId)?.transfiguration !== null || entry.transfiguration === null) return [];
+export interface JourneyTransfigurationCollectionContext {
+  readonly eventSeq: number;
+  readonly causalSeq?: number;
+  readonly ordinalStart: number;
+  readonly orderedEntryIds?: readonly DeckEntryId[];
+  readonly parentCause?: JourneyOperationCause;
+}
+const formNames: readonly TransfigurationType[] = ["Empowered", "Amplified", "Kindled", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned", "Perfected"];
+const safeOrdinal = (value: unknown): value is number => Number.isSafeInteger(value) && Number(value) >= 0;
+function validCause(value: unknown): value is JourneyOperationCause {
+  return record(value) && Object.keys(value).length === ("causalSeq" in value ? 6 : 5) && (!("causalSeq" in value) || safeOrdinal(value.causalSeq) && Number(value.causalSeq) > Number(value.eventSeq)) && safeOrdinal(value.eventSeq) && value.eventSeq > 0 && safeOrdinal(value.ordinal) && safeOrdinal(value.applicationIndex) && deckEntryIdFromUnknown(value.entryId) !== null && cardIdFromUnknown(value.cardId) !== null;
+}
+/** Continue retained causal work without changing its actual event-log attribution. */
+export function journeyTransfigurationOperationOrder(causes: readonly JourneyOperationCause[], eventSeq: number, permissionSeq = eventSeq): { readonly causalSeq: number; readonly ordinalStart: number } {
+  if (!safeOrdinal(eventSeq) || eventSeq === 0 || !safeOrdinal(permissionSeq) || causes.some(cause => !validCause(cause))) throw new RangeError("Invalid transfiguration operation clock");
+  const causalSeq = causes.reduce((clock, cause) => Math.max(clock, cause.causalSeq ?? cause.eventSeq), Math.max(eventSeq, permissionSeq));
+  const ordinalStart = causes.reduce((ordinal, cause) => (cause.causalSeq ?? cause.eventSeq) === causalSeq ? Math.max(ordinal, cause.ordinal + 1) : ordinal, 0);
+  if (!safeOrdinal(causalSeq) || !safeOrdinal(ordinalStart)) throw new RangeError("Transfiguration operation ordinal overflow");
+  return { causalSeq, ordinalStart };
+}
+function historicalEntry(value: unknown): value is DeckEntry {
+  if (!record(value) || deckEntryIdFromUnknown(value.entryId) === null || !safeOrdinal(value.cardNumber) || typeof value.isBane !== "boolean" || !(value.transfiguration === null || formNames.some(form => form === value.transfiguration)) || !validJourneyTransfigurationRecord(value)) return false;
+  if (value.sparkBonus !== undefined && (typeof value.sparkBonus !== "number" || !Number.isFinite(value.sparkBonus))) return false;
+  if (value.statOverride !== undefined && (!record(value.statOverride) || Object.entries(value.statOverride).some(([key, field]) => !["energyCost", "spark"].includes(key) || typeof field !== "number" || !Number.isFinite(field)))) return false;
+  if (value.keywordModification != null && (!record(value.keywordModification) || Object.entries(value.keywordModification).some(([key, field]) => key === "fast" ? typeof field !== "boolean" : !["energyCostReduction", "reclaim", "setReclaim"].includes(key) || typeof field !== "number" || !Number.isFinite(field)))) return false;
+  const change = value.typeChange;
+  return change == null || record(change) && cardTypeChangePredicateIdFromUnknown(change.predicateId) !== null && ["Character", "Event"].includes(String(change.cardType)) && cardSubtypeFromUnknown(change.subtype) !== null && typeof change.label === "string";
+}
+function detachedEntry(entry: Readonly<DeckEntry>): Readonly<DeckEntry> {
+  const freeze = (value: unknown): void => {
+    if (value === null || typeof value !== "object") return;
+    Object.values(value).forEach(freeze);
+    Object.freeze(value);
+  };
+  const copy = structuredClone(entry); freeze(copy); return copy;
+}
+function equalValue(left: unknown, right: unknown): boolean {
+  if (Object.is(left, right)) return true;
+  if (Array.isArray(left) || Array.isArray(right)) return Array.isArray(left) && Array.isArray(right) && left.length === right.length && left.every((value, index) => equalValue(value, right[index]));
+  if (!record(left) || !record(right)) return false;
+  const keys = Object.keys(left);
+  return keys.length === Object.keys(right).length && keys.every(key => Object.prototype.hasOwnProperty.call(right, key) && equalValue(left[key], right[key]));
+}
+function applicationCount(entry: Readonly<DeckEntry>): number { return entry.transfigurationApplications?.length ?? (entry.transfiguration === null ? 0 : 1); }
+/** Own optional provenance is coherent; legacy ordinary resolution needs no proof capability. */
+export function validJourneyTransfigurationOperation(value: unknown): boolean {
+  if (!record(value)) return false;
+  if (!("operation" in value)) return true;
+  const operation = value.operation;
+  if (!record(operation) || Object.keys(operation).some(key => !["cause", "beforeEntry", "parentCause"].includes(key)) || !validCause(operation.cause) || !historicalEntry(operation.beforeEntry) || !historicalEntry(value.entry) || cardIdFromUnknown(value.cardId) === null) return false;
+  const before = operation.beforeEntry, after = value.entry, cause = operation.cause;
+  if (before.entryId !== after.entryId || before.cardNumber !== after.cardNumber || cause.entryId !== after.entryId || cause.cardId !== value.cardId || cause.applicationIndex !== applicationCount(after) - 1 || applicationCount(after) !== applicationCount(before) + 1) return false;
+  if (operation.parentCause !== undefined) {
+    const parent = operation.parentCause;
+    if (!validCause(parent) || parent.entryId !== cause.entryId || parent.cardId !== cause.cardId || parent.applicationIndex >= applicationCount(before) || (parent.causalSeq ?? parent.eventSeq) > (cause.causalSeq ?? cause.eventSeq) || (parent.causalSeq ?? parent.eventSeq) === (cause.causalSeq ?? cause.eventSeq) && parent.ordinal >= cause.ordinal) return false;
+  }
+  try {
+    const resolved = provider?.resolve(after);
+    if (resolved?.cardId !== cause.cardId || resolved.cardType !== value.cardType) return false;
+    if (after.transfigurationApplications === undefined) return before.transfiguration === null && after.transfiguration !== null && equalValue({ ...before, transfiguration: after.transfiguration }, after);
+    const form = after.transfigurationApplications[after.transfigurationApplications.length - 1].form;
+    const appended = provider?.apply?.(before, form);
+    return appended?.ok === true && equalValue(appended.value, after);
+  } catch { return false; }
+}
+
+/** Only successful original-entry applications provide detached occasions. */
+export function journeyTransfigurationOccurrences(before: Readonly<Pick<JourneyState, "deck">>, after: Readonly<Pick<JourneyState, "deck">>, context?: JourneyTransfigurationCollectionContext): readonly JourneyTransfigurationOccurrence[] {
+  if (context !== undefined && (!safeOrdinal(context.eventSeq) || context.eventSeq === 0 || !safeOrdinal(context.ordinalStart) || "causalSeq" in context && (!safeOrdinal(context.causalSeq) || Number(context.causalSeq) <= context.eventSeq))) throw new RangeError("Invalid transfiguration operation clock");
+  const original = new Map(before.deck.map(entry => [entry.entryId, entry]));
+  const changed = after.deck.filter(entry => {
+    const old = original.get(entry.entryId);
+    return old !== undefined && (old.transfiguration === null && entry.transfiguration !== null || entry.transfigurationApplications !== undefined && !equalValue(entry.transfigurationApplications, old.transfigurationApplications));
+  });
+  const ordered = context?.orderedEntryIds;
+  if (ordered !== undefined && (ordered.length !== changed.length || new Set(ordered).size !== ordered.length || ordered.some(id => !changed.some(entry => entry.entryId === id)))) throw new Error("Incomplete transfiguration operation order");
+  const entries = ordered === undefined ? changed : ordered.map(id => changed.find(entry => entry.entryId === id)!);
+  return entries.map((entry, index) => {
     if (provider === null) throw new Error("Journey transfiguration content is unavailable.");
     const resolved = provider.resolve(entry);
     if (resolved === null) throw new Error("Transfigured journey card is unknown.");
-    return [Object.freeze({ entry: Object.freeze(structuredClone(entry)), cardId: resolved.cardId, cardType: resolved.cardType })];
+    const ordinal = (context?.ordinalStart ?? 0) + index;
+    if (!Number.isSafeInteger(ordinal)) throw new RangeError("Transfiguration operation ordinal overflow");
+    const occurrence: JourneyTransfigurationOccurrence = { entry: detachedEntry(entry), cardId: resolved.cardId, cardType: resolved.cardType,
+      ...(context === undefined ? {} : { operation: Object.freeze({ cause: Object.freeze({ eventSeq: context.eventSeq, ...(context.causalSeq === undefined ? {} : { causalSeq: context.causalSeq }), ordinal, entryId: entry.entryId, cardId: resolved.cardId, applicationIndex: applicationCount(entry) - 1 }), beforeEntry: detachedEntry(original.get(entry.entryId)!), ...(context.parentCause === undefined ? {} : { parentCause: Object.freeze({ ...context.parentCause }) }) }) }) };
+    if (!validJourneyTransfigurationOperation(occurrence)) throw new Error("Invalid transfiguration operation provenance");
+    return Object.freeze(occurrence);
   });
 }
 
@@ -39,10 +117,12 @@ const factorySpecs = new WeakMap<JourneyModifierDefinition["afterJourneyEvent"],
 export function canonicalJourneyTransfiguration(definition: JourneyModifierDefinition): boolean {
   if (Object.values(Object.getOwnPropertyDescriptors(definition)).some(field => !("value" in field))) return false;
   const spec = factorySpecs.get(definition.afterJourneyEvent);
-  return spec !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === spec.dreamsignId && Object.getOwnPropertyDescriptor(definition, "journeyTransfiguration")?.value === spec.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyTransfiguration", "afterJourneyEvent"].includes(key));
+  const valid = spec !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === spec.dreamsignId && Object.getOwnPropertyDescriptor(definition, "journeyTransfiguration")?.value === spec.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyTransfiguration", "afterJourneyEvent"].includes(key));
+  if (spec?.effect.kind === "additionalRandomTransfiguration" && !valid) throw new RangeError("Incompatible additional journey definition");
+  return valid;
 }
 export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: JourneyTransfigurationEffect): JourneyModifierDefinition {
-  if (descriptor.kind !== "copyTransfiguredEvent" && (descriptor.kind !== "afterBattleTransfiguration" ||
+  if (descriptor.kind !== "additionalRandomTransfiguration" && descriptor.kind !== "copyTransfiguredEvent" && (descriptor.kind !== "afterBattleTransfiguration" ||
     !Number.isSafeInteger(descriptor.maxCount) || descriptor.maxCount < 1)) throw new RangeError("Invalid journeyTransfiguration descriptor.");
   const effect = Object.freeze({ ...descriptor });
   const definition: JourneyModifierDefinition = { dreamsignId, journeyTransfiguration: effect,
@@ -54,6 +134,7 @@ export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: Jou
         const count = afterBattleChoice(next.screen)!.sources.length;
         return { journey: next, before: { permissions: count - 1 }, after: { permissions: count, maxCount: effect.maxCount }, target: { siteIds: [siteId] } };
       }
+      if (effect.kind === "additionalRandomTransfiguration") return null;
       const events = transfigurations.filter((occurrence) => occurrence.cardType === "Event");
       if (events.length === 0) return null;
       let deck = [...journey.deck];
@@ -120,7 +201,7 @@ export function validJourneyTransfigurationRecords(journey: unknown): boolean {
   if (!record(screen) || !record(screen.choice) || screen.choice.kind !== "subtype" || !record(screen.choice.resume)) return true;
   const resume = screen.choice.resume;
   return (!record(resume.before) || entries(resume.before.deck) && runtimes(resume.before.siteRuntime)) && entries(resume.attemptedEntries) &&
-    (!Array.isArray(resume.transfigurations) || resume.transfigurations.every(occurrence => !record(occurrence) || validJourneyTransfigurationRecord(occurrence.entry)));
+    (!Array.isArray(resume.transfigurations) || resume.transfigurations.every(occurrence => !record(occurrence) || validJourneyTransfigurationRecord(occurrence.entry) && validJourneyTransfigurationOperation(occurrence)));
 }
 export function assertJourneyTransfigurationCheckpoint(state: unknown): void {
   if (record(state) && !validJourneyTransfigurationRecords(state.journey)) throw new Error("Invalid journey transfiguration checkpoint");

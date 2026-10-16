@@ -3,11 +3,11 @@ import type { FoldState } from "../fold-state";
 import type { JourneyLoopBattleBinding, JourneyOperationCause, JourneyEarnedLoopInstruction, JourneyDreamsignGain, DeckEntry, TransfigurationType } from "../../types/journey";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, parseBattleId, parseTutorialRunId, siteIdFromUnknown } from "../../types/identifiers";
-import { isTransfigurationApplications } from "../../engine/transfiguration-application-data";
+import { copyTransfigurationApplications, isTransfigurationApplications } from "../../engine/transfiguration-application-data";
 import { isDeckEntryTransfigurationRecord } from "../../transfiguration/deck-entry-transfigurations";
 import { validJourneyTransfigurationRecord } from "./journey-transfiguration";
 import type { JourneyModifierRegistry } from "./modifier-registry";
-import { journeyLoopSpec } from "./journey-mandatory-loop";
+import { journeyInstructionSource } from "./journey-mandatory-loop";
 
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const array = (value: unknown): value is readonly unknown[] => Array.isArray(value);
@@ -18,7 +18,7 @@ function sources(value: unknown, nonempty = false): value is readonly JourneyDre
   return array(value) && (!nonempty || value.length > 0) && value.every(source) && new Set(value.map(item => item.heldIndex)).size === value.length;
 }
 function cause(value: unknown): value is JourneyOperationCause {
-  return record(value) && integer(value.eventSeq) && value.eventSeq > 0 && integer(value.ordinal) && integer(value.applicationIndex) && deckEntryIdFromUnknown(value.entryId) !== null && cardIdFromUnknown(value.cardId) !== null;
+  return record(value) && Object.keys(value).length === ("causalSeq" in value ? 6 : 5) && (!("causalSeq" in value) || integer(value.causalSeq) && Number(value.causalSeq) > Number(value.eventSeq)) && integer(value.eventSeq) && value.eventSeq > 0 && integer(value.ordinal) && integer(value.applicationIndex) && deckEntryIdFromUnknown(value.entryId) !== null && cardIdFromUnknown(value.cardId) !== null;
 }
 function binding(value: unknown): value is JourneyLoopBattleBinding | null {
   if (value === null) return true;
@@ -39,14 +39,14 @@ function entryProjection(value: unknown): Readonly<DeckEntry> | null {
     ...(applications === undefined ? {} : { transfigurationApplications: applications }) };
 }
 function instruction(value: unknown, registry?: JourneyModifierRegistry): value is JourneyEarnedLoopInstruction {
-  if (!record(value) || value.kind !== "mandatoryOriginalTransfiguration" || !integer(value.permissionSeq) || !cause(value.cause) || value.permissionSeq !== value.cause.eventSeq || !sources(value.sourceObserverSources, true) || !source(value.source)) return false;
+  if (!record(value) || value.kind !== "mandatoryOriginalTransfiguration" || !integer(value.permissionSeq) || !cause(value.cause) || value.permissionSeq < 1 || value.permissionSeq > (value.cause.causalSeq ?? value.cause.eventSeq) || !sources(value.sourceObserverSources, true) || !source(value.source)) return false;
   const earnedSource = value.source;
   if (!value.sourceObserverSources.some(item => item.heldIndex === earnedSource.heldIndex && item.dreamsignId === earnedSource.dreamsignId)) return false;
   // Only this validated projection is consumed by the source executor; saved optional modifications are never cast into it.
   const parent = entryProjection(value.parentEntry);
   if (parent === null || parent.entryId !== value.cause.entryId || value.cause.applicationIndex !== (parent.transfigurationApplications?.length ?? 1) - 1) return false;
   if (registry !== undefined) {
-    const spec = journeyLoopSpec(registry.lookup(value.source.dreamsignId));
+    const spec = journeyInstructionSource(registry.lookup(value.source.dreamsignId), value.cause.cardId);
     if (spec === undefined || spec.cardId !== value.cause.cardId || spec.provider.resolve(parent)?.cardId !== value.cause.cardId || !validJourneyTransfigurationRecord(parent)) return false;
   }
   return true;
@@ -68,20 +68,22 @@ export function validJourneyLoopState(value: unknown, registry?: JourneyModifier
       if (targets.length !== 1) return false;
       const target = entryProjection(targets[0]);
       if (target === null || target.cardNumber !== item.parentEntry.cardNumber) return false;
+      const parentApplications = item.parentEntry.transfigurationApplications;
+      if (parentApplications !== undefined && (target.transfigurationApplications === undefined || JSON.stringify(copyTransfigurationApplications(target.transfigurationApplications.slice(0, parentApplications.length))) !== JSON.stringify(copyTransfigurationApplications(parentApplications)))) return false;
       if (registry === undefined) return true;
-      const spec = journeyLoopSpec(registry.lookup(item.source.dreamsignId));
+      const spec = journeyInstructionSource(registry.lookup(item.source.dreamsignId), item.cause.cardId);
       return spec !== undefined && spec.provider.validateRecord?.(target) === true && spec.provider.resolve(target)?.cardId === item.cause.cardId;
     })) return false;
-    const identities = pending.instructions.map(item => JSON.stringify([item.cause.eventSeq, item.cause.ordinal, item.source.heldIndex]));
+    const identities = pending.instructions.map(item => JSON.stringify([item.cause.causalSeq ?? item.cause.eventSeq, item.cause.ordinal, item.source.heldIndex]));
     const snapshotKey = (items: readonly JourneyDreamsignGain[]) => JSON.stringify(items.map(item => [item.heldIndex, item.dreamsignId]));
     const first = pending.instructions[0];
     if (pending.permissionSeq !== first.permissionSeq || snapshotKey(pending.observerSources) !== snapshotKey(first.sourceObserverSources)) return false;
     return new Set(identities).size === identities.length && pending.instructions.every((item, index, items) => index === 0 ||
-      item.cause.eventSeq > items[index - 1].cause.eventSeq || item.cause.eventSeq === items[index - 1].cause.eventSeq &&
+      (item.cause.causalSeq ?? item.cause.eventSeq) > (items[index - 1].cause.causalSeq ?? items[index - 1].cause.eventSeq) || (item.cause.causalSeq ?? item.cause.eventSeq) === (items[index - 1].cause.causalSeq ?? items[index - 1].cause.eventSeq) &&
       item.cause.ordinal >= items[index - 1].cause.ordinal && snapshotKey(item.sourceObserverSources) === snapshotKey(items[index - 1].sourceObserverSources));
   }
   const draw = value.journeyDraw;
-  if (!record(draw) || draw.kind !== "mandatoryJourneyLoop" || draw.result !== "draw" || !integer(draw.committedSeq) || !cause(draw.cause) || draw.committedSeq < Number(draw.cause.eventSeq) || !source(draw.earnedSource) || !sources(draw.continuingSources, true) || !binding(draw.abandonedBattle) || value.screen.type !== "journeyFailed" || !record(draw.proof)) return false;
+  if (!record(draw) || draw.kind !== "mandatoryJourneyLoop" || draw.result !== "draw" || !integer(draw.committedSeq) || draw.committedSeq < 1 || "committedCausalSeq" in draw && (!integer(draw.committedCausalSeq) || Number(draw.committedCausalSeq) <= draw.committedSeq) || !cause(draw.cause) || Number(draw.committedCausalSeq ?? draw.committedSeq) < (draw.cause.causalSeq ?? draw.cause.eventSeq) || !source(draw.earnedSource) || !sources(draw.continuingSources, true) || !binding(draw.abandonedBattle) || value.screen.type !== "journeyFailed" || !record(draw.proof)) return false;
   const proof = draw.proof;
   if (proof.kind !== "canonicalTransfigurationTypeClosure" || !["Character", "Event"].includes(proof.cardType as string) || proof.anchor !== (proof.cardType === "Character" ? "Kindled" : "Inspired") || !array(proof.applicableForms) || !proof.applicableForms.includes(proof.anchor) || proof.applicableForms.some(form => typeof form !== "string" || !forms.includes(form)) || new Set(proof.applicableForms).size !== proof.applicableForms.length) return false;
   const rootCause = draw.cause;

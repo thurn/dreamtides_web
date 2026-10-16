@@ -100,7 +100,7 @@ describe("journey loop saved state contracts", () => {
     const f = afterBattle(fixture()), first = resolveWindow(f, f.state).state, bad = structuredClone(first);
     const pending = bad.journey.pendingJourneyLoop!, original = pending.instructions[0];
     if (field === "permission") Reflect.set(original, "permissionSeq", original.permissionSeq + 1);
-    else if (field === "causeSeq") Reflect.set(original.cause, "eventSeq", original.cause.eventSeq + 1);
+    else if (field === "causeSeq") Reflect.set(original.cause, "eventSeq", original.cause.eventSeq - 1);
     else if (field === "sourceUUID") Reflect.set(original.source, "dreamsignId", TOME);
     else if (field === "missingSlot") Reflect.set(original, "sourceObserverSources", original.sourceObserverSources.filter(item => item.heldIndex !== original.source.heldIndex));
     else if (field === "duplicateSlot") Reflect.set(original, "sourceObserverSources", [...original.sourceObserverSources, original.sourceObserverSources[0]]);
