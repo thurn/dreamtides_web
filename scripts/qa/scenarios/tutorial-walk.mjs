@@ -21,11 +21,12 @@
 //
 // Every beat reads the route, the phase, any visible guidance, and an empty
 // `__caps`. Waits use test IDs, data attributes, and card UUIDs from
-// `src/content/tutorial.ts`, never copy. Captures: 01, 19, 30, and 31.
+// `src/content/tutorial.ts`, never copy. Captures: 01, 19, the live guidance at 20, 30, and 31.
 
 /**
+ * @typedef {{ battleId: string, gameId: string, source: import("../../../src/rules/battle/fold").TutorialGuidanceSource, effectiveDurations: (number | null)[], delays: number[], messageIndex: number }} GuidanceMetadata
  * @typedef {{ beat: string, path: string, phase: string | null, guidance: string | null, sides: string, speech: string | null }} Beat
- * @typedef {{ beats: Beat[], speech: string | null, observed: string[] }} Carry
+ * @typedef {{ beats: Beat[], speech: string | null, observed: string[], battle?: { gameId: string, battleId: string, beginSeq: number }, victory?: { seq: number, ended: import("../prelude.mjs").GameLogRow, applied: import("../prelude.mjs").GameLogRow } }} Carry
  */
 
 /** @param {import("../prelude.mjs").Qa} qa */
@@ -48,15 +49,47 @@ async function tutorialWalk(qa) {
     nocturneStrummer: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
   };
 
-  /** The visible guidance bubble's kind, side, and trigger, or null. */
-  const visibleGuidance = () =>
-    page.evaluate((selector) => {
+  // Authored trigger UUIDs distinguish concepts sharing the same native source kind.
+  const triggers = {
+    noTargets: "277d95c1-e7a7-4d5a-9ee7-a5d26869bf75",
+    dusk: "9a5b5f0b-8e0b-437e-b04c-d12ab6e6071c",
+    night: "abe76c76-63ad-481e-9f22-559f33f845b8",
+  };
+
+  /** Read an active message, joining its opaque identity to native metadata. */
+  const visibleGuidance = async () => {
+    const shown = await page.evaluate((selector) => {
       const dom = /** @type {Window & { __qa?: import("../prelude.mjs").QaDom }} */ (window).__qa;
-      const element = dom?.rendered({ selector }, 0.95) ?? null;
-      if (element === null) return null;
-      const [, kind = "", side = ""] = (element.getAttribute("data-presentation-id") ?? "").split(":");
-      return { kind, side, trigger: element.getAttribute("data-trigger-id"), presentation: element.getAttribute("data-presentation-id") };
+      const dialogue = dom?.rendered({ selector: `${selector}:not([aria-hidden=true]) [data-testid=battle-tutorial-dialogue]` }, 0.95) ?? null;
+      const element = dialogue?.closest(selector);
+      if (element === null || element === undefined) return null;
+      return {
+        trigger: element.getAttribute("data-trigger-id"),
+        presentation: element.getAttribute("data-presentation-id"),
+        messageIndex: Number(element.getAttribute("data-message-index")),
+        cardId: element.querySelector("[data-battle-tutorial-source] [data-card-id]")?.getAttribute("data-card-id") ?? null,
+      };
     }, guidance);
+    if (shown === null) return null;
+    const records = await qa.gameLog.rows();
+    const recorded = records.findLast((row) => row.event === "battle_tutorial_guidance_presented" &&
+      row.presentationId === shown.presentation && row.messageIndex === shown.messageIndex &&
+      Array.isArray(row.triggerIds) && row.triggerIds[shown.messageIndex] === shown.trigger);
+    if (recorded === undefined) return null; // The persisted log can trail the render.
+    const metadata = /** @type {GuidanceMetadata} */ (/** @type {unknown} */ (recorded));
+    if (carry.battle !== undefined && (metadata.battleId !== carry.battle.battleId || metadata.gameId !== carry.battle.gameId)) {
+      throw new Error(`tutorial-walk ${viewport}: guidance belongs to another battle or game`);
+    }
+    const source = metadata.source;
+    if ((source.kind === "card" || source.kind === "figment") && shown.cardId !== source.cardId) {
+      throw new Error(`tutorial-walk ${viewport}: guidance printing UUID differs from its native source`);
+    }
+    const kind = source.kind === "card" ? (shown.trigger === triggers.noTargets ? "card-no-valid-targets" : "card-play") :
+      source.kind === "figment" ? "figment-created" : source.kind === "dreamwell" ? "dreamwell-resolve" :
+      source.kind === "challenge" ? "challenge-resolved" : shown.trigger === triggers.dusk ? "opponent-reposition-opportunity" :
+      shown.trigger === triggers.night ? "player-night-phase" : source.kind;
+    return { ...shown, kind, side: "side" in source ? source.side : source.activeSide, metadata };
+  };
 
   /** Records a beat: the route, phase, guidance, and sides, after asserting an empty `__caps`. */
   const beat = async (/** @type {string} */ name, /** @type {{ capture?: boolean }} */ options = {}) => {
@@ -71,6 +104,20 @@ async function tutorialWalk(qa) {
     }), null);
     const shown = await visibleGuidance();
     const { phase } = await qa.battle.state();
+    if (shown !== null) {
+      const geometry = await page.evaluate((id) => {
+        const root = [...document.querySelectorAll("[data-battle-tutorial-guidance]")].find((element) => element.getAttribute("data-presentation-id") === id);
+        const elements = root?.querySelectorAll("[data-testid=battle-tutorial-dialogue], [data-battle-tutorial-source]") ?? [];
+        return [...elements].map((element) => {
+          const rect = element.getBoundingClientRect();
+          if (rect.width <= 0 || rect.height <= 0 || rect.left < -1 || rect.top < -1 || rect.right > innerWidth + 1 || rect.bottom > innerHeight + 1) {
+            throw new Error("tutorial guidance geometry clips the viewport");
+          }
+          return { surface: element.getAttribute("data-testid") ?? "source", x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+        });
+      }, shown.presentation);
+      qa.note("guidance source and geometry", { shown, geometry });
+    }
     /** @type {Beat} */
     const entry = { beat: name, ...state, phase, guidance: shown === null ? null : `${shown.kind}:${shown.side}:${String(shown.trigger)}` };
     carry.beats.push(entry);
@@ -118,15 +165,38 @@ async function tutorialWalk(qa) {
       return shown !== null && shown.kind === kind && shown.side === side && shown.presentation !== previous ? shown : null;
     }, timeout);
 
-  /** Waits until no guidance bubble is visible; dismisses one that outstays `patience`. */
-  const guidanceCleared = async (patience = 15_000) => {
-    const deadline = Date.now() + patience;
-    while ((await visibleGuidance()) !== null) {
-      if (Date.now() > deadline) {
-        qa.note("dismissed lingering guidance", await visibleGuidance());
-        await qa.click("[data-testid=battle-tutorial-dismiss]");
+  /** Complete each exact native message by its authored timer or manual control. */
+  const guidanceCleared = async () => {
+    for (;;) {
+      const head = await visibleGuidance();
+      if (head === null) return;
+      const { metadata, messageIndex, presentation, trigger } = head;
+      const duration = metadata.effectiveDurations[messageIndex];
+      const delay = metadata.delays[messageIndex];
+      const reason = duration === null ? "manual" : "timer";
+      if (duration !== null && (!Number.isFinite(duration) || duration < 0 || !Number.isFinite(delay) || delay < 0)) {
+        throw new Error(`tutorial-walk ${viewport}: invalid authored timing for ${presentation}`);
       }
-      await qa.sleep(150);
+      if (reason === "manual") {
+        // Re-check the whole identity before an ordinary UI click.
+        const current = await visibleGuidance();
+        if (current?.presentation === presentation && current.messageIndex === messageIndex) {
+          await qa.click(`${guidance}[data-presentation-id="${presentation}"][data-message-index="${messageIndex}"] [data-testid=battle-tutorial-dismiss]`);
+        }
+      }
+      const intentKey = `battle-tutorial:${presentation}:${messageIndex}`;
+      const completion = await qa.gameLog.waitFor("exact native guidance completion", (rows) => {
+        const request = rows.findLast((row) => row.event === "battle_tutorial_guidance_advance_requested" &&
+          row.presentationId === presentation && row.messageIndex === messageIndex && row.triggerId === trigger && row.reason === reason);
+        const applied = rows.findLast((row) => row.event === "game_event" && row.type === "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
+          row.outcome === "applied" && row.intentKey === intentKey);
+        return request !== undefined && applied !== undefined ? { request, applied } : null;
+      }, { timeout: reason === "manual" ? 15_000 : (delay + (duration ?? 0)) * 1_000 + 15_000 });
+      await qa.waitFor("exact guidance message leaves the screen", ({ id, index }) =>
+        ![...document.querySelectorAll("[data-battle-tutorial-guidance]:not([aria-hidden=true])")].some((element) =>
+          element.getAttribute("data-presentation-id") === id && Number(element.getAttribute("data-message-index")) === index),
+      { id: presentation, index: messageIndex });
+      qa.note("authored guidance completed", { head, reason, completion });
     }
   };
 
@@ -141,21 +211,20 @@ async function tutorialWalk(qa) {
           if (document.elementFromPoint(x, y)?.closest("[data-battle-card-id]")?.getAttribute("data-battle-card-id") === cardId) return { x: x + 2, y: y + 2 };
         }
       }
-      return { x: box.x + box.width / 2, y: Math.min(box.y + box.height / 2, innerHeight - 6) };
+      throw new Error(`tutorial-walk: physical card ${cardId} has no exposed hit point`);
     }, id);
 
-  /** The battle card of card UUID `cardId` lowest on screen (the hand), or one whose id starts with `prefix`. */
-  const handCard = (/** @type {string} */ cardId, prefix = "\u0000") =>
+  /** Select a physical player-hand copy by its printing UUID. */
+  const handCard = (/** @type {string} */ cardId) =>
     until(`hand card ${cardId}`, () =>
-      page.evaluate(({ uuid, idPrefix }) => {
-        const matches = [...document.querySelectorAll("[data-battle-card-id]")].filter(
+      page.evaluate((uuid) => {
+        const matches = [...document.querySelectorAll("[data-battle-hand-owner=player] [data-battle-card-id]")].filter(
           (element) =>
-            element.querySelector(`[data-card-id="${uuid}"]`) !== null ||
-            (element.getAttribute("data-battle-card-id") ?? "").startsWith(idPrefix),
+            element.querySelector(`[data-card-id="${uuid}"]`) !== null,
         );
         matches.sort((a, b) => b.getBoundingClientRect().y - a.getBoundingClientRect().y);
         return matches[0]?.getAttribute("data-battle-card-id") ?? null;
-      }, { uuid: cardId, idPrefix: prefix }),
+      }, cardId),
     15_000);
 
   /** Drags with the pointer in 20 moves, then rests it outside the viewport. */
@@ -242,7 +311,7 @@ async function tutorialWalk(qa) {
     await beat("07-howto-materialize");
     await closeHowToPlay();
     await qa.sleep(1_200);
-    const direwolf = await handCard(cards.markedDirewolf, "tutorial-player-deck");
+    const direwolf = await handCard(cards.markedDirewolf);
     const middle = await backSlot();
     if (middle === null) throw new Error(`tutorial-walk ${viewport}: no empty back slot`);
     qa.note("guided play", { card: direwolf, slot: middle.id });
@@ -294,6 +363,15 @@ async function tutorialWalk(qa) {
     await until("the live battle", () => page.evaluate(() => document.querySelector("[data-tutorial-live-battle]") !== null, null));
     await qa.waitVisible(phaseNext);
     await qa.sleep(1_000);
+    const identity = await page.evaluate(() => ({
+      gameId: new URLSearchParams(location.search).get("game"),
+      battleId: document.querySelector("[data-battle-mobile]")?.getAttribute("data-battle-mobile") ?? null,
+    }), null);
+    if (identity.gameId === null || identity.battleId === null) throw new Error(`tutorial-walk ${viewport}: missing live battle identity`);
+    const begun = await qa.gameLog.waitFor("committed live tutorial handoff", (rows) => rows.findLast((row) =>
+      row.event === "game_event" && row.type === "BEGIN_TUTORIAL_BATTLE" && row.outcome === "applied" && row.gameId === identity.gameId && typeof row.seq === "number"));
+    carry.battle = { gameId: identity.gameId, battleId: identity.battleId, beginSeq: Number(begun.seq) };
+    qa.note("live battle identity", carry.battle);
     await beat("19-live-handoff", { capture: true });
     return carry;
   }
@@ -302,10 +380,14 @@ async function tutorialWalk(qa) {
     // 20–21 Glimpse of What Was: the foresee guidance, then the Foresee prompt.
     await drag(await cardPoint(await handCard(cards.glimpseOfWhatWas)), await boardMiddle());
     const foresee = await nextGuidance("card-play", "player");
-    await beat("20-mira-foresee");
-    await qa.waitVisible("[data-testid=battle-foresee-confirm]", { timeout: 15_000 });
+    await beat("20-mira-foresee", { capture: true });
+    await guidanceCleared();
+    await until("the player arrangement prompt", async () => {
+      const battle = await qa.battle.state();
+      return battle.prompt?.answerable === true && ["foresee", "arrange"].includes(battle.prompt.surface ?? "") ? battle.prompt : null;
+    }, 15_000);
     await beat("21-foresee-prompt");
-    await qa.click("[data-testid=battle-foresee-confirm]");
+    if (!await qa.battle.answer()) throw new Error(`tutorial-walk ${viewport}: arrangement prompt is not answerable`);
     await guidanceCleared();
     await qa.sleep(1_500);
 
@@ -333,6 +415,7 @@ async function tutorialWalk(qa) {
     await qa.click(phaseNext);
     await nextGuidance("opponent-reposition-opportunity", "player", null, 15_000);
     await beat("24-mira-dusk");
+    await guidanceCleared();
     await nextGuidance("player-night-phase", "player", null, 20_000);
     await beat("25-mira-night");
     await guidanceCleared();
@@ -341,12 +424,8 @@ async function tutorialWalk(qa) {
     const resolved = await nextGuidance("challenge-resolved", "player", null, 15_000);
     await beat("26-mira-challenge-resolved");
 
-    // 27–30 Until Victory: `qa.battle` presses the phase button whenever the
-    // player holds it and no guidance shows; the guidance the enemy's turn
-    // raises is recorded and cleared first. On the authored enemy turn the
-    // guidance is 27 (figment) and 28 (the enemy's card play), and the first
-    // press is 29 (Start Challenge against the enemy's challenge), then End
-    // Turn and Start Challenge for Victory.
+    // 27–30 Pass through the normal battle driver. Enemy teaching beats are
+    // optional observations of the selected AI policy, never required actions.
     const victory = "[data-testid=tutorial-battle-new-journey]";
     let presses = 0;
     /** @type {string | null} */
@@ -377,13 +456,38 @@ async function tutorialWalk(qa) {
       },
     });
     qa.note("live presses", { presses, observed: carry.observed });
+    const identity = carry.battle;
+    if (identity === undefined) throw new Error(`tutorial-walk ${viewport}: missing live battle identity`);
+    await qa.waitFor("current tutorial battle has its committed terminal state", (battleId) =>
+      document.querySelector("[data-battle-mobile]")?.getAttribute("data-battle-mobile") === battleId &&
+      document.querySelector("[data-tutorial-battle-state=terminal]") !== null, identity.battleId);
+    carry.victory = await qa.gameLog.waitFor("committed player Victory", (rows, log) => {
+      if (log.gameId !== identity.gameId) return null;
+      const start = rows.findLastIndex((row) => row.event === "game_event" && row.seq === identity.beginSeq && row.type === "BEGIN_TUTORIAL_BATTLE" && row.outcome === "applied");
+      if (start < 0 || rows.slice(start + 1).some((row) => row.event === "game_event" && row.outcome === "applied" && ["BEGIN_BATTLE", "BEGIN_TUTORIAL_BATTLE", "RESTART_TUTORIAL_BATTLE"].includes(String(row.type)))) return null;
+      rows = rows.slice(start + 1);
+      const index = rows.findLastIndex((row) => {
+        const result = /** @type {{ kind?: string, winner?: string } | null} */ (row.result);
+        return row.event === "engine.battleEnded" && result?.kind === "victory" && result.winner === "player" && row.gameId === identity.gameId && typeof row.seq === "number";
+      });
+      if (index < 0) return null;
+      // LocalGameProvider emits engine records only for applied commits.
+      // Their logger counter is separate from the event log's sequence.
+      const applied = rows.slice(0, index).findLast((row) => row.event === "game_event" &&
+        ["BATTLE_ACTION", "BATTLE_ANSWER"].includes(String(row.type)) && row.outcome === "applied");
+      return applied !== undefined && typeof applied.seq === "number" ? { seq: applied.seq, ended: rows[index], applied } : null;
+    });
+    qa.note("committed player Victory", carry.victory);
     await qa.waitVisible("[data-tutorial-victory-screen]");
-    await qa.sleep(1_500);
+    await qa.waitFor("Victory action animation settled", () => document.querySelector("[data-tutorial-victory-action-settled]") !== null, null);
+    await qa.waitVisible(victory);
     await beat("30-victory", { capture: true });
     return carry;
   }
 
   // 31 New Journey: the tutorial Avatar offer with its journeyStart guidance.
+  if (carry.victory === undefined) throw new Error(`tutorial-walk ${viewport}: missing committed player Victory`);
+  const victorySeq = carry.victory.seq;
   await qa.click("[data-testid=tutorial-battle-new-journey]");
   await qa.waitVisible("[data-journey-screen=journeyStart]", { timeout: 20_000 });
   await qa.waitVisible("[data-testid=journey-start-tutorial-dialogue] [data-character-dialogue-visible=true], [data-testid=journey-start-tutorial-dialogue][data-character-dialogue-visible=true]", { timeout: 20_000 });
@@ -391,9 +495,21 @@ async function tutorialWalk(qa) {
   await beat("31-journey-start", { capture: true });
   const offer = await page.evaluate(() => ({
     path: location.pathname,
-    choices: document.querySelectorAll("[data-choose-avatar] button").length,
+    avatars: [...document.querySelectorAll("[data-choose-avatar]")].map((element) => ({
+      id: element.getAttribute("data-choose-avatar"),
+      enabled: element.querySelector("button:not(:disabled)") !== null,
+    })),
   }), null);
   if (offer.path !== "/") throw new Error(`tutorial-walk ${viewport}: the Avatar offer is at ${offer.path}, not /`);
+  const offerLog = await qa.gameLog.waitFor("committed tutorial exit and Avatar offer", (rows) => {
+    const exit = rows.findLast((row) => row.event === "game_event" && row.type === "EXIT_TUTORIAL_BATTLE" && row.outcome === "applied" && row.intentKey === `tutorial-battle:${carry.battle?.battleId}:exit` && row.gameId === carry.battle?.gameId && typeof row.seq === "number" && row.seq > victorySeq);
+    const shown = rows.findLast((row) => row.event === "avatar_offer_shown");
+    return exit !== undefined && shown !== undefined && Array.isArray(shown.avatarIds) ? { exit, shown, avatarIds: shown.avatarIds } : null;
+  });
+  if (offer.avatars.length !== 1 || !offer.avatars[0].enabled || offer.avatars[0].id !== offerLog.avatarIds[0] || offerLog.avatarIds.length !== 1) {
+    throw new Error(`tutorial-walk ${viewport}: tutorial Avatar offer does not match native UUID options`);
+  }
+  qa.note("committed tutorial Avatar offer", { offer, offerLog });
   await qa.assertCaps(`${viewport} tutorial walk`);
   return {
     viewport,

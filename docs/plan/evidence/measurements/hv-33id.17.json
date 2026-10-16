@@ -1,0 +1,534 @@
+{
+  "bead": "hv-33id.17",
+  "base": "6bbf25e34e463476643c4bfe8ea4c7c9ee2a0d3b",
+  "scope": [
+    "scripts/qa/scenarios/tutorial-walk.mjs",
+    "README.md Browser QA tutorial-walk entry",
+    "own friction and measurement evidence"
+  ],
+  "sourceSHA256": "35962a550f7500d40af9d583c3ab80fcefdbf53df93da714643d6eb00b4dbfd6",
+  "sourceEpoch": "source-epoch-4.mjs",
+  "reviewPolicy": "Non-core, non-gate bead. Whole-phase fresh read-only Codex review remains at Phase 6 gate.",
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "testStrategy": "Canonical public scenario on current source, desktop and mobile, covers native guidance join, authored completion, shared prompts, current committed player Victory and guarded Avatar offer. No private-helper test seam or new entrypoint.",
+  "originalClaimStartUTC": "2026-10-16T02:18:02Z",
+  "dispatchUTC": "2026-10-16T02:20:42.940635+00:00",
+  "evidenceCutoffUTC": "2026-10-16T02:51:44.406544+00:00",
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow.end": {
+        "meaning": "Observed evidence cutoff; exact later Git commit and cutoff delta retained in ignored commit-tail.json."
+      },
+      "hostLoad": {
+        "measuredFor": "review-05 command start",
+        "method": "os.getloadavg()[0], system one-minute load"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "review-02.start": [
+      6.82568359375,
+      7.13623046875,
+      7.92041015625
+    ],
+    "knip-01.start": [
+      4.583984375,
+      5.67138671875,
+      6.7734375
+    ],
+    "review-05.start": [
+      8.8486328125,
+      7.48974609375,
+      7.76904296875
+    ],
+    "qa-01.start": [
+      7.51611328125,
+      7.2958984375,
+      7.93798828125
+    ],
+    "qa-02.start": [
+      7.84423828125,
+      7.36767578125,
+      7.71630859375
+    ],
+    "review-03.start": [
+      7.24755859375,
+      7.21826171875,
+      7.92626953125
+    ],
+    "heavy-01.start": [
+      4.6484375,
+      5.48876953125,
+      6.623046875
+    ],
+    "review-04.start": [
+      6.60107421875,
+      6.9658203125,
+      7.62890625
+    ],
+    "review-01.start": [
+      6.14501953125,
+      7.06103515625,
+      7.9375
+    ]
+  },
+  "validation": [
+    {
+      "label": "heavy-01",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/tutorial-walk17/heavy-admitted.py"
+      ],
+      "startUTC": "2026-10-16T02:41:03.281802+00:00",
+      "endUTC": "2026-10-16T02:51:16.165405+00:00",
+      "exit": 0,
+      "wallSeconds": 612.8433996249805,
+      "cpuUserSeconds": 322.885089,
+      "cpuSystemSeconds": 31.255461
+    },
+    {
+      "label": "knip-01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUTC": "2026-10-16T02:39:57.316275+00:00",
+      "endUTC": "2026-10-16T02:40:01.980033+00:00",
+      "exit": 0,
+      "wallSeconds": 4.663669292000122,
+      "cpuUserSeconds": 4.228669,
+      "cpuSystemSeconds": 1.469601
+    },
+    {
+      "label": "qa-01",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "tutorial-walk",
+        "--bead",
+        "hv-33id.17"
+      ],
+      "startUTC": "2026-10-16T02:26:59.348624+00:00",
+      "endUTC": "2026-10-16T02:30:10.022417+00:00",
+      "exit": 1,
+      "wallSeconds": 190.6732990000164,
+      "cpuUserSeconds": 6.499588,
+      "cpuSystemSeconds": 3.214343
+    },
+    {
+      "label": "qa-02",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "tutorial-walk",
+        "--bead",
+        "hv-33id.17"
+      ],
+      "startUTC": "2026-10-16T02:32:51.323273+00:00",
+      "endUTC": "2026-10-16T02:39:00.761962+00:00",
+      "exit": 0,
+      "wallSeconds": 369.4378090829705,
+      "cpuUserSeconds": 6.807454,
+      "cpuSystemSeconds": 2.876941
+    },
+    {
+      "label": "review-01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-16T02:25:32.723450+00:00",
+      "endUTC": "2026-10-16T02:25:52.763432+00:00",
+      "exit": 2,
+      "wallSeconds": 20.039851292036474,
+      "cpuUserSeconds": 56.844477,
+      "cpuSystemSeconds": 7.513777
+    },
+    {
+      "label": "review-02",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-16T02:26:15.552636+00:00",
+      "endUTC": "2026-10-16T02:26:27.807555+00:00",
+      "exit": 2,
+      "wallSeconds": 12.25477287499234,
+      "cpuUserSeconds": 31.136371,
+      "cpuSystemSeconds": 6.37561
+    },
+    {
+      "label": "review-03",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-16T02:26:42.054397+00:00",
+      "endUTC": "2026-10-16T02:26:53.991258+00:00",
+      "exit": 0,
+      "wallSeconds": 11.936772332992405,
+      "cpuUserSeconds": 31.36215,
+      "cpuSystemSeconds": 6.38714
+    },
+    {
+      "label": "review-04",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-16T02:31:15.881435+00:00",
+      "endUTC": "2026-10-16T02:31:29.099469+00:00",
+      "exit": 0,
+      "wallSeconds": 13.217866166960448,
+      "cpuUserSeconds": 32.105246,
+      "cpuSystemSeconds": 6.616505
+    },
+    {
+      "label": "review-05",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-16T02:32:25.045964+00:00",
+      "endUTC": "2026-10-16T02:32:36.846293+00:00",
+      "exit": 0,
+      "wallSeconds": 11.800193000002764,
+      "cpuUserSeconds": 30.973436,
+      "cpuSystemSeconds": 6.355297
+    }
+  ],
+  "heavy": {
+    "workers": 2,
+    "requestUTC": "2026-10-16T02:41:03.281802+00:00",
+    "admittedUTC": "2026-10-16T02:48:57.283695+00:00",
+    "requestToAdmissionSeconds": 474.001893,
+    "requestToAdmissionMeaning": "Includes startup and queue; not pure lock wait.",
+    "commandStart": {
+      "UTC": "2026-10-16T02:48:57.285647+00:00",
+      "pid": 25664,
+      "birth": "25664 25659 78986 Thu Oct 15 19:48:57 2026     node /opt/homebrew/bin/npm run review:full\n"
+    },
+    "commandReceipt": {
+      "startUTC": "2026-10-16T02:48:57.283695+00:00",
+      "endUTC": "2026-10-16T02:51:16.161325+00:00",
+      "exit": 0,
+      "wallSeconds": 138.87534633401083,
+      "cpuUserSeconds": 322.865584,
+      "cpuSystemSeconds": 31.245053
+    }
+  },
+  "qa": {
+    "command": "node scripts/qa/run-scenario.mjs tutorial-walk --bead hv-33id.17",
+    "seed": "1",
+    "aiOverride": null,
+    "observedPolicy": "greedy",
+    "tutorialPlaybackSpeed": 1,
+    "invocation": "run-MMr1Y1",
+    "resultFile": "tutorial-walk.result.json",
+    "verdict": "pass",
+    "caps": [],
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 100710
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 80964
+      },
+      {
+        "viewport": "desktop",
+        "step": 2,
+        "ms": 4542
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 98664
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 76990
+      },
+      {
+        "viewport": "mobile",
+        "step": 2,
+        "ms": 4652
+      }
+    ],
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1978,
+      "scenario": 366524,
+      "total": 368568
+    },
+    "viewports": {
+      "desktop": {
+        "gameId": "77vykj",
+        "nativeLogFile": "tutorial-walk-desktop.jsonl",
+        "nativeRows": 224,
+        "checkedBeats": 33,
+        "guidanceMessages": 8,
+        "completionReasons": [
+          "timer"
+        ],
+        "manualRuntimeCoverage": "Source-inspected only; default run exercises eight timer completions per viewport.",
+        "opaqueJoin": "presentationId + messageIndex + triggerId to native source; no ID semantic parsing",
+        "uuidPhysicalSources": [
+          {
+            "kind": "card",
+            "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+            "battleCardId": "i4",
+            "cardKind": "event",
+            "side": "player"
+          },
+          {
+            "kind": "card",
+            "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+            "battleCardId": "i5",
+            "cardKind": "event",
+            "side": "player"
+          },
+          {
+            "kind": "card",
+            "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+            "battleCardId": "i2",
+            "cardKind": "character",
+            "side": "player"
+          },
+          {
+            "kind": "figment",
+            "cardId": "3eddb1b8-95f2-4688-a1b3-f523a13ce0af",
+            "battleCardId": "i63",
+            "side": "enemy"
+          },
+          {
+            "kind": "card",
+            "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+            "battleCardId": "i34",
+            "cardKind": "event",
+            "side": "enemy"
+          }
+        ],
+        "committedVictory": {
+          "gameId": "77vykj",
+          "version": 54,
+          "result": {
+            "kind": "victory",
+            "winner": "player",
+            "reason": "score"
+          },
+          "timestamp": "2026-10-16T02:35:46.138Z",
+          "event": "engine.battleEnded",
+          "seq": 159
+        },
+        "guardedExit": {
+          "event": "game_event",
+          "timestamp": "2026-10-16T02:35:55.240Z",
+          "gameId": "77vykj",
+          "seq": 62,
+          "type": "EXIT_TUTORIAL_BATTLE",
+          "actor": "7hbotyxjnv5gjhhtpthha7fp",
+          "outcome": "applied",
+          "intentKey": "tutorial-battle:tutorial-battle:event:4:0:exit"
+        },
+        "avatarIds": [
+          "bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
+        ],
+        "geometryAssertions": "Source and dialogue positive bounds within viewport; normal drag hit points checked.",
+        "captures": [
+          "tutorial-walk-01-main-menu-desktop.png",
+          "tutorial-walk-19-live-handoff-desktop.png",
+          "tutorial-walk-20-mira-foresee-desktop.png",
+          "tutorial-walk-30-victory-desktop.png",
+          "tutorial-walk-31-journey-start-desktop.png"
+        ],
+        "visualVerdict": "All five captures viewed at expected 2x dimensions; guidance legible and visible controls clear."
+      },
+      "mobile": {
+        "gameId": "webi4x",
+        "nativeLogFile": "tutorial-walk-mobile.jsonl",
+        "nativeRows": 224,
+        "checkedBeats": 33,
+        "guidanceMessages": 8,
+        "completionReasons": [
+          "timer"
+        ],
+        "manualRuntimeCoverage": "Source-inspected only; default run exercises eight timer completions per viewport.",
+        "opaqueJoin": "presentationId + messageIndex + triggerId to native source; no ID semantic parsing",
+        "uuidPhysicalSources": [
+          {
+            "kind": "card",
+            "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+            "battleCardId": "i4",
+            "cardKind": "event",
+            "side": "player"
+          },
+          {
+            "kind": "card",
+            "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+            "battleCardId": "i5",
+            "cardKind": "event",
+            "side": "player"
+          },
+          {
+            "kind": "card",
+            "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+            "battleCardId": "i2",
+            "cardKind": "character",
+            "side": "player"
+          },
+          {
+            "kind": "figment",
+            "cardId": "3eddb1b8-95f2-4688-a1b3-f523a13ce0af",
+            "battleCardId": "i63",
+            "side": "enemy"
+          },
+          {
+            "kind": "card",
+            "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+            "battleCardId": "i34",
+            "cardKind": "event",
+            "side": "enemy"
+          }
+        ],
+        "committedVictory": {
+          "gameId": "webi4x",
+          "version": 54,
+          "result": {
+            "kind": "victory",
+            "winner": "player",
+            "reason": "score"
+          },
+          "timestamp": "2026-10-16T02:38:46.768Z",
+          "event": "engine.battleEnded",
+          "seq": 159
+        },
+        "guardedExit": {
+          "event": "game_event",
+          "timestamp": "2026-10-16T02:38:55.430Z",
+          "gameId": "webi4x",
+          "seq": 62,
+          "type": "EXIT_TUTORIAL_BATTLE",
+          "actor": "hp2oh33k2kvz2opfuhh8hd8q",
+          "outcome": "applied",
+          "intentKey": "tutorial-battle:tutorial-battle:event:4:0:exit"
+        },
+        "avatarIds": [
+          "bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
+        ],
+        "geometryAssertions": "Source and dialogue positive bounds within viewport; normal drag hit points checked.",
+        "captures": [
+          "tutorial-walk-01-main-menu-mobile.png",
+          "tutorial-walk-19-live-handoff-mobile.png",
+          "tutorial-walk-20-mira-foresee-mobile.png",
+          "tutorial-walk-30-victory-mobile.png",
+          "tutorial-walk-31-journey-start-mobile.png"
+        ],
+        "visualVerdict": "All five captures viewed at expected 2x dimensions; guidance legible and visible controls clear."
+      }
+    }
+  },
+  "attemptHistory": {
+    "review-01": "Own native metadata typing errors; repaired in scenario.",
+    "review-02": "Own nullable-duration type errors; repaired in scenario.",
+    "review-03": "Pass on source epoch2.",
+    "qa-01": {
+      "invocation": "run-e5aRE9",
+      "verdict": "fail",
+      "reason": "Own Victory assertion conflated logger seq161 with native event seq60; real player Victory and empty caps retained.",
+      "disposition": "Separate sequence domains and exact current game/battle handoff plus terminal projection bind final result.",
+      "caps": []
+    },
+    "review-04": "Pass on source epoch3.",
+    "review-05": "Pass on source epoch4.",
+    "evidence-write-01": "Serialization failed on parent install receipt lacking label before repository mutation; command-wrapper receipts filtered explicitly."
+  },
+  "runtime": {
+    "browserService": "http://localhost:8931/mcp",
+    "protocol": "2025-11-25",
+    "slot": 1,
+    "port": 5274,
+    "attempts": [
+      {
+        "invocation": "run-e5aRE9",
+        "runnerPid": 98886,
+        "serverProcessGroup": 98931,
+        "mcpSessionId": "a654c5e1-16bc-4e59-a0db-2af5531e008b",
+        "providerToken": "7f7d95b0-a45c-4582-a8f6-b15837b44734"
+      },
+      {
+        "invocation": "run-MMr1Y1",
+        "runnerPid": 55044,
+        "serverProcessGroup": 55108,
+        "mcpSessionId": "06f59e17-41ea-46f1-aa32-4a981c6cc34d",
+        "providerToken": "837e215e-f162-42d0-a2a0-149dd6b786e3"
+      }
+    ],
+    "settlement": {
+      "UTC": "2026-10-16T02:39:47.518948+00:00",
+      "ownedRecords": {},
+      "samePidOrGroupProcesses": [],
+      "port5274": {
+        "exit": 1,
+        "stdout": ""
+      },
+      "settled": true
+    },
+    "cpuScope": "Command-wrapper CPU includes child processes; shared provider CPU is outside that process tree.",
+    "observer": "Read-only own resource observation; actual process births, groups and owner images retained in raw archive.",
+    "finalSettlement": {
+      "UTC": "2026-10-16T02:52:10.288325+00:00",
+      "ownedProcessesRemaining": [],
+      "port5274Free": true,
+      "observerExited": true,
+      "qaOwnerRecordsCleared": true,
+      "settled": true
+    }
+  },
+  "protectedSource": {
+    "trackedPayloads": 5981,
+    "changed": [
+      "README.md",
+      "scripts/qa/scenarios/tutorial-walk.mjs"
+    ],
+    "unownedChanged": []
+  },
+  "preExistingIssues": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "rawEvidence": [
+    "source-audit.json",
+    "source-epochs.json",
+    "runtime-observations.jsonl",
+    "qa-native-proof.json",
+    "screens.json",
+    "command stdout/stderr and receipts in unique ignored implementation archive"
+  ],
+  "rawArchive": {
+    "directory": "implementation-_rrtcdfq",
+    "index": "index.json",
+    "indexSHA256": "7f3f13f2f097177ee33210c75b6d16e6bb18d2d8151ebc6225f3ed604200a461"
+  },
+  "suite": {
+    "files": 434,
+    "tests": 12131,
+    "result": "pass"
+  }
+}

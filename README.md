@@ -651,10 +651,13 @@ Tracked scenarios:
   screen's Begin, the scripted stage, the live tutorial battle to Victory, and
   New Journey to the tutorial Avatar offer. It runs three steps per viewport
   (front door and scripted stage, live battle, Avatar offer) and asserts an
-  empty `__caps` at every beat. After the player's guided turn `qa.battle`
-  presses the phase button until Victory, and the scenario only records and
-  clears the guidance the enemy's turn raises, so it reaches Victory
-  whichever policy plays the enemy
+  empty `__caps` at every beat. Guidance joins opaque presentation and message
+  identities to native log metadata, follows authored timer or manual completion,
+  and checks the source UUID and visible geometry. After the player's guided
+  turn `qa.battle` presses the phase button until a committed player Victory;
+  enemy teaching beats remain optional observations. The final step verifies
+  the committed tutorial exit and the Avatar offer's UUID selection options.
+  The enemy uses the normal policy selection
   (`--arg ai=<policy>` adds `?ai=` to the entry). Its waits use test IDs,
   data attributes, and card UUIDs, never copy.
 - `card-lab-play` is the card sweep's per-card run (below).
