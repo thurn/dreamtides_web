@@ -1,0 +1,165 @@
+{
+  "bead": "hv-umm2.45",
+  "phase": 5,
+  "sourceBase": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+  "auditHead": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+  "claim": "2026-10-16T05:54:01.002461+00:00",
+  "reviewer": {
+    "agent": "/root/mason_phase545_codex1",
+    "forkTurns": "none",
+    "nativeThread": "01a1434d-a6fa-73f1-82de-83672f38cce9",
+    "originalDispatch": "2026-10-16T06:02:04.921Z",
+    "continuationTurns": 3,
+    "reportSha256": "41c6aa9d93e3f67651c50bb55cf86f458a53b61657a6f34fffe089d9f1b36057",
+    "manifestSha256": "ea4c2f1c934f7ed4263726b402caf4c23331798d9c8586aec2d4fadd6ea92b04",
+    "checksExecuted": [],
+    "runtimeExecuted": false,
+    "sourceWrites": false,
+    "nativeMutations": false,
+    "samplingCpu": "UNKNOWN"
+  },
+  "coverage": {
+    "requiredInputs": 38,
+    "requiredComplete": 38,
+    "requiredSourceReturns": 139,
+    "adaptiveReturns": 65,
+    "adaptivePathsOrRepresentations": 35,
+    "scopeReturns": 4,
+    "actualOriginalReturnsVerifiedByParent": 208,
+    "maxEncodedAdaptiveReturnBytes": 9992,
+    "fullRulesRead": false,
+    "rules": "Complete targeted lines133-218,2337-2963,3152-3740EOF plus full-file packets1-3; other full-file packets4-27 unread except separately consumed targeted intervals.",
+    "qualification": "Complete required scope plus focused adaptive audit. No all-repository/all-definitions/all-tests/all-bug-briefs semantic read claim. Parent literal receipt/source-range verification is separate from independent semantic finding verification."
+  },
+  "custody": {
+    "initialTrackedLiteralPayloads": 6017,
+    "unchangedBeforeOwnEvidence": true,
+    "runtimeResources": [],
+    "allInitialPayloadsAfterChecksUnchanged": 6017,
+    "ownedCheckProcessGroupsEmpty": true
+  },
+  "retainedEvidence": {
+    "index": "final-audit/index.json",
+    "sha256": "b37230f86be949b67abc43f8b554f33ad5188f392f7020e0fd6c2f908a3a4a3a",
+    "files": 40,
+    "bytes": 4667490,
+    "includes": "Full original literal returns with metadata/terminals, exact source call inputs, report, read manifest, scope, parent original-return proof, finding verification, prefiling and native graph receipts."
+  },
+  "findings": [
+    {
+      "rank": 1,
+      "priority": 2,
+      "bead": "hv-umm2.764",
+      "improvement": "effect-execution-capability/phase-5",
+      "disposition": "accepted: declaration arm and consumed effect type boundary",
+      "invariant": "Preserve raw malformed recovery transaction, dual/static semantics, all current gameplay, node identity and runtime coverage gate."
+    },
+    {
+      "rank": 2,
+      "priority": 2,
+      "bead": "hv-umm2.765",
+      "improvement": "validated-after-battle-cursor/phase-5",
+      "disposition": "accepted: ephemeral validated discriminated cursor consumed in matching resolvers/views",
+      "invariant": "Preserve exact saved shape/hash, legacy untagged Purge, source-loss lifetime, current admission and rendering."
+    }
+  ],
+  "filing": {
+    "labels": [
+      "mason",
+      "core-review"
+    ],
+    "bothWaitFor": "hv-umm2.45",
+    "bothBlock": "hv-umm2.46",
+    "nativeCycles": [],
+    "betweenFindings": "Independent engine declaration and Journey cursor bodies; no semantic dependency or filename-only serialization.",
+    "dedup": "Successful fresh admitted+intended queries before each create. Primary file/improvement matches empty; second found_by matched first distinct proposal only and was inspected.",
+    "fallout": "Exported-symbol occurrence inventories retained; overmatches classified as discovery, not body edit authority. Each implementation requires source-first finite exact-path grant."
+  },
+  "nonFindings": [
+    "Trigger-context union lacks supported bounded net simplification.",
+    "Descriptor/callback provenance and mandatory-loop proof boundaries retained.",
+    "Chronological transformations, physical identities, finite sibling prefix and earned child ordering are normative.",
+    "No supported test deletion or performance benefit."
+  ],
+  "validation": {
+    "install": {
+      "label": "install",
+      "args": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-mason45-root",
+      "start": "2026-10-16T06:41:58.184011+00:00",
+      "end": "2026-10-16T06:42:00.740449+00:00",
+      "seconds": 2.5563739159842953,
+      "exit": 0,
+      "loadBefore": [
+        4.7529296875,
+        4.916015625,
+        5.60009765625
+      ],
+      "loadAfter": [
+        4.7529296875,
+        4.916015625,
+        5.60009765625
+      ],
+      "childCpuS": 5.765765,
+      "pid": 32385,
+      "log": "/tmp/45-root/install.log"
+    },
+    "review": {
+      "label": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-mason45-root",
+      "start": "2026-10-16T06:43:05.251100+00:00",
+      "end": "2026-10-16T06:43:05.593993+00:00",
+      "seconds": 0.3427859579678625,
+      "exit": 0,
+      "loadBefore": [
+        4.6494140625,
+        4.865234375,
+        5.529296875
+      ],
+      "loadAfter": [
+        4.6494140625,
+        4.865234375,
+        5.529296875
+      ],
+      "childCpuS": 0.345716,
+      "pid": 37128,
+      "log": "/tmp/45-root/review.log"
+    },
+    "knip": {
+      "label": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-mason45-root",
+      "start": "2026-10-16T06:43:10.159294+00:00",
+      "end": "2026-10-16T06:43:20.273673+00:00",
+      "seconds": 10.114276582957245,
+      "exit": 0,
+      "loadBefore": [
+        4.67724609375,
+        4.8671875,
+        5.52587890625
+      ],
+      "loadAfter": [
+        5.1201171875,
+        4.95361328125,
+        5.54833984375
+      ],
+      "childCpuS": 8.149778999999999,
+      "pid": 37641,
+      "log": "/tmp/45-root/knip.log"
+    }
+  },
+  "remainingObligations": "Each child retains full acceptance, required reviews, sanctioned content coverage and fuzz smoke. Gate46 retains final content sweep, cold review and D19 current-suite measurement/test-cut obligation. Peer-owned qa-harness-compatibility trigger hv-umm2.762 was independent at audit boundary; no duplicate investigation.",
+  "validationQualification": "Documentation review selected friction schema only; no source tests. Knip passed its prepared-workspace check and restored local art. Full review/browser/fuzz do not apply to this evidence-only audit; implementation acceptance retained in764/765. Parent clipped skill/search/large gate-dependency/log projections were excluded and repaired with bounded reads or precise retained projections; no semantic credit from clips."
+}
