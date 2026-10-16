@@ -8,16 +8,25 @@ is a catalog tunable (decision D32); the values given are starting proposals
 for simulation and playtest.
 
 Dreamtides 97 ("D97") is a long-form run mode for the Dreamtides web client.
-The player walks through a network of **dreams**: authored maps full of
-characters, joined by diegetic doors. Some characters can be challenged to a
-battle; others trade, give quests or offer Dream Guide services. Every dream
-has a **guardian**. Five of the guardians are incarnations of Apollyon, and
-defeating those five opens **Limbo**, where Apollyon waits.
+A run has two parts:
+
+- **The campaign.** Five **acts** lead to **Limbo**. Each act is a cluster of
+  authored **dreams** joined by diegetic doors, and its tilesets mix freely:
+  a door in a dwarven dungeon can open onto a space colony. Some characters
+  can be challenged to a battle; others run shops, give quests or offer Dream
+  Guide services. One of Apollyon's incarnations guards the way out of each
+  act. In Limbo the five other incarnations wait, and then Apollyon.
+- **The endgame.** From Act 4 the player finds **keys**. Each key opens a
+  one-time **key dream** of 4–7 challengers, and clearing one pays a known
+  prize: a Legendary card, a Legendary Dreamsign or an Avatar. Key dreams pay
+  more keys, so a run can continue indefinitely after Apollyon falls, until
+  the player owns every card, Dreamsign and Avatar.
 
 D97 combines three references:
 
-- **Path of Exile and Diablo 3** for the world: separate maps linked by doors
-  of several kinds, waypoints, and a Dream Atlas for fast travel.
+- **Path of Exile and Diablo 3** for the world: acts of linked maps, waypoints
+  and a Dream Atlas for fast travel, zones that repopulate so a stuck player
+  can grind, and an endgame of one-time maps opened by consumable items.
 - **Pokémon Scarlet and Violet** for encounters: challengers show an icon over
   their heads, every battle is opt-in, and guardians act as gym leaders.
 - **Shandalar** (*Magic: The Gathering*, MicroProse, 1997) for the economy: the
@@ -25,11 +34,14 @@ D97 combines three references:
   victory bundles and shops supply cards, amulets buy exact cards, and selling
   turns cards into Essence.
 
-**The reward pool.** Normal rewards draw from one **reward pool**: the
-playtested tides4 deal for the player's current Avatar. It holds 150 copies,
-about 101 distinct cards. Cards outside it come from specialized sources only:
-opponents' stakes, guardian picks, amulet merchants and the Legendary dream.
-Every card in the game can be obtained within a single run.
+**The reward bag.** Random rewards draw from the current Avatar's **reward
+bag**, without replacement. The bag starts with one copy of each card of the
+Avatar's signature tide and grows a layer at a time as the campaign advances:
+first broader cards, then second, third and fourth copies. Early rewards stay
+on the Avatar's plan and rarely repeat; late rewards broaden and build toward
+four-copy decks. Antes, guardian picks, amulet merchants, Tobias Tanglefur's
+curiosities and key prizes reach beyond the bag, and every card in the game
+can be obtained within a single run.
 
 ## How to read this document
 
@@ -38,11 +50,11 @@ tables:
 
 | Appendix | Contents |
 | --- | --- |
-| [A: Economy](appendix-a-economy.md) | The reward pool, rarity, prices, selling, traders, the copy allowance, victory bundles and extras, ante, amulets and resonance cores, guide services, quest rewards, chests and prize duels, guardian picks, the starting package, score |
-| [B: Dreams and encounters](appendix-b-dreams.md) | Tilesets and maps, network generation, doors and locks, waypoints and the Dream Atlas, population, challengers and tiers, battle setup, encounters, Dream Guides, sages, quests, avatar switching, state and logging |
-| [C: Guardians, Limbo and the Legendary dream](appendix-c-guardians-and-limbo.md) | Ordinary guardians, incarnation guardians, Limbo and Apollyon, the Legendary dream and its keepers |
+| [A: Economy](appendix-a-economy.md) | The reward bag, rarity, prices, selling, shops, victory bundles and extras, ante, amulets and resonance cores, guide services, quest rewards, chests and prize duels, guardian picks, the starting package, difficulty, score |
+| [B: Acts, dreams and encounters](appendix-b-dreams.md) | The dream catalog, act assembly, doors and guardian chokepoints, waypoints and the Dream Atlas, population, refills, challengers and tiers, battle setup, encounters, Dream Guides, sages, quests, Avatar switching, state and logging |
+| [C: Bosses, Limbo and keys](appendix-c-bosses-and-keys.md) | Ordinary guardians, incarnations, Limbo and Apollyon, keys, key dreams and prizes |
 | [D: Reusing Dreamtides content](appendix-d-content-reuse.md) | How every existing site, Dream Guide, Avatar, Dreamsign, transfiguration, Exploration and Augury outcome fits D97, including exclusions |
-| [E: Acquisition-rate calibration](appendix-e-calibration.md) | Shandalar reference rates, bundle calibration, the per-run card, Essence and amulet ledgers, and the measurement plan |
+| [E: Acquisition-rate calibration](appendix-e-calibration.md) | Shandalar reference rates, bundle calibration, the campaign's card, Essence and amulet ledgers, and the measurement plan |
 
 Research inputs, outside this repository:
 
@@ -58,89 +70,105 @@ Research inputs, outside this repository:
 1. **The collection is the long-term state.** Players own more cards than they
    play. A new card is a choice, not a forced deck addition; reserve cards
    prepare for specific guardians, fund purchases and feed quests.
-2. **One coherent pool for normal rewards.** Bundles, traders, chests and prize
-   duels draw from the current Avatar's tides4 deal, the pool playtesting has
-   shown to make a good game.
-3. **Every card is reachable.** Opponent stakes, guardian picks, amulet
-   merchants and the Legendary dream reach beyond the pool, each with its own
+2. **Rewards start focused and broaden.** The reward bag keeps early rewards on
+   the Avatar's plan and free of duplicates, then opens broader cards and extra
+   copies act by act.
+3. **Every card is reachable.** Antes, guardian picks, amulet merchants,
+   Tobias's curiosities and key prizes reach beyond the bag, each with its own
    degree of control.
-4. **Battles are opt-in.** Every challenger shows its stakes and its prize
-   before the player accepts. Nothing chases the player.
-5. **Losses hurt but never end the run.** A lost battle costs the staked card.
-   Lost challengers and guardians can be fought again.
-6. **The world is finite and procedural.** Challengers, chests, guide
-   appearances and quests are placed once per run. Doors, guardians, quests
-   and NPCs are rolled from the run seed onto authored maps; nothing is
-   narrative-driven.
-7. **Exploration is the progression.** Doors are blind, incarnations are
-   hidden, and locked doors open through guardians, quests, amulets and
-   incarnation counts.
-8. **Reuse Dreamtides content.** Every card, Avatar, transfiguration, the
-   tides4 pool, the Dream Guides, Apollyon's incarnations, and most Dreamsigns
-   and site encounters appear.
+4. **Battles are opt-in.** Every challenger shows its ante and its prize before
+   the player accepts. Nothing chases the player.
+5. **Losses hurt but never end the run.** A lost battle costs the anted card,
+   but never takes the collection below the minimum deck size. Campaign
+   challengers refill over time, so no boss is a hard wall.
+6. **The campaign is authored and assembled.** Dreams, their maps, friendly
+   characters and quests are authored and tied to their tilesets. Each run
+   assembles them into acts in a new arrangement.
+7. **Progress is spatial.** Doors never lock. Guardians stand in front of the
+   doors they protect, and the way out of each act passes the act's
+   incarnation.
+8. **Tides stay hidden.** No player-facing mechanic names a tide or a
+   resonance, except amulets and the starting Avatar's resonance. Tides shape
+   the reward bag and opponents' decks behind the scenes.
+9. **Reuse Dreamtides content.** Every card, Avatar, transfiguration, the tide
+   catalog, the Dream Guides, Apollyon's incarnations, nearly every Dreamsign
+   and most site encounters appear.
 
 ## A run at a glance
 
-1. **Setup.** The player chooses any of the 32 Avatars. The game deals the
-   reward pool, builds a starting collection, and generates the dream network.
+1. **Setup.** The player chooses a difficulty and any of the 32 Avatars. The
+   game builds a starting collection from the Avatar's bag and assembles the
+   five acts.
 2. **Explore.** Walk through dreams, step through doors, activate waypoints,
    and fast-travel between them from the Dream Atlas.
-3. **Challenge.** Opt into battles against challengers for their stakes,
-   victory bundles, Essence and amulets. Beat dream guardians for exact picks
-   from their decks.
-4. **Build.** Trade, buy exact cards with amulets, use Dream Guide services,
-   follow quests, and edit the active deck anywhere outside battle.
-5. **Grow.** Complete friendly Avatars' quests to unlock them, then switch
-   Avatars at any waypoint. Switching re-deals the reward pool.
-6. **Converge.** Find and defeat the five incarnation guardians. Their fall
-   opens Limbo.
-7. **Finale.** In Limbo, optionally fight the five other incarnations, then
-   defeat Apollyon. Victory ends the run with a score.
+3. **Challenge.** Opt into battles against challengers for their antes,
+   victory bundles, Essence, amulets and, from Act 4, keys. Beat guardians to
+   pass their doors and for exact picks from their decks.
+4. **Build.** Shop, buy exact cards with amulets, use Dream Guide services,
+   follow quests, slot Dreamsigns, and edit the active deck anywhere outside
+   battle.
+5. **Advance.** Beat each act's incarnation to step into the next act. Act 2
+   and Act 3 each offer one Avatar to unlock and switch to.
+6. **Finale.** In Limbo, defeat the five remaining incarnations in any order,
+   then Apollyon. His defeat records the campaign victory and its score.
+7. **Endgame.** Use keys to open key dreams, clear them for Legendary cards,
+   Legendary Dreamsigns and Avatars, and collect more keys.
 
-Target shape: 55–65 battles and 15–20 hours for a successful run, with the
-collection growing from 32 cards to about 120–150.
+Target shape: 25–35 hours and about 110–120 battles from run start to
+Apollyon's defeat, with the collection growing from 30 cards to about 210–260.
+The endgame has no fixed length.
 
 ## Glossary
 
 | Term | Meaning |
 | --- | --- |
-| **Run** | One D97 game, from Avatar choice to Apollyon's defeat. |
-| **Reward pool** | The tides4 deal for the player's current Avatar: 150 copies, about 101 distinct cards. Normal rewards draw from it. |
-| **Dream** | One map placed in a run's network, with its own guardian, characters and doors. |
-| **Map** | An authored layout on one tileset, with anchors where generation places characters, doors, a waypoint and chests. |
-| **Tileset** | A cosmetic art set, such as a pirate island or a wasteland. Tilesets have no mechanical effect. |
-| **Network** | The run's dreams and the doors between them, generated at run start. |
-| **Depth** | A dream's door distance from the start dream in the generated network. It sets the dream's tier. |
-| **Door** | A diegetic passage to another dream. Doors are two-way and blind; some are locked. |
+| **Run** | One D97 game, from Avatar choice onward. A run continues after Apollyon's defeat. |
+| **Campaign** | Acts 1–5 and Limbo, ending with Apollyon's defeat. |
+| **Act** | One stage of the campaign: several act dreams assembled at run start, ending at an incarnation. |
+| **Dream** | One authored location: a map on one tileset, with its own characters, quests and doors. |
+| **Act dream** | A dream placed in an act. Act dreams can be revisited for the rest of the run. |
+| **Key** | An item that opens one key dream, showing its dream, tier, challenger count and prize. |
+| **Key dream** | A one-time dream opened by a key. It closes once every challenger in it has been fought. |
+| **Prize** | A key dream's reward for beating all its challengers: a Legendary card, a Legendary Dreamsign or an Avatar. |
+| **Map** | A dream's authored layout, with anchors for characters, doors, a waypoint, a shop and chests. |
+| **Tileset** | A dream's art set, such as a dwarven dungeon or a space colony, grouped into categories. Tilesets have no mechanical effect. |
+| **Door** | A diegetic passage between dreams. Doors are two-way, blind and never locked. |
+| **Chokepoint** | A guardian anchor in front of a door. The guardian blocks that door until beaten. |
 | **Waypoint** | An object in each dream. Touching it lets the player fast-travel to and from that dream. |
 | **Dream Atlas** | The map of every dream the player has entered and every door they've traversed; also the fast-travel screen. |
 | **Challenger** | A character who can be challenged to a battle, shown with an icon over their head. |
+| **Refill** | A new challenger who appears in a cleared act dream as the player fights elsewhere. |
 | **Avatar character** | One of the 32 Avatars as a character, fighting with its Avatar ability. |
 | **Generic character** | A themed character who plays a deck built like an Avatar's, with no Avatar ability. |
-| **Guardian** | Each dream's strongest challenger: a boosted Avatar character, or an incarnation. |
-| **Incarnation** | One of Apollyon's ten incarnations. Five are guardians in a run; the other five wait in Limbo. |
-| **Limbo** | The final dream, opened by defeating the five incarnation guardians. |
-| **Legendary dream** | A locked special dream where keepers stake the eight Legendary cards. |
-| **Friendly NPC** | A character who can't be challenged: traders, amulet merchants, sages, Dream Guides and quest givers. |
+| **Guardian** | A boss standing at a chokepoint: a boosted Avatar character, or an incarnation. |
+| **Incarnation** | One of Apollyon's ten incarnations. Five guard the acts; the other five wait in Limbo. |
+| **Limbo** | The final campaign dream, beyond the Act 5 incarnation. |
+| **Friendly NPC** | A character who can't be challenged: shopkeepers, amulet merchants, sages, Dream Guides and quest givers. |
 | **Cluster** | A group of map anchors where friendly NPCs gather, which acts like a small town. |
 | **Collection** | Every owned card copy. |
 | **Active deck** | The owned copies equipped for battle. |
 | **Reserve** | Owned copies not in the active deck. |
-| **Stake** | The card each side risks on a battle (the ante). |
+| **Reward bag** | The current Avatar's supply for random rewards, drawn without replacement and refilled by layers. |
+| **Tide set** | An Avatar's authored signature tide and three facets, which define its bag. Hidden from the player. |
+| **Ante** | The card each side risks on a battle. |
 | **Victory bundle** | The cards a won battle pays. |
-| **Extra** | A challenger's advertised prize besides cards: an Essence purse or one amulet. |
+| **Extra** | A challenger's advertised prize besides cards: an Essence purse, one amulet or one key. |
 | **Amulet** | A currency token of one resonance, spent at that resonance's amulet merchants. |
 | **Resonance core** | The 20–40 cards that most strongly align with a resonance; an amulet merchant's catalog. |
-| **Trader** | A friendly NPC who sells reward-pool cards for Essence and buys owned cards. |
+| **Shop** | The card shop in every dream: sells bag cards for Essence and buys owned cards. |
+| **Dreamsign slot** | A place for one active Dreamsign. Only slotted Dreamsigns take effect. |
 | **Essence** | The general currency. |
 | **Tier** | An opponent's strength class (4–20). |
 | **Head start** | Points (⍟) a side begins a battle with. |
+| **Difficulty** | The run's level, `d` from 0 to 3, chosen at setup. |
 
 ## The five resonances
 
-Resonance labels tides today, and the Avatar select screen shows each Avatar's
-tides as resonance-colored pills. D97 keeps that presentation and adds one
-mechanic: each resonance has an amulet and a curated **resonance core**.
+Each Avatar has tides, and each tide has a resonance. D97 uses resonance in
+exactly two player-facing places: the Avatar select screen shows each Avatar's
+resonances as colored pills, and each resonance has an amulet that buys from a
+curated **resonance core**. Resonance is otherwise aesthetic: it tells the
+player a little about an Avatar's core plan.
 
 | Resonance | Identity |
 | --- | --- |
@@ -150,34 +178,40 @@ mechanic: each resonance has an amulet and a curated **resonance core**.
 | **Shadow** | Fill the void through discard and sacrifice, play Survivors, reclaim cards repeatedly, and fuel threats that scale with the void. |
 | **Vision** | Chain, copy, and amplify events into a decisive turn, supported by disruption and evasive Outsiders. |
 
-Avatars have no resonance of their own.
+Tide names never appear in D97. Quests, offers and rewards refer to card
+traits players can see (type, subtype, cost and rarity), never to tides or
+resonance.
 
 ## Player identity and difficulty
 
 - **Avatar.** The player chooses any Avatar from the full roster. It is in play
-  in every battle, as in the journey mode, and determines the reward pool.
-- **Avatar roster.** Six to eight friendly Avatar characters per run offer
-  quests. Completing one unlocks that Avatar. The player can switch among
-  unlocked Avatars at any waypoint, outside battle.
-- **Switching re-deals the pool.** The new Avatar's tides4 deal becomes the
-  reward pool for every later draw. Each Avatar's deal is seeded by the run and
-  that Avatar, so switching back restores the same pool. The collection is
-  unchanged.
-- **Difficulty.** D97 has one difficulty, using Shandalar's Magician values.
-  The difficulty term `d = 1` remains a catalog tunable so more levels can be
-  added later.
+  in every battle, as in the journey mode, and selects the reward bag.
+- **Avatar roster.** In the campaign, one friendly Avatar character in Act 2
+  and one in Act 3 each offer an Avatar quest that unlocks them. Every other
+  Avatar is a key prize. The player can switch among unlocked Avatars at any
+  waypoint, outside battle.
+- **Switching changes the bag.** Each Avatar keeps its own bag for the whole
+  run. Switching makes the new Avatar's bag the source of random rewards. The
+  collection is unchanged.
+- **Difficulty.** Four levels, `d = 0` to `3`; `d = 1` is the default.
+  Difficulty adds to every opponent's head start and sets the starting Essence,
+  amulets and Starter count and the score multiplier. Levels 0 and 1 are open
+  from the start; each higher level unlocks when the player beats Apollyon on
+  the level below. See
+  [Appendix A §A18](appendix-a-economy.md#a18-difficulty).
 
-| Starting value | Amount |
+| Starting value (`d = 1`) | Amount |
 | --- | --- |
-| Starting collection | 32 distinct cards, 5 of them Starter cards |
-| Minimum deck size | 27 |
+| Starting collection | 30 distinct cards, 5 of them Starter cards |
+| Minimum deck size | 25 |
 | Starting Essence | 200 |
 | Starting amulets | 2 |
+| Dreamsign slots | 1 |
 
 The AI plays at full strength (decision D24). Opponent tiers change deck
 construction and head starts, not the AI. See
 [Appendix A §A17](appendix-a-economy.md#a17-starting-package) and
-[Appendix B §B7](appendix-b-dreams.md#b7-challengers-tiers-and-opponent-construction).
+[Appendix B §B9](appendix-b-dreams.md#b9-challengers-tiers-and-opponent-construction).
 
 ## Collection and deck
 
@@ -188,52 +222,56 @@ construction and head starts, not the AI. See
 - **Active deck and reserve.** New copies enter reserve. Equipping and
   unequipping are free and change no ownership.
 - **Where you can edit.** Anywhere outside battle. Selling happens only at a
-  trader.
-- **Deck size.** At least 27; no maximum. Battles never pad a legal deck.
+  shop.
+- **Deck size.** At least 25; no maximum.
 - **No copy cap.** A deck can hold any number of copies of a card.
-- **Copy allowance.** Random generators skip a card the player already owns
-  `allowance` copies of: 1, plus 1 when the active deck has 30 or more cards,
-  plus 1 at 45 or more. Player-directed acquisitions ignore it and show owned
-  counts: amulet merchants, guardian picks, stakes, quest picks and
-  Duplication. See [A7](appendix-a-economy.md#a7-copy-allowance).
-- **Safety net.** If the collection can't field a legal deck, a battle pads the
-  active deck with temporary, unowned copies of the ten Starter cards. Selling
-  and delivering are refused when they would leave fewer owned cards than the
-  minimum deck size.
+- **The collection floor.** The collection never drops below 25 owned copies.
+  A player at the floor antes nothing, and selling, delivering and purge costs
+  are refused when they would cross it. So the player can always field a legal
+  deck.
 
 ## Card supply
 
 | Source | Draws from | Control |
 | --- | --- | --- |
-| Starting collection | Reward pool | None |
-| Victory bundles | Reward pool, led by the opponent's stake | Low: random, sized by tier |
-| Traders | Reward pool | Medium: known stock, finite |
-| Chests, prize duels, quest picks | Reward pool | Low to medium |
-| Opponent stakes | The opponent's own deck | Shown before the player opts in |
+| Starting collection | The bag's first layer | None |
+| Victory bundles | The opponent's ante, then the bag | Low: random, sized by tier |
+| Shops | The bag | Medium: known stock, finite |
+| Chests, prize duels, card-choice outcomes | The bag | Low to medium |
+| Opponent antes | The opponent's own deck | Shown before the player opts in |
 | Guardian picks | The guardian's own deck | High: exact picks |
+| Tobias's curiosities | Supply cards outside the Avatar's tide set | Medium: known stock |
 | Amulet merchants | A resonance core | High: exact cards for amulets |
-| Legendary dream | The eight Legendary cards | High: each keeper's stake is shown |
+| Key prizes | Legendary cards | High: each key shows its prize |
 
-**The reward pool.** At run start, and on each Avatar switch, D97 runs the
-production tides4 algorithm for the Avatar with seed `hash(runSeed : avatarId)`.
-It joins the signature tide and 1–3 drawn facets, plus fill if needed, and
-deals 150 copies, at most 2 per card and 1 per Legendary. Starter cards are
-excluded. Measured over 32 Avatars × 200 seeds, a pool has 101 distinct cards on
-average (85–121), about 48 of them at two copies, about 12 Rares (6–21), and
-71% Characters.
+**The reward bag.** Each Avatar has an authored **tide set**: its signature
+tide and three facets, chosen by hand so the 32 Avatars together cover the
+card pool evenly. Its bag holds copies of the tide set's cards, and each
+acquired copy leaves the bag:
 
-**Opponents' pools.** Every challenger's deck comes from its own tides4 deal:
-an Avatar character's own Avatar, or a generic character's **deck source**
-Avatar. Its stake is a card from that deck, so each win can reach outside the
-player's pool.
+| Bag layers | Signature cards | Other tide-set cards |
+| --- | --- | --- |
+| Run start | 1 copy each | — |
+| Act 2 | 1 | 1 |
+| Act 3 | 2 | 1 |
+| Act 4 | 2 | 2 |
+| Act 5 | 3 | 3 |
+| After Apollyon | 4 | 4 |
+
+A signature tide holds about 89 eligible cards (72–104), about 10 of them
+Rare; the facets add about 60–100 more. Legendary and Starter cards are never
+in a bag. Details: [Appendix A §A2](appendix-a-economy.md#a2-the-reward-bag).
+
+**Opponents' decks** come from the existing opponent deck builder over each
+opponent Avatar's tide set, seeded per character. Antes are cards from those
+decks, so each win can reach outside the player's bag.
 
 **Resonance cores.** Each resonance has a hand-curated core of 20–40 cards
 that align with it most strongly, stored as catalog metadata alongside the
 cards. Cores never overlap and exclude Legendary, Starter, Special and Tutorial
-cards. Together they cover 100–200 of the 509 supply cards; the other sources
-cover the rest.
+cards.
 
-**Legendary cards** come only from the Legendary dream.
+**Legendary cards** come only from key prizes.
 
 ## Rarity
 
@@ -244,38 +282,59 @@ collection surfaces.
 - **Starter cards** (owned only through the starting collection) price as
   Commons.
 - **Special and Tutorial cards** never appear.
+- **Legendary Dreamsigns.** D97 promotes the ten strongest Dreamsigns to
+  Legendary rarity, recorded in a D97 catalog module by Dreamsign UUID. Only
+  key prizes award them.
 
 ## Currencies
 
 | | Essence | Amulets (one type per resonance) |
 | --- | --- | --- |
-| Start | 200 | 2 |
+| Start (`d = 1`) | 200 | 2 |
 | Main sources | Advertised purses; selling cards; chests; quests; Essence events and Gamble | Advertised amulet extras; quests; chests; amulet changers |
-| Main sinks | Traders; Transfiguration, Duplication and Dreamsign Bazaar; amulet changers; Gamble stakes | Amulet merchants (1/2/3 per C/U/R); amulet-toll doors |
+| Main sinks | Shops and restocks; Tobias's curiosities; Transfiguration, Duplication and Dreamsign Bazaar; amulet changers; Gamble stakes | Amulet merchants (1/2/3 per C/U/R) |
 
 Algorithms: [Appendix A](appendix-a-economy.md).
 
-## Dreams
+## Acts and dreams
 
-- **Network** (Appendix B). About 12 ordinary dreams, generated at run start,
-  plus the Legendary dream, 1–2 hidden dreams and Limbo. Every dream has a
-  guardian.
-- **Maps** are authored layouts on cosmetic tilesets, about 4–5 maps per
-  tileset. Generation fills each map's anchors with characters, doors, a
-  waypoint and chests. A map appears at most once per run.
-- **Depth and tier.** A dream's depth is its door distance from the start
-  dream. Its challengers' tier is `4 + 2 × depth`, so going deeper is harder
-  and pays more.
-- **Doors** are two-way and blind: a door never reveals where it leads until
-  the player steps through. A locked door shows its lock:
-  - **guardian:** opens when this dream's guardian is beaten;
-  - **key:** opens with a quest's key, or appears only when a quest reveals it;
-  - **amulet toll:** opens by spending one amulet of the door's resonance;
-  - **incarnation count:** opens after a number of incarnations are beaten.
+- **Five acts and Limbo** (Appendix B). Each act holds 3–8 act dreams, about 25
+  across the campaign, with 12–14 challengers, 2–4 Avatar guardians and one
+  incarnation. Limbo is a single fixed dream.
+- **Authored dreams.** Each dream in the catalog is authored as a whole: its
+  map, tileset, friendly characters and 1–3 quests written for that tileset.
+  Dreams come in sizes from small (2–3 challengers) to large (6–8), so an act
+  might be eight small dreams or four large ones.
+- **Assembled acts.** At run start, D97 draws dreams from the catalog for each
+  act and joins them with doors into a new topology. A dream can land in any
+  act; its challengers' tier comes from the act.
+- **Mixed tilesets.** An act never repeats a tileset, spans at least three
+  tileset categories, and joins dreams of different categories wherever it
+  can, so genre jumps begin in Act 1.
+
+| Category | Example tilesets |
+| --- | --- |
+| Fantasy | Dwarven dungeon (Frostforge), elven realm, talking-animal village (Tumbleleaf Village) |
+| Sci-Fi | Space colony (Farpoint Station), cyberpunk city (Grid City), post-apocalyptic wasteland (The Rust Expanse) |
+| Historic | Egypt (Pharaoh's Gate), Viking (Winterwake Fjords), samurai Japan (Tsukiren), pirate island |
+| Nature | Enchanted forest (Wilderveil), meadow, snowfield |
+
+- **Doors** are two-way, blind and never locked. A door never reveals where
+  it leads until the player steps through.
+- **Chokepoints.** A guardian stands in front of the door it protects and
+  blocks it until beaten. Assembly guarantees that every route from an act's
+  entry to its incarnation passes at least two guardians, and the incarnation
+  stands in front of the door to the next act.
+- **Tiers by act.** Act 1 challengers are tier 4, then 7, 10, 13 and 16 in
+  Act 5. Deeper acts are harder and pay more.
+- **Refills.** Every four battles, each act the player has reached gains one
+  new generic challenger in one of its cleared challenger spots. Guardians and
+  incarnations never return.
 - **Waypoints.** Each dream has one. Touching it activates it. Standing at any
   activated waypoint, the player can travel free to any other.
-- **Dream Atlas.** It shows every dream the player has entered, each traversed
-  door, and each dream's tier, guardian and waypoint status.
+- **Dream Atlas.** It shows every dream the player has entered, grouped by
+  act, each traversed door, and each dream's tier, guardians and waypoint
+  status.
 - **Presentation.** The target is an isometric 3D view with click or tap to
   move. The web prototype mocks it with top-down 2D tile maps built from a CC0
   pixel-art dungeon set, linked into the workspace like card art and never
@@ -285,68 +344,97 @@ Algorithms: [Appendix A](appendix-a-economy.md).
 
 - **Opt-in.** Challengers show an icon over their heads. Approaching one opens a
   preview: the character, their Avatar (Avatar characters) or deck preview,
-  their tier, both stakes and their advertised extra. The player chooses
+  their tier, both antes and their advertised extra. The player chooses
   **Fight** or **Not now**.
 - **Challengers.** Avatar characters fight with their Avatar ability. Generic
-  characters play a deck built from a deck-source Avatar's pool, with no Avatar
-  ability. Each non-player Avatar appears at most once per run, as a challenger,
-  a guardian or a friendly quest giver.
-- **Finite.** Each challenger can be beaten once. A loss leaves the challenger
-  in place for a rematch with the same stakes.
-- **Stakes.** Each side stakes one card: the player's is a random active copy,
+  characters play a deck built from a deck-source Avatar's tide set, with no
+  Avatar ability.
+- **Rematches.** A beaten challenger stays beaten. A loss leaves the challenger
+  in place for a rematch with the same antes. Key dreams allow one attempt per
+  challenger instead.
+- **Ante.** Each side antes one card: the player's is a random active copy,
   the opponent's a random non-Legendary card of its own deck. Both are rolled
   when the challenge is first previewed and stay fixed. A loss permanently
-  removes the player's staked copy; a draw exchanges nothing. A few deep
-  challengers are high-stakes, risking three cards each.
-- **Win.** The player takes a victory bundle, led by the opponent's stake and
-  filled from the reward pool up to `S = ⌊T/4⌋` rarity points, and the
-  advertised extra.
-- **Head starts.** The score target is 25⍟. Opponents gain a head start at
-  higher tiers.
+  removes the player's anted copy, unless the player is at the collection
+  floor; a draw exchanges nothing. A few challengers from Act 4 on are
+  high-ante, risking three cards each.
+- **Win.** The player takes a victory bundle, led by the opponent's ante and
+  filled from the bag up to `S = ⌊T/4⌋` rarity points, and the advertised
+  extra.
+- **Score targets** grow by act: 15⍟ in Act 1, 20⍟ in Act 2 and 25⍟ from
+  Act 3. Incarnations play to 20⍟–30⍟, and Limbo and Apollyon to 30⍟.
+  Opponents gain a head start at higher tiers and difficulties.
 - **Discoveries.** Chests hold a card, Essence or an amulet. Prize duelists
-  offer an unstaked battle for two to four displayed Rares.
+  offer an unanted battle for two to four displayed Rares.
 
 Details: [Appendix A §A8–A9](appendix-a-economy.md#a8-victory-bundles-and-extras)
 and [Appendix B](appendix-b-dreams.md).
 
-## Guardians, Limbo and the Legendary dream
+## Guardians, incarnations and Limbo
 
-- **Guardians.** Every dream's guardian is a single staked battle, retryable
-  after a loss. Among the twelve ordinary dreams, seven guardians are boosted
-  Avatar characters and five are incarnations of Apollyon, chosen from the ten
-  at generation. Hidden dreams and the Legendary dream have Avatar guardians.
-- **Guardian picks.** A win pays the guardian's stake and exact picks from its
-  deck: 2 from an Avatar guardian, 3 from an incarnation.
-- **Incarnations** sit one shallow, two in the middle and two deep, and are
-  found by exploring. Each is stronger for every incarnation already beaten, so
-  any order works.
-- **Limbo.** Its door stands in every incarnation dream and opens after the
-  fifth incarnation falls. Inside, the five other incarnations are optional
-  challengers, and Apollyon is the guardian: unstaked, retryable, and built from
-  the five incarnations the player defeated. Beating him wins the run.
-- **The Legendary dream.** A lost-object quest chain recovers three fragments
-  for its key, and its door also needs two incarnations beaten. Inside, seven
-  keepers and a guardian each stake one distinct Legendary card.
+- **Guardians.** Each act has 2–4 Avatar guardians: boosted Avatar characters
+  at chokepoints. A guardian is a single anted battle, retryable after a loss.
+- **Incarnations.** At run start, five of Apollyon's ten incarnations are
+  drawn, one to guard each act's exit. Each act's incarnation is stronger than
+  the last.
+- **Guardian picks.** A win pays the guardian's ante and exact picks from its
+  deck: 1 from an Avatar guardian, 2 from an incarnation.
+- **Limbo.** The Act 5 incarnation guards the door to Limbo. Inside, the five
+  other incarnations stand as mandatory challengers, fought in any order and
+  each retryable. When the fifth falls, Apollyon manifests: unanted,
+  retryable, and built from the five incarnations who guarded the acts.
+  Beating him wins the campaign.
 
-Details: [Appendix C](appendix-c-guardians-and-limbo.md).
+Details: [Appendix C](appendix-c-bosses-and-keys.md).
+
+## Keys and key dreams
+
+- **Finding keys.** From Act 4, a key joins Essence and amulets as a possible
+  challenger extra, and the Act 4 and Act 5 incarnations each pay one. Every
+  finished key dream pays at least one new key, so the endgame never runs dry.
+- **What a key shows.** Its dream, tier, challenger count (4–7) and prize. A
+  prize is something the player doesn't own yet: one of the 8 Legendary cards,
+  one of the 10 Legendary Dreamsigns, or a locked Avatar. Once the player owns
+  them all, prizes become further copies of Legendary cards, up to four of
+  each.
+- **Using a key.** At any activated waypoint, outside battle. The key dream
+  opens with its own waypoint, and the player can leave and return until it is
+  finished. Several can be open at once.
+- **One attempt each.** Every challenger in a key dream can be fought once. A
+  win pays its normal rewards; a loss costs the ante, removes that challenger
+  and forfeits the prize. A key dream with an Avatar prize includes that Avatar
+  among its challengers.
+- **Finishing.** When every challenger has been fought, the key dream pays a
+  key. If every battle was won, it pays a second key and its prize. It closes
+  when the player leaves.
+- **Tier.** A key found in Act 4 or Act 5 opens a dream at that act's
+  challenger tier; keys found after Apollyon open tier 18 dreams.
+
+Key modifiers are future work. Details:
+[Appendix C §C5–C8](appendix-c-bosses-and-keys.md#c5-keys).
 
 ## Friendly NPCs
 
 There are no towns. Friendly NPCs stand at map anchors, and maps group some
-anchors into clusters that act like small towns.
+anchors into clusters that act like small towns. A dream's friendly
+characters are authored with it.
 
 | NPC | Role |
 | --- | --- |
-| Trader | Sells 4–6 reward-pool cards for Essence from finite stock; buys owned copies |
+| Shopkeeper | Every dream has one shop: 4–6 bag cards for Essence, a paid restock once per visit, and buying owned copies |
 | Amulet merchant | Sells exact cards from one resonance core for that resonance's amulets |
 | Amulet changer | Sells an amulet of any resonance for Essence |
-| Dream Guide | Hosts their signature service once per appearance; wanders between dreams |
-| Sage | Gives one free hint about doors, incarnations or an active quest |
-| Quest giver | Offers a quest; friendly Avatar characters offer quests that unlock them |
+| Dream Guide | Hosts their signature service once per appearance; every guide appears in every act |
+| Sage | Gives one free hint about a door, the way to the incarnation, or an active quest |
+| Quest giver | Offers one of the dream's authored quests; friendly Avatar characters offer Avatar quests |
 
 **Dream Guides** wander and recur. Each has a home tileset; a guide appearing
 in a dream of their home tileset is always enhanced, and other appearances are
-enhanced at random.
+enhanced at random. Tobias Tanglefur sells **curiosities**: cards from outside
+the current Avatar's tide set, at a premium.
+
+**Sages** are optional. Their hints save walking, and no progress depends on
+talking to them.
 
 **Quests** have no deadlines, and the player can hold any number. They come in
 these kinds:
@@ -354,188 +442,205 @@ these kinds:
 - defeat a named challenger;
 - deliver an owned card with a stated trait;
 - carry an item to a character in another dream;
-- a handicap trial: beat a challenger under a constraint;
-- a collector request: own cards from a named tide or core;
+- a handicap trial: beat Master Takeshi under a stated constraint;
 - find a lost object;
-- an Avatar quest;
-- a key quest.
+- an Avatar quest (Acts 2 and 3);
+- a Dreamsign slot quest (one in each of Acts 1–4).
 
-Details: [Appendix B §B11–B13](appendix-b-dreams.md#b11-dream-guides).
+Details: [Appendix B §B13–B15](appendix-b-dreams.md#b13-dream-guides).
 
 ## Dreamsigns
 
-Dreamsigns keep their battle effects and the 12-held cap. They come from the
-Dreamsign Bazaar and Revelation guide services and from Exploration, Augury
-and Gamble. Journey-effect Dreamsigns with no D97 meaning are remapped or
-excluded; see [Appendix D](appendix-d-content-reuse.md#d6-dreamsigns).
+- **Collection and slots.** The player owns any number of Dreamsigns, at most
+  one copy of each, and has **Dreamsign slots** for active ones: 1 at the
+  start, plus one from each act's slot quest in Acts 1–4, for 5 entering
+  Act 5.
+- **Only slotted Dreamsigns take effect,** for both battle and journey effects:
+  a shop discount works only while slotted. One-time effects on gaining a
+  Dreamsign fire when it is acquired, whatever its slot.
+- **Swapping** is free anywhere outside battle, like deck editing.
+- **Sources:** the Dreamsign Bazaar and Revelation guide services, Exploration,
+  Augury and Gamble outcomes, and key prizes for Legendary Dreamsigns.
+- **Journey effects** are adapted to D97: card-choice effects apply to D97's
+  card-choice offers, shop effects to shops, and "after each battle" effects
+  trigger after each boss victory and each finished key dream. Only
+  Dreamsigns whose effect is a purge reward or a Nightmare are left out; see
+  [Appendix D §D6](appendix-d-content-reuse.md#d6-dreamsigns).
 
 ## Content reuse and exclusions
 
 - **Reused:**
-  - every card, including the 8 Legendaries through the Legendary dream;
-  - Starter cards for the starting collection and safety-net padding;
-  - all 32 Avatars, all transfigurations, and the tides4 pool algorithm;
-  - the opponent deck builder, which also builds the starting collection;
+  - every card, including the 8 Legendaries as key prizes;
+  - Starter cards for the starting collection;
+  - all 32 Avatars, all transfigurations, the tide catalog and the opponent
+    deck builder;
   - the ten Apollyon incarnations and the Dream Guides;
-  - the Card Shop, Dreamsign Bazaar, Dreamsign Revelation, Transfiguration,
-    Duplication, Augury, Random Site, Gamble, Exploration and Essence sites.
+  - the Dreamsign Bazaar, Dreamsign Revelation, Transfiguration, Duplication,
+    Augury, Random Site, Gamble, Exploration and Essence sites, and the Card
+    Shop's stock and pricing for shops and Tobias's curiosities;
+  - card-choice offers from Exploration, Augury and Random Site's Draft, as
+    occasional rewards;
+  - purge as a cost: giving up an owned copy for a reward.
 - **Not included:**
   - the journey's layered map, dreamscape site lists, Firstlight Meadow and
-    Draft sites;
-  - Purge sites, every card-removal outcome, and Nightmare.
+    recurring Draft sites;
+  - Purge sites and every purge offered as a reward;
+  - Nightmare, and Exploration's choose-avatar action.
 
 Details: [Appendix D](appendix-d-content-reuse.md).
 
 ## Acquisition-rate targets
 
-The economy is tuned so a successful run acquires cards within about 15% of
-Shandalar's rate per battle: a forecast 2.18 copies per battle against the
+The campaign is tuned so a successful run acquires cards within about 15% of
+Shandalar's rate per battle: a forecast 2.2 copies per battle against the
 Magician research journey's 1.92. The table compares the two;
 [Appendix E](appendix-e-calibration.md) derives each row.
 
-| Channel (per successful run) | Shandalar Magician | D97 target (expected) |
+| Channel (per successful campaign) | Shandalar Magician | D97 target (expected) |
 | --- | --- | --- |
-| Starting collection | 40 | 32 |
-| Victory bundles, stakes included | 59 copies from 21 wins | 40–55 from about 33 wins |
-| Guardian stakes and picks | 15 castle picks | 28–38 |
-| Trader and Card Shop purchases | 16 | 10–18 |
-| Amulet merchant purchases | 11 | 7–12 |
-| Chests and prize duels | 5 lair finds and special duels | 8–17 |
-| Legendary dream | 5 dungeon treasures | 2–6 |
-| Quests, Duplication and site outcomes | 2 bounty picks | 3–13 |
-| Removed: sales, stakes, deliveries | −37 | −11 to −35 |
-| **Final collection** | **116** | **120–150** |
+| Starting collection | 40 | 30 |
+| Victory bundles, antes included | 59 copies from 21 wins | 105–130 from about 68 wins |
+| Guardian antes and picks | 15 castle picks | 45–58 |
+| Shop and curiosity purchases | 16 | 25–40 |
+| Amulet merchant purchases | 11 | 15–24 |
+| Chests and prize duels | 5 lair finds and special duels | 15–28 |
+| Key prizes | 5 dungeon treasures | 0–2 |
+| Trials, Duplication and site outcomes | 2 bounty picks | 10–20 |
+| Removed: sales, antes, deliveries, purge costs | −37 | −30 to −60 |
+| **Collection at Apollyon** | **116** | **210–260** |
 
 ## Logging
 
 Every D97 system logs enough to reconstruct a run in a production game
 (invariant "Log new features", decision D40), with UUIDs and never names:
 
-- each reward-pool deal, with its Avatar and seed;
-- network generation: map choices, depths, doors, locks, and every anchor's
-  occupant;
-- each door traversal, waypoint activation, Atlas travel and Avatar switch;
-- each challenge preview, with both stakes, the extra, tier and knob values;
+- act assembly: each act's dreams, topology, doors, guardians, incarnation and
+  every anchor's occupant;
+- each bag draw, layer opening and Avatar switch;
+- each door traversal, waypoint activation and Atlas travel;
+- each refill, with its dream, anchor and new challenger;
+- each challenge preview, with both antes, the extra, tier and knob values;
 - each battle setup and result;
 - each acquisition and removal (owned-copy UUID, card UUID, channel, price and
   currency);
-- each generated offer set: trader stock, bundles, chest contents, prize duel
-  prizes, guardian picks and amulet merchant catalogs;
+- each generated offer set: shop stock, curiosities, bundles, chest contents,
+  prize duel prizes, guardian picks and amulet merchant catalogs;
+- each key created, used and finished, with its prize and outcome;
+- Dreamsign slot changes;
 - quest offers, steps, completions and rewards; sage hints given.
 
-[Appendix B §B15](appendix-b-dreams.md#b15-state-and-logging) and
+[Appendix B §B17](appendix-b-dreams.md#b17-state-and-logging) and
 [Appendix E §E6](appendix-e-calibration.md#e6-measurement-plan) list the
 details and the derived metrics.
 
 ## Decision record
 
-**Interview of October 14, 2026.** These decisions define the dreams model.
-The "Revises" column names the October 13 decisions each one replaces or
-changes.
+**Interview of October 16, 2026.** These decisions define the act and key
+structure. The "Revises" column names the earlier decisions each one replaces
+or changes.
 
 | # | Topic | Decision | Revises |
 | --- | --- | --- | --- |
-| R1 | Direction | Keep the collection economy; replace the world layer with dreams; use Dreamtides names | Q9, Q29 |
-| R2 | Run failure | No run loss and no world clock; losses cost stakes only | Q14, Q21 |
-| R3 | Run length | 15–20 hours, 55–65 battles | — |
-| R4 | Amulets | Spent at amulet merchants for exact cards from a Shandalar-catalog-sized resonance selection | Q20, Q37, Q38 |
-| R5 | Resonance cores | 20–40 curated cards per resonance; the cores need not cover the catalog | Q34 |
-| R6 | Wide sources | Opponent stakes, guardian picks and the Legendary dream reach outside the reward pool; normal rewards stay inside it | Q39, Q43 |
-| R7 | Switching and the pool | Switching Avatars re-deals the reward pool; the collection is kept | Q34 |
-| R8 | Challengers | The 32 Avatars as characters, plus generic characters with similar decks and no Avatar ability | Q11, Q44 |
-| R9 | Avatar unlocks | Avatar quests from friendly Avatar characters only | — |
-| R10 | Switching rules | An unlocked roster; switch freely at waypoints; per-Avatar seeded deals | — |
-| R11 | Avatar resonance | Avatars have no resonance; the select screen keeps its resonance-colored tide pills | — |
-| R12 | Tilesets | Cosmetic only; about 4–5 maps per tileset | Q36 |
-| R13 | Dream Guides | Wandering, recurring characters; enhanced in their home tileset and at random elsewhere | Q16 |
-| R14 | Maps | Authored layouts with anchors; contents rolled per run | Q9 |
-| R15 | Presentation | Isometric click/tap-to-move target; the web prototype is top-down 2D with CC0 pixel art | Q9 |
-| R16 | Network | About 12 ordinary dreams, each with a guardian; five guardians are incarnations | Q26 |
-| R17 | Ordinary guardians | Boosted Avatar characters | — |
-| R18 | Scaling | Tier by depth; incarnations scale with incarnations already beaten | — |
-| R19 | Locks | Guardian, quest key, amulet toll and incarnation count | — |
-| R20 | Doors | Two-way and fully blind | — |
-| R21 | Fast travel | Waypoints found in each dream; travel only from a waypoint | — |
-| R22 | Respawning | Challengers are strictly finite; a loss allows a rematch | Q21 |
-| R23 | Guardian battle | One staked battle, retryable | Q25 |
-| R24 | Limbo | The five unused incarnations as optional challengers; Apollyon as an unstaked, retryable guardian | Q26 |
-| R25 | Win rewards | Stake, in-pool bundle and one advertised extra (an Essence purse or an amulet) | Q6 |
-| R26 | Incarnation placement | Spread by depth and found by exploring | — |
-| R27 | Information | Sages only | Q24 |
-| R28 | Quest types | Defeat, delivery, errand, handicap trial, collector request, lost object, Avatar and key quests | Q21 |
-| R29 | Quest log | Open, with no deadlines; quests placed at generation | Q21 |
-| R30 | Legendary dream | A fragment quest chain plus two incarnations opens it; seven keepers and a guardian stake the eight Legendaries | Q24, Q39 |
-| R31 | Guide services | One use per appearance | Q28 |
-| R32 | Starting Avatar | Any of the 32 | — |
-| R33 | Difficulty | One difficulty at Magician values; `d` stays a tunable | Q7, Q32 |
-| R34 | Dreamlinks | Not part of D97 | Q15 |
-| R35 | Discoveries | Chests and prize duelists | Q23 |
-| R36 | World magic | Not part of D97 | Q22 |
-| R37 | Copy allowance | Kept, without a Dreamsign term | Q4 |
-| R38 | Guardian picks | 2 from an Avatar guardian's deck, 3 from an incarnation's | Q43 |
-| R39 | Recovery | Rematches and the Starter safety net | — |
-| R40 | State | Walking is view-local; interactions are intent events | — |
-| R41 | Unlockable Avatars | Only Avatars met as friendly quest givers | — |
+| S1 | Run shape | Five acts and Limbo form the campaign; keys open one-time key dreams; the run continues after Apollyon | R3, R16 |
+| S2 | Campaign length | 25–35 hours, about 110–120 battles to Apollyon | R3 |
+| S3 | Act tilesets | Tilesets mix within every act, across categories | R12 |
+| S4 | Act assembly | Act-agnostic authored dreams with their own NPCs and quests, assembled per run into variable topologies | R14, R16 |
+| S5 | Gating | Doors never lock; guardians block the doors they stand before; every route to an act's incarnation passes at least two guardians | R19, R26 |
+| S6 | Incarnations and Limbo | Five incarnations drawn per run guard the acts; the other five are mandatory in Limbo, in any order, before Apollyon | R18, R24, R26 |
+| S7 | Refills | A battle clock refills cleared act dreams with new generic challengers; bosses never refill | R22 |
+| S8 | Key timing | Keys appear from Act 4; Apollyon's defeat records the campaign and opens the endgame | R30 |
+| S9 | Key sources | A key is a possible challenger extra from Act 4; Act 4 and 5 incarnations pay one; every finished key dream pays at least one | R30 |
+| S10 | Key dreams | 4–7 challengers, one attempt each; any loss forfeits the prize; the dream closes once finished | R30 |
+| S11 | Key prizes | An unowned Legendary card, Legendary Dreamsign or Avatar; then extra Legendary copies, up to four | R30 |
+| S12 | Legendary Dreamsigns | The ten strongest Dreamsigns are promoted to Legendary | — |
+| S13 | Key modifiers | None yet | — |
+| S14 | Key naming | "Keys" open "key dreams" | — |
+| S15 | Avatar unlocks | Avatar quests in Acts 2 and 3; every other Avatar is a key prize | R9, R41 |
+| S16 | Reward bag | Authored tide sets; random rewards draw without replacement from a bag that grows by act | R6, R7, R37 |
+| S17 | Signatureless Avatars | A fixed borrowed signature tide plus three facets of their own | — |
+| S18 | Opponent decks | The existing opponent deck builder over the opponent's tide set, seeded per character, with D97 tier knobs | — |
+| S19 | Ante | The battle wager is called the ante everywhere; no loss takes the collection below 25 | R39 |
+| S20 | Deck size | Minimum 25; no padding | R39 |
+| S21 | Dreamsign slots | 1 slot, plus one per slot quest in Acts 1–4; only slotted Dreamsigns take effect; swap freely | — |
+| S22 | Journey Dreamsigns | Adapt all but purge-reward and Nightmare effects | — |
+| S23 | Shops | A generic shop in every dream; Tobias sells curiosities from outside the bag | R13 |
+| S24 | Guide appearances | Every guide appears in every act | R13 |
+| S25 | Score target | 15⍟, 20⍟, then 25⍟ by act; bosses up to 30⍟ | — |
+| S26 | Difficulty | Four levels, `d = 0–3`, default 1; higher levels unlock by beating Apollyon | R33 |
+| S27 | Hidden tides | No player-facing mechanic names a tide or resonance, except amulets and the starting Avatar's resonance | R11, R28 |
+| S28 | Exploration | Occasional card-choice offers; purge as a cost; no purge as a reward | — |
+| S29 | Sages | Optional hints; nothing requires them | — |
+| S30 | Handicap trials | Master Takeshi offers trial quests and fights them himself | — |
+
+**October 14 decisions that still hold,** as adapted above: R1 (direction),
+R2 (no run loss), R4 (amulets), R5 (resonance cores), R8 (Avatar and generic
+characters), R10 (switching at waypoints), R13 in part (wandering guides with
+home tilesets), R15 (presentation), R17 (ordinary guardians), R20 (two-way
+blind doors), R21 (waypoints), R23 (retryable anted guardians), R25 (win
+rewards), R27 (sages as the only door information), R29 (open quest log), R31
+(one use per guide appearance), R32 (any starting Avatar), R34 (no
+Dreamlinks), R35 (chests and prize duelists), R36 (no world magic) and R40
+(state). R38 holds with recalibrated pick counts (E3).
 
 **October 13 decisions that still hold,** as adapted above: Q1 (scale), Q3
 (rarity), Q4 (no deck copy cap), Q5 (any Avatar), Q12 (bundle budgets), Q13
-(one stake each; three when high-stakes), Q17 (trader slots and rarity
-ceilings), Q18 (price formula), Q19 (selling with a resale guard), Q27 (no
-removal or Nightmare), Q30 in part (mandatory final win, the safety net, deck
-editing), Q31 (location), Q33 (bundle type mix), Q35 (unlimited catalog with
-the allowance) and Q42 (starting collection method).
+(one ante each; three when high-ante), Q17 (shop slots and rarity ceilings),
+Q18 (price formula), Q19 (selling with a resale guard), Q30 in part
+(mandatory final win, deck editing), Q31 (location), Q33 (bundle type mix) and
+Q42 (starting collection method).
 
 **Adopted without separate discussion,** as calibration or consistent
 application of the decisions above; each is a tunable called out in its
 appendix:
 
-- the bundle budget `S = ⌊T/4⌋`, recalibrated because every challenger win
-  pays a bundle ([E2](appendix-e-calibration.md#e2-victory-bundle-size));
-- amulet changers, carried over from Shandalar's lair amulet vendors
-  ([A10](appendix-a-economy.md#a10-amulets-and-amulet-merchants));
-- the depth profile, tier formulas and guardian boosts
-  ([B7](appendix-b-dreams.md#b7-challengers-tiers-and-opponent-construction),
-  [C1](appendix-c-guardians-and-limbo.md#c1-ordinary-guardians));
-- population counts for challengers, traders, merchants, sages, guides, chests
-  and prize duelists ([B6](appendix-b-dreams.md#b6-population));
-- the network generator and its reachability rule
-  ([B3–B4](appendix-b-dreams.md#b3-network-generation));
+- tiers by act, guardian and incarnation offsets, and the knob table
+  ([B9](appendix-b-dreams.md#b9-challengers-tiers-and-opponent-construction));
+- the bag's layer schedule ([A2](appendix-a-economy.md#a2-the-reward-bag));
+- the bundle budget `S = ⌊T/4⌋`
+  ([E2](appendix-e-calibration.md#e2-victory-bundle-size));
+- guardian picks of 1 and incarnation picks of 2
+  ([E3](appendix-e-calibration.md#e3-expected-card-ledger));
+- act budgets, dream sizes and the act assembly rules
+  ([B2–B4](appendix-b-dreams.md#b2-dream-catalog));
+- population counts for challengers, shops, merchants, sages, guides, chests
+  and prize duelists ([B7](appendix-b-dreams.md#b7-population));
+- the refill clock ([B8](appendix-b-dreams.md#b8-refills));
 - purse sizes and the extra split
   ([A8](appendix-a-economy.md#a8-victory-bundles-and-extras));
-- depth bands in place of settlement tiers for prices, and selling without
-  locality factors ([A4–A5](appendix-a-economy.md#a4-card-base-value-and-buy-quote));
-- pool-drawn contents rolled at first reveal
-  ([A2](appendix-a-economy.md#a2-the-reward-pool));
-- high-stakes challengers ([A9](appendix-a-economy.md#a9-ante-stakes));
-- Master Takeshi hosting handicap trials
-  ([D2](appendix-d-content-reuse.md#d2-dream-guides));
+- price bands by act ([A1](appendix-a-economy.md#a1-notation));
+- shop restocks and Tobias's curiosity prices
+  ([A6](appendix-a-economy.md#a6-shops-and-curiosities));
+- high-ante challengers ([A9](appendix-a-economy.md#a9-ante));
+- amulet changers ([A10](appendix-a-economy.md#a10-amulets-and-amulet-merchants));
 - the Dreamsign scaling rule ([D6](appendix-d-content-reuse.md#d6-dreamsigns));
-- starting amulets from the starting Avatar's tides
-  ([A17](appendix-a-economy.md#a17-starting-package));
-- the D97 score ([A18](appendix-a-economy.md#a18-score)).
+- difficulty values ([A18](appendix-a-economy.md#a18-difficulty));
+- the starting package and the D97 score
+  ([A17](appendix-a-economy.md#a17-starting-package),
+  [A19](appendix-a-economy.md#a19-score)).
 
 ## Risks and open questions
 
-- **Finite supply and losses.** A struggling player can bleed stakes while the
-  remaining challengers are deep. Rematches, traders, merchants and the safety
-  net are the only recovery; playtests should check that weak runs still
-  progress.
-- **A larger collection.** The forecast final collection is about 20% larger
-  than Shandalar's, from guardian picks and fewer sales. Playtests should check
-  that late-run rewards still matter.
-- **Pool saturation.** About 101 cards over 15–20 hours means random channels
-  offer mostly second copies late in a run. Avatar switching, stakes and
-  guardian picks open new cards; measure how much.
-- **Switching churn.** A player can switch Avatars just before claiming a
-  reward to steer it. Pool-drawn contents roll at first reveal, which limits
-  this to unrevealed rewards.
-- **Curating the cores.** The five resonance cores are a new authoring task.
-  Ember has only two signature tides, so its core needs the most care.
-- **Pending content.** Nine Avatars, all ten Apollyon Aspects and 104 of 153
-  Dreamsigns have no live ability. D97 offers only live Dreamsigns; pending
-  Avatars and Aspects fight without abilities until authored.
-- **Map authoring.** About 12 dreams per run at 4–5 maps per tileset needs a
-  catalog of roughly 30–50 maps before runs stop repeating layouts.
-- **Long-lived state.** A run is a long event log. It needs stable network,
-  anchor, quest and character identities, and content-hash pinning across
-  catalog revisions.
+- **A larger collection.** The forecast collection at Apollyon is about twice
+  Shandalar's, from a campaign about twice as long. Playtests should check
+  that late-campaign rewards still matter and that collection screens stay
+  usable at 250 cards.
+- **Refill pacing.** Refills must unstick a struggling player without making
+  low-tier grinding the best use of time. Measure how often players fight
+  refills, and where.
+- **Key-dream harshness.** One attempt per challenger and a forfeited prize on
+  any loss make Avatar unlocks slow for weaker players. Measure clear rates by
+  tier; the fallback is more keys, not easier rules.
+- **Endgame depth.** Without key modifiers, the endgame ends when the player
+  owns everything. Modifiers that harden key dreams and add rewards are the
+  natural next step.
+- **Authoring tide sets.** The 32 tide sets are a new authoring task. Most
+  Avatars' journey facet lists sit almost entirely inside their own signature
+  tide, so broad facets must often come from neighboring signature regions.
+- **Choosing Legendary Dreamsigns.** The ten promoted Dreamsigns need a
+  curation pass for power and variety.
+- **Content scale.** About 25 act dreams per run, with authored quests and
+  characters, needs a catalog of about 40 dreams before runs stop repeating;
+  key dreams draw on the same catalog.
+- **Long-lived state.** A run is a long event log that never formally ends. It
+  needs stable act, dream, anchor, quest, key and character identities, and
+  content-hash pinning across catalog revisions.

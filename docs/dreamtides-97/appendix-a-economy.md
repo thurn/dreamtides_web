@@ -1,67 +1,110 @@
 # Appendix A: Economy algorithms
 
-This appendix specifies every D97 economy algorithm: how cards, Essence and
-amulets enter and leave the player's possession. Values are catalog tunables.
-Where D97 keeps a Shandalar rule, the section names its origin in the
-decompilation (`~/shandalar-decomp/src/shandalar/src/`) and says where D97
-departs from it.
+This appendix specifies every D97 economy algorithm: how cards, Dreamsigns,
+Essence, amulets and keys enter and leave the player's possession. Values are
+catalog tunables. Where D97 keeps a Shandalar rule, the section names its
+origin in the decompilation (`~/shandalar-decomp/src/shandalar/src/`) and says
+where D97 departs from it.
 
 [Back to the design overview](README.md)
 
 ## A1. Notation
 
-- `d` — the difficulty term, fixed at 1 (Shandalar's Magician) and kept as a
-  tunable.
+- `d` — the difficulty level, 0 to 3; 1 is the default (A18).
 - `U{a..b}` — a uniform random integer from `a` to `b` inclusive. Every random
   draw is a seeded event-log draw, so reload and replay reproduce it.
-- `depth` — a dream's depth in the generated network (Appendix B §B2).
-- `b` — a dream's **price band**: 1 at depth 0–1, 2 at depth 2–3, 3 at depth 4
-  or more. It plays the role of Shandalar's settlement tier.
-- `P` — the reward pool (A2). `w(c)` is card `c`'s copy count in `P` (1 or 2).
-- `T` — an opponent's tier (Appendix B §B7).
+- `a` — a dream's **act number**: 1–5 for act dreams, 6 for Limbo and key
+  dreams.
+- `b` — a dream's **price band**: 1 in Acts 1–2, 2 in Acts 3–4, 3 in Act 5,
+  Limbo and key dreams. It plays the role of Shandalar's settlement tier.
+- `B` — the current Avatar's reward bag (A2). `w(c)` is card `c`'s copy count
+  in `B`.
+- `T` — an opponent's tier (Appendix B §B9).
 - `cost(card)` — rarity cost points: Common 1, Uncommon 2, Rare 3, Legendary 4.
-- **Eligible cards** are the Common, Uncommon and Rare cards of `P`.
-  Legendary, Starter, Special and Tutorial cards never come from generators,
-  traders or merchants.
-- **A weighted draw** from a set picks card `c` with probability proportional to
-  `w(c)`, as the draft engine weights offers by copies.
+- **Eligible cards** are Common, Uncommon and Rare supply cards. Legendary,
+  Starter, Special and Tutorial cards never come from bags, shops or
+  merchants.
+- **A bag draw** picks card `c` with probability proportional to `w(c)`.
+- **The collection floor** is the minimum deck size, 25. No sale, delivery,
+  purge cost or lost ante takes the collection below it.
 - Integer arithmetic truncates toward zero, in the order written.
 
-## A2. The reward pool
+## A2. The reward bag
 
-**The deal.** The reward pool is the production tides4 pool for the player's
-current Avatar, generated with seed `hash(runSeed : avatarId)`:
+**Tide sets.** Each Avatar has an authored **tide set**, stored in a D97
+catalog module keyed by Avatar UUID:
 
-- join the signature tide (or the borrowed archetype's) and 1–3 drawn facets,
-  with fill facets and neutral tides joined only while the deal needs copies;
-- deal 150 copies, at most 2 per card and 1 per Legendary;
-- exclude Starter cards.
+- **Signature tide.** The Avatar's own signature tide. Each of the 12 Avatars
+  without one has a fixed borrowed signature tide; each signature tide is lent
+  to at most one other Avatar.
+- **Three facets,** chosen by hand from the 32 facet tides and not limited to
+  the facets the Avatar's journey tide pool lists. Each chosen facet adds at
+  least 25 eligible cards outside the signature tide, and each facet serves two
+  to four Avatars, so the 32 tide sets cover the card pool evenly.
 
-The pool is an unlimited catalog of its cards: drawing a card never removes it.
+Neutral tides are not part of any tide set. The player never sees tide sets;
+they shape rewards only.
 
-**Switching.** When the player switches Avatar (Appendix B §B14), the reward
-pool becomes the new Avatar's deal. Because the seed depends only on the run
-and the Avatar, each Avatar always has the same deal within a run.
+**Rings.** Ring 1 is the eligible cards of the signature tide. Ring 2 is the
+eligible cards of the three facets that aren't in ring 1.
 
-**Rolled at first reveal.** Pool-drawn contents are rolled from the current
-pool when they're first revealed, then fixed:
+**Capacity.** A card's capacity is the number of copies its bag can ever
+supply, and it rises as the campaign advances:
+
+| Stage | Opens when | Ring 1 capacity | Ring 2 capacity |
+| --- | --- | --- | --- |
+| 1 | The run starts | 1 | 0 |
+| 2 | The player first enters Act 2 | 1 | 1 |
+| 3 | The player first enters Act 3 | 2 | 1 |
+| 4 | The player first enters Act 4 | 2 | 2 |
+| 5 | The player first enters Act 5 | 3 | 3 |
+| 6 | Apollyon falls | 4 | 4 |
+
+**Contents.** `w(c) = capacity(c) − drawn(c)`, where `drawn(c)` counts the
+copies of `c` the player has acquired from this Avatar's bag. Copies acquired
+through other channels never change `w`.
+
+**Draws and offers.**
+
+- A bag draw that pays a card at once (a bundle card, a chest card) removes
+  that copy.
+- An offer (shop stock, a card-choice offer, prize duel prizes) samples from
+  `B` without removing. One offer never shows a card more times than `w(c)`.
+  Acquiring an offered card removes one copy, if the bag still holds one.
+- A draw restricted by a filter (a rarity ceiling, Rares only) that finds the
+  bag empty falls back to the eligible cards of the tide set.
+
+**Rolled at first reveal.** Bag-drawn contents are rolled from the current
+bag when they're first revealed, then fixed:
 
 | Content | Rolled when |
 | --- | --- |
-| Trader stock | The trader is first opened |
+| Shop stock | The shop is first opened, and on each restock |
 | Victory bundle | The battle is won |
 | Chest card | The chest is opened |
 | Prize duel prizes | The duelist is first previewed |
-| Quest card picks | The quest is completed |
+| Trial picks | The trial is won |
+| Card-choice offers | The offer opens |
 
-A later Avatar switch never changes contents already rolled.
+**Switching.** Every Avatar's bag exists from run start, and its drawn counts
+persist for the whole run. Switching Avatars (Appendix B §B16) changes which
+bag later draws use. Contents already rolled never change.
 
-**Measured shape,** over 32 Avatars × 200 seeds: 101 distinct cards on average
-(85–121), about 48 at two copies, about 12 Rares (6–21), 0–3 Legendaries, and
-71% Characters.
+**Measured shape,** from the tide catalog:
 
-Origin: the draft-pool generator `generatePoolFromData`
-(`src/draft/pool/variant-tides4.ts`).
+- Ring 1 averages 89 eligible cards (72–104), with about 10 Rares (4–20).
+  Signature tides are 45% Common, 43% Uncommon and 12% Rare.
+- Facets hold 35–45 eligible cards each. Most Avatars' journey facet lists sit
+  almost entirely inside their own signature: for the 20 signatured Avatars,
+  the best three listed facets add 13–124 cards outside the signature (mean
+  66). Authored tide sets target 60–100 ring-2 cards.
+- Signature and facet tides together cover 468 of the 501 eligible cards. The
+  rest appear only in neutral tides and reach the player through antes,
+  curiosities and amulet merchants.
+
+Origin: the tide catalog (`src/content/tides.ts`) and the draft engine's
+remaining-copies bag. The journey deals a random tides4 pool per run; D97
+replaces it with authored tide sets that grow by layers.
 
 ## A3. Rarity
 
@@ -111,75 +154,80 @@ band.
 
 ## A5. Sale quote and the resale guard
 
-Every trader buys owned copies:
+Every shop buys owned copies:
 
 ```
 sale = 5 × (v × (b + 2) / 50)            (no clamp)
 ```
 
-A card sells for its unclamped buy quote in that dream, so deeper traders pay
+A card sells for its unclamped buy quote in that dream, so later acts pay
 more.
 
-**Resale guard.** A copy bought for Essence (trader, Card Shop, Duplication)
+**Resale guard.** A copy bought for Essence (shop, curiosities, Duplication)
 sells for at most the Essence paid. A copy bought for amulets sells for at most
-its band-1 buy quote. Copies from bundles, stakes, guardian picks, chests,
-prize duels, quests, the Legendary dream and the starting collection sell
-freely.
+its band-1 buy quote. Copies from bundles, antes, guardian picks, chests,
+prize duels, quests, key prizes and the starting collection sell freely.
 
-**Limits.** Selling is refused when it would leave fewer owned copies than the
-minimum deck size. Selling a copy that is a pending stake re-rolls that stake
-(A9).
+**Limits.** Selling is refused when it would cross the collection floor.
+Selling a copy that is a pending ante re-rolls that ante (A9).
 
 Origin: `SellPrice`, called from the deck manager in `deckdll.c`. Shandalar
 has no guard.
 
-## A6. Trader stock
+## A6. Shops and curiosities
 
-**Slot count.** `n = b + 3`: 4, 5 or 6.
+**Shops.** Every act dream and key dream has one shop at its shop anchor, run
+by a shopkeeper authored with the dream.
 
-**Generation.** A trader's stock is rolled when the trader is first opened. For
-slot `i` (0-based):
+- **Slot count.** `n = b + 3`: 4, 5 or 6.
+- **Stock.** Rolled when the shop is first opened. For slot `i` (0-based):
 
-```
-ceiling = (i mod 3) + 1
-c       = weighted draw from { eligible cards with cost ≤ ceiling that the allowance permits (A7) }
-```
+  ```
+  ceiling = (i mod 3) + 1
+  c       = bag draw from { eligible cards of B with cost ≤ ceiling }
+  ```
 
-If that set is empty, the slot ignores the allowance. Duplicate offers across
-slots are allowed. A ceiling permits every lower rarity, so slots 2 and 5 offer
-a Rare only some of the time. Each quote is fixed when its slot is generated.
+  Slots offer distinct cards. A ceiling permits every lower rarity, so slots 2
+  and 5 offer a Rare only some of the time. Each quote is fixed when its slot
+  is rolled.
+- **Purchase.** The player buys any affordable subset, one copy per slot. The
+  copy enters reserve with its price recorded, and the slot stays empty.
+- **Restock.** Once per visit, the player can pay `10 × (b + 2)` Essence (30,
+  40 or 50) to re-roll every slot, including empty ones. A visit ends when the
+  player leaves the dream.
+- **Selling.** Every shop buys owned copies (A5).
 
-**Purchase.** The player buys any affordable subset, one copy per slot. The
-copy enters reserve with its price recorded, and the slot stays empty. Trader
-stock never restocks; a run's supply of trader offers is its traders' slots.
+**Curiosities.** Tobias Tanglefur's guide site sells cards the bag can't
+supply:
+
+- **Stock.** 4 slots, rolled when the site opens, with the shop's slot
+  ceilings. Each slot is a uniform draw from eligible supply cards outside the
+  current Avatar's tide set, distinct across slots.
+- **Enhanced.** 6 slots; slot ceilings start at Uncommon.
+- **Price.** The buy quote × 3 / 2.
+- One use per appearance, like every guide site: the player buys any subset,
+  then the site closes.
 
 Origin: `RunTownServicesMenu` and the card purchase handler. Shandalar
 alternates on-color and loose slots and restocks on the world clock; D97 draws
-every slot from the whole pool and has no clock.
+every slot from the bag and restocks for Essence.
 
-## A7. Copy allowance
+## A7. Card-choice offers
 
-```
-allowance = 1 + [|active deck| ≥ 30] + [|active deck| ≥ 45]
-eligible for a random draw ⇔ owned copies < allowance
-```
+Card-choice offers are occasional "pick one of several" rewards: Exploration
+card grants, Augury card offers, the Draft site that Random Site can conceal,
+and trial picks.
 
-The allowance applies to random generators:
+- Each offer samples distinct cards from `B` with the action's existing
+  selection policy (A2).
+- Taking a card removes one copy from the bag.
+- **The Draft site** (Random Site only) runs three rounds of one pick from four
+  bag cards.
+- Clam Shell, Sea Urchin, Tortoise Shell and Mushroom Caps change the number of
+  options in every card-choice offer (Appendix D §D6).
 
-- victory bundle draws after the stake card;
-- trader slots;
-- chest cards;
-- prize duel prizes;
-- card-granting Dreamtides events.
-
-Player-directed acquisition ignores it and shows owned counts: amulet
-merchants, guardian picks, opponent stakes, quest picks and Duplication. The
-starting collection holds distinct cards. Decks have no copy cap.
-
-Origin: `GetRemainingAllowedCardCopies` (1 copy below 40 active cards, 2 at 40,
-3 at 60, plus 1 with the Tome of Enlightenment). D97 lowers the thresholds to
-match Dreamtides deck sizes and counts the whole collection, not only the
-active deck.
+Guardian picks (A15) choose from an opponent's deck and are not card-choice
+offers.
 
 ## A8. Victory bundles and extras
 
@@ -190,36 +238,42 @@ S = β + floor(T / 4)          // β = 0 (calibrated, Appendix E §E2)
 remaining = S; i = 0; bundle = []
 while remaining > 0:
     if i == 0:
-        c = the opponent's stake
+        c = the opponent's ante
     else:
-        c = weighted draw from eligible cards of P that the allowance permits
-        (an empty set ignores the allowance)
+        c = bag draw from eligible cards of B
     bundle.append(c); remaining -= cost(c); i += 1
 ```
 
 - The bundle is revealed after the win, and the player takes all of it into
   reserve; there is no pick.
-- The stake leads the bundle, and its rarity counts against the budget.
-- **Type mix** follows the copy-weighted pool. There is no separate
-  Character/Event roll.
+- The ante leads the bundle, and its rarity counts against the budget.
+- **Type mix** follows the bag. There is no separate Character/Event roll.
 
-**Expected bundle size `E[N | S]`**, including the stake, from the measured
-pool rarity mix (44% Common, 44% Uncommon, 12% Rare):
+**Expected bundle size `E[N | S]`**, including the ante, from the signature
+rarity mix:
 
 | Tier | 4–7 | 8–11 | 12–15 | 16–19 |
 | --- | --- | --- | --- | --- |
 | Budget `S` | 1 | 2 | 3 | 4 |
 | `E[N]` | 1.00 | 1.44 | 2.08 | 2.67 |
+| Challengers at that tier | Acts 1–2 | Act 3 | Act 4; tier 13 key dreams | Act 5; tier 16 and 18 key dreams |
 
-**Extra.** At generation, each challenger gets one advertised extra, shown on
-its preview and paid on a win:
+**Extra.** Each challenger gets one advertised extra when it is placed, shown
+on its preview and paid on a win:
 
-- **Essence purse** (probability 3/4): `5 × (1 + floor(T / 4))` Essence, so 10
-  at tier 4, 15 at tier 8, 20 at tier 12 and 25 at tier 16;
-- **Amulet** (probability 1/4): one amulet whose resonance is drawn from the
-  challenger's joined tides, weighted by each tide's card count.
+| Where | Essence purse | Amulet | Key |
+| --- | --- | --- | --- |
+| Acts 1–3 | 3/4 | 1/4 | — |
+| Acts 4–5 and key dreams | 5/8 | 1/4 | 1/8 |
 
-Guardians, keepers and prize duelists have no extra.
+- **Essence purse:** `5 × (1 + floor(T / 4))` Essence: 10 at tiers 4 and 7, 15
+  at tier 10, 20 at tier 13 and 25 at tiers 16 and 18.
+- **Amulet:** one amulet whose resonance is drawn from the challenger's tide
+  set, weighted by each tide's card count. The player sees only the amulet.
+- **Key:** one key, created when it's paid (A16).
+
+Guardians, incarnations and prize duelists have no extra. The Act 4 and Act 5
+incarnations each pay one key with their picks.
 
 **Origin:** the ordinary victory settlement in `world_lair_monster_encounter.c`.
 Shandalar's budget is `strength + floor(T / 2)`, and its wins pay no gold; an
@@ -228,46 +282,52 @@ D97 challenger pays a bundle, where about half of a Shandalar run's battles
 were cardless dungeon and castle fights. It replaces the random amulet drop
 with the advertised extra.
 
-## A9. Ante (stakes)
+## A9. Ante
 
-**Which battles stake.** Challenger, high-stakes, guardian, Limbo incarnation
-and Legendary keeper battles. Prize duels and the battle against Apollyon
-don't.
+**Which battles have an ante.** Challengers, high-ante challengers,
+guardians, incarnations in the acts and in Limbo, key-dream challengers and
+handicap trials. Prize duels and the battle against Apollyon have none.
 
 **Rolled at first preview,** seeded from the preview event, and shown on every
 later preview:
 
-- **Player's stake:** a uniform random copy of the active deck.
-- **Opponent's stake:** a uniform random non-Legendary card of its constructed
-  deck. A Legendary keeper stakes its Legendary instead (A16).
+- **Player's ante:** a uniform random copy of the active deck.
+- **Opponent's ante:** a uniform random non-Legendary card of its constructed
+  deck.
 
-Walking away and returning never re-rolls the stakes.
+Walking away and returning never re-rolls the antes.
 
-**Stake drift.** If the player's staked copy has left the active deck when the
+**The collection floor.** When a battle starts, the player's ante shrinks to
+at most `owned copies − 25` cards. A player at the floor antes nothing, and
+the preview says so. The opponent's ante is unchanged.
+
+**Ante drift.** If the player's anted copy has left the active deck when the
 battle starts, it re-rolls among active copies whose sale value in this dream
 is at least the original's. If there are none, it takes the highest-value
-active copy. Unequipping a card never makes the stake cheaper.
+active copy. Unequipping a card never makes the ante cheaper.
 
-**High stakes.** Each challenger of tier 12 or more is high-stakes with
-probability 1/10. Each side stakes three cards, chosen by the same rules.
+**High ante.** Each challenger of tier 13 or more (Act 4 onward, and key
+dreams) is high-ante with probability 1/10. Each side antes three cards,
+chosen by the same rules.
 
 **Outcomes:**
 
 | Battle | Win | Loss | Draw |
 | --- | --- | --- | --- |
-| Challenger | Opponent's stake leads the bundle (A8); the extra | Player's stake removed; rematch allowed | Nothing; rematch allowed |
-| High-stakes challenger | Three opponent stakes and the extra; no bundle | Three player stakes removed; rematch allowed | Nothing |
-| Guardian or Limbo incarnation | Opponent's stake and picks (A15) | Player's stake removed; retry allowed | Nothing |
-| Legendary keeper | Its Legendary (A16) | Player's stake removed; rematch allowed | Nothing |
+| Challenger | Opponent's ante leads the bundle (A8); the extra | Player's ante removed; rematch allowed | Nothing; rematch allowed |
+| High-ante challenger | Three opponent antes and the extra; no bundle | Three player antes removed; rematch allowed | Nothing |
+| Guardian or incarnation | Opponent's ante and picks (A15) | Player's ante removed; retry allowed | Nothing; retry allowed |
+| Key-dream challenger | As a challenger or high-ante challenger | Player's ante removed; the challenger leaves; the prize is forfeited | Nothing exchanged; the challenger leaves; the prize is forfeited |
+| Handicap trial | Opponent's ante and the trial reward (A12) | Player's ante removed; retry allowed | Nothing; retry allowed |
 
-A rematch keeps the original stakes. Won stakes are plain copies of the catalog
-card. **What can be staked:** transfigured copies, picks, stakes and Legendary
+A rematch keeps the original antes. Won antes are plain copies of the catalog
+card. **What can be anted:** transfigured copies, picks, antes and Legendary
 copies are all eligible.
 
 Origin: encounter setup and loss settlement in `world_lair_monster_encounter.c`.
-Shandalar limits the opponent's stake to cards it doesn't treat as special; D97
-lets any non-Legendary card of the opponent's deck be staked, so stakes reach
-outside the player's pool.
+Shandalar limits the opponent's ante to cards it doesn't treat as special; D97
+lets any non-Legendary card of the opponent's deck be anted, so antes reach
+outside the player's bag.
 
 ## A10. Amulets and amulet merchants
 
@@ -282,7 +342,7 @@ as a catalog module beside the cards and keyed by card UUID. Cores:
   tide memberships weigh most toward it, and adjusted by hand to match the
   resonance's identity (README).
 
-A core can include cards outside the player's reward pool; that's its purpose.
+A core can include cards outside the player's bag; that's its purpose.
 
 **Amulet merchants.**
 
@@ -290,14 +350,10 @@ A core can include cards outside the player's reward pool; that's its purpose.
   core.
 - **Price.** Common 1, Uncommon 2, Rare 3 amulets of that resonance.
 - **Use.** The player may buy at any time, repeatedly, while able to pay.
-  Merchants have no stock or cooldown.
-- **Allowance.** Not enforced; the catalog shows owned counts and filters.
+  Merchants have no stock or cooldown. The catalog shows owned counts.
 
 **Amulet changers** sell one amulet of any resonance for 250 Essence,
 repeatedly.
-
-**Amulet tolls.** Some doors open by spending one amulet of the door's
-resonance (Appendix B §B4).
 
 Origin: `BuyAnyCardFromTown` with a town's `trade_color_and_type`, and the lair
 amulet vendor. Shandalar's catalogs are color or card-type specialties of its
@@ -305,39 +361,39 @@ whole card list; D97's are the resonance cores.
 
 ## A11. Dream Guide services
 
-Every guide appearance is a one-use site (Appendix B §B11). Prices:
+Every guide appearance is a one-use site (Appendix B §B13). Prices:
 
 | Service | Standard | Enhanced | Price |
 | --- | --- | --- | --- |
-| **Card Shop** (Tobias Tanglefur) | A trader stock of 5 slots (A6) | 6 slots; slot ceilings start at Uncommon | Buy quotes (A4) |
+| **Curiosities** (Tobias Tanglefur) | 4 cards from outside the tide set (A6) | 6 cards; slot ceilings start at Uncommon | Buy quote × 3 / 2 |
 | **Transfiguration** (Durgan Forgehammer) | 3 random untransfigured active-deck copies with an eligible form; every eligible form shown; apply one | Any owned untransfigured copy, any eligible form | Existing form prices, rolled when the site opens: Empowered and Kindled by stat change 10/30/50/70 ±20; Amplified 10 ±20; Inspired 20 ±20; Enduring and Resonant 50 ±30; Attuned 10 ±20; Hastened free; Perfected 100 |
 | **Duplication** (Deacon Holt) | 3 random active-deck copies; copy one | Any owned copy | The card's buy quote in this dream (A4). The copy is plain and records the paid price for the resale guard |
 | **Dreamsign Bazaar** (Amunet, the Tomb-Keeper) | 3 Dreamsigns for Essence | 4 Dreamsigns | `5 × floor(base × (b + 2) / 20)`, base Common 50, Uncommon 100, Rare 200: band 1 35/75/150, band 2 50/100/200, band 3 60/125/250 |
 
-- Bazaar offers exclude held and pending Dreamsigns. At the 12-Dreamsign cap,
-  a purchase uses the existing replacement flow.
+- Bazaar offers exclude owned and Legendary Dreamsigns. A bought Dreamsign
+  joins the collection, and the player may slot it at once.
 - Leaf Ledger allows two transfigurations per Transfiguration site, and Spell
-  Tome keeps its copy-on-transfigure effect.
+  Tome keeps its copy-on-transfigure effect, while slotted.
 - The other guides' sites (Revelation, Augury, Random Site, Gamble,
-  Exploration, and Master Takeshi's trials) are in Appendix D §D2–D3.
+  Exploration, and Master Takeshi's trials) are in Appendix D §D2–D3 and
+  Appendix B §B15.
 
 ## A12. Quest rewards
 
-Quest generation is in Appendix B §B13. Each quest's reward is fixed at
-generation and shown on the offer.
+Quests are authored with their dreams (Appendix B §B15). Each authored quest
+names a reward kind from this table, and the amount follows its formula in the
+giver's dream. The reward shows on the offer.
 
 | Quest | Reward |
 | --- | --- |
-| Defeat, delivery, errand | One amulet of a resonance shown on the offer, or Essence `25 + 25 × depth` of the giver's dream |
-| Handicap trial | One exact pick from 3 eligible pool cards with a Rare in the first slot when the pool has one, plus one amulet |
-| Collector request | Two amulets of the named core's resonance, or of the named tide's resonance |
-| Lost object | Essence `75 + 25 × depth`, or a hidden door revealed |
-| Avatar quest | That Avatar unlocked (Appendix B §B14) |
-| Key quest | A key to a named key-locked door, or a hidden door revealed |
-| Legendary fragment chain | The key to the Legendary dream (Appendix C §C5) |
+| Defeat, delivery, errand | One amulet of a resonance shown on the offer, or Essence `25 + 25 × a` |
+| Lost object | Essence `50 + 25 × a` |
+| Handicap trial | One exact pick from 3 bag cards with a Rare in the first slot when the bag has one, plus one amulet; enhanced, a pick from 5 |
+| Avatar quest | That Avatar unlocked (Appendix B §B16) |
+| Dreamsign slot quest | One Dreamsign slot |
 
-A delivery hands over the requested owned copy. A collector request leaves the
-counted cards with the player.
+A delivery hands over the requested owned copy, and is refused when it would
+cross the collection floor.
 
 ## A13. Chests
 
@@ -345,27 +401,28 @@ A chest's contents are rolled when it's opened:
 
 | Weight | Contents |
 | --- | --- |
-| 1/2 | One weighted draw from eligible cards of `P` that the allowance permits |
-| 1/4 | Essence `5 × ((25 + 15 × depth + U{0..50}) / 5)` |
-| 1/4 | One amulet of a uniformly random resonance |
+| 1/3 | One bag draw from eligible cards of `B` |
+| 1/3 | Essence `5 × ((15 + 10 × a + U{0..30}) / 5)` |
+| 1/3 | One amulet of a uniformly random resonance |
 
-About a quarter of chests are locked: by the dream's guardian, or by a quest
-key (Appendix B §B10).
+Chests never lock. About a quarter of chests stand behind a guardian's
+chokepoint (Appendix B §B5).
 
 Origin: Shandalar's dungeon cash chests and lair finds, folded into one table.
 
 ## A14. Prize duels
 
-A prize duelist offers an unstaked battle for prizes shown before acceptance.
-Prizes are distinct eligible Rares of `P`; a pool with too few Rares fills with
-Uncommons. The four variants have equal weight:
+A prize duelist offers an unanted battle for prizes shown before acceptance.
+Prizes are distinct Rares drawn from `B`; a bag with too few Rares fills with
+Uncommons. The four variants have equal weight, with tiers relative to the
+act's challenger tier `t` (Appendix B §B9):
 
 | Variant | Prize | Opponent tier | Note |
 | --- | --- | --- | --- |
-| Duel of two | 2 Rares | 8 | |
-| Duel of three | 3 Rares | 13 | |
-| Duel of four | 4 Rares | 18 | |
-| Duel with a champion | 2 Rares | 13 | The opponent starts with one of its signature characters in play |
+| Duel of two | 2 Rares | `t` | |
+| Duel of three | 3 Rares | `t + 3` | |
+| Duel of four | 4 Rares | `min(t + 6, 20)` | |
+| Duel with a champion | 2 Rares | `t + 3` | The opponent starts with one of its signature characters in play |
 
 A win pays every prize. A loss or draw pays nothing, and the duelist leaves.
 
@@ -374,67 +431,110 @@ duels in `world_lair_monster_encounter.c`.
 
 ## A15. Guardian picks
 
-A won guardian or Limbo incarnation battle pays the opponent's stake and exact
-picks from the opponent's constructed deck:
+A won guardian or incarnation battle pays the opponent's ante and exact picks
+from the opponent's constructed deck:
 
 | Opponent | Picks |
 | --- | --- |
-| Avatar guardian | 2 |
-| Incarnation guardian, or Limbo incarnation | 3 |
+| Avatar guardian | 1 |
+| Incarnation, in an act or in Limbo | 2 |
 
 - Picks are distinct identities, excluding Legendary cards and the card the
-  opponent staked.
+  opponent anted.
 - An incarnation's curated signature cards are eligible.
-- The allowance is ignored; the screen shows owned counts.
+- The screen shows owned counts.
 - Picked copies are plain.
 
 Origin: `HandleDefeatedWizardCastle`, whose three castle picks come from a
 color-filtered catalog. D97 picks from the guardian's own deck.
 
-## A16. Legendary stakes
+## A16. Keys and prizes
 
-At generation, the eight Legendary cards are assigned one each to the seven
-Legendary keepers and the Legendary dream's guardian (Appendix C §C5). Each
-stakes its assigned Legendary instead of a random deck card. A win pays only
-that Legendary. The guardian also pays its two picks.
+**Creating a key.** A key is created when it's paid: as a challenger extra
+(A8), by the Act 4 or Act 5 incarnation, or by a finished key dream. Its
+dream, tier, challenger count and prize are rolled then and shown on the key
+(Appendix C §C5).
 
-The Legendary dream is the only source of Legendary cards. Legendaries can
-appear in opponents' decks at tier 12 and above, but they are never staked or
-picked there.
+**The prize set** holds everything the player doesn't own yet:
+
+- each of the 8 Legendary cards;
+- each of the 10 Legendary Dreamsigns;
+- each locked Avatar.
+
+A new key's prize is a uniform draw from the prize set, excluding prizes
+already shown on another held or open key. When the set is empty, the prize is
+one more copy of a uniformly drawn Legendary card that the player owns fewer
+than four copies of. When every Legendary card is at four copies, keys carry
+no prize.
+
+**Paying a prize.** A Legendary card arrives as a plain copy in reserve. A
+Legendary Dreamsign joins the Dreamsign collection. An Avatar joins the roster
+(Appendix B §B16).
+
+Key prizes are the only source of Legendary cards and Legendary Dreamsigns.
+Legendary cards can appear in opponents' decks from tier 13, but they are never
+anted or picked.
 
 ## A17. Starting package
 
-- **Essence:** 200, Shandalar's Magician value `(5 − d) × 50`.
-- **Amulets:** 2, each of a resonance drawn from the starting Avatar's joined
-  tides, weighted by each tide's card count.
+- **Essence:** `(5 − d) × 50`: 200 at `d = 1`.
+- **Amulets:** `max(0, 3 − d)`: 2 at `d = 1`. Each amulet's resonance is drawn
+  from the starting Avatar's tide set, weighted by each tide's card count.
+- **Dreamsign slots:** 1.
 - **Starting collection.** It's built with the opponent deck algorithm
-  (`buildTideOpponentDeck`, "unified tide affinity") run on the player's own
-  reward pool. All copies start in the active deck, and the player may bench
-  down to the minimum of 27.
+  (`buildTideOpponentDeck`, "unified tide affinity") run on the bag's ring 1.
+  All copies start in the active deck, and the player may bench down to the
+  minimum of 25.
 
-  1. **Context:** +1 per tide joined by `P`.
-  2. **Candidates:** the distinct non-Legendary cards of `P`.
+  1. **Context:** +1 per tide in the tide set.
+  2. **Candidates:** the eligible cards of ring 1.
   3. **Iterative picks:** rank the remaining candidates by
      [cosine affinity to the context, rarity], draw uniformly from the top 25%
      (at least 5), add the picked card's tide vector to the context, and repeat
-     until 32 cards are chosen.
-  4. **Starter dilution:** cut the 5 lowest-affinity picks and add 5 distinct
-     Starter cards in seeded random order.
+     until 30 cards are chosen.
+  4. **Starter dilution:** cut the `3 + 2d` lowest-affinity picks (5 at
+     `d = 1`) and add that many distinct Starter cards in seeded random order.
 
-  The starting collection holds one copy of each card.
+  The kept picks are drawn from the bag (A2). The starting collection holds
+  one copy of each card.
 
 Origin: `AddRandomStarterDeckCards` and `InitializeNewGameState`, which build a
 random starter by color recipe, more mixed at higher difficulty.
 
-## A18. Score
+## A18. Difficulty
 
-On victory, following Shandalar's structure:
+The player chooses `d` at run start. It never changes during a run.
+
+| | `d = 0` | `d = 1` (default) | `d = 2` | `d = 3` |
+| --- | --- | --- | --- | --- |
+| Opponent head start bonus | +0⍟ | +1⍟ | +2⍟ | +3⍟ |
+| Starting Essence | 250 | 200 | 150 | 100 |
+| Starting amulets | 3 | 2 | 1 | 0 |
+| Starters in the starting collection | 3 | 5 | 7 | 9 |
+| Score multiplier `m(d)` | ×0.5 | ×1 | ×1.5 | ×2 |
+| Available | From the start | From the start | After beating Apollyon at `d = 1` | After beating Apollyon at `d = 2` |
+
+The head start bonus applies to every opponent, Apollyon included. Unlocked
+levels are stored with the player's profile, outside any run. The levels'
+player-facing names are an open question.
+
+Origin: Shandalar's difficulty term, which sets starting gold `(5 − d) × 50`,
+opponent life and the starting deck's mix. D97 converts opponent life to a head
+start and the deck mix to Starter count.
+
+## A19. Score
+
+When Apollyon falls, following Shandalar's structure:
 
 ```
-score = 2 × ( Σ over won battles of (floor(T / 2) + 2)
-            + 25 × high-stakes wins )
-      + 40 × (25 − Apollyon's final score)
+score = m(d) × ( 2 × ( Σ over won campaign battles of (floor(T / 2) + 2)
+                     + 25 × high-ante wins )
+               + 40 × (30 − Apollyon's final score) )
 ```
+
+Battles in key dreams before Apollyon's defeat count toward the sum. The
+campaign score is fixed at Apollyon's defeat; the endgame keeps its own record
+of key dreams finished and prizes owned.
 
 Origin: `CalculateDungeonEndgameScore` (encounter class + 2 per victory, +25 per
 special victory, all doubled) and the final `(100 − opponent life) × 10` bonus.
