@@ -1,0 +1,1214 @@
+{
+  "bead": "hv-33id.14",
+  "phase": 6,
+  "sourceBase": "7b224ed57c5bcbed65b6c962b763269d9b4dc474",
+  "scope": "Read-only Sage retrospective over all ten uncovered Phase6 friction records; one additive coverage line and own evidence only.",
+  "originalClaimServerStart": "2026-10-16T01:44:19+00:00",
+  "nativeClaimACK": "2026-10-16T01:44:19.484301+00:00",
+  "evidenceCutoff": "2026-10-16T02:07:57.399437+00:00",
+  "inclusiveClaimToCutoffMinutes": 23.63999061666667,
+  "clockQualification": "Server-recorded native claim start at one-second resolution is the inclusive beginning. ACK is separately retained. Window includes parent install, source packet/native evidence collection, audit sampling, coordination, idle helper waits, verification, evidence and checks through this cutoff. Actual final Git endpoint and small subsequent tail are separately retained; no clock reset or editing-time/whole-host-CPU claim.",
+  "parentInstall": {
+    "start": "2026-10-16T01:44:54.513270+00:00",
+    "end": "2026-10-16T01:44:57.088660+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 2.575295167043805,
+    "cpuSeconds": 5.896427,
+    "hostLoad": [
+      5.0771484375,
+      7.1005859375,
+      6.93994140625
+    ]
+  },
+  "helper": {
+    "id": "/root/retrospective_33id14_audit",
+    "role": "Read-only Sage retrospective, not a formal code review",
+    "terminal": true,
+    "samplingCPU": "UNKNOWN; not measured",
+    "reportSHA256": "5a415f0a11f6d02fc83d9d4c7f55413ecaea3fe6cc744be6dd59de821ee8d7e7",
+    "sourceReceiptsSHA256": "5355b6fabdb26e68c304f8b4e23ff83947840f338443bb1c00c3835f0e335f34",
+    "analysisSHA256": "30ccebb59236b464dc2c7a1fa03937d8c21c33a536793dae43bdacda6bd75f6b"
+  },
+  "parentVerification": {
+    "at": "2026-10-16T02:02:30.441773+00:00",
+    "base": "7b224ed57c5bcbed65b6c962b763269d9b4dc474",
+    "reportSHA256": "5a415f0a11f6d02fc83d9d4c7f55413ecaea3fe6cc744be6dd59de821ee8d7e7",
+    "receiptsSHA256": "5355b6fabdb26e68c304f8b4e23ff83947840f338443bb1c00c3835f0e335f34",
+    "analysisSHA256": "30ccebb59236b464dc2c7a1fa03937d8c21c33a536793dae43bdacda6bd75f6b",
+    "all88SourceReceiptHashesMatch": true,
+    "all26RequiredPayloadBindingsMatch": true,
+    "tenFrictionComplete": true,
+    "coverageCounts": {
+      "complete": 35,
+      "partial": 53
+    },
+    "measurementJSONQualification": "Parsed full containers and exact applicable epoch/clock/qualification projections; raw geometry/manifests not exhaustively interpreted. Seven prose files and ten friction bodies complete. Historical nested dependency/PNG/rawlog limitations retained.",
+    "rootActuallyReadCompleteAuditReport": true,
+    "rootVerifiedNative46And742CanonicalOwnership": true,
+    "noNewImprovementAccepted": true,
+    "retrospectiveCoversExactlyTen": [
+      "hv-33id.2",
+      "hv-33id.3",
+      "hv-33id.6",
+      "hv-33id.7",
+      "hv-33id.8",
+      "hv-33id.9",
+      "hv-33id.10",
+      "hv-33id.11",
+      "hv-33id.12",
+      "hv-33id.13"
+    ],
+    "lastActualReleaseStageSeconds": 1030.133,
+    "latestFuzzWallCPU": {
+      "wallSeconds": 898.0,
+      "processCPUSeconds": 944.5,
+      "qualification": "Actual retained engine execution, not queue; cause/load UNKNOWN, controlled measurement remains46. No budget waiver."
+    },
+    "formalCodeReview": false,
+    "helperTerminal": true,
+    "worktreeCleanBeforeEvidenceWriter": true
+  },
+  "coverageLine": {
+    "retrospective": "2026-10-16",
+    "phase": 6,
+    "bead": "hv-33id.14",
+    "covers": [
+      "hv-33id.2",
+      "hv-33id.3",
+      "hv-33id.6",
+      "hv-33id.7",
+      "hv-33id.8",
+      "hv-33id.9",
+      "hv-33id.10",
+      "hv-33id.11",
+      "hv-33id.12",
+      "hv-33id.13"
+    ]
+  },
+  "historicalFrictionRecords": [
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.7.json",
+      "bead": "hv-33id.7",
+      "phase": 6,
+      "implementMin": 37.50245248333333,
+      "implementWindow": {
+        "start": "2026-10-12T20:06:51.709Z",
+        "end": "2026-10-12T20:44:21.856149+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 12.654192165995482,
+        "review": 55.135449374996824,
+        "knip": 3.650401958002476,
+        "reviewFull": 702.4937266250054
+      },
+      "hostLoad": 8.21533203125,
+      "testDelta": {
+        "files": 1,
+        "lines": 311,
+        "jsdomFiles": 0
+      },
+      "friction": [
+        {
+          "tag": "heavy-slot-wait",
+          "minutes": 10.079156916666667,
+          "note": "Required full review queued behind a separate acceptance tournament. Minutes are the observed queue-and-launch upper bound; no foreign holder action or retry."
+        }
+      ]
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.11.json",
+      "bead": "hv-33id.11",
+      "phase": 6,
+      "implementMin": 2.9157265,
+      "implementWindow": {
+        "start": "2026-10-13T00:39:57+00:00",
+        "end": "2026-10-13T00:42:51.943590+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "review-01": 0.3548212910100119,
+        "knip-01": 7.156008582998766,
+        "friction-01": 0.3137861669965787
+      },
+      "hostLoad": 25.62,
+      "testDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.10.json",
+      "bead": "hv-33id.10",
+      "phase": 6,
+      "implementMin": 95.69085636666667,
+      "implementWindow": {
+        "start": "2026-10-13T00:37:45+00:00",
+        "end": "2026-10-13T02:13:26.451382+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 5.754536624997854,
+        "review": 20.42539437500818,
+        "knip": 3.3258167500025593
+      },
+      "hostLoad": 3.96,
+      "testDelta": {
+        "files": 0,
+        "lines": 224,
+        "jsdomFiles": 0
+      },
+      "friction": [
+        {
+          "tag": "trigger-prerequisite",
+          "minutes": 10.528438,
+          "note": "Native trigger/re-entry recovery gross interval 00:38:07.002135Z\u201300:48:38.708418Z: trigger11 filing/audit/delivery, zero-source update rejection, native remove/recreate, install and dispatch check. Not isolated CPU/quota/productive time."
+        },
+        {
+          "tag": "tutorial-slot-projection",
+          "minutes": 38.338287183333335,
+          "note": "First failed placement assertion through final UI validation, including diagnosis of real card/slot remapping, read-only proposals/native scope ACKs, occupied-cell projection and geometry-fixture corrections. Gross elapsed, not isolated editing/CPU or a harness-only defect."
+        }
+      ]
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.6.json",
+      "bead": "hv-33id.6",
+      "phase": 6,
+      "implementMin": 62.021,
+      "implementWindow": null,
+      "timingBasis": "Parent native dispatch checkpoint 2026-10-11T17:28:49.648022Z to immediate commit preparation 2026-10-11T18:30:50.901159+00:00; includes research, parent ACKs/cold review, script reconstruction, authored walks, native lease queue, checks and evidence. Exact commit time is in Git. ACK/productive splits were not independently timed; they are not invented. First repository mutation was npm install at 17:30:36.523708Z.",
+      "localValidationS": {
+        "install": 2.483,
+        "historicalInstall": 2.017,
+        "reviewPreflight": 0.239,
+        "knip": 5.743,
+        "finalScenario": 478.192,
+        "review": 0.233
+      },
+      "hostLoad": 28.57861328125,
+      "testDelta": {
+        "files": 0,
+        "lines": 0,
+        "jsdomFiles": 0,
+        "cases": 0
+      },
+      "friction": [
+        {
+          "tag": "browser-qa-scripting",
+          "minutes": 20.012,
+          "note": "Measured extra scenario execution in failed draft/Inspector/atlas/setup diagnostics and the structurally passing matrix with two capture-readiness gaps. This conservative cost excludes hand-authoring, queue, cleanup and the accepted fourth matrix. Corrected old control role/opacity, scroll, physical UUID mapping, card flip and settled Victory action waits; runtime source remains exact."
+        }
+      ]
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.9.json",
+      "bead": "hv-33id.9",
+      "phase": 6,
+      "implementMin": 6.131890883333333,
+      "implementWindow": {
+        "start": "2026-10-12T21:04:57Z",
+        "end": "2026-10-12T21:11:04.913453+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 4.323887749997084,
+        "review": 11.59132099999988,
+        "knip": 3.559211542000412
+      },
+      "hostLoad": 6.55,
+      "testDelta": {
+        "files": 0,
+        "lines": 2,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.13.json",
+      "bead": "hv-33id.13",
+      "phase": 6,
+      "implementMin": 15.083076866666666,
+      "implementWindow": {
+        "start": "2026-10-13T03:52:55.517896+00:00",
+        "end": "2026-10-13T04:08:00.502508+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 5.743540625000605,
+        "review": 18.675084250004147,
+        "knip": 3.6888393749977695
+      },
+      "hostLoad": 3.57,
+      "testDelta": {
+        "files": 0,
+        "lines": 90,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.12.json",
+      "bead": "hv-33id.12",
+      "phase": 6,
+      "implementMin": 52.04472796666666,
+      "implementWindow": {
+        "start": "2026-10-13T02:33:34.538728+00:00",
+        "end": "2026-10-13T03:25:37.222406+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 7.986097375003737,
+        "review": 16.19712866700138,
+        "knip": 3.536878250000882
+      },
+      "hostLoad": 4.01,
+      "testDelta": {
+        "files": 0,
+        "lines": 160,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.8.json",
+      "bead": "hv-33id.8",
+      "phase": 6,
+      "implementMin": 5.8204719,
+      "implementWindow": {
+        "start": "2026-10-12T20:51:15Z",
+        "end": "2026-10-12T20:57:04.228314+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 5.7943795830069575,
+        "review": 54.55915850000747,
+        "knip": 4.3468690419977065
+      },
+      "hostLoad": 13.6,
+      "testDelta": {
+        "files": 0,
+        "lines": 17,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.3.json",
+      "bead": "hv-33id.3",
+      "phase": 6,
+      "implementMin": 191.8821904,
+      "implementWindow": {
+        "start": "2026-10-15T22:26:39.799000+00:00",
+        "end": "2026-10-16T01:38:32.730424+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "focused": 8.15282900002785,
+        "review": 58.74942958302563,
+        "knip": 3.8241657079779543,
+        "reviewFull": 128.98927508399356,
+        "reuseProof": 1.5291666659759358,
+        "browserMobile": 259.26833554101177,
+        "integrationReuse": 3.1707534170127474
+      },
+      "hostLoad": 3.552734375,
+      "testDelta": {
+        "files": 1,
+        "lines": 569,
+        "jsdomFiles": 0
+      },
+      "friction": [
+        {
+          "tag": "heavy-slot-wait",
+          "minutes": 14.079337894449903,
+          "note": "Two interrupted own queued requests before any product birth:448.563368167s and396.196905500s. Observed queue/admission/overhead upper bound, not pure kernel waiting; shared holder/lock untouched. Final successful admission measured separately."
+        },
+        {
+          "tag": "browser-qa-scripting",
+          "minutes": 23.940143318051316,
+          "note": "Observed total wrapper walls of failed recipes04/05/06/08/10/12/13/14/18; includes useful captures and completed desktop42 subset, not exclusive scripting CPU or wasted time. Invalid setup fields, authored timer observation races, screenshot transfer timing, sandbox URL and actual frontier/owner selectors corrected within ignored recipes; every negative retained."
+        }
+      ]
+    },
+    {
+      "source": "docs/plan/evidence/friction/hv-33id.2.json",
+      "bead": "hv-33id.2",
+      "phase": 6,
+      "implementMin": 299.44117195,
+      "implementWindow": {
+        "start": "2026-10-12T19:28:10.643000+00:00",
+        "end": "2026-10-13T00:27:37.113317+00:00"
+      },
+      "timingBasis": null,
+      "localValidationS": {
+        "review": 56.881088540991186,
+        "focused": 4.1572083750070306,
+        "knip": 2.8555211659986526,
+        "reviewFullProductRuntime": 113.51722100000188,
+        "browserFinal": 423.0866275839944,
+        "browserSupplemental": 18.0461821249919
+      },
+      "hostLoad": 8.89,
+      "testDelta": {
+        "files": 0,
+        "lines": -7180,
+        "jsdomFiles": -2
+      },
+      "friction": [
+        {
+          "tag": "generic-setup-prerequisite",
+          "minutes": 113.15146666666666,
+          "note": "Measured original dispatch19:28:10.643Z to fresh dispatch21:21:19.731Z parking/prerequisite/coordination window. Includes parent-owned generic7/8/9 work and research/queue, not helper productiveCPU."
+        },
+        {
+          "tag": "tutorial-producer-visibility",
+          "minutes": 10.8959391,
+          "note": "Measured failed normal-speed draw-boundary run terminal to corrected current-runtime Full02 terminal. Includes producer-frame repair, focused/review/Knip, owned accelerated diagnostic and fullvalidation; not isolated debugCPU."
+        },
+        {
+          "tag": "browser-qa-scripting",
+          "minutes": 11.162880783333332,
+          "note": "Measured historical literal11 harness failure terminal to corrected matrix launch. Includes public replay reconstruction, parent authority audit/ACK and immutable script adaptation; no gameplaychange."
+        },
+        {
+          "tag": "integration-conflict",
+          "minutes": 12.9462018,
+          "note": "Gross first candidate merge-conflict terminal through repaired integration endpoint. Includes native rollback/checkpoint/update, evidence qualification and checks; not productive CPU."
+        }
+      ]
+    }
+  ],
+  "historicalTimingQualification": "Gross windows overlap prerequisite work and are not summed. Exact command/epoch/source/failure/review/provider limitations are in the complete report and source-bound analysis. Partial generated arrays, historical raw logs, nested dependency bodies and PNG pixels are not claimed exhaustive reads.",
+  "newImprovements": [],
+  "newTriggerDispositions": [],
+  "canonicalResponsibilities": {
+    "browserQA": "hv-33id.11 and corrected source-qualified recipes; authoredD9 and full tutorial acceptance retained",
+    "heavyAndOrdinaryClassification": "D17, currentworkflow and hv-lf7t",
+    "integration": "Owner-native update/reapplication and hv-umm2.713",
+    "releaseAndD19": "hv-umm2.742 plus hv-umm2.46 controlled D19/full-fuzz measurement/response; observed budget excess and UNKNOWN attribution retained"
+  },
+  "releaseSnapshot": {
+    "staging": {
+      "ref": "refs/heads/staging",
+      "oid": {
+        "format": "sha1",
+        "bytes": "7b224ed57c5bcbed65b6c962b763269d9b4dc474"
+      }
+    },
+    "release": {
+      "ref": "refs/heads/release",
+      "oid": {
+        "format": "sha1",
+        "bytes": "ebbe40dda2c7e32a65bfcdea2ec28c2e8c18736e"
+      }
+    },
+    "lag": {
+      "commits": 1,
+      "since": [
+        2026,
+        289,
+        1,
+        41,
+        0,
+        983364000,
+        0,
+        0,
+        0
+      ]
+    },
+    "state": "pending",
+    "successfulRuns": 19,
+    "medianStepSumSeconds": 1070.22,
+    "medianElapsedSeconds": 1070.405,
+    "qualifications": [
+      "25 retained runs:19 successful,5 superseded,1 running; no whole-history claim",
+      "No per-run comparable load/CPU profile beyond last exact supplied logs",
+      "No new benchmark/profile/fuzz or suite execution by auditor"
+    ]
+  },
+  "boundedHistory": {
+    "count": 500,
+    "firstSequence": 33484,
+    "lastSequence": 33983,
+    "firstCreatedAt": [
+      2026,
+      288,
+      21,
+      6,
+      46,
+      307006000,
+      0,
+      0,
+      0
+    ],
+    "lastCreatedAt": [
+      2026,
+      289,
+      1,
+      45,
+      39,
+      159111000,
+      0,
+      0,
+      0
+    ],
+    "kindCounts": {
+      "user-master.synchronized": 12,
+      "promotion.completed": 12,
+      "queue.item-updated": 92,
+      "source.cleanup-completed": 12,
+      "release.run-superseded": 2,
+      "release.run-queued": 12,
+      "worktree.removed": 3,
+      "worktree.created": 11,
+      "remote.pull-completed": 279,
+      "worktree.updated": 4,
+      "release.run-passed": 11,
+      "release.advanced": 11,
+      "release.pushed": 11,
+      "candidate.created": 15,
+      "candidate.promotion-authorized": 12,
+      "item.cancel-command-completed": 1
+    }
+  },
+  "latestExactReleaseWitness": {
+    "item": "01a14247-7ce4-7d13-a104-02ab8bcdb273",
+    "buildset": "01a14247-7d45-7ce2-8363-31fc4274ea57",
+    "stepSumSeconds": 1030.133,
+    "nativeElapsedSeconds": 1030.299,
+    "games": 200,
+    "steps": 48163,
+    "fuzzNativeWallSeconds": 898.0,
+    "fuzzProcessCPUSeconds": 944.5,
+    "failures": 0,
+    "reviewTestSeconds": 89.8,
+    "reviewTestStartLoad": 16.765625,
+    "qualification": "Real fuzz execution, not queue startup. Fuzz host load/current hotspot UNKNOWN. Successful heterogeneous19-run snapshot is not a comparable-load three-consecutive-bead trigger or a budget waiver. Full-suite89.8s at load16.765625 is not a low-load D19 compliance reading."
+  },
+  "validation": {
+    "friction": {
+      "label": "friction",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-16T02:06:58.099631+00:00",
+      "end": "2026-10-16T02:06:58.268428+00:00",
+      "elapsedSeconds": 0.16871783399255946,
+      "cpuSeconds": 0.17995699999999998,
+      "hostLoad": [
+        6.962890625,
+        9.095703125,
+        8.10595703125
+      ],
+      "pid": 28490,
+      "pgid": 28490,
+      "exitCode": 0
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-16T02:06:36.870373+00:00",
+      "end": "2026-10-16T02:06:43.899760+00:00",
+      "elapsedSeconds": 7.029359290958382,
+      "cpuSeconds": 7.9804960000000005,
+      "hostLoad": [
+        7.21435546875,
+        9.27880859375,
+        8.14501953125
+      ],
+      "pid": 26879,
+      "pgid": 26879,
+      "exitCode": 0
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-16T02:06:36.870376+00:00",
+      "end": "2026-10-16T02:06:37.260138+00:00",
+      "elapsedSeconds": 0.38966516603250057,
+      "cpuSeconds": 0.466897,
+      "hostLoad": [
+        7.21435546875,
+        9.27880859375,
+        8.14501953125
+      ],
+      "pid": 26878,
+      "pgid": 26878,
+      "exitCode": 0
+    },
+    "whitespace": {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-16T02:06:58.100207+00:00",
+      "end": "2026-10-16T02:06:58.109940+00:00",
+      "elapsedSeconds": 0.009645292011555284,
+      "cpuSeconds": 0.041575999999999995,
+      "hostLoad": [
+        6.962890625,
+        9.095703125,
+        8.10595703125
+      ],
+      "pid": 28491,
+      "pgid": 28491,
+      "exitCode": 0
+    },
+    "schema": {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-16T02:06:58.109650+00:00",
+      "end": "2026-10-16T02:06:58.184244+00:00",
+      "elapsedSeconds": 0.07450679200701416,
+      "cpuSeconds": 0.080122,
+      "hostLoad": [
+        6.962890625,
+        9.095703125,
+        8.10595703125
+      ],
+      "pid": 28494,
+      "pgid": 28494,
+      "exitCode": 0
+    }
+  },
+  "validationQualification": "Ordinary evidence-only review and Knip/schema/trigger/whitespace checks only; no new source/test/browser/full-suite/fuzz/profile benchmark. Actual checks and their wrapper loads/CPU are recorded separately from historical audit evidence.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review actual wrapper starting1-minute os.getloadavg"
+      },
+      "implementMin": {
+        "measuredFor": "Inclusive nativeclaim-server-start to evidence cutoff; actual final Git endpoint/tail retained separately."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "cleanup": {
+    "helperTerminal": true,
+    "runtimeLaunched": false,
+    "browserOrHeavyJobLaunched": false,
+    "checkChildren": "Parent synchronous commands reaped; exact check PGs verified before delivery.",
+    "foreignResourcesTouched": false
+  },
+  "artifactManifest": [
+    {
+      "file": "retrospective-source-receipts/admit-duty.json",
+      "bytes": 3211,
+      "sha256": "445d5d20256b2241617959d66f55be0a901693f328f460e43e2d1ffe269485da"
+    },
+    {
+      "file": "retrospective-source-receipts/admit-duty.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/admitted.json",
+      "bytes": 422442,
+      "sha256": "da9a50f5a3f4cf070e68f8c3438c628dfe42f786887ca74228d96758160c3e5c"
+    },
+    {
+      "file": "retrospective-source-receipts/admitted.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/all-phase6-friction.json",
+      "bytes": 30229,
+      "sha256": "accd41116fa5c2bb0129d7e30670a17dbf257808524b16c4d6e54b92ff6c9a08"
+    },
+    {
+      "file": "retrospective-source-receipts/assemble-evidence.py",
+      "bytes": 7718,
+      "sha256": "dc3eae1e6130f7b8e01b106a3499de78c5085d8914cbfb1f4e351f8ae18078ba"
+    },
+    {
+      "file": "retrospective-source-receipts/audit-accepted-native.json",
+      "bytes": 5817,
+      "sha256": "692b30753388103b3cbe1e0581e3d531f8249efa396e2823e86a9c3597b57ef5"
+    },
+    {
+      "file": "retrospective-source-receipts/audit-accepted-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/audit-analysis.json",
+      "bytes": 289538,
+      "sha256": "30ccebb59236b464dc2c7a1fa03937d8c21c33a536793dae43bdacda6bd75f6b"
+    },
+    {
+      "file": "retrospective-source-receipts/audit-brief.md",
+      "bytes": 6450,
+      "sha256": "7c7e8b7bb6f40fdaf4d34425d9ab40ff34a9732d3884ff700be6aafd4e08ca27"
+    },
+    {
+      "file": "retrospective-source-receipts/audit-report.md",
+      "bytes": 35336,
+      "sha256": "5a415f0a11f6d02fc83d9d4c7f55413ecaea3fe6cc744be6dd59de821ee8d7e7"
+    },
+    {
+      "file": "retrospective-source-receipts/audit-source-receipts.json",
+      "bytes": 52852,
+      "sha256": "5355b6fabdb26e68c304f8b4e23ff83947840f338443bb1c00c3835f0e335f34"
+    },
+    {
+      "file": "retrospective-source-receipts/base-all-bindings.json",
+      "bytes": 1084958,
+      "sha256": "ba5923e23e943b24d62d4577ea55920161a8ad6549bfbba1b43d80ea91f5dd08"
+    },
+    {
+      "file": "retrospective-source-receipts/bead-33id4.json",
+      "bytes": 130489,
+      "sha256": "29fff7637e64cbcb21dcbdbb4bbdb99d74b9651e9003b7a4e60fd19658e995b4"
+    },
+    {
+      "file": "retrospective-source-receipts/bead-33id4.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-bead.json",
+      "bytes": 4392,
+      "sha256": "a5f25dc080f632f2ae2c4871652760dfac232284d8b94970b3e7d2e3350a1a82"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-bead.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-guard.json",
+      "bytes": 157,
+      "sha256": "3d696fa052eee36b0fa98a0626bb6b98ec76867799ffb15621eda0a2159d4e9d"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-owned.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-owned.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-ready.json",
+      "bytes": 109044,
+      "sha256": "418671891b234bffac9feef3d08cdd9e4381c495c0ccdfdb3e32b09bafc63c4b"
+    },
+    {
+      "file": "retrospective-source-receipts/claim-ready.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/claim.json",
+      "bytes": 3316,
+      "sha256": "b9d5fd86640a914413c47c0371c8c5ef9a858366231b44aaffd101d0d890b4e4"
+    },
+    {
+      "file": "retrospective-source-receipts/claim.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/create-duty.json",
+      "bytes": 2562,
+      "sha256": "96f0c23b069c91abc45b9315fb21216db6279dd954bb0c89e0c82e18cbb34c93"
+    },
+    {
+      "file": "retrospective-source-receipts/create-duty.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/dispatch-native.json",
+      "bytes": 4541,
+      "sha256": "1f2b3157f1807af5ef0089b448a899b3fd83ff87b37581b931501e333de35837"
+    },
+    {
+      "file": "retrospective-source-receipts/dispatch-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-after.json",
+      "bytes": 2955,
+      "sha256": "fd796f679c50199803919b247a790a9c21791d8eb70d8b62b8d6ca145125cc39"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-after.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-before.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-before.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-joined.json",
+      "bytes": 4352,
+      "sha256": "22ec9d2d5f5609b650017ce0725cd136b14bc9c9032334e9a2cabef03e2a347a"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-joined.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-prefiling-note.json",
+      "bytes": 3171,
+      "sha256": "4945808d79ed96ae875f0ac62e3a3eb1fbd698fe46ce13553c637dc04df76f53"
+    },
+    {
+      "file": "retrospective-source-receipts/duty-prefiling-note.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/epic-audit-native.json",
+      "bytes": 1599,
+      "sha256": "c5d17d1395cbfacddbbb1524306009c6959865de097a08e15b12a03e398c13ef"
+    },
+    {
+      "file": "retrospective-source-receipts/epic-audit-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/epic.json",
+      "bytes": 1021,
+      "sha256": "d53e01c2ca1c262dfb408c427c9a611a72a3edb55918ee08b8fe3a8a73b4ab55"
+    },
+    {
+      "file": "retrospective-source-receipts/epic.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/evidence-assembly.json",
+      "bytes": 272,
+      "sha256": "6e9fb4d10e3f8a8cc778594a6a2fcff1f54dedba03ef1197b2df17374add9115"
+    },
+    {
+      "file": "retrospective-source-receipts/existing-performance-candidates.json",
+      "bytes": 16812,
+      "sha256": "a072c7abc4f91df01707138ff2873762afb3566bc04fdf3161fd0783a55756c9"
+    },
+    {
+      "file": "retrospective-source-receipts/friction.log",
+      "bytes": 21488,
+      "sha256": "23afcdf2990da3f320811519e99e9d30c6608b779a98ed558c2c7e7a220d8b5c"
+    },
+    {
+      "file": "retrospective-source-receipts/friction.receipt.json",
+      "bytes": 385,
+      "sha256": "f5db20fdb0196afd34ff3f990a90e576224dca8a0d08a9ef32e6f9917bbd04a2"
+    },
+    {
+      "file": "retrospective-source-receipts/friction.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/friction.txt",
+      "bytes": 21508,
+      "sha256": "c818e237b2bf2897f087d555814a11eb45458bbbe37c38810c759d33f8f626fc"
+    },
+    {
+      "file": "retrospective-source-receipts/gate-join.json",
+      "bytes": 127,
+      "sha256": "fb2e61800ac9d30ef1bfa25c0180fd4d936f3bc5a396d973129192f7e2ba459e"
+    },
+    {
+      "file": "retrospective-source-receipts/gate-join.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/gate-joined.json",
+      "bytes": 75744,
+      "sha256": "f9f08be1183e5eb9cbdf51c64f7b54f80ec647dddf30f8cf4ca0b7123e76b0f7"
+    },
+    {
+      "file": "retrospective-source-receipts/gate-joined.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/gate.json",
+      "bytes": 72447,
+      "sha256": "70861865785587880368178f4c8189089d28ae02ccdf88a2edaea428a39be450"
+    },
+    {
+      "file": "retrospective-source-receipts/gate.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.10-native.json",
+      "bytes": 75228,
+      "sha256": "0cf972f8473aa83ab31391fde4763aabc3a10e36886968cc5800f4c6088d8769"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.10-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.11-native.json",
+      "bytes": 6134,
+      "sha256": "856176a65a61ddbe924cd6212a07ca0f657b08259f45ed0623965a26ce703733"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.11-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.12-native.json",
+      "bytes": 53403,
+      "sha256": "adf095a64f2d3caf6e5f4a6eaf3758f1ecc15761920a11336537a52a4d12b025"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.12-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.13-native.json",
+      "bytes": 42794,
+      "sha256": "728e8e81a4baac492d597f248aedba8778dff2cd5222b6ee3deab19a487a0e50"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.13-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.2-native.json",
+      "bytes": 193181,
+      "sha256": "226aecb5250726aa4827e26ef9fee4f40df4639d27b5a17a905e57ac5b2c1f42"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.2-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.3-native.json",
+      "bytes": 395843,
+      "sha256": "4698561708a0ebdf4d2e75671e64165eae031c3cba40ad02636c7b1f3ef36127"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.3-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.6-native.json",
+      "bytes": 5691,
+      "sha256": "44f1dfdb29b278c80795106a7cc79dadc4fa18a62d99ef391cee98b2c6a8c7d0"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.6-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.7-native.json",
+      "bytes": 24165,
+      "sha256": "63ea29df612256387e66a61d0b5aae697e6bd7514820c4d38c402e41952167e1"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.7-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.8-native.json",
+      "bytes": 23816,
+      "sha256": "99e605deb217cdcd7104a0b6a607433a90c6608c2c6774f4bbfec855c4807fe5"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.8-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.9-native.json",
+      "bytes": 18695,
+      "sha256": "c4d8ba7e04cc9f2e6ad029fb5e93e05494c4ada49d34abe9fe2e8263004e25e5"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-33id.9-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.46-body.json",
+      "bytes": 13880,
+      "sha256": "9fd308c48505e5d3172dd99d12371f37c1e372b08aa4972074650e64669d495b"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.46-native.json",
+      "bytes": 5047926,
+      "sha256": "80ec5421592ba4f69c4858bacdfd782d11206522003b357103060b10523b841c"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.46-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.46-scope-projection.json",
+      "bytes": 209383,
+      "sha256": "63c1fe3d3106f02ac9fcdbbaa40753728ed4f5c5335851329f98e15b0db479e7"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.742-body.json",
+      "bytes": 6338,
+      "sha256": "ac9dd284973eb9e935c2d2942f50f538e7bb25f3fd1fbb4da4668f581e0b9c25"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.742-native.json",
+      "bytes": 109753,
+      "sha256": "3c5c865ace52d587c1b1e505d8129688c6be1f5c26be5eda64a4342e90200d68"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.742-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/hv-umm2.742-scope-projection.json",
+      "bytes": 7272,
+      "sha256": "da0e4eacbbdb06bf154873acceeafd7fe23a5a591c95a83de7a3b584bcf451c8"
+    },
+    {
+      "file": "retrospective-source-receipts/install.log",
+      "bytes": 326,
+      "sha256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789"
+    },
+    {
+      "file": "retrospective-source-receipts/install.receipt.json",
+      "bytes": 252,
+      "sha256": "1ec595647f0dfa26c65fb7529a1af3a974d0f89e1b497ee93e05a495c4113822"
+    },
+    {
+      "file": "retrospective-source-receipts/intended.json",
+      "bytes": 99916,
+      "sha256": "d11b6ac291217d865906cbba4c3efe5971ce805bb0bb2043499b5fe31eab272a"
+    },
+    {
+      "file": "retrospective-source-receipts/intended.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/knip.log",
+      "bytes": 48746,
+      "sha256": "d4c6524c1213fa0ed8b31f90dc6e21ebd039f7cc4bcc1313b2718ed8cf3f4c9f"
+    },
+    {
+      "file": "retrospective-source-receipts/knip.receipt.json",
+      "bytes": 369,
+      "sha256": "e00f12a344646d06551b8502035b6552814d2c3c32d416348dd8e4016b2679d6"
+    },
+    {
+      "file": "retrospective-source-receipts/owned.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "retrospective-source-receipts/owned.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/parent-audit-verification.json",
+      "bytes": 1559,
+      "sha256": "63ddb1445f2d9bb7c30ae1f91c75bbed8dbec93b026074d0e036fbc34579492e"
+    },
+    {
+      "file": "retrospective-source-receipts/parent-current-release-extract.txt",
+      "bytes": 1316,
+      "sha256": "22a764fa2aa8a0e109fc627c32147ac5e4de9a3847082a31ceb0f357aac5770b"
+    },
+    {
+      "file": "retrospective-source-receipts/parent-final-source-verification.json",
+      "bytes": 606,
+      "sha256": "e6e02c921532972b113438c4f4e3179dbe4fa1b983794169c4bf17d67e549c9e"
+    },
+    {
+      "file": "retrospective-source-receipts/prefiling-selection.json",
+      "bytes": 196,
+      "sha256": "78ca7f53a0d97272d343ad3ce650487a113527844369f23c825cb714e0b8a7e1"
+    },
+    {
+      "file": "retrospective-source-receipts/ready.json",
+      "bytes": 108588,
+      "sha256": "6e1576e21513163d5393144f7ecace0702f9876e97fbcf34a3768094cb7698f7"
+    },
+    {
+      "file": "retrospective-source-receipts/ready.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-diagnose.json",
+      "bytes": 303,
+      "sha256": "79269e7cf319c10cccef29f9694c2a742eba48c22ca241554cd584eb06c57159"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-diagnose.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-fuzz-logs.json",
+      "bytes": 730,
+      "sha256": "0eab4350908a90ad23d25f5b8def9d8a5a1bae6250a32c53b6b5ce133b0ac7b1"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-fuzz-logs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-review-full-logs.json",
+      "bytes": 164278,
+      "sha256": "59205bd68afa63d7ffa723a8ae23c4b8aa4ea30207b6e2a46b6f7ed4601721de"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-review-full-logs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-status.json",
+      "bytes": 16877,
+      "sha256": "97aa2364167bb89f167481465c0db2a9960e7e0d0dbc475483c6be27db2fc78c"
+    },
+    {
+      "file": "retrospective-source-receipts/release-last-status.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/review.log",
+      "bytes": 344,
+      "sha256": "f3eea7e819c127f848548a2161d2e0616d8b2ed56b06d6e3b3c1834beba40517"
+    },
+    {
+      "file": "retrospective-source-receipts/review.receipt.json",
+      "bytes": 365,
+      "sha256": "ffbb53738db7e6b2316ab55c914145915519a37c56cbd7d1095c4531e8b5514f"
+    },
+    {
+      "file": "retrospective-source-receipts/root-state.json",
+      "bytes": 566,
+      "sha256": "e2e849cfc6ef7bc740245f98c4fba6d55210bb80d84db966a9057633b3b05e4b"
+    },
+    {
+      "file": "retrospective-source-receipts/run-check.py",
+      "bytes": 943,
+      "sha256": "8ec45d1718ffadaa6b1d8fba5faab29e24fd007387cb101339bdef8badca30cf"
+    },
+    {
+      "file": "retrospective-source-receipts/schema.log",
+      "bytes": 74,
+      "sha256": "47cb607d161f359f00d573c273b40dd14659c811921f8dbed3cca61bebf19f91"
+    },
+    {
+      "file": "retrospective-source-receipts/schema.receipt.json",
+      "bytes": 400,
+      "sha256": "befe94c125d76569a29fdcb0c1fe9061ce5e9b4d70a01c5dba6cd81aabfe9716"
+    },
+    {
+      "file": "retrospective-source-receipts/tg-doctor.json",
+      "bytes": 2079,
+      "sha256": "e6a1cabdad78089f062fc7a56341cdb984d3cc5407cffe40aa482f9d77a3c08e"
+    },
+    {
+      "file": "retrospective-source-receipts/tg-doctor.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/tg-history.json",
+      "bytes": 574446,
+      "sha256": "eadf18d025bc3d2a4f6f9bda43587ffc151a195eb502c7ff47ff491daac8746c"
+    },
+    {
+      "file": "retrospective-source-receipts/tg-history.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/tg-release.json",
+      "bytes": 26045,
+      "sha256": "432d4e247dd35e973ee562805a2facfde2e56358d26fecc7403d8808eec09992"
+    },
+    {
+      "file": "retrospective-source-receipts/tg-release.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/tutorial3-final-candidate-status.json",
+      "bytes": 14358,
+      "sha256": "aedeb2b5727913303535621925b83c8d3964b89f3b063281aa967cdedcc9b0a7"
+    },
+    {
+      "file": "retrospective-source-receipts/tutorial3-final-candidate-status.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/uncovered-source-packet.json",
+      "bytes": 4977,
+      "sha256": "5b6787dc377a09557af3cce6be0c85b45401a4de9fafbc955ed96299c285f66b"
+    },
+    {
+      "file": "retrospective-source-receipts/whitespace.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "retrospective-source-receipts/whitespace.receipt.json",
+      "bytes": 380,
+      "sha256": "13b7109b2be2b36dbe2f8120f16f7a1d8312d36cc992463fa2dcb148f0eacbb4"
+    }
+  ],
+  "futureAcceptance": "Phase6 gate retains final retrospective before independent review, landed mason findings, full desktop/mobile Greedy journeys/Caps, phase commits in release, metrics/D19 and epic closure."
+}
