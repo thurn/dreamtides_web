@@ -35,4 +35,19 @@ describe("journey purge view projection", () => {
     expect(view).toMatchObject({ minCount: 2, maxCount: 2, collectAmount: 44, dreamsignId: PICKER_SOURCE, heldIndex: 3, choiceIndex: 0 });
     expect(buildJourneyPurgeView(stateWithSites([makeSite("Essence")]).journey, c)).toBeNull();
   });
+  it("projects the legacy earned purge's physical binding without changing its saved representation", () => {
+    const c = content(), number = [...c.cardDatabase.keys()][0];
+    const { journey } = stateWithSites([makeSite("Battle")], { dreamsigns: [],
+      deck: [{ entryId: parseDeckEntryId("earned-entry"), cardNumber: number, transfiguration: null, isBane: false }],
+      screen: { type: "journeyPurge", choice: { kind: "afterBattle", siteId: SITE_ID,
+        sources: [{ dreamsignId: PICKER_SOURCE, heldIndex: 4, maxCount: 2 }], index: 0, returnTo: "atlas" } } });
+    const raw = JSON.stringify(journey.screen);
+    const view = buildJourneyPurgeView(journey, c);
+    expect(view).toMatchObject({ siteId: SITE_ID, dreamsignId: PICKER_SOURCE, heldIndex: 4, choiceIndex: 0, minCount: 0, maxCount: 2 });
+    expect(view?.cards.map(card => card.entryId)).toEqual(["earned-entry"]);
+    expect(JSON.stringify(journey.screen)).toBe(raw);
+    if (journey.screen.type !== "journeyPurge" || journey.screen.choice.kind !== "afterBattle") throw new Error("Missing permission");
+    expect(buildJourneyPurgeView({ ...journey, screen: { type: "journeyPurge", choice: { ...journey.screen.choice, index: 7 } } }, c)).toBeNull();
+  });
+
 });

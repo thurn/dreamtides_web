@@ -1,3 +1,4 @@
+import { projectAfterBattleCursor } from "../../rules/journey/journey-after-battle";
 import { journeyTypeRemapTypes } from "../../rules/journey/journey-type-remap";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import type { JourneyContent } from "../../data/journey-content";
@@ -32,8 +33,9 @@ export function buildJourneyDreamsignView(journey: JourneyState, content: Journe
     return { mode: "copy", scene, sourceDreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.index, permissionSeq: choice.permissionSeq, siteId: choice.continuation.type === "site" ? choice.continuation.siteId : null,
       title: JOURNEY_SITE_MESSAGES.dreamsignCopyTitle, instruction: JOURNEY_SITE_MESSAGES.dreamsignCopyInstruction, options: held.filter((sign) => sign.heldIndex !== source.heldIndex), held, atCap: false, canContinue: false };
   }
-  const source = choice.sources[choice.index];
-  if (source.kind !== "dreamsign") return null;
+  const cursor = projectAfterBattleCursor(choice);
+  if (cursor?.kind !== "dreamsign") return null;
+  const { source } = cursor;
   return { mode: "offer", scene, sourceDreamsignId: source.dreamsignId, heldIndex: source.heldIndex, choiceIndex: choice.index, permissionSeq: source.earnedSeq, siteId: choice.siteId,
     title: JOURNEY_SITE_MESSAGES.dreamsignOfferTitle, instruction: JOURNEY_SITE_MESSAGES.dreamsignOfferInstruction, options: source.offeredDreamsigns.map((sign, heldIndex) => ({ heldIndex, dreamsign: toDreamsignView(sign) })), held,
     atCap: held.length >= journey.maxDreamsigns, canContinue: source.offeredDreamsigns.length === 0 || held.length >= journey.maxDreamsigns };

@@ -1,5 +1,5 @@
 import { resolveBeforeBattlePurge, validBeforeBattlePurgeChoice } from "./journey-before-battle-purge";
-import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
+import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, projectAfterBattleCursor, validatedAfterBattleCursor } from "./journey-after-battle";
 import type { DreamsignId } from "../../types/identifiers";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, siteIdFromUnknown } from "../../types/identifiers";
 import type { AfterBattlePurgeSource, BeforeBattleJourneyPurgeChoice, JourneyPurgeChoice, JourneyPurgeEffect, JourneyPurgeTransition, JourneyState } from "../../types/journey";
@@ -18,9 +18,11 @@ export function currentPurgeSource(choice: Exclude<JourneyPurgeChoice, BeforeBat
 export function currentPurgeSource(choice: JourneyPurgeChoice): AfterBattlePurgeSource | BeforeBattleJourneyPurgeChoice | undefined;
 export function currentPurgeSource(choice: JourneyPurgeChoice): AfterBattlePurgeSource | BeforeBattleJourneyPurgeChoice | undefined {
   if (choice.kind === "beforeBattle") return choice;
-  const source = choice.kind === "afterBattle" ? choice.sources[choice.index] :
-    { dreamsignId: choice.dreamsignId, heldIndex: choice.heldIndex, maxCount: choice.count };
-  return source?.kind === "transfiguration" || source?.kind === "dreamsign" || source?.kind === "duplication" ? undefined : source;
+  if (choice.kind === "afterBattle") {
+    const cursor = projectAfterBattleCursor(choice);
+    return cursor?.kind === "purge" ? cursor.source : undefined;
+  }
+  return { dreamsignId: choice.dreamsignId, heldIndex: choice.heldIndex, maxCount: choice.count };
 }
 
 /** Strict purpose shape and saved continuation checks, independent of catalog defaults. */
@@ -43,8 +45,7 @@ export function validJourneyPurgeScreen(screen: unknown, journey: JourneyState, 
       journey.currentDreamscape !== null && journey.atlas.nodes[journey.currentDreamscape]?.sites.some((item) => item.id === site.id) === true &&
       runtime?.kind === "essence" && runtime.accepted === false && Number.isFinite(runtime.amount) && runtime.amount >= 0;
   }
-  return validAfterBattleChoice(choice, journey, registry) &&
-    currentPurgeSource(choice as unknown as JourneyPurgeChoice) !== undefined;
+  return validatedAfterBattleCursor(choice, journey, registry)?.kind === "purge";
 }
 
 /** Register printed purge permissions or a passive prohibition. */
@@ -95,10 +96,12 @@ export function journeyPurge(dreamsignId: DreamsignId, descriptor: JourneyPurgeE
 
 /** Resolve the current folded permission atomically, including its source and ordinal. */
 export function resolveJourneyPurge(journey: JourneyState, payload: Record<string, unknown>, registry: JourneyModifierRegistry): JourneyPurgeTransition | null {
-  if (journey.screen.type !== "journeyPurge" || !validJourneyPurgeScreen(journey.screen, journey, registry)) return null;
-  if (journey.screen.choice.kind === "beforeBattle") return resolveBeforeBattlePurge(journey, payload, registry);
+  if (journey.screen.type !== "journeyPurge" || !record(journey.siteRuntime)) return null;
   const choice = journey.screen.choice;
-  const source = currentPurgeSource(choice);
+  const cursor = choice.kind === "afterBattle" ? validatedAfterBattleCursor(choice, journey, registry) : null;
+  if (choice.kind === "afterBattle" ? cursor?.kind !== "purge" : !validJourneyPurgeScreen(journey.screen, journey, registry)) return null;
+  if (choice.kind === "beforeBattle") return resolveBeforeBattlePurge(journey, payload, registry);
+  const source = cursor?.kind === "purge" ? cursor.source : currentPurgeSource(choice);
   if (source === undefined || payload.siteId !== choice.siteId || payload.dreamsignId !== source.dreamsignId ||
     payload.heldIndex !== source.heldIndex || payload.choiceIndex !== (choice.kind === "afterBattle" ? choice.index : 0) ||
     !Array.isArray(payload.entryIds)) return null;
@@ -114,8 +117,8 @@ export function resolveJourneyPurge(journey: JourneyState, payload: Record<strin
     if (runtime?.kind !== "essence") return null;
     next = completeAndReturn({ ...next, siteRuntime: { ...next.siteRuntime,
       [choice.siteId]: { ...runtime, accepted: true } } }, choice.siteId);
-  } else {
-    next = advanceAfterBattle(next, choice);
+  } else if (cursor !== null) {
+    next = advanceAfterBattle(next, cursor);
   }
   return { journey: next, purges: removed.map(({ entryId }) => ({ entryId })) };
 }

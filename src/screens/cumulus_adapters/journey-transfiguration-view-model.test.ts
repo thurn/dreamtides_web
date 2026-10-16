@@ -17,6 +17,10 @@ describe("journey transfiguration view projection", () => {
     const view = buildJourneyTransfigurationView(state.journey, content);
     expect(view?.cards.map(({ entryId }) => entryId)).toEqual(["one", "two"]);
     expect(view).toMatchObject({ maxCount: 3, dreamsignId: source, heldIndex: 2, choiceIndex: 0 });
+    if (state.journey.screen.type !== "journeyTransfiguration") throw new Error("Missing permission");
+    const choice = state.journey.screen.choice;
+    expect(buildJourneyTransfigurationView({ ...state.journey, screen: { type: "journeyTransfiguration", choice: { ...choice, index: 7 } } }, content)).toBeNull();
+    expect(buildJourneyTransfigurationView({ ...state.journey, screen: { type: "journeyTransfiguration", choice: { ...choice, sources: [{ kind: "duplication", dreamsignId: source, heldIndex: 2, earnedSeq: 7 }] } } }, content)).toBeNull();
     expect(buildJourneyTransfigurationView(stateWithSites([makeSite("Battle")]).journey, content)).toBeNull();
   });
 });

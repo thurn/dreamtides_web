@@ -1,4 +1,5 @@
 import type { JourneyContent } from "../../data/journey-content";
+import { projectAfterBattleCursor } from "../../rules/journey/journey-after-battle";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyTransfigurationView } from "../../cumulus/screens/JourneyTransfigurationScreen";
 import { createJourneyTransfigurationProvider } from "../../session/providers/journey-transfiguration-provider";
@@ -10,8 +11,9 @@ import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 /** Project only currently applicable cards without rolling their eventual forms. */
 export function buildJourneyTransfigurationView(state: JourneyState, content: JourneyContent): JourneyTransfigurationView | null {
   if (state.screen.type !== "journeyTransfiguration") return null;
-  const choice = state.screen.choice, source = choice.sources[choice.index];
-  if (source?.kind !== "transfiguration") return null;
+  const cursor = projectAfterBattleCursor(state.screen.choice);
+  if (cursor?.kind !== "transfiguration") return null;
+  const { choice, source } = cursor;
   const provider = createJourneyTransfigurationProvider(content);
   const instruction = JOURNEY_SITE_MESSAGES.randomTransfigurationInstruction(source.maxCount);
   const node = Object.values(state.atlas.nodes).find((candidate) => candidate.sites.some((site) => site.id === choice.siteId)) ?? null;

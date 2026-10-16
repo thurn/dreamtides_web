@@ -48,6 +48,12 @@ describe("physical Dreamsign permission projection", () => {
   it("projects actual earned source, cap replacements and empty-quote continuation", () => {
     const state = initial([RED]).journey;
     state.screen = { type: "journeyDreamsign", choice: { kind: "afterBattle", siteId: parseSiteId("earned-site"), sources: [{ kind: "dreamsign", dreamsignId: RED, heldIndex: 0, earnedSeq: 17, offerCount: 3, offeredDreamsigns: [sign(DOLL)], remainingPoolIds: [] }], index: 0, returnTo: "atlas" } };
+    const raw = JSON.stringify(state.screen);
+    const missing = { ...state, screen: { type: "journeyDreamsign" as const, choice: { ...state.screen.choice, index: 7 } } };
+    expect(buildJourneyDreamsignView(missing, content())).toBeNull();
+    const foreign = { ...state, screen: { type: "journeyDreamsign" as const, choice: { ...state.screen.choice, sources: [{ kind: "purge" as const, dreamsignId: RED, heldIndex: 0, maxCount: 1 }] } } };
+    expect(buildJourneyDreamsignView(foreign, content())).toBeNull();
+    expect(JSON.stringify(state.screen)).toBe(raw);
     const free = buildJourneyDreamsignView(state, content()); expect(free).toMatchObject({ mode: "offer", permissionSeq: 17, atCap: false, canContinue: false });
     const capped = buildJourneyDreamsignView({ ...state, maxDreamsigns: 1 }, content()); expect(capped).toMatchObject({ atCap: true, canContinue: true });
     if (state.screen.choice.kind !== "afterBattle" || state.screen.choice.sources[0].kind !== "dreamsign") throw new Error("missing earned source");

@@ -4,10 +4,10 @@ import { finishTypeRemapAcquisition, validTypeRemapScreen, validTypeRemapBattleB
 import { prepareStarterAcquisition, finishStarterAcquisition } from "./journey-starter-acquisition";
 import type { ReducerLogRecord } from "../../eventlog/types";
 import { dreamsignIdFromUnknown, type DreamsignId, type SiteId } from "../../types/identifiers";
-import type { AfterBattleJourneyChoice, JourneyDreamsignCopyChoice, JourneyDreamsignGain, JourneyOpeningHandAcquisition, JourneyOnGainEffect, JourneyState, JourneySuspendedBattle, JourneyTransfigurationOccurrence } from "../../types/journey";
+import type { JourneyDreamsignCopyChoice, JourneyDreamsignGain, JourneyOpeningHandAcquisition, JourneyOnGainEffect, JourneyState, JourneySuspendedBattle, JourneyTransfigurationOccurrence } from "../../types/journey";
 import type { BattleFoldState } from "../battle/fold";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
-import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
+import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validatedAfterBattleCursor } from "./journey-after-battle";
 import { journeyTransfigurationCard, journeyTransfigurationOccurrences } from "./journey-transfiguration";
 import { prepareAfterBattleDreamsignOffer, findSite } from "./sites";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
@@ -157,7 +157,7 @@ export function validJourneyDreamsignScreen(screen: unknown, journey: JourneySta
   const choice = screen.choice;
   if (choice.kind === "subtype") return validJourneySubtypeScreen(screen, journey, registry);
   if (choice.kind === "typeRemap") return validTypeRemapScreen(screen, journey, registry);
-  if (choice.kind === "afterBattle") return validAfterBattleChoice(choice, journey, registry) && (choice.sources as AfterBattleJourneyChoice["sources"])[choice.index as number].kind === "dreamsign";
+  if (choice.kind === "afterBattle") return validatedAfterBattleCursor(choice, journey, registry)?.kind === "dreamsign";
   return validJourneyAcquisitionScreen(screen, journey, registry);
 }
 
@@ -183,12 +183,14 @@ export function resolveDreamsignCopy(journey: JourneyState, payload: Record<stri
 }
 
 export function resolveAfterBattleDreamsign(journey: JourneyState, payload: Record<string, unknown>, registry: JourneyModifierRegistry): JourneyState | null {
-  if (journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind !== "afterBattle" || !validJourneyDreamsignScreen(journey.screen, journey, registry)) return null;
-  const choice = journey.screen.choice, source = choice.sources[choice.index];
-  if (source.kind !== "dreamsign" || payload.siteId !== choice.siteId || payload.dreamsignId !== source.dreamsignId || payload.heldIndex !== source.heldIndex || payload.choiceIndex !== choice.index || payload.earnedSeq !== source.earnedSeq) return null;
-  if (payload.offeredDreamsignId === null) return source.offeredDreamsigns.length === 0 || journey.dreamsigns.length >= journey.maxDreamsigns ? advanceAfterBattle(journey, choice) : null;
+  if (journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind !== "afterBattle") return null;
+  const cursor = validatedAfterBattleCursor(journey.screen.choice, journey, registry);
+  if (cursor?.kind !== "dreamsign") return null;
+  const { choice, source } = cursor;
+  if (payload.siteId !== cursor.siteId || payload.dreamsignId !== source.dreamsignId || payload.heldIndex !== source.heldIndex || payload.choiceIndex !== choice.index || payload.earnedSeq !== source.earnedSeq) return null;
+  if (payload.offeredDreamsignId === null) return source.offeredDreamsigns.length === 0 || journey.dreamsigns.length >= journey.maxDreamsigns ? advanceAfterBattle(journey, cursor) : null;
   const incoming = source.offeredDreamsigns.find((sign) => sign.id === payload.offeredDreamsignId);
   if (incoming === undefined || payload.purgeIndex !== undefined && (!index(payload.purgeIndex) || journey.dreamsigns[payload.purgeIndex] === undefined) || payload.purgeIndex === undefined && journey.dreamsigns.length >= journey.maxDreamsigns) return null;
   const dreamsigns = payload.purgeIndex === undefined ? [...journey.dreamsigns, incoming] : journey.dreamsigns.map((sign, i) => i === payload.purgeIndex ? incoming : sign);
-  return advanceAfterBattle({ ...journey, dreamsigns }, choice);
+  return advanceAfterBattle({ ...journey, dreamsigns }, cursor);
 }

@@ -2,7 +2,7 @@ import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import type { JourneyContent } from "../../data/journey-content";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyPurgeView } from "../../cumulus/screens/JourneyPurgeScreen";
-import { currentPurgeSource } from "../../rules/journey/journey-purge";
+import { projectAfterBattleCursor } from "../../rules/journey/journey-after-battle";
 import { essenceSiteGain } from "../../rules/journey/journey-essence";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { toDeckCardView } from "./mobile-deck-view-model";
@@ -14,9 +14,12 @@ export function buildJourneyPurgeView(state: JourneyState, content: JourneyConte
   registry: JourneyModifierRegistry = journeyModifierRegistry): JourneyPurgeView | null {
   if (state.screen.type !== "journeyPurge") return null;
   const choice = state.screen.choice;
-  const source = currentPurgeSource(choice);
-  if (source === undefined) return null;
-  const limit = choice.kind === "beforeBattle" ? Math.max(0, state.deck.length - choice.minimumDeckSize) : choice.kind === "essenceSite" ? choice.count : currentPurgeSource(choice)!.maxCount;
+  const cursor = choice.kind === "afterBattle" ? projectAfterBattleCursor(choice) : null;
+  const permission = choice.kind === "afterBattle"
+    ? cursor?.kind === "purge" ? { source: cursor.source, limit: cursor.source.maxCount } : null
+    : { source: choice, limit: choice.kind === "beforeBattle" ? Math.max(0, state.deck.length - choice.minimumDeckSize) : choice.count };
+  if (permission === null) return null;
+  const { source, limit } = permission;
   const instruction = choice.kind === "beforeBattle" ? JOURNEY_SITE_MESSAGES.beforeBattlePurgeInstruction(limit) : choice.kind === "essenceSite"
     ? `You may forgo this site's essence to purge ${String(limit)} cards.`
     : `You may purge up to ${String(limit)} cards after this battle.`;

@@ -1,0 +1,478 @@
+{
+  "bead": "hv-umm2.765",
+  "base": "d319cb10d6776c64862ebfa1e72e61d4fa8fe87d",
+  "originalClaimUTC": "2026-10-16T06:49:14Z",
+  "dispatchUTC": "2026-10-16T06:52:24.064556+00:00",
+  "knownPreCommitCutoffUTC": "2026-10-16T07:38:55.024038+00:00",
+  "clockScope": "Dispatch through known cutoff includes research, coordination, checks, heavy request/execution, browser QA, evidence and archive preparation. Actual commit endpoint and tail are external final-report.json; this committed endpoint is refreshed immediately before commit. Original claim remains a separate earlier clock.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review start at 2026-10-16T07:26:06.611Z; macOS one-minute load from getloadavg, also emitted by review runner."
+      }
+    }
+  },
+  "archive": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.765/implementation-custody",
+  "commandIndex": "command-index.json",
+  "sourceInventory": "final-source-inventory.json",
+  "commands": [
+    {
+      "label": "initial-typecheck",
+      "requestUTC": "2026-10-16T07:03:39.666361+00:00",
+      "finishedUTC": "2026-10-16T07:03:57.930808+00:00",
+      "exitCode": 0,
+      "wallS": 18.612783875025343,
+      "cpuS": 32.890324,
+      "hostLoadStart": 4.22265625,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T070339Z-initial-typecheck-cb24b3a6/receipt.json",
+      "receiptSHA256": "2644bac13bb003ebb7deae8333568aa3b19f2c8a74e38c19c388be22c637e38e"
+    },
+    {
+      "label": "focused",
+      "requestUTC": "2026-10-16T07:05:26.083125+00:00",
+      "finishedUTC": "2026-10-16T07:05:33.825297+00:00",
+      "exitCode": 1,
+      "wallS": 7.900429291999899,
+      "cpuS": 10.779855,
+      "hostLoadStart": 4.48193359375,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T070525Z-focused-af475523/receipt.json",
+      "receiptSHA256": "f59b08a8136575308b283e822db89ff9038a80166043712539e4a68254f88b68"
+    },
+    {
+      "label": "focused-fixture-repair",
+      "requestUTC": "2026-10-16T07:05:50.515925+00:00",
+      "finishedUTC": "2026-10-16T07:05:56.899520+00:00",
+      "exitCode": 0,
+      "wallS": 6.545779666979797,
+      "cpuS": 10.846972,
+      "hostLoadStart": 4.35791015625,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T070550Z-focused-fixture-repair-b453a68c/receipt.json",
+      "receiptSHA256": "05be3f632e6921ae8d407cc2dbcdb403b64532f9a18bc3abbab8eb35afaf2841"
+    },
+    {
+      "label": "coverage",
+      "requestUTC": "2026-10-16T07:06:39.244424+00:00",
+      "finishedUTC": "2026-10-16T07:06:44.110028+00:00",
+      "exitCode": 0,
+      "wallS": 5.0303772909683175,
+      "cpuS": 6.406715999999999,
+      "hostLoadStart": 4.6396484375,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T070639Z-coverage-e990671b/receipt.json",
+      "receiptSHA256": "801c00b10861a62a27edf6649c283c78e74e10ff287b9892b81112e36ff75c08"
+    },
+    {
+      "label": "fuzz-admitted",
+      "requestUTC": "2026-10-16T07:07:17.949588+00:00",
+      "finishedUTC": "2026-10-16T07:23:19.091412+00:00",
+      "exitCode": 0,
+      "wallS": 961.7364174589748,
+      "cpuS": 1011.459339,
+      "hostLoadStart": 4.3505859375,
+      "changedPayloads": [
+        "src/rules/journey/journey-purge.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.ts"
+      ],
+      "receipt": "commands/20261016T070717Z-fuzz-admitted-19f9c63d/receipt.json",
+      "receiptSHA256": "92fff286172cf5ae05b1acefc7ad67d57f190a571deb4fb56bf40a9ae97c3f53"
+    },
+    {
+      "label": "heavy-fuzz-request",
+      "requestUTC": "2026-10-16T07:07:17.782793+00:00",
+      "finishedUTC": "2026-10-16T07:23:19.707323+00:00",
+      "exitCode": 99,
+      "wallS": 962.0593213749817,
+      "cpuS": 1011.916546,
+      "hostLoadStart": 4.3505859375,
+      "changedPayloads": [
+        "src/rules/journey/journey-purge.ts",
+        "src/screens/cumulus_adapters/journey-purge-view-model.ts"
+      ],
+      "receipt": "commands/20261016T070717Z-heavy-fuzz-request-11fb13c3/receipt.json",
+      "receiptSHA256": "0300808b4e349c54bb80d1db86a32989d9afec2e43172b46e5762d7ef7e20ec2"
+    },
+    {
+      "label": "focused-ingress-case",
+      "requestUTC": "2026-10-16T07:09:27.788120+00:00",
+      "finishedUTC": "2026-10-16T07:09:34.973483+00:00",
+      "exitCode": 0,
+      "wallS": 7.6224877500208095,
+      "cpuS": 7.658891,
+      "hostLoadStart": 3.57666015625,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T070927Z-focused-ingress-case-fbe9e1e0/receipt.json",
+      "receiptSHA256": "78f711c981c70f1bfe39b5f15e4c66be8f80bfae44519cd28c03d49bbbb45716"
+    },
+    {
+      "label": "review",
+      "requestUTC": "2026-10-16T07:11:05.508382+00:00",
+      "finishedUTC": "2026-10-16T07:11:54.456845+00:00",
+      "exitCode": 2,
+      "wallS": 49.29612658399856,
+      "cpuS": 130.598386,
+      "hostLoadStart": 3.77685546875,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T071105Z-review-42f232c9/receipt.json",
+      "receiptSHA256": "5a8760a5dfd0ec4e1bbf0a47a7863a0d2296e0d2fc8d9315ed6273506aef0ae9"
+    },
+    {
+      "label": "knip",
+      "requestUTC": "2026-10-16T07:14:17.639188+00:00",
+      "finishedUTC": "2026-10-16T07:14:24.136367+00:00",
+      "exitCode": 0,
+      "wallS": 6.654374708014075,
+      "cpuS": 5.765842,
+      "hostLoadStart": 3.560546875,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T071417Z-knip-4a103506/receipt.json",
+      "receiptSHA256": "38a021450430b9d461421214fd9d2051d1ad32893fbc1e49acd1a90f7285764a"
+    },
+    {
+      "label": "review-test-syntax-repair",
+      "requestUTC": "2026-10-16T07:24:31.550322+00:00",
+      "finishedUTC": "2026-10-16T07:25:15.137301+00:00",
+      "exitCode": 1,
+      "wallS": 44.01284654199844,
+      "cpuS": 117.142932,
+      "hostLoadStart": 2.78076171875,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T072431Z-review-test-syntax-repair-b6407474/receipt.json",
+      "receiptSHA256": "dcdf1d18117a97311821bdc695c33c9bd5d8ebdef7009d25d03ac47c9df986a5"
+    },
+    {
+      "label": "lint-test-assertion-repair",
+      "requestUTC": "2026-10-16T07:25:35.073610+00:00",
+      "finishedUTC": "2026-10-16T07:25:37.461678+00:00",
+      "exitCode": 0,
+      "wallS": 2.517153291963041,
+      "cpuS": 4.1664010000000005,
+      "hostLoadStart": 3.66943359375,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T072534Z-lint-test-assertion-repair-eaa20b08/receipt.json",
+      "receiptSHA256": "65478d15fbc7ce899e82f6733945d9d117139adf20dc407a3671d36d4d030382"
+    },
+    {
+      "label": "review-final",
+      "requestUTC": "2026-10-16T07:26:06.419030+00:00",
+      "finishedUTC": "2026-10-16T07:26:47.676457+00:00",
+      "exitCode": 0,
+      "wallS": 41.48071916599292,
+      "cpuS": 115.996531,
+      "hostLoadStart": 3.58349609375,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T072606Z-review-final-8babd7fd/receipt.json",
+      "receiptSHA256": "f4dafca88f77ec67e63a6aff995c3672975083f1b31e188ab89d5d01f4a294cc"
+    },
+    {
+      "label": "knip-final",
+      "requestUTC": "2026-10-16T07:27:27.147347+00:00",
+      "finishedUTC": "2026-10-16T07:27:31.038115+00:00",
+      "exitCode": 0,
+      "wallS": 4.0426869170041755,
+      "cpuS": 5.210013,
+      "hostLoadStart": 3.7275390625,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T072726Z-knip-final-063ff255/receipt.json",
+      "receiptSHA256": "9c13d2fcdc2c84ada4876629ec159b4812a31a4eb72dad49463b77ff346dd68e"
+    },
+    {
+      "label": "browser-matrix",
+      "requestUTC": "2026-10-16T07:27:40.933717+00:00",
+      "finishedUTC": "2026-10-16T07:29:05.568340+00:00",
+      "exitCode": 0,
+      "wallS": 85.18613195896614,
+      "cpuS": 11.873616000000002,
+      "hostLoadStart": 3.39990234375,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T072740Z-browser-matrix-2773ea96/receipt.json",
+      "receiptSHA256": "c2055bb4255e2f7bb90008a8ed7fe1e6a8ba8cdce659e69024014623bb8cd0f6"
+    },
+    {
+      "label": "browser-overlap-geometry",
+      "requestUTC": "2026-10-16T07:34:14.784612+00:00",
+      "finishedUTC": "2026-10-16T07:34:36.026682+00:00",
+      "exitCode": 0,
+      "wallS": 21.758507000049576,
+      "cpuS": 8.995957,
+      "hostLoadStart": 2.14599609375,
+      "changedPayloads": [],
+      "receipt": "commands/20261016T073414Z-browser-overlap-geometry-bfea4577/receipt.json",
+      "receiptSHA256": "27f5fcd1dd4f512a01c6a9907b1a9fcfd80c7c2e6c11739dfce12435ebf504fc"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "label": "initial-typecheck",
+      "requestUTC": "2026-10-16T07:03:39.666361+00:00",
+      "oneMinute": 4.22265625
+    },
+    {
+      "label": "focused",
+      "requestUTC": "2026-10-16T07:05:26.083125+00:00",
+      "oneMinute": 4.48193359375
+    },
+    {
+      "label": "focused-fixture-repair",
+      "requestUTC": "2026-10-16T07:05:50.515925+00:00",
+      "oneMinute": 4.35791015625
+    },
+    {
+      "label": "coverage",
+      "requestUTC": "2026-10-16T07:06:39.244424+00:00",
+      "oneMinute": 4.6396484375
+    },
+    {
+      "label": "fuzz-admitted",
+      "requestUTC": "2026-10-16T07:07:17.949588+00:00",
+      "oneMinute": 4.3505859375
+    },
+    {
+      "label": "heavy-fuzz-request",
+      "requestUTC": "2026-10-16T07:07:17.782793+00:00",
+      "oneMinute": 4.3505859375
+    },
+    {
+      "label": "focused-ingress-case",
+      "requestUTC": "2026-10-16T07:09:27.788120+00:00",
+      "oneMinute": 3.57666015625
+    },
+    {
+      "label": "review",
+      "requestUTC": "2026-10-16T07:11:05.508382+00:00",
+      "oneMinute": 3.77685546875
+    },
+    {
+      "label": "knip",
+      "requestUTC": "2026-10-16T07:14:17.639188+00:00",
+      "oneMinute": 3.560546875
+    },
+    {
+      "label": "review-test-syntax-repair",
+      "requestUTC": "2026-10-16T07:24:31.550322+00:00",
+      "oneMinute": 2.78076171875
+    },
+    {
+      "label": "lint-test-assertion-repair",
+      "requestUTC": "2026-10-16T07:25:35.073610+00:00",
+      "oneMinute": 3.66943359375
+    },
+    {
+      "label": "review-final",
+      "requestUTC": "2026-10-16T07:26:06.419030+00:00",
+      "oneMinute": 3.58349609375
+    },
+    {
+      "label": "knip-final",
+      "requestUTC": "2026-10-16T07:27:27.147347+00:00",
+      "oneMinute": 3.7275390625
+    },
+    {
+      "label": "browser-matrix",
+      "requestUTC": "2026-10-16T07:27:40.933717+00:00",
+      "oneMinute": 3.39990234375
+    },
+    {
+      "label": "browser-overlap-geometry",
+      "requestUTC": "2026-10-16T07:34:14.784612+00:00",
+      "oneMinute": 2.14599609375
+    }
+  ],
+  "guard": {
+    "initialPayloads": 6027,
+    "kinds": "Regular file bytes and literal symbolic-link payloads",
+    "outside14ChangedCodePathsUnchanged": true,
+    "allFinalReviewKnipBrowserPrePostUnchanged": true,
+    "sourceInventorySHA256": "6d86feda3b0851e2d9c9f72ddae052cad60ebc0f546a3c990e7fb844d00c256c"
+  },
+  "validation": {
+    "focused": "10 existing files, 344 cases passed after one synthetic offer-pool fixture repair; later ingress case18/18 and final related8927/8927 cover final Journey code/test syntax.",
+    "review": "Final exit0: typecheck, node typecheck, import cycles, lint, related150 files/8927 cases.",
+    "knip": "Final exit0; own unused symbols checked.",
+    "coverage": "Sanctioned src/engine/content-gates.test.ts:20/20 passed.",
+    "full": "No local review:full: bounded one-workflow refactor; no test infrastructure, repository configuration or cross-cutting architecture changes. Native scope disposition agrees.",
+    "negativeEpochs": [
+      "Focused initial1/344 failure: synthetic offer fixture lacked OFFER in remaining pool; corrected test setup.",
+      "Review exit2: new tests used ES2022 .at/Object.hasOwn under ES2021 and a prefer-const violation; test-only syntax repaired.",
+      "Next review exit1: unnecessary non-null assertion after array index; one-character test repair, isolated lint then final review exit0."
+    ],
+    "testsDeleted": false,
+    "testDeltaRationale": "Three additional cases and observable-contract assertions in five existing test files; net153 lines, zero files or jsdom changes. No deletion justified by D19."
+  },
+  "fuzz": {
+    "actualEngineExit": 0,
+    "outerExit": 99,
+    "actualGames": 200,
+    "steps": 50274,
+    "prompts": 4187,
+    "checkpointReruns": 436,
+    "checkpointRerunsAreGames": false,
+    "failures": 0,
+    "results": {
+      "player": 99,
+      "enemy": 100,
+      "draw": 1
+    },
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 2
+    },
+    "requestUTC": "2026-10-16T07:07:17.782793+00:00",
+    "admittedExecutionUTC": "2026-10-16T07:07:17.949588+00:00",
+    "terminalUTC": "2026-10-16T07:23:19.091412+00:00",
+    "requestToAdmittedS": 0.166795,
+    "requestIntervalQualification": "Includes wrapper startup and lock admission; not asserted pure kernel lock wait.",
+    "applicability": "Unchanged-engine-only smoke. Outer99 records two explicitly admitted Journey/Purge VM edits during execution. Both paths are outside the 1089 runtime AST module closure, whose pre/post/current hashes match. Parent independently audited closure and accepted ACK765-02 at07:25:40Z. Final Journey checks/browser follow both edits. No blanket frozen-tree PASS.",
+    "runtimeClosure": "fuzz-import-input-closure.json",
+    "exactEpoch": "fuzz-epoch/manifest.json",
+    "nativeDisposition": "native-fuzz-disposition.note",
+    "repeat": false
+  },
+  "browser": {
+    "matrixInvocation": "run-riUGRB",
+    "reportSHA256": "6860b7a50bd8cf12ceef04dfd56738a392a8b3eb1fac46b5f8bb56f1d18a9aa2",
+    "rows": 8,
+    "purposes": [
+      "purge",
+      "transfiguration",
+      "duplication",
+      "dreamsign"
+    ],
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "workflow": "Existing battle1 preview and UUID-addressed developer editor; actual BeginBattle, score debug controls, terminal result and reward Continue. Same-game reload before each purpose. Normal rendered controls select actual physical entries/offered UUIDs; real game logs verify earned bindings and outcomes through Atlas.",
+    "functionalVerdict": "pass8/8, empty Caps and finite in-viewport actionable controls; no horizontal overflow.",
+    "visualVerdict": "All ten matrix captures actually viewed; usable cards and confirmation at both viewports. Desktop Purge guide bubble is mostly covered by picker; separate qualified pre-existing observation. No universal no-overlap or baseline runtime comparison claim.",
+    "captureIndex": "capture-index.json",
+    "geometryDiagnostic": {
+      "invocation": "run-DklHU1",
+      "purpose": "One bounded desktop Purge DOM measurement prompted by observed guide overlap; no full matrix repetition.",
+      "reportSHA256": "d23f82b7d509035eec2afeda3c74a7242ba72343d860463250144f23ff148b31",
+      "geometry": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "speechAnchor": {
+          "x": 228.859375,
+          "y": 228.109375,
+          "width": 380,
+          "height": 60.59375,
+          "right": 608.859375,
+          "bottom": 288.703125
+        },
+        "speechBubble": {
+          "x": 214.859375,
+          "y": 228.109375,
+          "width": 394,
+          "height": 60.59375,
+          "right": 608.859375,
+          "bottom": 288.703125
+        },
+        "picker": {
+          "x": 260,
+          "y": 83,
+          "width": 960,
+          "height": 693,
+          "right": 1220,
+          "bottom": 776
+        },
+        "header": {
+          "x": 261,
+          "y": 105.84375,
+          "width": 958,
+          "height": 98.5,
+          "right": 1219,
+          "bottom": 204.34375
+        },
+        "confirm": {
+          "x": 1089.734375,
+          "y": 133.59375,
+          "width": 105.265625,
+          "height": 42,
+          "right": 1195,
+          "bottom": 175.59375
+        },
+        "intersection": {
+          "x": 260,
+          "y": 228.109375,
+          "right": 608.859375,
+          "bottom": 288.703125,
+          "width": 348.859375,
+          "height": 60.59375
+        },
+        "intersectionFractionOfBubble": 0.885429885786802,
+        "overlapPoint": {
+          "x": 434.4296875,
+          "y": 258.40625,
+          "topElements": [
+            {
+              "tag": "DIV",
+              "testId": null,
+              "galleryRole": null,
+              "className": ""
+            },
+            {
+              "tag": "IMG",
+              "testId": null,
+              "galleryRole": null,
+              "className": ""
+            },
+            {
+              "tag": "DIV",
+              "testId": null,
+              "galleryRole": null,
+              "className": ""
+            },
+            {
+              "tag": "DIV",
+              "testId": null,
+              "galleryRole": null,
+              "className": "card-view relative overflow-hidden rounded-lg transition-transform duration-200"
+            },
+            {
+              "tag": "DIV",
+              "testId": "journey-purge-card-deck-1",
+              "galleryRole": null,
+              "className": ""
+            },
+            {
+              "tag": "DIV",
+              "testId": null,
+              "galleryRole": null,
+              "className": ""
+            },
+            {
+              "tag": "DIV",
+              "testId": null,
+              "galleryRole": null,
+              "className": ""
+            },
+            {
+              "tag": "DIV",
+              "testId": null,
+              "galleryRole": null,
+              "className": ""
+            }
+          ]
+        }
+      },
+      "caps": []
+    },
+    "rawProviderIdentity": "Early owner/server images in browser command folders retain actual token/session/protocol and PID/PGID/birth privately; no token in committed evidence.",
+    "resources": "final-resource-check.json: own groups settled, port5274 free, exact provider/server records absent."
+  },
+  "reviewRouting": "Core review pending parent fresh read-only Codex agent after this implementation helper is terminal; no self-review credit.",
+  "rulesQuestions": [],
+  "preExisting": "Desktop Purge speech overlap: separate own file; unchanged renderer provenance, no base browser run."
+}

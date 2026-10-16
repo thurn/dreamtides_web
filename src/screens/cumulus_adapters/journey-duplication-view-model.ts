@@ -1,7 +1,7 @@
 import type { JourneyContent } from "../../data/journey-content";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyDuplicationView } from "../../cumulus/screens/JourneyDuplicationScreen";
-import { validJourneyDuplicationScreen } from "../../rules/journey/journey-duplication";
+import { validatedAfterBattleCursor } from "../../rules/journey/journey-after-battle";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 import { toDeckCardView } from "./mobile-deck-view-model";
@@ -11,9 +11,10 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 /** Read the earned source independently of current holdings and preserve physical choices. */
 export function buildJourneyDuplicationView(state: JourneyState, content: JourneyContent,
   registry: JourneyModifierRegistry = journeyModifierRegistry): JourneyDuplicationView | null {
-  if (state.screen.type !== "journeyDuplication" || !validJourneyDuplicationScreen(state.screen, state, registry)) return null;
-  const choice = state.screen.choice, source = choice.sources[choice.index];
-  if (source.kind !== "duplication") return null;
+  if (state.screen.type !== "journeyDuplication") return null;
+  const cursor = validatedAfterBattleCursor(state.screen.choice, state, registry);
+  if (cursor?.kind !== "duplication") return null;
+  const { choice, source } = cursor;
   const node = Object.values(state.atlas.nodes).find((candidate) => candidate.sites.some((site) => site.id === choice.siteId)) ?? null;
   const instruction = JOURNEY_SITE_MESSAGES.duplicationInstruction;
   return { siteId: choice.siteId, dreamsignId: source.dreamsignId, heldIndex: source.heldIndex,

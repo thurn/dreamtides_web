@@ -21,6 +21,9 @@ describe("earned duplication view projection", () => {
     expect(view).toMatchObject({ dreamsignId: source, heldIndex: 4, choiceIndex: 0, earnedSeq: 7 });
     expect(buildJourneyDuplicationView({ ...journey, screen: { type: "atlas" } }, content, registry)).toBeNull();
     if (journey.screen.type !== "journeyDuplication") throw new Error("Missing fixture");
+    const choice = journey.screen.choice;
+    expect(buildJourneyDuplicationView({ ...journey, screen: { type: "journeyDuplication", choice: { ...choice, index: 7 } } }, content, registry)).toBeNull();
+    expect(buildJourneyDuplicationView({ ...journey, screen: { type: "journeyDuplication", choice: { ...choice, sources: [{ kind: "transfiguration", dreamsignId: source, heldIndex: 4, maxCount: 1 }] } } }, content, registry)).toBeNull();
     expect(buildJourneyDuplicationView({ ...journey, screen: { ...journey.screen, choice: { ...journey.screen.choice, sources: [{ kind: "duplication", dreamsignId: testDreamsignId("unregistered"), heldIndex: 4, earnedSeq: 7 }] } } }, content, registry)).toBeNull();
   });
 });

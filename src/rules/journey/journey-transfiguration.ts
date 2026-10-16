@@ -5,7 +5,7 @@ import type { CardType } from "../../types/cards";
 import { deckEntryIdFromUnknown, cardTypeChangePredicateIdFromUnknown, type DeckEntryId, type DreamsignId } from "../../types/identifiers";
 import type { DeckEntry, JourneyState, JourneyTransfigurationEffect, JourneyTransfigurationOccurrence, JourneyOperationCause, TransfigurationType } from "../../types/journey";
 import { mintEntryId } from "./deck";
-import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
+import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validatedAfterBattleCursor } from "./journey-after-battle";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 import { findSite } from "./sites";
 import { journeyLoopTransfiguration as createJourneyLoopTransfiguration } from "./journey-mandatory-loop";
@@ -153,21 +153,22 @@ export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: Jou
 
 export function validJourneyTransfigurationScreen(screen: unknown, journey: JourneyState, registry: JourneyModifierRegistry): boolean {
   if (typeof screen !== "object" || screen === null || !("type" in screen) || screen.type !== "journeyTransfiguration" || !("choice" in screen)) return false;
-  return validAfterBattleChoice(screen.choice, journey, registry) &&
-    (screen.choice as import("../../types/journey").AfterBattleJourneyChoice).sources[(screen.choice as import("../../types/journey").AfterBattleJourneyChoice).index].kind === "transfiguration";
+  return validatedAfterBattleCursor(screen.choice, journey, registry)?.kind === "transfiguration";
 }
 
 /** Validation finishes before any card changes or random forms are committed. */
 export function resolveJourneyTransfiguration(journey: JourneyState, payload: Record<string, unknown>, ctx: EventContext, registry: JourneyModifierRegistry): JourneyState | null {
-  if (journey.screen.type !== "journeyTransfiguration" || !validJourneyTransfigurationScreen(journey.screen, journey, registry)) return null;
-  const choice = journey.screen.choice, source = choice.sources[choice.index];
-  if (source.kind !== "transfiguration" || payload.siteId !== choice.siteId || payload.dreamsignId !== source.dreamsignId ||
+  if (journey.screen.type !== "journeyTransfiguration") return null;
+  const cursor = validatedAfterBattleCursor(journey.screen.choice, journey, registry);
+  if (cursor?.kind !== "transfiguration") return null;
+  const { choice, source } = cursor;
+  if (payload.siteId !== cursor.siteId || payload.dreamsignId !== source.dreamsignId ||
     payload.heldIndex !== source.heldIndex || payload.choiceIndex !== choice.index || !Array.isArray(payload.entryIds) || payload.entryIds.length > source.maxCount) return null;
   const ids = payload.entryIds.map(deckEntryIdFromUnknown);
   if (ids.some((id) => id === null) || new Set(ids).size !== ids.length) return null;
   const selected = ids.map((id) => journey.deck.find((entry) => entry.entryId === id));
   if (selected.some((entry) => entry === undefined || entry.transfiguration !== null)) return null;
-  if (selected.length === 0) return advanceAfterBattle(journey, choice);
+  if (selected.length === 0) return advanceAfterBattle(journey, cursor);
   if (provider === null) return null;
   if (selected.some(entry => !validJourneyTransfigurationRecord(entry))) return null;
   const resolved = selected.map((entry) => provider!.resolve(entry!));
@@ -181,7 +182,7 @@ export function resolveJourneyTransfiguration(journey: JourneyState, payload: Re
     if (result !== undefined && !result.ok) throw new Error("Transfiguration source changed during append");
     return [id!, result?.ok ? result.value : { ...selected[index]!, transfiguration: form }];
   }));
-  return advanceAfterBattle({ ...journey, deck: journey.deck.map(entry => changed.get(entry.entryId) ?? entry) }, choice);
+  return advanceAfterBattle({ ...journey, deck: journey.deck.map(entry => changed.get(entry.entryId) ?? entry) }, cursor);
 }
 
 /** A legacy resolver cannot certify a present complete record. */

@@ -1,7 +1,7 @@
 import type { ReducerLogRecord } from "../../eventlog/types";
 import { deckEntryIdFromUnknown, type DeckEntryId, type DreamsignId, type SiteId } from "../../types/identifiers";
 import type { AfterBattleDuplicationSource, JourneyDuplicationEffect, JourneyState } from "../../types/journey";
-import { afterBattleChoice, advanceAfterBattle, appendAfterBattleSource, validAfterBattleChoice } from "./journey-after-battle";
+import { afterBattleChoice, advanceAfterBattle, appendAfterBattleSource, validatedAfterBattleCursor } from "./journey-after-battle";
 import { duplicateDeckEntry } from "./deck";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
@@ -32,21 +32,22 @@ export function journeyDuplicationRecord(before: JourneyState, journey: JourneyS
 
 export function validJourneyDuplicationScreen(screen: unknown, journey: JourneyState, registry: JourneyModifierRegistry): boolean {
   if (typeof screen !== "object" || screen === null || !("type" in screen) || screen.type !== "journeyDuplication" || !("choice" in screen)) return false;
-  return validAfterBattleChoice(screen.choice, journey, registry) &&
-    (screen.choice as import("../../types/journey").AfterBattleJourneyChoice).sources[(screen.choice as import("../../types/journey").AfterBattleJourneyChoice).index].kind === "duplication";
+  return validatedAfterBattleCursor(screen.choice, journey, registry)?.kind === "duplication";
 }
 
 /** Resolve one earned optional copy without consuming a stale or foreign permission. */
 export function resolveJourneyDuplication(journey: JourneyState, payload: Record<string, unknown>, seq: number, registry: JourneyModifierRegistry): JourneyState | null {
-  if (journey.screen.type !== "journeyDuplication" || !validJourneyDuplicationScreen(journey.screen, journey, registry)) return null;
-  const choice = journey.screen.choice, source = choice.sources[choice.index];
-  if (source.kind !== "duplication" || payload.siteId !== choice.siteId || payload.dreamsignId !== source.dreamsignId ||
+  if (journey.screen.type !== "journeyDuplication") return null;
+  const cursor = validatedAfterBattleCursor(journey.screen.choice, journey, registry);
+  if (cursor?.kind !== "duplication") return null;
+  const { choice, source } = cursor;
+  if (payload.siteId !== cursor.siteId || payload.dreamsignId !== source.dreamsignId ||
     payload.heldIndex !== source.heldIndex || payload.choiceIndex !== choice.index || payload.earnedSeq !== source.earnedSeq) return null;
-  if (payload.entryId === null) return advanceAfterBattle(journey, choice);
+  if (payload.entryId === null) return advanceAfterBattle(journey, cursor);
   const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (entryId === null) return null;
   const copied = duplicateDeckEntry(journey, { entryId }, { seq });
-  return copied === null ? null : advanceAfterBattle(copied, choice);
+  return copied === null ? null : advanceAfterBattle(copied, cursor);
 }
 
 /** The three printed duplication clauses share physical copies, not new transformation occasions. */

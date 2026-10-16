@@ -13,6 +13,20 @@ import { reduceGameEvent } from "../reducer";
 import { event } from "./lifecycle-fixtures";
 import { registry } from "./transfiguration-fixtures";
 import { testJourneySeed } from "../../types/test-identities";
+import { createHash } from "node:crypto";
+import type { ActiveAfterBattle } from "./journey-after-battle";
+import { afterBattleChoice, projectAfterBattleCursor } from "./journey-after-battle";
+import { createJourneyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
+import { journeyDuplication } from "./journey-duplication";
+import { journeyOnGain } from "./journey-on-gain";
+import { createSiteContentProvider } from "../../session/providers/site-provider";
+import { registerSiteContentProvider } from "./sites";
+import { makeAuguryTestContent, makeAuguryTestDreamsignTemplate } from "../../journey_v2/testing/fixtures";
+import { testDreamsignId, testGuideId, testGuideArtKey, testDreamscapeId } from "../../types/test-identities";
+import { buildJourneyPurgeView } from "../../screens/cumulus_adapters/journey-purge-view-model";
+import { buildJourneyTransfigurationView } from "../../screens/cumulus_adapters/journey-transfiguration-view-model";
+import { buildJourneyDuplicationView } from "../../screens/cumulus_adapters/journey-duplication-view-model";
+import { buildJourneyDreamsignView } from "../../screens/cumulus_adapters/journey-dreamsign-view-model";
 import type { DreamsignId } from "../../types/identifiers";
 import { genesisFoldState } from "../fold-state";
 import type { FoldState } from "../fold-state";
@@ -27,7 +41,12 @@ import { registerJourneyTransfigurationProvider } from "./journey-transfiguratio
 
 beforeEach(installProviders); afterEach(clearGameProviders);
 let lastBattleSlice: FoldState["battle"] = null;
-function battle(ids: readonly DreamsignId[], outcome: "victory" | "final" | "defeat" | "draw" = "victory"): FoldState {
+function battle(ids: readonly DreamsignId[], outcome: "victory" | "final" | "defeat" | "draw" = "victory", useRegistry: JourneyModifierRegistry = registry, beforeEnd?: (state: FoldState) => FoldState): FoldState {
+  const accepted: typeof import("./transfiguration-fixtures").accepted = (state, type, payload = {}, context = ctx()) => {
+    const result = reduceGameEvent(state, event(type, payload), context, useRegistry);
+    if (result.outcome !== "applied") throw new Error(`Synthetic ${type} bounced`);
+    return result.state;
+  };
   registerReplayFixtureProviders(); installProviders();
   if (outcome === "draw" || outcome === "defeat") {
     const loss: EngineCardDefinition = { id: syntheticId(0x4261), cardType: "event", costs: [energy(0)], spark: null,
@@ -60,6 +79,7 @@ function battle(ids: readonly DreamsignId[], outcome: "victory" | "final" | "def
   }
   s = { ...s, journey: { ...s.journey, deck: entries() } };
   lastBattleSlice = s.battle;
+  if (beforeEnd !== undefined) s = beforeEnd(s);
   return accepted(s, "END_BATTLE");
 }
 function resolve(s: FoldState, ids: readonly string[] = []) {
@@ -189,5 +209,110 @@ describe("earned choices suspend unrelated same-actor gameplay", () => {
     expect(essence.state.journey.essence).toBe(ordinary.journey.essence + 7);
     expect(added.state.journey.deck).toHaveLength(ordinary.journey.deck.length + 1);
     expect(removed.state.journey.deck.map((entry) => entry.entryId)).toEqual(ordinary.journey.deck.slice(1).map((entry) => entry.entryId));
+  });
+});
+
+
+describe("earned four-purpose cursor public contracts", () => {
+  const SPIDER = testDreamsignId("cursor-spider"), RED = testDreamsignId("cursor-red"), OFFER = testDreamsignId("cursor-offer");
+  const mixedRegistry = createJourneyModifierRegistry([registry.lookup(SLUG)!, registry.lookup(SLIME)!,
+    journeyDuplication(SPIDER, { kind: "afterBattleDuplication" }), journeyOnGain(RED, { kind: "afterBattleDreamsignChoice", offerCount: 1 })]);
+  const content = () => {
+    const value = makeAuguryTestContent({ cards: [card], dreamsignTemplates: [makeAuguryTestDreamsignTemplate({ id: OFFER })] });
+    value.guides = (["Purge", "Transfiguration", "Duplication"] as const).map((siteType) => ({
+      id: testGuideId(`cursor-${siteType}`), name: "", homeDreamscapeId: testDreamscapeId("cursor-home"), siteType,
+      portraitSource: "", artKey: testGuideArtKey(`cursor-${siteType}`), headTargetX: 0.5, dialogue: { site: [] }, homeSpecialty: "" }));
+    return value;
+  };
+  const run = (state: FoldState, type: Parameters<typeof apply>[1], payload: Record<string, unknown> = {}) =>
+    reduceGameEvent(state, event(type, payload), ctx(), mixedRegistry);
+  const prepare = () => {
+    const value = content();
+    const state = battle([SLUG, SLIME, SPIDER, RED], "victory", mixedRegistry,
+      (before) => {
+        registerSiteContentProvider(createSiteContentProvider(value));
+        return { ...before, journey: { ...before.journey, remainingDreamsignPool: [OFFER] } };
+      });
+    return { state, value };
+  };
+
+  it("reloads a mixed earned queue and resolves each projected physical permission exactly once", () => {
+    const { state: initial, value } = prepare();
+    let state = initial;
+    const held = [SLUG, SLIME, SPIDER, RED];
+    for (let ordinal = 0; ordinal < held.length; ordinal++) {
+      const raw = JSON.stringify(state.journey.screen), reloaded = run(state, "LOAD_STATE", { snapshot: JSON.parse(JSON.stringify(state.journey)) });
+      expect(reloaded.outcome).toBe("applied"); state = reloaded.state;
+      expect(JSON.stringify(state.journey.screen)).toBe(raw);
+      const choice = afterBattleChoice(state.journey.screen)!;
+      const common = { siteId: choice.siteId, dreamsignId: held[ordinal], heldIndex: ordinal, choiceIndex: ordinal };
+      const target = state.journey.deck[0].entryId;
+      let type: Parameters<typeof apply>[1], payload: Record<string, unknown>;
+      if (ordinal === 0) {
+        const view = buildJourneyPurgeView(state.journey, value, mixedRegistry)!;
+        expect(view).toMatchObject(common); expect(view.cards.map(item => item.entryId)).toEqual(state.journey.deck.filter(entry => entry.cardNumber === card.cardNumber).map(entry => entry.entryId));
+        type = "RESOLVE_JOURNEY_PURGE"; payload = { ...common, entryIds: [target] };
+      } else if (ordinal === 1) {
+        const view = buildJourneyTransfigurationView(state.journey, value)!;
+        expect(view).toMatchObject(common); expect(view.cards.map(entry => entry.entryId)).toContain(target);
+        type = "RESOLVE_JOURNEY_TRANSFIGURATION"; payload = { ...common, entryIds: [target] };
+      } else if (ordinal === 2) {
+        const view = buildJourneyDuplicationView(state.journey, value, mixedRegistry)!;
+        expect(view).toMatchObject(common); expect(view.cards.map(entry => entry.entryId)).toContain(target);
+        type = "RESOLVE_JOURNEY_DUPLICATION"; payload = { ...common, earnedSeq: view.earnedSeq, entryId: target };
+      } else {
+        const view = buildJourneyDreamsignView(state.journey, value)!;
+        expect(view).toMatchObject({ siteId: choice.siteId, sourceDreamsignId: RED, heldIndex: ordinal, choiceIndex: ordinal });
+        expect(view.options.map(option => option.dreamsign.id)).toEqual([OFFER]);
+        type = "RESOLVE_AFTER_BATTLE_DREAMSIGN"; payload = { ...common, earnedSeq: view.permissionSeq, offeredDreamsignId: OFFER };
+      }
+      for (const wrong of ["RESOLVE_JOURNEY_PURGE", "RESOLVE_JOURNEY_TRANSFIGURATION", "RESOLVE_JOURNEY_DUPLICATION", "RESOLVE_AFTER_BATTLE_DREAMSIGN"] as const) {
+        if (wrong === type) continue;
+        const rejected = run(state, wrong, payload);
+        expect(rejected.state).toBe(state); expect(rejected.logRecords).toBeUndefined();
+      }
+      const before = state, settled = run(state, type, payload);
+      expect(settled.outcome).toBe("applied"); state = settled.state;
+      if (ordinal === 0) expect(state.journey.deck.map(entry => entry.entryId)).toEqual(before.journey.deck.slice(1).map(entry => entry.entryId));
+      if (ordinal === 1) expect(state.journey.deck.find(entry => entry.entryId === target)?.transfiguration).not.toBeNull();
+      if (ordinal === 2) {
+        expect(state.journey.deck).toHaveLength(before.journey.deck.length + 1);
+        const copied = state.journey.deck[state.journey.deck.length - 1];
+        expect(copied.entryId).not.toBe(target); expect({ ...copied, entryId: target }).toEqual(before.journey.deck[0]);
+      }
+      if (ordinal === 3) expect(state.journey.dreamsigns[state.journey.dreamsigns.length - 1]?.id).toBe(OFFER);
+      const stale = run(state, type, payload); expect(stale.state).toBe(state); expect(stale.logRecords).toBeUndefined();
+    }
+    expect(state.journey.screen.type).toBe("atlas");
+  });
+
+  it("atomically rejects mismatched screen purposes and indices while retaining legacy purge bytes and hash", () => {
+    const { state, value } = prepare(), screen = state.journey.screen;
+    const original = JSON.stringify(screen), hash = createHash("sha256").update(original).digest("hex");
+    const reloaded = run(state, "LOAD_STATE", { snapshot: JSON.parse(JSON.stringify(state.journey)) });
+    expect(reloaded.outcome).toBe("applied");
+    buildJourneyPurgeView(reloaded.state.journey, value, mixedRegistry);
+    const saved = JSON.stringify(reloaded.state.journey.screen);
+    expect(saved).toBe(original); expect(createHash("sha256").update(saved).digest("hex")).toBe(hash);
+    const choice = afterBattleChoice(screen)!;
+    const uppercase = { ...screen, choice: { ...choice, sources: choice.sources.map(source => ({ ...source, dreamsignId: source.dreamsignId.toUpperCase() })) } };
+    const loadedUppercase = run(state, "LOAD_STATE", { snapshot: { ...state.journey, screen: uppercase } });
+    expect(loadedUppercase.outcome).toBe("applied");
+    expect(JSON.stringify(loadedUppercase.state.journey.screen)).toBe(JSON.stringify(uppercase));
+    expect(Object.prototype.hasOwnProperty.call(choice.sources[0], "kind")).toBe(false);
+    for (const badScreen of [
+      { type: "journeyTransfiguration", choice }, { type: "journeyDuplication", choice }, { type: "journeyDreamsign", choice },
+      { ...screen, choice: { ...choice, index: -1 } }, { ...screen, choice: { ...choice, index: choice.sources.length } },
+      { ...screen, choice: { ...choice, sources: [{ ...choice.sources[0], kind: "unknown" }] } },
+    ]) {
+      const rejected = run(state, "LOAD_STATE", { snapshot: { ...state.journey, screen: badScreen } });
+      expect(rejected.state).toBe(state); expect(rejected.logRecords).toBeUndefined();
+    }
+    const cursor = projectAfterBattleCursor({ ...choice, index: 2 });
+    const consumesTransfiguration = (_permission: Extract<ActiveAfterBattle, { kind: "transfiguration" }>): void => undefined;
+    if (cursor?.kind === "duplication") {
+      // @ts-expect-error A physical duplication permission cannot satisfy a transfiguration consumer.
+      consumesTransfiguration(cursor);
+    }
   });
 });
