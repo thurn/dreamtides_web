@@ -1,0 +1,30 @@
+{
+  "bead": "hv-33id.16",
+  "phase": 6,
+  "implementMin": 76.54738056666666,
+  "implementWindow": {
+    "start": "2026-10-16T02:05:40.842000+00:00",
+    "end": "2026-10-16T03:22:13.684834+00:00"
+  },
+  "localValidationS": {
+    "regression-red": 8.707438084005844,
+    "focused": 7.100939791998826,
+    "review": 80.08482491696486,
+    "knip": 4.156419208040461,
+    "full": 143.37275358301122,
+    "fuzz": 924.7248832079931
+  },
+  "hostLoad": 5.63916015625,
+  "testDelta": {
+    "files": 0,
+    "lines": 26,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 13.684936733333332,
+      "note": "Heavy-slot acquisition interval exceeded ten minutes; includes inner recorder startup/manifest overhead. Wrapper, acquisition observation and execution receipts are retained."
+    }
+  ]
+}

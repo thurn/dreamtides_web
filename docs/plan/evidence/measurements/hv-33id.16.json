@@ -1,0 +1,347 @@
+{
+  "bead": "hv-33id.16",
+  "base": "9286f669671541d711c3ea37b9bec6e3b38708b6",
+  "iteration": "repair-v02",
+  "scope": {
+    "admission": {
+      "path": "/tmp/root-3316/admitted-scope.json",
+      "sha": "a2dffe4e2c0914beaa68908f5ce82f0399e2bd56b2b6bca7b912218c246dbc99"
+    },
+    "outsideAreaWrites": [],
+    "fallout": []
+  },
+  "previousIteration": {
+    "sourceCommit": "448201d281b60d4fbde11ba5c366895f364df8a1",
+    "committedMeasurements": {
+      "path": "/tmp/root-3316/repair-v02/v01-committed-measurements.json",
+      "sha": "3016d3e807ba773a556e47ebc36f947ec101cb4bb6128406850ade74f477a977"
+    },
+    "committedFriction": {
+      "path": "/tmp/root-3316/repair-v02/v01-committed-friction.json",
+      "sha": "17e6fbbd664e8b58149f636440580f073aa6ca995e75452f5197c705549a617f"
+    },
+    "terminal": {
+      "path": "/tmp/root-3316/helper/final-terminal.json",
+      "sha": "ddeecc5ba2efe5c8ce6bc487f9d4fea5342d0945d9d80336ac6748d27b139e73"
+    },
+    "qualification": "All v01 stdout/stderr, receipts, manifests, terminal censuses and handoff remain immutable under /tmp/root-3316/helper. They apply to that historical source epoch; revised-source acceptance uses v02 receipts.",
+    "firstGit": {
+      "actualFinalGitStartUTC": "2026-10-16T02:49:18.109390+00:00",
+      "actualFinalGitEndUTC": "2026-10-16T02:49:18.158884+00:00",
+      "actualFullGrossMinutes": 43.62194806666666,
+      "GitReceipt": "/tmp/root-3316/helper/final-git.json",
+      "GitStdoutSHA": "01d137a66d006949d89e904ca7ffe4f67581e07839ae7d4e334910a32b84e696",
+      "currentManifestSHA": "866a53210e90efaf27c020df21ba965eccc7ba21a82518d13303e3b376179f48"
+    }
+  },
+  "repair": {
+    "start": {
+      "observedRepairStartUTC": "2026-10-16T02:59:11.946892+00:00",
+      "originalGrossStartUTC": "2026-10-16T02:05:40.842Z",
+      "originalGitReceipt": "/tmp/root-3316/helper/final-git.json",
+      "originalTerminalReceipt": "/tmp/root-3316/helper/final-terminal.json",
+      "priorCommit": "448201d281b60d4fbde11ba5c366895f364df8a1"
+    },
+    "counterfactual": "The new public table failed against the unchanged v01 decoder, then passed with the undefined-entry skip. Its five cases cover each undefined side, both sides undefined, and both mixed undefined/valid directions. Assertions compare omitted-side equivalents by serialization/hash, preserve the input, and check public saved-load acceptance.",
+    "sourceFrozenAfter": "focused",
+    "productionDeltaFromV01": "One undefined-value skip in the existing next-battle structural loop."
+  },
+  "receipts": {
+    "regression-red": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/regression-red.json",
+        "sha": "c390aa4fd83789f03b2c022577f79a77401310c7dac913d1252d35caa6dbd02b"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/regression-red.stdout",
+        "sha": "4fd931a7b3b365db273b1762543dd7b1a7fe6643f84d250d3cff9082c5c9c3b9"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/regression-red.stderr",
+        "sha": "5d03b40bc664859f01abc61a31854bf562bb434941275cca099da25ae84bd607"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/regression-red.manifest",
+        "sha": "be2c0454b5f61ae0fa8f3530d6f100239e81a76a5e5fa07ea459d361f64cad2b"
+      },
+      "sourceManifestSHA": "be2c0454b5f61ae0fa8f3530d6f100239e81a76a5e5fa07ea459d361f64cad2b",
+      "wallSeconds": 8.707438084005844,
+      "exit": 1
+    },
+    "focused": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/focused.json",
+        "sha": "4b6c615b13478f12865a2aa93bb36d469cac8894698fa69adc7ed0a3943e98c8"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/focused.stdout",
+        "sha": "e5b1120520dc6f8e24cc224a7da6dc40ac56fc70587fd15a9a5f22911218e23e"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/focused.stderr",
+        "sha": "858619808b8c485e9e9d15710044dd4663ce27d75e0632d67d4ac2d3d0d826e0"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/focused.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 7.100939791998826,
+      "exit": 0
+    },
+    "review": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/review.json",
+        "sha": "7f4616f3fffb0face3d48ff949b57e7c14ba9e72a8557e48974d91262244f241"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/review.stdout",
+        "sha": "269ed94a5b88839b948e56f360619b259acee2937acb5eccd6cb1e4b2283d44f"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/review.stderr",
+        "sha": "858619808b8c485e9e9d15710044dd4663ce27d75e0632d67d4ac2d3d0d826e0"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/review.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 80.08482491696486,
+      "exit": 0
+    },
+    "knip": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/knip.json",
+        "sha": "df2e8a92939d61be50efe7b858a405a30b7f046d1b01f52fd185f30548d08b38"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/knip.stdout",
+        "sha": "331a0fcd82c1765f9a418516afc78e921e32afe1469bcad77c05c6def0d18132"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/knip.stderr",
+        "sha": "858619808b8c485e9e9d15710044dd4663ce27d75e0632d67d4ac2d3d0d826e0"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/knip.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 4.156419208040461,
+      "exit": 0
+    },
+    "full-lock": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/full-lock.json",
+        "sha": "ba09ddaf40eb387d03764d4a22d2f4586c5bc151d837fe3de27e4bd47a461016"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/full-lock.stdout",
+        "sha": "371c05c4207cd4ff75581681cf0b709574f2e1972818a6415a951a52cbcf2226"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/full-lock.stderr",
+        "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/full-lock.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 143.59321391704725,
+      "exit": 0
+    },
+    "full": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/full.json",
+        "sha": "14c2f588c7601ef5fd34cd045a7ba0ebf1e10a420a6eea94d111ec580ab99bdb"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/full.stdout",
+        "sha": "3c202fbfb3e8a1de5e07ea88b47faa6b5585176e642732dd735b3b9dfc23f93b"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/full.stderr",
+        "sha": "725c56fb50ada7f19433268e58fc46a34a61e8ae63c659508ffa54c61dee98ea"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/full.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 143.37275358301122,
+      "exit": 0
+    },
+    "fuzz-lock": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/fuzz-lock.json",
+        "sha": "2b5acb59e3c4e018902e29503715b650c193f7995f7605f6077acad2db332e79"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/fuzz-lock.stdout",
+        "sha": "31470427525e96c4234ec5cea5dff70f76248ed875ab5d98263a300363fef269"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/fuzz-lock.stderr",
+        "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/fuzz-lock.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 924.9545855409815,
+      "exit": 0
+    },
+    "fuzz": {
+      "receipt": {
+        "path": "/tmp/root-3316/repair-v02/fuzz.json",
+        "sha": "6e3fedc2d353e7ec1f7a6127086293067dd6300baa1add89c4a9b0787038bc52"
+      },
+      "stdout": {
+        "path": "/tmp/root-3316/repair-v02/fuzz.stdout",
+        "sha": "d5ebe9fff028db471f496d0f746751c0fb6bfa235e520e0b9e18c60ef85c2ebe"
+      },
+      "stderr": {
+        "path": "/tmp/root-3316/repair-v02/fuzz.stderr",
+        "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "manifest": {
+        "path": "/tmp/root-3316/repair-v02/fuzz.manifest",
+        "sha": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+      },
+      "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f",
+      "wallSeconds": 924.7248832079931,
+      "exit": 0
+    }
+  },
+  "validationSource": {
+    "path": "/tmp/root-3316/repair-v02/validated-code.manifest",
+    "sha": "32fe56887a0542eaac32691eb43027015a01e1938fda2d90873eaec293525c55"
+  },
+  "validationInterpretation": {
+    "full": "Fresh changed-source full plan: prepare; concurrent full lint, typechecks, import cycles, Knip and friction schema; complete test suite; production bundle assertion. The full suite includes src/engine/content-gates.test.ts, so its sanctioned content coverage is reused.",
+    "fuzz": "One fresh default 200-game smoke; seed prefix fuzz, first ordinal 0 and interactive every 10 unchanged. Inner execution bounded to 1,800 seconds after acquiring machine-wide heavy lock.",
+    "timing": "Recorder startUTC precedes source-manifest capture; wallSeconds spans Popen through direct terminal wait, and endUTC follows the wait. Outer lockf command includes wait, inner recorder overhead and execution. Start-to-start interval is not pure queue time.",
+    "counterfactual": "regression-red is an expected nonzero historical source receipt, not final acceptance.",
+    "sourceEquality": "Final source bytes equal the code entries in focused, review, Knip, full and fuzz before-manifests; metadata timestamps are recorded separately."
+  },
+  "coreFailurePaths": {
+    "errorMidStep": {
+      "test": "rejects malformed declarations atomically before any observer sees state; resolves catalog availability and effective types only during atomic initialization",
+      "scope": "Declaration validation is synchronous and precedes allocation/step execution; no new mid-step transition is introduced."
+    },
+    "reloadOrRestart": {
+      "test": "preserves all four eligible-side declarations and omission through load and continuation; rebuilds every applied intent's events, and the same after a reload mid-prompt from a checkpoint and tail",
+      "scope": "Configured snapshots resume public fold actions with identical state hashes; existing mid-prompt replay contract remains covered."
+    },
+    "partialWrite": {
+      "reason": "The pure decoder writes neither input nor storage and returns validated data or refusal in one call. Public refusal tests check input/save immutability and zero observers. No new storage writer or partial-commit protocol is introduced."
+    },
+    "invalidOrStaleInput": {
+      "test": "rejects malformed declarations atomically before any observer sees state; rejects every eligible-side slot at initialization and saved-load boundaries; bounces an action based before a partner's event and applies a matching answer through it",
+      "scope": "Raw declaration refusal and existing stale-action fold contracts."
+    },
+    "concurrentActors": {
+      "test": "bounces intents that are not the intent's side's, illegal, or malformed; bounces an action based before a partner's event and applies a matching answer through it",
+      "reason": "The shared boundary contains no mutable shared state or asynchronous action; actor arbitration remains in existing fold contracts."
+    }
+  },
+  "resources": {
+    "testWorkers": 2,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "ownedJobs": [
+      {
+        "label": "regression-red",
+        "wrapperPID": 60661,
+        "pid": 60716,
+        "pgid": 60716,
+        "exit": 1
+      },
+      {
+        "label": "focused",
+        "wrapperPID": 63017,
+        "pid": 63037,
+        "pgid": 63037,
+        "exit": 0
+      },
+      {
+        "label": "review",
+        "wrapperPID": 65329,
+        "pid": 65358,
+        "pgid": 65358,
+        "exit": 0
+      },
+      {
+        "label": "knip",
+        "wrapperPID": 75833,
+        "pid": 75862,
+        "pgid": 75862,
+        "exit": 0
+      },
+      {
+        "label": "full-lock",
+        "wrapperPID": 77034,
+        "pid": 77052,
+        "pgid": 77052,
+        "exit": 0
+      },
+      {
+        "label": "full",
+        "wrapperPID": 77053,
+        "pid": 77063,
+        "pgid": 77063,
+        "exit": 0
+      },
+      {
+        "label": "fuzz-lock",
+        "wrapperPID": 75807,
+        "pid": 75826,
+        "pgid": 75826,
+        "exit": 0
+      },
+      {
+        "label": "fuzz",
+        "wrapperPID": 75827,
+        "pid": 75846,
+        "pgid": 75846,
+        "exit": 0
+      }
+    ],
+    "ports": [],
+    "browser": "No presentation or interaction changes; no browser/server started.",
+    "rawReceipts": "Closed outside the disposable worktree under /tmp/root-3316/repair-v02.",
+    "inFlightCheckpoint": {
+      "path": "/tmp/root-3316/repair-v02/fuzz-owned-checkpoint.json",
+      "sha": "4573c071af211ccbee1fd5af000043c9cb7445cbb9f69a5bd9e7513147f86957"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "v02 npm run review recorder start; exact hostLoad and startUTC are in review.json."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 26,
+    "jsdomFiles": 0,
+    "canonicalContractCasesBefore": 15,
+    "canonicalContractCasesAfter": 15
+  },
+  "timing": {
+    "originalGrossStartUTC": "2026-10-16T02:05:40.842000+00:00",
+    "observedRepairStartUTC": "2026-10-16T02:59:11.946892+00:00",
+    "committedPreGitCutoffUTC": "2026-10-16T03:22:13.684834+00:00",
+    "firstGit": "2026-10-16T02:49:18.158884+00:00",
+    "note": "Continuous original gross window includes first delivery, parent review/cancellation interval and repair. Revised actual Git endpoint, exact cutoff gap and repair interval are in external repair-v02/final-terminal.json. No timing floor or endpoint amendment."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "pending": [
+    "Parent fresh read-only Codex review/dispositions",
+    "Parent native candidate delivery, promotion, cleanup and closure"
+  ]
+}

@@ -30,6 +30,9 @@ export interface DreamwellConfig {
   readonly minimumConstructedLength: number;
 }
 
+/** Exactly the accepted ordered declarations of eligible victory sides. */
+export type VictorySides = readonly ["player"] | readonly ["enemy"] | readonly ["player", "enemy"] | readonly ["enemy", "player"];
+
 /**
  * Battle rules values for one battle, from the battle and Dreamwell data
  * modules plus the battle's own inputs. The engine reads every tunable from
@@ -40,7 +43,7 @@ export interface BattleConfig {
   /** Rounds after which an unfinished battle is a draw (P11), or `null` for unrestricted rounds. */
   readonly turnLimit: number | null;
   /** Sides eligible for any victory condition; absent means both sides. */
-  readonly victorySides?: readonly Side[];
+  readonly victorySides?: VictorySides;
   readonly handLimit: number;
   readonly openingHandSize: Readonly<Record<Side, number>>;
   readonly startingSide: Side;
@@ -151,6 +154,10 @@ export interface BattleSetup {
   readonly dreamwell: { readonly deck: readonly DreamwellCardId[]; readonly next: number };
 }
 
+declare const validatedBattleSetup: unique symbol;
+/** A structurally checked declaration, ready for catalog checks and preparation. */
+export type ValidatedBattleSetup = BattleSetup & { readonly [validatedBattleSetup]: true };
+
 /** Everything a battle needs to start. */
 export interface BattleInit {
   /** Battle seed, derived by the host from the game seed and battle index. */
@@ -172,7 +179,7 @@ export interface BattleInit {
   readonly nextBattle?: Readonly<Partial<Record<Side, NextBattleEffects>>>;
   /** Explicit initial zones/resources at a supported phase boundary; input decks are ordered. */
   readonly setup?: BattleSetup;
-  readonly victorySides?: readonly Side[];
+  readonly victorySides?: VictorySides;
   /** Positive round limit, or `null` to permit any number of rounds. */
   readonly turnLimit?: number | null;
 }

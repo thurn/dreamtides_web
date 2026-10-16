@@ -4,7 +4,7 @@ import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
 import { battleSeed, SIDES, type InstanceId, type Side } from "../../../state/ids";
 import { deserializeState, serializeState, stateHash } from "../../../state/hash";
-import type { BattleInit, BattleSetup, BattleState } from "../../../state/types";
+import type { BattleInit, BattleSetup, BattleState, VictorySides } from "../../../state/types";
 import { NO_PROMPTS } from "../../../steps/sources";
 import { SYNTHETIC, syntheticId } from "../../../testing/synthetic-cards";
 import { energy, event, noCardsIn, winCondition } from "../../../dsl/builders";
@@ -72,6 +72,18 @@ function slice(state: BattleState): BattleSlice {
   return { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
 }
 
+function expectDeclarationRefused(input: BattleInit, state: BattleState): void {
+  const before = structuredClone(input);
+  let observations = 0;
+  expect(() => engine.createBattle(input, NO_PROMPTS, () => { observations++; })).toThrow();
+  expect(observations).toBe(0);
+  expect(input).toStrictEqual(before);
+  const save = saved(input, slice(state));
+  const savedBefore = structuredClone(save);
+  expect(parseJourneyBattleFoldState(save)).toBeNull();
+  expect(save).toStrictEqual(savedBefore);
+}
+
 describe("declared public battle setup", () => {
   it("enters Draw with a real ordered draw and preserves the first-turn skip", () => {
     const input = init();
@@ -135,19 +147,30 @@ describe("declared public battle setup", () => {
     expect(day.events.map(({ kind }) => kind)).toEqual(["phaseChanged"]);
   });
 
-  it("keeps cost discounts in every declared recipe while rejecting conflicting opening-hand and energy modifiers", () => {
+  it("keeps cost discounts and accepts undefined per-side next-battle effects", () => {
     const effects = { openingHand: [], startingEnergy: 0, smallerHandAndCostDiscount: [{ openingHandDelta: 0, costReduction: 1 }] };
     const input = { ...init(), nextBattle: { player: effects } };
     const state = engine.createBattle(input, NO_PROMPTS).state;
     expect(engine.view(state, "player").instances.i1?.characteristics.cost).toBe(0);
     expect(battleDecklists(input).player).toHaveLength(input.decks.player.length);
     expect(battleDecklists(input).player.every((entry) => entry.deckMods?.costReduction === 1)).toBe(true);
-    for (const bad of [
-      { ...effects, startingEnergy: 1 },
-      { ...effects, openingHand: [{ count: 1, filter: null }] },
-      { ...effects, smallerHandAndCostDiscount: [{ openingHandDelta: -1, costReduction: 1 }] },
-      { ...effects, smallerHandAndCostDiscount: [{ openingHandDelta: 0, costReduction: Number.NaN }] },
-    ]) expect(() => engine.createBattle({ ...init(), nextBattle: { player: bad } }, NO_PROMPTS)).toThrow();
+    const declarations: readonly (readonly [NonNullable<BattleInit["nextBattle"]>, NonNullable<BattleInit["nextBattle"]>])[] = [
+      [{ player: undefined }, {}],
+      [{ enemy: undefined }, {}],
+      [{ player: undefined, enemy: undefined }, {}],
+      [{ player: undefined, enemy: effects }, { enemy: effects }],
+      [{ player: effects, enemy: undefined }, { player: effects }],
+    ];
+    for (const [nextBattle, equivalent] of declarations) {
+      const declared = { ...init(), nextBattle };
+      const before = structuredClone(declared);
+      const actual = engine.createBattle(declared, NO_PROMPTS).state;
+      const expected = engine.createBattle({ ...init(), nextBattle: equivalent }, NO_PROMPTS).state;
+      expect(serializeState(actual)).toBe(serializeState(expected));
+      expect(stateHash(actual)).toBe(stateHash(expected));
+      expect(declared).toStrictEqual(before);
+      expect(parseJourneyBattleFoldState(saved(declared, slice(actual)))).not.toBeNull();
+    }
   });
 
   it("rejects malformed declarations atomically before any observer sees state", () => {
@@ -169,36 +192,50 @@ describe("declared public battle setup", () => {
       (value) => Reflect.set(value.setup!.sides.player, "extra", 1),
       (value) => Reflect.set(value.setup!.dreamwell, "next", 4),
       (value) => Reflect.set(value.setup!.dreamwell, "deck", [parseDreamwellCardId("5e5e5e5e-0000-4000-8000-00000000ffff")]),
-      (value) => Reflect.set(value.decks, "player", [{ cardId: syntheticId(0xffff) }]),
       (value) => Reflect.set(value.decks.player[0], "amplified", "yes"),
       (value) => Reflect.set(value.decks.player[0], "transfigurations", ["unknown"]),
       (value) => Reflect.set(value.decks.player[0], "transfigurations", [["Amplified"]]),
       (value) => Reflect.set(value.decks.player[0], "deckMods", { costReduction: 1 }),
       (value) => Reflect.set(value, "dreamwell", [well.id, well.id]),
-      (value) => Reflect.set(value.decks, "player", [{ cardId: instantWin.id }, { cardId: other.id }, { cardId: instantWin.id }]),
+      (value) => Reflect.set(value.setup!, "placements", Array(1)),
+      (value) => Reflect.set(value.setup!, "placements", [null]),
+      (value) => Reflect.set(value.setup!.turn, "sideTurns", { player: 4, enemy: 3, extra: 0 }),
+      (value) => Reflect.set(value.setup!.turn, "lastNormal", "enemy"),
+      (value) => Reflect.set(value.setup!.turn, "round", 3),
+      (value) => Reflect.set(value.setup!.turn, "turnNumber", 0),
+      (value) => Reflect.set(value.setup!.sides.player, "score", Number.POSITIVE_INFINITY),
+      ...[
+        { openingHand: [], startingEnergy: 1, smallerHandAndCostDiscount: [] },
+        { openingHand: [{ count: 1, filter: null }], startingEnergy: 0, smallerHandAndCostDiscount: [] },
+        { openingHand: [], startingEnergy: 0, smallerHandAndCostDiscount: [{ openingHandDelta: -1, costReduction: 1 }] },
+        { openingHand: [], startingEnergy: 0, smallerHandAndCostDiscount: [{ openingHandDelta: 0, costReduction: Number.NaN }] },
+      ].map((effects) => (value: BattleInit) => Reflect.set(value, "nextBattle", { player: effects })),
     ];
+    const state = engine.createBattle(init(), NO_PROMPTS).state;
     for (const change of changes) {
       const input = structuredClone(init());
       change(input);
-      const before = JSON.stringify(input);
+      expectDeclarationRefused(input, state);
+    }
+  });
+
+  it("resolves catalog availability and effective types only during atomic initialization", () => {
+    const missingWell = parseDreamwellCardId("5e5e5e5e-0000-4000-8000-00000000ffff");
+    for (const input of [
+      { ...init(), avatars: { player: parseAvatarId("5e5e5e5e-0000-4000-8000-00000000ffff") } },
+      { ...init(), dreamsigns: { player: [parseDreamsignId("5e5e5e5e-0000-4000-8000-00000000ffff")] } },
+      { ...init(), dreamwell: [missingWell], setup: { ...setup(), dreamwell: { deck: [missingWell], next: 0 } } },
+      { ...init(), decks: { ...init().decks, player: [{ cardId: syntheticId(0xffff) }, { cardId: other.id }, { cardId: character.id }] } },
+      { ...init(), decks: { ...init().decks, player: [{ cardId: instantWin.id }, { cardId: other.id }, { cardId: instantWin.id }] } },
+    ]) {
+      const before = structuredClone(input);
       let observations = 0;
       expect(() => engine.createBattle(input, NO_PROMPTS, () => { observations++; })).toThrow();
       expect(observations).toBe(0);
-      expect(JSON.stringify(input)).toBe(before);
-      // Catalog availability and effective card types are checked by initialization,
-      // while saves retain structurally sound content identities for their host.
-      if (input.decks.player[0]?.cardId !== syntheticId(0xffff) && input.decks.player[0]?.cardId !== instantWin.id &&
-          input.setup!.dreamwell.deck[0] !== parseDreamwellCardId("5e5e5e5e-0000-4000-8000-00000000ffff")) {
-        const state = engine.createBattle(init(), NO_PROMPTS).state;
-        expect(parseJourneyBattleFoldState(saved(input, slice(state)))).toBeNull();
-      }
+      expect(input).toStrictEqual(before);
+      const state = engine.createBattle(init(), NO_PROMPTS).state;
+      expect(parseJourneyBattleFoldState(saved(input, slice(state)))).not.toBeNull();
     }
-    expect(() => engine.createBattle({ ...init(), dreamwell: [] }, NO_PROMPTS)).toThrow();
-    for (const unavailable of [
-      { avatars: { player: parseAvatarId("5e5e5e5e-0000-4000-8000-00000000ffff") } },
-      { dreamsigns: { player: [parseDreamsignId("5e5e5e5e-0000-4000-8000-00000000ffff")] } },
-      { dreamwell: [parseDreamwellCardId("5e5e5e5e-0000-4000-8000-00000000ffff")] },
-    ]) expect(() => engine.createBattle({ ...init(), ...unavailable }, NO_PROMPTS)).toThrow();
   });
 
   it("validates play against the effective deck-entry type", () => {
@@ -215,19 +252,15 @@ describe("declared public battle setup", () => {
 describe("declared result options", () => {
   it("rejects every eligible-side slot at initialization and saved-load boundaries", () => {
     const state = engine.createBattle(init(), NO_PROMPTS).state;
-    for (const victorySides of [Array<Side>(1), [undefined], [null], [["player"]]]) {
+    for (const options of [
+      ...[Array<Side>(1), Array<Side>(2), Object.assign(Array<Side>(2), { 0: "player" }), [undefined], [null], [["player"]], [], ["player", "player"], ["neutral"], ["player", "enemy", "player"]].map((victorySides) => ({ victorySides })),
+      ...[0, -1, 1.5, Number.NaN, "none"].map((turnLimit) => ({ turnLimit })),
+    ]) {
       const input = init();
-      Reflect.set(input, "victorySides", victorySides);
-      const before = structuredClone(input);
-      const ownIndices = Object.keys(victorySides);
-      let observations = 0;
-      expect.soft(() => engine.createBattle(input, NO_PROMPTS, () => { observations++; })).toThrow();
-      expect.soft(observations).toBe(0);
-      expect.soft(input).toStrictEqual(before);
-      expect.soft(Object.keys(input.victorySides ?? [])).toEqual(ownIndices);
-      expect.soft(parseJourneyBattleFoldState(saved(input, slice(state)))).toBeNull();
+      Object.assign(input, options);
+      expectDeclarationRefused(input, state);
       const malformed = structuredClone(state);
-      Reflect.set(malformed.config, "victorySides", victorySides);
+      Object.assign(malformed.config, options);
       expect.soft(parseJourneyBattleFoldState(saved(init(), slice(malformed)))).toBeNull();
     }
   });
@@ -252,7 +285,7 @@ describe("declared result options", () => {
       const number = side === "player" ? 7 : 8;
       const hand = { ...declared, placements: [{ side, deckIndex: 0, zone: "hand" as const }],
         turn: { ...setup().turn, active: side, lastNormal: side, turnNumber: number, sideTurns: { player: 4, enemy: side === "enemy" ? 4 : 3 } } };
-      for (const victorySides of [[side], [eligible]]) {
+      for (const victorySides of [[side], [eligible]] satisfies readonly VictorySides[]) {
         const created = engine.createBattle({ ...input, decks: { ...input.decks, [side]: [{ cardId: instantWin.id }] }, setup: hand, victorySides }, NO_PROMPTS).state;
         const card = created.sides[side].hand[0];
         if (card === undefined) throw new Error("Expected declared win card");
@@ -271,32 +304,36 @@ describe("declared result options", () => {
     }
   });
 
-  it("rejects malformed result configuration", () => {
-    for (const options of [{ victorySides: [] }, { victorySides: ["player", "player"] }, { victorySides: ["neutral"] }, { turnLimit: 0 }, { turnLimit: -1 }, { turnLimit: 1.5 }, { turnLimit: Number.NaN }]) {
-      const input = init();
-      Object.assign(input, options);
-      expect(() => engine.createBattle(input, NO_PROMPTS)).toThrow();
-    }
-  });
 });
 
 describe("declared setup persistence", () => {
-  it("round-trips configured snapshots and continues public fold actions without mutating the source", () => {
-    const input = { ...init(), victorySides: ["player"] as const, turnLimit: null };
-    const state = engine.createBattle(input, NO_PROMPTS).state;
-    const before = stateHash(state);
-    const reloaded = deserializeState(serializeState(state));
-    expect(stateHash(reloaded)).toBe(before);
-    const loaded = parseJourneyBattleFoldState(saved(input, slice(reloaded)));
-    expect(loaded).not.toBeNull();
-    const fold = createFoldAdapter(engine);
-    const outcome = fold.reduce(loaded!.engine.slice, { kind: "battleAction", side: "player", action: { kind: "pass" } });
-    expect(outcome.kind).toBe("applied");
-    if (outcome.kind !== "applied") throw new Error("Expected applied pass");
-    expect(outcome.slice.committed.config).toMatchObject({ victorySides: ["player"], turnLimit: null });
-    expect(outcome.slice.committed.config.victorySides).not.toBe(state.config.victorySides);
-    expect(stateHash(state)).toBe(before);
-    expect(stateHash(outcome.slice.committed)).toBe(stateHash(pass(reloaded)));
+  it("preserves all four eligible-side declarations and omission through load and continuation", () => {
+    const variants: readonly (VictorySides | undefined)[] = [undefined, ["player"], ["enemy"], ["player", "enemy"], ["enemy", "player"]];
+    const hashes = new Set<string>();
+    for (const victorySides of variants) {
+      const input = { ...init(), ...(victorySides === undefined ? {} : { victorySides }) };
+      const before = structuredClone(input);
+      const state = engine.createBattle(input, NO_PROMPTS).state;
+      expect(input).toStrictEqual(before);
+      expect(state.config.victorySides).toEqual(victorySides);
+      if (victorySides === undefined) expect(state.config).not.toHaveProperty("victorySides");
+      else expect(state.config.victorySides).not.toBe(victorySides);
+      const beforeHash = stateHash(state);
+      const bytes = serializeState(state);
+      hashes.add(stateHash(state));
+      const reloaded = deserializeState(bytes);
+      expect(serializeState(reloaded)).toBe(bytes);
+      expect(stateHash(reloaded)).toBe(stateHash(state));
+      const loaded = parseJourneyBattleFoldState(saved(input, slice(reloaded)));
+      expect(loaded).not.toBeNull();
+      const continued = createFoldAdapter(engine).reduce(loaded!.engine.slice, { kind: "battleAction", side: "player", action: { kind: "pass" } });
+      if (continued.kind !== "applied") throw new Error("Expected applied pass");
+      expect(continued.slice.committed.config.victorySides).toEqual(victorySides);
+      if (victorySides !== undefined) expect(continued.slice.committed.config.victorySides).not.toBe(state.config.victorySides);
+      expect(stateHash(state)).toBe(beforeHash);
+      expect(stateHash(continued.slice.committed)).toBe(stateHash(pass(state)));
+    }
+    expect(hashes.size).toBe(variants.length);
   });
 
   it("accepts ordinary old save fields and keeps absent result options absent", () => {
@@ -308,20 +345,9 @@ describe("declared setup persistence", () => {
     expect(parseJourneyBattleFoldState(saved(ordinary, slice(state)))).not.toBeNull();
   });
 
-  it("rejects malformed new save fields and an unsupported prepared boundary", () => {
+  it("accepts supported pending prepared steps and refuses unsupported phase entry", () => {
     const input = { ...init(), victorySides: ["player"] as const, turnLimit: null };
     const state = engine.createBattle(input, NO_PROMPTS).state;
-    for (const options of [{ victorySides: [] }, { victorySides: ["player", "player"] }, { victorySides: ["neutral"] }, { turnLimit: 0 }, { turnLimit: "none" }]) {
-      const badInit = structuredClone(input);
-      Object.assign(badInit, options);
-      expect(parseJourneyBattleFoldState(saved(badInit, slice(state)))).toBeNull();
-      const badState = structuredClone(state);
-      Object.assign(badState.config, options);
-      expect(parseJourneyBattleFoldState(saved(input, slice(badState)))).toBeNull();
-    }
-    const badSetup = structuredClone(input);
-    Reflect.set(badSetup.setup!.turn, "phase", "challenge");
-    expect(parseJourneyBattleFoldState(saved(badSetup, slice(state)))).toBeNull();
     const pending = { ...slice(state), inFlight: { step: { kind: "beginBattle" as const, dreamwell: [well.id], preparedPhase: "dawn" as const }, automatic: true, answers: [] } };
     expect(parseJourneyBattleFoldState(saved(input, pending))).not.toBeNull();
     Reflect.set(pending.inFlight.step, "preparedPhase", "ending");
