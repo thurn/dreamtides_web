@@ -1,3 +1,4 @@
+import { tutorialCheckpointQueue } from "./tutorial-checkpoints";
 // The journey battle lifecycle: the `BEGIN_BATTLE` and `END_BATTLE` reducer
 // cases and the provider seams they delegate to.
 //
@@ -259,7 +260,7 @@ function startJourneyBattleWithCommits(
     provider.engine,
     openingSeq,
   );
-  return started === null ? null : { battle: { mode: { kind: "journey" }, init: start.init, engine: started.fold, ...(start.guidance === undefined ? {} : { guidance: { ...start.guidance, checkpoints: [], tutorialPresentation: null } }) }, committedSteps: started.committedSteps };
+  return started === null ? null : { battle: { mode: { kind: "journey" }, init: start.init, engine: started.fold, ...(start.guidance === undefined ? {} : { guidance: { ...start.guidance, ...tutorialCheckpointQueue([]) } }) }, committedSteps: started.committedSteps };
 }
 
 // ---------------------------------------------------------------------------

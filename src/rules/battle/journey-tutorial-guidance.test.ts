@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "./tutorial-checkpoints";
 import { createEngineCardModels } from "../../battle/ui/engine-card-model";
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -32,7 +33,7 @@ function current(state: ReturnType<typeof host>) {
   return battle;
 }
 function finish(state: ReturnType<typeof host>) {
-  const presentation = current(state).guidance!.tutorialPresentation;
+  const presentation = currentTutorialPresentation(current(state).guidance);
   if (presentation === null) throw Error("missing presentation");
   return apply(state, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: presentation.id, messageIndex: presentation.messageIndex }, 50);
 }
@@ -245,31 +246,39 @@ describe("journey battle guidance from public engine work", () => {
 });
 
 describe("journey guidance replay, stale input and shared history", () => {
-  it("retains ordered distinct producers behind a prompt and completes exactly one checkpoint", () => {
+  it("reloads ordered producers, holds both actors until exact completion and resumes the same prompt", () => {
     const next = passUntilGuidance(drawHost([teaching("dreamwell-resolve", WELL), teaching("figment-created")])), battle = current(next), queue = battle.guidance!.checkpoints;
-    expect(queue.map(checkpoint => checkpoint.presentation.kind === "tutorial-guidance" ? checkpoint.presentation.source.kind : null)).toEqual(["dreamwell", "figment"]);
+    expect(queue.map(checkpoint => checkpoint.presentation.source.kind)).toEqual(["dreamwell", "figment"]);
+    expect(queue[0].producer!.index).toBeLessThan(queue[1].producer!.index);
+    expect(queue[0].producer!.seq).toBe(queue[1].producer!.seq);
+    const pending = pendingEnginePrompt(battle, engine)!;
+    if (pending.prompt.kind !== "chooseCards") throw Error("missing discard prompt");
     const loaded = apply(genesisFoldState(GENESIS), "LOAD_STATE", { snapshot: clone(next.journey), battle: clone(battle) });
     expect(loaded.outcome).toBe("applied");
-    const once = finish(loaded.state), twice = finish(once.state);
-    expect(current(once.state).guidance?.tutorialPresentation?.id).toBe(queue[1].presentation.id);
-    expect(current(twice.state).guidance?.tutorialPresentation).toBeNull();
-    expect(twice.state.battle?.engine).toEqual(battle.engine);
-    expect(pendingEnginePrompt(twice.state.battle, engine)?.prompt).toEqual(pendingEnginePrompt(battle, engine)?.prompt);
-  });
-  it("gates both actors and exact prompt/completion identities without changing engine state", () => {
-    const next = passUntilGuidance(drawHost()), battle = current(next), presentation = battle.guidance!.tutorialPresentation!, pending = pendingEnginePrompt(battle, engine)!;
-    if (pending.prompt.kind !== "chooseCards") throw Error("missing discard prompt");
-    for (const [type, payload] of [
-      ["BATTLE_ACTION", { side: "player", action: { kind: "pass" } }], ["BATTLE_ACTION", { side: "enemy", action: { kind: "pass" } }],
-      ["BATTLE_ANSWER", { side: pending.prompt.side, promptId: pending.prompt.id, value: [pending.prompt.candidates[0]] }], ["BATTLE_CANCEL", { side: pending.prompt.side, promptId: pending.prompt.id }],
-      ["END_BATTLE", {}], ["TUTORIAL_CARD_ATTEMPT", { battleId: battle.init.battleId, instance: "i1" }],
-    ] as const) expect(apply(next, type, payload).state).toBe(next);
-    expect(apply(next, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: "foreign", messageIndex: 0 }).outcome).toBe("bounced");
-    expect(apply(next, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: presentation.id, messageIndex: 1 }).outcome).toBe("bounced");
-    const completed = finish(next);
-    expect(completed.state.battle?.engine).toBe(battle.engine);
-    expect(apply(completed.state, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: presentation.id, messageIndex: 0 }).outcome).toBe("bounced");
-    expect(apply(completed.state, "BATTLE_ANSWER", { side: "player", promptId: parsePresentationId("stale"), value: [] }).outcome).toBe("bounced");
+    expect(JSON.stringify(loaded.state.battle)).toBe(JSON.stringify(battle));
+    expect(hashState(loaded.state.battle)).toBe(hashState(battle));
+    let held = loaded.state;
+    for (const checkpoint of queue) {
+      expect(current(held).guidance!.checkpoints[0]).toEqual(checkpoint);
+      for (const [type, payload] of [
+        ["BATTLE_ACTION", { side: "player", action: { kind: "pass" } }], ["BATTLE_ACTION", { side: "enemy", action: { kind: "pass" } }],
+        ["BATTLE_ANSWER", { side: pending.prompt.side, promptId: pending.prompt.id, value: [pending.prompt.candidates[0]] }], ["BATTLE_CANCEL", { side: pending.prompt.side, promptId: pending.prompt.id }],
+        ["END_BATTLE", {}], ["TUTORIAL_CARD_ATTEMPT", { battleId: battle.init.battleId, instance: "i1" }],
+      ] as const) expect(apply(held, type, payload).state).toBe(held);
+      expect(apply(held, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: "foreign", messageIndex: 0 }).outcome).toBe("bounced");
+      expect(apply(held, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: checkpoint.presentation.id, messageIndex: 1 }).outcome).toBe("bounced");
+      const completed = finish(held);
+      expect(completed.outcome).toBe("applied");
+      expect(completed.state.battle?.engine).toBe(held.battle?.engine);
+      expect(apply(completed.state, "COMPLETE_TUTORIAL_BATTLE_PRESENTATION", { presentationId: checkpoint.presentation.id, messageIndex: 0 }).outcome).toBe("bounced");
+      held = completed.state;
+    }
+    expect(current(held).guidance!.checkpoints).toEqual([]);
+    expect(pendingEnginePrompt(held.battle, engine)).toEqual(pending);
+    expect(apply(held, "BATTLE_ANSWER", { side: "player", promptId: parsePresentationId("stale"), value: [] }).outcome).toBe("bounced");
+    const answered = apply(held, "BATTLE_ANSWER", { side: pending.prompt.side, promptId: pending.prompt.id, value: [pending.prompt.candidates[0]] });
+    expect(answered.outcome).toBe("applied");
+    expect(answered.state.battle?.engine.slice.inFlight).toBeNull();
   });
 
   it("holds an otherwise legal top-level pass until the exact teaching checkpoint completes", () => {

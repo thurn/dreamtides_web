@@ -1,3 +1,4 @@
+import { tutorialCheckpointQueue } from "./tutorial-checkpoints";
 import { BATTLE } from "../../content/battle";
 import type { Engine, EngineEvent } from "../../engine";
 import type { BattleSlice, FoldObservation } from "../../engine/fold/slice";
@@ -15,7 +16,6 @@ export interface BattleGuidanceHost {
   readonly init: TutorialBattleDisplayInit;
   readonly engine: BattleFoldState["engine"];
   readonly checkpoints: readonly TutorialCheckpoint[];
-  readonly tutorialPresentation: import("./fold").TutorialBattlePresentation | null;
 }
 
 export function battleGuidanceOf(battle: BattleFoldState | null): BattleGuidanceHost | null {
@@ -27,22 +27,7 @@ export function battleGuidanceOf(battle: BattleFoldState | null): BattleGuidance
     init: { ...battle.init, tutorialTriggers: guidance.tutorialTriggers, dreamwellDeck: guidance.dreamwellDeck },
     engine: battle.engine,
     checkpoints: guidance.checkpoints,
-    tutorialPresentation: guidance.tutorialPresentation,
   };
-}
-
-/** Replace only the durable presentation queue on its actual battle host. */
-export function withBattleGuidanceCheckpoints(state: FoldState, checkpoints: readonly TutorialCheckpoint[]): FoldState | null {
-  const battle = state.battle;
-  if (battle === null) return null;
-  if (battle.mode.kind === "tutorial") {
-    const tutorial = battle as import("./fold").TutorialBattleFoldState;
-    return { ...state, battle: { ...tutorial, checkpoints, tutorialPresentation: checkpoints[0]?.presentation ?? null } };
-  }
-  const journey = battle as JourneyBattleFoldState;
-  if (journey.guidance === undefined || checkpoints.some(checkpoint => checkpoint.presentation.kind !== "tutorial-guidance")) return null;
-  const first = checkpoints[0]?.presentation;
-  return { ...state, battle: { ...journey, guidance: { ...journey.guidance, checkpoints, tutorialPresentation: first?.kind === "tutorial-guidance" ? first : null } } };
 }
 
 /** One shared matcher and authored-message projection for both battle hosts. */
@@ -152,6 +137,5 @@ export function journeyGuidanceTransition(state: FoldState, battle: JourneyBattl
     }
     if (observed !== undefined) before = observed;
   }
-  const next = { ...state, tutorialTriggerIdsSeen: seen, battle: { ...battle, engine: { ...battle.engine, slice } } };
-  return withBattleGuidanceCheckpoints(next, checkpoints) ?? next;
+  return { ...state, tutorialTriggerIdsSeen: seen, battle: { ...battle, engine: { ...battle.engine, slice }, guidance: { ...guidance, ...tutorialCheckpointQueue(checkpoints) } } };
 }

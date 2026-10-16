@@ -43,7 +43,7 @@ export interface JourneyBattleFoldState {
 export interface JourneyBattleGuidance {
   readonly tutorialTriggers: readonly TutorialTriggerDefinition[];
   readonly dreamwellDeck: readonly import("../../battle/types").DreamwellCardDefinition[];
-  readonly checkpoints: readonly TutorialCheckpoint[];
+  readonly checkpoints: readonly TutorialCheckpoint<TutorialGuidancePresentation>[];
   readonly tutorialPresentation: TutorialGuidancePresentation | null;
 }
 
@@ -89,8 +89,8 @@ export interface TutorialBattleDisplayInit extends JourneyBattleInit {
 }
 
 /** Durable playback frame; rules always read engine.slice instead. */
-export interface TutorialCheckpoint {
-  readonly presentation: TutorialBattlePresentation;
+export interface TutorialCheckpoint<P extends TutorialBattlePresentation = TutorialBattlePresentation> {
+  readonly presentation: P;
   readonly before: BattleState;
   readonly state: BattleState;
   /** Journey guidance owns the ordinary visual of this exact published edge. */

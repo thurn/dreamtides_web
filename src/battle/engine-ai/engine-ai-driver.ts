@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "../../rules/battle/tutorial-checkpoints";
 // The AI host of a journey's engine battle: it watches the fold, and when the
 // AI's side owes a top-level decision or a prompt answer it asks a policy
 // host (the Web Worker in live play) and submits the answer as an intent,
@@ -146,7 +147,7 @@ export class EngineAiDriver {
     const battle = engineBattleOf(state.battle);
     if (battle === null) return null;
     const tutorial = tutorialBattleOf(battle);
-    if (battleGuidanceOf(battle)?.tutorialPresentation != null) return null;
+    if (currentTutorialPresentation(battleGuidanceOf(battle)) !== null) return null;
     const fold = battle.engine;
     const pending = pendingEnginePrompt(battle, this.options.engine);
     const decision = aiDecision({

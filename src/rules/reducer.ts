@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "./battle/tutorial-checkpoints";
 import { observesJourneyLoops, journeyLoopSpec } from "./journey/journey-mandatory-loop";
 import { commitJourneyLoopFold, journeyLoopBattleBinding } from "./journey/journey-loop-state";
 import { validJourneySubtypeIntent, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey/journey-subtype";
@@ -364,9 +365,8 @@ export function routeDomain(
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "afterBattle" && isGameplayEventType(type) &&
     type !== "RESOLVE_AFTER_BATTLE_DREAMSIGN" && type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   if (
-    battleGuidanceOf(state.battle)?.tutorialPresentation != null &&
-    type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
-    (type === "END_BATTLE" || type === "BATTLE_ACTION" || type === "BATTLE_ANSWER" || type === "BATTLE_CANCEL" || type === "TUTORIAL_CARD_ATTEMPT")
+    (type === "END_BATTLE" || type === "BATTLE_ACTION" || type === "BATTLE_ANSWER" || type === "BATTLE_CANCEL" || type === "TUTORIAL_CARD_ATTEMPT") &&
+    currentTutorialPresentation(battleGuidanceOf(state.battle)) !== null
   ) {
     return bounce(state);
   }

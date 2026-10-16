@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "../../rules/battle/tutorial-checkpoints";
 // The journey battle screen over the engine battle (Phase 4.2). It renders
 // `engine.view` for the human through the existing battle screen, drives
 // highlights and drop targets from the engine's legal actions, and writes
@@ -139,8 +140,9 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const [abilityChooser, setAbilityChooser] = useState<EngineChooser | null>(null);
   const guidanceHost = useMemo(() => battleGuidanceOf(battle), [battle]);
   const guidanceCheckpoint = guidanceHost?.checkpoints[0] ?? null;
-  const presentation = usePresentationQueue(guidanceCheckpoint === null ? null : { id: guidanceCheckpoint.presentation.id, producer: guidanceCheckpoint.producer });
-  const guidanceHeld = guidanceCheckpoint !== null && presentation.guidanceHeld;
+  const guidancePresentation = currentTutorialPresentation(guidanceHost);
+  const presentation = usePresentationQueue(guidancePresentation === null || guidanceCheckpoint === null ? null : { id: guidancePresentation.id, producer: guidanceCheckpoint.producer });
+  const guidanceHeld = guidancePresentation !== null && guidanceCheckpoint !== null && presentation.guidanceHeld;
   const [browsed, setBrowsed] = useState<BrowsedZone | null>(null);
   const [logOpen, setLogOpen] = useState(false);
   const [resultDismissed, setResultDismissed] = useState(false);
@@ -349,7 +351,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         drawnForDiscard: derived.drawnForDiscard,
         playing: derived.playing,
         decision: derived.decision,
-        presented: guidanceCheckpoint === null && promptPresentable(head, presentation.notice),
+        presented: guidancePresentation === null && promptPresentable(head, presentation.notice),
         notice: noticeView,
         cards,
         catalog: engine.catalog,
@@ -368,7 +370,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           return definition === null ? null : dreamwellCardModel(definition);
         },
       }),
-    [avatars, battleId, cards, derived, dreamwell, engine, guidanceCheckpoint, guidanceHeld, head, init, noticeView, presentation.notice, printedKeywords, resultDismissed],
+    [avatars, battleId, cards, derived, dreamwell, engine, guidancePresentation, guidanceHeld, head, init, noticeView, presentation.notice, printedKeywords, resultDismissed],
   );
   const emblemName = useCallback<EngineEmblemNamer>(
     (emblem, id) =>

@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "./tutorial-checkpoints";
 import { testTutorialTriggerId } from "../../types/test-identities";
 import { afterEach, describe, expect, it } from "vitest";
 import { policyOverride } from "../../engine/policy/overrides";
@@ -60,7 +61,7 @@ describe("tutorial engine host contracts", () => {
     });
     it("durable guidance preserves delay, shared history and exact completion identity", () => {
         const early = trigger(testTutorialTriggerId("early"), "card-play", 0), late = trigger(testTutorialTriggerId("late"), "card-play", 1), initial = host("enemy", CARDS.strong, [late, early]);
-        const { next } = start(initial), current = battle(next), first = current.tutorialPresentation;
+        const { next } = start(initial), current = battle(next), first = currentTutorialPresentation(current);
         expect(next.tutorialTriggerIdsSeen).toEqual([early.id]);
         expect(first?.kind).toBe("tutorial-guidance");
         if (first?.kind !== "tutorial-guidance")
@@ -71,7 +72,7 @@ describe("tutorial engine host contracts", () => {
         const completed = completeTutorialCheckpoint(next, { presentationId: first.id, messageIndex: 0 });
         if (completed === null)
             throw Error("completion refused");
-        expect(battle(completed).tutorialPresentation).toBeNull();
+        expect(battle(completed).checkpoints).toEqual([]);
         expect(completed.tutorialTriggerIdsSeen).toEqual([early.id]);
         expect(completeTutorialCheckpoint(completed, { presentationId: first.id, messageIndex: 0 })).toBeNull();
         expect(parseTutorialBattleFoldState(roundTrip(current))).toEqual(current);
@@ -287,7 +288,7 @@ describe("tutorial authoritative settled victory handoff", () => {
         expect(won).toEqual(saved);
         const settled = settle(won);
         expect(battle(settled).checkpoints).toEqual([]);
-        expect(battle(settled).tutorialPresentation).toBeNull();
+        expect(battle(settled).checkpoints).toEqual([]);
         expect(battle(settled).engine.slice.inFlight).toBeNull();
         expect(exitTutorialBattle(settled, { battleId: "foreign" }, context(512))).toBeNull();
         const exited = exitTutorialBattle(settled, { battleId: id }, context(513));

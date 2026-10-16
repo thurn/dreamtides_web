@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "../rules/battle/tutorial-checkpoints";
 import { useCallback, useEffect, useMemo } from "react";
 import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
 import { logEvent } from "../logging";
@@ -19,7 +20,7 @@ export function useBattleTutorialGuidance(presentationVisible = true): BattleTut
   const actions = useActions();
   const clientId = useClientId();
   const battle = useMemo(() => battleGuidanceOf(state.battle), [state.battle]);
-  const presentation = battle?.tutorialPresentation;
+  const presentation = currentTutorialPresentation(battle);
   const guidance =
     presentation?.kind === "tutorial-guidance" ? presentation : null;
   const submitAdvance = useCallback(

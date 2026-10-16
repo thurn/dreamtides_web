@@ -1,0 +1,653 @@
+{
+  "bead": "hv-33id.15",
+  "base": "9286f669671541d711c3ea37b9bec6e3b38708b6",
+  "recordedAt": "2026-10-16T02:38:24.893136+00:00",
+  "stage": "Final pre-Git cutoff; actual ordinary Git start/return and clock tail are retained in additive ignored git-terminal receipt. Parent cold review and native delivery remain pending.",
+  "sourceHashes": {
+    "src/battle/components/EngineBattleScreen.tsx": "50c75be20b3d0df9c31162fe936b544d60f757d2d9e49ef36b90d57463efb09d",
+    "src/battle/engine-ai/engine-ai-driver.ts": "e73e13c6ce8d088b171dc59b390caedb9b5d93639880dc35c8c003469d1d2b07",
+    "src/battle/use-battle-tutorial-guidance.ts": "8be4104c63ff4a42e7d67124a79dd0c19df49745e0e930f388189b3c0415a547",
+    "src/battle/use-tutorial-battle-controller.ts": "5c513dbbbc21646d820f5cec4d29c49e0133a0053b9440aaf8b8a57177909e50",
+    "src/rules/battle/fold.ts": "cbd64f441ad368a999c13ab3907fe705d38e1fcda0ad990c06d75e85aee94260",
+    "src/rules/battle/journey-battle.ts": "0882e6846aeb293a98613084d71e38c72b5cf08a7f350479fb31b5ad1dd6c823",
+    "src/rules/battle/journey-tutorial-guidance.fixtures.ts": "7f25ad8aae1e57b2b21cab3feb414759ccd87aa2ef73fd4c8a806b00b608f313",
+    "src/rules/battle/journey-tutorial-guidance.test.ts": "12864e2f1564f346db91ecfba104245a51f4383f0c011658b23849be0056e3bf",
+    "src/rules/battle/journey-tutorial-guidance.ts": "052b193d4fb1ce353f1775c5e0dcec6c9878b493e30d75e0e759ef31eb94b093",
+    "src/rules/battle/tutorial-checkpoints.ts": "df53876acf867a63ebe652cdda4b54526264f4e29842086f84749549cdb320de",
+    "src/rules/battle/tutorial-contracts-fixture.ts": "42936edcfa2dd33ea7d7245de0d1776b772f5e152f0b04f0036f1fe7f7cf5139",
+    "src/rules/battle/tutorial-host.contracts.ts": "5c1fec2b4e79675b38bd6e27fbcd96e72dc2a795ede9d64cebf05ed7f9fa9a59",
+    "src/rules/battle/tutorial-lifecycle.ts": "06482bdbe1f559ca54eca806d8618c0635adfa4e7582041060c77cfaee941a78",
+    "src/rules/battle/tutorial-load.ts": "2dccab9a3da837e64ecf078a6a6c2b0b3262dc5249f6ff3d140b4c93cbbc66dc",
+    "src/rules/battle/tutorial-presentation.ts": "2088f156df537e8f52df243366cad75eb899814b6f383bf28fd35c7a66e097a6",
+    "src/rules/reducer.ts": "356fcc63a1999b979dbe636c5cccc16b6370ddffc9a62ef2e173e8944ad0807d",
+    "src/screens/cumulus_adapters/TutorialBattleScreenAdapter.tsx": "eef61c2168886174efe99f8db2d0694cea2628b76ec572408d0ad557aa3a2ee9",
+    "src/screens/cumulus_adapters/battle-tutorial-guidance-view-model.ts": "5ef87da98c958d0e929f294116a62c83c9c9557e764febccc7a9ff3a71c81bc0",
+    "src/screens/cumulus_adapters/tutorial-battle-view-model.ts": "97f3620ad8e6584a2ab83a0180170af83755d20087ac7c841c82f31ee3a52de3",
+    "src/screens/cumulus_adapters/tutorial-guidance-view-model.test.ts": "b1e79b106c3c8a6f263bc26a9bd443e8442063e7c51f5efafe1c67b622f0f1c5"
+  },
+  "sourceProvenance": {
+    "fingerprint": "source-epoch-v01.json",
+    "recordedAt": "2026-10-16T02:11:57.591278+00:00",
+    "coverage": "All20 changed source paths SHA256 plus exact unchanged base; generated materializations are disposable.",
+    "qaAndFuzz": "Contemporaneous pre-run source fingerprint precedes fuzz200, Foresee and both standalone invocations. Final rehash matches.",
+    "reviewAndFull": "Fingerprint is after final ordinary review and mid-full-review, not a pre-check snapshot. Binding rests on last runtime-source write before02:09:40, retained tool-call no-edit history, mid-run fingerprint and final commit equality. No source edits occurred after that last write.",
+    "negativeChecks": "Negative source snapshots are later deterministic reconstructions from retained edit scripts and tool-call repairs, explicitly not contemporaneous snapshots."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 10,
+    "jsdomFiles": 0,
+    "cases": -1,
+    "consolidation": "Two journey reload/gating cases become one synthetic two-producer public workflow; exact/raw mirror rejection remains separate."
+  },
+  "checks": [
+    {
+      "name": "helper-browser-reload",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.15/checkpoint-reload-v02.mjs",
+        "--bead",
+        "hv-33id.15",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:13:40.840294+00:00",
+      "end": "2026-10-16T02:14:20.537682+00:00",
+      "exit": 0,
+      "wallSeconds": 39.69722566602286,
+      "pid": 88526,
+      "pgid": 88526,
+      "load": "{ 7.19 9.53 8.86 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362356350216416,
+      "endedMonotonicNs": 362396047338500,
+      "cpuUserSeconds": 7.612487,
+      "cpuSystemSeconds": 3.408283
+    },
+    {
+      "name": "helper-browser-tutorial",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.15/tutorial-host-walk-v01.mjs",
+        "--bead",
+        "hv-33id.15",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:14:57.813945+00:00",
+      "end": "2026-10-16T02:17:42.025730+00:00",
+      "exit": 1,
+      "wallSeconds": 164.21135862497613,
+      "pid": 93399,
+      "pgid": 93399,
+      "load": "{ 8.20 9.40 8.87 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362433323708375,
+      "endedMonotonicNs": 362597534966750,
+      "cpuUserSeconds": 8.452657,
+      "cpuSystemSeconds": 3.562943
+    },
+    {
+      "name": "helper-browser-tutorial2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.15/tutorial-host-walk-v02.mjs",
+        "--bead",
+        "hv-33id.15",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:19:18.037254+00:00",
+      "end": "2026-10-16T02:25:44.416642+00:00",
+      "exit": 0,
+      "wallSeconds": 386.3785261660232,
+      "pid": 67605,
+      "pgid": 67605,
+      "load": "{ 9.19 9.36 8.95 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362693546445041,
+      "endedMonotonicNs": 363079924897083,
+      "cpuUserSeconds": 7.068648,
+      "cpuSystemSeconds": 3.381536
+    },
+    {
+      "name": "helper-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/journey-tutorial-guidance.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "src/screens/cumulus_adapters/tutorial-guidance-view-model.test.ts",
+        "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:04:48.793135+00:00",
+      "end": "2026-10-16T02:04:56.813535+00:00",
+      "exit": 1,
+      "wallSeconds": 8.020035916008055,
+      "pid": 13821,
+      "pgid": 13821,
+      "load": "{ 10.99 10.60 8.42 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 361824294256041,
+      "endedMonotonicNs": 361832314239250,
+      "cpuUserSeconds": 6.665045,
+      "cpuSystemSeconds": 2.561429
+    },
+    {
+      "name": "helper-focused2",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/journey-tutorial-guidance.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "src/screens/cumulus_adapters/tutorial-guidance-view-model.test.ts",
+        "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:05:26.849393+00:00",
+      "end": "2026-10-16T02:05:34.063356+00:00",
+      "exit": 0,
+      "wallSeconds": 7.213846375001594,
+      "pid": 16208,
+      "pgid": 16208,
+      "load": "{ 9.05 10.14 8.34 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 361862350022875,
+      "endedMonotonicNs": 361869563831000,
+      "cpuUserSeconds": 6.53305,
+      "cpuSystemSeconds": 2.243202
+    },
+    {
+      "name": "helper-focused3",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/lifecycle-start.test.ts",
+        "src/rules/battle/journey-tutorial-guidance.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "src/screens/cumulus_adapters/tutorial-guidance-view-model.test.ts",
+        "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:07:50.564760+00:00",
+      "end": "2026-10-16T02:07:55.976036+00:00",
+      "exit": 0,
+      "wallSeconds": 5.411192583967932,
+      "pid": 31811,
+      "pgid": 31811,
+      "load": "{ 5.23 8.23 7.84 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362006075351875,
+      "endedMonotonicNs": 362011486493083,
+      "cpuUserSeconds": 6.633437,
+      "cpuSystemSeconds": 1.923694
+    },
+    {
+      "name": "helper-full",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:10:41.023044+00:00",
+      "end": "2026-10-16T02:13:02.571945+00:00",
+      "exit": 0,
+      "wallSeconds": 141.5483867499861,
+      "pid": 44254,
+      "pgid": 44254,
+      "load": "{ 10.86 10.61 8.96 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362176533459833,
+      "endedMonotonicNs": 362318081762875,
+      "cpuUserSeconds": 324.174584,
+      "cpuSystemSeconds": 33.531213
+    },
+    {
+      "name": "helper-fuzz",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:13:39.665015+00:00",
+      "end": "2026-10-16T02:29:54.737989+00:00",
+      "exit": 0,
+      "wallSeconds": 975.0709233749658,
+      "pid": 88421,
+      "pgid": 88421,
+      "load": "{ 7.19 9.53 8.86 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362355174878833,
+      "endedMonotonicNs": 363330245695041,
+      "cpuUserSeconds": 1014.129291,
+      "cpuSystemSeconds": 10.337665
+    },
+    {
+      "name": "helper-knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:08:21.945627+00:00",
+      "end": "2026-10-16T02:08:27.134842+00:00",
+      "exit": 0,
+      "wallSeconds": 5.189064874954056,
+      "pid": 33980,
+      "pgid": 33980,
+      "load": "{ 5.70 8.06 7.79 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362037456223458,
+      "endedMonotonicNs": 362042645248083,
+      "cpuUserSeconds": 4.257626,
+      "cpuSystemSeconds": 1.493982
+    },
+    {
+      "name": "helper-review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:09:40.812953+00:00",
+      "end": "2026-10-16T02:10:31.996290+00:00",
+      "exit": 0,
+      "wallSeconds": 51.18316379201133,
+      "pid": 40533,
+      "pgid": 40533,
+      "load": "{ 16.38 11.28 9.07 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362116323325000,
+      "endedMonotonicNs": 362167506418083,
+      "cpuUserSeconds": 119.16304,
+      "cpuSystemSeconds": 12.751857
+    },
+    {
+      "name": "helper-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:06:10.991340+00:00",
+      "end": "2026-10-16T02:07:00.891932+00:00",
+      "exit": 1,
+      "wallSeconds": 49.90244333300507,
+      "pid": 21638,
+      "pgid": 21638,
+      "load": "{ 6.81 9.38 8.14 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 361906500022833,
+      "endedMonotonicNs": 361956402430375,
+      "cpuUserSeconds": 117.252911,
+      "cpuSystemSeconds": 11.122923
+    },
+    {
+      "name": "helper-review2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:08:42.712049+00:00",
+      "end": "2026-10-16T02:09:31.054348+00:00",
+      "exit": 0,
+      "wallSeconds": 48.342065542005,
+      "pid": 35871,
+      "pgid": 35871,
+      "load": "{ 11.24 9.11 8.17 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 362058222599083,
+      "endedMonotonicNs": 362106564620541,
+      "cpuUserSeconds": 119.981281,
+      "cpuSystemSeconds": 11.540107
+    },
+    {
+      "name": "helper-typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:04:01.986964+00:00",
+      "end": "2026-10-16T02:04:22.562111+00:00",
+      "exit": 2,
+      "wallSeconds": 20.5749297090224,
+      "pid": 10747,
+      "pgid": 10747,
+      "load": "{ 18.74 11.59 8.61 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 361777488156625,
+      "endedMonotonicNs": 361798063030333,
+      "cpuUserSeconds": 30.444788,
+      "cpuSystemSeconds": 3.428086
+    },
+    {
+      "name": "helper-schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:33:03.889593+00:00",
+      "end": "2026-10-16T02:33:04.031227+00:00",
+      "exit": 0,
+      "wallSeconds": 0.14151079196017236,
+      "pid": 55891,
+      "pgid": 55891,
+      "load": "{ 8.45 7.52 7.77 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 363519397112916,
+      "endedMonotonicNs": 363519538578708,
+      "cpuUserSeconds": 0.064858,
+      "cpuSystemSeconds": 0.036322
+    },
+    {
+      "name": "helper-schema-final2",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-tutorial-checkpoints33id15",
+      "start": "2026-10-16T02:38:24.915993+00:00",
+      "end": "2026-10-16T02:38:25.038904+00:00",
+      "exit": 0,
+      "wallSeconds": 0.12283070903504267,
+      "pid": 72284,
+      "pgid": 72284,
+      "load": "{ 4.76 6.11 7.04 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 363840422804208,
+      "endedMonotonicNs": 363840545596375,
+      "cpuUserSeconds": 0.056101,
+      "cpuSystemSeconds": 0.03092
+    }
+  ],
+  "acceptedCheckCounts": {
+    "focusedFinalBeforeScreenWiring": {
+      "files": 5,
+      "tests": 56
+    },
+    "finalRelated": {
+      "files": 149,
+      "tests": 8853
+    },
+    "full": {
+      "files": 434,
+      "tests": 12130,
+      "includes": "content gates, full lint, both typechecks, import cycles, Knip, evidence schema, production bundle"
+    },
+    "fuzz": {
+      "games": 200,
+      "steps": 48163,
+      "prompts": 4177,
+      "interactiveReruns": 419,
+      "failures": 0,
+      "scriptWallS": 973.3,
+      "scriptCpuS": 1022.4,
+      "externalWallS": 975.0709233749658,
+      "lockWaitS": null,
+      "scope": "973.3s is public-tooling execution; external difference includes lock/startup/teardown without separate attribution. Child lstart was the same UTC second as wrapper start; no sustained wait is inferred."
+    }
+  },
+  "qa": {
+    "reload": {
+      "invocation": "run-gGQHFK",
+      "script": "checkpoint-reload-v02.mjs",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "caps": [],
+      "scope": "One actual real-content Foresee producer, fresh-document exact reload and ordinary same-prompt UI answer. held[] are pure reducer refusal witnesses; two-producer and AI/stale contracts are synthetic public tests.",
+      "compact": "reload-compact-v01.json"
+    },
+    "standalone": {
+      "invocation": "run-Rpuvjq",
+      "script": "tutorial-host-walk-v02.mjs",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "caps": [],
+      "scope": "Actual authored standalone beats1\u201331 through Victory and Avatar, five live cinematic timer completions and eight timed guidance advances each viewport; observed manual guidance advances0. No whole journey playthrough claim.",
+      "compact": "tutorial-compact-v01.json"
+    },
+    "negativeStandalone": {
+      "invocation": "run-srHTwQ",
+      "wholeRunAccepted": false,
+      "cause": "Unknown. Raw error has no stack/navigation event; first failed read site is sequential-source inference.",
+      "retained": "negative-qa-v01.json"
+    },
+    "geometry": "Composite guidance/root and resumed battle containers; no bubble-bound/spacing claim.",
+    "viewedScreens": [
+      "reload-guidance-pending-prompt-desktop.png",
+      "reload-guidance-pending-prompt-mobile.png",
+      "resumed-same-prompt-desktop.png",
+      "resumed-same-prompt-mobile.png",
+      "20-mira-foresee-desktop.png",
+      "26-mira-challenge-resolved-desktop.png",
+      "30-victory-desktop.png",
+      "tutorial-host-31-avatar-desktop.png",
+      "20-mira-foresee-mobile.png",
+      "26-mira-challenge-resolved-mobile.png",
+      "30-victory-mobile.png",
+      "tutorial-host-31-avatar-mobile.png"
+    ],
+    "visualInspection": "Only listed12 captures actually viewed by helper; root independent2-image audit retained.",
+    "rootAudit": {
+      "filename": "root-reload-acceptance-audit-v01.json",
+      "sha256": "7330fb4f2e96d36fb6e31bb6a98fae78a3fea6a9c4bb678d5095dc1222743d96"
+    },
+    "actualAiAndOrder": {
+      "artifact": "live-ai-order-reconciliation-v01.json",
+      "scope": "Actual browser native records in both viewports show guide52:2 holding the real enemy after its committed i34 play, with no gameplay between52 and54; exact completion53 precedes the next actual worker main decision29:28/action54. Completion source preserves battle.engine, so eligible committed engine state during guide is inferred backward from that actual decision. This is source-supported inference, not contemporaneous sampled eligible UI, a pure reducer refusal, or a new browser run.",
+      "queueOrder": "Actual completions46/47/48/49 consume ids45:2,45:2:guidance,45:8,45:12 in order, before the actual enemy decision25:24/action50. Frozen event-loop ID construction ties the distinct2/8/12 producer indices to the challenge/Dreamwell/figment branches; producer-kind association uses source proof. This is separate from the synthetic public two-producer reload contract.",
+      "sourceBlobs": {
+        "src/rules/battle/tutorial-presentation.ts": {
+          "blob": "b110a04ac5a9b23c11e8752a53a2909e5ea3faa1",
+          "sha256": "2088f156df537e8f52df243366cad75eb899814b6f383bf28fd35c7a66e097a6",
+          "lines": [
+            [
+              52,
+              60
+            ],
+            [
+              71,
+              90
+            ],
+            [
+              111,
+              132
+            ]
+          ]
+        },
+        "src/rules/battle/tutorial-checkpoints.ts": {
+          "blob": "5514f64f6c29060cbfc66495170d90b0634b45db",
+          "sha256": "df53876acf867a63ebe652cdda4b54526264f4e29842086f84749549cdb320de",
+          "lines": [
+            [
+              1,
+              13
+            ]
+          ]
+        },
+        "src/battle/engine-ai/engine-ai-driver.ts": {
+          "blob": "692c1a41af6b11a023b4e6852aea28dee494cec7",
+          "sha256": "e73e13c6ce8d088b171dc59b390caedb9b5d93639880dc35c8c003469d1d2b07",
+          "lines": [
+            [
+              146,
+              163
+            ]
+          ]
+        }
+      },
+      "nativeHashes": {
+        "desktop": "4a535f9d26bfcf4fe5e6e5c3a810e93ba37cd48b28f7a964a1dc949f27c15195",
+        "mobile": "959c2e270d548ceedbdc4cf7012f9ea430f3cb5d9bcfb021b9b8c78d7a3311b7"
+      },
+      "qualification": "Explicit source-supported backward eligibility inference from actual worker/native events; not sampled eligible UI, pure refusal evidence, or full journey coverage."
+    },
+    "rootAudits": {
+      "root-reload-acceptance-audit-v01.json": "7330fb4f2e96d36fb6e31bb6a98fae78a3fea6a9c4bb678d5095dc1222743d96",
+      "root-standalone-acceptance-audit-v01.json": "714ebae2d01e7e861541aa1b40124c32d3893b2a689f32c45e91e4743a1a475d",
+      "root-selected-image-custody-v01.json": "a0b5e97375f8821b1625de9ec52a8ef6dd8a5532a73d6928e421f117b333cc75",
+      "root-live-ai-native-order-audit-v01.json": "a8d599540b84ef56e4c3b5f7e8e7b5642a68dea843237c5fca2b90be39a8e744",
+      "root-final-source-audit-v01.json": "dc7720ea46ef42ba9aa631e5dbec89f06efe647bc42519702a85586fbfe13434"
+    }
+  },
+  "compatibility": {
+    "wire": "Stored tutorialPresentation retained in both hosts and refreshed solely by tutorialCheckpointQueue. Initial/spread key positions and checkpoint object/frame/producer shapes preserved.",
+    "strictRawLoad": "Existing JSON mirror equality and raw shape/physical-source validation retained; typed journey return permits only guidance checkpoints.",
+    "publicContracts": "Two synthetic producers retain producer seq/index order, battle JSON/hash across load, block both actors at each head, refuse stale/wrong completions, preserve engine state and continue the same genuine prompt. Existing standalone cinematic/first-occurrence/Victory and LocalLog hash contracts pass.",
+    "boundaries": "No serializer, hash, codec, body, wire migration, catalog, authored timing/copy, engine setup validation or phase7 algorithm edits."
+  },
+  "failurePaths": {
+    "errorMidStep": "No new engine step or IO transition; existing cancellation/target/commit contracts pass. Queue writes build one immutable value on the applied reducer path.",
+    "reloadRestart": "reloads ordered producers... same prompt; tutorial lifecycle identities and explicit reset",
+    "partialWrite": "Synchronous immutable queue constructor in reducer; existing LocalLog replay at same hash; no independent persistence write added.",
+    "invalidStale": "Consolidated public two-producer test checks wrong ID/index, stale completed head, stale prompt; malformed raw mirror test remains.",
+    "concurrentActors": "Both actor intents/prompt answer/cancel refused at both queue heads; scheduled AI abandonment contract remains.",
+    "victory": "tutorial authoritative settled victory handoff plus actual desktop/mobile Victory\u2192Avatar"
+  },
+  "runtime": {
+    "recordedAt": "2026-10-16T02:32:26.548542+00:00",
+    "ownedGroups": {
+      "31811": [],
+      "88421": [],
+      "21638": [],
+      "93447": [],
+      "88526": [],
+      "16208": [],
+      "88563": [],
+      "67647": [],
+      "67605": [],
+      "40533": [],
+      "93399": [],
+      "10747": [],
+      "33980": [],
+      "13821": [],
+      "44254": [],
+      "35871": []
+    },
+    "ownServerGroups": [
+      88563,
+      93447,
+      67647
+    ],
+    "ownPort": 5274,
+    "terminalPortFreeReceipts": [
+      "helper-browser-reload.stderr",
+      "helper-browser-tutorial.stderr",
+      "helper-browser-tutorial2.stderr"
+    ],
+    "ownershipRecordsCurrentlyPresent": {
+      "provider": false,
+      "server": false
+    },
+    "qualification": "All own groups settled and each owned runner reported its port free at termination. v01 later observed shared-port reuse by listener99045 with no own group; it was never touched. Current shared state does not define own resource ownership. No shared-provider restart or ownership removal."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "helper-review-final concurrent typecheck/lint/test-related start2026-10-16T02:09:43.947Z"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "check": "helper-browser-reload",
+      "spawnLoad": "{ 7.19 9.53 8.86 }"
+    },
+    {
+      "check": "helper-browser-tutorial",
+      "spawnLoad": "{ 8.20 9.40 8.87 }"
+    },
+    {
+      "check": "helper-browser-tutorial2",
+      "spawnLoad": "{ 9.19 9.36 8.95 }"
+    },
+    {
+      "check": "helper-focused",
+      "spawnLoad": "{ 10.99 10.60 8.42 }"
+    },
+    {
+      "check": "helper-focused2",
+      "spawnLoad": "{ 9.05 10.14 8.34 }"
+    },
+    {
+      "check": "helper-focused3",
+      "spawnLoad": "{ 5.23 8.23 7.84 }"
+    },
+    {
+      "check": "helper-full",
+      "spawnLoad": "{ 10.86 10.61 8.96 }"
+    },
+    {
+      "check": "helper-fuzz",
+      "spawnLoad": "{ 7.19 9.53 8.86 }"
+    },
+    {
+      "check": "helper-knip",
+      "spawnLoad": "{ 5.70 8.06 7.79 }"
+    },
+    {
+      "check": "helper-review-final",
+      "spawnLoad": "{ 16.38 11.28 9.07 }"
+    },
+    {
+      "check": "helper-review",
+      "spawnLoad": "{ 6.81 9.38 8.14 }"
+    },
+    {
+      "check": "helper-review2",
+      "spawnLoad": "{ 11.24 9.11 8.17 }"
+    },
+    {
+      "check": "helper-typecheck",
+      "spawnLoad": "{ 18.74 11.59 8.61 }"
+    }
+  ],
+  "pending": "Parent fresh read-only fork:none exact-range core review, disposition, native certification/promotion/cleanup; helper has not run those tools.",
+  "implementationClock": {
+    "nativeClaim": "2026-10-16T02:00:29+00:00",
+    "preGitCutoff": "2026-10-16T02:38:24.893136+00:00",
+    "grossClaimMinutesAtCutoff": 37.93155226666667,
+    "scope": "Inclusive elapsed read/setup/coordination/check queues/verification/QA/evidence through this actual pre-Git stamp, not productive edit time. Actual Git return extends the clock in ignored helper-git.receipt.json; no future return timestamp or clock-only amend."
+  }
+}

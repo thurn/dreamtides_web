@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "../../rules/battle/tutorial-checkpoints";
 import { useCallback, useMemo } from "react";
 import { TutorialBattleScreen } from "../../cumulus/screens/TutorialBattleScreen";
 import { useFrontDoor } from "../../state/front-door-context";
@@ -40,7 +41,7 @@ function TutorialBattleBody({ battle, engine, content, previewVictory, onExit }:
     const controller = useTutorialBattleController({ paused: previewVictory });
     const interactions = useTutorialBattleInteractions(built.model);
     const guidanceController = useBattleTutorialGuidance();
-    const startNewJourney = useCallback(() => { if (previewVictory || battle.checkpoints.length === 0 && battle.engine.slice.committed.result?.kind === "victory" && battle.engine.slice.committed.result.winner === "player")
+    const startNewJourney = useCallback(() => { if (previewVictory || currentTutorialPresentation(battle) === null && battle.engine.slice.committed.result?.kind === "victory" && battle.engine.slice.committed.result.winner === "player")
         onExit(); }, [battle, onExit, previewVictory]);
     return <TutorialBattleScreen view={built.view} interactions={interactions.interactions} movementStatusMessage={interactions.movementStatusMessage} onMovementStatusDismiss={interactions.dismissMovementStatus} onNewJourney={startNewJourney} guidance={guidance} onGuidanceContinue={guidanceController.advance} onGuidanceDurationComplete={guidanceController.completeDuration} onPresentationVisible={controller.onPresentationVisible}/>;
 }

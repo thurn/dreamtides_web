@@ -1,3 +1,4 @@
+import { currentTutorialPresentation, tutorialCheckpointQueue } from "./tutorial-checkpoints";
 import { createCatalog, createEngine, type BattleInit, type EngineCardDefinition, type Side } from "../../engine";
 import { all, characterYouControl, event as effect } from "../../engine/dsl/builders";
 import { createCard, discard, dissolve, gainEnergy, materializeFigments, sequence } from "../../engine/effects/primitives";
@@ -42,7 +43,7 @@ export function host(side: Side = "player", card = CARDS.strong, triggers: reado
   return { ...base, frontDoor: { phase: "journey", journeyId: null, tutorial: null }, journey: { ...base.journey, currentDreamscape: nodeId, screen: { type: "site", siteId: metadata.siteId }, draftState: null,
     atlas: { ...base.journey.atlas, nodes: { [nodeId]: { ...node, sites: [{ id: metadata.siteId, type: "Battle", isVisited: false, isEnhanced: false }] } } } }, battle: {
     mode: { kind: "journey" }, init: { ...metadata, nodeId, cardDefinitions: allCards.map(createBaseBattleDeckCardDefinition) }, engine: fold,
-    guidance: { tutorialTriggers: triggers, dreamwellDeck: metadata.dreamwellDeck, checkpoints: [], tutorialPresentation: null },
+    guidance: { tutorialTriggers: triggers, dreamwellDeck: metadata.dreamwellDeck, ...tutorialCheckpointQueue([]) },
   } };
 }
 export function apply(state: FoldState, type: GameEvent["type"], payload: Record<string, unknown>, seq = 10) {
@@ -59,7 +60,7 @@ export function play(state: FoldState): FoldState {
 }
 export function passUntilGuidance(state: FoldState): FoldState {
   for (let seq = 20; seq < 40; seq++) {
-    if (battleGuidanceOf(state.battle)?.tutorialPresentation != null) return state;
+    if (currentTutorialPresentation(battleGuidanceOf(state.battle)) !== null) return state;
     if (state.battle === null) throw Error("missing battle");
     const side = engine.decision(state.battle.engine.slice.committed)?.side;
     if (side === undefined) throw Error("no passing decision");

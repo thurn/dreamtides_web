@@ -1,3 +1,5 @@
+import { currentTutorialPresentation, tutorialCheckpointQueue } from "./tutorial-checkpoints";
+import { tutorialBattleOf, journeyBattleOf } from "./fold";
 import type { Engine, EngineEvent, InstanceId, BattleState } from "../../engine";
 import type { BattleSlice } from "../../engine/fold/slice";
 import { runStep } from "../../engine/steps/runner";
@@ -11,7 +13,7 @@ import type { FoldState } from "../fold-state";
 import { matchTutorialGuidance } from "./tutorial-guidance";
 import { batchStates, foldAdapterFor } from "./engine-battle";
 import { type TutorialBattleFoldState, type TutorialBattlePresentation, type TutorialGuidanceSource, type TutorialCheckpoint } from "./fold";
-import { battleGuidanceOf, selectBattleGuidance, withBattleGuidanceCheckpoints } from "./journey-tutorial-guidance";
+import { battleGuidanceOf, selectBattleGuidance } from "./journey-tutorial-guidance";
 import { createBattleCardDisplayResolver } from "../../battle/card-display-definition";
 function printedId(state: BattleState, instance: InstanceId): CardId | null {
     const printing = state.instances[instance]?.printing;
@@ -96,7 +98,7 @@ export function tutorialEngineTransition(state: FoldState, battle: TutorialBattl
     if (selected !== null && selectedSide !== undefined && !battle.overrides.consumed.includes(selected.id) && published.some(event => event.kind === "cardPlayed" && event.side === selectedSide && event.instance === selected.instance) && slice.committed.turnLog.played[selectedSide].filter(play => play.instance === selected.instance).length > battle.engine.slice.committed.turnLog.played[selectedSide].filter(play => play.instance === selected.instance).length) {
         next = { ...next, pendingOverride: null, overrides: { ...next.overrides, consumed: [...next.overrides.consumed, selected.id] }, overrideCommits: [...next.overrideCommits, selected] };
     }
-    next = { ...next, pendingOverride: slice.inFlight === null ? null : next.pendingOverride, checkpoints, tutorialPresentation: checkpoints[0]?.presentation ?? null };
+    next = { ...next, pendingOverride: slice.inFlight === null ? null : next.pendingOverride, ...tutorialCheckpointQueue(checkpoints) };
     return { ...state, battle: next, tutorialTriggerIdsSeen: seen };
 }
 import { lookupFigmentCatalogEntryById } from "../../battle/state/figment-catalog";
@@ -105,28 +107,35 @@ function importFigmentCardId(figment: import("../../engine/state/ids").FigmentId
     const id = cardIdFromUnknown(figment);
     return id === null ? null : lookupFigmentCatalogEntryById(id)?.id ?? id;
 }
-export function completeTutorialCheckpoint(state: FoldState, payload: Record<string, unknown>): FoldState | null {
-    const battle = battleGuidanceOf(state.battle);
-    const first = battle?.checkpoints[0];
-    if (battle === null || first === undefined || payload.presentationId !== first.presentation.id)
-        return null;
-    let checkpoints: readonly TutorialCheckpoint[];
+/** Advance an exact queue head while preserving its host's presentation domain. */
+function completedCheckpoints<P extends TutorialBattlePresentation>(checkpoints: readonly TutorialCheckpoint<P>[], payload: Record<string, unknown>): readonly TutorialCheckpoint<P>[] | null {
+    const first = checkpoints[0];
+    if (first === undefined || payload.presentationId !== first.presentation.id) return null;
     const presentation = first.presentation;
     if (presentation.kind === "tutorial-guidance") {
-        if (payload.messageIndex !== presentation.messageIndex)
-            return null;
-        checkpoints = presentation.messageIndex + 1 < presentation.messages.length ? [{ ...first, presentation: { ...presentation, messageIndex: presentation.messageIndex + 1 } }, ...battle.checkpoints.slice(1)] : battle.checkpoints.slice(1);
+        if (payload.messageIndex !== presentation.messageIndex) return null;
+        if (presentation.messageIndex + 1 < presentation.messages.length)
+            return [{ ...first, presentation: { ...presentation, messageIndex: presentation.messageIndex + 1 } }, ...checkpoints.slice(1)];
     }
-    else
-        checkpoints = battle.checkpoints.slice(1);
-    return withBattleGuidanceCheckpoints(state, checkpoints);
+    return checkpoints.slice(1);
+}
+export function completeTutorialCheckpoint(state: FoldState, payload: Record<string, unknown>): FoldState | null {
+    const tutorial = tutorialBattleOf(state.battle);
+    if (tutorial !== null) {
+        const checkpoints = completedCheckpoints(tutorial.checkpoints, payload);
+        return checkpoints === null ? null : { ...state, battle: { ...tutorial, ...tutorialCheckpointQueue(checkpoints) } };
+    }
+    const journey = journeyBattleOf(state.battle);
+    if (journey?.guidance === undefined) return null;
+    const checkpoints = completedCheckpoints(journey.guidance.checkpoints, payload);
+    return checkpoints === null ? null : { ...state, battle: { ...journey, guidance: { ...journey.guidance, ...tutorialCheckpointQueue(checkpoints) } } };
 }
 /** A failed hand play is a presentation intent; its dry-run events never become gameplay. */
 export function tutorialCardAttempt(state: FoldState, payload: Record<string, unknown>, ctx: import("../../eventlog/types").EventContext): FoldState | null {
     const battle = battleGuidanceOf(state.battle);
     const provider = getBattleInitProvider();
     const engine = provider?.engine ?? null;
-    if (battle === null || engine === null || payload.battleId !== battle.init.battleId || battle.tutorialPresentation !== null || battle.engine.slice.inFlight !== null || typeof payload.instance !== "string")
+    if (battle === null || engine === null || payload.battleId !== battle.init.battleId || currentTutorialPresentation(battle) !== null || battle.engine.slice.inFlight !== null || typeof payload.instance !== "string")
         return null;
     const board = battle.engine.slice.committed;
     const instance = board.sides.player.hand.find(id => id === payload.instance);
@@ -147,7 +156,10 @@ export function tutorialCardAttempt(state: FoldState, payload: Record<string, un
     const matches = matchTutorialGuidance(battle.init.tutorialTriggers, { event: "card-no-valid-targets", cardId, cardKind, renderedText: definition?.renderedText ?? (state.battle?.mode.kind === "journey" ? provider?.guidanceCardText?.(cardId) : undefined) ?? "", seenTriggerIds: new Set(state.tutorialTriggerIdsSeen) });
     if (matches.length === 0)
         return null;
-    const presentation: TutorialBattlePresentation = { kind: "tutorial-guidance", id: parsePresentationId(`${battle.init.battleId}:${ctx.seq}:refusal`), source: { kind: "card", cardId, battleCardId: parseBattleCardId(instance), cardKind, side: "player" }, messages: matches.map(trigger => ({ triggerId: trigger.id, speaker: trigger.speaker, text: trigger.text, duration: trigger.duration, ...(trigger.delay?.["card-no-valid-targets"] === undefined ? {} : { delay: trigger.delay["card-no-valid-targets"] }), horizontalOffset: trigger.horizontalOffset, verticalOffset: trigger.verticalOffset, bubbleWidth: trigger.bubbleWidth })), messageIndex: 0, automatic: false };
-    return withBattleGuidanceCheckpoints({ ...state, tutorialTriggerIdsSeen: [...state.tutorialTriggerIdsSeen, ...matches.map(match => match.id)] }, [{ presentation, before: board, state: board }]);
+    const presentation: import("./fold").TutorialGuidancePresentation = { kind: "tutorial-guidance", id: parsePresentationId(`${battle.init.battleId}:${ctx.seq}:refusal`), source: { kind: "card", cardId, battleCardId: parseBattleCardId(instance), cardKind, side: "player" }, messages: matches.map(trigger => ({ triggerId: trigger.id, speaker: trigger.speaker, text: trigger.text, duration: trigger.duration, ...(trigger.delay?.["card-no-valid-targets"] === undefined ? {} : { delay: trigger.delay["card-no-valid-targets"] }), horizontalOffset: trigger.horizontalOffset, verticalOffset: trigger.verticalOffset, bubbleWidth: trigger.bubbleWidth })), messageIndex: 0, automatic: false };
+    const queue = tutorialCheckpointQueue([{ presentation, before: board, state: board }]);
+    const tutorial = tutorialBattleOf(state.battle), journey = journeyBattleOf(state.battle);
+    const nextBattle = tutorial !== null ? { ...tutorial, ...queue } : journey?.guidance === undefined ? null : { ...journey, guidance: { ...journey.guidance, ...queue } };
+    return nextBattle === null ? null : { ...state, tutorialTriggerIdsSeen: [...state.tutorialTriggerIdsSeen, ...matches.map(match => match.id)], battle: nextBattle };
 }
 import { getBattleInitProvider } from "./journey-battle";

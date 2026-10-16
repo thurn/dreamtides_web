@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "../../rules/battle/tutorial-checkpoints";
 import type { BattleTutorialGuidanceView } from "../../cumulus/screens/BattleTutorialGuidance";
 import type { BattleGuidanceHost } from "../../rules/battle/journey-tutorial-guidance";
 import type { Engine } from "../../engine";
@@ -51,7 +52,7 @@ export function buildBattleTutorialGuidanceView(
   engine: Engine,
   cards: EngineCardModels,
 ): BattleTutorialGuidanceView | null {
-  const presentation = battle.tutorialPresentation;
+  const presentation = currentTutorialPresentation(battle);
   if (presentation?.kind !== "tutorial-guidance") return null;
   const message = presentation.messages[presentation.messageIndex];
   if (message === undefined) return null;

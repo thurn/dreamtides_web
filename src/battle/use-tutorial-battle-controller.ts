@@ -1,3 +1,4 @@
+import { currentTutorialPresentation } from "../rules/battle/tutorial-checkpoints";
 import { useCallback, useEffect, useState } from "react";
 import { BATTLE } from "../content/battle";
 import { tutorialBattleOf } from "../rules/battle/fold";
@@ -10,7 +11,7 @@ export function useTutorialBattleController({ paused = false }: {
     const battle = tutorialBattleOf(useConfirmedGameState().battle);
     const actions = useActions(), actor = useClientId();
     const [visible, setVisible] = useState<PresentationId | null>(null);
-    const presentation = battle?.tutorialPresentation ?? null;
+    const presentation = currentTutorialPresentation(battle);
     const onPresentationVisible = useCallback((id: PresentationId) => setVisible(id), []);
     useEffect(() => {
         if (paused || presentation === null || presentation.kind === "tutorial-guidance" || visible !== presentation.id)

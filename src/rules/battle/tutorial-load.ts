@@ -60,7 +60,7 @@ export function parseJourneyBattleGuidance(value: unknown, engine: EngineBattleF
     const ids = new Set(guidance.checkpoints.map(checkpoint => checkpoint.presentation.id));
     if (ids.size !== guidance.checkpoints.length || guidance.checkpoints.some(checkpoint => {
         const current = checkpoint.presentation;
-        if (current.kind !== "tutorial-guidance" || current.messages.some(message => !triggerIds.has(message.triggerId))) return true;
+        if (current.messages.some(message => !triggerIds.has(message.triggerId))) return true;
         const source = current.source;
         if (source.kind === "dreamwell") return !guidance.dreamwellDeck.some(card => card.id === source.cardId);
         if (source.kind !== "card" && source.kind !== "figment") return false;

@@ -1,3 +1,4 @@
+import { tutorialCheckpointQueue } from "./tutorial-checkpoints";
 import { createCatalog, createEngine, type BattleInit, type EngineCardDefinition, type Side } from "../../engine";
 import { energy, energyX, event, target, enemyCharacter, characterYouControl, returnCost, additionalCost } from "../../engine/dsl/builders";
 import * as p from "../../engine/effects/primitives";
@@ -35,7 +36,7 @@ export function host(side: Side = "enemy", card = CARDS.choice, triggers: readon
     const engineInit = init(side, card, extra), fold = startEngineBattle(engineInit, engine, 1);
     if (fold === null)
         throw Error("synthetic init refused");
-    const battle: TutorialBattleFoldState = { mode: { kind: "tutorial", tutorialRunId: RUN, restartNumber: 0 }, init: display(triggers), engine: fold, checkpoints: [], tutorialPresentation: null, overrides: { definitions: [{ id: testTutorialAiActionOverrideId("tutorial-contract-override"), trigger: { kind: "after-dreamwell", side, cardId: WELL }, action: { kind: "play-card", cardId: card } }], consumed: [], dreamwell: { side, cardId: WELL, turnNumber: 1 } }, pendingOverride: null, overrideCommits: [] };
+    const battle: TutorialBattleFoldState = { mode: { kind: "tutorial", tutorialRunId: RUN, restartNumber: 0 }, init: display(triggers), engine: fold, ...tutorialCheckpointQueue([]), overrides: { definitions: [{ id: testTutorialAiActionOverrideId("tutorial-contract-override"), trigger: { kind: "after-dreamwell", side, cardId: WELL }, action: { kind: "play-card", cardId: card } }], consumed: [], dreamwell: { side, cardId: WELL, turnNumber: 1 } }, pendingOverride: null, overrideCommits: [] };
     return { ...root(), battle };
 }
 import { testTutorialActionId } from "../../types/test-identities";

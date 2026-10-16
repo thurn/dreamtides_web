@@ -13,6 +13,6 @@ describe("tutorial guidance projection",()=>{
   const next=reduceEngineIntent(initial,"BATTLE_ACTION",{side:"player",action},context(),engine)!;
   const battle=tutorialBattleOf(next.battle)!;
   const view=buildBattleTutorialGuidanceView(battle,engine,cards);
-  expect(view?.presentationId).toBe(battle.tutorialPresentation?.id);expect(view?.triggerId).toBe(next.tutorialTriggerIdsSeen[0]);
+  expect(view?.presentationId).toBe(battle.checkpoints[0]?.presentation.id);expect(view?.triggerId).toBe(next.tutorialTriggerIdsSeen[0]);
  });
 });

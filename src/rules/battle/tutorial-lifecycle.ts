@@ -1,3 +1,4 @@
+import { currentTutorialPresentation, tutorialCheckpointQueue } from "./tutorial-checkpoints";
 import type { Engine } from "../../engine";
 import type { EventContext } from "../../eventlog/types";
 import type { TutorialSetup, TutorialSetupInput } from "../../battle/integration/tutorial-setup";
@@ -35,7 +36,7 @@ function build(state: FoldState, tutorialRunId: import("../../types/identifiers"
     const engine = startEngineBattle(setup.engineInit, provider.engine, ctx.seq);
     if (engine === null)
         return null;
-    const battle: TutorialBattleFoldState = { mode: { kind: "tutorial", tutorialRunId, restartNumber }, init: setup.init, engine, checkpoints: [], tutorialPresentation: null, overrides: { definitions: provider.overrides, consumed: [], dreamwell: null }, pendingOverride: null, overrideCommits: [] };
+    const battle: TutorialBattleFoldState = { mode: { kind: "tutorial", tutorialRunId, restartNumber }, init: setup.init, engine, ...tutorialCheckpointQueue([]), overrides: { definitions: provider.overrides, consumed: [], dreamwell: null }, pendingOverride: null, overrideCommits: [] };
     return { ...state, battle };
 }
 export function exitTutorialBattle(state: FoldState, payload: Record<string, unknown>, ctx: EventContext): FoldState | null {
@@ -43,7 +44,7 @@ export function exitTutorialBattle(state: FoldState, payload: Record<string, unk
     const avatar = configuredTutorialJourneyAvatarId();
     if (battle === null || payload.battleId !== battle.init.battleId || avatar === null ||
         battle.engine.slice.committed.result?.kind !== "victory" || battle.engine.slice.committed.result.winner !== "player" ||
-        battle.engine.slice.inFlight !== null || battle.checkpoints.length !== 0 || battle.tutorialPresentation !== null)
+        battle.engine.slice.inFlight !== null || currentTutorialPresentation(battle) !== null)
         return null;
     const reset = resetJourney(state, ctx);
     return { ...reset, frontDoor: { phase: "journey", journeyId: null, tutorial: null }, journey: { ...reset.journey, screen: { type: "journeyStart", tutorialAvatarId: avatar } } };
