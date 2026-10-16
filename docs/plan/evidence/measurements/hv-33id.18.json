@@ -1,0 +1,1446 @@
+{
+  "bead": "hv-33id.18",
+  "phase": 6,
+  "sourceBase": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+  "scope": "Read-only Sage audit of the heavy-slot-wait/phase-6 trigger across exactly hv-33id.16, hv-33id.3 and hv-33id.7. One append-only disposition plus own evidence only.",
+  "claimStart": "2026-10-16T03:32:11.385012+00:00",
+  "claimACK": "2026-10-16T03:32:11.505507+00:00",
+  "evidenceCutoff": "2026-10-16T03:37:57.810117+00:00",
+  "inclusiveClaimToCutoffMinutes": 5.77375175,
+  "clockQualification": "Inclusive original atomic-claim wrapper through this cutoff, including installation, frozen source packet, read-only helper audit/waits, parent verification, evidence and checks. Actual final Git endpoint/tail retained separately; no editing-time, sampling-CPU or whole-host-CPU claim.",
+  "helper": {
+    "id": "/root/heavy_wait_33id18_audit",
+    "role": "Read-only Sage implementation audit, not a formal code review",
+    "terminal": true,
+    "samplingCPU": "UNKNOWN",
+    "reportSHA256": "dd6227fbf51b9f6fccfd9de3d978bb2581e8797e469ed71b0877d7593fa247c8",
+    "analysisSHA256": "6055b322c2a9ccde8394fbe190edbca86221d98999a4c78fa848dad071d81efd",
+    "sourceReceiptsSHA256": "58f849de0e24c95e0b9de62c09f3788efee0969178ae013a03830c66a934f302"
+  },
+  "sourcePacketBindings": {
+    "base": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18",
+    "files": [
+      {
+        "source": "docs/plan/evidence/friction/hv-33id.16.json",
+        "snapshot": "source-packet/friction/hv-33id.16.json",
+        "sha256": "70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7",
+        "bytes": 828
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.16.json",
+        "snapshot": "source-packet/measurements/hv-33id.16.json",
+        "sha256": "867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5",
+        "bytes": 15124
+      },
+      {
+        "source": "docs/plan/evidence/pre-existing/hv-33id.16.md",
+        "snapshot": "source-packet/pre-existing/hv-33id.16.md",
+        "sha256": "e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123",
+        "bytes": 702
+      },
+      {
+        "source": "docs/plan/evidence/friction/hv-33id.3.json",
+        "snapshot": "source-packet/friction/hv-33id.3.json",
+        "sha256": "c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c",
+        "bytes": 1416
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.3.json",
+        "snapshot": "source-packet/measurements/hv-33id.3.json",
+        "sha256": "b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e",
+        "bytes": 83952
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.3.md",
+        "snapshot": "source-packet/measurements/hv-33id.3.md",
+        "sha256": "d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e",
+        "bytes": 7870
+      },
+      {
+        "source": "docs/plan/evidence/pre-existing/hv-33id.3.md",
+        "snapshot": "source-packet/pre-existing/hv-33id.3.md",
+        "sha256": "69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874",
+        "bytes": 1946
+      },
+      {
+        "source": "docs/plan/evidence/friction/hv-33id.7.json",
+        "snapshot": "source-packet/friction/hv-33id.7.json",
+        "sha256": "e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f",
+        "bytes": 739
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.7.json",
+        "snapshot": "source-packet/measurements/hv-33id.7.json",
+        "sha256": "2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac",
+        "bytes": 28564
+      },
+      {
+        "source": "docs/plan/evidence/friction/hv-lf7t.json",
+        "snapshot": "source-packet/friction/hv-lf7t.json",
+        "sha256": "d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b",
+        "bytes": 481
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-lf7t.json",
+        "snapshot": "source-packet/measurements/hv-lf7t.json",
+        "sha256": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf",
+        "bytes": 46591
+      },
+      {
+        "source": "docs/plan/evidence/pre-existing/hv-lf7t.md",
+        "snapshot": "source-packet/pre-existing/hv-lf7t.md",
+        "sha256": "8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e",
+        "bytes": 675
+      }
+    ]
+  },
+  "parentPacketVerification": {
+    "at": "2026-10-16T03:33:50.429640+00:00",
+    "exactBase": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+    "sourcePacketBindingsVerified": [
+      {
+        "source": "docs/plan/evidence/friction/hv-33id.16.json",
+        "sha256": "70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7",
+        "bytes": 828
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.16.json",
+        "sha256": "867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5",
+        "bytes": 15124
+      },
+      {
+        "source": "docs/plan/evidence/pre-existing/hv-33id.16.md",
+        "sha256": "e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123",
+        "bytes": 702
+      },
+      {
+        "source": "docs/plan/evidence/friction/hv-33id.3.json",
+        "sha256": "c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c",
+        "bytes": 1416
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.3.json",
+        "sha256": "b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e",
+        "bytes": 83952
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.3.md",
+        "sha256": "d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e",
+        "bytes": 7870
+      },
+      {
+        "source": "docs/plan/evidence/pre-existing/hv-33id.3.md",
+        "sha256": "69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874",
+        "bytes": 1946
+      },
+      {
+        "source": "docs/plan/evidence/friction/hv-33id.7.json",
+        "sha256": "e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f",
+        "bytes": 739
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-33id.7.json",
+        "sha256": "2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac",
+        "bytes": 28564
+      },
+      {
+        "source": "docs/plan/evidence/friction/hv-lf7t.json",
+        "sha256": "d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b",
+        "bytes": 481
+      },
+      {
+        "source": "docs/plan/evidence/measurements/hv-lf7t.json",
+        "sha256": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf",
+        "bytes": 46591
+      },
+      {
+        "source": "docs/plan/evidence/pre-existing/hv-lf7t.md",
+        "sha256": "8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e",
+        "bytes": 675
+      }
+    ],
+    "worktreeCleanAfterInstall": true,
+    "policy": "No writes outside own future bead evidence and append-only disposition; audit makes no new runtime, capacity or performance claim."
+  },
+  "auditAnalysis": {
+    "auditBead": "hv-33id.18",
+    "trigger": {
+      "tag": "heavy-slot-wait",
+      "phase": 6,
+      "exactBeads": [
+        "hv-33id.16",
+        "hv-33id.3",
+        "hv-33id.7"
+      ]
+    },
+    "base": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+    "readOnly": true,
+    "beads": [
+      {
+        "bead": "hv-33id.16",
+        "measurementSource": "source-packet/measurements/hv-33id.16.json",
+        "sourceBase": "9286f669671541d711c3ea37b9bec6e3b38708b6",
+        "frictionMinutes": 13.684936733333332,
+        "grossImplementWindow": {
+          "start": "2026-10-16T02:05:40.842000+00:00",
+          "end": "2026-10-16T03:22:13.684834+00:00"
+        },
+        "frictionEpoch": "v01 historical source commit448201d281b60d4fbde11ba5c366895f364df8a1; final localValidationS fields describe repaired v02",
+        "historicalSourceManifestSHA256": "bfd9770506f65d90ce5079945144070f8f18c85b020e15f70fe207058187068b",
+        "windows": {
+          "v01": {
+            "full-lock": {
+              "command": [
+                "lockf",
+                "-k",
+                "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+                "python3",
+                "/tmp/root-3316/helper/run.py",
+                "full",
+                "npm",
+                "run",
+                "review:full"
+              ],
+              "startUTC": "2026-10-16T02:16:13.665148+00:00",
+              "endUTC": "2026-10-16T02:32:11.344353+00:00",
+              "wallSeconds": 957.5101941670291,
+              "exit": 0,
+              "sourceManifestSHA": "bfd9770506f65d90ce5079945144070f8f18c85b020e15f70fe207058187068b"
+            },
+            "full": {
+              "command": [
+                "npm",
+                "run",
+                "review:full"
+              ],
+              "startUTC": "2026-10-16T02:29:54.761352+00:00",
+              "endUTC": "2026-10-16T02:32:11.297416+00:00",
+              "wallSeconds": 135.9483305409667,
+              "exit": 0,
+              "sourceManifestSHA": "bfd9770506f65d90ce5079945144070f8f18c85b020e15f70fe207058187068b"
+            },
+            "fuzz-lock": {
+              "command": [
+                "lockf",
+                "-k",
+                "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+                "python3",
+                "/tmp/root-3316/helper/run.py",
+                "fuzz",
+                "timeout",
+                "1800",
+                "npm",
+                "run",
+                "fuzz:engine",
+                "--",
+                "--games",
+                "200"
+              ],
+              "startUTC": "2026-10-16T02:32:38.789348+00:00",
+              "endUTC": "2026-10-16T02:48:57.261040+00:00",
+              "wallSeconds": 978.255860041012,
+              "exit": 0,
+              "sourceManifestSHA": "bfd9770506f65d90ce5079945144070f8f18c85b020e15f70fe207058187068b"
+            },
+            "fuzz": {
+              "command": [
+                "timeout",
+                "1800",
+                "npm",
+                "run",
+                "fuzz:engine",
+                "--",
+                "--games",
+                "200"
+              ],
+              "startUTC": "2026-10-16T02:32:38.990475+00:00",
+              "endUTC": "2026-10-16T02:48:57.211320+00:00",
+              "wallSeconds": 978.027602666989,
+              "exit": 0,
+              "sourceManifestSHA": "bfd9770506f65d90ce5079945144070f8f18c85b020e15f70fe207058187068b"
+            }
+          },
+          "v02": {
+            "full-lock": {
+              "command": [
+                "lockf",
+                "-k",
+                "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+                "python3",
+                "/tmp/root-3316/repair-v02/run.py",
+                "full",
+                "npm",
+                "run",
+                "review:full"
+              ],
+              "startUTC": "2026-10-16T03:03:56.490576+00:00",
+              "endUTC": "2026-10-16T03:06:20.251252+00:00",
+              "wallSeconds": 143.59321391704725,
+              "exit": 0,
+              "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+            },
+            "full": {
+              "command": [
+                "npm",
+                "run",
+                "review:full"
+              ],
+              "startUTC": "2026-10-16T03:03:56.680052+00:00",
+              "endUTC": "2026-10-16T03:06:20.201108+00:00",
+              "wallSeconds": 143.37275358301122,
+              "exit": 0,
+              "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+            },
+            "fuzz-lock": {
+              "command": [
+                "lockf",
+                "-k",
+                "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+                "python3",
+                "/tmp/root-3316/repair-v02/run.py",
+                "fuzz",
+                "timeout",
+                "1800",
+                "npm",
+                "run",
+                "fuzz:engine",
+                "--",
+                "--games",
+                "200"
+              ],
+              "startUTC": "2026-10-16T03:06:31.635184+00:00",
+              "endUTC": "2026-10-16T03:21:56.766464+00:00",
+              "wallSeconds": 924.9545855409815,
+              "exit": 0,
+              "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+            },
+            "fuzz": {
+              "command": [
+                "timeout",
+                "1800",
+                "npm",
+                "run",
+                "fuzz:engine",
+                "--",
+                "--games",
+                "200"
+              ],
+              "startUTC": "2026-10-16T03:06:31.841918+00:00",
+              "endUTC": "2026-10-16T03:21:56.721035+00:00",
+              "wallSeconds": 924.7248832079931,
+              "exit": 0,
+              "sourceManifestSHA": "3f898acb7ecff547cdd838e9caf7a9eeb6b651f0e51da011e4b590e58de5ff1f"
+            }
+          }
+        },
+        "frictionAdmissionWindow": {
+          "start": "2026-10-16T02:16:13.665148+00:00",
+          "end": "2026-10-16T02:29:54.761352+00:00",
+          "seconds": 821.096204,
+          "classification": "External wrapper recorder start to inner recorder start; admission plus recorder/manifest overhead, not isolated kernel wait"
+        },
+        "inFlightObservation": {
+          "state": "awaiting-heavy-lock",
+          "observedUTC": "2026-10-16T02:26:28.185040+00:00"
+        },
+        "successfulFinalFullAdmissionSeconds": 0.189476,
+        "successfulFinalFuzzAdmissionSeconds": 0.206734,
+        "controls": [
+          "Full review and 200-game fuzz meet D17 heavy definition; required external lock and two workers retained.",
+          "v01 and v02 commands/source manifests are separate; v02 is descriptive, not a matched speed experiment.",
+          "v01 fuzz inner978.027602666989s and v02 inner924.7248832079931s are execution, excluded from slot-wait metric."
+        ],
+        "classification": "Required D17 serialization; no causal scheduler defect established",
+        "currentConsequences": "Historical wait remains recorded through repair; v02 full and fuzz successful with ~0.2s recorder-start admission offsets. No budget/load inference or performance claim."
+      },
+      {
+        "bead": "hv-33id.3",
+        "measurementSource": "source-packet/measurements/hv-33id.3.json; complete retained report source-packet/measurements/hv-33id.3.md",
+        "originalSourceBase": "b72b7514c65ba21a0f6172e4801cf08c05f1466d",
+        "originalValidatedSource": "5103fa7892b1dd660974debbd8cde0f0140d843d",
+        "integratedSourceBase": "ebbe40dda2c7e32a65bfcdea2ec28c2e8c18736e",
+        "grossImplementWindow": {
+          "start": "2026-10-15T22:26:39.799000+00:00",
+          "end": "2026-10-16T01:38:32.730424+00:00"
+        },
+        "frictionMinutes": 14.079337894449903,
+        "windows": [
+          {
+            "receipt": "checks-v14/lock-receipt.json",
+            "start": "2026-10-15T23:07:24.467244+00:00",
+            "end": "2026-10-15T23:14:53.036702+00:00",
+            "wallS": 448.5633681669715,
+            "admissionAndWaitS": null,
+            "exit": -15,
+            "innerReceipt": "/tmp/dreamtides-executor-01a1304d/33id3/helper/checks-v14/review-full/receipt.json",
+            "classification": "Cancelled outer request, no inner product launch per retained source; launch/wait/cancellation overhead upper bound"
+          },
+          {
+            "receipt": "checks-v22/lock-receipt.json",
+            "start": "2026-10-15T23:15:50.217630+00:00",
+            "end": "2026-10-15T23:22:26.419920+00:00",
+            "wallS": 396.1969055000227,
+            "admissionAndWaitS": null,
+            "exit": -15,
+            "innerReceipt": "/tmp/dreamtides-executor-01a1304d/33id3/helper/checks-v22/review-full/receipt.json",
+            "classification": "Cancelled outer request, no inner product launch per retained source; launch/wait/cancellation overhead upper bound"
+          },
+          {
+            "receipt": "checks-v34/lock-receipt.json",
+            "start": "2026-10-16T01:23:14.480189+00:00",
+            "end": "2026-10-16T01:25:23.874447+00:00",
+            "wallS": 129.3931046249927,
+            "admissionAndWaitS": 0.184976,
+            "exit": 0,
+            "innerReceipt": "/tmp/dreamtides-executor-01a1304d/33id3/helper/checks-v34/review-full/receipt.json",
+            "classification": "Successful outer request; admissionAndWaitS is recorder-start boundary offset, includes startup"
+          }
+        ],
+        "cancelledMeasuredWallSumS": 844.7602736669942,
+        "cancelledTimestampSumS": 844.771748,
+        "successfulInner": {
+          "start": "2026-10-16T01:23:14.665165+00:00",
+          "end": "2026-10-16T01:25:23.655589+00:00",
+          "wallS": 128.98927508399356,
+          "exit": 0,
+          "workers": 2,
+          "receipt": "checks-v34/review-full/receipt.json",
+          "receiptSHA256": "3c649cc8dfc3d8b0f3ad0ca6bd75ee0eb2fa528692fd07fe44d1ec0c12c759d8"
+        },
+        "rawReceiptVerification": [
+          {
+            "path": "/tmp/dreamtides-executor-01a1304d/33id3/helper/checks-v34/review-full/receipt.json",
+            "available": true,
+            "hashMatches": true
+          }
+        ],
+        "controls": [
+          "Both cancelled attempts definitively settled exit-15 before product birth; shared holder/lock untouched per source.",
+          "Final admission0.184976s and actual full execution128.98927508399356s are separate.",
+          "First browser epoch23:22:53.260912Z follows second cancellation23:22:26.419920Z; no measured browser overlap with the cancelled windows. Independent editing/coordination share UNKNOWN.",
+          "Browser scripting gross23.940143318051316min includes useful captures and completed desktop42 subset; excluded from heavy causality. Authored timers remain unchanged.",
+          "Full/browser acceptance remains tied to5103fa7892b1dd660974debbd8cde0f0140d843d; final integration checks/replay apply to combined base, no integrated full/browser rerun claimed."
+        ],
+        "classification": "Required D17 heavy admission with two settled own queued cancellations; different recipe/runtime/integration causes already dispositioned",
+        "currentConsequences": "Final accepted desktop/mobile42-beat and20-cell replay evidence preserves its exact source limitations. Native top-level record closed/completed. No new scheduler repair demonstrated."
+      },
+      {
+        "bead": "hv-33id.7",
+        "measurementSource": "source-packet/measurements/hv-33id.7.json",
+        "grossImplementWindow": {
+          "start": "2026-10-12T20:06:51.709Z",
+          "end": "2026-10-12T20:44:21.856149+00:00"
+        },
+        "frictionMinutes": 10.079156916666667,
+        "fullSourceCommit": "8d699fd4651495906e2ccdb07436e09677cbe68d",
+        "outer": {
+          "name": "review-full-final",
+          "cmd": [
+            "lockf",
+            "-k",
+            "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+            "npm",
+            "run",
+            "review:full"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+          "pid": 932,
+          "pgid": 932,
+          "start": "2026-10-12T20:29:49.738585+00:00",
+          "hostLoad": "{ 8.64 8.89 9.43 }",
+          "status": "exited",
+          "exit": 0,
+          "wallS": 702.4937266250054,
+          "end": "2026-10-12T20:41:32.240506+00:00"
+        },
+        "queueAndLaunchWindow": {
+          "start": "2026-10-12T20:29:49.738585+00:00",
+          "end": "2026-10-12T20:39:54.488Z",
+          "seconds": 604.749415,
+          "classification": "External wait plus canonical internal full-review slot plus npm/launcher startup to prepare; pure external-lock wait UNKNOWN"
+        },
+        "firstPrepareHostLoad": 17.53857421875,
+        "postPrepareToOuterEndS": 97.752506,
+        "retainedQueueWitness": "At 20:32:36Z own lockf932 waited with 0-byte log; separate lockf97572 had the heavy file open and ran an acceptance tournament. No foreign resource modified.",
+        "controls": [
+          "External machine-wide heavy.lock and distinct internal journey-full-review.lock are required/observed layers.",
+          "Read-only retained witness records separate acceptance-tournament holder at20:32:36Z; not a complete queue/holder history.",
+          "Local friction hostLoad8.21533203125 belongs to ordinary review, distinct from outer-full8.64 and prepare17.53857421875; no matched load comparison.",
+          "All6007 full-suite tests/352files passed per native source notes; sparse-member defect was separately accepted as hv-33id.8, unrelated to slot wait."
+        ],
+        "classification": "Observed required serialization behind separate heavy work, launch/internal-slot split UNKNOWN",
+        "currentConsequences": "Native source record closed/completed and core review settled; no recurring scheduling defect established."
+      }
+    ],
+    "priorRelatedDuty": {
+      "bead": "hv-lf7t",
+      "phase": 5,
+      "scopeBeads": [
+        "hv-umm2.551",
+        "hv-umm2.589",
+        "hv-umm2.95"
+      ],
+      "relationship": "Shared tag/interpretation guidance; distinct source set. Prior unnecessary ordinary wrappers in551/95 have owning corrections. Phase6 observed heavy requests are genuinely D17 heavy; no duplication of its completed duty.",
+      "priorDetermination": {
+        "disposition": "reason; no runtime fix",
+        "commonCause": "The shared tag groups distinct scopes, rather than proving one recurring scheduler defect across three beads. Agent-added unnecessary ordinary-check wrappers recur in 551 and 95; their owning records already correct that orchestration. 589 uses the mandated heavy slot for full review and weighted300 fuzz.",
+        "action": "Apply the existing D17 heavy-command list at dispatch. Run ordinary focused tests, review and Knip directly. Preserve required heavy serialization and source-bound raw receipts; distinguish outer launch, inner command/step start, execution and cancellation.",
+        "runtimeRepairRequired": false,
+        "evidenceLimits": [
+          "No measured acquisition timestamp or complete lock-owner/queue-depth history establishes isolated kernel-lock time, fairness, starvation, capacity loss or a runtime scheduler defect.",
+          "A client launch-to-first-step interval can include the external heavy lock, launcher/npm overhead and the independent internal full-review slot. Client wall minus native algorithm wall also includes startup/teardown; it is not pure queue time.",
+          "Host load samples are contemporaneous scope observations, not matched A/B controls. There is no performance claim, budget revision or new measurement-correction bead.",
+          "589 workflow-admission-hold (127.495582 minutes) is a separate gross read-only proof/coordination/admission scope and is excluded from heavy-lock causality. Exact productive versus hold split is unknown."
+        ]
+      }
+    },
+    "determination": {
+      "commonActionableSchedulerToolOrPolicyDefectEstablished": false,
+      "newImprovementBeadsRecommended": [],
+      "runtimeRepairRequired": false,
+      "ledgerDisposition": {
+        "tag": "heavy-slot-wait",
+        "phase": 6,
+        "reason": "D17 requires serialization of these full-review/200-game fuzz commands. The three source-bound records measure heterogeneous admission/startup upper bounds or settled queued cancellations, not isolated lost time: hv-33id.16 historical v01 full821.096204s (v02 final admission0.189476s), hv-33id.3 two pre-product cancellations844.760273667s then final admission0.184976s, hv-33id.7 launch-to-prepare604.749415s spanning external/internal admission and startup. No common actionable scheduler defect is established; queue-only time, fairness, capacity loss and savings remain UNKNOWN. Prior hv-lf7t phase5 disposition covers distinct records and already-corrected unnecessary ordinary-check wrappers; it supplies no new phase6 repair. Preserve D17/D19/D44 capacity, all acceptance/tests, authored timing and budgets."
+      }
+    },
+    "globalLimitations": [
+      "Retained exact-source observations are not a matched A/B benchmark; no before/after speed claim.",
+      "Gross implement windows include research, coordination, repairs, checks and waits; they cannot be summed with overlapping internal intervals as exclusive lost time.",
+      "No pure kernel wait, fairness/starvation, queue-depth, CPU/throughput savings or productive-time share is established.",
+      "Only own worktree/source packet and independently digest-bound retained /tmp raw artifacts read; no foreign worktree inspected.",
+      "No live scheduler/process/resource probing, native workflow mutation, runtime/check/browser rerun, delegation, or repository edit performed.",
+      "Native top-level snapshots and selected source-qualified contexts read; giant nested histories/process census payloads not exhaustively reviewed.",
+      "All decisions, exact source acceptance and existing budgets retain authority; this audit does not establish current release publication."
+    ]
+  },
+  "parentAuditVerification": {
+    "at": "2026-10-16T03:36:56.482946+00:00",
+    "accepted": true,
+    "helperTerminal": true,
+    "ledgerLine": {
+      "tag": "heavy-slot-wait",
+      "phase": 6,
+      "reason": "D17 requires serialization of these full-review/200-game fuzz commands. The three source-bound records measure heterogeneous admission/startup upper bounds or settled queued cancellations, not isolated lost time: hv-33id.16 historical v01 full821.096204s (v02 final admission0.189476s), hv-33id.3 two pre-product cancellations844.760273667s then final admission0.184976s, hv-33id.7 launch-to-prepare604.749415s spanning external/internal admission and startup. No common actionable scheduler defect is established; queue-only time, fairness, capacity loss and savings remain UNKNOWN. Prior hv-lf7t phase5 disposition covers distinct records and already-corrected unnecessary ordinary-check wrappers; it supplies no new phase6 repair. Preserve D17/D19/D44 capacity, all acceptance/tests, authored timing and budgets."
+    },
+    "all41ActualReadDigestsRecomputed": [
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/source-bindings.json",
+        "sha256": "01f362bc45cc905a9604a60d1acfd7c517ce9b4c9631b1d4614f14e4911960d4",
+        "bytes": 3049,
+        "expectedBinding": null
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/friction/hv-33id.16.json",
+        "sha256": "70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7",
+        "bytes": 828,
+        "expectedBinding": "70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/measurements/hv-33id.16.json",
+        "sha256": "867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5",
+        "bytes": 15124,
+        "expectedBinding": "867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/pre-existing/hv-33id.16.md",
+        "sha256": "e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123",
+        "bytes": 702,
+        "expectedBinding": "e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/friction/hv-33id.3.json",
+        "sha256": "c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c",
+        "bytes": 1416,
+        "expectedBinding": "c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/measurements/hv-33id.3.json",
+        "sha256": "b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e",
+        "bytes": 83952,
+        "expectedBinding": "b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/measurements/hv-33id.3.md",
+        "sha256": "d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e",
+        "bytes": 7870,
+        "expectedBinding": "d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/pre-existing/hv-33id.3.md",
+        "sha256": "69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874",
+        "bytes": 1946,
+        "expectedBinding": "69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/friction/hv-33id.7.json",
+        "sha256": "e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f",
+        "bytes": 739,
+        "expectedBinding": "e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/measurements/hv-33id.7.json",
+        "sha256": "2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac",
+        "bytes": 28564,
+        "expectedBinding": "2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/friction/hv-lf7t.json",
+        "sha256": "d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b",
+        "bytes": 481,
+        "expectedBinding": "d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/measurements/hv-lf7t.json",
+        "sha256": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf",
+        "bytes": 46591,
+        "expectedBinding": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/pre-existing/hv-lf7t.md",
+        "sha256": "8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e",
+        "bytes": 675,
+        "expectedBinding": "8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e"
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/hv-33id.7-native.json",
+        "sha256": "2b93bedef5042d40ae8364e2f2ce92469ee800a8086112edb5331b914a561c3e",
+        "bytes": 25664,
+        "expectedBinding": null
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/hv-lf7t-native.json",
+        "sha256": "552b8797ea270137002425487be4087ea183fdf4f9f74796e9e6b7da25123417",
+        "bytes": 3465,
+        "expectedBinding": null
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/hv-33id.16-native.json",
+        "sha256": "b21b4f60748110dd8ef02d76a23e964cad79c6dcc10ff73b8f64c053b8110085",
+        "bytes": 16779,
+        "expectedBinding": null
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/hv-33id.3-native.json",
+        "sha256": "fb53725a9518d019e2b34222a13dc8ea5443dcb1f8fc0896cb58bd113cee351a",
+        "bytes": 397342,
+        "expectedBinding": null
+      },
+      {
+        "path": "/tmp/dreamtides-heavy6-trigger-01a13a7a/source-packet/hv-33id-native.json",
+        "sha256": "a9e467f336de3fe6a725a35ccaad4b9fd83a6a77e5f91e48ab81db8850848416",
+        "bytes": 2516,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18/AGENTS.md",
+        "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "bytes": 8068,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18/docs/plan/workflow.md",
+        "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5",
+        "bytes": 104126,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18/docs/plan/decisions.md",
+        "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "bytes": 51785,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18/scripts/review.mjs",
+        "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+        "bytes": 16054,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18/scripts/review-lock.mjs",
+        "sha256": "13728dbdab0a059e48f8e8bc390aff453f4104d1ba1c3e4208008657cd9e3af6",
+        "bytes": 4776,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+        "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9",
+        "bytes": 744,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+        "sha256": "27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3",
+        "bytes": 4917,
+        "expectedBinding": null
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/shared/filing.md",
+        "sha256": "4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47",
+        "bytes": 5427,
+        "expectedBinding": null
+      },
+      {
+        "path": "/tmp/root-3316/repair-v02/v01-committed-measurements.json",
+        "sha256": "3016d3e807ba773a556e47ebc36f947ec101cb4bb6128406850ade74f477a977",
+        "bytes": 15129,
+        "expectedBinding": "3016d3e807ba773a556e47ebc36f947ec101cb4bb6128406850ade74f477a977"
+      },
+      {
+        "path": "/tmp/root-3316/repair-v02/v01-committed-friction.json",
+        "sha256": "17e6fbbd664e8b58149f636440580f073aa6ca995e75452f5197c705549a617f",
+        "bytes": 841,
+        "expectedBinding": "17e6fbbd664e8b58149f636440580f073aa6ca995e75452f5197c705549a617f"
+      },
+      {
+        "path": "/tmp/root-3316/helper/final-terminal.json",
+        "sha256": "ddeecc5ba2efe5c8ce6bc487f9d4fea5342d0945d9d80336ac6748d27b139e73",
+        "bytes": 3099,
+        "expectedBinding": "ddeecc5ba2efe5c8ce6bc487f9d4fea5342d0945d9d80336ac6748d27b139e73"
+      },
+      {
+        "path": "/tmp/root-3316/helper/full-lock.json",
+        "sha256": "1bcc997436cbd8378f3c0a38b8610366161cced7fcf40abea68911e6738df5c6",
+        "bytes": 219591,
+        "expectedBinding": "1bcc997436cbd8378f3c0a38b8610366161cced7fcf40abea68911e6738df5c6"
+      },
+      {
+        "path": "/tmp/root-3316/helper/full.json",
+        "sha256": "17ad19559ac066b6d5af8db70920fb72cc04252a787c4577a944738eb0a6cb25",
+        "bytes": 219789,
+        "expectedBinding": "17ad19559ac066b6d5af8db70920fb72cc04252a787c4577a944738eb0a6cb25"
+      },
+      {
+        "path": "/tmp/root-3316/helper/fuzz-lock.json",
+        "sha256": "cf166fdb996176fbec8c400f8c0e22183c307a7476899356b4f80da4f08a716b",
+        "bytes": 220810,
+        "expectedBinding": "cf166fdb996176fbec8c400f8c0e22183c307a7476899356b4f80da4f08a716b"
+      },
+      {
+        "path": "/tmp/root-3316/helper/fuzz.json",
+        "sha256": "8dc511ab0da7d80fa8198d07dc97ff76bf9b58dd26a8aa721d3beb1133dc5a36",
+        "bytes": 220796,
+        "expectedBinding": "8dc511ab0da7d80fa8198d07dc97ff76bf9b58dd26a8aa721d3beb1133dc5a36"
+      },
+      {
+        "path": "/tmp/root-3316/repair-v02/full-lock.json",
+        "sha256": "ba09ddaf40eb387d03764d4a22d2f4586c5bc151d837fe3de27e4bd47a461016",
+        "bytes": 227003,
+        "expectedBinding": "ba09ddaf40eb387d03764d4a22d2f4586c5bc151d837fe3de27e4bd47a461016"
+      },
+      {
+        "path": "/tmp/root-3316/repair-v02/full.json",
+        "sha256": "14c2f588c7601ef5fd34cd045a7ba0ebf1e10a420a6eea94d111ec580ab99bdb",
+        "bytes": 227204,
+        "expectedBinding": "14c2f588c7601ef5fd34cd045a7ba0ebf1e10a420a6eea94d111ec580ab99bdb"
+      },
+      {
+        "path": "/tmp/root-3316/repair-v02/fuzz-lock.json",
+        "sha256": "2b5acb59e3c4e018902e29503715b650c193f7995f7605f6077acad2db332e79",
+        "bytes": 227096,
+        "expectedBinding": "2b5acb59e3c4e018902e29503715b650c193f7995f7605f6077acad2db332e79"
+      },
+      {
+        "path": "/tmp/root-3316/repair-v02/fuzz.json",
+        "sha256": "6e3fedc2d353e7ec1f7a6127086293067dd6300baa1add89c4a9b0787038bc52",
+        "bytes": 227353,
+        "expectedBinding": "6e3fedc2d353e7ec1f7a6127086293067dd6300baa1add89c4a9b0787038bc52"
+      },
+      {
+        "path": "/tmp/root-3316/helper/full-lock-latest-observation.json",
+        "sha256": "0b2c5148501754f865ca0df55d47eb9bef3ea7949b86721402b2be4e3c678172",
+        "bytes": 90,
+        "expectedBinding": "0b2c5148501754f865ca0df55d47eb9bef3ea7949b86721402b2be4e3c678172"
+      },
+      {
+        "path": "/tmp/worker-init7/review-full-final.log",
+        "sha256": "0de62a72633fa5a1056ad96787b8f12ab62e60c6ea4484b32752e2c96346e9ec",
+        "bytes": 104255,
+        "expectedBinding": "0de62a72633fa5a1056ad96787b8f12ab62e60c6ea4484b32752e2c96346e9ec"
+      },
+      {
+        "path": "/tmp/worker-init7/review-full-final.receipt.json",
+        "sha256": "b9aa0753645ce6e79603529b4fff4e63c92cab8ae589a4c6aaba4255152fd944",
+        "bytes": 475,
+        "expectedBinding": "b9aa0753645ce6e79603529b4fff4e63c92cab8ae589a4c6aaba4255152fd944"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a1304d/33id3/helper/checks-v34/review-full/receipt.json",
+        "sha256": "3c649cc8dfc3d8b0f3ad0ca6bd75ee0eb2fa528692fd07fe44d1ec0c12c759d8",
+        "bytes": 878,
+        "expectedBinding": "3c649cc8dfc3d8b0f3ad0ca6bd75ee0eb2fa528692fd07fe44d1ec0c12c759d8"
+      }
+    ],
+    "exactThreeFrictionAndKeyWindowArithmeticVerified": true,
+    "sourceEpochs": "Historical .16 v01 raw companion/receipts retained separately from actual repaired v02; final source timings are not substituted or treated as a controlled speedup.",
+    "causalDisposition": "Required D17 full-review/200-game fuzz admission; heterogeneous scopes and settled cancellations establish no additional shared actionable scheduler defect. Pure kernel waiting, complete queue/owner history, fairness and savings UNKNOWN.",
+    "limitations": "Parent read complete report/analysis and critical source fields plus all41 raw digest bindings; giant nested native dependency histories and browser epoch payloads not exhaustively read. No new benchmark/CPU or acceptance claim.",
+    "unchangedOtherSourceBeforeEvidence": true,
+    "formalReview": "Not required for this unmarked evidence-only nongate duty; read-only Sage audit is not claimed as code review."
+  },
+  "ledgerLine": {
+    "tag": "heavy-slot-wait",
+    "phase": 6,
+    "reason": "D17 requires serialization of these full-review/200-game fuzz commands. The three source-bound records measure heterogeneous admission/startup upper bounds or settled queued cancellations, not isolated lost time: hv-33id.16 historical v01 full821.096204s (v02 final admission0.189476s), hv-33id.3 two pre-product cancellations844.760273667s then final admission0.184976s, hv-33id.7 launch-to-prepare604.749415s spanning external/internal admission and startup. No common actionable scheduler defect is established; queue-only time, fairness, capacity loss and savings remain UNKNOWN. Prior hv-lf7t phase5 disposition covers distinct records and already-corrected unnecessary ordinary-check wrappers; it supplies no new phase6 repair. Preserve D17/D19/D44 capacity, all acceptance/tests, authored timing and budgets."
+  },
+  "newSourceOrRuntimeChanges": false,
+  "requirements": "D17 resource capacity and exact heavy-command classification, D19 budgets, authored tutorial timing and all player/CI acceptance preserved. Historical observations establish neither current comparable-load performance nor capacity savings.",
+  "validation": {
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18",
+      "head": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+      "start": "2026-10-16T03:37:15.173855+00:00",
+      "pid": 39338,
+      "pgid": 39338,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:37:22.745452+00:00",
+      "elapsedSeconds": 7.571441958018113,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 7.203936000000001,
+      "hostLoad": [
+        5.0498046875,
+        7.255859375,
+        7.92529296875
+      ]
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18",
+      "head": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+      "start": "2026-10-16T03:37:15.173913+00:00",
+      "pid": 39337,
+      "pgid": 39337,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:37:15.581411+00:00",
+      "elapsedSeconds": 0.40733929199632257,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.357213,
+      "hostLoad": [
+        5.0498046875,
+        7.255859375,
+        7.92529296875
+      ]
+    },
+    "triggers": {
+      "label": "triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18",
+      "head": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+      "start": "2026-10-16T03:37:33.215310+00:00",
+      "pid": 40768,
+      "pgid": 40768,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:37:33.404880+00:00",
+      "elapsedSeconds": 0.18945904198335484,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.182951,
+      "hostLoad": [
+        4.97021484375,
+        7.09326171875,
+        7.8505859375
+      ]
+    },
+    "install": {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/heavy-wait-phase6-18",
+      "head": "13d095d68adbbcf23fbfd78d5d61f71b0a74cd61",
+      "start": "2026-10-16T03:32:36.654821+00:00",
+      "pid": 20306,
+      "pgid": 20306,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:32:39.660446+00:00",
+      "elapsedSeconds": 3.0054835000191815,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 6.384085,
+      "hostLoad": [
+        9.1884765625,
+        9.86962890625,
+        8.802734375
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting one-minute os.getloadavg()"
+      },
+      "implementMin": {
+        "measuredFor": "Original claim-wrapper start through evidence cutoff; actual final Git endpoint and small tail retained separately."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "validationQualification": "Evidence-only ordinary review, Knip, schema/trigger and whitespace checks. No new source tests, full-suite/fuzz/profile, browser runtime or performance benchmark.",
+  "cleanup": {
+    "helperTerminal": true,
+    "browserServerOrHeavyCheckLaunched": false,
+    "foreignWorktreesUntouched": true,
+    "checkChildren": "Root synchronous checks are reaped and exact owned process groups verified before delivery."
+  },
+  "artifactManifest": [
+    {
+      "path": "admit.json",
+      "bytes": 2996,
+      "sha256": "964b40a1c7edc80d91bd6cc79f943c1306e7443b26d0f3a12832b09009723043"
+    },
+    {
+      "path": "admit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "admitted.json",
+      "bytes": 399440,
+      "sha256": "3fc4adf8434ffa79cf11ee2b1d3e1297928b05fdcb53e1deded9c94996d8f789"
+    },
+    {
+      "path": "admitted.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "assemble-evidence.py",
+      "bytes": 4948,
+      "sha256": "720d2b02e41b6a5f80a3813423dfaa8ac28e6e5231456e8ce4188565991e8478"
+    },
+    {
+      "path": "audit-checkpoint-native.json",
+      "bytes": 4893,
+      "sha256": "de7e443703f7eb72a2344ff7675b95f6352ff484aaa91a020f25bf287903fd3c"
+    },
+    {
+      "path": "claim-owned.json",
+      "bytes": 5781,
+      "sha256": "1cfa2a680b58ae39d1194c2ac517a01fae32ab9e9d9864604a09d6f4f5c2553d"
+    },
+    {
+      "path": "claim-owned.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "claim-ready.json",
+      "bytes": 110324,
+      "sha256": "6e718d9f6ef6427467a9ee00478d3dbf9947ca67117f80357e45b53800501a96"
+    },
+    {
+      "path": "claim-ready.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "claim.json",
+      "bytes": 3101,
+      "sha256": "2ef7f889b73ad99733915cbcda0d2ccddb69a3c522b4c8af560f5992216faf26"
+    },
+    {
+      "path": "claim.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "create.json",
+      "bytes": 2552,
+      "sha256": "fcdfbecc47e7be20ae6d3947d44198b498ca562a0e9a70726d80cca49f4533f3"
+    },
+    {
+      "path": "create.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "duty-after.json",
+      "bytes": 2943,
+      "sha256": "1eabb6d35293dd23e57d0c120c02f8d6b84d71405897b4a0a7144c06f23c31ed"
+    },
+    {
+      "path": "duty-after.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "duty-before.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "duty-before.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "duty-note.json",
+      "bytes": 2956,
+      "sha256": "d993ca4ef704593271e0e510586a007933f069c6bb72660c85c8d8d30a40bb00"
+    },
+    {
+      "path": "duty-note.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "gate-edge.json",
+      "bytes": 127,
+      "sha256": "0c0fe75fd8cd5c0cebdbb54a4c8952acdbec2ef7a1f307b44a46a9689fa530e6"
+    },
+    {
+      "path": "gate-edge.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "helper/audit-analysis.json",
+      "bytes": 17600,
+      "sha256": "6055b322c2a9ccde8394fbe190edbca86221d98999a4c78fa848dad071d81efd"
+    },
+    {
+      "path": "helper/audit-report.md",
+      "bytes": 7168,
+      "sha256": "dd6227fbf51b9f6fccfd9de3d978bb2581e8797e469ed71b0877d7593fa247c8"
+    },
+    {
+      "path": "helper/build-audit.py",
+      "bytes": 19840,
+      "sha256": "42eb135f688f103201cfabed82250506c142e591ffaa80beb2c62bc08ec76efd"
+    },
+    {
+      "path": "helper/source-receipts.json",
+      "bytes": 19232,
+      "sha256": "58f849de0e24c95e0b9de62c09f3788efee0969178ae013a03830c66a934f302"
+    },
+    {
+      "path": "hv-33id-coordination.json",
+      "bytes": 2745,
+      "sha256": "03a28ef992e3fa5a3d0336fa08f841ca8d6fe7740cbec53750952759236bb3bd"
+    },
+    {
+      "path": "hv-33id.18-coordination.json",
+      "bytes": 3885,
+      "sha256": "89f96bd85848468eeb6cc4ea232c2c2eef013876803622cdef5affa14c17dc43"
+    },
+    {
+      "path": "install.log",
+      "bytes": 326,
+      "sha256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+    },
+    {
+      "path": "install.receipt.json",
+      "bytes": 523,
+      "sha256": "bbfea02f3bbc323fdcb3604e4d6afd819328b31d77ef6113b2d0f89134a97c89"
+    },
+    {
+      "path": "introspection-prefix.jsonl",
+      "bytes": 27128,
+      "sha256": "dea27a4494a9d5177cb207f25555c36ab3f1c159eef8ad11be98a821680ac8d5"
+    },
+    {
+      "path": "knip.log",
+      "bytes": 47965,
+      "sha256": "37aac2c9ab7788c0fb05b98694075a24de18e266b4e565e6da6f472fb14b364d"
+    },
+    {
+      "path": "knip.receipt.json",
+      "bytes": 536,
+      "sha256": "dff4bde05d0f1a6a5cf65990fed2d81b496161071fa5876108e6849b90d6f330"
+    },
+    {
+      "path": "parent-audit-verification.json",
+      "bytes": 13048,
+      "sha256": "c96af9aa13b34955af9559fd20d3512dbebff7254711291f2121b97815af111a"
+    },
+    {
+      "path": "parent-packet-verification.json",
+      "bytes": 2497,
+      "sha256": "574c5e092732347e99e565b6fe8837fa2dd6724c5b654cc369e64e6327a8c742"
+    },
+    {
+      "path": "pending.json",
+      "bytes": 114492,
+      "sha256": "f5a3f6d050679cb1e17834fbbe9b177cad66cb8256a527aeb497a2034b90d9c2"
+    },
+    {
+      "path": "pending.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "resource-cleanup.json",
+      "bytes": 185,
+      "sha256": "e6a4574b50f19b65f80c8cce4f0d6c40e6db3c1e50072540ca5cab971c3656b1"
+    },
+    {
+      "path": "retained-read-inputs/01f362bc45cc905a9604a60d1acfd7c517ce9b4c9631b1d4614f14e4911960d4-source-bindings.json",
+      "bytes": 3049,
+      "sha256": "01f362bc45cc905a9604a60d1acfd7c517ce9b4c9631b1d4614f14e4911960d4"
+    },
+    {
+      "path": "retained-read-inputs/0b2c5148501754f865ca0df55d47eb9bef3ea7949b86721402b2be4e3c678172-full-lock-latest-observation.json",
+      "bytes": 90,
+      "sha256": "0b2c5148501754f865ca0df55d47eb9bef3ea7949b86721402b2be4e3c678172"
+    },
+    {
+      "path": "retained-read-inputs/0de62a72633fa5a1056ad96787b8f12ab62e60c6ea4484b32752e2c96346e9ec-review-full-final.log",
+      "bytes": 104255,
+      "sha256": "0de62a72633fa5a1056ad96787b8f12ab62e60c6ea4484b32752e2c96346e9ec"
+    },
+    {
+      "path": "retained-read-inputs/13728dbdab0a059e48f8e8bc390aff453f4104d1ba1c3e4208008657cd9e3af6-review-lock.mjs",
+      "bytes": 4776,
+      "sha256": "13728dbdab0a059e48f8e8bc390aff453f4104d1ba1c3e4208008657cd9e3af6"
+    },
+    {
+      "path": "retained-read-inputs/14c2f588c7601ef5fd34cd045a7ba0ebf1e10a420a6eea94d111ec580ab99bdb-full.json",
+      "bytes": 227204,
+      "sha256": "14c2f588c7601ef5fd34cd045a7ba0ebf1e10a420a6eea94d111ec580ab99bdb"
+    },
+    {
+      "path": "retained-read-inputs/17ad19559ac066b6d5af8db70920fb72cc04252a787c4577a944738eb0a6cb25-full.json",
+      "bytes": 219789,
+      "sha256": "17ad19559ac066b6d5af8db70920fb72cc04252a787c4577a944738eb0a6cb25"
+    },
+    {
+      "path": "retained-read-inputs/17e6fbbd664e8b58149f636440580f073aa6ca995e75452f5197c705549a617f-v01-committed-friction.json",
+      "bytes": 841,
+      "sha256": "17e6fbbd664e8b58149f636440580f073aa6ca995e75452f5197c705549a617f"
+    },
+    {
+      "path": "retained-read-inputs/1bcc997436cbd8378f3c0a38b8610366161cced7fcf40abea68911e6738df5c6-full-lock.json",
+      "bytes": 219591,
+      "sha256": "1bcc997436cbd8378f3c0a38b8610366161cced7fcf40abea68911e6738df5c6"
+    },
+    {
+      "path": "retained-read-inputs/20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9-SKILL.md",
+      "bytes": 744,
+      "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9"
+    },
+    {
+      "path": "retained-read-inputs/27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3-entry.md",
+      "bytes": 4917,
+      "sha256": "27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3"
+    },
+    {
+      "path": "retained-read-inputs/2b5acb59e3c4e018902e29503715b650c193f7995f7605f6077acad2db332e79-fuzz-lock.json",
+      "bytes": 227096,
+      "sha256": "2b5acb59e3c4e018902e29503715b650c193f7995f7605f6077acad2db332e79"
+    },
+    {
+      "path": "retained-read-inputs/2b93bedef5042d40ae8364e2f2ce92469ee800a8086112edb5331b914a561c3e-hv-33id.7-native.json",
+      "bytes": 25664,
+      "sha256": "2b93bedef5042d40ae8364e2f2ce92469ee800a8086112edb5331b914a561c3e"
+    },
+    {
+      "path": "retained-read-inputs/2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac-hv-33id.7.json",
+      "bytes": 28564,
+      "sha256": "2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac"
+    },
+    {
+      "path": "retained-read-inputs/3016d3e807ba773a556e47ebc36f947ec101cb4bb6128406850ade74f477a977-v01-committed-measurements.json",
+      "bytes": 15129,
+      "sha256": "3016d3e807ba773a556e47ebc36f947ec101cb4bb6128406850ade74f477a977"
+    },
+    {
+      "path": "retained-read-inputs/3c649cc8dfc3d8b0f3ad0ca6bd75ee0eb2fa528692fd07fe44d1ec0c12c759d8-receipt.json",
+      "bytes": 878,
+      "sha256": "3c649cc8dfc3d8b0f3ad0ca6bd75ee0eb2fa528692fd07fe44d1ec0c12c759d8"
+    },
+    {
+      "path": "retained-read-inputs/48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90-AGENTS.md",
+      "bytes": 8068,
+      "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90"
+    },
+    {
+      "path": "retained-read-inputs/4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47-filing.md",
+      "bytes": 5427,
+      "sha256": "4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47"
+    },
+    {
+      "path": "retained-read-inputs/552b8797ea270137002425487be4087ea183fdf4f9f74796e9e6b7da25123417-hv-lf7t-native.json",
+      "bytes": 3465,
+      "sha256": "552b8797ea270137002425487be4087ea183fdf4f9f74796e9e6b7da25123417"
+    },
+    {
+      "path": "retained-read-inputs/65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3-review.mjs",
+      "bytes": 16054,
+      "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3"
+    },
+    {
+      "path": "retained-read-inputs/69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874-hv-33id.3.md",
+      "bytes": 1946,
+      "sha256": "69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874"
+    },
+    {
+      "path": "retained-read-inputs/6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf-hv-lf7t.json",
+      "bytes": 46591,
+      "sha256": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf"
+    },
+    {
+      "path": "retained-read-inputs/6e3fedc2d353e7ec1f7a6127086293067dd6300baa1add89c4a9b0787038bc52-fuzz.json",
+      "bytes": 227353,
+      "sha256": "6e3fedc2d353e7ec1f7a6127086293067dd6300baa1add89c4a9b0787038bc52"
+    },
+    {
+      "path": "retained-read-inputs/70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7-hv-33id.16.json",
+      "bytes": 828,
+      "sha256": "70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7"
+    },
+    {
+      "path": "retained-read-inputs/8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e-hv-lf7t.md",
+      "bytes": 675,
+      "sha256": "8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e"
+    },
+    {
+      "path": "retained-read-inputs/85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5-workflow.md",
+      "bytes": 104126,
+      "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5"
+    },
+    {
+      "path": "retained-read-inputs/867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5-hv-33id.16.json",
+      "bytes": 15124,
+      "sha256": "867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5"
+    },
+    {
+      "path": "retained-read-inputs/89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4-decisions.md",
+      "bytes": 51785,
+      "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4"
+    },
+    {
+      "path": "retained-read-inputs/8dc511ab0da7d80fa8198d07dc97ff76bf9b58dd26a8aa721d3beb1133dc5a36-fuzz.json",
+      "bytes": 220796,
+      "sha256": "8dc511ab0da7d80fa8198d07dc97ff76bf9b58dd26a8aa721d3beb1133dc5a36"
+    },
+    {
+      "path": "retained-read-inputs/a9e467f336de3fe6a725a35ccaad4b9fd83a6a77e5f91e48ab81db8850848416-hv-33id-native.json",
+      "bytes": 2516,
+      "sha256": "a9e467f336de3fe6a725a35ccaad4b9fd83a6a77e5f91e48ab81db8850848416"
+    },
+    {
+      "path": "retained-read-inputs/b21b4f60748110dd8ef02d76a23e964cad79c6dcc10ff73b8f64c053b8110085-hv-33id.16-native.json",
+      "bytes": 16779,
+      "sha256": "b21b4f60748110dd8ef02d76a23e964cad79c6dcc10ff73b8f64c053b8110085"
+    },
+    {
+      "path": "retained-read-inputs/b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e-hv-33id.3.json",
+      "bytes": 83952,
+      "sha256": "b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e"
+    },
+    {
+      "path": "retained-read-inputs/b9aa0753645ce6e79603529b4fff4e63c92cab8ae589a4c6aaba4255152fd944-review-full-final.receipt.json",
+      "bytes": 475,
+      "sha256": "b9aa0753645ce6e79603529b4fff4e63c92cab8ae589a4c6aaba4255152fd944"
+    },
+    {
+      "path": "retained-read-inputs/ba09ddaf40eb387d03764d4a22d2f4586c5bc151d837fe3de27e4bd47a461016-full-lock.json",
+      "bytes": 227003,
+      "sha256": "ba09ddaf40eb387d03764d4a22d2f4586c5bc151d837fe3de27e4bd47a461016"
+    },
+    {
+      "path": "retained-read-inputs/c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c-hv-33id.3.json",
+      "bytes": 1416,
+      "sha256": "c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c"
+    },
+    {
+      "path": "retained-read-inputs/cf166fdb996176fbec8c400f8c0e22183c307a7476899356b4f80da4f08a716b-fuzz-lock.json",
+      "bytes": 220810,
+      "sha256": "cf166fdb996176fbec8c400f8c0e22183c307a7476899356b4f80da4f08a716b"
+    },
+    {
+      "path": "retained-read-inputs/d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e-hv-33id.3.md",
+      "bytes": 7870,
+      "sha256": "d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e"
+    },
+    {
+      "path": "retained-read-inputs/d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b-hv-lf7t.json",
+      "bytes": 481,
+      "sha256": "d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b"
+    },
+    {
+      "path": "retained-read-inputs/ddeecc5ba2efe5c8ce6bc487f9d4fea5342d0945d9d80336ac6748d27b139e73-final-terminal.json",
+      "bytes": 3099,
+      "sha256": "ddeecc5ba2efe5c8ce6bc487f9d4fea5342d0945d9d80336ac6748d27b139e73"
+    },
+    {
+      "path": "retained-read-inputs/e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123-hv-33id.16.md",
+      "bytes": 702,
+      "sha256": "e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123"
+    },
+    {
+      "path": "retained-read-inputs/e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f-hv-33id.7.json",
+      "bytes": 739,
+      "sha256": "e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f"
+    },
+    {
+      "path": "retained-read-inputs/fb53725a9518d019e2b34222a13dc8ea5443dcb1f8fc0896cb58bd113cee351a-hv-33id.3-native.json",
+      "bytes": 397342,
+      "sha256": "fb53725a9518d019e2b34222a13dc8ea5443dcb1f8fc0896cb58bd113cee351a"
+    },
+    {
+      "path": "retained-read-inputs.json",
+      "bytes": 11812,
+      "sha256": "0514cc287be32f85472ff5f7f0944449c664d86a17471a55ddfe3115ce07a429"
+    },
+    {
+      "path": "review.log",
+      "bytes": 343,
+      "sha256": "5e34b2cdecde9f36d2575d4becabd9001a0d6a8122745cd5041590089a78785e"
+    },
+    {
+      "path": "review.receipt.json",
+      "bytes": 533,
+      "sha256": "b6f10f4b704723af3ff188b00376dc3d3ab6299cc6f2ed73bc2886b4c1be737b"
+    },
+    {
+      "path": "root-state.json",
+      "bytes": 591,
+      "sha256": "b39abd0c0ff682edc3eb823db4b7c8c821688a46e9f0be55825357975520dce3"
+    },
+    {
+      "path": "run-in-dir.py",
+      "bytes": 1483,
+      "sha256": "8e4583399b6722bd71445d32eaad6f6d6f7cb6cf46bd9f0e9d4513ea8b494531"
+    },
+    {
+      "path": "source-freeze.json",
+      "bytes": 290,
+      "sha256": "1490e7be2ed5b6e36731182cd2d1966cbc0ab70dd6fb4c0cf20850cfe9989acf"
+    },
+    {
+      "path": "source-packet/friction/hv-33id.16.json",
+      "bytes": 828,
+      "sha256": "70432ec82f580011cc6f0ee899acf7e3541d06a53f71db96def915f8489ac5d7"
+    },
+    {
+      "path": "source-packet/friction/hv-33id.3.json",
+      "bytes": 1416,
+      "sha256": "c3dd5d022cb27271ff45ea421f3005d2303a6045c86208b91754911443fd426c"
+    },
+    {
+      "path": "source-packet/friction/hv-33id.7.json",
+      "bytes": 739,
+      "sha256": "e870a53bae71f8915484c4a33457a0b2f2dd0ca3c17eb7b9ae358ea9f16e4e1f"
+    },
+    {
+      "path": "source-packet/friction/hv-lf7t.json",
+      "bytes": 481,
+      "sha256": "d7f82e3c62fbbe5c8b4897e18e77d88f750ffe12bb0e9bb8da76fadc8c70470b"
+    },
+    {
+      "path": "source-packet/hv-33id-native.json",
+      "bytes": 2516,
+      "sha256": "a9e467f336de3fe6a725a35ccaad4b9fd83a6a77e5f91e48ab81db8850848416"
+    },
+    {
+      "path": "source-packet/hv-33id.16-native.json",
+      "bytes": 16779,
+      "sha256": "b21b4f60748110dd8ef02d76a23e964cad79c6dcc10ff73b8f64c053b8110085"
+    },
+    {
+      "path": "source-packet/hv-33id.3-native.json",
+      "bytes": 397342,
+      "sha256": "fb53725a9518d019e2b34222a13dc8ea5443dcb1f8fc0896cb58bd113cee351a"
+    },
+    {
+      "path": "source-packet/hv-33id.7-native.json",
+      "bytes": 25664,
+      "sha256": "2b93bedef5042d40ae8364e2f2ce92469ee800a8086112edb5331b914a561c3e"
+    },
+    {
+      "path": "source-packet/hv-lf7t-native.json",
+      "bytes": 3465,
+      "sha256": "552b8797ea270137002425487be4087ea183fdf4f9f74796e9e6b7da25123417"
+    },
+    {
+      "path": "source-packet/measurements/hv-33id.16.json",
+      "bytes": 15124,
+      "sha256": "867c984d635c4f74c89c9d2efa8b86c3f8c32e7ae15ccd62d5d637f576a54ab5"
+    },
+    {
+      "path": "source-packet/measurements/hv-33id.3.json",
+      "bytes": 83952,
+      "sha256": "b882bf839d1a0f3410803fa3c2dce87b233a074087ef8832dc4b0055dd27bf5e"
+    },
+    {
+      "path": "source-packet/measurements/hv-33id.3.md",
+      "bytes": 7870,
+      "sha256": "d73aa85f1bf287b3bccc3791811fdf3626eef07e589dbecbeef125703116fc4e"
+    },
+    {
+      "path": "source-packet/measurements/hv-33id.7.json",
+      "bytes": 28564,
+      "sha256": "2ee38b5d38fe33f6c9dd918c1d24823294cae97bd25c6d2db221d276eddebdac"
+    },
+    {
+      "path": "source-packet/measurements/hv-lf7t.json",
+      "bytes": 46591,
+      "sha256": "6caf1023ff54887fbc33392144f3221bab87861cba4409e23b44489bc6badebf"
+    },
+    {
+      "path": "source-packet/pre-existing/hv-33id.16.md",
+      "bytes": 702,
+      "sha256": "e120a4d9a27732bbc991f04259f8032dce44bac6ad92f7e5119f7535dea34123"
+    },
+    {
+      "path": "source-packet/pre-existing/hv-33id.3.md",
+      "bytes": 1946,
+      "sha256": "69e70b67d8f065134f6ec6a4c1e07469b873a4a9b62f09871b461b1ae6790874"
+    },
+    {
+      "path": "source-packet/pre-existing/hv-lf7t.md",
+      "bytes": 675,
+      "sha256": "8559878501df74ce16ff451a9e368152b6038d5983106511b501268a0df8af9e"
+    },
+    {
+      "path": "source-packet/source-bindings.json",
+      "bytes": 3049,
+      "sha256": "01f362bc45cc905a9604a60d1acfd7c517ce9b4c9631b1d4614f14e4911960d4"
+    },
+    {
+      "path": "triggers.log",
+      "bytes": 22344,
+      "sha256": "ae7db35b39da7253a70a5d60a0184ddb0dff472066192aebca3c427ef4d0b474"
+    },
+    {
+      "path": "triggers.receipt.json",
+      "bytes": 548,
+      "sha256": "f38bafcb7f2b22917dfc257e3d1d00d3c60f8398cc673b7b11796c92aa764bd1"
+    },
+    {
+      "path": "worktree-create.json",
+      "bytes": 327,
+      "sha256": "22d1868914c68e4d1726f7c1c22a6c5802fadd5977961ebf723461efc8a494e0"
+    },
+    {
+      "path": "worktree-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "rawArchive": "artifacts/qa/hv-33id.18/audit/<exact final source commit>/; immutable source cutoff excludes subsequent final Git/delivery/closure receipts archived separately."
+}
