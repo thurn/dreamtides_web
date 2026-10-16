@@ -1,0 +1,1246 @@
+{
+  "bead": "hv-umm2.768",
+  "phase": 5,
+  "base": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+  "role": "bounded read-only Sage audit, evidence only",
+  "claimStart": "2026-10-16T10:07:43+00:00",
+  "recordCutoff": "2026-10-16T10:19:02.879183+00:00",
+  "inclusiveMinutesAtCutoff": 11.331319716666666,
+  "clockScope": "Claim through real pre-Git cutoff includes root/helper reading, immutable packets, scope/custody verification, evidence, review, Knip and queues. Final schema/whitespace and actual Git return are additive ignored receipts; no future timestamp or clock-only amend.",
+  "sageReportSha256": "4bbb0adf9e55f273733435cbadb09e19135e097d716de0164c72aa382d893631",
+  "sageScope": {
+    "bead": "hv-umm2.768",
+    "role": "Fresh read-only Codex Sage audit, not a code review",
+    "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-suite-cost-audit768",
+    "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+    "baselineSource": "00a9521babd1d9b446f2ddac023c5593eacd6024",
+    "packet": {
+      "path": "/tmp/root768-20261016/sage-required-scope-v01.json",
+      "sha256": "670f3d2a226bd39428d2719f0d2c1a9c7c6f0bcdeb1d97b4ea16c83a07feadc8",
+      "requiredInputs": 38,
+      "requiredRangeLines": 12729,
+      "fullFrozenSourceBodies": 22,
+      "fullFrozenSourceLines": 4483
+    },
+    "required": [
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/00-AGENTS.md",
+        "kind": "source",
+        "lines": 145,
+        "ranges": [
+          [
+            1,
+            145
+          ]
+        ],
+        "bytes": 8068,
+        "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "repositoryPath": "AGENTS.md",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+        "actualReadRanges": [
+          [
+            1,
+            145
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/01-README.md",
+        "kind": "source",
+        "lines": 334,
+        "ranges": [
+          [
+            1,
+            334
+          ]
+        ],
+        "bytes": 18782,
+        "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "repositoryPath": "docs/plan/README.md",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+        "actualReadRanges": [
+          [
+            1,
+            334
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/02-vitest.config.ts",
+        "kind": "source",
+        "lines": 115,
+        "ranges": [
+          [
+            1,
+            115
+          ]
+        ],
+        "bytes": 3911,
+        "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "repositoryPath": "vitest.config.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+        "actualReadRanges": [
+          [
+            1,
+            115
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/03-setup-dom.ts",
+        "kind": "source",
+        "lines": 48,
+        "ranges": [
+          [
+            1,
+            48
+          ]
+        ],
+        "bytes": 1710,
+        "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+        "repositoryPath": "src/testing/setup-dom.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+        "actualReadRanges": [
+          [
+            1,
+            48
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/04-dom-globals.ts",
+        "kind": "source",
+        "lines": 130,
+        "ranges": [
+          [
+            1,
+            130
+          ]
+        ],
+        "bytes": 4444,
+        "sha256": "b386de655cfc825c7728a783cc3066b869021675805d48f079a440d8cd07b117",
+        "repositoryPath": "src/testing/dom-globals.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "b386de655cfc825c7728a783cc3066b869021675805d48f079a440d8cd07b117",
+        "actualReadRanges": [
+          [
+            1,
+            130
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/05-render-cleanup.ts",
+        "kind": "source",
+        "lines": 20,
+        "ranges": [
+          [
+            1,
+            20
+          ]
+        ],
+        "bytes": 648,
+        "sha256": "fa3837d001fe66444863d57d3281a3f5c9da413880c7f45942fc2a1339e41c6d",
+        "repositoryPath": "src/cumulus/testing/render-cleanup.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "fa3837d001fe66444863d57d3281a3f5c9da413880c7f45942fc2a1339e41c6d",
+        "actualReadRanges": [
+          [
+            1,
+            20
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/06-review.mjs",
+        "kind": "source",
+        "lines": 592,
+        "ranges": [
+          [
+            1,
+            592
+          ]
+        ],
+        "bytes": 16054,
+        "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+        "repositoryPath": "scripts/review.mjs",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+        "actualReadRanges": [
+          [
+            1,
+            592
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/07-review-plan.mjs",
+        "kind": "source",
+        "lines": 390,
+        "ranges": [
+          [
+            1,
+            390
+          ]
+        ],
+        "bytes": 11782,
+        "sha256": "95f59988e0a7db7903255e56c0c0fb3c0fbb9ba4037b91c73f770fefd66eea31",
+        "repositoryPath": "scripts/review-plan.mjs",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "95f59988e0a7db7903255e56c0c0fb3c0fbb9ba4037b91c73f770fefd66eea31",
+        "actualReadRanges": [
+          [
+            1,
+            390
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/08-contracts.test.ts",
+        "kind": "source",
+        "lines": 6,
+        "ranges": [
+          [
+            1,
+            6
+          ]
+        ],
+        "bytes": 311,
+        "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+        "repositoryPath": "src/engine/effects/primitives/contracts.test.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+        "actualReadRanges": [
+          [
+            1,
+            6
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/09-cost-composition.contracts.ts",
+        "kind": "source",
+        "lines": 479,
+        "ranges": [
+          [
+            1,
+            479
+          ]
+        ],
+        "bytes": 30897,
+        "sha256": "11d8402405065419f61da3051298eb99d320f57bb18d8944594a1e8e3df679c3",
+        "repositoryPath": "src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "11d8402405065419f61da3051298eb99d320f57bb18d8944594a1e8e3df679c3",
+        "actualReadRanges": [
+          [
+            1,
+            479
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/10-cost-modifier-nth-support.ts",
+        "kind": "source",
+        "lines": 103,
+        "ranges": [
+          [
+            1,
+            103
+          ]
+        ],
+        "bytes": 7453,
+        "sha256": "962cd9a110b109570ac14bf36a85117b0a0ae612efc64ca6f755ce451582c539",
+        "repositoryPath": "src/engine/effects/primitives/contracts/cost-modifier-nth-support.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "962cd9a110b109570ac14bf36a85117b0a0ae612efc64ca6f755ce451582c539",
+        "actualReadRanges": [
+          [
+            1,
+            103
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/11-cost-setter-composition-support.ts",
+        "kind": "source",
+        "lines": 98,
+        "ranges": [
+          [
+            1,
+            98
+          ]
+        ],
+        "bytes": 6657,
+        "sha256": "64775fe27cf269beed079a7bb550f6fa3e82f1bbc5b38968ae273c6d596fd1ca",
+        "repositoryPath": "src/engine/effects/primitives/contracts/cost-setter-composition-support.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "64775fe27cf269beed079a7bb550f6fa3e82f1bbc5b38968ae273c6d596fd1ca",
+        "actualReadRanges": [
+          [
+            1,
+            98
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/12-cost-modifier-reclaim-composition-support.ts",
+        "kind": "source",
+        "lines": 99,
+        "ranges": [
+          [
+            1,
+            99
+          ]
+        ],
+        "bytes": 7070,
+        "sha256": "fb7fee5e0a0785d81f2999d55f478249bc9248412aaec329715af020ad88e80a",
+        "repositoryPath": "src/engine/effects/primitives/contracts/cost-modifier-reclaim-composition-support.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "fb7fee5e0a0785d81f2999d55f478249bc9248412aaec329715af020ad88e80a",
+        "actualReadRanges": [
+          [
+            1,
+            99
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/13-when-copy-trigger.contracts.ts",
+        "kind": "source",
+        "lines": 497,
+        "ranges": [
+          [
+            1,
+            497
+          ]
+        ],
+        "bytes": 38316,
+        "sha256": "7ac22da2af5e4b81dad874a5e200303338fb4cdb0501f0d504733b4143d5b8ee",
+        "repositoryPath": "src/engine/effects/primitives/contracts/when-copy-trigger.contracts.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "7ac22da2af5e4b81dad874a5e200303338fb4cdb0501f0d504733b4143d5b8ee",
+        "actualReadRanges": [
+          [
+            1,
+            497
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/14-with-materialized-support.ts",
+        "kind": "source",
+        "lines": 130,
+        "ranges": [
+          [
+            1,
+            130
+          ]
+        ],
+        "bytes": 7753,
+        "sha256": "65fc6745b9ac99cbc90b7af7a87480a95bc3382f30e7cc7678abc308b19c20fe",
+        "repositoryPath": "src/engine/effects/primitives/contracts/with-materialized-support.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "65fc6745b9ac99cbc90b7af7a87480a95bc3382f30e7cc7678abc308b19c20fe",
+        "actualReadRanges": [
+          [
+            1,
+            130
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/15-engine.ts",
+        "kind": "source",
+        "lines": 120,
+        "ranges": [
+          [
+            1,
+            120
+          ]
+        ],
+        "bytes": 4945,
+        "sha256": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+        "repositoryPath": "src/engine/engine.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+        "actualReadRanges": [
+          [
+            1,
+            120
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/16-catalog.ts",
+        "kind": "source",
+        "lines": 354,
+        "ranges": [
+          [
+            1,
+            354
+          ]
+        ],
+        "bytes": 15403,
+        "sha256": "1fcb5371bfad5c7d3c7206a8bb56d2ccbdc9a3b288edec6be365bc0949d3728d",
+        "repositoryPath": "src/engine/catalog.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "1fcb5371bfad5c7d3c7206a8bb56d2ccbdc9a3b288edec6be365bc0949d3728d",
+        "actualReadRanges": [
+          [
+            1,
+            354
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/17-board.ts",
+        "kind": "source",
+        "lines": 152,
+        "ranges": [
+          [
+            1,
+            152
+          ]
+        ],
+        "bytes": 6417,
+        "sha256": "e413fa76285203d1e25697e175307ede6fee09c1a9ea472e8f07e1b96d24e0d7",
+        "repositoryPath": "src/engine/testing/board.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "e413fa76285203d1e25697e175307ede6fee09c1a9ea472e8f07e1b96d24e0d7",
+        "actualReadRanges": [
+          [
+            1,
+            152
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/18-synthetic-cards.ts",
+        "kind": "source",
+        "lines": 143,
+        "ranges": [
+          [
+            1,
+            143
+          ]
+        ],
+        "bytes": 5172,
+        "sha256": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+        "repositoryPath": "src/engine/testing/synthetic-cards.ts",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "ec3e23320168ce455bc467f3efc5dfa87cfa45e68b9ed106b8a8259c94f18a31",
+        "actualReadRanges": [
+          [
+            1,
+            143
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/19-hv-umm2.766.json",
+        "kind": "source",
+        "lines": 448,
+        "ranges": [
+          [
+            1,
+            448
+          ]
+        ],
+        "bytes": 19208,
+        "sha256": "6ce03de8a5323df99a3c7a8d57e1b082a24fd006c75f5372d24eba1668a3f4c3",
+        "repositoryPath": "docs/plan/evidence/measurements/hv-umm2.766.json",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "added evidence after baseline",
+        "actualSha256": "6ce03de8a5323df99a3c7a8d57e1b082a24fd006c75f5372d24eba1668a3f4c3",
+        "actualReadRanges": [
+          [
+            1,
+            448
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/20-hv-umm2.766.md",
+        "kind": "source",
+        "lines": 17,
+        "ranges": [
+          [
+            1,
+            17
+          ]
+        ],
+        "bytes": 3530,
+        "sha256": "333e74e371496bf28f2cc5b83bc61cab6edaa0dcd76f07004e614fd38ab0274b",
+        "repositoryPath": "docs/plan/evidence/measurements/hv-umm2.766.md",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "added evidence after baseline",
+        "actualSha256": "333e74e371496bf28f2cc5b83bc61cab6edaa0dcd76f07004e614fd38ab0274b",
+        "actualReadRanges": [
+          [
+            1,
+            17
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/21-package.json",
+        "kind": "source",
+        "lines": 63,
+        "ranges": [
+          [
+            1,
+            63
+          ]
+        ],
+        "bytes": 2249,
+        "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+        "repositoryPath": "package.json",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "baseComparison": "identical",
+        "actualSha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+        "actualReadRanges": [
+          [
+            1,
+            63
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/workflow.md",
+        "kind": "normative",
+        "lines": 1951,
+        "ranges": [
+          [
+            249,
+            407
+          ],
+          [
+            1038,
+            1085
+          ],
+          [
+            1240,
+            1413
+          ],
+          [
+            1801,
+            1847
+          ]
+        ],
+        "bytes": 104126,
+        "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5",
+        "repositoryPath": "docs/plan/workflow.md",
+        "actualSha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5",
+        "actualReadRanges": [
+          [
+            249,
+            407
+          ],
+          [
+            1038,
+            1085
+          ],
+          [
+            1240,
+            1413
+          ],
+          [
+            1801,
+            1847
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/decisions.md",
+        "kind": "normative",
+        "lines": 1170,
+        "ranges": [
+          [
+            520,
+            557
+          ],
+          [
+            734,
+            823
+          ]
+        ],
+        "bytes": 51785,
+        "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "repositoryPath": "docs/plan/decisions.md",
+        "actualSha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+        "actualReadRanges": [
+          [
+            520,
+            557
+          ],
+          [
+            734,
+            823
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/engine-design.md",
+        "kind": "normative",
+        "lines": 3126,
+        "ranges": [
+          [
+            2989,
+            3126
+          ]
+        ],
+        "bytes": 201473,
+        "sha256": "f51d6ba9bfe71fb4834dff4dec9e37999a58676278c55736ec24e75b31cff09c",
+        "repositoryPath": "docs/plan/engine-design.md",
+        "actualSha256": "f51d6ba9bfe71fb4834dff4dec9e37999a58676278c55736ec24e75b31cff09c",
+        "actualReadRanges": [
+          [
+            2989,
+            3126
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/metrics.md",
+        "kind": "normative",
+        "lines": 1207,
+        "ranges": [
+          [
+            1,
+            1207
+          ]
+        ],
+        "bytes": 73446,
+        "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+        "repositoryPath": "docs/plan/evidence/metrics.md",
+        "actualSha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+        "actualReadRanges": [
+          [
+            1,
+            1207
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen copy = own worktree bytes = exact HEAD Git bytes"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/raw-cost-projection-v01.json",
+        "kind": "derived-structured-attribution",
+        "lines": 4980,
+        "ranges": [
+          [
+            1,
+            4980
+          ]
+        ],
+        "bytes": 130287,
+        "sha256": "7a5cb9f0094dece59af8711eae3eab6c8c295295ed561e350adc57a478bdcdb4",
+        "actualSha256": "7a5cb9f0094dece59af8711eae3eab6c8c295295ed561e350adc57a478bdcdb4",
+        "actualReadRanges": [
+          [
+            1,
+            4980
+          ]
+        ],
+        "mode": "complete structured parse; all 436 report rows and 383 group rows displayed, selected cohorts semantically mapped to exact source",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/baseline-archive-index.json",
+        "kind": "historical-evidence",
+        "lines": 235,
+        "ranges": [
+          [
+            1,
+            235
+          ]
+        ],
+        "bytes": 8767,
+        "sha256": "fce54d146f265820105d980bdd60e24b8a06ef5ecb60e3d6a2c2edae42ab3238",
+        "actualSha256": "fce54d146f265820105d980bdd60e24b8a06ef5ecb60e3d6a2c2edae42ab3238",
+        "actualReadRanges": [
+          [
+            1,
+            235
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/baseline-sage-d19-cost-audit.report.md",
+        "kind": "historical-evidence",
+        "lines": 117,
+        "ranges": [
+          [
+            1,
+            117
+          ]
+        ],
+        "bytes": 20008,
+        "sha256": "cddbee41be5005eaa294a66c5e9d6a2263aed664bfc5be9d69197cbb728b0731",
+        "actualSha256": "cddbee41be5005eaa294a66c5e9d6a2263aed664bfc5be9d69197cbb728b0731",
+        "actualReadRanges": [
+          [
+            1,
+            117
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/baseline-parent-d19-baseline-assessment.json",
+        "kind": "historical-evidence",
+        "lines": 242,
+        "ranges": [
+          [
+            1,
+            242
+          ]
+        ],
+        "bytes": 8865,
+        "sha256": "8fc7b8d765b797143aebe1ddb410eb83b121a43e175493deaefcc2de858df832",
+        "actualSha256": "8fc7b8d765b797143aebe1ddb410eb83b121a43e175493deaefcc2de858df832",
+        "actualReadRanges": [
+          [
+            1,
+            242
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/baseline-native-baseline-authority.json",
+        "kind": "historical-evidence",
+        "lines": 26,
+        "ranges": [
+          [
+            1,
+            26
+          ]
+        ],
+        "bytes": 16323,
+        "sha256": "14308b662de1f11886a567aefaac0f045af1b10097f62c348c5529b030047b1d",
+        "actualSha256": "14308b662de1f11886a567aefaac0f045af1b10097f62c348c5529b030047b1d",
+        "actualReadRanges": [
+          [
+            1,
+            26
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/baseline-native-control-authority.json",
+        "kind": "historical-evidence",
+        "lines": 26,
+        "ranges": [
+          [
+            1,
+            26
+          ]
+        ],
+        "bytes": 17334,
+        "sha256": "c25542194508669bf0cafc897c29fa2379032a8ed0e86523ef1efa92f8e0ce1b",
+        "actualSha256": "c25542194508669bf0cafc897c29fa2379032a8ed0e86523ef1efa92f8e0ce1b",
+        "actualReadRanges": [
+          [
+            1,
+            26
+          ]
+        ],
+        "mode": "complete structured parse; every field equal to already completely read baseline authority or displayed complete changed value/suffix",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/766-helper-full-inner-v01.receipt.json",
+        "kind": "actual766-evidence",
+        "lines": 20,
+        "ranges": [
+          [
+            1,
+            20
+          ]
+        ],
+        "bytes": 516,
+        "sha256": "e69f2e541925f2dbe8d3b9e9240d6fdfbf90a108fab411fd1a38d660ae3275e9",
+        "actualSha256": "e69f2e541925f2dbe8d3b9e9240d6fdfbf90a108fab411fd1a38d660ae3275e9",
+        "actualReadRanges": [
+          [
+            1,
+            20
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/766-helper-full-inner-v01.stdout",
+        "kind": "actual766-evidence",
+        "lines": 78,
+        "ranges": [
+          [
+            1,
+            78
+          ]
+        ],
+        "bytes": 2625,
+        "sha256": "a0c78746eb46bafafa34d3d106c1430678c1e2ef599009805c841806e8c3bf68",
+        "actualSha256": "a0c78746eb46bafafa34d3d106c1430678c1e2ef599009805c841806e8c3bf68",
+        "actualReadRanges": [
+          [
+            1,
+            78
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/766-helper-full-inner-v01.stderr",
+        "kind": "actual766-evidence",
+        "lines": 560,
+        "ranges": [
+          [
+            1,
+            560
+          ]
+        ],
+        "bytes": 99554,
+        "sha256": "bdc228279fb9ff04dc28984d148296dcc4263d5cf3f28948bcd0aacc7e87651b",
+        "actualSha256": "bdc228279fb9ff04dc28984d148296dcc4263d5cf3f28948bcd0aacc7e87651b",
+        "actualReadRanges": [
+          [
+            1,
+            560
+          ]
+        ],
+        "mode": "complete line read; repeated path prefixes displayed with reversible aliases; clipped 303\u2013449 recovered separately",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/766-helper-focused-after-v01.receipt.json",
+        "kind": "actual766-evidence",
+        "lines": 24,
+        "ranges": [
+          [
+            1,
+            24
+          ]
+        ],
+        "bytes": 696,
+        "sha256": "fb8b578ffd91cf21394b14898479834da96be1bc600609b7fd9d2e39c0f6fbcd",
+        "actualSha256": "fb8b578ffd91cf21394b14898479834da96be1bc600609b7fd9d2e39c0f6fbcd",
+        "actualReadRanges": [
+          [
+            1,
+            24
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/766-focused-before-v01.receipt.json",
+        "kind": "actual766-evidence",
+        "lines": 24,
+        "ranges": [
+          [
+            1,
+            24
+          ]
+        ],
+        "bytes": 695,
+        "sha256": "8386ed9c6d6c61ac2541535fc745af11d4d9d50c1c90c9aa9ad418a4c29389eb",
+        "actualSha256": "8386ed9c6d6c61ac2541535fc745af11d4d9d50c1c90c9aa9ad418a4c29389eb",
+        "actualReadRanges": [
+          [
+            1,
+            24
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      },
+      {
+        "path": "/tmp/root768-20261016/sage-inputs-v01/native-task-scope.json",
+        "kind": "native-task",
+        "lines": 13,
+        "ranges": [
+          [
+            1,
+            13
+          ]
+        ],
+        "bytes": 6537,
+        "sha256": "f4986db2b320f0386bc45cc7ea1a795820d8e42974c6a4c471041e938b1ecead",
+        "actualSha256": "f4986db2b320f0386bc45cc7ea1a795820d8e42974c6a4c471041e938b1ecead",
+        "actualReadRanges": [
+          [
+            1,
+            13
+          ]
+        ],
+        "mode": "complete semantic body read in bounded chunks",
+        "requiredComplete": true,
+        "headByteVerification": "frozen evidence SHA verified"
+      }
+    ],
+    "rawStructuredInput": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.46/d19-baseline-custody-cae0fdec44bd49779efb22fe3eebcb8e/standalone-vitest.json",
+      "sha256": "bd92100f359e8fe881319bf9b72c1ab3f625b056e120801f07a9391362665e4c",
+      "readScope": "Parse complete structure to verify436reports/12206cases and cost projection. Semantically inspect only cost-composition and two closed-copy group attribution; no all-case semantic read claim.",
+      "actualSha256": "bd92100f359e8fe881319bf9b72c1ab3f625b056e120801f07a9391362665e4c",
+      "actualReadRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "mode": "complete JSON parse and all-report/all-assertion status/count/duration aggregation; selected 532+20+20 cases mapped to required source; no semantic audit of unrelated assertion bodies",
+      "reports": 436,
+      "assertions": 12206,
+      "passedReports": 436,
+      "passedAssertions": 12206,
+      "jsonNestedSuites": 1886,
+      "jsonSuccess": true,
+      "all436CostRowsExact": true,
+      "all383PrimitiveGroupsExact": true,
+      "cumulativeAssertionMs": 115531.43275500044,
+      "primitiveAssertions": 5784,
+      "primitiveCumulativeAssertionMs": 19910.282665999992
+    },
+    "supplementary": [
+      {
+        "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+        "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9",
+        "actualReadRanges": [
+          [
+            1,
+            8
+          ]
+        ],
+        "complete": true
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+        "sha256": "27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3",
+        "actualReadRanges": [
+          [
+            1,
+            26
+          ]
+        ],
+        "complete": true
+      },
+      {
+        "path": "/Users/dthurn/.llms/skills/shared/filing.md",
+        "sha256": "4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47",
+        "actualReadRanges": [
+          [
+            1,
+            22
+          ]
+        ],
+        "complete": true
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-suite-cost-audit768/docs/plan/evidence/measurements/hv-umm2.676.json",
+        "repositoryPath": "docs/plan/evidence/measurements/hv-umm2.676.json",
+        "sha256": "ac590728fd60709f48c5416a77ca6271d7010182ab7aff497dee3e9cef67c669",
+        "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+        "ownWorktreeEqualsExactHead": true,
+        "lines": 855,
+        "actualReadRanges": [
+          [
+            1,
+            180
+          ]
+        ],
+        "complete": false,
+        "uncreditedRanges": [
+          [
+            181,
+            855
+          ]
+        ],
+        "justification": "Native audit scope refers to actual676/766 source epochs. Source-bound metadata and validation prove676is BeadCharm content/QA, not reset or suite-cost authority. No production leaf/body read needed or claimed."
+      }
+    ],
+    "clippingRecovery": [
+      {
+        "input": "01-README.md",
+        "recoveredRanges": [
+          [
+            170,
+            259
+          ]
+        ],
+        "reason": "first combined output outer clipping"
+      },
+      {
+        "input": "workflow.md",
+        "recoveredRanges": [
+          [
+            1370,
+            1396
+          ]
+        ],
+        "reason": "combined normative output clipping"
+      },
+      {
+        "input": "766-helper-full-inner-v01.stderr",
+        "recoveredRanges": [
+          [
+            303,
+            449
+          ]
+        ],
+        "reason": "long combined path-expanded output clipping; separate exact middle with reversible temp prefix alias"
+      },
+      {
+        "input": "docs/plan/evidence/measurements/hv-umm2.676.json",
+        "recoveredRanges": [
+          [
+            1,
+            180
+          ]
+        ],
+        "reason": "optional initial whole-file output clipped; credit only exact separate relevant range, rest expressly uncredited"
+      }
+    ],
+    "deniedInputs": [],
+    "missingRequiredInputs": [],
+    "unreadRequiredRanges": [],
+    "unknowns": [
+      "All transitive mutable/side-effectful engine and UI dependency paths have not been inspected; no reset-exempt safe subset established.",
+      "No execution-level attribution of board/catalog fixture preparation versus legalActions/apply/replay bodies exists in this packet.",
+      "No fresh current-head full-suite measurement; 766 measured cbec1 source separately from audited1d5head.",
+      "No foreign worktree, live native unfinished-bead inventory, archive resource process census, or unrelated gameplay/policy/tournament source access.",
+      "Optional676 lines181\u2013855 are uncredited; no676suite-cost conclusion derives from them."
+    ],
+    "runtime": {
+      "diagnosticsExecuted": 0,
+      "diagnosticsRequested": 0,
+      "npmOrInstallExecuted": false,
+      "browserOrServerAcquired": false,
+      "helpersSpawned": 0,
+      "nativeAuthorityCalls": 0,
+      "repositoryWrites": 0,
+      "scratchWritesOnly": "/tmp/root768-20261016/sage-output",
+      "terminalResources": "none acquired; no persistent runtime resource to settle"
+    },
+    "confirmedReadyRepairs": []
+  },
+  "ownerDisposition": {
+    "at": "2026-10-16T10:17:58.872544+00:00",
+    "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+    "requiredInputs": 38,
+    "scopeRangesHashesVerified": true,
+    "fullSources": 22,
+    "completeRepositoryBindings": 26,
+    "rootVerifiedArchiveFiles": 46,
+    "sourceProtection": {
+      "at": "2026-10-16T10:15:11.573371+00:00",
+      "head": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+      "required38HashesMatch": true,
+      "initialTrackedCount": 6038,
+      "sourceDeltas": [],
+      "worktreeClean": true,
+      "rootCoverage": "Root actual initial config/setup/DOM/cleanup, review plan full, review first220, cost table full479, closed-copy intro1-105/250-497; no full historical-report semantic read claim. Sage owns complete required packet audit."
+    },
+    "dedup": {
+      "admittedUnfinished": 25,
+      "intendedUnfinished": 10,
+      "nativeQueries": [
+        "unfinished.stdout",
+        "intended.stdout"
+      ],
+      "matchingConfirmedRepair": null,
+      "filedRepairs": []
+    },
+    "findingsDisposition": {
+      "resetIsolation": "Rejected: transitive mutable/side-effectful safety and stable order sensitivity witness not established.",
+      "primitiveCuts": "Rejected: public payment/affordability/Offering/composition and copy failure/reload/privacy contracts remain distinct; fixture-body cost attribution absent.",
+      "microFixtureObservation": "8discarded continuation constructions static only, no material commandCPU proof or >=10% viable repair; not a ready finding."
+    },
+    "measuredSource": "cbec1c8fbeec238a1ee0782de127eb8cdcc28d31",
+    "auditedSource": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+    "latestMeasuredFullVitestS": 87.48,
+    "targetS": 60,
+    "targetMet": false,
+    "freshCurrentHeadFullRun": false,
+    "budgetWaiver": false,
+    "runtimeDiagnostics": 0,
+    "sourceWrites": 0,
+    "parentGate": "hv-umm2.46 retains full original acceptance and final retrospective/review"
+  },
+  "checks": {
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-suite-cost-audit768",
+      "start": "2026-10-16T10:18:21.304555+00:00",
+      "end": "2026-10-16T10:18:21.660244+00:00",
+      "exit": 0,
+      "wallSeconds": 0.3556324169621803,
+      "pid": 10790,
+      "pgid": 10790,
+      "load": "{ 15.39 8.07 6.64 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 391436578594750,
+      "endedMonotonicNs": 391436934180541,
+      "cpuUserSeconds": 0.221472,
+      "cpuSystemSeconds": 0.11981399999999999
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-suite-cost-audit768",
+      "start": "2026-10-16T10:18:22.110259+00:00",
+      "end": "2026-10-16T10:18:33.601138+00:00",
+      "exit": 0,
+      "wallSeconds": 11.49080520804273,
+      "pid": 11607,
+      "pgid": 11607,
+      "load": "{ 15.39 8.07 6.64 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 391437384323875,
+      "endedMonotonicNs": 391448875073750,
+      "cpuUserSeconds": 5.84345,
+      "cpuSystemSeconds": 2.857815
+    }
+  },
+  "runtimeLedger": {
+    "installReceipt": "/tmp/root768-20261016/install.receipt.json",
+    "diagnostics": 0,
+    "persistentResources": []
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "cases": 0,
+    "jsdomFiles": 0
+  },
+  "preExistingIssues": []
+}
