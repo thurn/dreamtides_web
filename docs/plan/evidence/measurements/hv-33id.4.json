@@ -1,0 +1,94 @@
+{
+  "bead": "hv-33id.4",
+  "auditTarget": "7b224ed57c5bcbed65b6c962b763269d9b4dc474",
+  "auditHelper": {
+    "agent": "/root/mason_tutorial33id4",
+    "fresh": true,
+    "forkTurns": "none",
+    "readOnly": true,
+    "terminal": true,
+    "sourcePathsHashVerified": 125,
+    "sourceLinesInInventory": 41426,
+    "coverageQualification": "Deep focused phase6 domain flows; remaining125-path inventory received phase-change/signature/contract classification. Not exhaustive unchanged-body reads of all large screens or unrelated generic validators. No denied reads; no checks or runtime run by helper."
+  },
+  "scopePacketSHA256": "63d675c2a1c568c6feb97877246ac59d667b40e31b00c10f68966732178166f3",
+  "reportSHA256": "60e9e8e9b1849afb14275f662279fa993c022052240b40a254e4f4cab655ca2d",
+  "findings": [
+    {
+      "id": "hv-33id.15",
+      "key": "tutorial-checkpoint-authority/phase-6",
+      "title": "Derive live tutorial presentation from typed checkpoint queues (core-review)",
+      "fileMatches": {
+        "src/rules/battle/fold.ts": [],
+        "src/rules/battle/tutorial-load.ts": [],
+        "src/rules/battle/tutorial-presentation.ts": [],
+        "src/rules/battle/journey-tutorial-guidance.ts": [],
+        "src/rules/battle/tutorial-checkpoints.ts": []
+      }
+    },
+    {
+      "id": "hv-33id.16",
+      "key": "declared-battle-input-boundary/phase-6",
+      "title": "Share declared battle input validation and close victory eligibility types (core-review)",
+      "fileMatches": {
+        "src/engine/state/create.ts": [],
+        "src/engine/state/types.ts": [],
+        "src/engine/state/declared-input.ts": [],
+        "src/rules/battle/fold.ts": [
+          "hv-33id.15"
+        ]
+      }
+    }
+  ],
+  "dispositions": {
+    "checkpointAuthority": "accepted with retained compatibility mirror and strict raw validation; no serializer/hash change",
+    "declaredInputBoundary": "accepted with catalog checks kept at init; exact four ordered tuples grouped in same boundary",
+    "storedThreeCaseEnum": "rejected: changes saved/hash representation",
+    "deleteWireMirror": "rejected: direct compaction codec/hash includes field",
+    "otherSubstantialFindings": "none justified"
+  },
+  "rootVerification": [
+    "queue/mirror model, all relevant writers/read gates and strict raw validators",
+    "direct GAME_ENGINE_CONFIG codec/hash and public setup/eligibility contracts",
+    "duplicate structural setup/create/load predicates and initialization-only catalog boundary",
+    "frozen source125hashes and no post-audit source epoch change",
+    "fresh admitted/intended/exact-key/primary-file dedup and distinctfold.ts body ownership",
+    "two after-audit/before-gate joins verified before admission; cycles empty"
+  ],
+  "implementation": "audit/evidence/native filing only; no product, test, config or runtime changes",
+  "runtime": {
+    "browsers": 0,
+    "servers": 0,
+    "heavyChecks": 0,
+    "activeHelpers": 0,
+    "install": "exit0/2.512942708s/groupempty",
+    "frictionDispatch": "exit0/0.173116125s/groupempty"
+  },
+  "validation": {
+    "final-review": {
+      "wallSeconds": 0.3813913330086507,
+      "start": "2026-10-16T01:56:50.050718+00:00",
+      "end": "2026-10-16T01:56:50.432191+00:00",
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    "final-knip": {
+      "wallSeconds": 7.734230083995499,
+      "start": "2026-10-16T01:57:11.543466+00:00",
+      "end": "2026-10-16T01:57:19.277825+00:00",
+      "exit": 0,
+      "groupRemainingAtExit": []
+    }
+  },
+  "clock": {
+    "start": "2026-10-16T01:42:25Z",
+    "definition": "inclusive claim through actual ordinary Git return, including setup, source review, helper wait, verification, filing, evidence and checks; final return external receipt",
+    "preCommitStamp": "2026-10-16T01:58:07.317334+00:00",
+    "ordinaryCommitReturn": "pending actual Git return; no fabricated self-referential committed timestamp",
+    "inclusiveMinutesAtStamp": 15.7052889,
+    "qualification": "Exact actual ordinary Git return is retained externally after the commit; the committed stamp precedes schema/staging/Git return and is not presented as that later instant."
+  },
+  "custody": "artifacts/qa/hv-33id.4/; source reachable by exact immutable audit commit; raw source/check/native records copied before promotion",
+  "changedFiles": 4,
+  "hostLoadSource": "final-review started receipt:4.61 rounded sysctl; script review actualload4.6083984375 used in compact friction record."
+}
