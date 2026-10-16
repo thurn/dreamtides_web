@@ -1,0 +1,499 @@
+{
+  "bead": "hv-umm2.273",
+  "sourceBase": "905fef1eb9d777a57e74cc07dacb1562604d6136",
+  "originalDispatch": "2026-10-15T06:44:44.581Z",
+  "claim": "2026-10-15T06:41:47.898825Z",
+  "stage2NativeAck": "2026-10-16T04:55:41.964426+00:00",
+  "clockQualification": "Inclusive original dispatch through commit; resume did not reset clock. Productive/model CPU UNKNOWN. Friction window freezes immediately before the single commit; actual commit termination and exact inclusive interval are retained in external commit receipt.",
+  "sourceEpoch": {
+    "src/content/dreamsigns/scorpion-71f77dd5.ts": "398c4056625a4b366e43b8305fdc8e303da3925eeafa6ff4225e82f879c01b4a",
+    "src/content/dreamsigns/charm-staff-883f88fb.ts": "14b9ab6556055e39a9017033db182630a831e214ca72ece83eb322bdb5568651",
+    "src/content/dreamsigns/purple-crystal-cd4bb1f4.ts": "0d8151de00bde5962c3a368ed722cd37e1cd22be015df41d7748d0ad13d9610d",
+    "src/content/dreamsigns/glow-pouch-34ce9428.ts": "41042074ef79dc4abac5ccc8bf456eee41d0cfedd6652ce5c927d43bd5ef7fb2",
+    "src/rules/journey/modifier-registry.ts": "2230e9e7bf14ae951cf96ee76efdb7055bfb731278847632c57a22245391036e",
+    "src/rules/journey/dreamsigns-journey-03.test.ts": "733e588a745fd7894ecb6f5dbcfbbd172bd04043877e8b640c8296462a38c26b"
+  },
+  "validation": {
+    "focused-own-typed": {
+      "exit": 0,
+      "wallS": 2.7709436250152066,
+      "start": "2026-10-16T05:14:00.411448+00:00",
+      "end": "2026-10-16T05:14:03.181981+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        4.79833984375,
+        4.02490234375,
+        3.49609375
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/focused-own-typed.receipt.json",
+        "sha256": "232cb5ab56a70c0070fecb31ffdd273b5082f90fccc9a7f863bd3299b41b5dff"
+      }
+    },
+    "focused-owners": {
+      "exit": 0,
+      "wallS": 3.0732434579986148,
+      "start": "2026-10-16T04:58:45.150063+00:00",
+      "end": "2026-10-16T04:58:48.223397+00:00",
+      "cpuS": null,
+      "hostLoad": [
+        2.0400390625,
+        2.2275390625,
+        2.79638671875
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/focused-owners.receipt.json",
+        "sha256": "5b5106190855dd384a970a871b2f1973dbfe6825307e12a0ae3419e9efe9eb9a"
+      },
+      "files": 8,
+      "tests": 295
+    },
+    "review-typed": {
+      "exit": 0,
+      "wallS": 68.73349366703769,
+      "start": "2026-10-16T05:14:48.533520+00:00",
+      "end": "2026-10-16T05:15:57.267307+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        3.60498046875,
+        3.85498046875,
+        3.4638671875
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/review-typed.receipt.json",
+        "sha256": "f0302d2ec361667b7e98549820d22a31dd6c6010923474a2ad6e970517bedf8b"
+      },
+      "testSelection": "test-related, 298 files and10236 tests, not full-suite execution",
+      "testRelatedStepS": 66.1
+    },
+    "knip-typed": {
+      "exit": 0,
+      "wallS": 4.638145875011105,
+      "start": "2026-10-16T05:21:29.519073+00:00",
+      "end": "2026-10-16T05:21:34.157308+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        5.9208984375,
+        4.5830078125,
+        3.923828125
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/knip-typed.receipt.json",
+        "sha256": "7a47c2d0b9514769d242ba970c1177218edb706edd661b4ecc9ec13b8e2acb41"
+      }
+    },
+    "journey300": {
+      "exit": 0,
+      "wallS": 2.994354458001908,
+      "start": "2026-10-16T05:01:52.101188+00:00",
+      "end": "2026-10-16T05:01:55.095652+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        3.69287109375,
+        2.70361328125,
+        2.86669921875
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/journey300.receipt.json",
+        "sha256": "34603c388fbc795586414db22ae1967b8856e13690fba51c5c571bda9bbe5139"
+      }
+    },
+    "preflight": {
+      "exit": 0,
+      "wallS": 1.6350214999984019,
+      "start": "2026-10-16T05:02:12.580668+00:00",
+      "end": "2026-10-16T05:02:14.215770+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        3.40234375,
+        2.705078125,
+        2.86279296875
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/preflight.receipt.json",
+        "sha256": "d0fde7b5a8524e3c7ba46b265fcfd30f9a7f1d883bd1064bb60626f17788eba5"
+      }
+    },
+    "sweep": {
+      "exit": 0,
+      "wallS": 52.09922324999934,
+      "start": "2026-10-16T05:02:36.306067+00:00",
+      "end": "2026-10-16T05:03:28.405852+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        3.73828125,
+        2.8212890625,
+        2.89990234375
+      ],
+      "receipt": {
+        "path": "/tmp/273-root/resume-after730/stage2/sweep.receipt.json",
+        "sha256": "3a439c45668d198e37590d83ec4bf3539c8b85d7d6107c70136331994bf39273"
+      }
+    },
+    "content-final": {
+      "exit": 0,
+      "wallS": 1.871435500041116,
+      "start": "2026-10-16T05:47:11.004613+00:00",
+      "end": "2026-10-16T05:47:12.876134+00:00",
+      "cpuS": "UNKNOWN: wrapper does not measure child CPU",
+      "hostLoad": [
+        2.79833984375,
+        3.412109375,
+        3.826171875
+      ],
+      "files": 2,
+      "tests": 35
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 108,
+    "jsdomFiles": 0,
+    "tests": 2
+  },
+  "reviewScope": "Actual bounded40 non-test changed lines/additive composition, no new prompt and no infrastructure/configuration/cross-cutting architecture change. This noncore bead requires no individual cold review and has no current individual review debt. Parent owns native certification. Phase-gate cold review remains required; Gate46 retains full current-measurement duty. D19 compliance is unclaimed by these local measurements.",
+  "recipe6": {
+    "battleWeighted": "NOT EXECUTED: unsupported journey-only content; engine/testing/fuzz.ts174-242 rejects empty battle abilities.",
+    "journeySupplement": {
+      "runs": 300,
+      "boundedBranches": 1200,
+      "recordedBranchIntentExecutions": 3300,
+      "additionalSetupProbeOpenSiteCalls": 300,
+      "replayComparisons": 2400,
+      "codecComparisons": 2400,
+      "refusedInputs": 600,
+      "mandatoryDraws": 300,
+      "finiteChildren": 300,
+      "failures": 0,
+      "perUuidHookCounters": {
+        "71f77dd5-3bb5-4987-80f4-13dc69f74e6b": 600,
+        "883f88fb-ac50-419a-8382-c22edee29755": 600,
+        "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f": 400,
+        "34ce9428-dda9-4efa-bacd-5ec2698561c1": 600
+      },
+      "qualification": "Seeded journey-domain branches, not full journeys or battle-weighted games. Initial post-battle permission in this driver is a valid manual synthetic fixture, not an actually played END_BATTLE receipt. Actual END_BATTLE-earned browser coverage is separate.",
+      "innerLoopWallS": 1.781447583,
+      "innerLoopCpuS": 2.326584,
+      "outerCpu": "UNKNOWN",
+      "driver": {
+        "path": "/tmp/273-root/resume-after730/stage2/journey300.mts",
+        "sha256": "88247286409f82dc48e2a94933cd64dd64895a52299466f6fc6303412c8aef5a"
+      },
+      "summary": {
+        "path": "/tmp/273-root/resume-after730/stage2/journey300-summary.json",
+        "sha256": "788221af0b2cbfd220f878442a93f6764f298e7b0f3201edb3083d8f1a3fe976"
+      },
+      "runsLog": {
+        "path": "/tmp/273-root/resume-after730/stage2/journey300-runs.jsonl",
+        "sha256": "79f8a4798fdf03550ade13ceb9e9955cc58c05c27f7f5b7fa130bf21640a1776"
+      }
+    }
+  },
+  "recipe7": {
+    "preflight": {
+      "pass": 8,
+      "skip": 72,
+      "fail": 0
+    },
+    "sweep": {
+      "pass": 8,
+      "skip": 72,
+      "fail": 0
+    },
+    "qualification": "All eight base pass rows are initialization only, exercised=false and zero journey-hook credit. Unsupported variants skip. Actual journey judged rows follow in ledger.",
+    "unmodifiedOriginalSweepLedger": {
+      "path": "/tmp/273-root/resume-after730/stage2/sweep-ledger-original.jsonl",
+      "sha256": "1a756df70f8a4a9187048ef04c3f56dbdd1f824ae19f839792119d7386dd959e"
+    }
+  },
+  "p8": {
+    "commands": 34,
+    "viewportCells": 66,
+    "judgedUuidRows": 88,
+    "canonicalInitializationPass": 8,
+    "canonicalUnsupportedSkip": 72,
+    "uuidJudgedRows": {
+      "883f88fb-ac50-419a-8382-c22edee29755": 14,
+      "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f": 14,
+      "34ce9428-dda9-4efa-bacd-5ec2698561c1": 54,
+      "71f77dd5-3bb5-4987-80f4-13dc69f74e6b": 6
+    },
+    "screens": 81,
+    "matrixStatus": {
+      "DONE": 25,
+      "QUALIFIED": 1,
+      "INAPPLICABLE": 2
+    },
+    "runtimeCases": {
+      "path": "/tmp/273-root/resume-after730/stage2/runtime-cases.json",
+      "sha256": "23c2f622843d806bca5df91e8c422be786abf31a7a715a16fcc4401c8858ded8"
+    },
+    "exactCellIndex": {
+      "path": "/tmp/273-root/resume-after730/stage2/p8-evidence.json",
+      "sha256": "812f8d34046ed96f39ebcfc55378bc47094fb67ee41ee231a96e68ff08f3288e"
+    },
+    "finiteMatrix": {
+      "path": "/tmp/273-root/resume-after730/stage2/p8-matrix.json",
+      "sha256": "0c5c93f430de9daaf13e917737a2a3e2d8b5fafe779d9e9056b75a9e748447f4"
+    },
+    "qualification": "66 actual viewport cells across34 chosen command epochs yield88 UUID judgments; controls include negative outcomes and are not all positive hook activations. Enhanced Exploration desktop passes within actual exit1 aggregate; separate mobile final exit0. Native complete-save and explicit offer setup are preparation, not generation proof. Hosted Shop is already materialized native scene, not host materialization-flow proof. Native chooser painting unclaimed; input/download prototype adapters restored. Actual Battle uses debug-score engine victory for content QA, then real END_BATTLE and earned root/child windows; not ordinary full battle playthrough.",
+    "geometry": "Raw reports retain actual bounds/hits and assertions; canonical initial shop geometry independently checked by parent. No blanket wholeview overlap-free claim. See own pre-existing mobile cap overlap note.",
+    "visualInspection": "Actual desktop/mobile shop refill, Scorpion floor selection, Transfiguration draw, finite Battle earned desktop/completed mobile and cap mobile captures inspected; PNGs are DPR2, CSS1440x900/390x844,81 distinct retained captures verified dimensions."
+  },
+  "qualifications": [
+    "Anise eligible-preformed executed driver result prose says Event517; actual native before/after identify Event11 UUIDbe72bd04-21a6-4035-a117-2b7213ad1a34. Immutable raw driver/result retained; no copied prose identity credit.",
+    "Exploration all-card failure was stale prepared runtime: buildQaScene prepared offer before helper removed prior holdings and added Glow. Parent fresh-provider controls accept both current Glow/noGlow; old offer rejects both. This is demonstrated QA setup drift, no production capability defect observed; controls are provider diagnostics, not browser credit.",
+    "Scorpion repeat-BEGIN_BATTLE literal second Start is unavailable while permission UI is mounted. Actual pending/reload/no-duplicate/no-init observed; refusal belongs to owning public reducer contracts.",
+    "Shop reloaded first-purchase diagnostic row duplicates same eventSeq7; exactly two actual purchases, not three raw diagnostic rows.",
+    "Earlier local fixture alias/clock/readonly typing failures and native setup/locator/readiness failures retained. No false pass credit. Early three RED own-test epochs have exact receipt hashes/logs but not separate full literal snapshots; later before-readonly file retained. Legacy wrapper input hashes not contemporaneously captured; never upgraded to whole-source read claims."
+  ],
+  "failedCompletedCommands": [
+    {
+      "command": "build-qa-v2",
+      "exit": 1,
+      "wallS": 3.508813042019028,
+      "receipt": "/tmp/273-root/resume-after730/stage2/build-qa-v2.receipt.json"
+    },
+    {
+      "command": "build-qa-v3",
+      "exit": 1,
+      "wallS": 3.4007600839831866,
+      "receipt": "/tmp/273-root/resume-after730/stage2/build-qa-v3.receipt.json"
+    },
+    {
+      "command": "build-qa-v4",
+      "exit": 1,
+      "wallS": 4.901761540968437,
+      "receipt": "/tmp/273-root/resume-after730/stage2/build-qa-v4.receipt.json"
+    },
+    {
+      "command": "build-qa",
+      "exit": 1,
+      "wallS": 3.0288116249721497,
+      "receipt": "/tmp/273-root/resume-after730/stage2/build-qa.receipt.json"
+    },
+    {
+      "command": "final-cells-batch",
+      "exit": 1,
+      "wallS": 114.474160999991,
+      "receipt": "/tmp/273-root/resume-after730/stage2/final-cells-batch.receipt.json"
+    },
+    {
+      "command": "finish-batch",
+      "exit": 1,
+      "wallS": 427.7396733330097,
+      "receipt": "/tmp/273-root/resume-after730/stage2/finish-batch.receipt.json"
+    },
+    {
+      "command": "focused-own-diag",
+      "exit": 1,
+      "wallS": 2.732310499995947,
+      "receipt": "/tmp/273-root/resume-after730/stage2/focused-own-diag.receipt.json"
+    },
+    {
+      "command": "focused-own-green",
+      "exit": 1,
+      "wallS": 2.3938030829885975,
+      "receipt": "/tmp/273-root/resume-after730/stage2/focused-own-green.receipt.json"
+    },
+    {
+      "command": "focused-own",
+      "exit": 1,
+      "wallS": 7.905384959012736,
+      "receipt": "/tmp/273-root/resume-after730/stage2/focused-own.receipt.json"
+    },
+    {
+      "command": "gain-batch",
+      "exit": 1,
+      "wallS": 439.3302468750044,
+      "receipt": "/tmp/273-root/resume-after730/stage2/gain-batch.receipt.json"
+    },
+    {
+      "command": "journey-one",
+      "exit": 1,
+      "wallS": 3.4021318329614587,
+      "receipt": "/tmp/273-root/resume-after730/stage2/journey-one.receipt.json"
+    },
+    {
+      "command": "qa-anise",
+      "exit": 1,
+      "wallS": 38.71972804097459,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-anise.receipt.json"
+    },
+    {
+      "command": "qa-battle-finite",
+      "exit": 1,
+      "wallS": 38.8519402500242,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-battle-finite.receipt.json"
+    },
+    {
+      "command": "qa-bazaar-cap",
+      "exit": 1,
+      "wallS": 40.7618271659594,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-bazaar-cap.receipt.json"
+    },
+    {
+      "command": "qa-cap-final",
+      "exit": 1,
+      "wallS": 15.38993904198287,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-cap-final.receipt.json"
+    },
+    {
+      "command": "qa-exploration-random-enhanced",
+      "exit": 1,
+      "wallS": 50.027858249959536,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-exploration-random-enhanced.receipt.json"
+    },
+    {
+      "command": "qa-glow-augury-enhanced",
+      "exit": 1,
+      "wallS": 42.34706995799206,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-glow-augury-enhanced.receipt.json"
+    },
+    {
+      "command": "qa-glow-augury",
+      "exit": 1,
+      "wallS": 48.89406079100445,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-glow-augury.receipt.json"
+    },
+    {
+      "command": "qa-glow-exploration-enhanced",
+      "exit": 1,
+      "wallS": 42.43360250000842,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-glow-exploration-enhanced.receipt.json"
+    },
+    {
+      "command": "qa-glow-exploration",
+      "exit": 1,
+      "wallS": 41.72131175000686,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-glow-exploration.receipt.json"
+    },
+    {
+      "command": "qa-glow-gain-duplication-enhanced",
+      "exit": 1,
+      "wallS": 23.088951500016265,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-glow-gain-duplication-enhanced.receipt.json"
+    },
+    {
+      "command": "qa-glow-gain-duplication",
+      "exit": 1,
+      "wallS": 22.850694124994334,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-glow-gain-duplication.receipt.json"
+    },
+    {
+      "command": "qa-scorpion-v1",
+      "exit": 1,
+      "wallS": 35.18413083301857,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-scorpion-v1.receipt.json"
+    },
+    {
+      "command": "qa-shop-v1",
+      "exit": 1,
+      "wallS": 7.4440305000171065,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-shop-v1.receipt.json"
+    },
+    {
+      "command": "qa-shop-v2",
+      "exit": 1,
+      "wallS": 26.926542290952057,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-shop-v2.receipt.json"
+    },
+    {
+      "command": "qa-shop-v3",
+      "exit": 1,
+      "wallS": 14.904775875038467,
+      "receipt": "/tmp/273-root/resume-after730/stage2/qa-shop-v3.receipt.json"
+    },
+    {
+      "command": "review",
+      "exit": 2,
+      "wallS": 72.42298470903188,
+      "receipt": "/tmp/273-root/resume-after730/stage2/review.receipt.json"
+    },
+    {
+      "command": "site-first-v1",
+      "exit": 2,
+      "wallS": 7.32257987500634,
+      "receipt": "/tmp/273-root/resume-after730/stage2/site-first-v1.receipt.json"
+    },
+    {
+      "command": "site-first-v2",
+      "exit": 1,
+      "wallS": 22.114549125020858,
+      "receipt": "/tmp/273-root/resume-after730/stage2/site-first-v2.receipt.json"
+    }
+  ],
+  "retainedReceiptIndex": "/tmp/273-root/resume-after730/stage2/receipt-index-final.json",
+  "receiptIndexQualification": "Exact raw receipts/drivers/report hashes/source pre/post and cleanup are in final external index. Batch timings contain child commands and are not added to child totals. Child CPU and server birth UNKNOWN unless measured. Hash binds payload epoch, not whole-file semantic reading. Original Stage1 artifacts remain immutable.",
+  "parentDiagnostics": [
+    {
+      "path": "/tmp/273-root/resume-after730/parent-exploration-diagnosis.mts",
+      "sha256": "3a79240b7a4ada554e90a14443a07bc3f13f811e1fd116efffc0f4dbebc41968"
+    },
+    {
+      "path": "/tmp/273-root/resume-after730/parent-exploration-diagnosis.json",
+      "sha256": "a5406f9b42b92ee27357d585800ddf5aa059ccd7c59c49b7054962e06b7c985c"
+    },
+    {
+      "path": "/tmp/273-root/resume-after730/parent-exploration-qa-audit.json",
+      "sha256": "36075f5aeac6b75bdc73711962818507b896a28f0486ca1f6bdc53a9e3488983"
+    },
+    {
+      "path": "/tmp/273-root/resume-after730/parent-cap-audit.json",
+      "sha256": "57618d4b6c51ae2eff86ef5f6ed72c32102d2568904c2ddc731bed33cb2383aa"
+    },
+    {
+      "path": "/tmp/273-root/resume-after730/parent-interim-source-guard.json",
+      "sha256": "5fc85a5b3a92e20e94cd40b1f6f1f9169fb63f59fb7a468f3814da7abc6fbf1f"
+    }
+  ],
+  "boundaryFrictionReceipt": {
+    "path": "/tmp/273-root/resume-after730/friction-boundary-receipt.json",
+    "sha256": "7fb294550a6177f62569f3ad05242beb988dfc37ee3a7cebeb10b5abad3babac"
+  },
+  "hostLoadSamples": {
+    "focused-own-typed": [
+      4.79833984375,
+      4.02490234375,
+      3.49609375
+    ],
+    "focused-owners": [
+      2.0400390625,
+      2.2275390625,
+      2.79638671875
+    ],
+    "review-typed": [
+      3.60498046875,
+      3.85498046875,
+      3.4638671875
+    ],
+    "knip-typed": [
+      5.9208984375,
+      4.5830078125,
+      3.923828125
+    ],
+    "journey300": [
+      3.69287109375,
+      2.70361328125,
+      2.86669921875
+    ],
+    "preflight": [
+      3.40234375,
+      2.705078125,
+      2.86279296875
+    ],
+    "sweep": [
+      3.73828125,
+      2.8212890625,
+      2.89990234375
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-typed starting host 1-minute os.getloadavg sample; actual method retained, not retroactively relabeled sysctl."
+      }
+    }
+  },
+  "frictionQualification": "Friction entries are measured failed-command execution-only durations; no cause-specific productive investigation interval measured. All diagnosis/coordination/repair/waits remain in original inclusive clock. No containing batch times added to child times."
+}

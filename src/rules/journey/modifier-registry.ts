@@ -1,3 +1,7 @@
+import scorpion, { journeyPurgeEffect as scorpionEffect } from "../../content/dreamsigns/scorpion-71f77dd5";
+import charmStaff, { journeyShopEffect as charmStaffEffect } from "../../content/dreamsigns/charm-staff-883f88fb";
+import purpleCrystal, { journeyShopEffect as purpleCrystalEffect } from "../../content/dreamsigns/purple-crystal-cd4bb1f4";
+import glowPouch, { journeyTransfigurationEffect as glowPouchEffect } from "../../content/dreamsigns/glow-pouch-34ce9428";
 import { earnJourneyLoops, settleJourneyLoops, validateJourneyLoopRegistry } from "./journey-mandatory-loop";
 import mug, { journeyBattleInitEffect as mugBattleEffect, journeyOnGainEffect as mugGainEffect } from "../../content/dreamsigns/spotted-mug-069c6e8f";
 import { journeyBattleInit } from "./journey-battle-init";
@@ -302,6 +306,10 @@ export function createJourneyModifierRegistry(
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyPurge(parseDreamsignId(scorpion.id), scorpionEffect),
+  journeyShop(parseDreamsignId(charmStaff.id), charmStaffEffect),
+  journeyShop(parseDreamsignId(purpleCrystal.id), purpleCrystalEffect),
+  journeyTransfiguration(parseDreamsignId(glowPouch.id), glowPouchEffect),
   journeyBattleInit(parseDreamsignId(mug.id), mugBattleEffect, mugGainEffect),
   journeyOnGain(parseDreamsignId(toad.id), toadEffect),
   journeyDeckEntry(parseDreamsignId(glowing.id), glowingEffect),
