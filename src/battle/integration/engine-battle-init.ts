@@ -14,7 +14,7 @@ import type {
   DeckEntry as EngineDeckEntry,
   NextBattleEffects,
 } from "../../engine";
-import type { DeckMods } from "../../engine/dsl/types";
+import { deckModsOf } from "../deck-mods";
 import { battleSeed } from "../../engine/state/ids";
 import type { CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -158,37 +158,6 @@ export function engineDeckEntry(
     ...(transfiguration === null ? {} : { transfigurations: [transfiguration] }),
     ...(deckMods === null ? {} : { deckMods }),
   };
-}
-
-/**
- * The deck-entry modifications of a journey deck entry, or `null` when it has
- * none. A dealt card definition carries the same type and keyword changes, so
- * the battle screen reads its display variant through this too.
- */
-export function deckModsOf(entry: Pick<DeckEntry, "sparkBonus" | "keywordModification" | "typeChange">): DeckMods | null {
-  const keywords = entry.keywordModification ?? null;
-  const reclaim = wholeOrNull(keywords?.setReclaim ?? keywords?.reclaim);
-  const costReduction = Math.max(0, wholeOrNull(keywords?.energyCostReduction) ?? 0);
-  const mods: DeckMods = {
-    sparkBonus: wholeOrNull(entry.sparkBonus) ?? 0,
-    costReduction,
-    fast: keywords?.fast === true,
-    reclaim: reclaim === null || reclaim < 0 ? null : reclaim,
-    typeChange:
-      entry.typeChange == null
-        ? null
-        : {
-            cardType: entry.typeChange.cardType === "Character" ? "character" : "event",
-            subtype: entry.typeChange.subtype,
-          },
-  };
-  const modified =
-    mods.sparkBonus !== 0 || mods.costReduction !== 0 || mods.fast || mods.reclaim !== null || mods.typeChange !== null;
-  return modified ? mods : null;
-}
-
-function wholeOrNull(value: number | undefined): number | null {
-  return value === undefined || !Number.isFinite(value) ? null : Math.trunc(value);
 }
 
 /**

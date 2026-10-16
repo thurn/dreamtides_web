@@ -29,12 +29,22 @@ import { parseCardId, parseCardName } from "../../types/card-identity";
 import type { AtlasNodeId, BattleCardId, BattleId, DreamwellCardId, PresentationId, PromptId, SiteId, TutorialRunId, TutorialTriggerId } from "../../types/identifiers";
 import { parseAtlasNodeId, parseAvatarId, parseApollyonIncarnationId, parseBattleId, parseDreamsignId, parseDreamwellCardId, parseOpponentId, parsePromptId, parseSiteId } from "../../types/identifiers";
 import type { PolicyOverrideContext, PolicyOverrideSelection } from "../../engine/policy/overrides";
+import { parseJourneyBattleGuidance } from "./tutorial-load";
 
 export type BattleFoldState = JourneyBattleFoldState | TutorialBattleFoldState;
 export interface JourneyBattleFoldState {
   readonly mode: JourneyBattleMode;
   readonly init: JourneyBattleInit;
   readonly engine: EngineBattleFold;
+  readonly guidance?: JourneyBattleGuidance;
+}
+
+/** Authored first-occurrence guidance saved with an ordinary journey battle. */
+export interface JourneyBattleGuidance {
+  readonly tutorialTriggers: readonly TutorialTriggerDefinition[];
+  readonly dreamwellDeck: readonly import("../../battle/types").DreamwellCardDefinition[];
+  readonly checkpoints: readonly TutorialCheckpoint[];
+  readonly tutorialPresentation: TutorialGuidancePresentation | null;
 }
 
 /**
@@ -83,6 +93,8 @@ export interface TutorialCheckpoint {
   readonly presentation: TutorialBattlePresentation;
   readonly before: BattleState;
   readonly state: BattleState;
+  /** Journey guidance owns the ordinary visual of this exact published edge. */
+  readonly producer?: { readonly seq: number; readonly index: number };
 }
 
 export interface TutorialBattleFoldState {
@@ -156,8 +168,9 @@ function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
 
 export function parseJourneyBattleFoldState(value: Record<string, unknown>): JourneyBattleFoldState | null {
   const engine = parseEngineBattleFold(value.engine);
-  return isPlainRecord(value.mode) && value.mode.kind === "journey" && isJourneyBattleInit(value.init) && engine !== null
-    ? { mode: { kind: "journey" }, init: value.init, engine } : null;
+  if (!isPlainRecord(value.mode) || value.mode.kind !== "journey" || !isJourneyBattleInit(value.init) || engine === null) return null;
+  const guidance = value.guidance === undefined ? undefined : parseJourneyBattleGuidance(value.guidance, engine);
+  return guidance === null ? null : { mode: { kind: "journey" }, init: value.init, engine, ...(guidance === undefined ? {} : { guidance }) };
 }
 export interface TutorialGuidanceMessage {
   readonly triggerId: TutorialTriggerId;

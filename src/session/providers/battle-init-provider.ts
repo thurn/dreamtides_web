@@ -9,7 +9,7 @@
 // identical across replays too.
 
 import type { JourneyContent } from "../../data/journey-content";
-import { createBattleInit } from "../../battle/integration/create-battle-init";
+import { createBattleInit, dreamwellCardDefinition } from "../../battle/integration/create-battle-init";
 import { APOLLYON_BATTLE_DESIGN } from "../../content/apollyon/design";
 import { buildTutorialSetup } from "../../battle/integration/tutorial-setup";
 import { findSite } from "../../rules/journey/sites";
@@ -23,6 +23,7 @@ import type { TutorialBattleInitProvider } from "../../rules/battle/tutorial-lif
 import type { Engine } from "../../engine";
 import { journeyContentEngine } from "./journey-content-engine";
 export { journeyContentEngine } from "./journey-content-engine";
+import type { CardId } from "../../types/card-identity";
 import type { DreamscapeNode, JourneyState } from "../../types/journey";
 import { advanceAtlas } from "../../atlas/atlas-generator";
 import { parseJourneyId } from "../../types/identifiers";
@@ -94,7 +95,7 @@ function buildBattleStart(
     siteId,
     journey.completionLevel,
   );
-  return createBattleInit({
+  const start = createBattleInit({
     opponentsData: content.opponentsData,
     transfigurationData: content.transfigurationData,
     battleEntryKey: parseBattleEntryKey(battleEntryKey),
@@ -116,6 +117,7 @@ function buildBattleStart(
     economyData: content.economyData,
     deferOpponentLog,
   });
+  return { ...start, guidance: { tutorialTriggers: content.tutorial.triggers, dreamwellDeck: content.dreamwellCards.map(dreamwellCardDefinition) } };
 }
 
 /**
@@ -142,8 +144,11 @@ export function createBattleInitProvider(
   content: JourneyContent,
   engine: Engine = journeyContentEngine(content),
 ): BattleInitProvider {
+  const cardTexts = new Map<CardId, string>();
+  for (const card of content.cardDatabase.values()) cardTexts.set(card.id, card.renderedText);
   return {
     engine,
+    guidanceCardText: cardId => cardTexts.get(cardId),
     beginBattle: ({ journey, siteId, seedOverride, seq }): BattleStart | null =>
       buildBattleStart(content, journey, siteId, seedOverride, (emit) =>
         deferredOpponentLogs.set(seq, emit),

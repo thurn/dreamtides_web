@@ -1,9 +1,10 @@
+import { knows } from "../../engine/view/knowledge";
 import { parseTutorialTriggers } from "../../data/tutorial-actions";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { dreamwellCardIdFromUnknown, tutorialAiActionOverrideIdFromUnknown, parseTutorialTriggerId, parsePresentationId, parseTutorialRunId } from "../../types/identifiers";
 import { parseEngineBattleFold, parseJourneyBattleFoldState, type TutorialBattleFoldState } from "./fold";
-import type { EngineBattleFold } from "./fold";
+import type { EngineBattleFold, JourneyBattleGuidance } from "./fold";
 function identity(parser: (value: unknown) => unknown, value: unknown): unknown { try {
     return parser(value);
 }
@@ -44,10 +45,35 @@ function presentation(value: unknown): boolean {
         default: return false;
     }
 }
+
+function dreamwellDefinitions(value: unknown): boolean {
+    return Array.isArray(value) && value.every(card => record(card) && dreamwellCardIdFromUnknown(card.id) !== null && typeof card.renderedText === "string" && typeof card.name === "string" && [card.energyAdded, card.order, card.cardNumber, card.imageNumber].every(number => typeof number === "number" && Number.isFinite(number)));
+}
+
+/** Legacy journey saves omit the host; present hosts must retain their exact queue. */
+export function parseJourneyBattleGuidance(value: unknown, engine: EngineBattleFold): JourneyBattleGuidance | null {
+    if (!record(value) || !dreamwellDefinitions(value.dreamwellDeck)) return null;
+    try { parseTutorialTriggers(value.tutorialTriggers); } catch { return null; }
+    if (!Array.isArray(value.checkpoints) || !value.checkpoints.every(checkpoint => record(checkpoint) && record(checkpoint.presentation) && checkpoint.presentation.kind === "tutorial-guidance" && presentation(checkpoint.presentation) && frame(checkpoint.before, engine) && frame(checkpoint.state, engine) && (checkpoint.producer === undefined || record(checkpoint.producer) && index(checkpoint.producer.seq) && index(checkpoint.producer.index)))) return null;
+    const guidance = value as unknown as JourneyBattleGuidance;
+    const triggerIds = new Set(guidance.tutorialTriggers.map(trigger => trigger.id));
+    const ids = new Set(guidance.checkpoints.map(checkpoint => checkpoint.presentation.id));
+    if (ids.size !== guidance.checkpoints.length || guidance.checkpoints.some(checkpoint => {
+        const current = checkpoint.presentation;
+        if (current.kind !== "tutorial-guidance" || current.messages.some(message => !triggerIds.has(message.triggerId))) return true;
+        const source = current.source;
+        if (source.kind === "dreamwell") return !guidance.dreamwellDeck.some(card => card.id === source.cardId);
+        if (source.kind !== "card" && source.kind !== "figment") return false;
+        const physical = Object.values(checkpoint.state.instances).find(instance => instance.id === source.battleCardId);
+        const printing = physical?.printing;
+        return physical === undefined || !knows(checkpoint.state, physical, "player") || printing === undefined || (printing.kind === "figment" ? cardIdFromUnknown(printing.figment) !== source.cardId : printing.cardId !== source.cardId);
+    })) return null;
+    return JSON.stringify(value.tutorialPresentation) === JSON.stringify(guidance.checkpoints[0]?.presentation ?? null) ? guidance : null;
+}
 /** Tutorial loads use the shared engine validators and validate only host-owned metadata. */
 export function parseTutorialBattleFoldState(value: Record<string, unknown>): TutorialBattleFoldState | null {
     const engine = parseEngineBattleFold(value.engine);
-    if (engine === null || !record(value.mode) || value.mode.kind !== "tutorial" || identity(parseTutorialRunId, value.mode.tutorialRunId) === null || !index(value.mode.restartNumber) || !record(value.init) || parseJourneyBattleFoldState({ mode: { kind: "journey" }, init: value.init, engine: value.engine }) === null || !Array.isArray(value.init.dreamwellDeck) || !value.init.dreamwellDeck.every(card => record(card) && dreamwellCardIdFromUnknown(card.id) !== null && typeof card.renderedText === "string" && typeof card.name === "string" && [card.energyAdded, card.order, card.cardNumber, card.imageNumber].every(number => typeof number === "number" && Number.isFinite(number))))
+    if (engine === null || !record(value.mode) || value.mode.kind !== "tutorial" || identity(parseTutorialRunId, value.mode.tutorialRunId) === null || !index(value.mode.restartNumber) || !record(value.init) || parseJourneyBattleFoldState({ mode: { kind: "journey" }, init: value.init, engine: value.engine }) === null || !dreamwellDefinitions(value.init.dreamwellDeck))
         return null;
     try {
         parseTutorialTriggers(value.init.tutorialTriggers);

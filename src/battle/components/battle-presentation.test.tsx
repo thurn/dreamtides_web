@@ -293,3 +293,134 @@ describe("published engine event subscriber", () => {
     expect(batches[0]?.seq).toBe(reopened.log.head());
   });
 });
+
+
+import { PresentationQueue, PRESENTATION_OBSERVATION, usePresentationQueue, type PresentationState } from "./battle-presentation";
+import { presentationItems, resolveNoticeSource } from "./presentation-items";
+import { applyEngineBattleIntent, batchStates } from "../../rules/battle/engine-battle";
+import { journeyGuidanceTransition } from "../../rules/battle/journey-tutorial-guidance";
+import { engine as guidanceEngine, host as guidanceHost, SUMMON, teaching } from "../../rules/battle/journey-tutorial-guidance.fixtures";
+import { parsePresentationId } from "../../types/identifiers";
+
+function mixedVisuals() {
+  const initial = guidanceHost("enemy", SUMMON, [teaching("figment-created")]);
+  const battle = journeyBattleOf(initial.battle)!;
+  const instance = battle.engine.slice.committed.sides.enemy.hand[0];
+  const seq = 77;
+  const outcome = applyEngineBattleIntent(guidanceEngine, battle.engine, {kind:"battleAction",side:"enemy",action:{kind:"play",card:instance,from:"hand"}}, seq, PRESENTATION_OBSERVATION);
+  if (outcome.kind !== "applied" || outcome.error !== null) throw Error("mixed public play failed");
+  const next = journeyGuidanceTransition(initial, battle, guidanceEngine, outcome.slice, outcome.published, seq);
+  const checkpoint = journeyBattleOf(next.battle)?.guidance?.checkpoints[0];
+  if (checkpoint?.producer === undefined) throw Error("missing genuine figment producer");
+  const states = batchStates(foldAdapterFor(guidanceEngine), battle.engine.slice, outcome.slice, outcome.published);
+  const batch = {key:sliceKey(outcome.slice),state:states.state};
+  const view = guidanceEngine.view(batch.state,"player");
+  const items = presentationItems(outcome.published,"player",batch,states.before,source=>resolveNoticeSource(source,view),states.eventStates,seq);
+  return {initial,next,checkpoint,items,instance,published:outcome.published};
+}
+
+function reachGuidance(queue: PresentationQueue, bound: number) {
+  for (let remaining=bound; !queue.snapshot().guidanceHeld && remaining>0; remaining--) vi.advanceTimersToNextTimer();
+  expect(queue.snapshot().guidanceHeld).toBe(true);
+}
+
+describe("ordinary visuals ordered around durable teaching", () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it("fully presents an unowned enemy play before its figment teaching and retains the later travel", () => {
+    const fixture = mixedVisuals(), queue = new PresentationQueue();
+    const original = JSON.parse(JSON.stringify(fixture.next)) as typeof fixture.next;
+    const played = fixture.published.findIndex(event=>event.kind === "cardPlayed");
+    expect(fixture.checkpoint.producer!.index).toBeGreaterThan(played);
+    queue.setGuidance({id:fixture.checkpoint.presentation.id,producer:fixture.checkpoint.producer});
+    queue.enqueue(fixture.items);
+    const reveal = queue.snapshot().queue[0];
+    expect(reveal.visual).toMatchObject({kind:"reveal",instance:fixture.instance});
+    expect(queue.snapshot().guidanceHeld).toBe(false);
+    vi.advanceTimersByTime(reveal.dwellMs-1);
+    expect(queue.snapshot().queue[0]).toBe(reveal);
+    vi.advanceTimersByTime(1);
+    reachGuidance(queue,fixture.items.length);
+    expect(queue.snapshot().queue[0].producer).toEqual(fixture.checkpoint.producer);
+    expect(queue.snapshot().guidanceReady).toBe(true);
+    const retained = queue.snapshot().queue;
+    expect(retained.slice(1).some(item=>item.producer!.index>fixture.checkpoint.producer!.index)).toBe(true);
+    vi.runOnlyPendingTimers();
+    expect(queue.snapshot().queue).toBe(retained);
+    queue.setGuidance(null);
+    expect(queue.snapshot().queue).toEqual(retained.slice(1));
+    expect(queue.snapshot().guidanceHeld).toBe(false);
+    vi.runAllTimers();
+    expect(queue.snapshot().queue).toEqual([]);
+    expect(fixture.next).toEqual(original);
+    queue.dispose();
+  });
+
+  it("skips only the exact completed sequence/index and restores a checkpoint over an empty reload queue", () => {
+    const fixture=mixedVisuals(),queue=new PresentationQueue(),owned=fixture.items.find(item=>item.producer?.index===fixture.checkpoint.producer!.index)!;
+    queue.setGuidance({id:fixture.checkpoint.presentation.id,producer:fixture.checkpoint.producer});
+    expect(queue.snapshot().guidanceReady).toBe(true);
+    queue.enqueue([owned,{...owned,key:parsePresentationId("next-sequence-visual"),producer:{seq:fixture.checkpoint.producer!.seq+1,index:owned.producer!.index}}]);
+    expect(queue.snapshot().queue).toHaveLength(2);
+    queue.setGuidance(null);
+    expect(queue.snapshot().queue).toHaveLength(1);
+    expect(queue.snapshot().queue[0].producer?.seq).toBe(fixture.checkpoint.producer!.seq+1);
+    queue.enqueue([owned]);
+    expect(queue.snapshot().queue).toHaveLength(1);
+    queue.dispose();
+    vi.runAllTimers();
+    expect(queue.snapshot().queue).toHaveLength(1);
+  });
+
+  it("binds readiness to each checkpoint while an intervening ordinary item completes", () => {
+    const fixture = mixedVisuals();
+    const first = { id: fixture.checkpoint.presentation.id, producer: fixture.checkpoint.producer! };
+    const second = { id: parsePresentationId("second-guidance"), producer: { seq: first.producer.seq, index: first.producer.index + 2 } };
+    const owned = fixture.items.find(item => item.producer?.index === first.producer.index)!;
+    const middle = { ...owned, key: parsePresentationId("between-guidance"), producer: { seq: first.producer.seq, index: first.producer.index + 1 } };
+    const later = { ...owned, key: parsePresentationId("second-owned"), producer: second.producer };
+    const observations: { id: typeof first.id; ready: boolean }[] = [];
+    let presentation: PresentationState | null = null;
+    function Probe({ boundary }: { boundary: typeof first }) {
+      const state = usePresentationQueue(boundary);
+      presentation = state;
+      observations.push({ id: boundary.id, ready: state.guidanceReady });
+      return null;
+    }
+    const root = createRoot(document.createElement("div"));
+    roots.push(root);
+    act(() => root.render(<Probe boundary={first} />));
+    act(() => presentation!.enqueue([owned, middle, later]));
+    expect(presentation!.guidanceReady).toBe(true);
+    act(() => root.render(<Probe boundary={second} />));
+    expect(observations.filter(value => value.id === second.id).every(value => !value.ready)).toBe(true);
+    expect(presentation!.head).toBe(middle);
+    act(() => { vi.advanceTimersByTime(middle.dwellMs - 1); });
+    expect(presentation!.guidanceReady).toBe(false);
+    expect(presentation!.head).toBe(middle);
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(presentation!.guidanceReady).toBe(true);
+    expect(presentation!.head).toBe(later);
+    act(() => { vi.runOnlyPendingTimers(); });
+    expect(presentation!.head).toBe(later);
+  });
+
+  it("finishes a prior notice before teaching and raises a later notice only after the checkpoint", () => {
+    const fixture=mixedVisuals(),queue=new PresentationQueue(),owned=fixture.items.find(item=>item.producer?.index===fixture.checkpoint.producer!.index)!;
+    const prior={...fixture.items[0],notice:{kind:"capacityReached" as const,missing:1}};
+    const later={...owned,key:parsePresentationId("later-notice"),producer:{seq:owned.producer!.seq,index:owned.producer!.index+1},notice:{kind:"noLegalTarget" as const,source:null}};
+    queue.setGuidance({id:fixture.checkpoint.presentation.id,producer:fixture.checkpoint.producer});
+    queue.enqueue([prior,owned,later]);
+    expect(queue.snapshot().notice?.notice).toEqual(prior.notice);
+    vi.advanceTimersByTime(prior.dwellMs);
+    expect(queue.snapshot().guidanceHeld).toBe(true);
+    expect(queue.snapshot().guidanceReady).toBe(false);
+    queue.dismissNotice();
+    expect(queue.snapshot().guidanceReady).toBe(true);
+    expect(queue.snapshot().notice).toBeNull();
+    queue.setGuidance(null);
+    expect(queue.snapshot().notice?.notice).toEqual(later.notice);
+    queue.dispose();
+  });
+});

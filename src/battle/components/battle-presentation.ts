@@ -11,9 +11,9 @@
 // answer's notice are presented first.
 //
 // Presentation never gates game flow: the fold and the AI host do not read
-// it. A reload starts with an empty queue, so a reloaded board shows the
-// settled state and a reloaded prompt shows at once; events folded by the
-// replay are never presented again.
+// it. A reload starts with an empty ordinary queue; durable teaching remains
+// on its fold-owned host, and the prompt follows that checkpoint. Events folded
+// by replay have no live ordinary presentation items.
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useSyncExternalStore } from "react";
 import { BATTLE } from "../../content/battle";
@@ -34,6 +34,9 @@ import {
 
 /** The queue's state: the items left to present and the current notice. */
 export interface PresentationSnapshot {
+  readonly guidanceId: PresentationId | null;
+  readonly guidanceHeld: boolean;
+  readonly guidanceReady: boolean;
   readonly queue: readonly PresentationItem[];
   readonly notice: { readonly key: PresentationId; readonly notice: EngineBattleNotice } | null;
 }
@@ -43,8 +46,18 @@ export interface PresentationSnapshot {
  * its intent is folded renders in the same commit as the fold's new state,
  * and the board never shows a batch before its presentation begins.
  */
+interface GuidanceBoundary {
+  readonly id: PresentationId;
+  readonly producer?: PresentationItem["producer"];
+}
+function sameProducer(left: PresentationItem["producer"], right: PresentationItem["producer"]): boolean {
+  return left !== undefined && right !== undefined && left.seq === right.seq && left.index === right.index;
+}
+
 export class PresentationQueue {
-  private snapshotValue: PresentationSnapshot = { queue: [], notice: null };
+  private snapshotValue: PresentationSnapshot = { queue: [], notice: null, guidanceId: null, guidanceHeld: false, guidanceReady: false };
+  private guidance: GuidanceBoundary | null = null;
+  private readonly completedProducers: NonNullable<PresentationItem["producer"]>[] = [];
   private readonly listeners = new Set<() => void>();
   private timer: { readonly head: PresentationItem; readonly id: ReturnType<typeof setTimeout> } | null = null;
 
@@ -57,7 +70,16 @@ export class PresentationQueue {
 
   enqueue(items: readonly PresentationItem[]): void {
     if (items.length === 0) return;
-    this.update({ ...this.snapshotValue, queue: enqueuePresentation(this.snapshotValue.queue, items) });
+    this.update({ ...this.snapshotValue, queue: enqueuePresentation(this.snapshotValue.queue, items.filter(item => !this.completedProducers.some(producer => sameProducer(producer, item.producer)))) });
+  }
+
+  /** Visual ordering only: durable fold checkpoints own input and AI permission. */
+  setGuidance(boundary: GuidanceBoundary | null): void {
+    if (boundary?.id === this.guidance?.id && (boundary?.producer === this.guidance?.producer || sameProducer(boundary?.producer, this.guidance?.producer))) return;
+    const completed = this.guidance?.producer;
+    if (completed !== undefined) this.completedProducers.push(completed);
+    this.guidance = boundary;
+    this.update({ ...this.snapshotValue, queue: this.snapshotValue.queue.filter(item => !sameProducer(completed, item.producer)) });
   }
 
   dismissNotice(): void {
@@ -72,19 +94,22 @@ export class PresentationQueue {
 
   private update(next: PresentationSnapshot): void {
     const head = next.queue[0];
-    const notice =
-      head?.notice != null && head !== this.snapshotValue.queue[0] ? { key: head.key, notice: head.notice } : next.notice;
-    this.snapshotValue = { ...next, notice };
+    const boundary = this.guidance?.producer;
+    const guidanceHeld = this.guidance !== null && (head === undefined || boundary !== undefined && head.producer !== undefined &&
+      (head.producer.seq > boundary.seq || head.producer.seq === boundary.seq && head.producer.index >= boundary.index));
+    const notice = !guidanceHeld && head?.notice != null && (head !== this.snapshotValue.queue[0] || this.snapshotValue.guidanceHeld)
+      ? { key: head.key, notice: head.notice } : next.notice;
+    this.snapshotValue = { ...next, notice, guidanceId: this.guidance?.id ?? null, guidanceHeld, guidanceReady: guidanceHeld && notice === null };
     this.schedule();
     for (const listener of [...this.listeners]) listener();
   }
 
   private schedule(): void {
     const head = this.snapshotValue.queue[0];
-    if (this.timer?.head === head) return;
+    if (this.timer?.head === head && !this.snapshotValue.guidanceHeld) return;
     if (this.timer !== null) clearTimeout(this.timer.id);
     this.timer = null;
-    if (head === undefined) return;
+    if (head === undefined || this.snapshotValue.guidanceHeld) return;
     const id = setTimeout(() => {
       this.timer = null;
       const { queue } = this.snapshotValue;
@@ -98,21 +123,26 @@ export class PresentationQueue {
 export interface PresentationState {
   /** The item being presented, or `null` when the queue is idle. */
   readonly head: PresentationItem | null;
+  readonly guidanceHeld: boolean;
+  readonly guidanceReady: boolean;
   readonly notice: PresentationSnapshot["notice"];
   readonly enqueue: (items: readonly PresentationItem[]) => void;
   readonly dismissNotice: () => void;
 }
 
 /** Plays queued items in order, each for its dwell. */
-export function usePresentationQueue(): PresentationState {
+export function usePresentationQueue(boundary: GuidanceBoundary | null = null): PresentationState {
   const queueRef = useRef<PresentationQueue | null>(null);
   queueRef.current ??= new PresentationQueue();
   const queue = queueRef.current;
+  const id = boundary?.id, seq = boundary?.producer?.seq, index = boundary?.producer?.index;
+  useLayoutEffect(() => queue.setGuidance(id === undefined ? null : { id, ...(seq === undefined || index === undefined ? {} : { producer: { seq, index } }) }), [queue, id, seq, index]);
   useEffect(() => () => queue.dispose(), [queue]);
   const snapshot = useSyncExternalStore(queue.subscribe, queue.snapshot);
   const enqueue = useCallback((items: readonly PresentationItem[]) => queue.enqueue(items), [queue]);
   const dismissNotice = useCallback(() => queue.dismissNotice(), [queue]);
-  return { head: snapshot.queue[0] ?? null, notice: snapshot.notice, enqueue, dismissNotice };
+  const currentBoundary = boundary !== null && snapshot.guidanceId === boundary.id;
+  return { head: snapshot.queue[0] ?? null, guidanceHeld: currentBoundary && snapshot.guidanceHeld, guidanceReady: currentBoundary && snapshot.guidanceReady, notice: snapshot.notice, enqueue, dismissNotice };
 }
 
 /** One applied intent's published events, with the state they arrive with and the state they started from. */

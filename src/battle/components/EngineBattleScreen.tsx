@@ -25,6 +25,7 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
+import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuidance";
 import { BattleEventLogOverlay } from "../../cumulus/screens/battle-overlays/BattleEventLogOverlay";
 import {
   MobileBattleScreen,
@@ -40,6 +41,9 @@ import { decisionKeyOf, sidePending, type DecisionKey } from "../../engine/fold/
 import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { journeyBattleOf } from "../../rules/battle/fold";
+import { battleGuidanceOf } from "../../rules/battle/journey-tutorial-guidance";
+import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
+import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { PAGE_DEBUG_PANEL, PAGE_ENEMY_POLICY } from "../../runtime/runtime-config";
 import { ENGINE_BATTLE_LOG_COPY, engineBattleNoticeCopy } from "../../runtime/battle-prompt-messages";
 import {
@@ -133,7 +137,10 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
 
   const [drag, setDrag] = useState<Drag | null>(null);
   const [abilityChooser, setAbilityChooser] = useState<EngineChooser | null>(null);
-  const presentation = usePresentationQueue();
+  const guidanceHost = useMemo(() => battleGuidanceOf(battle), [battle]);
+  const guidanceCheckpoint = guidanceHost?.checkpoints[0] ?? null;
+  const presentation = usePresentationQueue(guidanceCheckpoint === null ? null : { id: guidanceCheckpoint.presentation.id, producer: guidanceCheckpoint.producer });
+  const guidanceHeld = guidanceCheckpoint !== null && presentation.guidanceHeld;
   const [browsed, setBrowsed] = useState<BrowsedZone | null>(null);
   const [logOpen, setLogOpen] = useState(false);
   const [resultDismissed, setResultDismissed] = useState(false);
@@ -177,14 +184,16 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     const byId = new Map(journeyContent.dreamwellCards.map((card) => [card.id, dreamwellCardDefinition(card)]));
     return (card: DreamwellCardId) => byId.get(card) ?? null;
   }, [journeyContent]);
+  const guidanceView = useMemo(() => guidanceHost === null || !presentation.guidanceReady ? null : buildBattleTutorialGuidanceView(guidanceHost, engine, cards), [guidanceHost, engine, cards, presentation.guidanceReady]);
+  const guidanceController = useBattleTutorialGuidance(guidanceView !== null);
 
   // The board shows the batch being presented while it is older than the
   // fold: the opponent's plays arrive one at a time.
   const head = presentation.head;
   const foldKey = sliceKey(slice);
-  const presentedState = head !== null && head.batch.key !== foldKey ? head.batch.state : null;
-  // The board on screen: a presented item's, else the fold's.
-  const boardKey = presentedState !== null && head !== null ? head.batch.key : foldKey;
+  const presentedState = guidanceHeld ? guidanceCheckpoint.state : (head !== null && head.batch.key !== foldKey ? head.batch.state : null);
+  // The board on screen: the eligible checkpoint, an earlier item, or the fold.
+  const boardKey = guidanceHeld ? guidanceCheckpoint.presentation.id : (presentedState !== null && head !== null ? head.batch.key : foldKey);
 
   // Everything the engine derives is memoized on the slice, which changes
   // only when an engine intent applies, and on the batch being presented.
@@ -240,7 +249,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   usePublishedEngineEvents(engine, slice, ({ events, batch, before, eventStates, seq }) => {
     if (import.meta.env.DEV) probeHistory?.append({ events, seq });
     const view = engine.view(batch.state, HUMAN);
-    const items = presentationItems(events, HUMAN, batch, before, (source) => resolveNoticeSource(source, view), eventStates);
+    const items = presentationItems(events, HUMAN, batch, before, (source) => resolveNoticeSource(source, view), eventStates, seq);
     presentation.enqueue(items);
     if (items.length > 0) {
       logEvent("battle_engine_presentation_queued", {
@@ -340,7 +349,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         drawnForDiscard: derived.drawnForDiscard,
         playing: derived.playing,
         decision: derived.decision,
-        presented: promptPresentable(head, presentation.notice),
+        presented: guidanceCheckpoint === null && promptPresentable(head, presentation.notice),
         notice: noticeView,
         cards,
         catalog: engine.catalog,
@@ -349,9 +358,9 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         opponentName: init.enemyDescriptor.name,
         essenceReward: init.essenceReward,
         resultDismissed,
-        visual: head?.visual == null ? null : { key: head.key, visual: head.visual },
+        visual: guidanceHeld || head?.visual == null ? null : { key: head.key, visual: head.visual },
         revealedCard:
-          head?.visual?.kind === "reveal"
+          !guidanceHeld && head?.visual?.kind === "reveal"
             ? (engine.view(head.visual.after, HUMAN).instances[head.visual.instance] ?? null)
             : null,
         dreamwellCard: (card) => {
@@ -359,7 +368,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           return definition === null ? null : dreamwellCardModel(definition);
         },
       }),
-    [avatars, battleId, cards, derived, dreamwell, engine, head, init, noticeView, presentation.notice, printedKeywords, resultDismissed],
+    [avatars, battleId, cards, derived, dreamwell, engine, guidanceCheckpoint, guidanceHeld, head, init, noticeView, presentation.notice, printedKeywords, resultDismissed],
   );
   const emblemName = useCallback<EngineEmblemNamer>(
     (emblem, id) =>
@@ -501,11 +510,13 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
       const play = handPlayAction(model, HUMAN, id, target);
       if (play === null) {
         logEvent("battle_engine_play_refused", { battleId, card: id, surface, decisionKey: derived.decisionKey });
+        const instance = model.instances.get(id);
+        if (model.affordances.canAct && instance !== undefined) void actions.tutorialCardAttempt(battleId, instance.id);
         return;
       }
       submitAction(play, surface);
     },
-    [battleId, derived.decisionKey, model, submitAction],
+    [actions, battleId, derived.decisionKey, model, submitAction],
   );
 
   const choose = (select: ChoiceSelection): void => {
@@ -740,6 +751,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         inspectorVisibility="hidden"
         phaseNavigation={derived.view.stack.length > 0 ? "pass" : "next-phase"}
       />
+      <BattleTutorialGuidance view={guidanceView} onDismiss={guidanceController.advance} onDurationComplete={guidanceController.completeDuration} />
       {browsed === null ? null : (
         <CardZoneBrowserOverlay<BattleCardId>
           owner={browsed.side === HUMAN ? "viewer" : "opponent"}

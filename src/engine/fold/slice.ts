@@ -148,8 +148,14 @@ export interface PendingPrompt {
 export interface FoldObservation {
   /** Whether presentation shows `event`; only these events' states are copied. */
   readonly presented: (event: EngineEvent) => boolean;
-  /** The most states one intent's fold copies; the presented events after them go unobserved. */
+  /** The most ordinary presented states copied per intent; required sources have their own sparse bound. */
   readonly limit: number;
+  /** Sparse authoritative sources beyond the ordinary visual budget. The owner bounds selections. */
+  readonly required?: {
+    /** Stable identity of the immutable selection policy; excludes mutable shared history. */
+    readonly key: object;
+    readonly select: (event: EngineEvent, snapshot: () => BattleState) => boolean;
+  };
 }
 
 export interface FoldAdapter {
@@ -169,8 +175,10 @@ export interface FoldAdapter {
    * The state an observed fold copied at `event`, an event this adapter
    * published: a presented event's own state; for any other event, the state
    * at the latest presented event before it in its intent's fold, or the
-   * state that fold started from; `undefined` for an event no observed fold
-   * reached, and from the first presented event past the limit on.
+   * state that fold started from. Beyond the ordinary limit only selected
+   * required events retain their exact states; other events are `undefined`.
+   * A new required capability supplements memoized events once, preserving
+   * ordinary copies; subsequent reads of that capability reuse them.
    */
   observed(event: EngineEvent): BattleState | undefined;
   /**
@@ -312,9 +320,19 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
   // Non-persisted observed states (`observed`), by published event: the
   // events of a memoized run keep theirs while it is memoized.
   const states = new WeakMap<EngineEvent, BattleState>();
+  const ordinaryStates = new WeakMap<EngineEvent, BattleState>();
   // The memoized runs an observed fold ran: a run memoized while nothing
   // observed (a reload's log replay) is run again when a fold observes it.
   const observedRuns = new WeakSet<StepResult>();
+  const exactStates = new WeakSet<EngineEvent>();
+  const requiredRuns = new WeakMap<StepResult, WeakSet<object>>();
+  function markRequired(result: StepResult, progress: Observing): void {
+    const key = progress.observation.required?.key;
+    if (key === undefined) return;
+    let keys = requiredRuns.get(result);
+    if (keys === undefined) { keys = new WeakSet(); requiredRuns.set(result, keys); }
+    keys.add(key);
+  }
 
   /**
    * Observes one run of an intent's fold, after the `skip` events an earlier
@@ -323,16 +341,24 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
    * intent's limit allows, and gives any other event the latest copy, kept
    * in `into`.
    */
-  function observer(progress: Observing, skip: number, into: Pick<WeakMap<EngineEvent, BattleState>, "set"> = states): EventObserver {
+  function observer(progress: Observing, skip: number, into: Pick<WeakMap<EngineEvent, BattleState>, "set"> = states, requiredOnly = false): EventObserver {
     let seen = 0;
     return (event, snapshot) => {
       seen += 1;
       if (seen <= skip) return;
-      if (progress.observation.presented(event)) {
-        progress.latest = progress.remaining > 0 ? snapshot() : undefined;
+      let copy: BattleState | undefined;
+      const once = () => copy ??= snapshot();
+      const required = progress.observation.required?.select(event, once) === true;
+      if (!requiredOnly && progress.observation.presented(event)) {
+        progress.latest = progress.remaining > 0 ? once() : undefined;
         progress.remaining -= 1;
+        if (progress.latest !== undefined) exactStates.add(event);
       }
-      if (progress.latest !== undefined) into.set(event, progress.latest);
+      if (!requiredOnly && progress.latest !== undefined) ordinaryStates.set(event, progress.latest);
+      if (required) {
+        into.set(event, once());
+        exactStates.add(event);
+      } else if (!requiredOnly && progress.latest !== undefined) into.set(event, progress.latest);
     };
   }
 
@@ -402,13 +428,18 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
    * deterministic, so that run's events match the memoized ones position by
    * position, and each memoized event keeps the state observed at its match.
    */
-  function observeMemoized(committed: BattleState, inFlight: InFlight, cached: StepResult, progress: Observing, skip: number): void {
+  function observeMemoized(committed: BattleState, inFlight: InFlight, cached: StepResult, progress: Observing, skip: number, requiredOnly = false): void {
     const fresh = new Map<EngineEvent, BattleState>();
-    const again = runOnce(committed, inFlight, observer(progress, skip, fresh));
+    const again = runOnce(committed, inFlight, observer(progress, skip, fresh, requiredOnly));
     cached.events.forEach((event, index) => {
       const match = again.events[index];
       const state = match === undefined ? undefined : fresh.get(match);
-      if (state !== undefined) states.set(event, state);
+      const ordinary = match === undefined ? undefined : ordinaryStates.get(match);
+      if (!requiredOnly && ordinary !== undefined) ordinaryStates.set(event, ordinary);
+      if (state !== undefined && (!requiredOnly || !exactStates.has(event))) {
+        states.set(event, state);
+        if (match !== undefined && exactStates.has(match)) exactStates.add(event);
+      }
     });
   }
 
@@ -426,15 +457,20 @@ export function createFoldAdapter(engine: Engine, options: FoldOptions = {}): Fo
       const last = cached.events[cached.events.length - 1];
       if (progress === null || last === undefined || cached.events.length <= skip) return cached;
       if (observedRuns.has(cached)) {
-        progress.latest = states.get(last);
+        const key = progress.observation.required?.key;
+        if (key !== undefined && requiredRuns.get(cached)?.has(key) !== true) {
+          observeMemoized(committed, inFlight, cached, progress, skip, true);
+        }
+        progress.latest = ordinaryStates.get(last);
       } else {
         observeMemoized(committed, inFlight, cached, progress, skip);
         observedRuns.add(cached);
       }
+      markRequired(cached, progress);
       return cached;
     }
     const result = runOnce(committed, inFlight, progress === null ? undefined : observer(progress, skip));
-    if (progress !== null) observedRuns.add(result);
+    if (progress !== null) { observedRuns.add(result); markRequired(result, progress); }
     if (byState === undefined) {
       byState = new Map();
       runs.set(committed, byState);

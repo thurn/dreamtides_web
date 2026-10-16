@@ -15,12 +15,21 @@ import { buildBattleAvatarStatus } from "../../battle/ui/battle-avatar-status";
 import { buildEngineBattleScreenModel, enginePrintedKeywords } from "./engine-battle-view-model";
 export { tutorialActionLogDetails } from "./tutorial-action-log";
 function cardIdOf(state: BattleState, id: InstanceId) { const printing = state.instances[id]?.printing; return printing?.kind === "card" || printing?.kind === "figmentCopy" ? printing.cardId : null; }
+function precedingOpponentDraw(prefix: TutorialPrefixState, actions: readonly TutorialAction[], at: number | null) {
+    const current = at === null ? undefined : actions[at];
+    return current?.action !== "reveal-and-play-opponent-card" ? undefined : prefix.draws.filter(draw => { const cue = actions.find(cue => cue.id === draw.actionId); return cue !== undefined && "cardId" in cue && cue.cardId === current.cardId && actions.indexOf(cue) < (at ?? 0); }).slice(-1)[0];
+}
 function frameFor(prefix: TutorialPrefixState, actions: readonly TutorialAction[], at: number | null): BattleState {
     const action = at === null ? null : actions[at];
     const draw = action === null ? undefined : prefix.draws.find(draw => draw.actionId === action?.id);
     if (draw?.eventIndex != null)
         return prefix.events[draw.eventIndex]?.before ?? prefix.engine.slice.committed;
     if (action?.action === "reveal-and-play-opponent-card") {
+        const source = precedingOpponentDraw(prefix, actions, at);
+        const preceding = new Set(actions.slice(0, at ?? 0).map(cue => cue.id));
+        const frame = source === undefined ? undefined : [...prefix.actionFrames].reverse().find(frame => preceding.has(frame.actionId) && frame.state.sides.enemy.hand.includes(source.instance));
+        if (frame !== undefined)
+            return frame.state;
         const event = prefix.events.find(entry => entry.event.kind === "cardPlayed" && entry.event.side === "enemy" && cardIdOf(entry.state, entry.event.instance) === action.cardId);
         if (event !== undefined)
             return event.before;
@@ -103,7 +112,7 @@ export function buildTutorialView(avatars: readonly AvatarContent[], configurati
     }
     const drawCard = boundDraw === undefined ? null : physical(boundDraw.instance);
     const cardDraw = current?.action === "draw-card" && drawCard !== null ? { actionId: current.id, owner: current.owner, card: drawCard } : null;
-    const revealDraw = current?.action === "reveal-and-play-opponent-card" && prefix !== undefined ? prefix.draws.filter(draw => { const cue = actions.find(cue => cue.id === draw.actionId); return cue !== undefined && "cardId" in cue && cue.cardId === current.cardId && actions.indexOf(cue) < (at ?? 0); }).slice(-1)[0] : undefined;
+    const revealDraw = prefix === undefined ? undefined : precedingOpponentDraw(prefix, actions, at);
     const opponentCardToReveal = revealDraw === undefined ? null : physical(revealDraw.instance);
     const dialogueAction = current?.action === "display-speech-bubble" || current?.action === "reveal-and-play-opponent-card" || current?.action === "end-turn" && playback?.playerCardPlay != null ? current : null;
     const speech = dialogueAction !== null && "speechBubble" in dialogueAction ? dialogueAction.speechBubble ?? null : null;

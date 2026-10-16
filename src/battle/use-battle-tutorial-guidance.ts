@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
 import { logEvent } from "../logging";
 import {
@@ -6,7 +6,7 @@ import {
   tutorialGuidanceMessageDurationSeconds,
 } from "./tutorial-presentation-timing";
 import { parseIntentKey } from "../types/identifiers";
-import { tutorialBattleOf } from "../rules/battle/fold";
+import { battleGuidanceOf } from "../rules/battle/journey-tutorial-guidance";
 
 export interface BattleTutorialGuidanceController {
   readonly advance: () => void;
@@ -14,11 +14,11 @@ export interface BattleTutorialGuidanceController {
 }
 
 /** Shared timer/manual bridge for one event-log-owned Mira battle tutorial. */
-export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
+export function useBattleTutorialGuidance(presentationVisible = true): BattleTutorialGuidanceController {
   const state = useConfirmedGameState();
   const actions = useActions();
   const clientId = useClientId();
-  const battle = tutorialBattleOf(state.battle);
+  const battle = useMemo(() => battleGuidanceOf(state.battle), [state.battle]);
   const presentation = battle?.tutorialPresentation;
   const guidance =
     presentation?.kind === "tutorial-guidance" ? presentation : null;
@@ -50,7 +50,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
   );
 
   useEffect(() => {
-    if (guidance === null || battle === null) return;
+    if (!presentationVisible || guidance === null || battle === null) return;
     logEvent("battle_tutorial_guidance_presented", {
       battleId: battle.init.battleId,
       presentationId: guidance.id,
@@ -72,7 +72,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       bubbleWidths: guidance.messages.map((message) => message.bubbleWidth),
       messageIndex: guidance.messageIndex,
     });
-  }, [battle, guidance]);
+  }, [battle, guidance, presentationVisible]);
 
   return {
     advance: () => submitAdvance("manual"),

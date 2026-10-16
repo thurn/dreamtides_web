@@ -40,9 +40,10 @@ import type {
   Screen,
 } from "../../types/journey";
 import type { FoldState } from "../fold-state";
+import type { CardId } from "../../types/card-identity";
 import type { DeckEntryId, SiteId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
-import { journeyBattleOf, type JourneyBattleFoldState, type JourneyBattleInit } from "./fold";
+import { journeyBattleOf, type JourneyBattleFoldState, type JourneyBattleInit, type JourneyBattleGuidance } from "./fold";
 import { engineBattleResult, startEngineBattleWithCommits } from "./engine-battle";
 import type { Engine } from "../../engine";
 import type {
@@ -89,6 +90,8 @@ export interface BattleInitProvider {
    * battle's engine battle on it, and the engine intents fold over it.
    */
   readonly engine: Engine;
+  /** Pinned UI catalog text for a created UUID absent from dealt definitions. */
+  readonly guidanceCardText?: (cardId: CardId) => string | undefined;
   /**
    * Build the immutable journey init for `siteId` deterministically from
    * `(journey, rng, timestamp)`, with the engine init of the same battle, or `null` to bounce (e.g. the site is not a battle, or its
@@ -108,6 +111,7 @@ export interface BattleInitProvider {
 export interface BattleStart {
   readonly init: JourneyBattleInit;
   readonly engineInit: EngineBattleInit;
+  readonly guidance?: Pick<JourneyBattleGuidance, "tutorialTriggers" | "dreamwellDeck">;
 }
 
 /**
@@ -255,7 +259,7 @@ function startJourneyBattleWithCommits(
     provider.engine,
     openingSeq,
   );
-  return started === null ? null : { battle: { mode: { kind: "journey" }, init: start.init, engine: started.fold }, committedSteps: started.committedSteps };
+  return started === null ? null : { battle: { mode: { kind: "journey" }, init: start.init, engine: started.fold, ...(start.guidance === undefined ? {} : { guidance: { ...start.guidance, checkpoints: [], tutorialPresentation: null } }) }, committedSteps: started.committedSteps };
 }
 
 // ---------------------------------------------------------------------------

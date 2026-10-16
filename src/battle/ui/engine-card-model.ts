@@ -12,13 +12,10 @@
 import { remapGameCardModelTypes } from "../../runtime/card-type-remap";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import type { InstanceView } from "../../engine";
-import type { TransfigurationApplication } from "../../engine/dsl/types";
-import type { DeckMods } from "../../engine/dsl/types";
 import { figmentCardDisplayName } from "../../data/figment-card-display";
 import { parseCardId, parseCardName, type CardId, type CardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type { TransfigurationType } from "../../types/journey";
-import { deckModsOf } from "../integration/engine-battle-init";
+import { createBattleCardDisplayResolver, type BattleCardDisplayResolver } from "../card-display-definition";
 import type { FigmentCatalogEntry } from "../state/figment-catalog";
 import type { BattleDeckCardDefinition } from "../types";
 
@@ -45,53 +42,12 @@ export interface EngineCardModels {
 }
 
 /**
- * Dealt card definitions by card UUID: the first of each display variant,
- * and the first of each transfiguration for a transfigured instance whose
- * display variant no definition has.
- */
-type DefinitionIndex = ReadonlyMap<CardId, CardDefinitions>;
-
-interface CardDefinitions {
-  readonly byVariant: Map<string, BattleDeckCardDefinition>;
-  readonly byTransfiguration: Map<string, BattleDeckCardDefinition>;
-}
-
-/**
- * The part of a variant the dealt display data depends on: the
- * transfiguration and the Fast, Reclaim, and type changes of the deck entry.
- * The spark bonus and cost reduction change only spark and cost, which the
- * model takes from the engine's characteristics, a multi-cost card's orb
- * labels included (`engineOrbLabels`).
- */
-function serializedDisplayVariant(transfiguration: TransfigurationType | null, mods: DeckMods | null | undefined, applications?: readonly TransfigurationApplication[]): string {
-  return JSON.stringify([
-    applications === undefined ? transfiguration : applications,
-    mods?.fast ?? false,
-    mods?.reclaim ?? null,
-    mods?.typeChange?.cardType ?? null,
-    mods?.typeChange?.subtype ?? null,
-  ]);
-}
-
-function instanceDisplayVariant(instance: Pick<InstanceView, "variant">): string {
-  return serializedDisplayVariant(instance.variant.transfigurations?.[0] ?? null, instance.variant.deckMods, instance.variant.transfigurationApplications);
-}
-
-/**
  * A card-model builder over `sources`. Models are cached by everything they
  * show, so an instance whose display did not change keeps the same object
  * across renders.
  */
 export function createEngineCardModels(sources: EngineCardSources): EngineCardModels {
-  const definitions = new Map<CardId, CardDefinitions>();
-  for (const definition of sources.definitions) {
-    const indexed = definitions.get(definition.cardId) ?? { byVariant: new Map(), byTransfiguration: new Map() };
-    const variant = serializedDisplayVariant(definition.transfiguration, deckModsOf(definition), definition.transfigurationDisplay?.applications?.map(step => step.application));
-    if (!indexed.byVariant.has(variant)) indexed.byVariant.set(variant, definition);
-    const history = JSON.stringify(definition.transfigurationDisplay?.applications?.map(step => step.application) ?? definition.transfiguration);
-    if (definition.transfiguration !== null && !indexed.byTransfiguration.has(history)) indexed.byTransfiguration.set(history, definition);
-    definitions.set(definition.cardId, indexed);
-  }
+  const definitions = createBattleCardDisplayResolver(sources.definitions);
   const cache = new Map<string, GameCardModel>();
   return Object.assign((instance: InstanceView) => {
     const { characteristics } = instance;
@@ -102,7 +58,7 @@ export function createEngineCardModels(sources: EngineCardSources): EngineCardMo
       characteristics.subtype,
       characteristics.cost,
       characteristics.spark ?? "",
-      instanceDisplayVariant(instance),
+      definitions.serializeVariant(instance.variant),
       instance.variant.typeRemap ?? "",
     ].join("|");
     const cached = cache.get(key);
@@ -113,17 +69,8 @@ export function createEngineCardModels(sources: EngineCardSources): EngineCardMo
   }, { nameOf: (identity: EngineCardIdentity) => cardName(sources, definitions, identity.printing.cardId, identity.variant) });
 }
 
-/** The dealt display definition selected by the immutable UUID and variant. */
-function displayDefinition(definitions: DefinitionIndex, cardId: CardId, variant: InstanceView["variant"]): BattleDeckCardDefinition | undefined {
-  const transfiguration = variant.transfigurations?.[0] ?? null;
-  const history = variant.transfigurationApplications;
-  const indexed = definitions.get(cardId);
-  return indexed?.byVariant.get(instanceDisplayVariant({ variant })) ??
-    (history === undefined && transfiguration === null ? undefined : indexed?.byTransfiguration.get(JSON.stringify(history ?? transfiguration)));
-}
-
-function cardName(sources: EngineCardSources, definitions: DefinitionIndex, cardId: CardId, variant: InstanceView["variant"]): CardName {
-  return displayDefinition(definitions, cardId, variant)?.name ?? sources.cards.get(cardId)?.name ?? parseCardName("Card");
+function cardName(sources: EngineCardSources, definitions: BattleCardDisplayResolver, cardId: CardId, variant: InstanceView["variant"]): CardName {
+  return definitions.definition(cardId, variant)?.name ?? sources.cards.get(cardId)?.name ?? parseCardName("Card");
 }
 
 /**
@@ -142,7 +89,7 @@ function engineOrbLabels(printed: readonly string[], cost: number): string[] {
 
 function buildModel(
   sources: EngineCardSources,
-  definitions: DefinitionIndex,
+  definitions: BattleCardDisplayResolver,
   instance: InstanceView,
 ): GameCardModel {
   const { characteristics, printing } = instance;
@@ -171,7 +118,7 @@ function buildModel(
     };
   }
   const cardId = printing.cardId;
-  const definition = displayDefinition(definitions, cardId, instance.variant);
+  const definition = definitions.definition(cardId, instance.variant);
   const card = sources.cards.get(cardId);
   const name = cardName(sources, definitions, cardId, instance.variant);
   const imageNumber = definition?.imageNumber ?? card?.imageNumber ?? 0;

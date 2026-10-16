@@ -21,6 +21,8 @@ import { tutorialBattleId } from "../../battle/integration/tutorial-setup";
 // batch's states, observed ones included, with `batchStates`.
 
 import { acceptedTutorialOverride, tutorialEngineTransition } from "./tutorial-presentation";
+import { journeyGuidanceObservation, journeyGuidanceTransition } from "./journey-tutorial-guidance";
+import { getBattleInitProvider } from "./journey-battle";
 import { BATTLE } from "../../content/battle";
 import { eventLogRecords } from "../../engine/log";
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
@@ -294,7 +296,11 @@ export function reduceEngineIntentWithCommits(
   const tutorial = battle.mode.kind === "tutorial" ? battle as import("./fold").TutorialBattleFoldState : null;
   const selected = payload.override === undefined ? null : tutorial === null ? null : acceptedTutorialOverride(tutorial,engine,payload.override);
   if (payload.override !== undefined && (selected === null || type !== "BATTLE_ACTION" || !isRecord(payload.action) || payload.action.kind !== "play" || payload.action.card !== selected.instance)) return null;
-  const observation = tutorial === null ? observations.get(engine)?.[0] : {presented:()=>true,limit:BATTLE.presentation.maxObservedEventStates};
+  const journey = battle.mode.kind === "journey" ? battle as JourneyBattleFoldState : null;
+  const provider = getBattleInitProvider();
+  const guidanceCardText = provider?.engine === engine ? provider.guidanceCardText : undefined;
+  const observation = journey?.guidance !== undefined ? journeyGuidanceObservation(journey, engine, guidanceCardText)
+    : tutorial === null ? observations.get(engine)?.[0] : {presented:()=>true,limit:BATTLE.presentation.maxObservedEventStates};
   const folded = collectEngineWork(ctx.seq, () => foldEngineIntent(foldAdapterFor(engine), fold.slice, type, payload, observation));
   if (folded.kind === "bounced") return null;
   if (folded.kind === "threw" && fold.slice.inFlight !== null) {
@@ -307,8 +313,8 @@ export function reduceEngineIntentWithCommits(
       },
     ]);
   }
-  const next = tutorial === null ? { ...state, battle: { ...battle, engine: { ...fold, slice: folded.slice } } }
-    : tutorialEngineTransition(state,tutorial,engine,folded.slice,folded.kind === "applied" ? folded.published : [],ctx.seq,selected ?? tutorial.pendingOverride,type === "BATTLE_CANCEL");
+  const next = tutorial !== null ? tutorialEngineTransition(state,tutorial,engine,folded.slice,folded.kind === "applied" ? folded.published : [],ctx.seq,selected ?? tutorial.pendingOverride,type === "BATTLE_CANCEL")
+    : journeyGuidanceTransition(state,battle as JourneyBattleFoldState,engine,folded.slice,folded.kind === "applied" ? folded.published : [],ctx.seq,guidanceCardText);
   return { state: next, committedSteps: tutorial === null && folded.kind === "applied" ? folded.committedSteps : [] };
 }
 

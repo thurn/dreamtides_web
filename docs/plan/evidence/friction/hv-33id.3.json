@@ -1,0 +1,36 @@
+{
+  "bead": "hv-33id.3",
+  "phase": 6,
+  "implementMin": 191.8821904,
+  "implementWindow": {
+    "start": "2026-10-15T22:26:39.799000+00:00",
+    "end": "2026-10-16T01:38:32.730424+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.15282900002785,
+    "review": 58.74942958302563,
+    "knip": 3.8241657079779543,
+    "reviewFull": 128.98927508399356,
+    "reuseProof": 1.5291666659759358,
+    "browserMobile": 259.26833554101177,
+    "integrationReuse": 3.1707534170127474
+  },
+  "hostLoad": 3.552734375,
+  "testDelta": {
+    "files": 1,
+    "lines": 569,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 14.079337894449903,
+      "note": "Two interrupted own queued requests before any product birth:448.563368167s and396.196905500s. Observed queue/admission/overhead upper bound, not pure kernel waiting; shared holder/lock untouched. Final successful admission measured separately."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 23.940143318051316,
+      "note": "Observed total wrapper walls of failed recipes04/05/06/08/10/12/13/14/18; includes useful captures and completed desktop42 subset, not exclusive scripting CPU or wasted time. Invalid setup fields, authored timer observation races, screenshot transfer timing, sandbox URL and actual frontier/owner selectors corrected within ignored recipes; every negative retained."
+    }
+  ]
+}

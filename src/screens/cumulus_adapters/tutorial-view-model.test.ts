@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildTutorialView } from "./tutorial-view-model";
-import { engine, init, display, CARDS } from "../../rules/battle/tutorial-contracts-fixture";
-import { startTutorialPrefix, completePrefixAction } from "../../rules/battle/tutorial-prefix";
+import { engine, init, display, CARDS, WELL } from "../../rules/battle/tutorial-contracts-fixture";
+import { startTutorialPrefix, completePrefixAction, enterPrefixAction } from "../../rules/battle/tutorial-prefix";
 import { makeTutorialBattleConfiguration } from "../../testing/tutorial-configuration-fixture";
 import { testTutorialActionId } from "../../types/test-identities";
 import { parseTutorialRunId } from "../../types/identifiers";
@@ -61,4 +61,32 @@ it.each([4, 9])("retains ordinary occupied B%s outside the compact initial empty
  expect(played).toEqual(saved);
  expect(buildTutorialView(avatars,configuration,{...playback,prefix:saved},[],[],engine)).toEqual(view);
  expect(playPrefixPlayer(engine,drawn,instance,22,prefixActions,slot)).toEqual(played);
+});
+
+
+import { createCatalog, createEngine } from "../../engine";
+import { energy } from "../../engine/dsl/builders";
+it("projects a saved pre-entry physical hand after the real play publishes handEmptied", () => {
+ const paidEngine = createEngine(createCatalog(engine.catalog.cardDefinitions.map(card => card.id === CARDS.weak ? { ...card, costs: [energy(2)] } : card), [engine.catalog.dreamwellCard(WELL)]));
+ const initial = startTutorialPrefix(paidEngine, { init: display(), engineInit: init("enemy", CARDS.weak) }, actions, 1)!;
+ const drawn = completePrefixAction(paidEngine, initial, actions[0], actions, 2)!;
+ const entered = enterPrefixAction(paidEngine, drawn, actions[1], actions, 3)!;
+ const physical = drawn.draws[0].instance;
+ const emptied = entered.events.findIndex(entry => entry.event.kind === "handEmptied" && entry.event.side === "enemy");
+ const played = entered.events.findIndex(entry => entry.event.kind === "cardPlayed" && entry.event.instance === physical);
+ expect(emptied).toBeGreaterThanOrEqual(0);
+ expect(played).toBeGreaterThan(emptied);
+ expect(entered.events[played].before.sides.enemy.hand).not.toContain(physical);
+ expect(drawn.actionFrames[drawn.actionFrames.length - 1]?.state.sides.enemy.hand).toContain(physical);
+ expect(entered.engine.slice.committed.sides.enemy.hand).not.toContain(physical);
+ expect(entered.engine.slice.committed.sides.enemy.currentEnergy).toBe(3);
+ const saved = JSON.parse(JSON.stringify(entered)) as typeof entered;
+ const playback = {runId:parseTutorialRunId("pre-entry-projection"),actions,currentActionIndex:1,playerCardPlay:null,prefix:entered};
+ const view = buildTutorialView(avatars, configuration, playback, [], [], paidEngine);
+ expect(view.battle.farHand.cardIds).toEqual([physical]);
+ expect(view.opponentCardToReveal?.id).toBe(physical);
+ expect(view.opponentCardToReveal?.model.cardId).toBe(CARDS.weak);
+ expect(view.battle.far.status.currentEnergy).toBe(5);
+ expect(entered).toEqual(saved);
+ expect(buildTutorialView(avatars, configuration, {...playback,prefix:saved}, [], [], paidEngine)).toEqual(view);
 });

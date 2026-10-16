@@ -10,7 +10,9 @@ import type { TutorialTriggerEvent } from "../../types/tutorial";
 import type { FoldState } from "../fold-state";
 import { matchTutorialGuidance } from "./tutorial-guidance";
 import { batchStates, foldAdapterFor } from "./engine-battle";
-import { tutorialBattleOf, type TutorialBattleFoldState, type TutorialBattlePresentation, type TutorialGuidanceSource, type TutorialCheckpoint } from "./fold";
+import { type TutorialBattleFoldState, type TutorialBattlePresentation, type TutorialGuidanceSource, type TutorialCheckpoint } from "./fold";
+import { battleGuidanceOf, selectBattleGuidance, withBattleGuidanceCheckpoints } from "./journey-tutorial-guidance";
+import { createBattleCardDisplayResolver } from "../../battle/card-display-definition";
 function printedId(state: BattleState, instance: InstanceId): CardId | null {
     const printing = state.instances[instance]?.printing;
     return printing?.kind === "card" || printing?.kind === "figmentCopy" ? printing.cardId : null;
@@ -37,12 +39,11 @@ export function tutorialEngineTransition(state: FoldState, battle: TutorialBattl
     const checkpoints = [...battle.checkpoints];
     const enqueue = (presentation: TutorialBattlePresentation, before: BattleState, frame: BattleState): void => { checkpoints.push({ presentation, before, state: frame }); };
     const guidance = (event: TutorialTriggerEvent, source: TutorialGuidanceSource, before: BattleState, frame: BattleState, id: PresentationId, cardId?: CardId | import("../../types/identifiers").DreamwellCardId, text = "", kind?: "character" | "event", automatic = false): boolean => {
-        const matches = matchTutorialGuidance(battle.init.tutorialTriggers, { event, ...(cardId === undefined ? {} : { cardId }), renderedText: text, ...(kind === undefined ? {} : { cardKind: kind }), seenTriggerIds: new Set(seen) });
-        if (matches.length === 0)
+        const presentation = selectBattleGuidance(battle.init.tutorialTriggers, seen, event, source, id, cardId, text, kind, automatic);
+        if (presentation === null)
             return false;
-        const messages = matches.map(trigger => ({ triggerId: trigger.id, speaker: trigger.speaker, text: trigger.text, duration: trigger.duration, ...(trigger.delay?.[event] === undefined ? {} : { delay: trigger.delay[event] }), horizontalOffset: trigger.horizontalOffset, verticalOffset: trigger.verticalOffset, bubbleWidth: trigger.bubbleWidth }));
-        seen.push(...matches.map(trigger => trigger.id));
-        enqueue({ kind: "tutorial-guidance", id, source, messages, messageIndex: 0, automatic }, before, frame);
+        seen.push(...presentation.messages.map(message => message.triggerId));
+        enqueue(presentation, before, frame);
         return true;
     };
     let before = batch.before;
@@ -105,7 +106,7 @@ function importFigmentCardId(figment: import("../../engine/state/ids").FigmentId
     return id === null ? null : lookupFigmentCatalogEntryById(id)?.id ?? id;
 }
 export function completeTutorialCheckpoint(state: FoldState, payload: Record<string, unknown>): FoldState | null {
-    const battle = tutorialBattleOf(state.battle);
+    const battle = battleGuidanceOf(state.battle);
     const first = battle?.checkpoints[0];
     if (battle === null || first === undefined || payload.presentationId !== first.presentation.id)
         return null;
@@ -118,12 +119,13 @@ export function completeTutorialCheckpoint(state: FoldState, payload: Record<str
     }
     else
         checkpoints = battle.checkpoints.slice(1);
-    return { ...state, battle: { ...battle, checkpoints, tutorialPresentation: checkpoints[0]?.presentation ?? null } };
+    return withBattleGuidanceCheckpoints(state, checkpoints);
 }
 /** A failed hand play is a presentation intent; its dry-run events never become gameplay. */
 export function tutorialCardAttempt(state: FoldState, payload: Record<string, unknown>, ctx: import("../../eventlog/types").EventContext): FoldState | null {
-    const battle = tutorialBattleOf(state.battle);
-    const engine = getAttemptEngine();
+    const battle = battleGuidanceOf(state.battle);
+    const provider = getBattleInitProvider();
+    const engine = provider?.engine ?? null;
     if (battle === null || engine === null || payload.battleId !== battle.init.battleId || battle.tutorialPresentation !== null || battle.engine.slice.inFlight !== null || typeof payload.instance !== "string")
         return null;
     const board = battle.engine.slice.committed;
@@ -140,13 +142,12 @@ export function tutorialCardAttempt(state: FoldState, payload: Record<string, un
     const cardId = printedId(board, instance);
     if (!refusal || cardId === null)
         return null;
-    const definition = battle.init.cardDefinitions.find(card => card.cardId === cardId);
-    const cardKind=engine.catalog.card(cardId).cardType;
-    const matches = matchTutorialGuidance(battle.init.tutorialTriggers, { event: "card-no-valid-targets", cardId, cardKind, renderedText: definition?.renderedText ?? "", seenTriggerIds: new Set(state.tutorialTriggerIdsSeen) });
+    const definition = state.battle?.mode.kind === "journey" ? createBattleCardDisplayResolver(battle.init.cardDefinitions).definition(cardId, board.instances[instance].variant) : battle.init.cardDefinitions.find(card => card.cardId === cardId);
+    const cardKind = state.battle?.mode.kind === "journey" ? engine.view(board, "player").instances[instance]?.characteristics.cardType ?? engine.catalog.card(cardId).cardType : engine.catalog.card(cardId).cardType;
+    const matches = matchTutorialGuidance(battle.init.tutorialTriggers, { event: "card-no-valid-targets", cardId, cardKind, renderedText: definition?.renderedText ?? (state.battle?.mode.kind === "journey" ? provider?.guidanceCardText?.(cardId) : undefined) ?? "", seenTriggerIds: new Set(state.tutorialTriggerIdsSeen) });
     if (matches.length === 0)
         return null;
     const presentation: TutorialBattlePresentation = { kind: "tutorial-guidance", id: parsePresentationId(`${battle.init.battleId}:${ctx.seq}:refusal`), source: { kind: "card", cardId, battleCardId: parseBattleCardId(instance), cardKind, side: "player" }, messages: matches.map(trigger => ({ triggerId: trigger.id, speaker: trigger.speaker, text: trigger.text, duration: trigger.duration, ...(trigger.delay?.["card-no-valid-targets"] === undefined ? {} : { delay: trigger.delay["card-no-valid-targets"] }), horizontalOffset: trigger.horizontalOffset, verticalOffset: trigger.verticalOffset, bubbleWidth: trigger.bubbleWidth })), messageIndex: 0, automatic: false };
-    return { ...state, battle: { ...battle, checkpoints: [{ presentation, before: board, state: board }], tutorialPresentation: presentation }, tutorialTriggerIdsSeen: [...state.tutorialTriggerIdsSeen, ...matches.map(match => match.id)] };
+    return withBattleGuidanceCheckpoints({ ...state, tutorialTriggerIdsSeen: [...state.tutorialTriggerIdsSeen, ...matches.map(match => match.id)] }, [{ presentation, before: board, state: board }]);
 }
 import { getBattleInitProvider } from "./journey-battle";
-function getAttemptEngine(): Engine | null { return getBattleInitProvider()?.engine ?? null; }

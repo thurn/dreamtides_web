@@ -142,6 +142,8 @@ export interface PresentationBatch {
 /** One presented event: how long it holds the queue, its visual, and the notice it raises. */
 export interface PresentationItem {
   readonly key: PresentationId;
+  /** Exact public event which produced this live visual; replay queues start empty. */
+  readonly producer?: { readonly seq: number; readonly index: number };
   readonly presentation: Exclude<EventPresentation, "status" | "none">;
   readonly dwellMs: number;
   readonly visual: PresentationVisual | null;
@@ -474,6 +476,7 @@ export function presentationItems(
   before: BattleState,
   source: NoticeSource,
   eventStates: readonly (BattleState | undefined)[] = [],
+  seq?: number,
 ): PresentationItem[] {
   const { eventDwellMs } = BATTLE.presentation;
   // Items before the batch's first new turn show its state in the turn it
@@ -507,6 +510,7 @@ export function presentationItems(
       return [
         {
           key: parsePresentationId(`${batch.key}:${String(index)}`),
+          ...(seq === undefined ? {} : { producer: { seq, index } }),
           presentation,
           dwellMs,
           visual,

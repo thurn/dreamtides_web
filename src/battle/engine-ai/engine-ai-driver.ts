@@ -34,6 +34,7 @@ import type { EventActor } from "../../eventlog/types";
 import type { FoldState } from "../../rules/fold-state";
 import type { GameActions } from "../../session/actions";
 import { engineBattleOf, tutorialBattleOf } from "../../rules/battle/fold";
+import { battleGuidanceOf } from "../../rules/battle/journey-tutorial-guidance";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { parseIntentKey, type BattleId, type IntentKey, type PromptId } from "../../types/identifiers";
 
@@ -145,7 +146,7 @@ export class EngineAiDriver {
     const battle = engineBattleOf(state.battle);
     if (battle === null) return null;
     const tutorial = tutorialBattleOf(battle);
-    if (tutorial?.tutorialPresentation != null) return null;
+    if (battleGuidanceOf(battle)?.tutorialPresentation != null) return null;
     const fold = battle.engine;
     const pending = pendingEnginePrompt(battle, this.options.engine);
     const decision = aiDecision({

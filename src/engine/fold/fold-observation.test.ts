@@ -91,6 +91,61 @@ describe("presentation observation", () => {
     expect(again.published.every((event, index) => fold.observed(event) === states[index])).toBe(true);
   });
 
+  it("supplements sparse required sources without expanding ordinary copies or reobserving the same capability", () => {
+    const loops = createEngine(testCatalog(LOOP_CARDS));
+    const { state, ids } = boardState(loops.catalog, { active: "player", phase: "day", scoreToWin: 1000, player: { hand: [LOOP.bouncer.id], deck } });
+    const fold = createFoldAdapter(loops);
+    const start: BattleSlice = { committed: state, inFlight: null, attempt: 0, publishedEvents: 0 };
+    const played = applied(fold.reduce(start, { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand", slot: { rank: "back", index: 0 } } }));
+    const loop = played.committed.loops.candidate;
+    if (loop === null) throw Error("missing synthetic repeat loop");
+    const intent: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "repeatLoop", loop: loop.id, count: 20 } };
+    const ordinary = fold.reduce(played, intent, { presented: shown, limit: 2 });
+    if (ordinary.kind !== "applied") throw Error("repeat refused");
+    const boundary = ordinary.published.flatMap((event, index) => shown(event) ? [index] : [])[2];
+    const selected = ordinary.published.findIndex((event, index) => index > boundary && event.kind === "pointsScored");
+    if (selected < 0) throw Error("missing late source");
+    const prior = ordinary.published.map(event => fold.observed(event));
+    let calls = 0;
+    const key = {};
+    const required: FoldObservation = { presented: shown, limit: 2, required: { key, select: () => calls++ === selected } };
+    const supplemented = fold.reduce(played, intent, required);
+    expect(supplemented).toEqual(ordinary);
+    expect(supplemented.kind === "applied" && supplemented.published.every((event, index) => event === ordinary.published[index])).toBe(true);
+    const source = fold.observed(ordinary.published[selected]);
+    expect(source).toBeDefined();
+    expect(source?.sides.player.score).toBeGreaterThan(played.committed.sides.player.score);
+    expect(new Set(ordinary.published.map(event => fold.observed(event)).filter(frame => frame !== undefined && frame !== played.committed)).size).toBeLessThanOrEqual(3);
+    ordinary.published.forEach((event, index) => {
+      if (index !== selected) expect(fold.observed(event)).toBe(prior[index]);
+    });
+    const firstCalls = calls;
+    fold.reduce(played, intent, required);
+    fold.reduce(played, intent, { presented: shown, limit: 64 });
+    expect(calls).toBe(firstCalls);
+    expect(fold.observed(ordinary.published[selected])).toBe(source);
+    let secondCalls = 0;
+    const second = selected + 1;
+    fold.reduce(played, intent, { presented: shown, limit: 2, required: { key: {}, select: () => secondCalls++ === second } });
+    expect(fold.observed(ordinary.published[second])).toBeDefined();
+    expect(new Set(ordinary.published.map(event => fold.observed(event)).filter(frame => frame !== undefined && frame !== played.committed)).size).toBeLessThanOrEqual(4);
+    expect(fold.observed(ordinary.published[selected])).toBe(source);
+    ordinary.published.forEach((event, index) => {
+      if (index !== selected && index !== second) expect(fold.observed(event)).toBe(prior[index]);
+    });
+    const fresh = createFoldAdapter(loops);
+    let freshCalls = 0;
+    const observed = fresh.reduce(played, intent, { presented: shown, limit: 2, required: { key: {}, select: () => freshCalls++ === selected } });
+    expect(observed).toEqual(ordinary);
+    expect(observed.kind === "applied" && fresh.observed(observed.published[selected])).toEqual(source);
+    const unobserved = createFoldAdapter(loops);
+    const memo = unobserved.reduce(played, intent);
+    let memoCalls = 0;
+    const restored = unobserved.reduce(played, intent, { presented: shown, limit: 2, required: { key: {}, select: () => memoCalls++ === selected } });
+    expect(restored).toEqual(memo);
+    expect(restored.kind === "applied" && unobserved.observed(restored.published[selected])).toEqual(source);
+  });
+
   it("observes only the events an answer newly publishes, from the suspended display", () => {
     const { slice: start, ids } = slice({ active: "player", phase: "day", player: { hand: [drawThenDiscard.id, v.vanilla1.id], deck }, enemy: { deck } });
     const playCard: BattleIntent = { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } };

@@ -52,6 +52,7 @@ import {
 } from "./battle/engine-battle";
 import type { Engine } from "../engine";
 import { journeyBattleOf, tutorialBattleOf } from "./battle/fold";
+import { battleGuidanceOf } from "./battle/journey-tutorial-guidance";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
 import * as lifecycle from "./journey/lifecycle";
@@ -363,7 +364,7 @@ export function routeDomain(
   if (journey.screen.type === "journeyDreamsign" && journey.screen.choice.kind === "afterBattle" && isGameplayEventType(type) &&
     type !== "RESOLVE_AFTER_BATTLE_DREAMSIGN" && type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN") return bounce(state);
   if (
-    tutorialBattleOf(state.battle)?.tutorialPresentation != null &&
+    battleGuidanceOf(state.battle)?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
     (type === "END_BATTLE" || type === "BATTLE_ACTION" || type === "BATTLE_ANSWER" || type === "BATTLE_CANCEL" || type === "TUTORIAL_CARD_ATTEMPT")
   ) {

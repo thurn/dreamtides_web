@@ -1,0 +1,9 @@
+# hv-33id.3 pre-existing issues
+
+The normal front-door tutorial reached its first opponent reveal with the genuine physical source absent from the projected enemy hand. The engine publishes `handEmptied` before `cardPlayed`; the inherited projection selected `cardPlayed.before`, which reflects that hand event. The reveal component requires the exact physical hand source for its trajectory. Actual failures in run-S7JeCF and run-TWk0zN retain the empty reveal board/native action6; source-qualified constructor diagnostic run-Q3KGuA establishes event order/identity and is diagnostic only.
+
+The current projection selects the latest genuine preceding authored action frame containing the bound physical copy in the enemy hand, with the per-event frame as fallback. The synthetic public draw-completion→automatic-reveal contract confirms actual handEmptied/cardPlayed ordering and saved-view state without changing committed gameplay. Complete desktop/mobile front-door walks retain the actual reveal06 and all42beats.
+
+Own unlanded issues are distinct from this inherited issue: hidden-source checkpoint acceptance, first-UUID display-variant lookup, eager integration import cycle, blanket ordinary-presentation suppression, stale boundary readiness and missing late transient source capture were repaired in the same bead. Their exact negative checks/runtime observations and bounded source admissions are retained in the measurement companion. Ignored QA setup/selector/timer/reporting corrections are observation recipes, not inherited product bugs.
+
+The provider merge conflict is delivery integration, separate from the inherited reveal issue. The combined source retains the landed engine extraction/provenance and conditional journey-loop fields while restoring the owned additive guidance metadata and pinned-text callback. Exact rollback, checkpoint, reapplication and validation receipts are recorded in the measurement companion.
