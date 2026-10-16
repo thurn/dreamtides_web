@@ -1,8 +1,8 @@
 /**
  * The Greedy policy: a one-ply search. For a top-level decision it samples
  * determinizations of its view (D22), applies each legal action to each,
- * resolves the stack with both sides passing, ends a play or reposition’s main
- * window to match passing’s phase boundary, and scores the result with a
+ * resolves the stack with both sides passing, ends a play, reposition, or
+ * immediately unproductive activation's main window to match passing's phase boundary, and scores the result with a
  * simple evaluation: score difference, board spark, cards in hand, and
  * energy. The action with the best mean score wins. Prompts are answered
  * with the prompt heuristic (`greedyAnswer`), live and in simulation; a
@@ -74,8 +74,9 @@ function simulationSource(engine: Engine): InlineSource {
 
 /**
  * The score of `action` in the determinized `state`: the action applied,
- * then the stack resolved with both sides passing. A main-window play or
- * reposition also ends its current window to include the same phase-boundary consequences
+ * then the stack resolved with both sides passing. A main-window activation
+ * keeps its immediate score when it improves utility. Other main activations,
+ * plays and repositions end their current window to include the same phase-boundary consequences
  * as passing. `null` when the action
  * is not legal in this sample or the simulation fails.
  */
@@ -87,7 +88,8 @@ function simulate(
   loops: { simulations: number; iterations: number },
 ): number | null {
   const source = simulationSource(engine);
-  const settleWindow = action.kind === "reposition" || (action.kind === "play" && state.stack.length === 0);
+  const mainActivation = action.kind === "activate" && state.stack.length === 0;
+  const settleWindow = mainActivation || action.kind === "reposition" || (action.kind === "play" && state.stack.length === 0);
   const sameWindow = (current: BattleState) => current.turn.phase === state.turn.phase &&
     current.turn.active === state.turn.active && current.turn.turnNumber === state.turn.turnNumber;
   try {
@@ -104,9 +106,14 @@ function simulate(
     }
     let current = applied.state;
     let endedWindow = !sameWindow(current);
-    for (let passes = 0; passes < GREEDY.stackPassLimit && current.result === null; passes++) {
+    for (let passes = 0; passes <= GREEDY.stackPassLimit && current.result === null; passes++) {
       const next = engine.decision(current);
       if (next?.kind !== "respond") {
+        if (mainActivation && !endedWindow && current.stack.length === 0 && next?.kind === "main" && next.side === side && sameWindow(current)) {
+          const immediate = evaluatePosition(engine.view(current, side), side);
+          // Useful renewable activations retain their gains before an adverse boundary.
+          if (immediate > evaluatePosition(engine.view(state, side), side)) return immediate;
+        }
         // Compare a main-window candidate with passing at the same horizon. Resolve any
         // responses first, and end only this candidate's original window.
         if (
@@ -115,22 +122,16 @@ function simulate(
         ) break;
         endedWindow = true;
       }
+      // Inspect the last settled decision without spending another response pass.
+      if (passes === GREEDY.stackPassLimit) break;
       current = engine.apply(current, next.side, { kind: "pass" }, source).state;
       if (!sameWindow(current)) endedWindow = true;
     }
     // A bounded response chain can consume the pass allowance before the
     // window ends. An unfinished candidate cannot compete with a completed pass.
-    if (settleWindow && (!endedWindow || current.stack.length > 0) && current.result === null) return null;
+    if (settleWindow && current.result === null && (sameWindow(current) || current.stack.length > 0 || engine.decision(current)?.kind === "respond")) return null;
     const after = engine.view(current, side);
-    const score = evaluatePosition(after, side);
-    if (state.stack.length === 0 && action.kind === "activate" && typeof action.source === "string") {
-      const before = engine.view(state, side);
-      const priorSpark = before.instances[action.source]?.characteristics.spark;
-      const nextSpark = after.instances[action.source]?.characteristics.spark;
-      // A main-window renewable pump must improve utility, even when passing has a worse horizon.
-      if (priorSpark != null && nextSpark != null && nextSpark > priorSpark && score <= evaluatePosition(before, side)) return null;
-    }
-    return score;
+    return evaluatePosition(after, side);
   } catch {
     return null;
   }

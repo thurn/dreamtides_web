@@ -1,0 +1,760 @@
+{
+  "bead": "hv-umm2.771",
+  "phase": 5,
+  "base": "c259eac20566ba03314a34ecbf748e6ce87b9d8d",
+  "claimAt": "2026-10-16T15:28:10Z",
+  "dispatchAt": "2026-10-16T15:30:04.658Z",
+  "testedSource": [
+    {
+      "path": "src/engine/policy/greedy.ts",
+      "sha256": "2bb3c3ec2836e1a8b96f074ab043449a1c2a375b430a0f048cd22e3c31255c33",
+      "bytes": 10193
+    },
+    {
+      "path": "src/engine/policy/productive-activation.contracts.ts",
+      "sha256": "21adab827e063616c05c0853263d4ceb6ec34b1d3ed9e1259f3092e78693eddb",
+      "bytes": 27312
+    }
+  ],
+  "policyBoundary": {
+    "consumer": "POLICIES.greedy / runPolicy; production createPolicyWorkerHandler and inline playGame",
+    "scope": "simulate and current-system comments; additive public synthetic contracts in the existing registered module",
+    "semantics": "A main activation with strictly positive response-settled immediate utility keeps that value. Other main activations compete with pass at the original window boundary. Failed or unsettled required continuations are excluded. Final decision inspection applies at most the existing catalog stackPassLimit passes.",
+    "unchangedContracts": [
+      "normal turnPlanning256/response64 iteration budgets",
+      "catalog determinizations and loop simulation limit",
+      "private seeded policy randomness and view-only determinization",
+      "UUID/brand identities, rules, content and legal human actions",
+      "public policy API and trace schema"
+    ],
+    "serialization": "Only simulate main-window continuation/progress body overlaps earlier Greedy horizon work. Parent verified native claim and no active shared-body peer overlap; original46 full acceptance join remains."
+  },
+  "rawEvidence": {
+    "indexFilename": "raw-evidence-index-v1.json",
+    "sha256": "e3cb12e58852040be0ad83a44d7964948efb1a841a1d19b808d6680dcafb5785",
+    "files": 181,
+    "totalBytes": 73103014,
+    "qualification": "Immutable parent-rehashed custody index. Filenames locate records in the bead QA directory; byte custody is distinct from semantic reading. Final schema/author/core/delivery receipts are retained separately."
+  },
+  "adapter": {
+    "source": {
+      "filename": "author/witness-adapter-v1.mts",
+      "bytes": 15587,
+      "sha256": "40ed3e979f0849cedaf1b39e37a63a3efde94d75469c4166110a7f73054b8540"
+    },
+    "manifest": {
+      "filename": "author/witness-manifest-v1.json",
+      "bytes": 1113211,
+      "sha256": "a89f65857ae796d95279790e50b99b72870ac5c180440d8980679f47beb636e0"
+    },
+    "node": "v24.16.0",
+    "trackedPayloads": 6051,
+    "packagedDependencyPayloads": 59,
+    "trackedSymlinksByTargetText": 2,
+    "controls": "Strict scratch typecheck passed. Tiny synthetic success:2actions/2decisions/8steps/3commits with full replay. Deliberate first-real-apply failure retained its creation commit.",
+    "gameRunBound": "One1790sTERM/5sKILL run per original full-pool fixture; each completed within30minutes. No forced policy decisions or recorded decision tapes in either new game."
+  },
+  "witnesses": [
+    {
+      "ordinal": 173,
+      "originalInput": {
+        "filename": "input/game-173.original.jsonl",
+        "bytes": 60198167,
+        "sha256": "76ef1e8c82c83116e88b8896461af6ae101b2118757e5e9645ceea475080e0ac"
+      },
+      "journal": {
+        "filename": "runtime/witness-game173-v1/game173.jsonl",
+        "bytes": 285455,
+        "sha256": "8d3a779386c3e981c569c99a193a6871cfaf2bd1f0777c32dd7085570b2e176b"
+      },
+      "parentProof": {
+        "filename": "raw/witness-game173-parent-proof-v2.json",
+        "bytes": 2054,
+        "sha256": "90a72e443ea242a063b917865b2484eaeabf814d754566b1857eaff9af8f67e2"
+      },
+      "summary": {
+        "name": "game173",
+        "status": "completed",
+        "result": {
+          "kind": "victory",
+          "winner": "player",
+          "reason": "score"
+        },
+        "actions": 24,
+        "decisions": 32,
+        "commits": 25,
+        "steps": 184,
+        "invariantStepChecks": 184,
+        "replayInvariantStepChecks": 184,
+        "finalStateHash": "0dea0201de15b6",
+        "publicOutcomeHash": "a4763b3f683d95dbfdfdb9c24ca7e9c43ab2093faf2900f73b9a17fbf967de47",
+        "replay": {
+          "allSteps": true,
+          "allCommitStatesEventsAnswersAndBounded": true,
+          "allAnswerSourcesExhausted": true,
+          "terminal": true
+        },
+        "manifestSHA256": "a89f65857ae796d95279790e50b99b72870ac5c180440d8980679f47beb636e0"
+      },
+      "originalFixturePoliciesBudgetsSeedEqual": true,
+      "journalHashChainVerified": true,
+      "allCommitAndStepHashRowsEqualReplay": true,
+      "actualCommitBoundedEmpty": true,
+      "wholeCommand": {
+        "exitCode": 0,
+        "wallS": 26.746537709026597,
+        "cpuS": 27.214043999999998,
+        "groups": [
+          96968
+        ],
+        "survivors": [],
+        "timedOut": false
+      }
+    },
+    {
+      "ordinal": 19,
+      "originalInput": {
+        "filename": "input/game-19.original.jsonl",
+        "bytes": 1524400,
+        "sha256": "d468e4ba7a826f76b6f25edf76efca0c0215f81e240683b24083f78e823f3bf6"
+      },
+      "journal": {
+        "filename": "runtime/witness-game19-v1/game19.jsonl",
+        "bytes": 657584,
+        "sha256": "4193bcf411086c8f504405977ce9d859a55995e0cbe32a4caf3e749bd343852b"
+      },
+      "parentProof": {
+        "filename": "raw/witness-game19-parent-proof-v2.json",
+        "bytes": 2045,
+        "sha256": "f237c4581df7751cdbaa148bf3ed30912b811de104a2d25a8cb667a7d6424919"
+      },
+      "summary": {
+        "name": "game19",
+        "status": "completed",
+        "result": {
+          "kind": "victory",
+          "winner": "player",
+          "reason": "score"
+        },
+        "actions": 83,
+        "decisions": 153,
+        "commits": 84,
+        "steps": 418,
+        "invariantStepChecks": 418,
+        "replayInvariantStepChecks": 418,
+        "finalStateHash": "1c3c12ae01eb1d",
+        "publicOutcomeHash": "4149c719225995a3967fa1b3d87b9e400ba3a6f44a02383381976b6a4c81f9a1",
+        "replay": {
+          "allSteps": true,
+          "allCommitStatesEventsAnswersAndBounded": true,
+          "allAnswerSourcesExhausted": true,
+          "terminal": true
+        },
+        "manifestSHA256": "a89f65857ae796d95279790e50b99b72870ac5c180440d8980679f47beb636e0"
+      },
+      "originalFixturePoliciesBudgetsSeedEqual": true,
+      "journalHashChainVerified": true,
+      "allCommitAndStepHashRowsEqualReplay": true,
+      "actualCommitBoundedEmpty": true,
+      "wholeCommand": {
+        "exitCode": 0,
+        "wallS": 1390.9626072919928,
+        "cpuS": 1597.293582,
+        "groups": [
+          98925
+        ],
+        "survivors": [],
+        "timedOut": false
+      }
+    }
+  ],
+  "positiveGame19": {
+    "proof": {
+      "filename": "raw/game19-original-sequence-parent-proof.json",
+      "bytes": 12876,
+      "sha256": "ef337c6a5a52acbbb4413fc98f38518ed794d4027dd0d31ca922514c4a18706d"
+    },
+    "all84OldNewCommitFieldsEqual": [
+      "kind",
+      "action",
+      "stateHash",
+      "answers",
+      "events",
+      "bounded"
+    ],
+    "all83ActionsAndRecordedAnswersEqual": true,
+    "uuid": "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+    "physicalInstance": "i6",
+    "preservedActivations": 23,
+    "oldCheckpointQualification": {
+      "filename": "input/game19-checkpoint-qualification.json",
+      "bytes": 1548,
+      "sha256": "eaa288425545346a4de6da9d82026e8eb499f6f551afe7460b0d3e56fd3d6050"
+    },
+    "timingQualification": "Original19 reused138policy decisions and71commits, with15new decisions. Own19 computes153decisions from its full initial state. There is no matched fresh-game timing baseline and no speedup/regression claim."
+  },
+  "validation": [
+    {
+      "label": "red-policy",
+      "receipt": {
+        "filename": "raw/red-policy.json",
+        "bytes": 30013,
+        "sha256": "31bf96635de76e2d2b54b9cd4c292ba52582dd07260fb0f379f6ea5cc4579f65"
+      },
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "start": "2026-10-16T15:44:00.942995+00:00",
+      "end": "2026-10-16T15:44:14.168137+00:00",
+      "exitCode": 1,
+      "timedOut": false,
+      "wallS": 13.155219208041672,
+      "cpuS": 15.53486,
+      "hostLoadStart": [
+        2.9794921875,
+        3.1201171875,
+        5.33154296875
+      ],
+      "hostLoadEnd": [
+        3.3154296875,
+        3.1826171875,
+        5.32763671875
+      ],
+      "sysctlLoadStart": "{ 2.98 3.12 5.33 }",
+      "groups": [
+        75746
+      ],
+      "survivors": []
+    },
+    {
+      "label": "focused-policy",
+      "receipt": {
+        "filename": "raw/focused-policy.json",
+        "bytes": 24266,
+        "sha256": "806b5e8f660f0a5341b698d68515d60719246cfa11ae5f822aef5b53585ea242"
+      },
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "start": "2026-10-16T15:46:01.722774+00:00",
+      "end": "2026-10-16T15:46:12.731502+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 10.954226416011807,
+      "cpuS": 14.132062,
+      "hostLoadStart": [
+        3.189453125,
+        3.1123046875,
+        5.03271484375
+      ],
+      "hostLoadEnd": [
+        3.6015625,
+        3.2060546875,
+        5.04345703125
+      ],
+      "sysctlLoadStart": "{ 3.19 3.11 5.03 }",
+      "groups": [
+        78345
+      ],
+      "survivors": []
+    },
+    {
+      "label": "focused-policy-boundary",
+      "receipt": {
+        "filename": "raw/focused-policy-boundary.json",
+        "bytes": 27685,
+        "sha256": "10bacf7d0b40e296a43fd5c1ad5a46b60bd69450ac5e42d6fb4826e92248aec8"
+      },
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "start": "2026-10-16T15:49:55.677796+00:00",
+      "end": "2026-10-16T15:50:08.328558+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 12.578214790963102,
+      "cpuS": 14.321472,
+      "hostLoadStart": [
+        3.17333984375,
+        3.02294921875,
+        4.51904296875
+      ],
+      "hostLoadEnd": [
+        3.927734375,
+        3.18701171875,
+        4.55908203125
+      ],
+      "sysctlLoadStart": "{ 3.17 3.02 4.52 }",
+      "groups": [
+        83560
+      ],
+      "survivors": []
+    },
+    {
+      "label": "review",
+      "receipt": {
+        "filename": "raw/review.json",
+        "bytes": 100136,
+        "sha256": "60580fc42a96dc085a0b968d5611c59f57b53802feea2abf88ee895b3e1980db"
+      },
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-16T15:51:22.275525+00:00",
+      "end": "2026-10-16T15:52:00.570336+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 38.24154408299364,
+      "cpuS": 103.398117,
+      "hostLoadStart": [
+        2.84814453125,
+        3.02197265625,
+        4.37939453125
+      ],
+      "hostLoadEnd": [
+        3.79931640625,
+        3.2998046875,
+        4.4208984375
+      ],
+      "sysctlLoadStart": "{ 2.85 3.02 4.38 }",
+      "groups": [
+        85529
+      ],
+      "survivors": []
+    },
+    {
+      "label": "knip",
+      "receipt": {
+        "filename": "raw/knip.json",
+        "bytes": 10221,
+        "sha256": "bc5a9b6a36e4276f34a91383edd2fe8641d9b054a01f12057e541e1dff16e1f2"
+      },
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-16T15:52:09.625003+00:00",
+      "end": "2026-10-16T15:52:14.653288+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 4.97452633298235,
+      "cpuS": 5.418806,
+      "hostLoadStart": [
+        3.73486328125,
+        3.29443359375,
+        4.412109375
+      ],
+      "hostLoadEnd": [
+        3.595703125,
+        3.2724609375,
+        4.39794921875
+      ],
+      "sysctlLoadStart": "{ 3.73 3.29 4.41 }",
+      "groups": [
+        86726
+      ],
+      "survivors": []
+    },
+    {
+      "label": "adapter-typecheck",
+      "receipt": {
+        "filename": "raw/adapter-typecheck.json",
+        "bytes": 6875,
+        "sha256": "2bea6aa5a043f465122f76df1dd973de6bc757c4b60d2e0f26bc2739495b9a7c"
+      },
+      "command": [
+        "/opt/homebrew/bin/timeout",
+        "-s",
+        "TERM",
+        "-k",
+        "5s",
+        "115s",
+        "node",
+        "/Users/dthurn/dreamtides_web/.worktrees/greedy-cycle771-root/node_modules/typescript/bin/tsc",
+        "--project",
+        "/tmp/771-root/author/witness-tsconfig-v1.json"
+      ],
+      "start": "2026-10-16T15:58:46.038700+00:00",
+      "end": "2026-10-16T15:58:48.870470+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 2.779891583020799,
+      "cpuS": 4.853179999999999,
+      "hostLoadStart": [
+        2.45849609375,
+        2.81591796875,
+        3.751953125
+      ],
+      "hostLoadEnd": [
+        2.45849609375,
+        2.81591796875,
+        3.751953125
+      ],
+      "sysctlLoadStart": "{ 2.46 2.82 3.75 }",
+      "groups": [
+        95246
+      ],
+      "survivors": []
+    },
+    {
+      "label": "adapter-control",
+      "receipt": {
+        "filename": "raw/adapter-control.json",
+        "bytes": 11718,
+        "sha256": "5783fa01c2b100b5d284a4149be0aaafb138e54a4027f12783db6f26c7eca01f"
+      },
+      "command": [
+        "/opt/homebrew/bin/timeout",
+        "-s",
+        "TERM",
+        "-k",
+        "5s",
+        "115s",
+        "node",
+        "--import",
+        "/Users/dthurn/dreamtides_web/.worktrees/greedy-cycle771-root/node_modules/tsx/dist/loader.mjs",
+        "/tmp/771-root/author/witness-adapter-v1.mts",
+        "control",
+        "/tmp/771-root/author/witness-manifest-v1.json",
+        "a89f65857ae796d95279790e50b99b72870ac5c180440d8980679f47beb636e0",
+        "/tmp/771-root/author/adapter-control-v1"
+      ],
+      "start": "2026-10-16T15:59:05.634487+00:00",
+      "end": "2026-10-16T15:59:09.562045+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 3.8758601669687778,
+      "cpuS": 2.647196,
+      "hostLoadStart": [
+        2.5263671875,
+        2.81005859375,
+        3.7275390625
+      ],
+      "hostLoadEnd": [
+        2.5263671875,
+        2.81005859375,
+        3.7275390625
+      ],
+      "sysctlLoadStart": "{ 2.53 2.81 3.73 }",
+      "groups": [
+        95597
+      ],
+      "survivors": []
+    },
+    {
+      "label": "witness-game173",
+      "receipt": {
+        "filename": "raw/witness-game173.json",
+        "bytes": 56326,
+        "sha256": "6c7e0abb231ea6d23d1b9176acfb8db1f8f0c671942accb19d2d3350b76654b8"
+      },
+      "command": [
+        "/opt/homebrew/bin/timeout",
+        "-s",
+        "TERM",
+        "-k",
+        "5s",
+        "1790s",
+        "node",
+        "--import",
+        "/Users/dthurn/dreamtides_web/.worktrees/greedy-cycle771-root/node_modules/tsx/dist/loader.mjs",
+        "/tmp/771-root/author/witness-adapter-v1.mts",
+        "game173",
+        "/tmp/771-root/author/witness-manifest-v1.json",
+        "a89f65857ae796d95279790e50b99b72870ac5c180440d8980679f47beb636e0",
+        "/tmp/771-root/author/witness-game173-v1"
+      ],
+      "start": "2026-10-16T16:00:08.762053+00:00",
+      "end": "2026-10-16T16:00:35.560889+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 26.746537709026597,
+      "cpuS": 27.214043999999998,
+      "hostLoadStart": [
+        2.65673828125,
+        2.80908203125,
+        3.66357421875
+      ],
+      "hostLoadEnd": [
+        2.84619140625,
+        2.8408203125,
+        3.64599609375
+      ],
+      "sysctlLoadStart": "{ 2.66 2.81 3.66 }",
+      "groups": [
+        96968
+      ],
+      "survivors": []
+    },
+    {
+      "label": "witness-game19",
+      "receipt": {
+        "filename": "raw/witness-game19.json",
+        "bytes": 2737981,
+        "sha256": "fff048810a384b0f8efaf25a139773b22771f2cffc52c3d453d55723c4c83f18"
+      },
+      "command": [
+        "/opt/homebrew/bin/timeout",
+        "-s",
+        "TERM",
+        "-k",
+        "5s",
+        "1790s",
+        "node",
+        "--import",
+        "/Users/dthurn/dreamtides_web/.worktrees/greedy-cycle771-root/node_modules/tsx/dist/loader.mjs",
+        "/tmp/771-root/author/witness-adapter-v1.mts",
+        "game19",
+        "/tmp/771-root/author/witness-manifest-v1.json",
+        "a89f65857ae796d95279790e50b99b72870ac5c180440d8980679f47beb636e0",
+        "/tmp/771-root/author/witness-game19-v1"
+      ],
+      "start": "2026-10-16T16:01:40.044944+00:00",
+      "end": "2026-10-16T16:24:51.076836+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallS": 1390.9626072919928,
+      "cpuS": 1597.293582,
+      "hostLoadStart": [
+        2.46533203125,
+        2.71875,
+        3.54248046875
+      ],
+      "hostLoadEnd": [
+        3.41552734375,
+        3.4931640625,
+        3.51904296875
+      ],
+      "sysctlLoadStart": "{ 2.47 2.72 3.54 }",
+      "groups": [
+        98925
+      ],
+      "survivors": []
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 168,
+    "jsdomFiles": 0,
+    "cases": 16,
+    "suiteCases": 83,
+    "existingCases": 67
+  },
+  "epochs": [
+    {
+      "label": "red-policy",
+      "testSHA256": "f3c229a61b3fde316f1a4e6792f45524b94e96f1ec30a1293f843ca93b898525",
+      "runtimeSHA256": "8e6261d7c4afc8340e560ccfbf7f63fd9a8aee6cedbaf5f0b57c8294e5d5583b",
+      "result": "67passed/14failed. Both progress assertions reproduce the original window cycle; positional/fault expectations also fail. Two new activate-only point-positive expectations incorrectly rejected valid repeatLoop.",
+      "qualification": "Final positive uses regenerating figment identities and final response-fault fixture uses a visible board responder. Those strengthened fixtures were not run on original source."
+    },
+    {
+      "label": "focused-policy",
+      "result": "81passed",
+      "qualification": "This epoch used an invalid10-position front-rank fixture. It is not valid positional invariant evidence."
+    },
+    {
+      "label": "focused-policy-boundary",
+      "result": "83passed",
+      "qualification": "Final fixtures use FRONT_RANK_SIZE/BACK_RANK_SIZE and assert invariantViolations===[]; positive final-pass controls cover both sides. All67existing cases remain passing."
+    }
+  ],
+  "failurePaths": {
+    "midSimulationError": "Both sides: rejects error activation response continuation; rejects error activation boundary continuation.",
+    "nonSettlingContinuation": "Both sides: rejects non-settling activation response/boundary continuation; incomplete candidates absent from public trace.",
+    "finalPassBoundary": "Both sides: keeps productive activation settling on final allowed response pass, without an extra apply.",
+    "reloadRestart": "Public repeated request on fresh engine and input equality; recorded-answer replay of zero-utility movement. Real witnesses replay all steps/commits/answers.",
+    "invalidStaleSample": "Engine facade failures produce an excluded candidate and legal pass fallback; continuation faults cover the new boundary.",
+    "partialWrite": "Policy has no persistence writes. Adapter fsyncs durable journal rows and its deliberate failure control retains a committed creation prefix.",
+    "concurrentActors": "Policy contexts own their seed and immutable view; no shared persistence write or new concurrent state transition. Same-request/fresh-engine determinism and legal side-owned action checks apply."
+  },
+  "sourceReading": {
+    "account": {
+      "filename": "author/read-account-v2.json",
+      "bytes": 50522,
+      "sha256": "b104eeb143ef8dc0667b10349caf63526c42e328fb9c041d9fa072ee12a682e2"
+    },
+    "baseProof": {
+      "filename": "raw/preflight-source-proof.200ea5189fed8ccf0ca217b61aaef308b218eedfbc634e63c34efa4e287d58dc.json",
+      "bytes": 72714,
+      "sha256": "200ea5189fed8ccf0ca217b61aaef308b218eedfbc634e63c34efa4e287d58dc"
+    },
+    "qualification": "Read account binds actual72received bounded packets through adapter preparation. Later evidence proof/document reads remain in separate author completion receipts. Large original journals are structurally/partially projected, not claimed wholly semantically read."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl -n vm.loadavg one-minute value at review whole-command start15:51:22.275525Z",
+        "value": 2.85
+      },
+      "implementMin": {
+        "measuredFor": "Inclusive post-claim helper dispatch through commit wall window; research, coordination, waits and validation included. Not model CPU or productive edit time."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "red-policy",
+      "start": [
+        2.9794921875,
+        3.1201171875,
+        5.33154296875
+      ],
+      "end": [
+        3.3154296875,
+        3.1826171875,
+        5.32763671875
+      ],
+      "sysctlStart": "{ 2.98 3.12 5.33 }"
+    },
+    {
+      "label": "focused-policy",
+      "start": [
+        3.189453125,
+        3.1123046875,
+        5.03271484375
+      ],
+      "end": [
+        3.6015625,
+        3.2060546875,
+        5.04345703125
+      ],
+      "sysctlStart": "{ 3.19 3.11 5.03 }"
+    },
+    {
+      "label": "focused-policy-boundary",
+      "start": [
+        3.17333984375,
+        3.02294921875,
+        4.51904296875
+      ],
+      "end": [
+        3.927734375,
+        3.18701171875,
+        4.55908203125
+      ],
+      "sysctlStart": "{ 3.17 3.02 4.52 }"
+    },
+    {
+      "label": "review",
+      "start": [
+        2.84814453125,
+        3.02197265625,
+        4.37939453125
+      ],
+      "end": [
+        3.79931640625,
+        3.2998046875,
+        4.4208984375
+      ],
+      "sysctlStart": "{ 2.85 3.02 4.38 }"
+    },
+    {
+      "label": "knip",
+      "start": [
+        3.73486328125,
+        3.29443359375,
+        4.412109375
+      ],
+      "end": [
+        3.595703125,
+        3.2724609375,
+        4.39794921875
+      ],
+      "sysctlStart": "{ 3.73 3.29 4.41 }"
+    },
+    {
+      "label": "adapter-typecheck",
+      "start": [
+        2.45849609375,
+        2.81591796875,
+        3.751953125
+      ],
+      "end": [
+        2.45849609375,
+        2.81591796875,
+        3.751953125
+      ],
+      "sysctlStart": "{ 2.46 2.82 3.75 }"
+    },
+    {
+      "label": "adapter-control",
+      "start": [
+        2.5263671875,
+        2.81005859375,
+        3.7275390625
+      ],
+      "end": [
+        2.5263671875,
+        2.81005859375,
+        3.7275390625
+      ],
+      "sysctlStart": "{ 2.53 2.81 3.73 }"
+    },
+    {
+      "label": "witness-game173",
+      "start": [
+        2.65673828125,
+        2.80908203125,
+        3.66357421875
+      ],
+      "end": [
+        2.84619140625,
+        2.8408203125,
+        3.64599609375
+      ],
+      "sysctlStart": "{ 2.66 2.81 3.66 }"
+    },
+    {
+      "label": "witness-game19",
+      "start": [
+        2.46533203125,
+        2.71875,
+        3.54248046875
+      ],
+      "end": [
+        3.41552734375,
+        3.4931640625,
+        3.51904296875
+      ],
+      "sysctlStart": "{ 2.47 2.72 3.54 }"
+    }
+  ],
+  "resourceAccounting": {
+    "allNineCommandTreesAndCollectorsSettled": true,
+    "survivors": [],
+    "modelCPUTimeS": null,
+    "modelTimeQualification": "Unavailable. Whole-command OS CPU and inclusive helper elapsed wall time are separate recorded quantities.",
+    "serversBrowsers": []
+  },
+  "scopeQualifications": [
+    "Two completed original full-pool repair witnesses do not establish the parent10000-game phase gate.",
+    "No local review:full/200-game fuzz/perf:ab or browser QA is required for this bounded policy-only source change. Staged gate/release owns aggregate certification.",
+    "Review17files/6167tests and Knip passed on final runtime/test bytes. Final own evidence gets its own schema and whitespace checks; no repeated unchanged-code aggregate.",
+    "No pre-existing issue file: introduced fixture mistakes and normal restored local-art sandbox warnings are not pre-existing product findings.",
+    "Fresh fork-none core review, exact candidate authorization, certified promotion and cleanup belong to the parent."
+  ],
+  "finalEvidenceChecks": {
+    "schemaReceiptFilename": "schema.json",
+    "whitespaceReceiptFilename": "whitespace.json",
+    "qualification": "Run after these evidence bytes are written; retained separately to avoid self-reference."
+  },
+  "implementWindow": {
+    "start": "2026-10-16T15:30:04.658000+00:00",
+    "end": "2026-10-16T16:32:52.532402+00:00"
+  },
+  "implementMin": 62.798,
+  "implementWindowQualification": "Post-claim helper dispatch through the immediate commit boundary, within schema one-minute tolerance; inclusive elapsed wall time includes source preflight, coordination, waits and verification, not model CPU."
+}

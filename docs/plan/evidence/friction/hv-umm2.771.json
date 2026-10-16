@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.771",
+  "phase": 5,
+  "implementMin": 62.798,
+  "implementWindow": {
+    "start": "2026-10-16T15:30:04.658000+00:00",
+    "end": "2026-10-16T16:32:52.532402+00:00"
+  },
+  "localValidationS": {
+    "review": 38.24154408299364,
+    "knip": 4.97452633298235,
+    "focused": 12.578214790963102,
+    "adapterTypecheck": 2.779891583020799,
+    "adapterControl": 3.8758601669687778,
+    "witness173": 26.746537709026597,
+    "witness19": 1390.9626072919928
+  },
+  "hostLoad": 2.85,
+  "testDelta": {
+    "files": 0,
+    "lines": 168,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "full-pool-greedy-witness",
+      "minutes": 23.182710121533212,
+      "note": "Fresh original full-pool game 19 computed 153 policy decisions and completed in 23.18 minutes with normal budgets and full replay. Its old journal reused 138 decisions and 71 commits; these whole-command costs have no matched fresh timing baseline."
+    }
+  ]
+}
