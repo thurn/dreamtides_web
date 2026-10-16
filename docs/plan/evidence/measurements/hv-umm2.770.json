@@ -1,0 +1,3961 @@
+{
+  "bead": "hv-umm2.770",
+  "phase": 5,
+  "base": "526b0291bfde3b42ac1f72c294f497e37ece13e2",
+  "role": "fresh bounded source-qualified Sage cadence retrospective",
+  "claimStart": "2026-10-16T12:07:24+00:00",
+  "recordCutoff": "2026-10-16T12:30:48.825984+00:00",
+  "inclusiveMinutesAtCutoff": 23.4137664,
+  "clockScope": "Claim through real pre-Git cutoff includes root/helper reads, packet/dedup/native/source-custody preparation and recoveries, audit, qualification, report, review, Knip and queues. Final schema/whitespace and actual Git return/tail are additive ignored receipts; no future clock or clock-only amend.",
+  "sageReportSha256": "25cf47cdba885f69d9adc01db6d0a132feb669b3acdce8bfe7cb2aceee222ade",
+  "sageScopeSha256": "73b5b262ee99ef054035491efa5c4654be577525b6c168ec049c57066b156cef",
+  "requiredPacketSha256": "a7a6d96be68148d309e81a0618a2040da838791bbbaa38273a67d55bca533d04",
+  "coverage": [
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/AGENTS.md",
+      "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          145
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          145
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/README.md",
+      "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          334
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          334
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/workflow.md",
+      "sha256": "85be9842ab0d0057629d950ce6fd4ca416dd47850d828d331a4eb1fed6dafed5",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          408,
+          491
+        ],
+        [
+          1038,
+          1413
+        ],
+        [
+          1690,
+          1722
+        ],
+        [
+          1801,
+          1951
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          408,
+          491
+        ],
+        [
+          1038,
+          1413
+        ],
+        [
+          1690,
+          1722
+        ],
+        [
+          1801,
+          1951
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/decisions.md",
+      "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          520,
+          557
+        ],
+        [
+          696,
+          823
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          520,
+          557
+        ],
+        [
+          696,
+          823
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/metrics.md",
+      "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1207
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          1207
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction-tags.json",
+      "sha256": "0edbf5483483c7ea443f0316c98970b5c8f1f2ed3afbf557f1d2b4f8349cb266",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          852
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          852
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/introspection.jsonl",
+      "sha256": "924cd4162a7bf4667d12ffab539f6822627b2d75a403a21796241bf42d6db6b2",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          78
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          78
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-qgxa.json",
+      "sha256": "31d006517d4775b1b7b1497aef26f75c58434ab7198af33f16a116bb36a99fdc",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          21
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-qgxa.json",
+      "sha256": "cad83401fe0c32a6aeead511b39eb4fd852da6dd3c71060ba4968d34796b9a41",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          951
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/scopePacketSHA256",
+        "/localKeySummary/qualification",
+        "/grossClockQualification",
+        "/D19/qualification",
+        "/newCause/cause",
+        "/newCause/repairScope",
+        "/existingCauseHomes/heavyAdmission",
+        "/existingCauseHomes/reviewFindings"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-qgxa.md",
+      "sha256": "058e6c3b2bd5fc58fa5ed09f60d9d913e09a354b5b3ec13debb8f3cbb4cf759a",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-qgxa.bead.json",
+      "sha256": "8eb32c112066dc36bec8a3ef1f368a9f8c7d3fb57befa5b184df39ef359d67c2",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          62
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-qgxa.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.269.json",
+      "sha256": "52ff97d092aad37843818a72403ad389d227bd124ce92c650cac3b2c648e5341",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          54
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          54
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.269.json",
+      "sha256": "0b5b52c21540a6a7440e16818bb418f98fd04845d725d2d69984a5a410ebef4a",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          6284
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clockStatus",
+        "/timingQualification",
+        "/recipe6/literal/qualification",
+        "/recipe6/supplemental/qualification",
+        "/recipe7/qualification",
+        "/queueQualification",
+        "/commandReceipts/0/terminalProcessCensus/qualification",
+        "/commandReceipts/2/terminalProcessCensus/portQualification",
+        "/commandReceipts/3/terminalProcessCensus/qualification",
+        "/commandReceipts/5/terminalProcessCensus/qualification",
+        "/commandReceipts/8/terminalProcessCensus/qualification",
+        "/commandReceipts/13/terminalProcessCensus/custodyQualification",
+        "/commandReceipts/14/terminalProcessCensus/portQualification",
+        "/commandReceipts/15/terminalProcessCensus/portQualification",
+        "/commandReceipts/21/terminalProcessCensus/portQualification",
+        "/commandReceipts/27/terminalProcessCensus/qualification",
+        "/commandReceipts/44/terminalProcessCensus/portQualification",
+        "/commandReceipts/48/terminalProcessCensus/qualification",
+        "/commandReceipts/49/terminalProcessCensus/qualification",
+        "/commandReceipts/71/terminalProcessCensus/qualification",
+        "/commandReceipts/79/terminalProcessCensus/qualification",
+        "/commandReceipts/83/terminalProcessCensus/qualification",
+        "/commandReceipts/90/terminalProcessCensus/qualification",
+        "/commandReceipts/93/terminalProcessCensus/qualification",
+        "/commandReceipts/99/terminalProcessCensus/qualification",
+        "/browser/capturesActuallyViewed/0/qualification",
+        "/browser/capturesActuallyViewed/5/qualification",
+        "/browser/capturesActuallyViewed/11/qualification",
+        "/browser/capturesActuallyViewed/12/qualification",
+        "/browser/capturesActuallyViewed/13/qualification",
+        "/browser/capturesActuallyViewed/17/qualification",
+        "/browser/capturesActuallyViewed/27/qualification",
+        "/browser/capturesActuallyViewed/28/qualification",
+        "/browser/capturesActuallyViewed/30/qualification",
+        "/browser/capturesActuallyViewed/32/qualification",
+        "/browser/layoutFailure",
+        "/browser/emptyPanelRepairCurrent/sourceQualification",
+        "/reviews/coldVisual/status",
+        "/reviews/coldVisual/scope",
+        "/reviews/combinedSourceP3Historical/scope",
+        "/reviews/coreHistoricalP1/scope",
+        "/scope",
+        "/finalEvidenceChecks/frictionTriggers/scope",
+        "/finalEvidenceChecks/qualification",
+        "/retainedCheckpointQualification",
+        "/historicalPreIntegration/clockStatus",
+        "/historicalPreIntegration/reviews/coldVisual/status",
+        "/historicalPreIntegration/reviews/coldVisual/scope",
+        "/historicalPreIntegration/scope",
+        "/historicalPreIntegration/finalEvidenceChecks/schema/scope",
+        "/historicalPreIntegration/finalEvidenceChecks/frictionTriggers/scope",
+        "/historicalPreIntegration/finalEvidenceChecks/qualification",
+        "/historicalPreIntegration/retainedCheckpointQualification",
+        "/historicalPreIntegration/finalGitExternalReceipt/qualification",
+        "/historicalPreIntegration/qualification",
+        "/emptyPanelRepair/browserAudit/qualifications",
+        "/historicalPreReceiptBasisRepair/clockStatus",
+        "/historicalPreReceiptBasisRepair/scope",
+        "/historicalPreReceiptBasisRepair/finalGitExternalReceipt/qualification",
+        "/historicalPreReceiptBasisRepair/qualification",
+        "/receiptBasisRepair/productionPreviewDiffSHA256",
+        "/receiptBasisRepair/public300Audit/summary/qualification",
+        "/receiptBasisRepair/public300Audit/qualification",
+        "/receiptBasisRepair/browserAudit/qualification",
+        "/receiptBasisRepair/canceledObsoleteWait/qualification",
+        "/receiptBasisRepair/newCheckQueue/qualification",
+        "/receiptBasisRepair/retrospectiveDutyCurrentNative/status",
+        "/receiptBasisRepair/retrospectiveDutyCurrentNative/qualification",
+        "/finalGitExternalReceipt/qualification"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.269.md",
+      "sha256": "37ff47e9df31825baf61c2deb0d64d80e748992e4dec7a30dbff385f562a2e24",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          32
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.269.md",
+      "sha256": "9095547555e09bbd6374bcd3e7ca6461b79d435a2fb238c6a04ef0e558736073",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.269.bead.json",
+      "sha256": "9db83fe191d475d89e395bb54c760bde25aade5fcddef81e31f4d62b940acb5b",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          260
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.269.comments.json",
+      "sha256": "748f16f637cf0c0e5f5706c89415ec06b467ad7e4486cad617527a2237effa4e",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1",
+        "/2"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.273.json",
+      "sha256": "5d8e070e6d9e0610793ae800ac8b59ecab71631f52d66ba0501ab761beebb999",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          34
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          34
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.273.json",
+      "sha256": "8e292d4744a0c833afb70add907bd9b15d90e0568f30c92cfdd4d986cf22e34b",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          499
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clockQualification",
+        "/reviewScope",
+        "/recipe6/journeySupplement/qualification",
+        "/recipe7/qualification",
+        "/p8/qualification",
+        "/receiptIndexQualification",
+        "/frictionQualification",
+        "/validation",
+        "/hostLoadSamples",
+        "/schemaNormalization",
+        "/failedCompletedCommands"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.273.md",
+      "sha256": "cdf5667d18b6346c373edcb6fe129f6608e27cb83b5e9b8f256ef0e92f6a8f69",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          11
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          11
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.273.md",
+      "sha256": "0cc346d56891556c836ed4b42c834e35a4ffb03549abad6051f61ebd7b83221a",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.273.bead.json",
+      "sha256": "e5cd403cdfb96cbf583dfdca2445dd6aad9410c50b5ae2a96d604323d59a94c5",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          237
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.273.comments.json",
+      "sha256": "8765c903dd38e292719d5c3754919cbd71c988ef24ef422ca8b76ebb8898c52d",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          16
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.278.json",
+      "sha256": "f9dd7ad861461da91f203bd5acf2b3694a2b6a68b2f26a9e3d18f745203a3e08",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          53
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.278.json",
+      "sha256": "9027d3aed311ec2ed65c1bc78fe17f9ae47d6470ab1b4c8f1f3737cd680c016e",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          980
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/RSSQualification",
+        "/status",
+        "/inclusiveClock/qualification",
+        "/inclusiveClock/measurementScope",
+        "/preflight/redQualification",
+        "/visual/qualification",
+        "/frictionWindows/caller/scope",
+        "/frictionWindows/caller/qualification",
+        "/frictionWindows/operational/scope",
+        "/frictionWindows/operational/qualification",
+        "/frictionWindows/lease/qualification",
+        "/postQaValidation/fullReviewScope",
+        "/gitReturnEvidence/qualification",
+        "/checks",
+        "/hostLoadSamples",
+        "/canonical",
+        "/judged",
+        "/profiles"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.278.md",
+      "sha256": "0e03492fc2edae31dedbebd602e3baeb7057736df90093a07256352f0c3aaa83",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          45
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.278.md",
+      "sha256": "48a974ef6f3ca1a766044cb881ef95c6edff1caef36a26283018996ef0090122",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          43
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          43
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.278.bead.json",
+      "sha256": "87503d031f69b94fff54f029fb75867dbace3ed9209a31fd787885e9da87d867",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          218
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.278.comments.json",
+      "sha256": "0a5b0f0072e8a2ea3eabc217d3ab571e4e067d4d146b91bd40393738902e26b3",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          373
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/49",
+        "/50",
+        "/51",
+        "/52"
+      ],
+      "uncredited": [
+        "Earlier /0 through /48 detailed comment bodies are structurally parsed; their relevant incident/recovery outcomes are inspected in full 278 prose and enumerated selected qualification branches."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.283.json",
+      "sha256": "a010195e6853e709fcd03b1273fae8da4fbdb2b78e11853496bf58ce68406729",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          48
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.283.json",
+      "sha256": "2ef5c8f7184811d93c04a81e9c2269ae9c011ee411207382d5d8bbfa97575db0",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5812
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/scope",
+        "/finalTailQualification",
+        "/clockQualification",
+        "/parentSetup/qualification",
+        "/commands/heavy-queue-first0/qualification",
+        "/cpuQualification",
+        "/hostLoadSamples/0/scope",
+        "/sourceAudit/sourceFreeze/qualification",
+        "/paymentQualification",
+        "/fuzzQualification",
+        "/canonicalSweep/skipActorQualification",
+        "/canonicalSweep/v01Retained/qualification",
+        "/canonicalSweep/qualification",
+        "/d21/status",
+        "/contractJoin/qualification",
+        "/formatterPrerequisite/qualification",
+        "/cleanup/scope",
+        "/dependencyWindow/qualification"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.283.md",
+      "sha256": "f155ba1d7147aad83e32ecfab3221ca791e6c90307c6527c983e2a7bfb6a87c6",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.283.bead.json",
+      "sha256": "33fd1adcb10bb08a9639ceabe338695bfb932a9858e7c273dafb2ec730f2a00f",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          118
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.283.comments.json",
+      "sha256": "4a52ab6ca24aef7595a564e40cd186b122bd968cd03f7aa4973e18dc8ec61894",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1",
+        "/2"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.284.json",
+      "sha256": "4f7027eb8d8720729e657f29e96de0d5e6e776a8fdccb9382c03b5187814fcdd",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          28
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          28
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.284.json",
+      "sha256": "66ff53ce79cb1555c7fb265bb6dce471f0e644c2258943ffb55105136c99b0ac",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          239
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [
+        "entire metadata JSON (referenced raw/source/gameplay files not followed)"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.284.md",
+      "sha256": "49a6a1a7c2fb070abb8ca4371f94c1f302a2e871c3fdcb31cc06f80ed1438adf",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.284.bead.json",
+      "sha256": "3e33eaea7f2ae85a2dfe00948989ccd18ba28fe94409f54b0fa90161eab95748",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          103
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.284.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.285.json",
+      "sha256": "84f3736d15d64db56db08c9be7dec7b5da7e5cb29f41cb9b3d4eed5913b45a15",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          47
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.285.json",
+      "sha256": "1266f6ba2df552622d30a71f47e09edf134c646f6a83f1989ba28e0416771081",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          233
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [
+        "entire metadata JSON (referenced raw/source/gameplay files not followed)"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.285.md",
+      "sha256": "a471a8b63bfbc0be53ab57f13bd6da13c2411631ec4d242008a1ba443bdaedb8",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.285.bead.json",
+      "sha256": "c2bb91707918560a6fd354d16f87cd7c86640d007eb58d53c71ee066f5e173d4",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          118
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.285.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.288.json",
+      "sha256": "675d57bde875c0009ee6eddcb0bf7eedc3fded18771cce3aea37bac416776f3e",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          26
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          26
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.288.json",
+      "sha256": "b9f9a33cdd5b4a60e179ed79b5382fe264537cf0c7947f64053ecc39ec63cee9",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          241
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [
+        "entire metadata JSON (referenced raw/source/gameplay files not followed)"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.288.md",
+      "sha256": "e54869aa25a25023ef57ca34fb81eefe389e25246b849457020831190169feea",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          11
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          11
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.288.bead.json",
+      "sha256": "1ee53b1210934a174fc67a27a773d6203c56750aedf7f013eb40edb0547654f1",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          104
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.288.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.295.json",
+      "sha256": "fab23cdca499713cb5e60e0f76cac672d57f10eeaba414d1321c10c74811d7d3",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.295.json",
+      "sha256": "68836d0da9a44d5aa19cc94c7059b59a04d41b5175811de6a7bfa9a35f420697",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          232
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [
+        "entire metadata JSON (referenced raw/source/gameplay files not followed)"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.295.md",
+      "sha256": "f0c08f663b12d0d42adeae3212bf641d381914e347df5fe75a2a921ddeb30592",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          14
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          14
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.295.bead.json",
+      "sha256": "f0b932644ec948b7ce05e8548b297db7ac440101c65afae33d92599ee9c8cd43",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          161
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.295.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.45.json",
+      "sha256": "422edba97fb92b4a4ce5bdee67a49bfd1e37b6b81404cebf2cd7408a23d28488",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          21
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.45.json",
+      "sha256": "9a5fdc07dff6764ea4ef067088c384d4ba49753434fba7e48de691b26c680c58",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          165
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/coverage/qualification",
+        "/remainingObligations",
+        "/validationQualification"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.45.md",
+      "sha256": "281b145cfec3f25b29bf63ca5f68331fa1565043bb6ce0801f24bf04c0ff456b",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          23
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.45.bead.json",
+      "sha256": "b3d77d63dc17518f33398266bc172d52ab9771bb2722e2d857cbcb7be86e90e2",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          450
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.45.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.635.json",
+      "sha256": "09048bb9fb005ce355b5447436b332278ad18a682ef288d49509a7a6e0311845",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.635.json",
+      "sha256": "c4e857c6cbd33f9a3af6f632f49a8ca8a3761f8c83a13f8d40a16e3c25038aa6",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          740
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/qualification",
+        "/sensitivity/qualification",
+        "/sensitivity/reconstructionQualification",
+        "/failedAttempts/review01",
+        "/incident/firstFocusQualification",
+        "/sourceGuard/scope",
+        "/reviews",
+        "/validationScope",
+        "/accounting/scope",
+        "/finalPrecommitProof/status",
+        "/gitStatus",
+        "/failedAttempts",
+        "/incident",
+        "/incidentDisposition",
+        "/fiveFailures"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.635.md",
+      "sha256": "e5485aeb529a992d9cf32294619fd62401cbebff3997cf92ad9676df04e0c24a",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.635.bead.json",
+      "sha256": "75aeae2fa9756457efbbc789b817e15084e66a8af3b421876b772e4d62e175cf",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          121
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.635.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.636.json",
+      "sha256": "9435ee9311d68b375777b9415d1cf9b80d2393a991af75996b245cc47b688600",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          21
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.636.json",
+      "sha256": "388109d228e920fd2f0cf8ed509780a411bc5014ac3b61cd63db3d49657455a1",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          349
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/windowQualification",
+        "/proofQualification",
+        "/sourceReads/qualification",
+        "/authority/scope",
+        "/commandTimingQualification",
+        "/sensitivity/0/qualification",
+        "/failurePaths/recovery",
+        "/reviewScope",
+        "/resourceQualification",
+        "/cutoffHistory/0/qualification",
+        "/cutoffHistory/1/qualification",
+        "/deliveryWhitespaceRepair/qualification",
+        "/failurePaths",
+        "/sensitivity",
+        "/deliveryWhitespaceRepair"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.636.md",
+      "sha256": "c204e9dbe5d26bc2d9b17cb5d2c69987bbd4254e212fe7fdb1feb4e3d5e2c397",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          6
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.636.bead.json",
+      "sha256": "68585aecebde7cf78090d1557986b251810c09cb4f53c26690e8c666c4d0dc70",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          121
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.636.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.730.json",
+      "sha256": "919b550abb8e85a56a9652ec19b1c53a50a2962ca4fd5ea6ac321621096e5b37",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          68
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          68
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.730.json",
+      "sha256": "47beaa1d32af3c22f1226cc1f2345c51a8e657832e10283ca3fce372ad1f987f",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          3862
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/runtimeSourceHashes/src/session/journey-additional-recovery.contracts.ts",
+        "/historicalQualification/qualification",
+        "/heavy/budgetCompliance",
+        "/resourceSettlement/initialPsQualification",
+        "/originalValidationEpoch/runtimeSourceHashes/src/session/journey-additional-recovery.contracts.ts",
+        "/originalValidationEpoch/heavy/budgetCompliance",
+        "/originalValidationEpoch/resourceSettlement/qualification",
+        "/integration/sourceRecovery",
+        "/integration/manifestQualification",
+        "/integration/buildMetadataQualification",
+        "/integration/cpuQualification",
+        "/integration/clockRepair",
+        "/preClockIntegrationEpoch/integration/buildMetadataQualification",
+        "/preClockIntegrationEpoch/integration/cpuQualification",
+        "/preClockIntegrationEpoch/heavy/budgetCompliance",
+        "/importClockRepair/redAttribution/recovery-clock-red-01",
+        "/importClockRepair/redAttribution/subtype-clock-red-01",
+        "/importClockRepair/redAttribution/subtype-clock-red-02",
+        "/importClockRepair/failedIntermediateAttribution/review-01"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.730.md",
+      "sha256": "647c6c495c47f045050b7175b723515a8d137a38cecec16f1dd3745822854a10",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          79
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          79
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.730.md",
+      "sha256": "20de47cffadac52930a1c8eb4953f2ae2295e972a0249feb66ba7ce3a66dcb90",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.730.bead.json",
+      "sha256": "f2be01ed0851d86c4a681be7d3480f6cd5f4bf3326eef8762387c3b7f77e6447",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          176
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.730.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.755.json",
+      "sha256": "ccbca07711e372f6d2e6bb7974ebe39b584c7b316160af899f5688cd36fd5dc5",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          42
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.755.json",
+      "sha256": "6d796d7df6a85752a5265fb8889a9d90a67d41bc69e5c1bac270566d867dc65c",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          647
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clock/claimClock",
+        "/clock/firstWorkingSourceSnapshotWindow/qualification",
+        "/clock/firstSourceAuthorCommit/qualification",
+        "/sourceCustody/focusedTimingQualification",
+        "/sourceCustody/sourceReadQualification",
+        "/baseline/correctionQualification",
+        "/savedRelationRepair/qualification",
+        "/finalFull/d19Qualification",
+        "/reviewAndDelivery",
+        "/qualifications/implementWindowQualification",
+        "/qualifications/hostLoadQualification",
+        "/schemaNormalization/fields/hostLoad/qualification",
+        "/coreFailurePaths/tests/ordinaryError/qualification",
+        "/coreFailurePaths/tests/actors/qualification",
+        "/coreFailurePaths/tests/pendingCopy/qualification",
+        "/coreFailurePaths/tests/pendingMerged/qualification",
+        "/coreFailurePaths/tests/battlePrefix/qualification",
+        "/coreFailurePaths/tests/persistence/qualification",
+        "/coreFailurePaths/tests/resultAction/qualification",
+        "/integration/currentEpochQualification",
+        "/integration/candidateConflict/qualification",
+        "/integration/initializationEpochs/ack16/qualification",
+        "/integration/source/qualification",
+        "/integration/source/postFullFormatting/qualification",
+        "/integration/review/cycleQualification",
+        "/integration/full3/d19Qualification",
+        "/integration/ui/qualification",
+        "/integration/sourceReadScope",
+        "/integration/clock"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.755.md",
+      "sha256": "c1e68009f2ccd0f2d79e4bae3a3b84407b6a5aeae4174edf2a7bf189bd0fb6d0",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.755.bead.json",
+      "sha256": "156319d73bccf2cd95078c9aa56d0890e50b23e2f92fccc97d774fc56bf00f11",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.755.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.758.json",
+      "sha256": "786e68a533ebbb0ef9bbe8d8e8ae63df5c584709b582d708afa5b753ea896205",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          32
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.758.json",
+      "sha256": "0c05503b5c244797fcfb1525d975da0ce3dea6b1637b13fabb0a6d4c4d51c1cc",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          723
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/scope/reviewDisposition",
+        "/scope/qaEpochQualification",
+        "/validation/0/hostLoadScope",
+        "/cpuQualification",
+        "/remainingOutsideThisRepair"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.758.md",
+      "sha256": "8f19593bfe41746f28064e9ed51d8e08da90fca82967da9e3ed233c8a90cd550",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.758.bead.json",
+      "sha256": "3abbefd483d71f8286c66ede92db0051d803cc557e6de9039261452a6d2c06dd",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.758.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.760.json",
+      "sha256": "3be28e249b2df7adc29cd9400e32ee97449b244ff48bfae06e62756220f6b435",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.760.json",
+      "sha256": "077f20053dad8bd3a8fc7b462fdc03a5f0024cc926a2ccbb896787f2544154a7",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1120
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clockQualification",
+        "/sourceReadLedger/qualification",
+        "/adoption/semanticQualification",
+        "/failures/0/qualification",
+        "/failures/1/qualification",
+        "/failures/2/qualification",
+        "/failures/3/qualification",
+        "/readOnlyQualifications",
+        "/deliveryQualification",
+        "/parentSourceContextAdoption/qualification",
+        "/parentSourceContextAdoption/epochQualification",
+        "/heavySlot/qualification",
+        "/fullSuiteObservation/qualification",
+        "/postAdmissionReadQualifications/0/qualification",
+        "/postAdmissionReadQualifications/1/qualification",
+        "/coldCoreReview",
+        "/collectionQualification"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.760.md",
+      "sha256": "992a90f2f2903eb5fba5cafdbe4b09d926a7a104c38891c278ab853f98c60cd6",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          8
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.760.bead.json",
+      "sha256": "4c72488fc191ce5ac12113148bf6a2342646a32ba859aa6d80ff3ed987d5a502",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.760.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.761.json",
+      "sha256": "1235ff3a2c5b97457e15a1a23a1109ee3b080300941ad7207fbb1608902ced8f",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          32
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.761.json",
+      "sha256": "9aba11142c108ef6ec4dcd88bbdca9a6356839f2f7d815ddf46a43ededde3cff",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1266
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/implementationEndQualification",
+        "/sourceLedger/qualification",
+        "/runtimeRunner/cpuQualification",
+        "/failureAttempts/0/cause",
+        "/failureAttempts/1/cause",
+        "/failureAttempts/2/cause",
+        "/finalRealDiagnosticSummary/qualification",
+        "/requiredReview/status",
+        "/heavyFull/admissionQualification",
+        "/heavyFull/performanceQualification",
+        "/fullSuiteSyntheticResources/qualification",
+        "/helperDispatchQualification",
+        "/readDeliveryQualification"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.761.md",
+      "sha256": "995991d1043c25cc4bfe8f817df9544bb279179b8ac265a56313407d4cc78520",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.761.bead.json",
+      "sha256": "28a90ce7814b21a25ad63cbdedf8212ad3b83a3c2535043f5e9004034cde9549",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.761.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.762.json",
+      "sha256": "7de5c9802d3a0af37ed0092fd6ab5bb2c6fabce75f19d2a76030ff48694b8ebb",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.762.json",
+      "sha256": "0cc31f49024f9976043b13930c3d19c6d916ea096dfbcc1a51332043711630a8",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          353
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/sourceMatrix/qualification",
+        "/rootCustody/qualification",
+        "/scope",
+        "/implementationClock/qualification",
+        "/hostLoadQualification"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.762.md",
+      "sha256": "0a545dcf309804e317e0b015dc99e8dabb8d789be657b6e036c365da1ddcb08a",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.762.bead.json",
+      "sha256": "71bcde832621b499f99d7491d3e027a5e21066ce2822104cb542afb11d0a47d1",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          90
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.762.comments.json",
+      "sha256": "4b16139839ca3fc12b3cce66607501978a731ef2a035ad44b50b0e220724b1c2",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1",
+        "/2",
+        "/3"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.763.json",
+      "sha256": "39f54888346949c717235c7a55f26090d976815e9c72a0021a2db2675597c1a1",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.763.json",
+      "sha256": "1e75b231f35821a4bda88fdac4c3685a12030f1daf1c31e462867b12486bb498",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1156
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/browser/v01/qualification",
+        "/browser/v02/qualification",
+        "/window/inclusiveScope"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.763.md",
+      "sha256": "dc14d6212b4d08ff08181a558a838edd9d5bd3bb3394d574bc45f23291622d7f",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          29
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          29
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.763.md",
+      "sha256": "d0ebb788708a91293217d3c5e598cde572d00ca2868583f6e667422a3fcdcb3a",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.763.bead.json",
+      "sha256": "72feae5bd73d74ac76939fe964447e757e064be25bcd404b30c6f338f3fd9496",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          63
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.763.comments.json",
+      "sha256": "7d663690c277298192d62b69f244f652fcbc917dd22f6f3976092bd1de19ac1b",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          37
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1",
+        "/2",
+        "/3",
+        "/4"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.764.json",
+      "sha256": "0660b37b34a498427438985342b786432c26faf06673e77893214ec0e3dc2e64",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.764.json",
+      "sha256": "89ddbfe80bbcc60447c709033c5e8b929def2683cd70e800275e561f41392657",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          181
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clockQualification",
+        "/commandCPUQualification",
+        "/sourceEvidence/stage1/qualification",
+        "/sourceEvidence/additional23/qualification",
+        "/sourceEvidence/catalogQualification",
+        "/validationEvidence/testScopes/fullreview",
+        "/validationEvidence/exactSourceQualification",
+        "/acceptanceMap/failure",
+        "/validationEvidence",
+        "/resources",
+        "/review"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.764.bead.json",
+      "sha256": "c468860b8cd51e202c6fb4c1f513ae58fd840bfd4acd4e6cfd6f68a4ea911633",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          58
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.764.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.765.json",
+      "sha256": "e5c4d8c95a4ea7b90656c7e7361e3e80dd50f3faa054f17036587783e9af9d69",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          26
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          26
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.765.json",
+      "sha256": "2ec0840e735d11b951a72786d63c44d7db7f9c2ef541de26296b4c3426154305",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          478
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clockScope",
+        "/validation/review",
+        "/fuzz/requestIntervalQualification",
+        "/reviewRouting",
+        "/fuzz",
+        "/browser"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.765.md",
+      "sha256": "b5b288e8f87ba5e369cac74aff8a7cb1be37f696833882573f8f95157312c9a1",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          15
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.765.md",
+      "sha256": "32386dac2e38070b0429c7a27d881be89668acb3d7c89b92794e58d20618cc9c",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.765.bead.json",
+      "sha256": "3c33f849eb531670f85991a7456f00989fcc404a0906ba935c429929b19ee0e6",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          59
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.765.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.766.json",
+      "sha256": "b44d848bc1282fc4505c4ea141d287209eb3218008c61408a0c5a70cab6c18e2",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.766.json",
+      "sha256": "6ce03de8a5323df99a3c7a8d57e1b082a24fd006c75f5372d24eba1668a3f4c3",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          448
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/scope/coreReview",
+        "/clock/scope",
+        "/nativeOperationMapping/staticCountQualification",
+        "/fullValidation/admissionQualification",
+        "/fullValidation/budget",
+        "/sourceCustodyAdditional/reviewIntermediateSnapshot"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.766.md",
+      "sha256": "333e74e371496bf28f2cc5b83bc61cab6edaa0dcd76f07004e614fd38ab0274b",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          17
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.766.bead.json",
+      "sha256": "a540e2c434925b7c2f01c28a52f71512c1d5efd6a725c4efe09a20a671d75591",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.766.comments.json",
+      "sha256": "2b821c5542ef0a2e99dd8e1fd77c4f483adc80e476fe2f8706baa1e69dc16aea",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1",
+        "/2",
+        "/3"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.767.json",
+      "sha256": "e58751bad808dbcfe3af98a3a57fdf5ece04831b12b919718388b8e11809e228",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          22
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.767.json",
+      "sha256": "8a76c939bb73f9adf4a84ad5ff2b564bf47d241b055afa8adcee88d08d390072",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/modelCpuQualification",
+        "/sourceEpochQualification",
+        "/validation/0/childCpuS/scope",
+        "/resourceQualification",
+        "/commitWindowQualification",
+        "/notRun",
+        "/pending",
+        "/failurePaths"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.767.bead.json",
+      "sha256": "5ae572884a33ad0074a1f4518d4036015d310237d2c1270500bee6a528609352",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.767.comments.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.768.json",
+      "sha256": "ea5191962ffd7de05b0d84123b7b7714bb116b766be9e175d1020786edfac901",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          20
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          20
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.768.json",
+      "sha256": "3051877b994a15840f26b3d0181869d555c6e04ddafaad8811cfded737e3099a",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1246
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/clockScope"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.768.md",
+      "sha256": "8d719afd13df4157cac5deb21a169b5909bb271d2a5ae36895ca955e940c272c",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          124
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          124
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.768.bead.json",
+      "sha256": "1526ebc5481c823333e4ba49c0b1da799c21d5d8c3c202d356b45c14d3134006",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          59
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.768.comments.json",
+      "sha256": "b5e23ddc190c578b481043322cd3f99216636b511938e3169476331ad6724310",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          9
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/friction/hv-umm2.769.json",
+      "sha256": "de0f9c6bd10313154738f933855784cc69af5af3ecc1148765639d07b042fc42",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          33
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          33
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.769.json",
+      "sha256": "03aec02940fb350ecc692980e3859c8b53123837392f35d07548a3fe421e461d",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          349
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/cause/qualification",
+        "/recordedDecision/responseBudget",
+        "/benchmark/qualification",
+        "/validationScope/reviewFull",
+        "/validationScope/coreReview",
+        "/failurePaths/recovery",
+        "/source",
+        "/recordedDecision",
+        "/benchmark",
+        "/validation",
+        "/failurePaths"
+      ],
+      "uncredited": [
+        "Nonselected per-cell, gameplay, capture, manifest/hash inventories and raw referenced artifacts; see measurement-uncredited-pointers.json. Whole-file semantic reading is not claimed."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/measurements/hv-umm2.769.md",
+      "sha256": "c728e5ba0e4f4ce71e0d256a470aaf309bee54f1143787b70542ca11da8e9f33",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          47
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/docs/plan/evidence/pre-existing/hv-umm2.769.md",
+      "sha256": "db057b09dedc07abdee9ed8db20add3a903ddebcb8b52d1c3f9246e3afd7c0da",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.769.bead.json",
+      "sha256": "fc5f5ffa0b950014fd4f3feaf74a9690a1fe2cb860131ed80015ba3a8f92daf0",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          40
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/id",
+        "/title",
+        "/status",
+        "/started_at",
+        "/closed_at",
+        "/metadata",
+        "/labels",
+        "/close_reason"
+      ],
+      "uncredited": [
+        "Unselected authoring proposals/gameplay descriptions, other note intervals and unrelated parent dependencySummary bodies."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native/hv-umm2.769.comments.json",
+      "sha256": "0b6772de7799cd21c100c9e3c640f1797951a13fa329362a44901434257b6a2b",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          16
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/0",
+        "/1"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-dispatch-friction-v02.stdout",
+      "sha256": "6bf903727a5ca9067d8370160440558df283a39f618cabd54cf306032ed0aebd",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1283
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/cadence or /report/cadence",
+        "/triggers or /report/triggers disposition/status/tag membership",
+        "/unknownMeasurements or /report/unknownMeasurements exact count+cohort exclusion"
+      ],
+      "uncredited": [
+        "Unrelated phase records used only for disposition/cadence boundaries; redundant text rendering not separately semantically read."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-delivery-projection-v01.json",
+      "sha256": "1bc86db76a56df496ca70d6172116c09be37734420faf30e5f4d25f6c7319b61",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          5616
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/rows/*/bead",
+        "/rows/*/source",
+        "/rows/*/testedOid",
+        "/rows/*/parent",
+        "/rows/*/candidate",
+        "/rows/*/certificate",
+        "/rows/*/generation",
+        "/rows/*/buildset",
+        "/rows/*/cleanup"
+      ],
+      "uncredited": []
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-history.stdout",
+      "sha256": "c6e1dc416ec2ecde3b5c185937bbd729d3d22301638cbd4ff8e09315590b9f31",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          19850
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "all500 event kind/sequence/UTC/payload state/source/tested/outcome/status fields",
+        "all release/promote/advance/push/queue transitions",
+        "all retry/failure/cancellation/terminal_reason branches"
+      ],
+      "uncredited": [
+        "History outside sequences34463\u201334962 unavailable; no broader absence inference. Repeated unchanged remote-pull payloads analyzed structurally by kind/outcome/source."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-parent-comments.stdout",
+      "sha256": "b50555cc4bfbe228d03a8e13bc0c747e2a6a375eb45cba6c2506f0a6ecc6920e",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          177
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          177
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-comments.stdout",
+      "sha256": "08a5089e9c40657c2186a5ba99bbf0f4742d11ed45507161d9a742db199c4734",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          9
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          9
+        ]
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-duty-admitted.stdout",
+      "sha256": "98f20215fe496480e51cd7eaf6d465dfc04d9b0ce34fc82cbb5bedf5bbbc4175",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "complete duty result identity/status/time/metadata and result cardinality"
+      ],
+      "uncredited": [
+        "Repeated native task prose already full-read at input148."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/root-duty-intended.stdout",
+      "sha256": "98f20215fe496480e51cd7eaf6d465dfc04d9b0ce34fc82cbb5bedf5bbbc4175",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "complete duty result identity/status/time/metadata and result cardinality"
+      ],
+      "uncredited": [
+        "Repeated native task prose already full-read at input148."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/creator-cadence-duty-after.json",
+      "sha256": "c0c25b5d7b8ccce508adb63de5000eae8a3557f09074223295485d451a0cf824",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          39
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "complete duty result identity/status/time/metadata and result cardinality"
+      ],
+      "uncredited": [
+        "Repeated native task prose already full-read at input148."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/creator-cadence-duty-before-final.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "complete duty result identity/status/time/metadata and result cardinality"
+      ],
+      "uncredited": [
+        "Repeated native task prose already full-read at input148."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/creator-filing-project-unfinished.json",
+      "sha256": "549e3f5a676ac4b1fc776526f24d2c6f12ed9291ae896e815f7e3a3c1153a573",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          4386
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "all23 unfinished IDs/titles/status/metadata for duty/Areas dedup context"
+      ],
+      "uncredited": [
+        "Unrelated full native descriptions/notes/dependency bodies; this is dedup context only."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/creator-friction-report.json",
+      "sha256": "81102c8c6dd3d1392192e25deeaa28050debaa7fdd06f683260dd7e2fcb55053",
+      "mode": "complete structural parse plus enumerated semantic workflow selections",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          1280
+        ]
+      ],
+      "wholeFileSemanticClaim": false,
+      "selectedSemantic": [
+        "/cadence or /report/cadence",
+        "/triggers or /report/triggers disposition/status/tag membership",
+        "/unknownMeasurements or /report/unknownMeasurements exact count+cohort exclusion"
+      ],
+      "uncredited": [
+        "Unrelated phase records used only for disposition/cadence boundaries; redundant text rendering not separately semantically read."
+      ]
+    },
+    {
+      "path": "/tmp/root770-20261016/sage-inputs-v01/native-task.json",
+      "sha256": "8bd632b0954f2062cbe3bf4e3daf993359f29211c6765b62e269cdcbe20f51cd",
+      "mode": "full semantic requested text ranges",
+      "completion": "complete in declared mode",
+      "requestedRanges": [
+        [
+          1,
+          13
+        ]
+      ],
+      "wholeFileSemanticClaim": true,
+      "selectedSemantic": [],
+      "uncredited": [],
+      "actualRanges": [
+        [
+          1,
+          13
+        ]
+      ]
+    }
+  ],
+  "coverageLimits": "All required input structures and65 requested text-body scopes are complete. Structured semantic coverage is the explicit selection below, not a claim to every nested gameplay/native note body or external raw artifact. Nonselected fields remain structural-only/uncredited.",
+  "readRecovery": [
+    "Combined normative return clipped README120\u2013157; exact range reread.",
+    "Large inventory/timing/native-tail displays clipped; inventory used structurally, every required full body and cited native closing paragraph recovered through bounded rereads.",
+    "453-command table was clipped: full-row semantic coverage is NOT claimed. Exact complete negative/status and qualified per-input aggregate projection was inspected; specific final/relevant commands read separately.",
+    "measurement-read-batches.json has33 prepared batches; only batch0 was actually returned/read. Batches1\u201332 are preparation only and not semantic credit.",
+    "full-read-batches.json8/8 and narrative-selected-batches.json4/4 were returned completely; preparation alone is never credited."
+  ],
+  "optionalEvidence": [
+    {
+      "path": "/tmp/root770-20261016/root-delivery-audit-v01.json",
+      "sha256": "1b7d9bef548f9296e66c934763be582361760b86df2cae10b38c32278d95d88d",
+      "mode": "complete structural parse + exact source/status/timing selections; full metadata semantic read for285 receipt",
+      "semanticLimits": "root audit changed-path inventory used structurally for17code/8docs classification; sums independently recalculated from required native buildsets. Release all8step/source/certificate/timing inspected; referenced raw logs not read. 285 full2753-byte receipt read."
+    },
+    {
+      "path": "/tmp/root770-20261016/release-summary-v01.json",
+      "sha256": "1fed605f0941dd25645fe7b02b6d1f6f9bc2ee9e95924960eafbc6ed0269da34",
+      "mode": "complete structural parse + exact source/status/timing selections; full metadata semantic read for285 receipt",
+      "semanticLimits": "root audit changed-path inventory used structurally for17code/8docs classification; sums independently recalculated from required native buildsets. Release all8step/source/certificate/timing inspected; referenced raw logs not read. 285 full2753-byte receipt read."
+    },
+    {
+      "path": "/tmp/root770-20261016/285-actual-commit-result-v01.json",
+      "sha256": "9cc16981aaf47db5f21e7647007e60597f5fefc7d862906ff25334e77e78324b",
+      "mode": "complete structural parse + exact source/status/timing selections; full metadata semantic read for285 receipt",
+      "semanticLimits": "root audit changed-path inventory used structurally for17code/8docs classification; sums independently recalculated from required native buildsets. Release all8step/source/certificate/timing inspected; referenced raw logs not read. 285 full2753-byte receipt read."
+    }
+  ],
+  "ownerDisposition": {
+    "at": "2026-10-16T12:29:40.725878+00:00",
+    "head": "526b0291bfde3b42ac1f72c294f497e37ece13e2",
+    "required149HashAndModeScopeVerified": true,
+    "fullTextScopes": 65,
+    "structuredScopes": 84,
+    "repositoryGitBindings": 87,
+    "scopeLimits": "All required input structures and65 requested text-body scopes are complete. Structured semantic coverage is the explicit selection below, not a claim to every nested gameplay/native note body or external raw artifact. Nonselected fields remain structural-only/uncredited.",
+    "readRecovery": [
+      "Combined normative return clipped README120\u2013157; exact range reread.",
+      "Large inventory/timing/native-tail displays clipped; inventory used structurally, every required full body and cited native closing paragraph recovered through bounded rereads.",
+      "453-command table was clipped: full-row semantic coverage is NOT claimed. Exact complete negative/status and qualified per-input aggregate projection was inspected; specific final/relevant commands read separately.",
+      "measurement-read-batches.json has33 prepared batches; only batch0 was actually returned/read. Batches1\u201332 are preparation only and not semantic credit.",
+      "full-read-batches.json8/8 and narrative-selected-batches.json4/4 were returned completely; preparation alone is never credited."
+    ],
+    "newImprovementBeads": [],
+    "budgetRevision": null,
+    "newDispositionLines": [],
+    "cohort": [
+      "hv-qgxa",
+      "hv-umm2.269",
+      "hv-umm2.273",
+      "hv-umm2.278",
+      "hv-umm2.283",
+      "hv-umm2.284",
+      "hv-umm2.285",
+      "hv-umm2.288",
+      "hv-umm2.295",
+      "hv-umm2.45",
+      "hv-umm2.635",
+      "hv-umm2.636",
+      "hv-umm2.730",
+      "hv-umm2.755",
+      "hv-umm2.758",
+      "hv-umm2.760",
+      "hv-umm2.761",
+      "hv-umm2.762",
+      "hv-umm2.763",
+      "hv-umm2.764",
+      "hv-umm2.765",
+      "hv-umm2.766",
+      "hv-umm2.767",
+      "hv-umm2.768",
+      "hv-umm2.769"
+    ],
+    "final25DeliveryProof": "root-delivery-audit-v01.json",
+    "d44SumQualification": "root-gate-metric-qualification-v02.json",
+    "release8Proof": "release-summary-v01.json",
+    "traceabilityException": {
+      "bead": "hv-umm2.278",
+      "tested": "fe54300fdb1c9c173799e20720890978e7f526cb",
+      "trailerPresent": false,
+      "association": "Exact native final candidate+certificate+staging ancestry; explicit finalphase inventory membership retained."
+    },
+    "clock285Correction": "Original cutoff preserved; verifiedactual13635.795445s/227.263257417min, external515.966998s tail included in retrospective own record.",
+    "sourceProtection": "6045regular payloads plus2directory symlinks=6047Gitentries; onlyadditive introspection line and ownnew evidence writable.",
+    "retrospectiveLineSha256": "d5954332cbf89e5dca6b5fd187329d3353e278a96cf6c0a21bdd57d2ceb9a8d7",
+    "parentGate": "hv-umm2.46 retains full original acceptance and laterfinal5.10 retrospective; current526b fullsuite/release success unclaimed."
+  },
+  "gateMetrics": {
+    "at": "2026-10-16T12:18:56.024112+00:00",
+    "priorAuditSha256": "1b7d9bef548f9296e66c934763be582361760b86df2cae10b38c32278d95d88d",
+    "priorAuditQualification": "v01gateMs/gateMedianMs/codeGateMedianMs/docsGateMedianMs label only the review-gate STEP. D44gate cost below is sum of dependency+review-gate steps, not end-to-end latency or comparable-load benchmark.",
+    "rows": [
+      {
+        "bead": "hv-qgxa",
+        "codeOrTest": false,
+        "reviewGateStepMs": 18815,
+        "sumGateStepMs": 23909,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5094
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 18815
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.269",
+        "codeOrTest": true,
+        "reviewGateStepMs": 109967,
+        "sumGateStepMs": 115155,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5188
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 109967
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.273",
+        "codeOrTest": true,
+        "reviewGateStepMs": 103924,
+        "sumGateStepMs": 108431,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4507
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 103924
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.278",
+        "codeOrTest": true,
+        "reviewGateStepMs": 51734,
+        "sumGateStepMs": 56553,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4819
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 51734
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.283",
+        "codeOrTest": false,
+        "reviewGateStepMs": 18247,
+        "sumGateStepMs": 23611,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5364
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 18247
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.284",
+        "codeOrTest": false,
+        "reviewGateStepMs": 19962,
+        "sumGateStepMs": 24839,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4877
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 19962
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.285",
+        "codeOrTest": false,
+        "reviewGateStepMs": 18101,
+        "sumGateStepMs": 22678,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4577
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 18101
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.288",
+        "codeOrTest": false,
+        "reviewGateStepMs": 17500,
+        "sumGateStepMs": 22328,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4828
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 17500
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.295",
+        "codeOrTest": true,
+        "reviewGateStepMs": 21770,
+        "sumGateStepMs": 26392,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4622
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 21770
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.45",
+        "codeOrTest": false,
+        "reviewGateStepMs": 19011,
+        "sumGateStepMs": 23758,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4747
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 19011
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.635",
+        "codeOrTest": true,
+        "reviewGateStepMs": 19830,
+        "sumGateStepMs": 25409,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5579
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 19830
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.636",
+        "codeOrTest": true,
+        "reviewGateStepMs": 19214,
+        "sumGateStepMs": 24031,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4817
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 19214
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.730",
+        "codeOrTest": true,
+        "reviewGateStepMs": 105289,
+        "sumGateStepMs": 109980,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4691
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 105289
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.755",
+        "codeOrTest": true,
+        "reviewGateStepMs": 109687,
+        "sumGateStepMs": 114751,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5064
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 109687
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.758",
+        "codeOrTest": true,
+        "reviewGateStepMs": 109069,
+        "sumGateStepMs": 113870,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4801
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 109069
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.760",
+        "codeOrTest": true,
+        "reviewGateStepMs": 20838,
+        "sumGateStepMs": 25691,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4853
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 20838
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.761",
+        "codeOrTest": true,
+        "reviewGateStepMs": 21862,
+        "sumGateStepMs": 26896,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5034
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 21862
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.762",
+        "codeOrTest": false,
+        "reviewGateStepMs": 17512,
+        "sumGateStepMs": 22215,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4703
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 17512
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.763",
+        "codeOrTest": true,
+        "reviewGateStepMs": 20431,
+        "sumGateStepMs": 25060,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4629
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 20431
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.764",
+        "codeOrTest": true,
+        "reviewGateStepMs": 109268,
+        "sumGateStepMs": 114006,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4738
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 109268
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.765",
+        "codeOrTest": true,
+        "reviewGateStepMs": 106234,
+        "sumGateStepMs": 110905,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4671
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 106234
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.766",
+        "codeOrTest": true,
+        "reviewGateStepMs": 32305,
+        "sumGateStepMs": 36876,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4571
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 32305
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.767",
+        "codeOrTest": true,
+        "reviewGateStepMs": 23888,
+        "sumGateStepMs": 28665,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4777
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 23888
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.768",
+        "codeOrTest": false,
+        "reviewGateStepMs": 18040,
+        "sumGateStepMs": 23088,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 5048
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 18040
+          }
+        ]
+      },
+      {
+        "bead": "hv-umm2.769",
+        "codeOrTest": true,
+        "reviewGateStepMs": 101334,
+        "sumGateStepMs": 105946,
+        "steps": [
+          {
+            "name": "dependencies",
+            "elapsedMs": 4612
+          },
+          {
+            "name": "review-gate",
+            "elapsedMs": 101334
+          }
+        ]
+      }
+    ],
+    "sumGateMedianMs": 26392,
+    "codeSumGateMedianMs": 56553,
+    "docsSumGateMedianMs": 23349.5
+  },
+  "releaseMetrics": {
+    "passedExecutions": 8,
+    "elapsedMedianS": 1122.7655,
+    "sourceScope": "Frozen500events only; source tips through23ede4, current526b unmeasured."
+  },
+  "clock285Actual": {
+    "originalClaimStartUTC": "2026-10-15T22:15:16.972786+00:00",
+    "recordedCutoffUTC": "2026-10-16T01:53:56.801233+00:00",
+    "actualCommitEndpointUTC": "2026-10-16T02:02:32.768231+00:00",
+    "claimToCommitS": 13635.795445,
+    "cutoffToCommitS": 515.966998
+  },
+  "checks": {
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-retrospective770",
+      "start": "2026-10-16T12:30:02.390824+00:00",
+      "end": "2026-10-16T12:30:02.704191+00:00",
+      "exit": 0,
+      "wallSeconds": 0.3132844170322642,
+      "pid": 65682,
+      "pgid": 65682,
+      "load": "{ 3.68 4.40 4.49 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 399337598288208,
+      "endedMonotonicNs": 399337911535208,
+      "cpuUserSeconds": 0.200122,
+      "cpuSystemSeconds": 0.11147299999999999
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-retrospective770",
+      "start": "2026-10-16T12:30:03.087958+00:00",
+      "end": "2026-10-16T12:30:10.626953+00:00",
+      "exit": 0,
+      "wallSeconds": 7.538875332975294,
+      "pid": 65812,
+      "pgid": 65812,
+      "load": "{ 4.03 4.46 4.51 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 399338295420708,
+      "endedMonotonicNs": 399345834242541,
+      "cpuUserSeconds": 5.117324,
+      "cpuSystemSeconds": 2.056993
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "cases": 0,
+    "jsdomFiles": 0
+  },
+  "preExistingIssues": [
+    "Final278commit missingBead trailer; native exact source/certificate association retained."
+  ],
+  "preparationNegatives": {
+    "frictionUnsupportedJson": "First dispatch-friction exit2 from unsupported--json; exported read API command succeeds asv02; no repository defect or CI failure.",
+    "sourceAssociation": "Initial parser drafts mishandled Gittrailer newline then missing278trailer; distinct readonly draft namespacesv01\u2013v03 retained. Finalv04 matches25.",
+    "packetV01": "Rangeend1960 exceededactual1951, corrected immutablev02before dispatch; no clippedread credit."
+  }
+}

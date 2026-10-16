@@ -1,0 +1,3 @@
+# hv-umm2.770: source traceability
+
+At certified526b0291bfde3b42ac1f72c294f497e37ece13e2, final278source/tested `fe54300fdb1c9c173799e20720890978e7f526cb` has no `Bead:` trailer. Exact native finalcandidate `01a141f4-a7ba-78c3-aeec-9f1366b966dc`, promotedcertificate `01a141f5-8f6c-7922-ae0e-60e6c508f037`, source/tested parent/tree/voters andstagingancestry establish the association. Finalphase source enumeration includes this explicit exactcommit membership alongside trailer-selected commits. Gate46nativecoordination retains this qualification. This single case establishes no recurring source-tool defect or missing implementation; promoted source remains immutable.
