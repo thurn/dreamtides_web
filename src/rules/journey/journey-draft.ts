@@ -42,6 +42,16 @@ const FORM_TYPES: Readonly<Record<TransfigurationType, true>> = Object.freeze({
 });
 
 /** Register a bounded Draft clause and diagnose its successful applications. */
+const canonicalCallbacks = new WeakMap<JourneyModifierDefinition["afterJourneyEvent"], { readonly id: DreamsignId; readonly effect: JourneyModifierDefinition["journeyDraft"] }>();
+function remember(definition: JourneyModifierDefinition): JourneyModifierDefinition {
+  canonicalCallbacks.set(definition.afterJourneyEvent, { id: definition.dreamsignId, effect: definition.journeyDraft });
+  return definition;
+}
+export function canonicalJourneyDraft(definition: JourneyModifierDefinition): boolean {
+  if (Object.values(Object.getOwnPropertyDescriptors(definition)).some(field => !("value" in field))) return false;
+  const origin = canonicalCallbacks.get(definition.afterJourneyEvent);
+  return origin !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === origin.id && Object.getOwnPropertyDescriptor(definition, "journeyDraft")?.value === origin.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyDraft", "afterJourneyEvent"].includes(key));
+}
 export function journeyDraft(dreamsignId: DreamsignId, descriptor: JourneyDraftEffect): JourneyModifierDefinition {
   const effect = Object.freeze({ ...descriptor });
   if (effect.kind === "firstDraftEventTransfiguration") {
@@ -51,7 +61,7 @@ export function journeyDraft(dreamsignId: DreamsignId, descriptor: JourneyDraftE
     effect.minimumEssence !== undefined && (!Number.isFinite(effect.minimumEssence) || effect.minimumEssence < 0)) {
     throw new RangeError("Invalid journeyDraft catalog arithmetic.");
   }
-  return {
+  return remember({
     dreamsignId,
     journeyDraft: effect,
     afterJourneyEvent({ before, journey, eventType, lookup }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
@@ -86,5 +96,5 @@ export function journeyDraft(dreamsignId: DreamsignId, descriptor: JourneyDraftE
         target: { siteIds: [draft.activeSiteId] },
       };
     },
-  };
+  });
 }

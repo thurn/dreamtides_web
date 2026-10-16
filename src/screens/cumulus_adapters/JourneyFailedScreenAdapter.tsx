@@ -7,9 +7,14 @@ import { buildJourneyFailedView } from "./journey-failed-view-model";
 export function JourneyFailedScreenAdapter() {
   const { state, mutations } = useJourney();
   const summary = state.failureSummary;
+  const draw = state.journeyDraw;
   const view = useMemo(() => buildJourneyFailedView(state), [state]);
 
   useEffect(() => {
+    if (draw !== undefined) {
+      logEventOnce(`journey_draw_screen_shown:${state.runId ?? "unscoped"}:${String(draw.committedSeq)}:${String(draw.cause.ordinal)}`, "journey_failed_screen_shown", { result: draw.result, reason: "mandatory_journey_loop", cause: draw.cause, committedSeq: draw.committedSeq });
+      return;
+    }
     if (summary === null) return;
     logEventOnce(
       `journey_failed_screen_shown:${summary.battleId}`,
@@ -25,16 +30,21 @@ export function JourneyFailedScreenAdapter() {
         enemyScore: summary.enemyScore,
       },
     );
-  }, [summary]);
+  }, [draw, state.runId, summary]);
 
   const handleNewJourney = useCallback(() => {
+    if (draw !== undefined) {
+      logEvent("journey_failed_start_new_run", { result: draw.result, cause: draw.cause, committedSeq: draw.committedSeq });
+      mutations.resetJourney();
+      return;
+    }
     if (summary === null) return;
     logEvent("journey_failed_start_new_run", {
       battleId: summary.battleId,
       result: summary.result,
     });
     mutations.resetJourney();
-  }, [mutations, summary]);
+  }, [draw, mutations, summary]);
 
   return <JourneyFailedScreen view={view} onNewJourney={handleNewJourney} />;
 }

@@ -1,3 +1,4 @@
+import "./journey-loop-view.contracts";
 import { testAvatarId } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";

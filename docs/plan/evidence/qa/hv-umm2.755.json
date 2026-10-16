@@ -1,0 +1,402 @@
+{
+  "bead": "hv-umm2.755",
+  "sourceManifestSha256": "d874eec187ab198780da08b40792750c8a470f42e962177ca0b63b95f8f421d7",
+  "resultWorkflow": {
+    "run": "qa-result-7",
+    "exit": 0,
+    "seconds": 52.89311566599645,
+    "invocation": "run-xLwYty",
+    "mcpIdentity": {
+      "pid": 17427,
+      "slot": 1,
+      "port": 5274,
+      "mcpSessionId": "fdd5946d-8509-4585-a9e6-ee703fdeb890",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "caps": [],
+    "assertions": [
+      "Existing public file-input change listener/parser/LOAD imports actual retained reducer-produced files.",
+      "Normal and tutorial-history draw scope/reason, no battle or tutorial surface.",
+      "Actual current game ID preserved across a reload after removing only the developer goto query.",
+      "Desktop1440x900/mobile390x844 root/content/button geometry, no horizontal overflow, button hit targets and actual interaction.",
+      "Four actual exported JSON files preserve journeyDraw, seed, full deck record/history, committed failureSummary, completionLevel and essence.",
+      "Actual roundtrip reimport and New Journey reach existing Avatar selection; reset own fields are inspected by public unit contracts.",
+      "Temporary file-input click adapter restores exact original prototype descriptor/identity, removes its own key, and leaves no hidden input."
+    ],
+    "roundtrips": [
+      {
+        "kind": "normal",
+        "viewport": "desktop",
+        "gameId": "bg3ve2",
+        "filename": "755-normal-roundtrip-desktop.json",
+        "sha256": "8e7137a80f455295ee354dd88526ef83bcb87ac4511f5fb92121ca5a7e67df07",
+        "mismatches": [],
+        "button": {
+          "x": 651.25,
+          "y": 808,
+          "width": 137.5,
+          "height": 42,
+          "hit": true
+        },
+        "overflow": false
+      },
+      {
+        "kind": "tutorial",
+        "viewport": "desktop",
+        "gameId": "7qxejo",
+        "filename": "755-tutorial-roundtrip-desktop.json",
+        "sha256": "973e51c9506a1bae462e434260211bde77650c6447785f37e1d59d13a8c5a7b1",
+        "mismatches": [],
+        "button": {
+          "x": 651.25,
+          "y": 808,
+          "width": 137.5,
+          "height": 42,
+          "hit": true
+        },
+        "overflow": false
+      },
+      {
+        "kind": "normal",
+        "viewport": "mobile",
+        "gameId": "grhj2f",
+        "filename": "755-normal-roundtrip-mobile.json",
+        "sha256": "63d36b020a447f0af05c9975c8ce7ecad4066b2a1834d158beb76f009d165155",
+        "mismatches": [],
+        "button": {
+          "x": 126.25,
+          "y": 752,
+          "width": 137.5,
+          "height": 42,
+          "hit": true
+        },
+        "overflow": false
+      },
+      {
+        "kind": "tutorial",
+        "viewport": "mobile",
+        "gameId": "cas8ks",
+        "filename": "755-tutorial-roundtrip-mobile.json",
+        "sha256": "ae3c454ec28279e6d84891ba43201e22ad9ae492ee0b963600991be9920142ad",
+        "mismatches": [],
+        "button": {
+          "x": 126.25,
+          "y": 752,
+          "width": 137.5,
+          "height": 42,
+          "hit": true
+        },
+        "overflow": false
+      }
+    ]
+  },
+  "finalPortableCheck": {
+    "run": "qa-final-portable-validation",
+    "exit": 0,
+    "seconds": 2.634334583999589,
+    "result": "qa-final-portable-validation.result.json",
+    "qualification": "Final-source public parse/default-registry LOAD/whole-fold decode of the same epoch1-produced files; no terminal regeneration."
+  },
+  "legacyControl": {
+    "run": "qa-source-export-2",
+    "exit": 0,
+    "seconds": 8.140000584011432,
+    "invocation": "run-12InmZ",
+    "mcpIdentity": {
+      "pid": 93892,
+      "slot": 1,
+      "port": 5274,
+      "mcpSessionId": "e5f28e8b-f3b9-42a5-8ae6-98dc80e41284",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "caps": [],
+    "qualification": "Existing journeyfailed developer scene demonstrates legacy battle-scope presentation/download only; actual END_BATTLE bookkeeping is covered by public node contracts."
+  },
+  "producer": {
+    "scriptSha256": "ddf1882254c912351b7010a1f149d880aa31c7625b6bab4c6c6069a089e71494",
+    "scriptTiming": "Executed script bytes retained after run; no prelaunch hash claim.",
+    "compactProvenance": "producer-provenance-compact.json",
+    "compactSha256": "c29951fd45a410053e86496217397c5430875560a9ca7495accf000892b3218e",
+    "rawBytes": 118850838,
+    "rawSha256": "474f119abbf6d44783a12775e87adc9af0996e7a50a5eb7bab38df75dbdebfe0",
+    "rawLocation": "Gitignored author-resume1/qa-generated/producer-provenance.json",
+    "qualification": "Actual default loaded content/public reducer/custom closed test registry; public tutorial begin/battle host. The journey skeleton/site/source are a declared synthetic operation fixture. No live production Glow activation or whole tutorial walkthrough."
+  },
+  "limitations": [
+    "Native OS chooser/modal painting is untested; the scoped adapter drives the actual existing DOM file input and its change/parser/LOAD path.",
+    "Browser reset inspects the rendered Avatar route, not private fold state. Public unit contracts inspect cleared owned fields.",
+    "Sourceexport1 exact MCP identity was not retained; no backfill is claimed. Sourceexport2 retains actual final-source identity.",
+    "Normal/tutorial portable files carry a historical synthetic QA failure summary; real committed battle reward/completion/failure guarantees use actual END_BATTLE contracts."
+  ],
+  "failedResultAttempts": [
+    {
+      "run": "qa-result-1",
+      "exit": 1,
+      "seconds": 6.0881169170024805,
+      "qualification": "VM filesystem-import setup failure before navigation; zero behavioral credit."
+    },
+    {
+      "run": "qa-result-2",
+      "exit": 2,
+      "seconds": 12.067205125000328,
+      "qualification": "MCP native file-chooser modal transport/setup failure; no complete workflow credit."
+    },
+    {
+      "run": "qa-result-3",
+      "exit": 1,
+      "seconds": 8.569103167043068,
+      "qualification": "Import and empty Caps succeeded, then VM URL-global setup failed."
+    },
+    {
+      "run": "qa-result-4",
+      "exit": 1,
+      "seconds": 26.96851366601186,
+      "qualification": "Normal desktop same-game reload/geometry/Caps/download passed; dialog setup failed before reimport."
+    },
+    {
+      "run": "qa-result-5",
+      "exit": 1,
+      "seconds": 37.194802000012714,
+      "qualification": "Load dialog auto-closes through existing DebugScreen onClose; redundant Close setup timed out."
+    },
+    {
+      "run": "qa-result-6",
+      "exit": 1,
+      "seconds": 32.84021120896796,
+      "qualification": "Normal import/reload/roundtrip/reimport/Caps and actual RESET applied; retained goto query masked Avatar rendering through the existing QA gate."
+    }
+  ],
+  "preExisting": "pre-existing/hv-umm2.755.md",
+  "authorVisualInspection": [
+    "755-normal-journey-draw-desktop.png",
+    "755-normal-journey-draw-mobile.png",
+    "755-tutorial-journey-draw-mobile.png",
+    "755-normal-new-journey-desktop.png",
+    "755-tutorial-new-journey-mobile.png",
+    "755-legacy-journey-failure-desktop.png"
+  ],
+  "visualConclusion": "Inspected assembled screens are legible and unclipped; fresh independent core/holistic visual review remains parent-owned.",
+  "captures": [
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-normal-journey-initial-desktop.png",
+      "sha256": "ebbf5019d7395e2d819e5b4e2e49a76be4ec8886755f0d094314269385e80de3",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-normal-journey-draw-desktop.png",
+      "sha256": "88007d0270d059178bd40e701629df85417b39ce0e10bc48979d0de85b84ea4a",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-normal-new-journey-desktop.png",
+      "sha256": "1c6316eaeae5474566f06566f9f6d818bbfd0e236aed3f098511b86aea12249a",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-tutorial-journey-initial-desktop.png",
+      "sha256": "c1bfd832eed83266568872cde5212fa8288a3f005cf287e126e28ac66896a0cb",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-tutorial-journey-draw-desktop.png",
+      "sha256": "6e869eff644859b4b19d416e0653b7d275344b7bd45ce822360ed49b953436f5",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-tutorial-new-journey-desktop.png",
+      "sha256": "1c6316eaeae5474566f06566f9f6d818bbfd0e236aed3f098511b86aea12249a",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-normal-journey-initial-mobile.png",
+      "sha256": "9cdf7ad0c615ca80d488f31629104bdb2bf3f1acdeb7a11c5b8eebc8eb29e985",
+      "cssViewport": [
+        390,
+        844
+      ],
+      "pngPixels": [
+        780,
+        1688
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-normal-journey-draw-mobile.png",
+      "sha256": "f5a50b55695d6f736013400083a1490d2435f7c6f52031ba7c04187da263afea",
+      "cssViewport": [
+        390,
+        844
+      ],
+      "pngPixels": [
+        780,
+        1688
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-normal-new-journey-mobile.png",
+      "sha256": "be29464b29d3e9fedd8b8c31d3ecb3bcac036c817eb1170f4aaf145a0d2c2534",
+      "cssViewport": [
+        390,
+        844
+      ],
+      "pngPixels": [
+        780,
+        1688
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-tutorial-journey-initial-mobile.png",
+      "sha256": "469d005c63a514e08cab013c241b4baac04aa448059d5088cb837db5e659cadd",
+      "cssViewport": [
+        390,
+        844
+      ],
+      "pngPixels": [
+        780,
+        1688
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-tutorial-journey-draw-mobile.png",
+      "sha256": "6dd3b0fdee1fce57ac56e0f79ebf8192f645c3857fb082f51f09c98bbae2e0d2",
+      "cssViewport": [
+        390,
+        844
+      ],
+      "pngPixels": [
+        780,
+        1688
+      ]
+    },
+    {
+      "invocation": "run-xLwYty",
+      "filename": "755-tutorial-new-journey-mobile.png",
+      "sha256": "7b13a2decd7c436f1d51ce2a4715ce454b628b1b04a5f091bec6b5d8dd1bf521",
+      "cssViewport": [
+        390,
+        844
+      ],
+      "pngPixels": [
+        780,
+        1688
+      ]
+    },
+    {
+      "invocation": "run-12InmZ",
+      "filename": "755-legacy-journey-failure-desktop.png",
+      "sha256": "efd8e7a22fa463584a81e641414df0f47a1f6937d5d69f66388fb4f153f47ce0",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "pngPixels": [
+        2880,
+        1800
+      ]
+    }
+  ],
+  "resourceSettlement": [
+    "final-review-full-2.settlement.json",
+    "qa-final-portable-validation.settlement.json",
+    "qa-result-7.settlement.json",
+    "qa-source-export-2.settlement.json"
+  ],
+  "artifactDirectory": "artifacts/qa/hv-umm2.755/author-resume1",
+  "integration": {
+    "base": "40853f15527679dc47f8cd4d04222d3c98ee214a",
+    "fullSourceManifest": "20516131cc08e00352a03d4d0fbd3512f68c24b277ba5fa2518a0159ac9ca415",
+    "browserObservedSource": "0140dd642312f1d96b8d4aa0881537f7ca95a289",
+    "browserReuseQualification": "Draw adapter/view/screen/App bytes match OLD0140; actual current front-door phase journey priority and terminal/reset URL branches match. Context/action additions concern opening selection. Portable default-registry LOAD/decode passes. No changed tested terminal/reset branch was found, so no additional browser run is claimed.",
+    "currentPortableValidation": {
+      "at": "2026-10-16T00:57:23.814048+00:00",
+      "resultSha256": "b97abc5681010afd64a87ec8aaf8e307c6806e96c22f1bb13cacad05de4bb35a",
+      "files": [
+        {
+          "kind": "normal",
+          "sha256": "d78a503c864bfe68e7f95778648bedaf28568c8a5ff7f6c8c810f44e028dcb47",
+          "load": "applied",
+          "decode": "accepted",
+          "binding": null
+        },
+        {
+          "kind": "tutorial",
+          "sha256": "8fe09d778311023cf928e553c6ef70f72a32edf35286e3765bada27b0cfae77a",
+          "load": "applied",
+          "decode": "accepted",
+          "binding": {
+            "battleId": "tutorial-battle:event:1:0",
+            "mode": "tutorial",
+            "tutorialRunId": "event:1"
+          }
+        }
+      ],
+      "source5959AfterMismatches": [],
+      "resource": {
+        "pidAbsent": true,
+        "pgAbsent": true
+      },
+      "browserResourcesHeld": false
+    },
+    "currentPortableReceipt": "integration1/combined-portable-validation.run.json",
+    "currentPortableSeconds": 2.5611403330112807,
+    "finalSourceBrowserExecution": false,
+    "nativePickerPainting": "UNTESTED",
+    "liveProductionGlowActivation": "UNTESTED",
+    "resetFieldQualification": "Own unit contracts assert clearing journeyDraw/pendingJourneyLoop; OLD0140 browser7 observes actual DOM reset route. Current reset body is byte-identical and current public contracts pass.",
+    "resources": "Current portable PID/PG59853 and full3 command/guard/lock groups are settled; no additional browser lease/context/server acquired."
+  }
+}

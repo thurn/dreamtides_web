@@ -20,7 +20,7 @@ import {
 import type { AvatarId } from "../../types/identifiers";
 
 export interface JourneyFailedStatView {
-  id: "battles" | "round" | "playerScore" | "enemyScore";
+  id: "battles" | "round" | "playerScore" | "enemyScore" | "deckEntries";
   value: number;
 }
 
@@ -29,12 +29,11 @@ export interface JourneyFailedAvatarView extends AvatarVisual {
   ability: string;
 }
 
-export interface JourneyFailedView {
-  result: JourneyFailureBattleResult;
-  reason: JourneyFailureReason;
+export type JourneyFailedView = {
   avatar: JourneyFailedAvatarView | null;
   stats: readonly JourneyFailedStatView[];
-}
+} & ({ kind?: "battle"; result: JourneyFailureBattleResult; reason: JourneyFailureReason } |
+  { kind: "journey"; result: "draw"; reason: "mandatory_journey_loop" });
 
 export interface JourneyFailedScreenProps {
   view: JourneyFailedView | null;
@@ -42,12 +41,13 @@ export interface JourneyFailedScreenProps {
 }
 
 /** The eyebrow naming how the lost battle ended. */
-const FAILURE_REASON_LABELS: Readonly<Record<JourneyFailureReason, string>> = {
+const FAILURE_REASON_LABELS: Readonly<Record<JourneyFailureReason | "mandatory_journey_loop", string>> = {
   score_target_reached: "Score Threshold Reached",
   win_condition_met: "Win Condition Met",
   turn_limit_reached: "Turn Limit Reached",
   forced_result: "Forced Result",
   unbreakable_loop: "Endless Loop",
+  mandatory_journey_loop: "Endless Journey",
 };
 
 /** The sparse Cumulus journey-failure summary, paired with the victory surface. */
@@ -62,6 +62,7 @@ export function JourneyFailedScreen({
       {...(view === null
         ? {}
         : {
+            "data-journey-failed-scope": view.kind ?? "battle",
             "data-journey-failed-screen": view.result,
             "data-journey-failed-reason": view.reason,
           })}
@@ -145,7 +146,7 @@ export function JourneyFailedScreen({
                     color: token("--text-primary"),
                   }}
                 >
-                  {view.result === "defeat" ? "Journey Ended" : "Stalemate"}
+                  {view.kind === "journey" ? "Journey Drawn" : view.result === "defeat" ? "Journey Ended" : "Stalemate"}
                 </h1>
                 <p
                   style={{
@@ -154,7 +155,9 @@ export function JourneyFailedScreen({
                     color: token("--text-muted"),
                   }}
                 >
-                  {view.result === "defeat"
+                  {view.kind === "journey"
+                    ? "Your journey has reached an endless path."
+                    : view.result === "defeat"
                     ? "Your journey ends here."
                     : "Neither side could claim the dream."}
                 </p>
@@ -280,7 +283,9 @@ function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
       >
         {stat.id === "battles"
           ? "Battles Won"
-          : stat.id === "round"
+          : stat.id === "deckEntries"
+            ? "Cards In Deck"
+            : stat.id === "round"
             ? "Final Round"
             : stat.id === "playerScore"
               ? "Your Score"

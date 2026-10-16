@@ -1,3 +1,12 @@
+import "./journey-loop-before-battle.contracts";
+import "./journey-loop-acquisition.contracts";
+import "./journey-loop-battle-outcomes.contracts";
+import "./journey-loop-state-controls.contracts";
+import "./journey-loop-source-controls.contracts";
+import "./journey-loop.contracts";
+import "./journey-loop-prefix.contracts";
+import "./journey-loop-controls.contracts";
+import "./journey-loop-binding.contracts";
 import "./journey-transfiguration-record-controls.contracts";
 import "./journey-transfiguration-record.contracts";
 import "./journey-transfiguration-record-ingress.contracts";

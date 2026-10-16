@@ -122,10 +122,20 @@ export function finishJourneyAcquisition(journey: JourneyState, copySources: rea
   return finishTypeRemapAcquisition(finishStarterAcquisition(finishJourneyOnGain(journey, sources, seq, binding, lookup), starterSources, seq, binding), typeRemapSources, seq, binding);
 }
 
+const canonicalCallbacks = new WeakMap<JourneyModifierDefinition["afterJourneyEvent"], { readonly id: DreamsignId; readonly effect: JourneyModifierDefinition["journeyOnGain"] }>();
+function remember(definition: JourneyModifierDefinition): JourneyModifierDefinition {
+  canonicalCallbacks.set(definition.afterJourneyEvent, { id: definition.dreamsignId, effect: definition.journeyOnGain });
+  return definition;
+}
+export function canonicalJourneyOnGain(definition: JourneyModifierDefinition): boolean {
+  if (Object.values(Object.getOwnPropertyDescriptors(definition)).some(field => !("value" in field))) return false;
+  const origin = canonicalCallbacks.get(definition.afterJourneyEvent);
+  return origin !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === origin.id && Object.getOwnPropertyDescriptor(definition, "journeyOnGain")?.value === origin.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyOnGain", "afterJourneyEvent"].includes(key));
+}
 export function journeyOnGain(dreamsignId: DreamsignId, descriptor: JourneyOnGainEffect): JourneyModifierDefinition {
   if (descriptor.kind === "addNightmaresOnGain" ? !index(descriptor.count) || descriptor.count < 1 : descriptor.kind === "afterBattleDreamsignChoice" ? !index(descriptor.offerCount) || descriptor.offerCount < 1 : descriptor.kind === "randomTransfigurationOnGain" ? !index(descriptor.numerator) || !index(descriptor.denominator) || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator : descriptor.kind === "purgeStarterOnGain" ? !index(descriptor.maxCount) || descriptor.maxCount < 1 : descriptor.kind === "perfectStarterOnGain" ? descriptor.transfiguration !== "Perfected" : descriptor.kind !== "chooseOpeningHandEventOnGain" && descriptor.kind !== "copyOwnedDreamsignOnGain" && descriptor.kind !== "typeRemapOnGain" && descriptor.kind !== "deckSubtypeOnGain") throw new RangeError("Invalid journeyOnGain descriptor.");
   const effect = Object.freeze({ ...descriptor });
-  return { dreamsignId, journeyOnGain: effect, afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, random }) {
+  return remember({ dreamsignId, journeyOnGain: effect, afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, random }) {
     if (effect.kind !== "afterBattleDreamsignChoice" || eventType !== "END_BATTLE" || siteId === null || before.screen.type !== "site" || before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;
     const drawIndices: number[] = [];
     const offer = prepareAfterBattleDreamsignOffer(journey, effect.offerCount, () => { const draw = random(); drawIndices.push(draw.drawIndex); return draw.value; });
@@ -133,7 +143,7 @@ export function journeyOnGain(dreamsignId: DreamsignId, descriptor: JourneyOnGai
     const next = appendAfterBattleSource({ ...journey, remainingDreamsignPool: [...offer.remainingDreamsignPool] }, siteId, { kind: "dreamsign", dreamsignId, heldIndex, earnedSeq: seq, offerCount: effect.offerCount, offeredDreamsigns: offer.offeredDreamsigns, remainingPoolIds: offer.remainingDreamsignPool });
     if (next === null) throw new Error("Earned Dreamsign continuation is unavailable.");
     return { journey: next, before: { permissions: afterBattleChoice(journey.screen)?.sources.length ?? 0 }, after: { permissions: afterBattleChoice(next.screen)!.sources.length, offered: offer.offeredDreamsigns.length }, target: { siteIds: [siteId], offeredDreamsignIds: offer.offeredDreamsigns.map((sign) => sign.id), drawIndices } };
-  } };
+  } });
 }
 
 export function validJourneyDreamsignScreen(screen: unknown, journey: JourneyState, registry: JourneyModifierRegistry): boolean {

@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.755",
+  "phase": 5,
+  "implementMin": 432.31318655,
+  "implementWindow": {
+    "start": "2026-10-15T17:59:21.482000+00:00",
+    "end": "2026-10-16T01:11:40.273193+00:00"
+  },
+  "localValidationS": {
+    "focused": 12.630666416021995,
+    "review": 52.497987624956295,
+    "knip": 3.892603957967367,
+    "full": 122.90095995896263,
+    "browser": 52.89311566599645,
+    "finalPortableImport": 2.5611403330112807,
+    "finalLegacyControl": 8.140000584011432
+  },
+  "hostLoad": 3.59033203125,
+  "testDelta": {
+    "files": 14,
+    "lines": 1130,
+    "jsdomFiles": 0,
+    "newTestEntrypoints": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-lock-admission",
+      "minutes": 21.236596318066585,
+      "note": "Sum of three actual heavy admission plus launcher-startup intervals, including original full1/full2 and combined full3. Kernel lock wait was not sampled separately; no browser resources held. Every interval stays in the original inclusive author clock."
+    },
+    {
+      "tag": "qa-harness-compatibility",
+      "minutes": 2.0621325347339736,
+      "note": "Actual execution wall time of six retained failed result-QA attempts, excluding time between attempts and CPU. Causes: VM filesystem import, native chooser modal transport, VM URL global, dialog closure assumptions, and the existing retained-goto reset gate. Partial successful assertions remain qualified in the QA record."
+    },
+    {
+      "tag": "combined-initialization-checks",
+      "minutes": 1.0222062645838983,
+      "note": "Measured execution-only wall time of failed combined focused1 import setup and review1 cycle/lint epochs. Between-check source audit, repair and coordination wall time and productive CPU are UNKNOWN; successful checks and all waits also remain in the continuous author clock."
+    }
+  ]
+}

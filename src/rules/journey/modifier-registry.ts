@@ -1,3 +1,4 @@
+import { earnJourneyLoops, settleJourneyLoops, validateJourneyLoopRegistry } from "./journey-mandatory-loop";
 import mug, { journeyBattleInitEffect as mugBattleEffect, journeyOnGainEffect as mugGainEffect } from "../../content/dreamsigns/spotted-mug-069c6e8f";
 import { journeyBattleInit } from "./journey-battle-init";
 import { journeySubtypeBefore, resolveJourneySubtype } from "./journey-subtype";
@@ -63,6 +64,7 @@ import twistedHerbs, { journeyOnGainEffect as twistedHerbsEffect } from "../../c
  * battle DSL. Administrative intents never reach a hook.
  */
 export interface JourneyModifierDefinition {
+  readonly journeyLoopContinuation?: { readonly kind: "mandatoryOriginalTransfiguration"; readonly cardId: CardId };
   readonly journeyBattleInit?: import("../../types/journey").JourneyBattleInitEffect;
   readonly journeyDuplication?: import("../../types/journey").JourneyDuplicationEffect;
   readonly journeyShop?: import("../../types/journey").JourneyShopEffect;
@@ -119,12 +121,13 @@ export interface JourneyModifierDefinition {
 }
 
 export interface JourneyModifierRegistry {
-  resumeSubtype(input: { journey: JourneyState; payload: Record<string, unknown>; battle: BattleFoldState | null; seq: number; random: () => { readonly value: number; readonly drawIndex: number } }): { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } | null;
+  resumeSubtype(input: { journey: JourneyState; payload: Record<string, unknown>; battle: BattleFoldState | null; loopBattleBinding?: import("../../types/journey").JourneyLoopBattleBinding | null; seq: number; random: () => { readonly value: number; readonly drawIndex: number } }): { journey: JourneyState; logRecords: readonly ReducerLogRecord[] } | null;
   applyBattleCommits(input: Omit<Parameters<typeof applyJourneyBattleEssence>[0], "lookup">): ReturnType<typeof applyJourneyBattleEssence>;
   lookup(dreamsignId: DreamsignId): JourneyModifierDefinition | undefined;
   apply(input: {
     dreamsignGains?: readonly import("../../types/journey").JourneyDreamsignGain[];
     battleBinding?: import("../../types/journey").JourneySuspendedBattle | null;
+    loopBattleBinding?: import("../../types/journey").JourneyLoopBattleBinding | null;
     before: JourneyModifierBefore;
     journey: JourneyState;
     eventType: GameplayEventType;
@@ -150,6 +153,7 @@ function snapshot(values: Readonly<Record<string, number>>): Record<string, numb
 export function createJourneyModifierRegistry(
   definitions: readonly JourneyModifierDefinition[],
 ): JourneyModifierRegistry {
+  validateJourneyLoopRegistry(definitions);
   const byId = new Map<DreamsignId, JourneyModifierDefinition>();
   for (const definition of definitions) {
     const dreamsignId = parseDreamsignId(definition.dreamsignId);
@@ -158,8 +162,9 @@ export function createJourneyModifierRegistry(
     }
     byId.set(dreamsignId, Object.freeze({ ...definition, dreamsignId }));
   }
+  validateJourneyLoopRegistry([...byId.values()]);
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
-  const run = ({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null }: Parameters<JourneyModifierRegistry["apply"]>[0], resume?: JourneySubtypeResume, rngEventSeq = seq) => {
+  const run = ({ before, journey, eventType, seq, random, transfigurations, siteId, purges, dreamsignGains = [], battleBinding = null, loopBattleBinding = null }: Parameters<JourneyModifierRegistry["apply"]>[0], resume?: JourneySubtypeResume, rngEventSeq = seq) => {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
       const reservedEntries = new Map<DeckEntryId, DeckEntry>();
@@ -207,7 +212,7 @@ export function createJourneyModifierRegistry(
       next = acquisition.journey;
       logRecords.push(...acquisition.logRecords.map(row => resume === undefined ? row : { ...row, fields: { ...row.fields, rngEventSeq } }));
       transformed.splice(0, transformed.length, ...acquisition.transfigurations);
-      if (acquisition.paused) return { journey: next, logRecords };
+      if (acquisition.paused) return { journey: earnJourneyLoops(next, transformed, observerSources, lookup, seq, siteId, loopBattleBinding, logRecords), logRecords };
       const gainWave = (previous: Readonly<Pick<JourneyState, "deck">>) => {
         if (entrySources.length === 0 || eventType === "START_JOURNEY") return;
         const gains = journeyDeckEntryGains(previous, next);
@@ -247,18 +252,20 @@ export function createJourneyModifierRegistry(
         copied = false;
         for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
       } while (copied);
-      return { journey: finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding, acquisition.openingHandAcquisitions, lookup), logRecords };
+      next = earnJourneyLoops(next, transformed, observerSources, lookup, seq, siteId, loopBattleBinding, logRecords);
+      next = finishJourneyAcquisition(next, acquisition.copySources, acquisition.starterSources, acquisition.typeRemapSources, seq, battleBinding, acquisition.openingHandAcquisitions, lookup);
+      return { journey: settleJourneyLoops(next, lookup, rngEventSeq, random, logRecords, [...reservedEntries.values()]), logRecords };
     };
   const registry: JourneyModifierRegistry = {
     lookup,
     applyBattleCommits: input => applyJourneyBattleEssence({ ...input, lookup }),
     apply: input => run(input),
-    resumeSubtype({ journey, payload, battle, seq, random }) {
+    resumeSubtype({ journey, payload, battle, loopBattleBinding = null, seq, random }) {
       if (journey.screen.type !== "journeyDreamsign" || journey.screen.choice.kind !== "subtype") return null;
       const choice = journey.screen.choice, resolved = resolveJourneySubtype(journey, payload, battle, registry);
       if (resolved === null) return null;
       const resume = { ...choice.resume, sourceIndex: choice.resume.sourceIndex + 1 };
-      const result = run({ before: resume.before, journey: resolved, eventType: resume.eventType, seq: choice.permissionSeq, random, transfigurations: resume.transfigurations, siteId: resume.siteId, purges: resume.purges, battleBinding: choice.suspendedBattle }, resume, seq);
+      const result = run({ before: resume.before, journey: resolved, eventType: resume.eventType, seq: choice.permissionSeq, random, transfigurations: resume.transfigurations, siteId: resume.siteId, purges: resume.purges, battleBinding: choice.suspendedBattle, loopBattleBinding }, resume, seq);
       return { ...result, logRecords: [{ event: "journey_modifier_applied", fields: { dreamsignId: payload.sourceDreamsignId, heldIndex: payload.heldIndex, hook: "subtype_resolved", choiceIndex: payload.choiceIndex, permissionSeq: choice.permissionSeq, rngEventSeq: seq, chosenSubtype: payload.chosenSubtype, cohort: choice.current } }, ...result.logRecords] };
     },
   };

@@ -8,6 +8,7 @@ import { mintEntryId } from "./deck";
 import { afterBattleChoice, appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
 import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 import { findSite } from "./sites";
+import { journeyLoopTransfiguration as createJourneyLoopTransfiguration } from "./journey-mandatory-loop";
 
 export interface JourneyTransfigurationProvider {
   validateRecord?(entry: Readonly<DeckEntry>): boolean;
@@ -16,6 +17,8 @@ export interface JourneyTransfigurationProvider {
 }
 let provider: JourneyTransfigurationProvider | null = null;
 export function registerJourneyTransfigurationProvider(value: JourneyTransfigurationProvider | null): void { provider = value; }
+/** Identity only, for agreement with the currently consumed executor. */
+export function currentJourneyTransfigurationProvider(): JourneyTransfigurationProvider | null { return provider; }
 
 export function journeyTransfigurationCard(entry: Readonly<DeckEntry>) { return provider?.resolve(entry) ?? null; }
 
@@ -31,11 +34,18 @@ export function journeyTransfigurationOccurrences(before: JourneyState, after: J
   });
 }
 
+const factorySpecs = new WeakMap<JourneyModifierDefinition["afterJourneyEvent"], { dreamsignId: DreamsignId; effect: NonNullable<JourneyModifierDefinition["journeyTransfiguration"]> }>();
+/** Validate the complete definition around the exact factory-owned callback. */
+export function canonicalJourneyTransfiguration(definition: JourneyModifierDefinition): boolean {
+  if (Object.values(Object.getOwnPropertyDescriptors(definition)).some(field => !("value" in field))) return false;
+  const spec = factorySpecs.get(definition.afterJourneyEvent);
+  return spec !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === spec.dreamsignId && Object.getOwnPropertyDescriptor(definition, "journeyTransfiguration")?.value === spec.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyTransfiguration", "afterJourneyEvent"].includes(key));
+}
 export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: JourneyTransfigurationEffect): JourneyModifierDefinition {
   if (descriptor.kind !== "copyTransfiguredEvent" && (descriptor.kind !== "afterBattleTransfiguration" ||
     !Number.isSafeInteger(descriptor.maxCount) || descriptor.maxCount < 1)) throw new RangeError("Invalid journeyTransfiguration descriptor.");
   const effect = Object.freeze({ ...descriptor });
-  return { dreamsignId, journeyTransfiguration: effect,
+  const definition: JourneyModifierDefinition = { dreamsignId, journeyTransfiguration: effect,
     afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, seq, transfigurations, reservedEntries = [] }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
       if (effect.kind === "afterBattleTransfiguration") {
         if (eventType !== "END_BATTLE" || siteId === null || before.screen.type !== "site" || before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;
@@ -56,6 +66,8 @@ export function journeyTransfiguration(dreamsignId: DreamsignId, descriptor: Jou
         target: { siteIds: siteId === null ? [] : [siteId], copies } };
     },
   };
+  factorySpecs.set(definition.afterJourneyEvent, { dreamsignId, effect });
+  return definition;
 }
 
 export function validJourneyTransfigurationScreen(screen: unknown, journey: JourneyState, registry: JourneyModifierRegistry): boolean {
@@ -112,4 +124,8 @@ export function validJourneyTransfigurationRecords(journey: unknown): boolean {
 }
 export function assertJourneyTransfigurationCheckpoint(state: unknown): void {
   if (record(state) && !validJourneyTransfigurationRecords(state.journey)) throw new Error("Invalid journey transfiguration checkpoint");
+}
+
+export function journeyLoopTransfiguration(dreamsignId: DreamsignId, source: JourneyTransfigurationProvider, cardId: CardId): ReturnType<typeof createJourneyLoopTransfiguration> {
+  return createJourneyLoopTransfiguration(dreamsignId, source, cardId);
 }

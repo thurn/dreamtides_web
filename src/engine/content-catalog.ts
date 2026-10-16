@@ -1,4 +1,5 @@
-import { resonantChange, transfigurationSourceState } from "../transfiguration/transfiguration-logic";
+import { canonicalTransfigurationSource } from "../transfiguration/canonical-transfiguration-source";
+import { resonantChange } from "../transfiguration/transfiguration-logic";
 import { AVATARS } from "../content/avatars";
 import { APOLLYON_INCARNATIONS } from "../content/apollyon";
 import { CARDS } from "../content/cards";
@@ -58,7 +59,7 @@ function cardCosts(card: CardDefinition): CardCost[] {
 export function engineCardFromContent(card: CardDefinition): EngineCardDefinition {
   const originalText = card.renderedText, authoredText = card.amplifiedText;
   return {
-    transfigurationState: (initiallyAmplified, steps) => transfigurationSourceState(originalText, authoredText, initiallyAmplified, steps),
+    transfigurationState: canonicalTransfigurationSource(originalText, authoredText),
     id: parseCardId(card.id),
     transfiguration: {
       amplified: card.amplifiedText !== undefined && card.amplifiedText.trim().length > 0 && card.amplifiedText !== card.renderedText,

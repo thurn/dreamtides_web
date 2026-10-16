@@ -1,3 +1,4 @@
+import { validJourneyLoopState, validJourneyLoopFold } from "./journey-loop-state";
 import { validJourneyTransfigurationRecords } from "./journey-transfiguration";
 import { validShopReplenishmentRuntime } from "./journey-shop";
 import { validCommittedPurgePrevention } from "./journey-committed-purge-state";
@@ -488,7 +489,8 @@ export function validateLoadedState(
   if (snapshot.screen.type === "journeyStarterPurge" && snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId)) return null;
   if (snapshot.screen.type === "journeyDreamsign" && !validDreamsignBattleBinding(snapshot, battle)) return null;
   if (snapshot.screen.type === "journeyDreamsign" && (snapshot.screen.choice.kind === "copy" || snapshot.screen.choice.kind === "openingHand") && snapshot.screen.choice.suspendedBattle?.mode === "tutorial" && (battle?.mode.kind !== "tutorial" || state.frontDoor.phase !== "tutorial" || state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId)) return null;
-  return { ...state, journey: snapshot, battle };
+  const loaded = { ...state, journey: snapshot, battle, frontDoor: snapshot.journeyDraw === undefined ? state.frontDoor : { ...state.frontDoor, phase: "journey" as const } };
+  return validJourneyLoopFold(loaded, registry) ? loaded : null;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -548,7 +550,7 @@ function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
  * match their canonical UUID through the registered deck content provider.
  */
 function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry): value is JourneyState {
-  if (!validJourneyTransfigurationRecords(value)) return false;
+  if (!validJourneyTransfigurationRecords(value) || !validJourneyLoopState(value, registry)) return false;
   if (!isRecord(value)) return false;
   const numberKeys = ["essence", "maxDreamsigns", "completionLevel"];
   for (const key of numberKeys) {

@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import "./journey-loop-result.contracts";
 
 import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

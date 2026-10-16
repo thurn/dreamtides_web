@@ -3245,6 +3245,14 @@ unavoidable also start a new run. A forced choice preserves the count.
 Repetitions of an optional loop are the player's own actions, so they never
 make a mandatory loop either.
 
+### Journey Mandatory Loops
+
+A mandatory journey reaction sequence that is proved unable to finish or reach a legal stopping choice ends your journey in a draw. The proof covers every legal random outcome, the current applicable operations, the physical sources that continue the sequence, and all intervening side effects and choices. Growing card values, copies or application history do not prevent such a proof. A repeated sampled outcome, an action or depth count, and elapsed time do not establish it.
+
+Complete the current operation's finite, already-earned sibling reactions, gains and acquisition choices before closing an inevitable child continuation. A reached choice resolves normally. An instruction already earned from a source remains earned when that source is lost or replaced. After the choices, resolve that instruction once if its target remains and its continuation is finite; losing the original target supplies no application. If that work itself is proved unable to finish, the draw precedes its unexecuted continuation. Retain the finite work actually completed through that boundary and record its causal applications and physical sources. Do not materialize unexecuted random applications or copies.
+
+A journey draw is a journey result with a new-journey action. It supplies no battle result, battle identity, score or battle reward. Any actually suspended battle is abandoned using its exact captured identity and mode when the journey result is committed. A suspended tutorial battle also retains its actual tutorial-run identity in that record. Battle outcomes, scores, rewards and completion already committed before the journey draw remain part of the finite prefix; the journey draw is the current journey result.
+
 ## Deck-entry Card-type Changes
 
 A permanent deck-entry card-type change preserves the card's transformed authored abilities, including their conditions, costs and functional zones. The changed type determines whether it resolves as a Character or an Event. If the transformed printing has no spark, changing it into a Character gives it base spark 0 and its permanent deck-entry spark bonus does not apply. A card changed into an Event has no spark. Later spark gained in battle and applicable continuous effects follow their ordinary rules.

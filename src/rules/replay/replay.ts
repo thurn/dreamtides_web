@@ -1,3 +1,4 @@
+import { assertJourneyLoopCheckpoint } from "../journey/journey-loop-state";
 import { assertJourneyTransfigurationCheckpoint } from "../journey/journey-transfiguration";
 import { assertJourneySubtypeCheckpoint } from "../journey/journey-subtype";
 import { assertJourneyTypeRemapCheckpoint } from "../journey/journey-type-remap";
@@ -57,6 +58,7 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   decode: (raw) => {
     const state: unknown = JSON.parse(raw);
     assertJourneyTransfigurationCheckpoint(state);
+    assertJourneyLoopCheckpoint(state);
     assertJourneySubtypeCheckpoint(state, journeyModifierRegistry);
     assertJourneyTypeRemapCheckpoint(state, journeyModifierRegistry);
     assertBeforeBattlePurgeCheckpoint(state);

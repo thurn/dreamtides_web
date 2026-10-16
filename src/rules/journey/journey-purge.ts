@@ -48,18 +48,28 @@ export function validJourneyPurgeScreen(screen: unknown, journey: JourneyState, 
 }
 
 /** Register printed purge permissions or a passive prohibition. */
+const canonicalCallbacks = new WeakMap<JourneyModifierDefinition["afterJourneyEvent"], { readonly id: DreamsignId; readonly effect: JourneyModifierDefinition["journeyPurge"] }>();
+function remember(definition: JourneyModifierDefinition): JourneyModifierDefinition {
+  canonicalCallbacks.set(definition.afterJourneyEvent, { id: definition.dreamsignId, effect: definition.journeyPurge });
+  return definition;
+}
+export function canonicalJourneyPurge(definition: JourneyModifierDefinition): boolean {
+  if (Object.values(Object.getOwnPropertyDescriptors(definition)).some(field => !("value" in field))) return false;
+  const origin = canonicalCallbacks.get(definition.afterJourneyEvent);
+  return origin !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === origin.id && Object.getOwnPropertyDescriptor(definition, "journeyPurge")?.value === origin.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyPurge", "afterJourneyEvent"].includes(key));
+}
 export function journeyPurge(dreamsignId: DreamsignId, descriptor: JourneyPurgeEffect): JourneyModifierDefinition {
   const effect = Object.freeze({ ...descriptor });
   if (effect.kind === "beforeBattlePurge") {
     if (!indexInteger(effect.minimumDeckSize)) throw new RangeError("Invalid journeyPurge catalog minimum.");
-    return { dreamsignId, journeyPurge: effect, afterJourneyEvent: () => null };
+    return remember({ dreamsignId, journeyPurge: effect, afterJourneyEvent: () => null });
   }
-  if (effect.kind === "preventPurge") return { dreamsignId, journeyPurge: effect, afterJourneyEvent: () => null };
+  if (effect.kind === "preventPurge") return remember({ dreamsignId, journeyPurge: effect, afterJourneyEvent: () => null });
   if ((effect.kind !== "afterBattlePurge" && effect.kind !== "replaceEssenceWithPurge") ||
     !positiveInteger(effect.kind === "afterBattlePurge" ? effect.maxCount : effect.count)) {
     throw new RangeError("Invalid journeyPurge catalog count.");
   }
-  return { dreamsignId, journeyPurge: effect,
+  return remember({ dreamsignId, journeyPurge: effect,
     afterJourneyEvent({ before, journey, eventType, heldIndex, siteId }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
       if (siteId === null) return null;
       if (effect.kind === "afterBattlePurge") {
@@ -80,7 +90,7 @@ export function journeyPurge(dreamsignId: DreamsignId, descriptor: JourneyPurgeE
       return { journey: { ...journey, screen: { type: "journeyPurge", choice } },
         before: { offered: 0 }, after: { offered: 1, count: effect.count }, target: { siteIds: [siteId] } };
     },
-  };
+  });
 }
 
 /** Resolve the current folded permission atomically, including its source and ordinal. */

@@ -1,0 +1,647 @@
+{
+  "bead": "hv-umm2.755",
+  "base": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+  "clock": {
+    "originalDispatch": "2026-10-15T17:59:21.482000+00:00",
+    "journalOrdinal": 53045,
+    "dispatchCall": "call_13022db33aeb440196454de98c9593fd",
+    "authorEvidenceCutoff": "2026-10-16T00:10:04.395229+00:00",
+    "continuousThrough": "Actual replacement commit completion is retained in integration1/final-amend-attempt2.json; the original dispatch clock includes prerequisites, research, recovery, coordination, all failed epochs, admission waits, validation, QA, evidence and Git.",
+    "sampling": "UNKNOWN",
+    "productiveCPU": "UNKNOWN",
+    "claimClock": "Parent-owned native claim remains a separate clock.",
+    "firstWorkingSourceSnapshotWindow": {
+      "start": "2026-10-15T17:59:21.482000+00:00",
+      "end": "2026-10-15T22:58:03.292035+00:00",
+      "minutes": 298.69683391666666,
+      "qualification": "Measured original-dispatch to epoch1 source snapshot boundary, not final author completion. The inclusive original clock continues through later repairs, all validation/QA/queues and actual Git; sampling remains UNKNOWN."
+    },
+    "finalCommitStamp": "2026-10-16T01:11:40.273193+00:00",
+    "endpointPrecision": "Immediate pre-amend wall-clock stamp; integration1/final-amend-attempt2.json retains actual dispatch/completion and endpoint difference. The committed artifact cannot contain its future commit OID or actual completion. Sampling and productive CPU remain UNKNOWN.",
+    "firstSourceAuthorCommit": {
+      "source": "0140dd642312f1d96b8d4aa0881537f7ca95a289",
+      "base": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+      "committedStamp": "2026-10-16T00:21:48.037738+00:00",
+      "committedImplementMin": 382.4425956333333,
+      "actualDispatch": "2026-10-16T00:21:48.316716+00:00",
+      "actualCompletion": "2026-10-16T00:21:48.354425+00:00",
+      "endpointDifferenceSeconds": 0.316687,
+      "receipt": "git-final/final-commit.json",
+      "qualification": "Historical first source commit window. Original author clock remains continuous through supported integration and the replacement commit; no queue or failed epoch is subtracted."
+    },
+    "integrationReplacementCommit": "Immediate pre-amend stamp 2026-10-16T01:11:40.273193+00:00; actual replacement Git completion and endpoint precision are retained in integration1/final-amend-attempt2.json."
+  },
+  "artifactDirectory": "artifacts/qa/hv-umm2.755/author-resume1",
+  "authority": [
+    {
+      "name": "ack01.txt",
+      "sha256": "0e4ddaa7ca3ef6473e8e95b0856fa5f42997265597762d2b3b228cd5e00e565a"
+    },
+    {
+      "name": "ack02.txt",
+      "sha256": "b20d7b016ea1ae631e97b3d6f42f51985d66fab7413cb534ab507e8a78390dd3"
+    },
+    {
+      "name": "ack03.txt",
+      "sha256": "d52e0c6e0fed8e9389c52789953a54f293cb075c7dc39230b1502995ba7459a2"
+    },
+    {
+      "name": "ack04.txt",
+      "sha256": "097542b260642f400587100be6e08b02517e63950c52ec4ff534efe16bc63da5"
+    },
+    {
+      "name": "ack05.txt",
+      "sha256": "947d229c746f8ce696575ab8094c8b9200193a84a8d8be1a41470f0033ce3c81"
+    },
+    {
+      "name": "ack06.txt",
+      "sha256": "988a9aa04d386e86298c7476e02b16e323e6e94ef16abd8c61207dd31163b4c8"
+    },
+    {
+      "name": "ack07.txt",
+      "sha256": "a2bf1bf806e77e42203fa8116d5f0a49ee56f777b171826b35c7fb6fdcb210be"
+    },
+    {
+      "name": "ack08.txt",
+      "sha256": "6e5720986b45fe8f26733460e244832332ef40400a884a5b211cb8389df57627"
+    },
+    {
+      "name": "ack09.txt",
+      "sha256": "74bed069f846875dcc1ed1c7c65b963ec4ad7dec7e9fb9c48ed992c89d7db263"
+    },
+    {
+      "name": "ack10.txt",
+      "sha256": "66326bd1068e4ac2ab7a7b678754830067781771dec4a3ab979cbdc323fdd9ae"
+    },
+    {
+      "name": "ack11.txt",
+      "sha256": "ae751647312342e14702fc2fd649a7e6671660ae9b3bd498f7ff2d1d24e83a99"
+    },
+    {
+      "name": "ack12.txt",
+      "sha256": "d753abdc57d8ad76e0d11e4f3b31fd173dfddd1492c53dff13a8af6032d5d80a"
+    }
+  ],
+  "sourceCustody": {
+    "initialTrackedPayloads": 5882,
+    "finalRuntimeManifest": "postrepair-final-source-manifest.json",
+    "finalRuntimeManifestSha256": "d874eec187ab198780da08b40792750c8a470f42e962177ca0b63b95f8f421d7",
+    "runtimeAndContractPayloads": 41,
+    "initialUnchanged": 5860,
+    "expectedInitialChanges": 22,
+    "runtimeGrossLines": 676,
+    "runtimeNetLines": 560,
+    "runtimePaths": 21,
+    "newLogicalContractFixtureModules": 14,
+    "netTestAndRunnerImportLines": 1130,
+    "newTestEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "epoch1ManifestSha256": "307b111b3fc3efa5ceb3dc809aaa4ddebb16f22002555d3c184372c571f04eb6",
+    "epoch1Delta": "Final runtime differs from epoch1 only in the pending target relation guard; the new state-controls module adds its public controls. All other 39 payloads are identical.",
+    "focusedTimingQualification": "Focused10 passed before the final hash capture; no retroactive pre-launch hash claim. Review6 and final full2 ran after a matching source capture. Browser7 and full2 use identical 41 payloads. Own final evidence files are written after full2.",
+    "sourceReadQualification": "Frozen Stage1 proposal/source manifest and parent actual-return audit are retained. Whole clipped source returns and an oversized producer-data display are excluded from semantic-read claims."
+  },
+  "baseline": {
+    "originalRun": "baseline-2",
+    "total": 87,
+    "passed": 69,
+    "behaviorFailures": 18,
+    "setupFailures": 0,
+    "immutableCopies": "baseline-2-bytes",
+    "correctionLedger": "baseline-corrected-epoch-ack03-05-07.json",
+    "correctionQualification": "Original RED bytes and receipts are immutable. Authorized type/lint/log-observation corrections have a distinct epoch. The later-sibling throwing control establishes ordinary atomicity with an inert same-UUID callback; separate genuine-loop opaque-source refusal controls cover capability safety. Baseline1 contains three setup/assertion failures and supplies no RED credit."
+  },
+  "savedRelationRepair": {
+    "cleanRed": "pending-relation-red-2",
+    "total": 126,
+    "passed": 124,
+    "behaviorFailures": 2,
+    "setupFailures": 0,
+    "redTestSha256": "21051c8477f4329cc5f54edc6488a658166e8b74420ee8c2d698046c7fd7ae3e",
+    "proof": "pending-relation-red-2.proof.json",
+    "actualProductionCounterexample": "repro-pending-print-3.result.json",
+    "postrepairCounterexampleCheck": "repro-pending-print-postrepair-1.result.json",
+    "adjacentOverwriteDiagnostic": "repro-pending-overwrite-2.result.json",
+    "qualification": "Changing only a still-present physical target printing was accepted before repair and is rejected at decode/LOAD after repair. Existing reached-choice gates bounce both public clear/replacement intents before mutation; no full-history-prefix restriction was added. Missing targets and later valid record growth remain accepted."
+  },
+  "finalChecks": {
+    "runtime-focused-10": {
+      "receipt": "runtime-focused-10.run.json",
+      "raw": "runtime-focused-10.raw.log",
+      "exit": 0,
+      "seconds": 10.917622415989172,
+      "rawBytes": 50447
+    },
+    "review-6": {
+      "receipt": "review-6.run.json",
+      "raw": "review-6.raw.log",
+      "exit": 0,
+      "seconds": 69.39567825000267,
+      "rawBytes": 51061
+    },
+    "runtime-knip-3": {
+      "receipt": "runtime-knip-3.run.json",
+      "raw": "runtime-knip-3.raw.log",
+      "exit": 0,
+      "seconds": 7.632420790963806,
+      "rawBytes": 50049
+    },
+    "final-review-full-2": {
+      "receipt": "final-review-full-2.run.json",
+      "raw": "final-review-full-2.raw.log",
+      "exit": 0,
+      "seconds": 127.08761041698745,
+      "rawBytes": 103477
+    },
+    "qa-result-7": {
+      "receipt": "qa-result-7.run.json",
+      "raw": "qa-result-7.raw.log",
+      "exit": 0,
+      "seconds": 52.89311566599645,
+      "rawBytes": 66408
+    },
+    "qa-final-portable-validation": {
+      "receipt": "qa-final-portable-validation.run.json",
+      "raw": "qa-final-portable-validation.raw.log",
+      "exit": 0,
+      "seconds": 2.634334583999589,
+      "rawBytes": 3230
+    },
+    "qa-source-export-2": {
+      "receipt": "qa-source-export-2.run.json",
+      "raw": "qa-source-export-2.raw.log",
+      "exit": 0,
+      "seconds": 8.140000584011432,
+      "rawBytes": 7415
+    }
+  },
+  "finalFocused": {
+    "files": 4,
+    "tests": 159,
+    "failed": 0
+  },
+  "finalRelatedReview": {
+    "files": 158,
+    "tests": 8954,
+    "failed": 0
+  },
+  "finalFull": {
+    "files": 425,
+    "tests": 11938,
+    "failed": 0,
+    "innerGuardSeconds": 1800,
+    "workers": 2,
+    "admissionAndLauncherStartupSeconds": 1131.3167545839678,
+    "actualExecutionSeconds": 127.08761041698745,
+    "outerSeconds": 1258.4204190839664,
+    "sourceAfterMismatches": [],
+    "testStepSeconds": 90.7,
+    "testStartOneMinuteLoad": 8.60791015625,
+    "d19Qualification": "This loaded test epoch exceeds the monitored 60-second test-step target. It supplies no controlled low-load budget result or waiver; the Gate46 controlled-measurement obligation remains."
+  },
+  "historicalQualifications": {
+    "preAck06": "Focused5 140 green is a historical source epoch, not final closed-source acceptance. The opaque-callback before-battle pause fixture/helper was retracted; the current canonical before-battle compatibility control is retained. Real after-battle copy/starter/remap/subtype acceptance remains covered.",
+    "failedRuns": "All actual failed setup, assertion, type/lint, and QA epochs remain in the raw/run ledger. Outer baseline observer status is not substituted for the actual inner exit.",
+    "oldFull": "Full1 passed its immutable epoch1 source; full2 passes the repaired final source.",
+    "producer": "Actual loaded default content cardNumber520 and UUID229ab3a1-3720-41a2-924c-8fe112188f8e execute the isolated public reducer producer. The authored test source-data spy is synthetic input into the actual default/post-catalog constructor, restored afterward; it is not weighted production-data coverage."
+  },
+  "coverage": {
+    "prefix": "Root finite siblings/gains/reached choices, copy/starter/remap/subtype pauses, source retention/loss, multiple physical sources, reserved prevented-copy IDs, and mixed-UUID recorded child order in both directions.",
+    "state": "Malformed owned saved relations, current target printing/record/duplicates, absent target/growth, production-registry historical terminal LOAD, replay/reload, both local actors, stale intent and reset.",
+    "battle": "Actual public END_BATTLE nonfinal/final victory, defeat and draw bookkeeping; retained committed reward/completion/failure summaries. Actual initialized tutorial host binding and terminal custody; no fabricated battle result.",
+    "source": "Same captured executing source and proof, two authored ability inputs, finite Resonant measure, all nine forms/Perfected branches, private constructor/factory provenance and callback/descriptor/catalog/map/form/rule mutation refusals with ordinary compatibility.",
+    "boundaries": "Other unproved callback families are unsupported only for a loop-enabled custom registry; the production no-loop registry keeps its ordinary path. Full730 FIFO/reaction drain/Glow activation and the original273 final joins remain with their owners."
+  },
+  "qaRecord": "qa/hv-umm2.755.json",
+  "finalEvidenceValidationReceipts": [
+    "evidence-schema-docfix.run.json",
+    "evidence-whitespace-docfix.run.json"
+  ],
+  "reviewAndDelivery": "Fresh Codex core and holistic visual review, candidate/certification/promotion are parent-owned after the sole author commit. This record claims author validation, not those later stages.",
+  "qualifications": {
+    "implementWindowQualification": "The friction endpoint/minutes measure original17:59:21.482Z dispatch through the immediate replacement-amend stamp. Actual completion and stamp precision are retained in integration1/final-amend-attempt2.json. firstSourceAuthorCommit retains the historical382.442595633-minute first-source stamp window, and firstWorkingSourceSnapshotWindow retains its298.696833917-minute epoch1 boundary. All queues, failed attempts and integration time remain included; sampling/productive CPU are UNKNOWN.",
+    "hostLoadQualification": "Observed one-minute host load at the admitted combined full3 command start; distinct from test-step/ordinary-review samples. Correctness validation supplies no controlled-budget claim.",
+    "unmeasuredFriction": "Source-read and producer-data output clipping, type/lint repairs, fixture corrections, and coordination remain in the continuous author clock. Their complete rework wall time and productive CPU were not separately sampled."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review:full command start after heavy admission, combined-review-full-3",
+        "oneMinute": 3.59033203125,
+        "receipt": "integration1/combined-review-full-3.run.json",
+        "qualification": "Admitted command-start sample; test-step and ordinary review samples retain their distinct scopes. Gate46 controlled measurement remains owed."
+      },
+      "localValidationS": {
+        "focused": "integration1/focused-integration-3, combined source",
+        "review": "integration1/review-integration-2, combined source",
+        "knip": "integration1/knip-integration-1, combined source",
+        "full": "integration1/combined-review-full-3, combined source; admission separate",
+        "browser": "qa-result-7, OLD0140 source only; unchanged draw/reset branch comparison qualifies reuse",
+        "finalPortableImport": "integration1/combined-portable-validation, combined source with retained epoch1 files",
+        "finalLegacyControl": "qa-source-export-2, OLD0140 source only; current legacy view contract passes focused/related checks"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "measuredFor": "final-review-full-2 command start after admission",
+      "oneMinute": 6.1337890625
+    },
+    {
+      "measuredFor": "review-6 ordinary review command start",
+      "oneMinute": 10.0400390625
+    },
+    {
+      "measuredFor": "final-review-full-2 test-step start",
+      "oneMinute": 8.60791015625
+    },
+    {
+      "measuredFor": "combined-review-full-3 admitted command start",
+      "oneMinute": 3.59033203125
+    },
+    {
+      "measuredFor": "review-integration-2 ordinary review command start",
+      "oneMinute": 4.66796875
+    },
+    {
+      "measuredFor": "combined-review-full-3 test-step start",
+      "oneMinute": 5.138671875
+    }
+  ],
+  "coreFailurePaths": {
+    "referenceFormat": "Each reference below names an existing exact test title/template and source file. All referenced modules execute through the four owning runners in final focused/full checks. N/A reasons delimit the missing scenario rather than claiming an unexecuted test.",
+    "tests": {
+      "ordinaryError": {
+        "file": "src/rules/journey/journey-loop-controls.contracts.ts",
+        "test": "contains a later root sibling failure without partially committing a cost, form or terminal diagnostic",
+        "qualification": "Ordinary inert-callback fold atomicity only; this is not a throwing callback admitted to a closed loop registry."
+      },
+      "cas": {
+        "file": "src/rules/journey/journey-loop-controls.contracts.ts",
+        "test": "uses existing CAS actor rules before any application or proof"
+      },
+      "actors": {
+        "file": "src/rules/journey/journey-loop-state-controls.contracts.ts",
+        "test": "folds the same public terminal for both actors and ignores a stale duplicate intent",
+        "qualification": "Two actor-specific local logs and stale duplicate intent; no distributed transport race is simulated."
+      },
+      "terminalReplayReset": {
+        "file": "src/rules/journey/journey-loop.contracts.ts",
+        "test": "replays the public registered terminal and permits only a new journey through gameplay"
+      },
+      "terminalInvalid": {
+        "file": "src/rules/journey/journey-loop-state-controls.contracts.ts",
+        "test": "rejects malformed terminal %s at decode and LOAD"
+      },
+      "pendingInvalid": {
+        "file": "src/rules/journey/journey-loop-state-controls.contracts.ts",
+        "test": "rejects intrinsic pending %s relations"
+      },
+      "targetInvalid": {
+        "file": "src/rules/journey/journey-loop-state-controls.contracts.ts",
+        "test": "rejects a pending target with a mismatched %s relation"
+      },
+      "targetAbsentGrowth": {
+        "file": "src/rules/journey/journey-loop-state-controls.contracts.ts",
+        "test": "retains a pending instruction with its target %s"
+      },
+      "pendingCopy": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "completes actual copy replacement before its child, original replaced=%s",
+        "qualification": "Both source-retained and source-replaced cases encode/decode the actually reached copy pause before resolving it."
+      },
+      "pendingMerged": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "retains actual operation witnesses when a later earned Rat acquisition transfigures another original",
+        "qualification": "Actual merged pending operation is encoded/decoded and LOADed before source loss and final resolution."
+      },
+      "starter": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "honors a real starter permission that purges the original before its child"
+      },
+      "remap": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "commits a real type-remap choice before the journey draw"
+      },
+      "subtype": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "uses the actual subtype resume consumer with distinct permission and committing sequence"
+      },
+      "finiteSourceLoss": {
+        "file": "src/rules/journey/journey-loop-prefix.contracts.ts",
+        "test": "settles the already-earned actual application once after its source is removed"
+      },
+      "finiteForms": {
+        "file": "src/rules/journey/journey-loop-prefix.contracts.ts",
+        "test": "gives each legal next form its actual one-step branch after source loss"
+      },
+      "causalChildren": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "visits mixed-UUID children in causal order after source loss %s"
+      },
+      "reservedCopies": {
+        "file": "src/rules/journey/journey-loop-acquisition.contracts.ts",
+        "test": "keeps prevented physical copy attempts reserved across multiple finite child Tomes"
+      },
+      "battlePrefix": {
+        "file": "src/rules/journey/journey-loop-battle-outcomes.contracts.ts",
+        "test": "preserves actual $outcome reward/completion and earlier summary, final=$final",
+        "qualification": "Actual public END_BATTLE nonfinal/final victory, defeat and draw; pending LOAD before final child settlement."
+      },
+      "tutorial": {
+        "file": "src/rules/journey/journey-loop-binding.contracts.ts",
+        "test": "records the actual initialized tutorial battle and run before teardown and exposes reset in journey routing"
+      },
+      "tutorialInvalid": {
+        "file": "src/rules/journey/journey-loop-binding.contracts.ts",
+        "test": "does not clear an unrelated tutorial run or commit a partial form/cost when binding is inconsistent"
+      },
+      "historicalImport": {
+        "file": "src/rules/journey/journey-loop-state-controls.contracts.ts",
+        "test": "imports a committed terminal through the actual production registry without requiring its historical source"
+      },
+      "persistence": {
+        "file": "src/session/journey-loop-recovery.contracts.ts",
+        "test": "retries the actual atomic terminal event, reopens its checkpoint, and replays after an invalid matching-hash terminal checkpoint",
+        "qualification": "Injects one putAll rejection, verifies prior durable head, retries, reopens, rejects corrupt matching-hash checkpoint and replays; physical torn IndexedDB writes are not simulated."
+      },
+      "opaqueRefusal": {
+        "file": "src/rules/journey/journey-loop-source-controls.contracts.ts",
+        "test": "rejects arbitrary held callbacks before constructing a closed registry"
+      },
+      "captureRefusal": {
+        "file": "src/rules/journey/journey-loop-source-controls.contracts.ts",
+        "test": "refuses %s capture without bouncing an ordinary valid action"
+      },
+      "captureMutation": {
+        "file": "src/rules/journey/journey-loop-source-controls.contracts.ts",
+        "test": "refuses a producer that changes canonical %s during source capture"
+      },
+      "providerSwap": {
+        "file": "src/rules/journey/journey-loop-source-controls.contracts.ts",
+        "test": "settles an earned child finitely after a compatible public provider swap"
+      },
+      "resultAction": {
+        "file": "src/cumulus/screens/journey-loop-result.contracts.tsx",
+        "test": "renders the registered fold's journey result and its existing new-journey action without battle statistics",
+        "qualification": "Component dispatch contract; actual browser RESET and routing are separately retained in qa-result-7, with field clearing asserted by terminalReplayReset."
+      }
+    },
+    "transitions": {
+      "canonical source capture and closed registry admission (precondition, not persisted state)": {
+        "errorMidStep": "captureRefusal + captureMutation + opaqueRefusal; unsupported capture retains ordinary action compatibility and unsupported callback is rejected before execution.",
+        "interrupt": "N/A: synchronous construction of an in-memory provider/registry; no game event or durable half-provider is published.",
+        "reloadOrRestart": "N/A: capabilities are rebuilt from current canonical content, never serialized; historicalImport covers terminal import without a historical capability.",
+        "partialWrite": "N/A: these constructors write no repository/game storage and publish only a completed return value.",
+        "invalidOrStaleInput": "opaqueRefusal + captureRefusal + captureMutation + providerSwap.",
+        "concurrentActors": "N/A for constructor execution: capability is shared immutable in-memory authority, not actor-owned game state. cas + actors cover subsequent public events."
+      },
+      "root application to committed journey draw": {
+        "errorMidStep": "ordinaryError (ordinary fold boundary qualification retained) + tutorialInvalid (actual inconsistent binding refuses without cost/form/host mutation); opaqueRefusal prevents arbitrary throwing siblings in a closed registry.",
+        "interrupt": "N/A within one reducer invocation: computation is synchronous and exposes no yielded intermediate state. Process interruption recovers from the preceding committed event or complete next event; persisted boundary is covered by persistence.",
+        "reloadOrRestart": "terminalReplayReset + persistence + historicalImport.",
+        "partialWrite": "N/A for individual fold fields: only the returned whole FoldState is published; no owned field-level storage writer exists. ordinaryError checks the shared fold-error boundary, and persistence checks actual batch failure/retry; physical torn storage is not simulated.",
+        "invalidOrStaleInput": "terminalInvalid + cas + actors.",
+        "concurrentActors": "cas + actors: these transitions run in the same actor-independent serialized fold. No new locks, actor ownership, or distributed transport are introduced; distributed delivery races are outside this bead."
+      },
+      "root finite prefix to reached pending choice and acquisition resumes": {
+        "errorMidStep": "ordinaryError establishes the same public fold boundary; opaqueRefusal excludes arbitrary injected root/gain callbacks from closed execution. pendingCopy + starter + remap + subtype cover actual canonical resumes; no invented throwing canonical producer is injected.",
+        "interrupt": "pendingCopy + pendingMerged cover interruption at a real reached-choice boundary; within a single event: N/A within one reducer invocation: computation is synchronous and exposes no yielded intermediate state. Process interruption recovers from the preceding committed event or complete next event; persisted boundary is covered by persistence.",
+        "reloadOrRestart": "pendingCopy + pendingMerged + battlePrefix encode/decode or LOAD an actual pending operation before continuing. Starter/remap/subtype have direct public resume controls, not separate restart fault injection.",
+        "partialWrite": "N/A for individual fold fields: only the returned whole FoldState is published; no owned field-level storage writer exists. ordinaryError checks the shared fold-error boundary, and persistence checks actual batch failure/retry; physical torn storage is not simulated.",
+        "invalidOrStaleInput": "pendingInvalid + targetInvalid + targetAbsentGrowth + cas; absent target and valid record growth are explicitly accepted.",
+        "concurrentActors": "cas + actors: these transitions run in the same actor-independent serialized fold. No new locks, actor ownership, or distributed transport are introduced; distributed delivery races are outside this bead."
+      },
+      "pending child to finite source-loss settlement or first proved draw": {
+        "errorMidStep": "ordinaryError covers the common fold error publication boundary; finiteForms + providerSwap cover actual legal finite paths and capability loss. No closed canonical callback supplies a mid-child throwing fixture.",
+        "interrupt": "N/A within one reducer invocation: computation is synchronous and exposes no yielded intermediate state. Process interruption recovers from the preceding committed event or complete next event; persisted boundary is covered by persistence.",
+        "reloadOrRestart": "pendingMerged + pendingCopy + targetAbsentGrowth reload before settlement; terminalReplayReset + persistence recover the committed terminal afterward.",
+        "partialWrite": "N/A for individual fold fields: only the returned whole FoldState is published; no owned field-level storage writer exists. ordinaryError checks the shared fold-error boundary, and persistence checks actual batch failure/retry; physical torn storage is not simulated. reservedCopies checks distinct physical attempted IDs during successful finite settlement, not storage faults.",
+        "invalidOrStaleInput": "pendingInvalid + targetInvalid + targetAbsentGrowth + finiteSourceLoss + causalChildren + cas.",
+        "concurrentActors": "cas + actors: these transitions run in the same actor-independent serialized fold. No new locks, actor ownership, or distributed transport are introduced; distributed delivery races are outside this bead."
+      },
+      "journey draw takes normal or tutorial host custody while retaining prior battle bookkeeping": {
+        "errorMidStep": "tutorialInvalid rejects inconsistent actual tutorial binding without partial form/cost or clearing the unrelated host.",
+        "interrupt": "N/A within one reducer invocation: computation is synchronous and exposes no yielded intermediate state. Process interruption recovers from the preceding committed event or complete next event; persisted boundary is covered by persistence.",
+        "reloadOrRestart": "battlePrefix LOADs real after-battle pending states; historicalImport + persistence cover committed terminal import/replay. Browser7 imports/reloads both normal and tutorial-bound committed terminals; no live production loop activation claim.",
+        "partialWrite": "N/A for individual fold fields: only the returned whole FoldState is published; no owned field-level storage writer exists. ordinaryError checks the shared fold-error boundary, and persistence checks actual batch failure/retry; physical torn storage is not simulated.",
+        "invalidOrStaleInput": "tutorialInvalid + terminalInvalid + battlePrefix (duplicate END_BATTLE after commitment is bounced).",
+        "concurrentActors": "cas + actors: these transitions run in the same actor-independent serialized fold. No new locks, actor ownership, or distributed transport are introduced; distributed delivery races are outside this bead."
+      },
+      "committed result projection and public RESET_JOURNEY": {
+        "errorMidStep": "N/A for projection: pure view construction adds no state writer. resultAction covers callback dispatch; terminalReplayReset + persistence cover actual reducer reset. No UI render exception or reset storage-failure injection is claimed.",
+        "interrupt": "N/A for pure projection. Before RESET the committed result remains; after synchronous RESET the whole new state is published. persistence flushes the reset; no mid-reset yielded state exists.",
+        "reloadOrRestart": "persistence reopens the committed terminal and flushes reset; terminalReplayReset checks replay and reset field clearing. Browser7 checks same-game result reload and actual normal/tutorial DOM reset, with unit-only field-reset qualification.",
+        "partialWrite": "N/A for projection and individual reset fields: no separate field writer exists. Shared repository batch atomicity is exercised by persistence on terminal commit; reset-specific physical torn-write fault injection is not claimed.",
+        "invalidOrStaleInput": "terminalReplayReset bounces other gameplay after terminal; actors checks stale duplicate intent; terminalInvalid rejects malformed loaded result.",
+        "concurrentActors": "cas + actors: these transitions run in the same actor-independent serialized fold. No new locks, actor ownership, or distributed transport are introduced; distributed delivery races are outside this bead."
+      }
+    }
+  },
+  "integration": {
+    "currentEpochQualification": "Existing base/sourceCustody/finalChecks/finalFull fields describe immutable old0140 evidence. This integration block describes the current combined base/source and actual checks. Browser7 is an OLD0140 observation, not combined-source browser execution.",
+    "oldSource": "0140dd642312f1d96b8d4aa0881537f7ca95a289",
+    "oldBase": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+    "newBase": "40853f15527679dc47f8cd4d04222d3c98ee214a",
+    "updatedUnsubmittableCheckpoint": "d98ad6318d53d71eb12a4f17485fc5be8b20945c",
+    "candidateConflict": {
+      "candidate": "01a14219-4014-7a92-a7fe-31171d545d21",
+      "paths": [
+        "docs/rules.md",
+        "src/rules/journey/lifecycle.ts",
+        "src/rules/journey/modifier-registry.ts"
+      ],
+      "ownerUpdate1Exit": 5,
+      "rollbackSource": "0140dd642312f1d96b8d4aa0881537f7ca95a289",
+      "ownerUpdate2Exit": 0,
+      "qualification": "Owner native receipts retain clean rollback, temporary three-path parking checkpoint and supported update. Author performed no raw rebase/native action. Temporary checkpoint is not a validated candidate."
+    },
+    "retainedAuthority": [
+      "ack14.txt",
+      "ack15.txt",
+      "ack16.txt",
+      "ack17.txt",
+      "ack18.txt"
+    ],
+    "reapplication": "Own three journey-loop paragraphs precede peer card-type heading; peer opening-hand bindings, tutorial guards, Mug metadata/registration and acquisition arguments retained with own earn/settle logic. Both-side exact diffs retained.",
+    "initializationEpochs": {
+      "focused1": {
+        "receipt": "focused-integration-1.run.json",
+        "exit": 1,
+        "seconds": 9.169250875012949,
+        "filesFailedToImport": 8,
+        "filesPassed": 3,
+        "testsPassed": 8,
+        "behaviorFailureCredit": 0
+      },
+      "ack16": {
+        "receipt": "focused-integration-2.run.json",
+        "exit": 0,
+        "seconds": 12.998824957991019,
+        "testsPassed": 787,
+        "qualification": "Historical hoisted-storage source passes public tests; ordinary review1 still rejects import cycle and six no-var declarations."
+      },
+      "review1": {
+        "receipt": "review-integration-1.run.json",
+        "exit": 1,
+        "seconds": 52.163125000020955,
+        "relatedTestsPassed": 9071,
+        "relatedFilesPassed": 163,
+        "typechecks": 0,
+        "lint": 1,
+        "importCycles": 1
+      },
+      "finalRepair": "Exact original constructor/private origin/cache/helper bodies extracted into journey-content-engine.ts; two proof/provider imports consume that leaf, and existing battle provider re-exports the same constructor. Six ACK16 files restored to exact pre-ACK16 bytes. One cache/private origin authority; no var exceptions, new seal or trusted producer family."
+    },
+    "source": {
+      "allPayloadManifest": "combined-full3-source-manifest.json",
+      "sha256": "20516131cc08e00352a03d4d0fbd3512f68c24b277ba5fa2518a0159ac9ca415",
+      "payloads": 5959,
+      "trackedCheckpointPayloads": 5958,
+      "explicitNewSource": "src/session/providers/journey-content-engine.ts",
+      "ownFrozenPayloads": 46,
+      "postFullMismatches": [],
+      "qualification": "All5959 source hashes agree before/after full3; three own evidence records are appended after that guard epoch.",
+      "postFullFormatting": {
+        "path": "src/session/providers/journey-content-engine.ts",
+        "oldSHA256": "e828ceb443aaee0804bf454f627ecc94770c817116e41acf3b335cb62d565fca",
+        "newSHA256": "99f931de2485f0eb5789dcb2fd7f90aba0bb34d91f02191b443cf24e1f05d5d2",
+        "removedBytes": 1,
+        "removedByte": "LF",
+        "executableBodyUnchanged": true,
+        "failedBoundary": "failed-amend-boundary-1/whitespace-integration-commit-staged.run.json",
+        "qualification": "One extra blank EOF line from the new module was caught only once staged. Full3 executes identical body bytes; final source differs only by one EOF LF. Failed staged epoch is retained, no runtime rerun claimed."
+      }
+    },
+    "currentDiff": {
+      "runtimeGross": 866,
+      "runtimeNet": 564,
+      "runtimePaths": 22,
+      "testNet": 1130,
+      "testPaths": 18,
+      "newLogicalContractFixtureModules": 14,
+      "newTestEntrypoints": 0
+    },
+    "checks": {
+      "focused-integration-3": {
+        "receipt": "focused-integration-3.run.json",
+        "exit": 0,
+        "seconds": 12.630666416021995,
+        "rawBytes": 52016
+      },
+      "review-integration-2": {
+        "receipt": "review-integration-2.run.json",
+        "exit": 0,
+        "seconds": 52.497987624956295,
+        "rawBytes": 51286
+      },
+      "knip-integration-1": {
+        "receipt": "knip-integration-1.run.json",
+        "exit": 0,
+        "seconds": 3.892603957967367,
+        "rawBytes": 50042
+      },
+      "combined-portable-validation": {
+        "receipt": "combined-portable-validation.run.json",
+        "exit": 0,
+        "seconds": 2.5611403330112807,
+        "rawBytes": 3234
+      }
+    },
+    "focused": {
+      "files": 11,
+      "tests": 787,
+      "failed": 0
+    },
+    "review": {
+      "files": 163,
+      "tests": 9071,
+      "failed": 0,
+      "bothTypechecks": 0,
+      "lint": 0,
+      "importCycles": 0,
+      "cycleQualification": "2572 modules,5 late-bound cycles, no evaluation-time reads inside a cycle."
+    },
+    "full3": {
+      "receipt": "combined-review-full-3.run.json",
+      "files": 433,
+      "tests": 12103,
+      "exit": 0,
+      "guardExit": 0,
+      "outerExit": 0,
+      "workers": 2,
+      "admissionAndLauncherStartupSeconds": 0.025704708008561283,
+      "executionSeconds": 122.90095995896263,
+      "outerSeconds": 123.05752012500307,
+      "commandStartOneMinuteLoad": 3.59033203125,
+      "testStepStartOneMinuteLoad": 5.138671875,
+      "testStepSeconds": 87.6,
+      "d19Qualification": "This is a correctness epoch. No controlled low-load budget compliance or waiver is inferred; Gate46 controlled-measurement duty remains.",
+      "innerTimeoutSeconds": 1800
+    },
+    "portable": {
+      "at": "2026-10-16T00:57:23.814048+00:00",
+      "resultSha256": "b97abc5681010afd64a87ec8aaf8e307c6806e96c22f1bb13cacad05de4bb35a",
+      "files": [
+        {
+          "kind": "normal",
+          "sha256": "d78a503c864bfe68e7f95778648bedaf28568c8a5ff7f6c8c810f44e028dcb47",
+          "load": "applied",
+          "decode": "accepted",
+          "binding": null
+        },
+        {
+          "kind": "tutorial",
+          "sha256": "8fe09d778311023cf928e553c6ef70f72a32edf35286e3765bada27b0cfae77a",
+          "load": "applied",
+          "decode": "accepted",
+          "binding": {
+            "battleId": "tutorial-battle:event:1:0",
+            "mode": "tutorial",
+            "tutorialRunId": "event:1"
+          }
+        }
+      ],
+      "source5959AfterMismatches": [],
+      "resource": {
+        "pidAbsent": true,
+        "pgAbsent": true
+      },
+      "browserResourcesHeld": false
+    },
+    "ui": {
+      "comparison": "ui-branch-comparison.json",
+      "browserObservedSource": "0140dd642312f1d96b8d4aa0881537f7ca95a289",
+      "unchangedWholeFiles": 4,
+      "sameResetAndLoadDispatchBodies": true,
+      "qualification": "Draw adapter/view/screen/App bytes match OLD0140; actual current front-door phase journey priority and terminal/reset URL branches match. Context/action additions concern opening selection. Portable default-registry LOAD/decode passes. No changed tested terminal/reset branch was found, so no additional browser run is claimed."
+    },
+    "unsupportedBoundary": "Composed journeyBattleInit/Mug definitions carry extra metadata and are not accepted by the private closed-loop registry provenance contract. The default production no-loop registry retains ordinary behavior, covered by real opening-acquisition/recovery/battle-init/integration/view contracts. Additional family support and full730 causal drain remain with730;273 acceptance is unchanged.",
+    "sourceReadScope": "author-integration-read-scope.json; actual bounded delivery qualification retained, not preparation-only proof",
+    "clock": "Original17:59:21.482Z dispatch continues through the imminent replacement-amend stamp; actual completion and precision are retained in integration1/final-amend-attempt2.json. Historical first-commit/snapshot windows and all failed/admission intervals remain retained without subtraction; sampling/productive CPU UNKNOWN.",
+    "priorFriction": {
+      "hostLoad": 6.1337890625,
+      "localValidationS": {
+        "focused": 10.917622415989172,
+        "review": 69.39567825000267,
+        "knip": 7.632420790963806,
+        "full": 127.08761041698745,
+        "browser": 52.89311566599645,
+        "finalPortableImport": 2.634334583999589,
+        "finalLegacyControl": 8.140000584011432
+      },
+      "friction": [
+        {
+          "tag": "heavy-lock-admission",
+          "minutes": 21.23616790626644,
+          "note": "Sum of the two actual lock-admission plus launcher-startup intervals. Kernel lock wait was not sampled separately; no browser resources were held. This wall time is included in the original author window."
+        },
+        {
+          "tag": "qa-harness-compatibility",
+          "minutes": 2.0621325347339736,
+          "note": "Actual execution wall time of six retained failed result-QA attempts, excluding time between attempts and CPU. Causes: VM filesystem import, native chooser modal transport, VM URL global, dialog closure assumptions, and the existing retained-goto reset gate. Partial successful assertions remain qualified in the QA record."
+        }
+      ]
+    }
+  }
+}

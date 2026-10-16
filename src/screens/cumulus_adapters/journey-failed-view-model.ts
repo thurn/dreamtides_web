@@ -6,11 +6,11 @@ export function buildJourneyFailedView(
   state: JourneyState,
 ): JourneyFailedView | null {
   const summary = state.failureSummary;
-  if (summary === null) return null;
+  const draw = state.journeyDraw;
+  if (summary === null && draw === undefined) return null;
 
   return {
-    result: summary.result,
-    reason: summary.reason,
+    ...(draw === undefined ? { result: summary!.result, reason: summary!.reason } : { kind: "journey" as const, result: "draw" as const, reason: "mandatory_journey_loop" as const }),
     avatar:
       state.avatar === null
         ? null
@@ -24,17 +24,17 @@ export function buildJourneyFailedView(
               ? {}
               : { portraitFocus: state.avatar.portraitFocus }),
           },
-    stats: [
+    stats: draw === undefined ? [
       {
         id: "battles",
         value: state.completionLevel,
       },
-      { id: "round", value: summary.turnNumber },
-      { id: "playerScore", value: summary.playerScore },
+      { id: "round", value: summary!.turnNumber },
+      { id: "playerScore", value: summary!.playerScore },
       {
         id: "enemyScore",
-        value: summary.enemyScore,
+        value: summary!.enemyScore,
       },
-    ],
+    ] : [{ id: "battles", value: state.completionLevel }, { id: "deckEntries", value: state.deck.length }],
   };
 }

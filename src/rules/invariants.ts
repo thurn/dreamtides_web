@@ -1,3 +1,4 @@
+import { validJourneyLoopFold } from "./journey/journey-loop-state";
 import { subtypeContinuation, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey/journey-subtype";
 import { typeRemapContinuation, validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey/journey-type-remap";
 import { validShopReplenishmentRuntime } from "./journey/journey-shop";
@@ -93,6 +94,7 @@ export function foldInvariantViolations(
   }
 
   if (!validJourneyTransfigurationRecords(state.journey)) violations.push({ code: "journey_transfiguration_record_inconsistent", detail: "applications" });
+  if (!validJourneyLoopFold(state, registry)) violations.push({ code: "journey_loop_inconsistent", detail: "earned_or_terminal" });
   if (journey.runId === null) return violations;
 
   const nodes = Object.values(journey.atlas.nodes);

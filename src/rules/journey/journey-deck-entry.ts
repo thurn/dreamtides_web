@@ -164,13 +164,20 @@ function prevent(journey: JourneyState, before: Readonly<Pick<JourneyState, "dec
 }
 
 /** Catalog values author the threshold and amount; physical gains are the sole subjects. */
+const factorySpecs = new WeakMap<JourneyModifierDefinition["afterJourneyEvent"], { dreamsignId: DreamsignId; effect: NonNullable<JourneyModifierDefinition["journeyDeckEntry"]> }>();
+/** Validate the complete definition around the exact factory-owned callback. */
+export function canonicalJourneyDeckEntry(definition: JourneyModifierDefinition): boolean {
+  if (Object.values(Object.getOwnPropertyDescriptors(definition)).some(field => !("value" in field))) return false;
+  const spec = factorySpecs.get(definition.afterJourneyEvent);
+  return spec !== undefined && Object.getOwnPropertyDescriptor(definition, "dreamsignId")?.value === spec.dreamsignId && Object.getOwnPropertyDescriptor(definition, "journeyDeckEntry")?.value === spec.effect && Object.keys(definition).every(key => ["dreamsignId", "journeyDeckEntry", "afterJourneyEvent"].includes(key));
+}
 export function journeyDeckEntry(dreamsignId: DreamsignId, descriptor: JourneyDeckEntryEffect): JourneyModifierDefinition {
   if ((descriptor.kind !== "preventNightmare" && descriptor.kind !== "warriorSpark" && descriptor.kind !== "randomTransfiguration" && descriptor.kind !== "randomCharacterTransfiguration") ||
     (descriptor.kind === "warriorSpark" && (!Number.isSafeInteger(descriptor.amount) || descriptor.amount < 0)) ||
     (descriptor.kind === "randomTransfiguration" && (!Number.isSafeInteger(descriptor.minimumDeckSize) || descriptor.minimumDeckSize < 0))) throw new RangeError("Invalid journey deck entry clause.");
   if (descriptor.kind === "randomCharacterTransfiguration" && (!Number.isSafeInteger(descriptor.numerator) || !Number.isSafeInteger(descriptor.denominator) || descriptor.numerator < 0 || descriptor.denominator < 1 || descriptor.numerator > descriptor.denominator)) throw new RangeError("Invalid character transfiguration chance.");
   const effect = Object.freeze({ ...descriptor });
-  return { dreamsignId, journeyDeckEntry: effect,
+  const definition: JourneyModifierDefinition = { dreamsignId, journeyDeckEntry: effect,
     afterJourneyEvent({ before, journey, heldIndex, siteId, gains, random }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
       const current = new Map(journey.deck.map((entry) => [entry.entryId, entry]));
       const present = gains.filter((gain) => current.has(gain.entry.entryId));
@@ -223,4 +230,6 @@ export function journeyDeckEntry(dreamsignId: DreamsignId, descriptor: JourneyDe
       return { journey: { ...journey, deck: journey.deck.map((entry) => byId.has(entry.entryId) ? { ...entry, transfiguration: byId.get(entry.entryId)! } : entry) }, before: { transformed: 0, deckSize: journey.deck.length }, after: { transformed: transformations.length, deckSize: journey.deck.length }, target: { siteIds: siteId === null ? [] : [siteId], transfigurations: transformations } };
     },
   };
+  factorySpecs.set(definition.afterJourneyEvent, { dreamsignId, effect });
+  return definition;
 }

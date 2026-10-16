@@ -1,3 +1,5 @@
+import { observesJourneyLoops, journeyLoopSpec } from "./journey/journey-mandatory-loop";
+import { commitJourneyLoopFold, journeyLoopBattleBinding } from "./journey/journey-loop-state";
 import { validJourneySubtypeIntent, validJourneySubtypeScreen, validJourneySubtypeBattleBinding } from "./journey/journey-subtype";
 import { resolveTypeRemap, validTypeRemapIntent, validJourneyTypeRemap, validTypeRemapBattleBinding } from "./journey/journey-type-remap";
 import { finishBeforeBattlePurge, prepareBeforeBattlePurge } from "./journey/journey-before-battle-purge";
@@ -148,8 +150,9 @@ function finishTransition(
 ): ReduceResult {
   const seq = ctx.seq;
   if (event.type === "RESOLVE_JOURNEY_SUBTYPE" && result.outcome === "applied") {
-    const resumed = modifiers.resumeSubtype({ journey: before.journey, payload: event.payload ?? {}, battle: before.battle, seq, random });
-    return resumed === null ? bounce(before) : enforceInvariants(event, { ...result, state: { ...result.state, journey: resumed.journey }, logRecords: resumed.logRecords }, modifiers);
+    const resumed = modifiers.resumeSubtype({ journey: before.journey, payload: event.payload ?? {}, battle: before.battle, loopBattleBinding: observesJourneyLoops(before.journey, id => modifiers.lookup(id)) || before.journey.pendingJourneyLoop !== undefined ? journeyLoopBattleBinding(before) : null, seq, random });
+    if (resumed === null) return bounce(before);
+    return enforceInvariants(event, { ...result, state: commitJourneyLoopFold({ ...result.state, journey: resumed.journey }), logRecords: resumed.logRecords }, modifiers);
   }
   if (event.type === "BEGIN_BATTLE" && result.outcome === "applied" && result.state.battle === null && result.state.journey.screen.type === "journeyPurge" && result.state.journey.screen.choice.kind === "beforeBattle") return enforceInvariants(event, result, modifiers);
   if (
@@ -164,7 +167,7 @@ function finishTransition(
     const siteId = siteIdFromUnknown(event.payload?.siteId) ??
       (before.journey.screen.type === "site" ? before.journey.screen.siteId : null);
     // Domain occurrences are frozen once; modifier-produced copies are not inputs.
-    const transfigurations = event.type !== "TRANSFIGURE_CARD" && result.state.journey.dreamsigns.some((sign) => modifiers.lookup(sign.id)?.journeyTransfiguration?.kind === "copyTransfiguredEvent")
+    const transfigurations = event.type !== "TRANSFIGURE_CARD" && result.state.journey.dreamsigns.some((sign) => modifiers.lookup(sign.id)?.journeyTransfiguration?.kind === "copyTransfiguredEvent" || journeyLoopSpec(modifiers.lookup(sign.id)) !== undefined)
       ? journeyTransfigurationOccurrences(before.journey, result.state.journey) : [];
     const domain = result.state.journey;
     const records: ReducerLogRecord[] = [];
@@ -197,22 +200,25 @@ function finishTransition(
       journey: result.state.journey,
       dreamsignGains: journeyDreamsignGains(before.journey, result.state.journey, event),
       battleBinding: result.state.battle === null ? null : { battleId: result.state.battle.init.battleId, mode: result.state.battle.mode.kind },
+      loopBattleBinding: observesJourneyLoops(result.state.journey, id => modifiers.lookup(id)) || result.state.journey.pendingJourneyLoop !== undefined ? journeyLoopBattleBinding(result.state) : null,
       eventType: event.type,
       seq, random, transfigurations,
       siteId,
       ...(result.purges === undefined ? {} : { purges: result.purges }),
     });
+    const appliedJourney = applied.journey;
     result = {
       ...result,
-      state: applied.journey === result.state.journey
+      state: appliedJourney === result.state.journey
         ? result.state
-        : { ...result.state, journey: applied.journey },
+        : { ...result.state, journey: appliedJourney },
       ...([...records, ...applied.logRecords].length === 0
         ? {}
         : { logRecords: [...(result.logRecords ?? []), ...records, ...applied.logRecords] }),
     };
   }
-  if (result.outcome === "applied" && event.type === "RESOLVE_JOURNEY_PURGE" && before.journey.screen.type === "journeyPurge" && before.journey.screen.choice.kind === "beforeBattle") {
+  if (result.outcome === "applied" && isKnownEventType(event.type) && isGameplayEventType(event.type) && result.state.journey.journeyDraw !== undefined) result = { ...result, state: commitJourneyLoopFold(result.state) };
+  if (result.outcome === "applied" && result.state.journey.journeyDraw === undefined && event.type === "RESOLVE_JOURNEY_PURGE" && before.journey.screen.type === "journeyPurge" && before.journey.screen.choice.kind === "beforeBattle") {
     const finalJourney = result.state.journey;
     const transition = finishBeforeBattlePurge(result.state, before.journey.screen.choice, ctx);
     if (transition === null || transition.state.battle === null) return bounce(before);
@@ -220,6 +226,7 @@ function finishTransition(
     result = { ...result, state: { ...transition.state, journey: committed.journey }, logRecords: [...(result.logRecords ?? []), ...committed.logRecords,
       { event: "journey_before_battle_started", fields: { siteId: before.journey.screen.choice.siteId, earnedSeq: before.journey.screen.choice.earnedSeq, battleId: transition.state.battle.init.battleId, entryIds: finalJourney.deck.map(({ entryId }) => entryId), essence: finalJourney.essence, dreamsignIds: finalJourney.dreamsigns.map(({ id }) => id) } }] };
   }
+
   return enforceInvariants(event, result, modifiers);
 }
 
@@ -339,6 +346,7 @@ export function routeDomain(
     // Unrecognized type string — recorded no-op, never a throw.
     return bounce(state);
   }
+  if (state.journey.journeyDraw !== undefined && isGameplayEventType(event.type)) return bounce(state);
   const payload = event.payload ?? {};
   const journey = state.journey;
   const type: GameEventType = event.type;

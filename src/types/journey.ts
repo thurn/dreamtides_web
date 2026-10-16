@@ -1576,6 +1576,29 @@ export interface TransfiguredSiteOfferModifier {
   readonly sourceActionId: ExplorationActionId;
 }
 
+/** Actual original operation and physical source that earned an unexecuted child. */
+export interface JourneyOperationCause { readonly eventSeq: number; readonly ordinal: number; readonly entryId: DeckEntryId; readonly cardId: CardId; readonly applicationIndex: number }
+export type JourneyLoopBattleBinding = { readonly battleId: BattleId; readonly mode: "journey" } | { readonly battleId: BattleId; readonly mode: "tutorial"; readonly tutorialRunId: import("./identifiers").TutorialRunId };
+export interface JourneyEarnedLoopInstruction { readonly kind: "mandatoryOriginalTransfiguration"; readonly permissionSeq: number; readonly sourceObserverSources: readonly JourneyDreamsignGain[]; readonly cause: JourneyOperationCause; readonly parentEntry: Readonly<DeckEntry>; readonly source: JourneyDreamsignGain }
+export interface JourneyLoopPending {
+  readonly kind: "earnedOriginalTransfiguration";
+  readonly permissionSeq: number;
+  readonly siteId: SiteId | null;
+  readonly instructions: readonly JourneyEarnedLoopInstruction[];
+  readonly observerSources: readonly JourneyDreamsignGain[];
+  readonly suspendedBattle: JourneyLoopBattleBinding | null;
+}
+export interface JourneyDraw {
+  readonly kind: "mandatoryJourneyLoop";
+  readonly result: "draw";
+  readonly committedSeq: number;
+  readonly cause: JourneyOperationCause;
+  readonly earnedSource: JourneyDreamsignGain;
+  readonly continuingSources: readonly JourneyDreamsignGain[];
+  readonly proof: { readonly kind: "canonicalTransfigurationTypeClosure"; readonly cardType: CardType; readonly anchor: "Kindled" | "Inspired"; readonly applicableForms: readonly TransfigurationType[] };
+  readonly abandonedBattle: JourneyLoopBattleBinding | null;
+}
+
 /** The top-level journey state object. */
 export interface JourneyState {
   /** C12's completed run-wide choice, projected into each future battle entry. */
@@ -1612,6 +1635,8 @@ export interface JourneyState {
   draftState: DraftState | null;
   screen: Screen;
   failureSummary: JourneyFailureSummary | null;
+  readonly pendingJourneyLoop?: JourneyLoopPending;
+  readonly journeyDraw?: JourneyDraw;
   /**
    * Whether the player has dismissed the one-time starter-deck reveal popup
    * shown immediately after picking an Avatar. Persisted on the journey
