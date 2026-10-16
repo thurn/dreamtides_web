@@ -17,6 +17,8 @@ import { CumulusRoot } from "./cumulus/CumulusRoot";
 import type { JourneyContent } from "./data/journey-content";
 import { loadJourneyContent } from "./data/journey-content";
 import { useLocalGame } from "./session/use-local-game";
+import { useConfirmedHead } from "./session/hooks";
+import type { RuntimeConfig } from "./runtime/runtime-config";
 import type { CardData } from "./types/cards";
 import type { JourneyMutations } from "./state/journey-context";
 import type { JourneyState } from "./types/journey";
@@ -27,6 +29,7 @@ import {
   parseDeckEntryId,
   parseJourneyId,
   parseGameId,
+  parseQaSceneId,
 } from "./types/identifiers";
 import { testAvatarId, testJourneySeed } from "./types/test-identities";
 
@@ -61,7 +64,7 @@ vi.mock("./session/hooks", () => ({
   LocalGameProvider: ({ children }: { children: ReactNode }) => (
     <div data-local-game-provider>{children}</div>
   ),
-  useConfirmedHead: () => 0,
+  useConfirmedHead: vi.fn(() => 0),
 }));
 
 vi.mock("./session/providers/register-game-providers", () => ({
@@ -92,7 +95,10 @@ vi.mock("./components/ScreenRouter", () => ({
   }: {
     cumulusChromeHandlers?: { onOpenPoolViewer?: () => void };
   }) => (
-    <div data-testid="cumulus-screen-router">
+    <div
+      data-testid="cumulus-screen-router"
+      data-screen={useJourney().state.screen.type}
+    >
       <button
         type="button"
         data-testid="cumulus-open-pool"
@@ -266,11 +272,11 @@ function mount(element: ReactElement): HTMLDivElement {
   return container;
 }
 
-function mountJourneyApp(): HTMLDivElement {
+function mountJourneyApp(config: Partial<RuntimeConfig> = {}): HTMLDivElement {
   return mount(
     <JourneyApp
       cardDatabase={new Map()}
-      runtimeConfig={{ seedOverride: null, gameId: null }}
+      runtimeConfig={{ seedOverride: null, gameId: null, ...config }}
     />,
   );
 }
@@ -288,6 +294,7 @@ async function flushAppEffects(): Promise<void> {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.mocked(useConfirmedHead).mockReturnValue(0);
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
   vi.mocked(loadJourneyContent).mockReturnValue(makeJourneyContent());
@@ -358,6 +365,105 @@ describe("App", () => {
 });
 
 describe("JourneyApp", () => {
+  it("keeps a fresh QA scene loading until its confirmed scene is rendered", () => {
+    const mutations = makeMutations();
+    const config = { gotoScene: parseQaSceneId("journeyfailed") };
+    setJourneyState(makeState(), mutations);
+    const container = mountJourneyApp(config);
+    const root = roots[roots.length - 1];
+    if (root === undefined) throw new Error("expected a mounted root");
+    const rerender = (): void => {
+      act(() => {
+        root.render(
+          <CumulusRoot>
+            <JourneyApp
+              cardDatabase={new Map()}
+              runtimeConfig={{ seedOverride: null, gameId: null, ...config }}
+            />
+          </CumulusRoot>,
+        );
+      });
+    };
+
+    expect(
+      container.querySelector('[data-application-state="loading"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-screen-router"]'),
+    ).toBeNull();
+    expect(mutations.bootstrapQaScene).toHaveBeenCalledTimes(1);
+    expect(mutations.bootstrapQaScene).toHaveBeenCalledWith(
+      config.gotoScene,
+      null,
+      null,
+      null,
+      null,
+    );
+    rerender();
+    expect(mutations.bootstrapQaScene).toHaveBeenCalledTimes(1);
+    expect(
+      container.querySelector('[data-application-state="loading"]'),
+    ).not.toBeNull();
+
+    vi.mocked(useConfirmedHead).mockReturnValue(1);
+    setJourneyState(
+      starterCallerState({ screen: { type: "journeyFailed" } }),
+      mutations,
+    );
+    rerender();
+    expect(
+      container.querySelector('[data-screen="journeyFailed"]'),
+    ).not.toBeNull();
+
+    // The confirmed reset retains the scene query and returns to Avatar entry.
+    vi.mocked(useConfirmedHead).mockReturnValue(2);
+    setJourneyState(makeState(), mutations);
+    rerender();
+    expect(
+      container.querySelector('[data-screen="journeyStart"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-application-state="loading"]'),
+    ).toBeNull();
+    expect(mutations.bootstrapQaScene).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders a saved reset journey with the retained QA scene on a fresh mount", () => {
+    const mutations = makeMutations();
+    vi.mocked(useConfirmedHead).mockReturnValue(2);
+    setJourneyState(makeState(), mutations);
+    const container = mountJourneyApp({
+      gotoScene: parseQaSceneId("journeyfailed"),
+    });
+
+    expect(
+      container.querySelector('[data-screen="journeyStart"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-application-state="loading"]'),
+    ).toBeNull();
+    expect(mutations.bootstrapQaScene).not.toHaveBeenCalled();
+  });
+
+  it.each([undefined, parseQaSceneId("avatar-select")])(
+    "renders ordinary and start-scene entry without a loading hold (%s)",
+    (gotoScene) => {
+      const mutations = makeMutations();
+      setJourneyState(makeState(), mutations);
+      const container = mountJourneyApp({ gotoScene });
+
+      expect(
+        container.querySelector('[data-screen="journeyStart"]'),
+      ).not.toBeNull();
+      expect(
+        container.querySelector('[data-application-state="loading"]'),
+      ).toBeNull();
+      expect(mutations.bootstrapQaScene).toHaveBeenCalledTimes(
+        gotoScene === undefined ? 0 : 1,
+      );
+    },
+  );
+
   it("shows the starting-deck modal only once an avatar is picked and until it is seen", () => {
     const cases: ReadonlyArray<readonly [JourneyState, boolean]> = [
       [makeState(), false],

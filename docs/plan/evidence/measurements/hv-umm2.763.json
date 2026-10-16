@@ -1,0 +1,1156 @@
+{
+  "bead": "hv-umm2.763",
+  "base": "c6a2f3fbc25d6a7b89cf112d3c1bc9d079148068",
+  "qaRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763",
+  "sourceComparisons": [
+    {
+      "epoch": "red-v01",
+      "before": "source-red-v01/manifest.json",
+      "after": "source-red-v01-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "green-v01",
+      "before": "source-green-v01/manifest.json",
+      "after": "source-green-v01-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "browser-v01",
+      "before": "source-browser-v01/manifest.json",
+      "after": "source-browser-v01-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "browser-v02",
+      "before": "source-browser-v02/manifest.json",
+      "after": "source-browser-v02-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "final-focused-v01",
+      "before": "source-final-focused-v01/manifest.json",
+      "after": "source-final-focused-v01-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "final-review-v01",
+      "before": "source-final-review-v01/manifest.json",
+      "after": "source-final-review-v01-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "final-focused-v02",
+      "before": "source-final-focused-v02/manifest.json",
+      "after": "source-final-focused-v02-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "final-review-v02",
+      "before": "source-final-review-v02/manifest.json",
+      "after": "source-final-review-v02-after/manifest.json",
+      "equal": true
+    },
+    {
+      "epoch": "final-knip-v01",
+      "before": "source-final-knip-v01/manifest.json",
+      "after": "source-final-knip-v01-after/manifest.json",
+      "equal": true
+    }
+  ],
+  "finalRuntimeTestHashes": {
+    "src/App.tsx": "9358c9231bb3e7012036f2d04385679b97f62b8013959e0ca4bf3a6cc7740d58",
+    "src/App.test.tsx": "050209cf2036c75aadaf11bc81f02e5485743f143bc31ddf5976b480007ddd06",
+    "src/runtime/qa-scenes.ts": "34a59ba3bcdf37b98f2ec10e17636c2d4e1245737cca6a9aaa3160f29eb38f90",
+    "src/rules/journey/lifecycle.ts": "a5fe2f1bc7d66c6dc97b4870679e56fcaec8fd537b4797205671d02b5640f849",
+    "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+    "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+    "scripts/screenshot-runtime.mjs": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8"
+  },
+  "browserAppEqualsFinalApp": true,
+  "testDelta": {
+    "files": 0,
+    "lines": 106,
+    "cases": 4,
+    "jsdomFiles": 0
+  },
+  "scope": {
+    "changed": [
+      "src/App.tsx:QA bootstrap/loading eligibility",
+      "src/App.test.tsx:existing rendered contract owner",
+      "own evidence"
+    ],
+    "fallout": [],
+    "unchangedProtectedInputs": [
+      "src/runtime/qa-scenes.ts",
+      "src/rules/journey/lifecycle.ts",
+      "scripts/qa/run-scenario.mjs",
+      "scripts/qa/prelude.mjs",
+      "scripts/screenshot-runtime.mjs"
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final-v02 starting one-minute vm.loadavg"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "epoch": "focused-red-v01",
+      "utc": "2026-10-16T06:09:41.053461+00:00",
+      "load": "{ 4.72 6.08 5.67 }"
+    },
+    {
+      "epoch": "focused-green-v01",
+      "utc": "2026-10-16T06:10:03.593046+00:00",
+      "load": "{ 4.95 6.05 5.67 }"
+    },
+    {
+      "epoch": "browser-v01",
+      "utc": "2026-10-16T06:10:53.633891+00:00",
+      "load": "{ 4.66 5.82 5.61 }"
+    },
+    {
+      "epoch": "browser-v02",
+      "utc": "2026-10-16T06:12:25.900810+00:00",
+      "load": "{ 10.91 7.32 6.19 }"
+    },
+    {
+      "epoch": "focused-final-v01",
+      "utc": "2026-10-16T06:13:08.583385+00:00",
+      "load": "{ 9.04 7.33 6.24 }"
+    },
+    {
+      "epoch": "review-final-v01",
+      "utc": "2026-10-16T06:13:30.586896+00:00",
+      "load": "{ 8.70 7.37 6.29 }"
+    },
+    {
+      "epoch": "focused-final-v02",
+      "utc": "2026-10-16T06:14:04.534878+00:00",
+      "load": "{ 7.96 7.37 6.33 }"
+    },
+    {
+      "epoch": "review-final-v02",
+      "utc": "2026-10-16T06:14:10.342324+00:00",
+      "load": "{ 7.73 7.34 6.33 }"
+    },
+    {
+      "epoch": "knip-final-v01",
+      "utc": "2026-10-16T06:14:41.274111+00:00",
+      "load": "{ 6.41 7.06 6.26 }"
+    }
+  ],
+  "commands": [
+    {
+      "epoch": "focused-red-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/App.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:09:41.053461+00:00",
+      "end": "2026-10-16T06:09:50.044491+00:00",
+      "exit": 1,
+      "wallSeconds": 8.990937791997567,
+      "pid": 72348,
+      "pgid": 72348,
+      "load": "{ 4.72 6.08 5.67 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376516437500583,
+      "endedMonotonicNs": 376525428378916,
+      "cpuUserSeconds": 6.970885,
+      "cpuSystemSeconds": 2.6730329999999998,
+      "receipt": "receipts/focused-red-v01.receipt.json",
+      "stdout": "receipts/focused-red-v01.stdout",
+      "stderr": "receipts/focused-red-v01.stderr"
+    },
+    {
+      "epoch": "focused-green-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/App.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:10:03.593046+00:00",
+      "end": "2026-10-16T06:10:09.689881+00:00",
+      "exit": 0,
+      "wallSeconds": 6.096734958991874,
+      "pid": 74046,
+      "pgid": 74046,
+      "load": "{ 4.95 6.05 5.67 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376538977045750,
+      "endedMonotonicNs": 376545073743666,
+      "cpuUserSeconds": 6.067321,
+      "cpuSystemSeconds": 2.000207,
+      "receipt": "receipts/focused-green-v01.receipt.json",
+      "stdout": "receipts/focused-green-v01.stdout",
+      "stderr": "receipts/focused-green-v01.stderr"
+    },
+    {
+      "epoch": "browser-v01",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763/retained-reset-v01.mjs",
+        "--bead",
+        "hv-umm2.763",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:10:53.633891+00:00",
+      "end": "2026-10-16T06:11:12.057446+00:00",
+      "exit": 0,
+      "wallSeconds": 18.423450666014105,
+      "pid": 77878,
+      "pgid": 77878,
+      "load": "{ 4.66 5.82 5.61 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376589017795208,
+      "endedMonotonicNs": 376607441185041,
+      "cpuUserSeconds": 6.444291,
+      "cpuSystemSeconds": 3.056371,
+      "receipt": "receipts/browser-v01.receipt.json",
+      "stdout": "receipts/browser-v01.stdout",
+      "stderr": "receipts/browser-v01.stderr"
+    },
+    {
+      "epoch": "browser-v02",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763/retained-reset-v02.mjs",
+        "--bead",
+        "hv-umm2.763",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:12:25.900810+00:00",
+      "end": "2026-10-16T06:12:41.831414+00:00",
+      "exit": 0,
+      "wallSeconds": 15.930482458963525,
+      "pid": 23542,
+      "pgid": 23542,
+      "load": "{ 10.91 7.32 6.19 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376681284561291,
+      "endedMonotonicNs": 376697215004833,
+      "cpuUserSeconds": 6.40531,
+      "cpuSystemSeconds": 2.854215,
+      "receipt": "receipts/browser-v02.receipt.json",
+      "stdout": "receipts/browser-v02.stdout",
+      "stderr": "receipts/browser-v02.stderr"
+    },
+    {
+      "epoch": "focused-final-v01",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/App.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:13:08.583385+00:00",
+      "end": "2026-10-16T06:13:18.254106+00:00",
+      "exit": 0,
+      "wallSeconds": 9.670611583977006,
+      "pid": 44633,
+      "pgid": 44633,
+      "load": "{ 9.04 7.33 6.24 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376723967056750,
+      "endedMonotonicNs": 376733637630875,
+      "cpuUserSeconds": 6.858391,
+      "cpuSystemSeconds": 3.064833,
+      "receipt": "receipts/focused-final-v01.receipt.json",
+      "stdout": "receipts/focused-final-v01.stdout",
+      "stderr": "receipts/focused-final-v01.stderr"
+    },
+    {
+      "epoch": "review-final-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:13:30.586896+00:00",
+      "end": "2026-10-16T06:13:48.172070+00:00",
+      "exit": 2,
+      "wallSeconds": 17.585064999992028,
+      "pid": 47445,
+      "pgid": 47445,
+      "load": "{ 8.70 7.37 6.29 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376745970532541,
+      "endedMonotonicNs": 376763555527708,
+      "cpuUserSeconds": 50.939425,
+      "cpuSystemSeconds": 9.405917,
+      "receipt": "receipts/review-final-v01.receipt.json",
+      "stdout": "receipts/review-final-v01.stdout",
+      "stderr": "receipts/review-final-v01.stderr"
+    },
+    {
+      "epoch": "focused-final-v02",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/App.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:14:04.534878+00:00",
+      "end": "2026-10-16T06:14:10.364460+00:00",
+      "exit": 0,
+      "wallSeconds": 5.829491165990476,
+      "pid": 50082,
+      "pgid": 50082,
+      "load": "{ 7.96 7.37 6.33 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376779918440958,
+      "endedMonotonicNs": 376785747886625,
+      "cpuUserSeconds": 5.962342,
+      "cpuSystemSeconds": 1.9403949999999999,
+      "receipt": "receipts/focused-final-v02.receipt.json",
+      "stdout": "receipts/focused-final-v02.stdout",
+      "stderr": "receipts/focused-final-v02.stderr"
+    },
+    {
+      "epoch": "review-final-v02",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:14:10.342324+00:00",
+      "end": "2026-10-16T06:14:25.863039+00:00",
+      "exit": 0,
+      "wallSeconds": 15.520592791959643,
+      "pid": 50614,
+      "pgid": 50614,
+      "load": "{ 7.73 7.34 6.33 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376785725897125,
+      "endedMonotonicNs": 376801246442166,
+      "cpuUserSeconds": 40.677628,
+      "cpuSystemSeconds": 7.906415,
+      "receipt": "receipts/review-final-v02.receipt.json",
+      "stdout": "receipts/review-final-v02.stdout",
+      "stderr": "receipts/review-final-v02.stderr"
+    },
+    {
+      "epoch": "knip-final-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-reset-gate763",
+      "start": "2026-10-16T06:14:41.274111+00:00",
+      "end": "2026-10-16T06:14:45.807672+00:00",
+      "exit": 0,
+      "wallSeconds": 4.533488292014226,
+      "pid": 53004,
+      "pgid": 53004,
+      "load": "{ 6.41 7.06 6.26 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376816657624416,
+      "endedMonotonicNs": 376821191034333,
+      "cpuUserSeconds": 4.240077,
+      "cpuSystemSeconds": 1.448633,
+      "receipt": "receipts/knip-final-v01.receipt.json",
+      "stdout": "receipts/knip-final-v01.stdout",
+      "stderr": "receipts/knip-final-v01.stderr"
+    }
+  ],
+  "failures": [
+    {
+      "epoch": "focused-red-v01",
+      "reason": "Unchanged App leaves loading after same-mount reset and saved-reset mount; exactly two assertions fail, seven pass.",
+      "source": "source-red-v01/manifest.json"
+    },
+    {
+      "epoch": "review-final-v01",
+      "reason": "Test fixture used Array.at outside configured target and expression-bodied act returned a thenable. Corrected solely in App.test.tsx; final checks pass.",
+      "source": "source-final-review-v01/manifest.json"
+    }
+  ],
+  "browser": {
+    "v01": {
+      "invocation": "run-4qrGM2",
+      "report": "invocations/run-4qrGM2/retained-reset-v01.result.json",
+      "driver": "retained-reset-v01.mjs",
+      "driverSha256": "6d52b6c0ddef3ad82b37998a67ac0528be120c8a20c15842f7f8b97248a7f5e2",
+      "preDispatch": "retained-reset-v01.mjs.predispatch.json",
+      "ok": true,
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 77916,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2587,
+        "scenario": 15234,
+        "total": 17883
+      },
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 9135
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 6099
+        }
+      ],
+      "nativeLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763/invocations/run-4qrGM2/retained-reset-v01-desktop.jsonl",
+          "gameId": "ix3zci",
+          "selectedBy": "url",
+          "rows": 71,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763/invocations/run-4qrGM2/retained-reset-v01-mobile.jsonl",
+          "gameId": "34ai5c",
+          "selectedBy": "url",
+          "rows": 71,
+          "reason": null
+        }
+      ],
+      "result": {
+        "desktop": {
+          "before": {
+            "href": "http://localhost:5274/failed?seed=1&goto=journeyfailed&game=ix3zci",
+            "path": "/failed",
+            "game": "ix3zci",
+            "goto": "journeyfailed",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "after": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=ix3zci",
+            "path": "/",
+            "game": "ix3zci",
+            "goto": "journeyfailed",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reloaded": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=ix3zci",
+            "path": "/",
+            "game": "ix3zci",
+            "goto": "journeyfailed",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reset": {
+            "event": "game_event",
+            "timestamp": "2026-10-16T06:11:01.346Z",
+            "gameId": "ix3zci",
+            "seq": 2,
+            "type": "RESET_JOURNEY",
+            "actor": "24oa3c27b4r3qcfgn6fr7e6o",
+            "outcome": "applied"
+          },
+          "avatar": {
+            "screen": true,
+            "avatarOffers": 0,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 917.59375
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "documentWidth": 1440,
+            "actions": [
+              {
+                "x": 1372,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 153,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 577,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 1001,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "reloadAvatar": {
+            "screen": true,
+            "avatarOffers": 0,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 917.59375
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "documentWidth": 1440,
+            "actions": [
+              {
+                "x": 1372,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 153,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 577,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 1001,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "loads": 1,
+          "finalLoads": 1,
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "mobile": {
+          "before": {
+            "href": "http://localhost:5274/failed?seed=1&goto=journeyfailed&game=34ai5c",
+            "path": "/failed",
+            "game": "34ai5c",
+            "goto": "journeyfailed",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "after": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=34ai5c",
+            "path": "/",
+            "game": "34ai5c",
+            "goto": "journeyfailed",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reloaded": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=34ai5c",
+            "path": "/",
+            "game": "34ai5c",
+            "goto": "journeyfailed",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reset": {
+            "event": "game_event",
+            "timestamp": "2026-10-16T06:11:07.600Z",
+            "gameId": "34ai5c",
+            "seq": 2,
+            "type": "RESET_JOURNEY",
+            "actor": "qiw6t8n769ikdxwtnxozkxmj",
+            "outcome": "applied"
+          },
+          "avatar": {
+            "screen": true,
+            "avatarOffers": 0,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "documentWidth": 390,
+            "actions": [
+              {
+                "x": 322,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 37,
+                "y": 739,
+                "width": 316,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 346,
+                "y": 388.234375,
+                "width": 40,
+                "height": 40,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "reloadAvatar": {
+            "screen": true,
+            "avatarOffers": 0,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "documentWidth": 390,
+            "actions": [
+              {
+                "x": 322,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 37,
+                "y": 739,
+                "width": 316,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 346,
+                "y": 388.234375,
+                "width": 40,
+                "height": 40,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "loads": 1,
+          "finalLoads": 1,
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      "caps": [],
+      "qualification": "v01 optional avatarOffers observed zero using absent data-avatar-id; its wrapper and action geometry plus viewed images are positive. v02 explicitly asserts data-choose-avatar offers and enabled onscreen buttons after reset and reload."
+    },
+    "v02": {
+      "invocation": "run-tg0EVP",
+      "report": "invocations/run-tg0EVP/retained-reset-v02.result.json",
+      "driver": "retained-reset-v02.mjs",
+      "driverSha256": "e795f82957755dcbb09d4b9c4f9faeecc48801de70a6c299f58080ffd0f60bab",
+      "preDispatch": "retained-reset-v02.mjs.predispatch.json",
+      "ok": true,
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 23586,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2266,
+        "scenario": 13033,
+        "total": 15366
+      },
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 8068
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 4963
+        }
+      ],
+      "nativeLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763/invocations/run-tg0EVP/retained-reset-v02-desktop.jsonl",
+          "gameId": "25bfev",
+          "selectedBy": "url",
+          "rows": 71,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.763/invocations/run-tg0EVP/retained-reset-v02-mobile.jsonl",
+          "gameId": "8ah6un",
+          "selectedBy": "url",
+          "rows": 71,
+          "reason": null
+        }
+      ],
+      "result": {
+        "desktop": {
+          "before": {
+            "href": "http://localhost:5274/failed?seed=1&goto=journeyfailed&game=25bfev",
+            "path": "/failed",
+            "game": "25bfev",
+            "goto": "journeyfailed",
+            "timeOrigin": 1792131149287.8,
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "after": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=25bfev",
+            "path": "/",
+            "game": "25bfev",
+            "goto": "journeyfailed",
+            "timeOrigin": 1792131149287.8,
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reloaded": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=25bfev",
+            "path": "/",
+            "game": "25bfev",
+            "goto": "journeyfailed",
+            "timeOrigin": 1792131154025.6,
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reset": {
+            "event": "game_event",
+            "timestamp": "2026-10-16T06:12:33.573Z",
+            "gameId": "25bfev",
+            "seq": 2,
+            "type": "RESET_JOURNEY",
+            "actor": "zhjeawnsqmaf6te2f5swedu2",
+            "outcome": "applied"
+          },
+          "avatar": {
+            "choices": [
+              {
+                "x": 153,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 577,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 1001,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "screen": true,
+            "avatarOffers": 3,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 917.59375
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "documentWidth": 1440,
+            "actions": [
+              {
+                "x": 1372,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 153,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 577,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 1001,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "reloadAvatar": {
+            "choices": [
+              {
+                "x": 153,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 577,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 1001,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "screen": true,
+            "avatarOffers": 3,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 917.59375
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "documentWidth": 1440,
+            "actions": [
+              {
+                "x": 1372,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 153,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 577,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 1001,
+                "y": 615.015625,
+                "width": 286,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "initialLoads": 1,
+          "loads": 1,
+          "finalLoads": 1,
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "mobile": {
+          "before": {
+            "href": "http://localhost:5274/failed?seed=1&goto=journeyfailed&game=8ah6un",
+            "path": "/failed",
+            "game": "8ah6un",
+            "goto": "journeyfailed",
+            "timeOrigin": 1792131156513.4,
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "after": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=8ah6un",
+            "path": "/",
+            "game": "8ah6un",
+            "goto": "journeyfailed",
+            "timeOrigin": 1792131156513.4,
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reloaded": {
+            "href": "http://localhost:5274/?seed=1&goto=journeyfailed&game=8ah6un",
+            "path": "/",
+            "game": "8ah6un",
+            "goto": "journeyfailed",
+            "timeOrigin": 1792131158934,
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            }
+          },
+          "reset": {
+            "event": "game_event",
+            "timestamp": "2026-10-16T06:12:38.395Z",
+            "gameId": "8ah6un",
+            "seq": 2,
+            "type": "RESET_JOURNEY",
+            "actor": "7yud456zfuwjygmc6e65e37c",
+            "outcome": "applied"
+          },
+          "avatar": {
+            "choices": [
+              {
+                "x": 37,
+                "y": 739,
+                "width": 316,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "screen": true,
+            "avatarOffers": 1,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "documentWidth": 390,
+            "actions": [
+              {
+                "x": 322,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 37,
+                "y": 739,
+                "width": 316,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 346,
+                "y": 388.234375,
+                "width": 40,
+                "height": 40,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "reloadAvatar": {
+            "choices": [
+              {
+                "x": 37,
+                "y": 739,
+                "width": 316,
+                "height": 42,
+                "disabled": false
+              }
+            ],
+            "screen": true,
+            "avatarOffers": 1,
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "documentWidth": 390,
+            "actions": [
+              {
+                "x": 322,
+                "y": 71,
+                "width": 48,
+                "height": 48,
+                "disabled": false
+              },
+              {
+                "x": 37,
+                "y": 739,
+                "width": 316,
+                "height": 42,
+                "disabled": false
+              },
+              {
+                "x": 346,
+                "y": 388.234375,
+                "width": 40,
+                "height": 40,
+                "disabled": false
+              }
+            ],
+            "loading": false
+          },
+          "initialLoads": 1,
+          "loads": 1,
+          "finalLoads": 1,
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      "caps": [],
+      "qualification": "Fresh document timeOrigin changes, same game and retained goto, exactly one native bootstrap at initial scene/reset/reload, positive choice geometry at both reset and reload."
+    }
+  },
+  "selectedActualVisualViews": [
+    {
+      "filename": "retained-reset-v01-desktop-avatar.png",
+      "sha256": "985244228cb5cff11baa34fabc47605edfa82fb4d1f6c9d6f331cdf71b5ba330",
+      "width": 2880,
+      "height": 1800,
+      "actuallyViewed": true,
+      "viewObservation": "Three desktop Avatar choices, readable panels and visible Choose actions."
+    },
+    {
+      "filename": "retained-reset-v01-desktop-before.png",
+      "sha256": "d91e0b875afd213a3aba4c36c185325c6109609a4d259bd6add8dd7c28afaa3e",
+      "width": 2880,
+      "height": 1800,
+      "actuallyViewed": true,
+      "viewObservation": "Terminal scene, visible New Journey action and summary."
+    },
+    {
+      "filename": "retained-reset-v01-mobile-avatar.png",
+      "sha256": "b2b31f47aa1569e8ad46ef6ee3ceeb4409d96343e62e60e4fd88596f4cca2fec",
+      "width": 780,
+      "height": 1688,
+      "actuallyViewed": true,
+      "viewObservation": "Active mobile portrait, readable information panel and visible Choose action."
+    }
+  ],
+  "runtimeSettlement": "runtime-settlement-v01.json",
+  "sourceFrozen": "App source frozen before browser-v01; test fixture reaches final bytes before focused-final-v02, review-final-v02 and knip-final-v01. Every epoch pre/post hash matches. Evidence completion follows runtime/test checks.",
+  "window": {
+    "start": "2026-10-16T06:06:48+00:00",
+    "startBasis": "native claim verified receipt",
+    "preGitCutoff": "2026-10-16T06:16:18.739159+00:00",
+    "preGitCutoffMonotonicNs": 376914122385000,
+    "inclusiveScope": "Native claim through this real pre-Git evidence cutoff includes research, setup, all negative epochs, repairs, coordination, queues, browser, visual inspection and checks. No speculative future time is recorded. Final schema and actual Git return are measured in additive ignored tail receipts; no clock-only amend."
+  },
+  "versions": {
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "runnerBase": "c6a2f3fbc25d6a7b89cf112d3c1bc9d079148068",
+    "reducerVersion": "dreamtides-coop-v31",
+    "browserProviderVersion": "Not separately retained; no browser-version-specific assertion."
+  },
+  "limitations": [
+    "Development QA scene entry only; no production build needed for this developer-only predicate.",
+    "No native chooser/dialog interaction, gameplay or performance claim.",
+    "Fresh loading and ordinary/start entry are synthetic rendered contracts; actual reset/reload is browser acceptance.",
+    "Desktop journey wrapper height917.59375 exceeds900px viewport; choice controls lie inside viewport. No layout edits or layout acceptance beyond documented geometry."
+  ]
+}

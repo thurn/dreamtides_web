@@ -78,19 +78,17 @@ export function JourneyApp({
   const openDeckFiredRef = useRef(false);
   const openPoolViewerFiredRef = useRef(false);
 
+  const gotoSceneName = runtimeConfig.gotoScene ?? null;
+  const canBootstrapQaScene =
+    gotoSceneName !== null && confirmedHead === 0 && state.avatar === null;
+
   // `?goto=<scene>`: replace the freshly created game's empty journey state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
   // open screens that are otherwise reachable only by playing battles forward.
-  // Fires once per mount, and the mutation guards on `avatar === null` so a
-  // reload is a no-op.
+  // Fires once per mount for an empty confirmed history. Persisted journeys,
+  // including a reset journey with a null Avatar, render their folded state.
   useEffect(() => {
-    const gotoScene = runtimeConfig.gotoScene ?? null;
-    if (
-      gotoScene === null ||
-      gotoSceneFiredRef.current ||
-      confirmedHead !== 0 ||
-      state.avatar !== null
-    ) {
+    if (!canBootstrapQaScene || gotoSceneFiredRef.current) {
       return;
     }
     if (mutations.bootstrapQaScene === undefined) {
@@ -99,20 +97,19 @@ export function JourneyApp({
 
     gotoSceneFiredRef.current = true;
     mutations.bootstrapQaScene(
-      gotoScene,
+      gotoSceneName,
       runtimeConfig.explorationCardId ?? null,
       runtimeConfig.explorationDreamsignCount ?? null,
       runtimeConfig.explorationDreamsignCap ?? null,
       runtimeConfig.explorationStarterCount ?? null,
     );
   }, [
-    confirmedHead,
+    canBootstrapQaScene,
+    gotoSceneName,
     runtimeConfig.explorationCardId,
     runtimeConfig.explorationDreamsignCap,
     runtimeConfig.explorationDreamsignCount,
     runtimeConfig.explorationStarterCount,
-    runtimeConfig.gotoScene,
-    state.avatar,
     mutations,
   ]);
 
@@ -239,17 +236,16 @@ export function JourneyApp({
   }, [mutations]);
 
   // `?goto=<scene>`: hold a loading screen — rather than the Avatar
-  // selection screen — until `bootstrapQaScene` has folded into the game, so QA
+  // selection screen — while the fresh game is eligible for bootstrap, so QA
   // lands directly on the requested scene (e.g. the Dream Atlas). Scenes
   // whose destination *is* the Avatar selection screen (`landsOnJourneyStart`)
   // are exempt: their state keeps `avatar` null, so this gate — which waits
   // for an Avatar to be selected — would otherwise spin forever.
-  const gotoSceneName = runtimeConfig.gotoScene ?? null;
   const gotoScene = gotoSceneName === null ? null : findQaScene(gotoSceneName);
   if (
+    canBootstrapQaScene &&
     gotoScene !== null &&
-    gotoScene.landsOnJourneyStart !== true &&
-    state.avatar === null
+    gotoScene.landsOnJourneyStart !== true
   ) {
     return (
       <ApplicationStateScreen
