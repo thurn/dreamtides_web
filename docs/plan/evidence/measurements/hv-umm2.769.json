@@ -1,0 +1,349 @@
+{
+  "bead": "hv-umm2.769",
+  "phase": 5,
+  "source": {
+    "base": "23ede4e34e3c0e68fcd7db92d7f890761ad5e0aa",
+    "historicalProfile": "1d5adfdee7ce2fde1f2a7431066afb7f0b3ad63d",
+    "originalToBaseDelta": "Three hv-umm2.768 evidence files; engine/content/policy identical, parent verified.",
+    "claim": "2026-10-16T10:42:35Z",
+    "dispatch": "2026-10-16T10:49:39.080Z",
+    "implementationEnd": "2026-10-16T11:41:22.937387+00:00",
+    "modelCPU": "unknown",
+    "grantSHA256": "ebe082b6b9d184c153ece31ada2a1e3471114fc068b9bd16ff014c73c6e57741",
+    "writerSHA256": {
+      "src/engine/steps/driver.ts": "69faa800de7babf80491b436810d137a8b1d3001597b79bcef58d7d6b09222ca",
+      "src/engine/continuous/continuous-zones.test.ts": "63672b7fa01cd483ce673c711a440f5a3f13cff812d3ec1eaadb983d2f72fb76",
+      "src/engine/effects/primitives/contracts/gain-abilities.contracts.ts": "9b0640be420cc5b4ac3e4a8902eaeab9c52396e473337af5a3bfed805d0f2075"
+    },
+    "falloutGrantSHA256": "e8f28e0adbe859523b1b4b51b6a0e67e0fd2a3b633e222b06d270cbe0d0e9636",
+    "sourceProof": {
+      "filename": "parent-source-account-proof.62.954d1cc84c538c08941269c48220d31054baa8098498315f073fbe89d820a5c9.json",
+      "sha256": "954d1cc84c538c08941269c48220d31054baa8098498315f073fbe89d820a5c9",
+      "accountFilename": "source-read-account.62.21abcd06d6434e124f2d2064ebf5c11031dad2a5d262914a484292d007d69218.json",
+      "accountSHA256": "21abcd06d6434e124f2d2064ebf5c11031dad2a5d262914a484292d007d69218",
+      "nativePackets": 62
+    },
+    "sourceProofCustody": "Frozen 62-packet proof 954d1cc84c538c08941269c48220d31054baa8098498315f073fbe89d820a5c9 supersedes the mutable 55 aggregate; original 55 native returns are retained and reverified in 62. Old 55 aggregate content/hash is not claimed available."
+  },
+  "cause": {
+    "boundary": "Committed inline/fold states reach boundedLegality before the engine facade remembers their lazy Layers. Repeated characteristic/cost queries rebuild that evaluation.",
+    "historicalSampleUS": {
+      "runToDecision9181": 41140615,
+      "boundedLegality9205": 40580695,
+      "legalMoves9206": 40579237,
+      "computeMoves9207": 40576195,
+      "canPlay9210": 21309617
+    },
+    "qualification": "Inclusive ancestor costs overlap; canPlay is transitive through anonymous frames. TSX line1 supplies no line attribution.",
+    "admission": "Existing rememberCharacteristics call after boundedLegality state/side guards; mutable step/search/recovery work stays outside the memo."
+  },
+  "recordedDecision": {
+    "version": 585,
+    "ordinal": 92,
+    "side": "enemy",
+    "legalActions": 186,
+    "repositions": 180,
+    "normalIterations": 256,
+    "responseBudget": "64 unchanged; policy/catalog files match initial payloads.",
+    "inputSHA256": "3570eec537882f514f9cf073ac95c2f8732808acca3392fe55fd58ec11f0f486",
+    "stateHash": "17d015ba30a062",
+    "requestSHA256": "3fb9d7fd11cef2b62564e5bbfe120465951298e843bbbbe5b75f5e2522095a55",
+    "adapterSHA256": "1f782d528391a38fe03e735013d52e85894c43434d3eaa2000736f20b24f4032",
+    "before": {
+      "userS": 46.855636,
+      "systemS": 1.5025439999999999,
+      "cpuS": 48.35818,
+      "wallS": 47.05051808297867,
+      "hostLoadStart": [
+        5.44091796875,
+        5.12646484375,
+        5.587890625
+      ]
+    },
+    "after": {
+      "userS": 21.572276,
+      "systemS": 1.068744,
+      "cpuS": 22.641019999999997,
+      "wallS": 23.54545620799763,
+      "hostLoadStart": [
+        3.62548828125,
+        3.32470703125,
+        4.10791015625
+      ]
+    },
+    "cpuReductionPercent": 53.18057875627247,
+    "wallReductionPercent": 49.95707344503057,
+    "acceptanceThresholdCPU": 43.522362,
+    "equivalence": "Every captured request field, whole non-time policy result, all 510 sampled/apply transition records, events, answers, bounds and hashes equal. The non-time policy result also equals historical output.",
+    "transitionsSHA256": "a15c86eb4b01a3dcbca76927e902e5bafc0767cc55a9dbbd95f53fc6da44b838",
+    "qualification": {
+      "cohort": "One retained real main decision; one baseline and one candidate run; descriptive case evidence, not general Greedy throughput.",
+      "collectors": "Baseline external Python sampled main process group every1s; candidate external Python sampled descendant identities/groups every0.5s. Whole-child CPU excludes the collectors. The Node command, loader, adapter and deterministic workload are identical except exclusive result pathname.",
+      "hostLoad1Min": {
+        "before": 5.44091796875,
+        "after": 3.62548828125
+      },
+      "historicalProfile": "Original profiled process48.6332wall/50.5933CPU remains historical; same-adapter48.35818CPU is the comparison denominator."
+    },
+    "gameCredit": 0
+  },
+  "benchmark": {
+    "recipe": "npm run perf:ab -- 23ede4e34e3c0e68fcd7db92d7f890761ad5e0aa --workload bench --rounds 5 --args \"--games 10 --step-games 2 --interactive-games 2 --seed greedy-legality769\" --snapshot-parent /tmp/769-root",
+    "summary": "bench summary (5 rounds each):\n  A wall median 31.49 s (31.43–32.63, spread 3.8%)\n  A CPU  median 35.63 s (34.59–36.39, spread 5.1%)\n  A load median 3.82\n  B wall median 24.23 s (23.95–25.82, spread 7.7%)\n  B CPU  median 27.72 s (27.39–27.94, spread 2.0%)\n  B load median 3.40\n  B vs A: wall -23.1%, CPU -22.2%\nperf:ab: removed snapshot /tmp/769-root/dreamtides-perf-ab-XEvQ3C",
+    "rounds": [
+      {
+        "round": 1,
+        "side": "A",
+        "wallS": 31.49,
+        "cpuS": 35.63,
+        "hostLoad1Min": 3.57
+      },
+      {
+        "round": 1,
+        "side": "B",
+        "wallS": 24.11,
+        "cpuS": 27.4,
+        "hostLoad1Min": 3.98
+      },
+      {
+        "round": 2,
+        "side": "A",
+        "wallS": 31.43,
+        "cpuS": 34.73,
+        "hostLoad1Min": 4.1
+      },
+      {
+        "round": 2,
+        "side": "B",
+        "wallS": 23.95,
+        "cpuS": 27.39,
+        "hostLoad1Min": 4.04
+      },
+      {
+        "round": 3,
+        "side": "A",
+        "wallS": 32.04,
+        "cpuS": 35.69,
+        "hostLoad1Min": 3.84
+      },
+      {
+        "round": 3,
+        "side": "B",
+        "wallS": 24.25,
+        "cpuS": 27.79,
+        "hostLoad1Min": 3.4
+      },
+      {
+        "round": 4,
+        "side": "A",
+        "wallS": 31.49,
+        "cpuS": 34.59,
+        "hostLoad1Min": 3.82
+      },
+      {
+        "round": 4,
+        "side": "B",
+        "wallS": 24.23,
+        "cpuS": 27.72,
+        "hostLoad1Min": 3.35
+      },
+      {
+        "round": 5,
+        "side": "A",
+        "wallS": 32.63,
+        "cpuS": 36.39,
+        "hostLoad1Min": 3.78
+      },
+      {
+        "round": 5,
+        "side": "B",
+        "wallS": 25.82,
+        "cpuS": 27.94,
+        "hostLoad1Min": 3.4
+      }
+    ],
+    "battleStepsEachRound": 2622,
+    "managedSnapshotRemoved": true,
+    "qualification": "Existing full-pool Random seeded bench; five interleaved pairs plus existing warmups. Printed values rounded by existing tool. This does not measure general Greedy throughput or count toward Gate46 acceptance games."
+  },
+  "validation": {
+    "focused": {
+      "exitCode": 0,
+      "wallS": 6.056189958006144,
+      "cpuS": 5.708622,
+      "hostLoadStart": [
+        2.67333984375,
+        3.123046875,
+        4.0732421875
+      ],
+      "sysctlLoadStart": "{ 2.67 3.12 4.07 }",
+      "groups": [
+        61184
+      ],
+      "survivors": []
+    },
+    "fuzz": {
+      "exitCode": 0,
+      "wallS": 735.5159549170057,
+      "cpuS": 779.406754,
+      "hostLoadStart": [
+        3.42431640625,
+        3.447265625,
+        3.89990234375
+      ],
+      "sysctlLoadStart": "{ 3.42 3.45 3.90 }",
+      "groups": [
+        70215,
+        70217
+      ],
+      "survivors": []
+    },
+    "review": {
+      "exitCode": 1,
+      "wallS": 77.60895791702205,
+      "cpuS": 210.350754,
+      "hostLoadStart": [
+        3.46728515625,
+        4.1962890625,
+        4.1923828125
+      ],
+      "sysctlLoadStart": "{ 3.47 4.20 4.19 }",
+      "groups": [
+        89665
+      ],
+      "survivors": []
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallS": 7.156925665971357,
+      "cpuS": 5.964557,
+      "hostLoadStart": [
+        4.6533203125,
+        4.27490234375,
+        4.12158203125
+      ],
+      "sysctlLoadStart": "{ 4.65 4.27 4.12 }",
+      "groups": [
+        80351
+      ],
+      "survivors": []
+    },
+    "gain-targeted": {
+      "exitCode": 0,
+      "wallS": 4.971429209050257,
+      "cpuS": 5.812633,
+      "hostLoadStart": [
+        2.75927734375,
+        3.21923828125,
+        3.71484375
+      ],
+      "sysctlLoadStart": "{ 2.76 3.22 3.71 }",
+      "groups": [
+        98685
+      ],
+      "survivors": []
+    },
+    "review-fixed": {
+      "exitCode": 0,
+      "wallS": 72.65425279201008,
+      "cpuS": 197.159915,
+      "hostLoadStart": [
+        2.9423828125,
+        3.1630859375,
+        3.654296875
+      ],
+      "sysctlLoadStart": "{ 2.94 3.16 3.65 }",
+      "groups": [
+        212
+      ],
+      "survivors": []
+    },
+    "knip-final": {
+      "exitCode": 0,
+      "wallS": 4.401403833006043,
+      "cpuS": 5.365117,
+      "hostLoadStart": [
+        4.37890625,
+        3.6474609375,
+        3.78662109375
+      ],
+      "sysctlLoadStart": "{ 4.38 3.65 3.79 }",
+      "groups": [
+        2817
+      ],
+      "survivors": []
+    },
+    "schema": {
+      "exitCode": 0,
+      "wallS": 0.5945835420279764,
+      "cpuS": 0.08846699999999999,
+      "hostLoadStart": [
+        3.98681640625,
+        3.64404296875,
+        3.7685546875
+      ],
+      "sysctlLoadStart": "{ 3.99 3.64 3.77 }",
+      "groups": [
+        4473
+      ],
+      "survivors": []
+    },
+    "whitespace": {
+      "exitCode": 0,
+      "wallS": 0.03609579097246751,
+      "cpuS": 0.033213,
+      "hostLoadStart": [
+        3.72607421875,
+        3.6357421875,
+        3.7587890625
+      ],
+      "sysctlLoadStart": "{ 3.73 3.64 3.76 }",
+      "groups": [
+        5263
+      ],
+      "survivors": []
+    }
+  },
+  "validationScope": {
+    "focused": "72 tests in four files: continuous-zones.test.ts, continuous.test.ts, costs-search.test.ts, fold/fold.test.ts.",
+    "fuzz": "Existing full-pool 200 seeded Random games, default 10% interactive replay, lockf heavy slot; inner 1800s watchdog plus 10 s TERM cleanup; workers2. No Gate46 acceptance credit.",
+    "reviewFull": "Not required: existing cache admission and one contract case; no configuration, test infrastructure or cross-cutting architecture changes.",
+    "aggregateResult": "Final aggregate review:354files/11181tests passed; first aggregate:353files/11179tests passed and2fixture cases failed, preserved before repair.",
+    "coreReview": "Parent dispatches fresh read-only fork_turns:none Codex review against exact commit.",
+    "status": "complete"
+  },
+  "publicContract": {
+    "testDelta": {
+      "files": 0,
+      "lines": 51,
+      "jsdomFiles": 0,
+      "cases": 1
+    },
+    "assertions": "Full Engine.apply results match with/without committed-view observers and cold reload between void entry and Reclaim; views, live spark, input immutability and invariants match. No private call counts, timing or production-data assertions."
+  },
+  "failurePaths": {
+    "midStepError": "runStep clones; failed/suspended work never reaches the new cache admission. Existing continuous-zone failed-resolution and fold divergence/rollback contracts run.",
+    "interrupt": "Guards, nextAutomaticStep, candidate order and one-step feasibility budgets stay unchanged; existing costs-search and exact transition equality cover bounds/response behavior.",
+    "reload": "Serialized cold synthetic run and fold event/fingerprint/hash equivalence; derived WeakMap entries are unpersisted.",
+    "partialWrite": "No runtime persistence introduced. Returned state/events/answers/bounds remain exact.",
+    "invalidStaleInput": "Existing prompt/intent validation and state-object/version authority; fold reload/cancel/invalid-answer contracts remain in scope.",
+    "concurrentActors": "Per-catalog WeakMap, distinct committed state objects and versions; no shared global cache.",
+    "hiddenInformation": "Only original reconstructed side view/dealt decklists go to policy; synthetic both-side views and existing hidden-hand contracts preserve visibility.",
+    "recovery": "Fold recovery copies changed knowledge/turnLog records before publishing a distinct committed object; suspended display and recovery work-in-progress are not admitted."
+  },
+  "rawEvidence": {
+    "index": {
+      "filename": "raw-evidence-index.json",
+      "sha256": "afe5c1efcc910e63113b235233d9be8cc93dcdd9aee1b27a6ae67ae38e685cb8",
+      "files": 198
+    },
+    "sourceReturns": "source-read-account.json plus source-returns/ retain 62 original returned packets; Stage1 grant proof covers 55. Source ranges distinguish complete writers from selective read-only consumers.",
+    "collectors": "Original baseline samples main group every 1 s; candidate/bench every 0.5 s. Child CPU excludes Python collectors. Short-lived unsampled births remain unknown. Early focused/candidate collector PIDs derive from childPPID; their birth/PGID were not directly observed. Other observed ownership and final settlement are in raw receipts.",
+    "resources": "No browser/server/port. Every validation command joins its root and settles all observed owned groups.",
+    "preExistingIssues": [
+      "Two gainAbilities fixtures appended later floating effects directly to committed Engine.apply output after observing characteristics. Existing cloneState is used in those two bodies before later fixture construction, retaining every assertion/timestamp. See own pre-existing/hv-umm2.769.md."
+    ],
+    "validationFallout": "First aggregate review failed2 timestamp fixture assertions;353files/11179tests passed. Immutable attempt1 receipts retained. Final aggregate and Knip run after the admitted fixture-only repair. Runtime/zone hashes remain unchanged, preserving the successful exactcase/bench/fuzz source epochs.",
+    "assetWarnings": "Existing validation asset sandbox reported missing linked art and restored workspace assets successfully; raw stderr retained, no asset source changes."
+  }
+}

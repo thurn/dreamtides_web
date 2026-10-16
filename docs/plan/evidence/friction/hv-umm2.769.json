@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.769",
+  "phase": 5,
+  "implementMin": 51.73095645,
+  "implementWindow": {
+    "start": "2026-10-16T10:49:39.080000+00:00",
+    "end": "2026-10-16T11:41:22.937387+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.05619,
+    "fuzz": 735.515955,
+    "gain-targeted": 4.971429,
+    "schema": 0.594584,
+    "whitespace": 0.036096,
+    "review-first-failed": 77.608958,
+    "review": 72.654253,
+    "knip-first": 7.156926,
+    "knip": 4.401404
+  },
+  "hostLoad": 2.94,
+  "testDelta": {
+    "files": 0,
+    "lines": 51,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "full-pool-fuzz-validation",
+      "minutes": 12.258599248616763,
+      "note": "Required unchanged-source default200 full-pool validation took735.515955s whole-command wall and779.406754s childCPU; native733.9s/777.6s and50274steps, zero failures. This records validation cost; lock admission/startup/drain are included, exact queue time is unknown. No threshold breach, generalized regression, retrospective cause or acceptance waiver is inferred."
+    }
+  ]
+}

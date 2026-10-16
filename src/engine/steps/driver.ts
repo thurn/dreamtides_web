@@ -1,4 +1,5 @@
 import type { EngineCatalog } from "../catalog";
+import { rememberCharacteristics } from "../continuous/characteristics";
 import type { EngineEvent } from "../events";
 import type { Action } from "../rules/actions";
 import { decision, mainWindowSide } from "../rules/decision";
@@ -114,6 +115,7 @@ export function boundedLegality(
   if (state.result !== null || state.triggerQueue.length > 0 || state.loops.run !== null) return [];
   const side = state.stack.length > 0 ? state.priority : stopped ? mainWindowSide(state) : null;
   if (side === null) return [];
+  rememberCharacteristics(state, catalog);
   return legalMoves(state, catalog, side, memo).bounded.map((step) => ({ version: state.version, side, step }));
 }
 

@@ -223,8 +223,9 @@ describe("gainAbilities", () => {
     state.nextEffect = 2;
     const after = run(state, [["player", activate(collector)]]).state;
     expect(hasKeyword(after, engine.catalog, collector, "vengeful")).toBe(true);
-    after.floating.push(loss(`e${after.nextEffect}`, after.clock));
-    expect(hasKeyword(after, engine.catalog, collector, "vengeful")).toBe(false);
+    const later = cloneState(after);
+    later.floating.push(loss(`e${later.nextEffect}`, later.clock));
+    expect(hasKeyword(later, engine.catalog, collector, "vengeful")).toBe(false);
   });
 
   it("orders a gained static ability by when it was gained, after an earlier change to the same characteristic", () => {
@@ -239,8 +240,9 @@ describe("gainAbilities", () => {
     expect(effectiveSpark(state, engine.catalog, collector)).toBe(2);
     const after = run(state, [["player", activate(collector)]]).state;
     expect(effectiveSpark(after, engine.catalog, collector)).toBe(5);
-    after.floating.push(baseSpark(`e${after.nextEffect}`, after.clock, 3));
-    expect(effectiveSpark(after, engine.catalog, collector)).toBe(3);
+    const later = cloneState(after);
+    later.floating.push(baseSpark(`e${later.nextEffect}`, later.clock, 3));
+    expect(effectiveSpark(later, engine.catalog, collector)).toBe(3);
   });
 });
 

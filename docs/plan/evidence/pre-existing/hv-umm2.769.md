@@ -1,0 +1,7 @@
+# hv-umm2.769: synthetic committed-state ownership
+
+The gainAbilities timestamp contracts construct each hypothetical later effect on a deep clone of the preceding committed state. The keyword contract checks an earlier loss, a later gain, and a still later loss. The spark contract checks an earlier base of 2, a gained base of 5, and a still later base of 3. Their assertions and effect timestamps are retained.
+
+The initial aggregate review exposed two latent fixture ownership violations in `src/engine/effects/primitives/contracts/gain-abilities.contracts.ts` at base `23ede4e34e3c0e68fcd7db92d7f890761ad5e0aa`, lines 211–244. Both cases appended to `after.floating` after reading characteristics of that same engine-returned state. The file's `run` helper and `testing/trigger-harness.ts`'s `passUntil` return committed `Engine.apply` states directly. The engine contract treats these objects as immutable and keys derived evaluations by object and version.
+
+`cloneState(after)` gives the later synthetic state distinct identity and copies its floating effects before the fixture appends another. This preserves the ordered-effect contracts without changing production rules or mutating the preceding committed result. The failed review attempt and subsequent validation receipts are retained in the bead's raw QA index. This diagnosis concerns fixture ownership; it establishes no production rules defect.

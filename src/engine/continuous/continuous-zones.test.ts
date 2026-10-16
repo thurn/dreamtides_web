@@ -170,6 +170,55 @@ describe("static abilities from other zones", () => {
     expect(spark(reclaimed, source)).toBe(1);
   });
 
+  it("keeps complete zone-transition results identical when observed or resumed from cold committed states", () => {
+    const makeEngine = () => createEngine(testCatalog([voidAnthem, dissolveAlly]));
+    const setup = boardState(makeEngine().catalog, {
+      active: "player", phase: "day",
+      player: { back: [voidAnthem.id], front: [v.vanilla1.id], hand: [dissolveAlly.id], energy: 1, deck },
+      enemy: { deck },
+    });
+    const source = setup.ids.player.back[0]!;
+    const ally = setup.ids.player.front[0]!;
+    const saved = serializeState(setup.state);
+    const run = (observed: boolean, reload: boolean) => {
+      let currentEngine = makeEngine();
+      const initial = deserializeState(saved);
+      const observe = observed ? (committed: BattleState) => {
+        const before = serializeState(committed);
+        currentEngine.view(committed, "player");
+        currentEngine.view(committed, "enemy");
+        expect(serializeState(committed)).toBe(before);
+      } : undefined;
+      const answers = new ScriptedSource([[source]]);
+      const dissolved = currentEngine.apply(initial, "player", {
+        kind: "play", card: setup.ids.player.hand[0], from: "hand",
+      }, answers, observe);
+      answers.assertExhausted();
+      expect(serializeState(initial)).toBe(saved);
+      expect(zoneOf(dissolved.state, source)).toBe("void");
+      expect(currentEngine.view(dissolved.state, "player").instances[ally]?.characteristics.spark).toBe(2);
+      const boundary = serializeState(dissolved.state);
+      const committed = reload ? deserializeState(boundary) : dissolved.state;
+      if (reload) currentEngine = makeEngine();
+      const reclaimAnswers = new ScriptedSource([]);
+      const reclaimed = currentEngine.apply(committed, "player", {
+        kind: "play", card: source, from: "void",
+      }, reclaimAnswers, observe);
+      reclaimAnswers.assertExhausted();
+      expect(serializeState(committed)).toBe(boundary);
+      expect(zoneOf(reclaimed.state, source)).toBe("play");
+      const views = { player: currentEngine.view(reclaimed.state, "player"), enemy: currentEngine.view(reclaimed.state, "enemy") };
+      expect(views.player.instances[ally]?.characteristics.spark).toBe(1);
+      expect(invariantViolations(reclaimed.state, currentEngine.catalog)).toEqual([]);
+      return { dissolved, reclaimed, views };
+    };
+    const warm = run(false, false);
+    expect(run(true, false)).toEqual(warm);
+    expect(run(false, true)).toEqual(warm);
+    expect(run(true, true)).toEqual(warm);
+    expect(serializeState(setup.state)).toBe(saved);
+  });
+
   it("apply from a hidden hand without naming the card to the opponent, in its view or its events", () => {
     const { state, ids } = board({ player: { front: [v.vanilla1.id], hand: [DSL.drawTwo.id], energy: 2, deck: [handAnthem.id, handAnthem.id] }, enemy: { deck } });
     const ally = ids.player.front[0]!;
