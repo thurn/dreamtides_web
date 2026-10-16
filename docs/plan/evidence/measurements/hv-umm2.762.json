@@ -1,0 +1,353 @@
+{
+  "bead": "hv-umm2.762",
+  "auditTarget": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+  "recordedAt": "2026-10-16T06:04:38.439149+00:00",
+  "stage": "Final pre-Git evidence cutoff; report/ledger/checks complete. Actual Git return and inclusive clock tail retained externally; certified delivery pending.",
+  "auditHelper": {
+    "agent": "/root/sage_qa_compatibility762",
+    "forkTurns": "none",
+    "fresh": true,
+    "readOnly": true,
+    "terminal": true,
+    "coverage": "Full friction records/prose, relevant QA/provenance branches and cited source/recipes; not exhaustive730JSON/raw-log/screenshot semantic inspection.",
+    "checksActuallyRun": "Read-only source/Git/JSON/hash inspection only; no tests/runtime/native effects."
+  },
+  "sourceInputs": [
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.273.json",
+      "sha256": "5d8e070e6d9e0610793ae800ac8b59ecab71631f52d66ba0501ab761beebb999",
+      "blob": "a1bcb8dc3b10122a9c8272c20d32e70cc728462b",
+      "bytes": 1238,
+      "lines": 34
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.273.md",
+      "sha256": "cdf5667d18b6346c373edcb6fe129f6608e27cb83b5e9b8f256ef0e92f6a8f69",
+      "blob": "c78714604968081fafb57784711a28693426e8d8",
+      "bytes": 2714,
+      "lines": 11
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.273.json",
+      "sha256": "8e292d4744a0c833afb70add907bd9b15d90e0568f30c92cfdd4d986cf22e34b",
+      "blob": "ae5b9c1cb86fa2e32429249ca1c03eaa382ab8f1",
+      "bytes": 19972,
+      "lines": 499
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.730.json",
+      "sha256": "919b550abb8e85a56a9652ec19b1c53a50a2962ca4fd5ea6ac321621096e5b37",
+      "blob": "15a86a6d096eb8ce87b72abd2f616c37fc0a8b30",
+      "bytes": 2998,
+      "lines": 68
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.730.md",
+      "sha256": "647c6c495c47f045050b7175b723515a8d137a38cecec16f1dd3745822854a10",
+      "blob": "b479290ef42f149719ebdca9148455e1f7fc6b6c",
+      "bytes": 18052,
+      "lines": 79
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.730.json",
+      "sha256": "47beaa1d32af3c22f1226cc1f2345c51a8e657832e10283ca3fce372ad1f987f",
+      "blob": "a4f15f7b57c89c312b9df6c50ae84c1a73531e9c",
+      "bytes": 147962,
+      "lines": 3862
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.755.json",
+      "sha256": "ccbca07711e372f6d2e6bb7974ebe39b584c7b316160af899f5688cd36fd5dc5",
+      "blob": "3d73984a2a1249c9c12c62cd0973e1f5db46686c",
+      "bytes": 1815,
+      "lines": 42
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.755.json",
+      "sha256": "6d796d7df6a85752a5265fb8889a9d90a67d41bc69e5c1bac270566d867dc65c",
+      "blob": "78bacd4efe956836110f45bfb2e5b01f2f4b96fb",
+      "bytes": 39583,
+      "lines": 647
+    }
+  ],
+  "sourceMatrix": {
+    "at": "2026-10-16T06:01:29.644126+00:00",
+    "sources": {
+      "scripts/qa/run-scenario.mjs": [
+        {
+          "commit": "905fef1eb9d777a57e74cc07dacb1562604d6136",
+          "blob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939
+        },
+        {
+          "commit": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+          "blob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939
+        },
+        {
+          "commit": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+          "blob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939
+        },
+        {
+          "commit": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+          "blob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939
+        },
+        {
+          "commit": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+          "blob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939
+        }
+      ],
+      "scripts/qa/prelude.mjs": [
+        {
+          "commit": "905fef1eb9d777a57e74cc07dacb1562604d6136",
+          "blob": "4d3cdae5b3109ef7912feab0515a3553480571de",
+          "sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+          "bytes": 109640
+        },
+        {
+          "commit": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+          "blob": "4d3cdae5b3109ef7912feab0515a3553480571de",
+          "sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+          "bytes": 109640
+        },
+        {
+          "commit": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+          "blob": "4d3cdae5b3109ef7912feab0515a3553480571de",
+          "sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+          "bytes": 109640
+        },
+        {
+          "commit": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+          "blob": "4d3cdae5b3109ef7912feab0515a3553480571de",
+          "sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+          "bytes": 109640
+        },
+        {
+          "commit": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+          "blob": "4d3cdae5b3109ef7912feab0515a3553480571de",
+          "sha256": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+          "bytes": 109640
+        }
+      ],
+      "scripts/screenshot-runtime.mjs": [
+        {
+          "commit": "905fef1eb9d777a57e74cc07dacb1562604d6136",
+          "blob": "86e55d22895170e609960f2fd58900bd391c0928",
+          "sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+          "bytes": 9185
+        },
+        {
+          "commit": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+          "blob": "86e55d22895170e609960f2fd58900bd391c0928",
+          "sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+          "bytes": 9185
+        },
+        {
+          "commit": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+          "blob": "86e55d22895170e609960f2fd58900bd391c0928",
+          "sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+          "bytes": 9185
+        },
+        {
+          "commit": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+          "blob": "86e55d22895170e609960f2fd58900bd391c0928",
+          "sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+          "bytes": 9185
+        },
+        {
+          "commit": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+          "blob": "86e55d22895170e609960f2fd58900bd391c0928",
+          "sha256": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+          "bytes": 9185
+        }
+      ],
+      "src/App.tsx": [
+        {
+          "commit": "905fef1eb9d777a57e74cc07dacb1562604d6136",
+          "blob": "d3f30e1d76ddf7841e6600bbd5adcf3d8cd45f63",
+          "sha256": "de1f8b560368ff0f649a8f21a76f595bfbbdff2a28708a9494d9dec2f072a124",
+          "bytes": 22656
+        },
+        {
+          "commit": "4d5aa9bdb5e2530a8e2ee7c68bbdbc952ad41657",
+          "blob": "d3f30e1d76ddf7841e6600bbd5adcf3d8cd45f63",
+          "sha256": "de1f8b560368ff0f649a8f21a76f595bfbbdff2a28708a9494d9dec2f072a124",
+          "bytes": 22656
+        },
+        {
+          "commit": "c30e79b87443cbf1a379afd782d0d10ad7cfd1e7",
+          "blob": "d3f30e1d76ddf7841e6600bbd5adcf3d8cd45f63",
+          "sha256": "de1f8b560368ff0f649a8f21a76f595bfbbdff2a28708a9494d9dec2f072a124",
+          "bytes": 22656
+        },
+        {
+          "commit": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+          "blob": "d3f30e1d76ddf7841e6600bbd5adcf3d8cd45f63",
+          "sha256": "de1f8b560368ff0f649a8f21a76f595bfbbdff2a28708a9494d9dec2f072a124",
+          "bytes": 22656
+        },
+        {
+          "commit": "c0a05d278f1beda7ce9484fa19fd363d9ae9aaac",
+          "blob": "d3f30e1d76ddf7841e6600bbd5adcf3d8cd45f63",
+          "sha256": "de1f8b560368ff0f649a8f21a76f595bfbbdff2a28708a9494d9dec2f072a124",
+          "bytes": 22656
+        }
+      ]
+    },
+    "qualification": "Exact five retained Git source objects; does not backfill prelaunch driver snapshots or establish730MCP missing-result cause. Current App reset loading defect remains separately filed763."
+  },
+  "rootCustody": {
+    "at": "2026-10-16T06:02:30.717170+00:00",
+    "indexSHA256": "94675245c69d31fe0755ac7ddf5b4142eb9f1814569e9be656a26a36f2f0ade5",
+    "indexedPayloadCount": 331,
+    "mismatches": [],
+    "qualification": "Root verified receipt/raw-log/report bytes named by the index; no full semantic read of every payload or retroactive scenario source epoch claim."
+  },
+  "rootVerification": [
+    "full3friction records and measurement QA/qualification branches",
+    "nine273raw-error/receipt samples, all331indexedpayload hashes",
+    "README VM source/global contract",
+    "actual755negative6RESET/URL/timeout and currentAppbootstrap/gate mismatch",
+    "exactfour-file/five-objectSHA andblob equivalence",
+    "new763exactdedup/Areas/prerequisite/gatejoins andcyclesempty"
+  ],
+  "finding": {
+    "bead": "hv-umm2.763",
+    "improvement": "qa-scene-reset-loading-gate/phase-5",
+    "disposition": "Accepted bounded separate developer-QA repair; after762before46; App body unchanged by this audit."
+  },
+  "commonTagDisposition": {
+    "tag": "qa-harness-compatibility",
+    "phase": 5,
+    "reason": "273/730/755 contain distinct source-bound recipe/setup corrections and unknown native-modal MCP outcomes; qualified replacement paths succeeded, but no shared current runner defect is established. The surviving retained-goto reset loading gate is tracked separately by hv-umm2.763. Native dialog painting, 730 QA05\u201308 causes and early-driver provenance, and 755 combined-source browser execution remain unproved."
+  },
+  "limitations": [
+    "730QA05\u201308missing-result causeUNKNOWN",
+    "early730driver and755attempt1\u20132prelaunchcustody notbackfilled",
+    "755browser7oldsource; combinedbrowserexecutionunclaimed",
+    "nativepicker/modalpaintingunobserved",
+    "negative/partial273aggregatesnotupgradedtopasses",
+    "nostatistical/timing/budget/gameplay/acceptancewaiver"
+  ],
+  "scope": "Own evidence and one additive introspection reason line only; no product/test/config/tool body changes.",
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "runtime": {
+    "activeHelpers": 0,
+    "browsers": 0,
+    "servers": 0,
+    "heavyChecks": 0,
+    "installation": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-compatibility762",
+      "start": "2026-10-16T05:56:41.249224+00:00",
+      "end": "2026-10-16T05:56:43.748117+00:00",
+      "exit": 0,
+      "wallSeconds": 2.498809707991313,
+      "pid": 11487,
+      "pgid": 11487,
+      "load": "{ 5.34 6.54 5.46 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 375736634661291,
+      "endedMonotonicNs": 375739133432875,
+      "cpuUserSeconds": 1.938987,
+      "cpuSystemSeconds": 3.8039
+    }
+  },
+  "validation": {
+    "final-review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-compatibility762",
+      "start": "2026-10-16T06:04:03.728700+00:00",
+      "end": "2026-10-16T06:04:04.087066+00:00",
+      "exit": 0,
+      "wallSeconds": 0.35828099999343976,
+      "pid": 43912,
+      "pgid": 43912,
+      "load": "{ 4.34 4.68 4.89 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376179113362833,
+      "endedMonotonicNs": 376179471585416,
+      "cpuUserSeconds": 0.221251,
+      "cpuSystemSeconds": 0.18864699999999998
+    },
+    "final-knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-compatibility762",
+      "start": "2026-10-16T06:04:03.728699+00:00",
+      "end": "2026-10-16T06:04:11.413634+00:00",
+      "exit": 0,
+      "wallSeconds": 7.684806042001583,
+      "pid": 43911,
+      "pgid": 43911,
+      "load": "{ 4.34 4.68 4.89 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376179113383458,
+      "endedMonotonicNs": 376186798131541,
+      "cpuUserSeconds": 5.247392,
+      "cpuSystemSeconds": 2.051919
+    },
+    "final-friction": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-qa-compatibility762",
+      "start": "2026-10-16T06:04:03.728963+00:00",
+      "end": "2026-10-16T06:04:04.038884+00:00",
+      "exit": 0,
+      "wallSeconds": 0.3097078329883516,
+      "pid": 43910,
+      "pgid": 43910,
+      "load": "{ 4.34 4.68 4.89 }",
+      "groupRemainingAtExit": [],
+      "startedMonotonicNs": 376179113735166,
+      "endedMonotonicNs": 376179423406625,
+      "cpuUserSeconds": 0.149256,
+      "cpuSystemSeconds": 0.073055
+    }
+  },
+  "implementationClock": {
+    "nativeClaim": "2026-10-16T05:56:21+00:00",
+    "currentCutoff": "2026-10-16T06:04:38.439149+00:00",
+    "qualification": "Continuous claim interval includes all investigation, filing, evidence and checks. Actual ordinary Git return tail will be retained externally; no fabricated future time or clock-only amend."
+  },
+  "hostLoadSamples": [
+    {
+      "check": "final-review",
+      "spawnLoad": "{ 4.34 4.68 4.89 }"
+    },
+    {
+      "check": "final-knip",
+      "spawnLoad": "{ 4.34 4.68 4.89 }"
+    },
+    {
+      "check": "final-friction",
+      "spawnLoad": "{ 4.34 4.68 4.89 }"
+    }
+  ],
+  "hostLoadQualification": "Final review friction-records substep start06:04:04.004Z load4.33642578125; own timings are not a controlled speed comparison."
+}

@@ -1,0 +1,22 @@
+{
+  "bead": "hv-umm2.762",
+  "phase": 5,
+  "implementMin": 8.290652483333334,
+  "implementWindow": {
+    "start": "2026-10-16T05:56:21+00:00",
+    "end": "2026-10-16T06:04:38.439149+00:00"
+  },
+  "localValidationS": {
+    "review": 0.35828099999343976,
+    "knip": 7.684806042001583,
+    "friction": 0.3097078329883516
+  },
+  "hostLoad": 4.33642578125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "hostLoadQualification": "Final review friction-records substep start06:04:04.004Z load4.33642578125; own timings are not a controlled speed comparison."
+}
