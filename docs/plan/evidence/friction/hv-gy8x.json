@@ -1,0 +1,59 @@
+{
+  "bead": "hv-gy8x",
+  "phase": "T",
+  "implementMin": 61.5890673,
+  "implementWindow": {
+    "start": "2026-10-16T02:27:40.677509+00:00",
+    "end": "2026-10-16T03:29:16.021547+00:00"
+  },
+  "localValidationS": {
+    "install-dependencies": 1.8238646250101738,
+    "install-preflight-release": 0.13050649996148422,
+    "installed-cli-version": 0.014690666983369738,
+    "startup-dreamtides-doctor-1": 0.004513832973316312,
+    "evidence-triggers": 0.2830963329761289,
+    "installed-app-quit": 0.0998823749832809,
+    "installed-app-launch": 0.045813457982148975,
+    "evidence-install": 2.7598337919916958,
+    "staged-bundle-verify": 0.01782579201972112,
+    "whitespace": 0.015177958004642278,
+    "release-build-queue": 393.49272083403775,
+    "installed-bundle-verify": 0.019845917006023228,
+    "bundle-adhoc-sign": 0.06222462496953085,
+    "startup-tool-doctor-2": 0.04105562501354143,
+    "bundle-stage": 0.022683291987050325,
+    "red-worktree-remove": 15.843773290980607,
+    "evidence-schema": 0.28367458301363513,
+    "red-worktree-remove-v02": 11.862960166996345,
+    "release-bundle": 266.20713225001236,
+    "install-wait-release": 376.79056037496775,
+    "focused-worktree-remove": 8.692972375021782,
+    "install-global-idle": 0.15705487498780712,
+    "startup-tool-doctor-1": 0.2608245420269668,
+    "bundle-verify": 0.018727165996097028,
+    "related-worktree": 5.490132124978118,
+    "install-wait-queued-release": 1067.0956529999967,
+    "evidence-review": 1.4799112500040792,
+    "startup-dreamtides-doctor-2": 0.010487374966032803,
+    "evidence-knip": 6.561220749979839,
+    "format": 0.5405528750270605
+  },
+  "hostLoad": 16.43408203125,
+  "testDelta": {
+    "files": 0,
+    "lines": 168,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "tollgate-worktree-release-retention",
+      "minutes": 18.63231946666667,
+      "note": "Gross claim-to-certified-source verification window for the active-release/source-OID cleanup false positive. Includes diagnosis, test development, compile-only correction, red/final checks, evidence and native certification. Not productive editing time; original preclaim orchestration incident is separately measured."
+    },
+    {
+      "tag": "tollgate-self-install-idle-wait",
+      "minutes": 24.34763365,
+      "note": "Observed busy guard to observed all-repository idle guard. D45 requires idle validation before app restart; native waits covered the running and queued Dreamtides release. This gross interval overlaps useful evidence preparation and is not all idle or lost CPU time. No shared job was canceled or policy waived."
+    }
+  ]
+}

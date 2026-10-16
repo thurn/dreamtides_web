@@ -1,0 +1,2164 @@
+{
+  "bead": "hv-gy8x",
+  "phase": "T",
+  "sourceBase": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+  "scope": "D16 tooling-fix exception: one Tollgate source commit, exact certified self-install, native cleanup of this session unused Dreamtides worktree, then one own Dreamtides evidence commit.",
+  "authority": "User continuous in-scope plan authority; D16 tooling-fix exception and D45 standing promotion/self-install; same-task Justiciar direct repair. No delegated implementation or changed acceptance.",
+  "originalClaimStart": "2026-10-16T02:27:40.677509+00:00",
+  "nativeClaimACK": "2026-10-16T02:27:40.794067+00:00",
+  "evidenceCutoff": "2026-10-16T03:29:16.021547+00:00",
+  "inclusiveClaimToCutoffMinutes": 61.5890673,
+  "clockQualification": "Original wrapper claim start is inclusive through this cutoff, including research, tests, failed compile, certification, heavy admission/build, global idle waits, install/restart, cleanup and evidence checks. Final Git endpoint/tail retained separately. Wall time is not active editing or whole-host CPU; nested wrappers overlap and are not summed.",
+  "incident": {
+    "preclaimWindow": {
+      "start": "2026-10-16T02:18:45.750646+00:00",
+      "end": "2026-10-16T02:27:40.677509+00:00"
+    },
+    "qualification": "Known mixed orchestration/diagnostic interval, separate from claimed implementation. No inferred CPU or lost productive time.",
+    "agentCause": "Outer exec did not propagate nonzero atomic-claim assertion and continued unused worktree creation. Future dependent orchestration checks returned exit_code and exits cell unless exactly zero before title/worktree effects.",
+    "toolCause": "remove_worktree compared commit OID for every nonterminal queue kind, including unrelated Release retaining a promoted commit in native refs.",
+    "competingClaim": "hv-33id.17 remained with actor01a13046-4c66-7813-9606-9913f0743415 and separate codex-tutorial-walk17-root worktree. No assignment/edge/source/worktree/candidate mutation.",
+    "originalUnusedWorktree": "tutorial-walk-17 at6bbf25e34e463476643c4bfe8ea4c7c9ee2a0d3b; no install/source/helper/candidate there.",
+    "sharedReleaseCanceled": false,
+    "rawWorktreeDeletion": false
+  },
+  "sourceDelivery": {
+    "at": "2026-10-16T02:46:18.616677+00:00",
+    "candidate": "01a14298-09eb-7722-892d-6948f43607a6",
+    "source": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "base": "d02a7e0f245299e42d633e4b65b0f82358882655",
+    "tested": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "prefix": "d02a7e0f245299e42d633e4b65b0f82358882655",
+    "prefixTree": "da1ecac274c991bebe3bd7698f71415897aff693",
+    "certificate": "01a14298-e134-7cd1-b6cd-3587af3d976a",
+    "generation": "01a14298-0cac-77b3-86f1-8a4ee3ad95e5",
+    "buildset": "01a14298-0d00-7891-b9f3-a07c121f3db6",
+    "sourceRefCertGenerationBuildsetTestedTreeStagingVerified": true,
+    "wholeOwnPatchReverseRecoversExactCertifiedPrefixTree": true,
+    "worktreeAndBranchGone": true,
+    "ciSteps": [
+      {
+        "diagnostics": [],
+        "elapsed_ms": 54099,
+        "exit_code": 0,
+        "log_hash": "16eba243f3a1c80cf829561e262921444ef5782a1c057d25f66730d90f035707",
+        "name": "ci",
+        "result_class": "success",
+        "reused_from_attempt_id": null,
+        "signal": null,
+        "stderr_end": 3503,
+        "stdout_end": 11151
+      }
+    ],
+    "releaseAtClose": {
+      "release_state": "green",
+      "lag": {
+        "commits": 0,
+        "since": null
+      },
+      "release_block_reasons": [],
+      "promotion_pause": null,
+      "active_run": null
+    },
+    "doctor": {
+      "checks": [
+        {
+          "detail": "Active",
+          "name": "Repository execution",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "ok",
+          "name": "SQLite integrity",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "observed 98c32f227b \u00b7 recorded 98c32f227b",
+          "name": "Authoritative staging",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "observed 98c32f227b \u00b7 recorded 98c32f227b",
+          "name": "Authoritative release",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "Recorded staging is reachable in the isolated execution mirror.",
+          "name": "Execution mirror",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "disk 66ffd05df453 \u00b7 active 66ffd05df453",
+          "name": "Trusted configuration",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "/bin/sh",
+          "name": "Runner executable",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "1 registered slot(s) passed ownership checks",
+          "name": "Persistent slots",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "no retained artifact needs attention",
+          "name": "Retained artifacts",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "force-clone probe succeeded",
+          "name": "APFS force-clone",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "219477450752 bytes available",
+          "name": "Authoritative volume reserve",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "observed 98c32f227b",
+          "name": "Remote exact ref",
+          "recovery_action": null,
+          "status": "healthy"
+        }
+      ],
+      "generated_at": [
+        2026,
+        289,
+        2,
+        46,
+        18,
+        453975000,
+        0,
+        0,
+        0
+      ],
+      "healthy": true,
+      "repository_id": "019ff669-c120-73a3-8619-e4bbff6d45fc"
+    },
+    "publishedClaim": false
+  },
+  "sourcePhaseGit": {
+    "bead": "hv-gy8x",
+    "base": "d02a7e0f245299e42d633e4b65b0f82358882655",
+    "head": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "worktree": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+    "branch": "release-worktree-cleanup-gy8x",
+    "start": "2026-10-16T02:43:42.326091+00:00",
+    "end": "2026-10-16T02:43:42.354069+00:00",
+    "elapsedSeconds": 0.05389466695487499,
+    "cpuSeconds": 0.023937999999999994,
+    "exitCode": 0,
+    "uniqueCommits": 1,
+    "changedPaths": [
+      "crates/tollgate-service/src/lib.rs"
+    ],
+    "clean": true,
+    "sourceSHA256": "8777cead42cab880e61512f1a32177bf3c02e86af9e1d4cc2bc62e4039be61f3",
+    "sourcePhaseClaimToGitMinutes": 16.027942666666668,
+    "beadIncompleteUntilInstalledAndEvidenceDelivered": true
+  },
+  "sourceShape": {
+    "changedPaths": [
+      "crates/tollgate-service/src/lib.rs"
+    ],
+    "finalSourceSHA256": "8777cead42cab880e61512f1a32177bf3c02e86af9e1d4cc2bc62e4039be61f3",
+    "testSourceLinesAdded": 168,
+    "newTestFunctions": 2,
+    "focusedTestsPassed": 3,
+    "relatedTestsPassed": 14,
+    "ownedTestGroupsAbsent": [
+      83676,
+      67399,
+      69914,
+      73113,
+      77256,
+      83677
+    ],
+    "productionDelta": "Comment plus release-only exclusion from commitOID criterion; exact worktree-path and Gate/IndependentCheck criteria retained.",
+    "formalReviewRequired": false,
+    "reviewPolicy": "D18/project policy marks core/phasegates; this bounded toolingfix is notmarked. Production3grosslines belowshared100 default. No formalreviewclaimed; source/rootverification andmeaningfulpublictests are distinct."
+  },
+  "regressionProvenance": {
+    "v01": {
+      "at": "2026-10-16T02:38:18.453670+00:00",
+      "v01": "Compile-only failure: guessedQueueItemKind::Check; actualstablevariantIndependentCheck. Zero behavioralcredit.",
+      "v01ExactSourceRecoveredAndInitialSHA256Matched": "40220127ef0f4ccadcca97ee3ab373a6525fcafe6fd58faa968f988c68b35b34",
+      "v02SHA256": "82c3f4402f121b88c203fee733eac3067bda2b38bd4fe39ce9f31b3c3d9744ad",
+      "productionRemoveBodyStillExactBase": true
+    },
+    "v02": "Actual original production guard: release removal fails while two controls pass. Final bounded guard: three focused and fourteen related public/native service tests pass. Fixtures settle their owned barrier-held workers before asserting even on the expected red failure.",
+    "ownershipControls": "Gate and IndependentCheck each retain same-OID alias and exact source path with moved HEAD. Release test removes unused worktree while the same actual release/generation remains Running.",
+    "productionGrossLines": 3,
+    "allOtherTrackedToolFilesUnchanged": true
+  },
+  "selfInstall": {
+    "at": "2026-10-16T03:23:00.332480+00:00",
+    "source": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "sourceSnapshot": "/tmp/tollgate-gy8x-install-98c32f227bb4",
+    "releaseImmediatelyBeforeQuit": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "releaseImmediatelyBeforeReplacement": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "replacedAt": "2026-10-16T03:22:58.782414+00:00",
+    "allRepositoryIdleGuard": {
+      "at": "2026-10-16T03:22:58.520062+00:00",
+      "source": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+      "rawSHA256": "793f8906747072b08973d83be246616e5d095258012d57c5a73c5525a45c9ba4",
+      "rawGzip": "install-global-idle.json.gz",
+      "allRepositoriesIdle": true,
+      "repositories": [
+        {
+          "id": "01a00ae2-9411-7c00-b742-50f3abde5e7c",
+          "name": "battlement",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a1051d-f53b-7b51-83f8-cd4d1663ccf4",
+          "name": "dreamtides_web",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a0b7d2-6376-7af2-88e1-51bb50114da8",
+          "name": "fulcrum",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a0cc79-6fa9-7be1-ac9c-3f2d23fad671",
+          "name": "hive",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "019ff601-cf8c-7b83-b38b-7c7aa5433cd3",
+          "name": "quest_prototype",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a10207-e051-74a1-a099-fa4cfb7882bd",
+          "name": "rbp",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a10c95-03e2-75d1-b81c-3a6aba43bc26",
+          "name": "roguespades_prototype",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a0f77c-5d8c-7a70-bda9-f390f484ca72",
+          "name": "rsp",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "01a0c260-ea58-7022-8b91-95c2c53874be",
+          "name": "stylon",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "019ff669-c120-73a3-8619-e4bbff6d45fc",
+          "name": "tollgate",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        },
+        {
+          "id": "019ff68a-a646-73f2-92bf-1292668469db",
+          "name": "trox",
+          "activeRuns": 0,
+          "queuedRuns": 0,
+          "activeItems": []
+        }
+      ]
+    },
+    "beforeProcesses": [
+      "58483 Mon Oct 12 01:06:30 2026     /Applications/Tollgate.app/Contents/MacOS/tollgate-app"
+    ],
+    "afterProcesses": [
+      "41617 Thu Oct 15 20:22:58 2026     /Applications/Tollgate.app/Contents/MacOS/tollgate-app"
+    ],
+    "oldAppExited": true,
+    "installedBinaries": {
+      "tollgate-app": {
+        "sha256": "da1f83031e8128a84e0fbed4a856c1bdd3036ff57cd5b0ba39219a4d9ddd0913",
+        "bytes": 17777312
+      },
+      "tg": {
+        "sha256": "4adeb1a5ed93b38dcf8e05ea185f058dc4d7eb23c059b6e64097ede01e9d0ef5",
+        "bytes": 2346224
+      },
+      "tollgate-worker": {
+        "sha256": "e3459a46be5797220735375d59d5af8fd5f92ff6c3f06204ed41ed4ea239bfd4",
+        "bytes": 1222080
+      }
+    },
+    "builtAndInstalledBinariesMatch": true,
+    "cliResolved": "/Applications/Tollgate.app/Contents/MacOS/tg",
+    "cliVersion": "tg 0.1.0",
+    "appVersion": "0.1.0",
+    "versionQualification": "Version strings are not unique commit IDs; exact detached source and built/installed executable hashes plus fresh process/healthy IPC establish installation identity.",
+    "toolDoctor": {
+      "activation": {
+        "id": "019ff669-c120-73a3-8619-e4bbff6d45fc",
+        "name": "tollgate",
+        "path": "/Users/dthurn/tollgate",
+        "phase": "recovering",
+        "phase_started_at": [
+          2026,
+          289,
+          3,
+          23,
+          0,
+          254085000,
+          0,
+          0,
+          0
+        ],
+        "queued_at": [
+          2026,
+          289,
+          3,
+          22,
+          59,
+          680653000,
+          0,
+          0,
+          0
+        ],
+        "step": "master"
+      },
+      "checks": [
+        {
+          "detail": "Tollgate 0.1.0 is serving requests",
+          "name": "app-service",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "activating for 0s: recovering (master)",
+          "name": "repository-activation",
+          "recovery_action": "Wait for activation to finish; `tg repo activation --wait` reports progress. Repository checks run once it is active.",
+          "status": "attention"
+        }
+      ],
+      "generated_at": [
+        2026,
+        289,
+        3,
+        23,
+        0,
+        262289000,
+        0,
+        0,
+        0
+      ],
+      "healthy": false,
+      "repository_id": "019ff669-c120-73a3-8619-e4bbff6d45fc"
+    },
+    "dreamtidesDoctor": {
+      "activation": {
+        "id": "01a1051d-f53b-7b51-83f8-cd4d1663ccf4",
+        "name": "dreamtides_web",
+        "path": "/Users/dthurn/dreamtides_web",
+        "phase": "queued",
+        "phase_started_at": [
+          2026,
+          289,
+          3,
+          22,
+          59,
+          680653000,
+          0,
+          0,
+          0
+        ],
+        "queued_at": [
+          2026,
+          289,
+          3,
+          22,
+          59,
+          680653000,
+          0,
+          0,
+          0
+        ],
+        "step": "waiting-for-slot"
+      },
+      "checks": [
+        {
+          "detail": "Tollgate 0.1.0 is serving requests",
+          "name": "app-service",
+          "recovery_action": null,
+          "status": "healthy"
+        },
+        {
+          "detail": "activating for 0s: queued (waiting-for-slot)",
+          "name": "repository-activation",
+          "recovery_action": "Wait for activation to finish; `tg repo activation --wait` reports progress. Repository checks run once it is active.",
+          "status": "attention"
+        }
+      ],
+      "generated_at": [
+        2026,
+        289,
+        3,
+        23,
+        0,
+        274628000,
+        0,
+        0,
+        0
+      ],
+      "healthy": false,
+      "repository_id": "01a1051d-f53b-7b51-83f8-cd4d1663ccf4"
+    },
+    "serializedInstallLock": "/tmp/tollgate-self-install.lock",
+    "backup": "/Applications/.tollgate-install-gy8x.3uithaxe/Tollgate.previous.app",
+    "outcome": "installed-and-healthy"
+  },
+  "nativeUnusedCleanup": {
+    "start": "2026-10-16T03:23:21.225152+00:00",
+    "end": "2026-10-16T03:23:21.856251+00:00",
+    "elapsedSeconds": 0.6311560419853777,
+    "exitCode": 0,
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-walk-17",
+    "branch": "tutorial-walk-17",
+    "priorHEAD": "6bbf25e34e463476643c4bfe8ea4c7c9ee2a0d3b",
+    "priorClean": true,
+    "priorNodeModulesAbsent": true,
+    "worktreeAndBranchGone": true,
+    "nativeResult": {
+      "action": "removed",
+      "branch": "tutorial-walk-17",
+      "message": "Removed the verified clean linked worktree and its unchanged branch.",
+      "new_oid": null,
+      "old_oid": {
+        "bytes": "6bbf25e34e463476643c4bfe8ea4c7c9ee2a0d3b",
+        "format": "sha1"
+      },
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/tutorial-walk-17"
+    },
+    "qualification": "Actual cleanup after safe idle self-install; original unrelated release has completed. Held-release behavior is proven by public service regression, not claimed from this live cleanup."
+  },
+  "buildSnapshotCleanup": {
+    "at": "2026-10-16T03:23:23.449344+00:00",
+    "snapshot": "/tmp/tollgate-gy8x-install-98c32f227bb4",
+    "head": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+    "cleanBefore": true,
+    "processesBefore": [],
+    "ownDetachedSnapshotGone": true,
+    "exitCode": 0
+  },
+  "validation": {
+    "install-dependencies": {
+      "label": "install-dependencies",
+      "command": [
+        "npm",
+        "--prefix",
+        "ui",
+        "ci"
+      ],
+      "cwd": "/tmp/tollgate-gy8x-install-98c32f227bb4",
+      "head": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+      "start": "2026-10-16T02:48:37.714242+00:00",
+      "pid": 24317,
+      "pgid": 24317,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:48:39.538210+00:00",
+      "elapsedSeconds": 1.8238646250101738,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 3.644508,
+      "hostLoad": [
+        10.8310546875,
+        10.50048828125,
+        8.60693359375
+      ]
+    },
+    "install-preflight-release": {
+      "start": "2026-10-16T03:22:58.071340+00:00",
+      "end": "2026-10-16T03:22:58.201952+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.13050649996148422
+    },
+    "installed-cli-version": {
+      "start": "2026-10-16T03:23:00.317517+00:00",
+      "end": "2026-10-16T03:23:00.332203+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--version"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.014690666983369738
+    },
+    "startup-dreamtides-doctor-1": {
+      "start": "2026-10-16T03:22:59.163242+00:00",
+      "end": "2026-10-16T03:22:59.167739+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exitCode": 5,
+      "elapsedSeconds": 0.004513832973316312
+    },
+    "evidence-triggers": {
+      "label": "evidence-triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gy8x-install-evidence",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T03:28:38.514948+00:00",
+      "pid": 12672,
+      "pgid": 12672,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:28:38.798127+00:00",
+      "elapsedSeconds": 0.2830963329761289,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.25414499999999995,
+      "hostLoad": [
+        3.55322265625,
+        5.8828125,
+        7.17529296875
+      ]
+    },
+    "installed-app-quit": {
+      "start": "2026-10-16T03:22:58.577484+00:00",
+      "end": "2026-10-16T03:22:58.677352+00:00",
+      "argv": [
+        "osascript",
+        "-e",
+        "tell application id \"dev.tollgate.desktop\" to quit"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.0998823749832809
+    },
+    "installed-app-launch": {
+      "start": "2026-10-16T03:22:58.813703+00:00",
+      "end": "2026-10-16T03:22:58.859500+00:00",
+      "argv": [
+        "open",
+        "/Applications/Tollgate.app"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.045813457982148975
+    },
+    "evidence-install": {
+      "label": "evidence-install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gy8x-install-evidence",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T02:59:05.285229+00:00",
+      "pid": 57415,
+      "pgid": 57415,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:59:08.045196+00:00",
+      "elapsedSeconds": 2.7598337919916958,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 5.842157,
+      "hostLoad": [
+        9.67138671875,
+        13.658203125,
+        11.42333984375
+      ]
+    },
+    "staged-bundle-verify": {
+      "start": "2026-10-16T02:58:32.879564+00:00",
+      "end": "2026-10-16T02:58:32.897369+00:00",
+      "argv": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/.tollgate-install-gy8x.3uithaxe/Tollgate.app"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.01782579201972112
+    },
+    "whitespace": {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-16T02:42:55.860839+00:00",
+      "pid": 83676,
+      "pgid": 83676,
+      "cwd": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:42:55.876134+00:00",
+      "elapsedSeconds": 0.015177958004642278,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.009937,
+      "hostLoad": [
+        3.9560546875,
+        4.86083984375,
+        6.22412109375
+      ]
+    },
+    "release-build-queue": {
+      "label": "release-build-queue",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/tollgate-remove-release-01a13a7a/run-in-dir.py",
+        "release-bundle",
+        "/tmp/tollgate-gy8x-install-98c32f227bb4",
+        "npm",
+        "--prefix",
+        "ui",
+        "run",
+        "bundle"
+      ],
+      "start": "2026-10-16T02:49:08.905226+00:00",
+      "pid": 26486,
+      "pgid": 26486,
+      "queueTimeout": null,
+      "end": "2026-10-16T02:55:42.404460+00:00",
+      "elapsedSeconds": 393.49272083403775,
+      "exitCode": 0,
+      "cpuSeconds": 524.743736,
+      "hostLoad": [
+        9.6083984375,
+        10.2158203125,
+        8.56787109375
+      ],
+      "qualification": "Outer includes lock admission/launcher/startup and execution; inner timer starts after lock acquisition. NestedCPU/wall not additive."
+    },
+    "worktree-create": {
+      "start": "2026-10-16T02:27:40.930016+00:00",
+      "end": "2026-10-16T02:27:41.254200+00:00",
+      "exitCode": 0
+    },
+    "installed-bundle-verify": {
+      "start": "2026-10-16T03:22:58.785350+00:00",
+      "end": "2026-10-16T03:22:58.805183+00:00",
+      "argv": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/Tollgate.app"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.019845917006023228
+    },
+    "bundle-adhoc-sign": {
+      "start": "2026-10-16T02:58:32.775017+00:00",
+      "end": "2026-10-16T02:58:32.837374+00:00",
+      "argv": [
+        "codesign",
+        "--force",
+        "--deep",
+        "--sign",
+        "-",
+        "/tmp/tollgate-gy8x-install-98c32f227bb4/target/release/bundle/macos/Tollgate.app"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.06222462496953085
+    },
+    "startup-tool-doctor-2": {
+      "start": "2026-10-16T03:23:00.223782+00:00",
+      "end": "2026-10-16T03:23:00.264843+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.04105562501354143
+    },
+    "bundle-stage": {
+      "start": "2026-10-16T02:58:32.856773+00:00",
+      "end": "2026-10-16T02:58:32.879440+00:00",
+      "argv": [
+        "ditto",
+        "/tmp/tollgate-gy8x-install-98c32f227bb4/target/release/bundle/macos/Tollgate.app",
+        "/Applications/.tollgate-install-gy8x.3uithaxe/Tollgate.app"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.022683291987050325
+    },
+    "red-worktree-remove": {
+      "label": "red-worktree-remove",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "tollgate-service",
+        "worktree_remove",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": "2026-10-16T02:36:05.797032+00:00",
+      "pid": 67399,
+      "pgid": 67399,
+      "cwd": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:36:21.640932+00:00",
+      "elapsedSeconds": 15.843773290980607,
+      "exitCode": 101,
+      "timedOut": false,
+      "cpuSeconds": 42.40324,
+      "hostLoad": [
+        6.0615234375,
+        6.8203125,
+        7.4140625
+      ]
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gy8x-install-evidence",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T03:28:38.179085+00:00",
+      "pid": 12646,
+      "pgid": 12646,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:28:38.462846+00:00",
+      "elapsedSeconds": 0.28367458301363513,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.15032299999999998,
+      "hostLoad": [
+        3.55322265625,
+        5.8828125,
+        7.17529296875
+      ]
+    },
+    "red-worktree-remove-v02": {
+      "label": "red-worktree-remove-v02",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "tollgate-service",
+        "worktree_remove",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": "2026-10-16T02:37:22.982862+00:00",
+      "pid": 69914,
+      "pgid": 69914,
+      "cwd": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:37:34.845955+00:00",
+      "elapsedSeconds": 11.862960166996345,
+      "exitCode": 101,
+      "timedOut": false,
+      "cpuSeconds": 18.199244999999998,
+      "hostLoad": [
+        5.09326171875,
+        6.42333984375,
+        7.21533203125
+      ]
+    },
+    "release-bundle": {
+      "label": "release-bundle",
+      "command": [
+        "npm",
+        "--prefix",
+        "ui",
+        "run",
+        "bundle"
+      ],
+      "cwd": "/tmp/tollgate-gy8x-install-98c32f227bb4",
+      "head": "98c32f227bb4d04c709f47b14ad29a317fa7ba40",
+      "start": "2026-10-16T02:51:16.186845+00:00",
+      "pid": 67064,
+      "pgid": 67064,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:55:42.398225+00:00",
+      "elapsedSeconds": 266.20713225001236,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 524.596181,
+      "hostLoad": [
+        7.462890625,
+        9.26123046875,
+        8.42236328125
+      ]
+    },
+    "install-wait-release": {
+      "label": "install-wait-release",
+      "command": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "wait",
+        "01a14299-e047-7143-858e-6d8409ea2447"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T02:58:54.053384+00:00",
+      "pid": 56653,
+      "pgid": 56653,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:05:10.849951+00:00",
+      "elapsedSeconds": 376.79056037496775,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.123137,
+      "hostLoad": [
+        9.64990234375,
+        13.78466796875,
+        11.44091796875
+      ]
+    },
+    "focused-worktree-remove": {
+      "label": "focused-worktree-remove",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "tollgate-service",
+        "worktree_remove",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": "2026-10-16T02:38:59.714185+00:00",
+      "pid": 73113,
+      "pgid": 73113,
+      "cwd": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:39:08.407246+00:00",
+      "elapsedSeconds": 8.692972375021782,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 12.841964999999998,
+      "hostLoad": [
+        4.12646484375,
+        5.830078125,
+        6.90673828125
+      ]
+    },
+    "install-global-idle": {
+      "start": "2026-10-16T03:22:58.202102+00:00",
+      "end": "2026-10-16T03:22:58.359134+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--no-launch",
+        "--json",
+        "repo",
+        "list"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.15705487498780712
+    },
+    "startup-tool-doctor-1": {
+      "start": "2026-10-16T03:22:58.902262+00:00",
+      "end": "2026-10-16T03:22:59.163088+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 5,
+      "elapsedSeconds": 0.2608245420269668
+    },
+    "bundle-verify": {
+      "start": "2026-10-16T02:58:32.837508+00:00",
+      "end": "2026-10-16T02:58:32.856199+00:00",
+      "argv": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/tmp/tollgate-gy8x-install-98c32f227bb4/target/release/bundle/macos/Tollgate.app"
+      ],
+      "cwd": "/Users/dthurn/tollgate",
+      "exitCode": 0,
+      "elapsedSeconds": 0.018727165996097028
+    },
+    "related-worktree": {
+      "label": "related-worktree",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "tollgate-service",
+        "worktree",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": "2026-10-16T02:41:00.651894+00:00",
+      "pid": 77256,
+      "pgid": 77256,
+      "cwd": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:41:06.142141+00:00",
+      "elapsedSeconds": 5.490132124978118,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 8.880438999999999,
+      "hostLoad": [
+        4.6484375,
+        5.48876953125,
+        6.623046875
+      ]
+    },
+    "install-wait-queued-release": {
+      "label": "install-wait-queued-release",
+      "command": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "wait",
+        "01a142a2-fcc6-7d11-9276-a5874d07b2f6"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T03:05:10.897405+00:00",
+      "pid": 13957,
+      "pgid": 13957,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:22:57.989556+00:00",
+      "elapsedSeconds": 1067.0956529999967,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.23826899999999998,
+      "hostLoad": [
+        7.7666015625,
+        8.7265625,
+        9.6845703125
+      ]
+    },
+    "evidence-review": {
+      "label": "evidence-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gy8x-install-evidence",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T03:23:37.793968+00:00",
+      "pid": 55530,
+      "pgid": 55530,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:23:39.273979+00:00",
+      "elapsedSeconds": 1.4799112500040792,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 1.018838,
+      "hostLoad": [
+        16.43408203125,
+        8.94580078125,
+        8.37158203125
+      ]
+    },
+    "startup-dreamtides-doctor-2": {
+      "start": "2026-10-16T03:23:00.264995+00:00",
+      "end": "2026-10-16T03:23:00.275464+00:00",
+      "argv": [
+        "/Users/dthurn/.local/bin/tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "exitCode": 0,
+      "elapsedSeconds": 0.010487374966032803
+    },
+    "evidence-knip": {
+      "label": "evidence-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/gy8x-install-evidence",
+      "head": "4e9e1a2ca6d3f7107546ec343955adb7de95776e",
+      "start": "2026-10-16T03:23:38.949034+00:00",
+      "pid": 57962,
+      "pgid": 57962,
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T03:23:45.510416+00:00",
+      "elapsedSeconds": 6.561220749979839,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 7.362129,
+      "hostLoad": [
+        16.43408203125,
+        8.94580078125,
+        8.37158203125
+      ]
+    },
+    "format": {
+      "label": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "start": "2026-10-16T02:42:55.860843+00:00",
+      "pid": 83677,
+      "pgid": 83677,
+      "cwd": "/Users/dthurn/tollgate/.worktrees/release-worktree-cleanup-gy8x",
+      "cargoBuildJobs": 4,
+      "end": "2026-10-16T02:42:56.401535+00:00",
+      "elapsedSeconds": 0.5405528750270605,
+      "exitCode": 0,
+      "timedOut": false,
+      "cpuSeconds": 0.42178899999999997,
+      "hostLoad": [
+        3.9560546875,
+        4.86083984375,
+        6.22412109375
+      ]
+    }
+  },
+  "hostLoadSamples": {
+    "install-dependencies": [
+      10.8310546875,
+      10.50048828125,
+      8.60693359375
+    ],
+    "evidence-triggers": [
+      3.55322265625,
+      5.8828125,
+      7.17529296875
+    ],
+    "evidence-install": [
+      9.67138671875,
+      13.658203125,
+      11.42333984375
+    ],
+    "whitespace": [
+      3.9560546875,
+      4.86083984375,
+      6.22412109375
+    ],
+    "release-build-queue": [
+      9.6083984375,
+      10.2158203125,
+      8.56787109375
+    ],
+    "red-worktree-remove": [
+      6.0615234375,
+      6.8203125,
+      7.4140625
+    ],
+    "evidence-schema": [
+      3.55322265625,
+      5.8828125,
+      7.17529296875
+    ],
+    "red-worktree-remove-v02": [
+      5.09326171875,
+      6.42333984375,
+      7.21533203125
+    ],
+    "release-bundle": [
+      7.462890625,
+      9.26123046875,
+      8.42236328125
+    ],
+    "install-wait-release": [
+      9.64990234375,
+      13.78466796875,
+      11.44091796875
+    ],
+    "focused-worktree-remove": [
+      4.12646484375,
+      5.830078125,
+      6.90673828125
+    ],
+    "related-worktree": [
+      4.6484375,
+      5.48876953125,
+      6.623046875
+    ],
+    "install-wait-queued-release": [
+      7.7666015625,
+      8.7265625,
+      9.6845703125
+    ],
+    "evidence-review": [
+      16.43408203125,
+      8.94580078125,
+      8.37158203125
+    ],
+    "evidence-knip": [
+      16.43408203125,
+      8.94580078125,
+      8.37158203125
+    ],
+    "format": [
+      3.9560546875,
+      4.86083984375,
+      6.22412109375
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "evidence-review starting one-minute os.getloadavg()"
+      },
+      "implementMin": {
+        "measuredFor": "Inclusive original claim wrapper through current evidence cutoff; final actual Git endpoint retained separately."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 168,
+    "jsdomFiles": 0,
+    "newRustFunctions": 2,
+    "dreamtidesSourceOrTestChanges": 0
+  },
+  "validationQualification": "Focused Rust and native Tollgate CI validate the source repair. Release app build uses D17 machine heavy lock and CARGO_BUILD_JOBS=4. Evidence-only Dreamtides ordinary review/Knip/schema/triggers/whitespace do not claim a new full suite, browser run, fuzz/profile or benchmark. No formal review required or claimed for this nongate, unmarked three-production-line repair.",
+  "cleanup": {
+    "helper": null,
+    "browserServerOrLease": false,
+    "sharedReleaseCanceled": false,
+    "peerWorktreeUntouched": true,
+    "sourceWorktreeAndBranchGone": true,
+    "unusedWorktreeAndBranchGone": true,
+    "ownDetachedBuildSnapshotGone": true
+  },
+  "frictionWindows": [
+    {
+      "tag": "tollgate-worktree-release-retention",
+      "minutes": 18.63231946666667,
+      "note": "Gross claim-to-certified-source verification window for the active-release/source-OID cleanup false positive. Includes diagnosis, test development, compile-only correction, red/final checks, evidence and native certification. Not productive editing time; original preclaim orchestration incident is separately measured."
+    },
+    {
+      "tag": "tollgate-self-install-idle-wait",
+      "minutes": 24.34763365,
+      "note": "Observed busy guard to observed all-repository idle guard. D45 requires idle validation before app restart; native waits covered the running and queued Dreamtides release. This gross interval overlaps useful evidence preparation and is not all idle or lost CPU time. No shared job was canceled or policy waived."
+    }
+  ],
+  "artifactManifest": [
+    {
+      "path": "admit.json",
+      "bytes": 5548,
+      "sha256": "11c1d3864b5456277c2b0ba30a523d14f2eebd545a1249c9b7e82e9a6e1323b5"
+    },
+    {
+      "path": "admit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "admitted.json",
+      "bytes": 420309,
+      "sha256": "a700a665e889269c7724f2edebfa9a1ee3030b93a37f322cb8ee109d49bb6ac0"
+    },
+    {
+      "path": "admitted.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "assemble-evidence.py",
+      "bytes": 8430,
+      "sha256": "111e701e8d74660699b97144471be43ec30542167ecccd4928d227ce0e1389af"
+    },
+    {
+      "path": "build-snapshot-cleanup.json",
+      "bytes": 258,
+      "sha256": "9eb42c76cea5ca5230ff5d384035cf373664644c2898d740874baaec6fd8edd2"
+    },
+    {
+      "path": "bundle-adhoc-sign.receipt.json",
+      "bytes": 360,
+      "sha256": "8f0d110afc771eaae338438334e251b8a395d2eea255c07cc1070612d0a130a0"
+    },
+    {
+      "path": "bundle-adhoc-sign.stderr",
+      "bytes": 111,
+      "sha256": "13e0480d1591dd696a7aef1d7794cc4272736c6e9af33ab8c48acc7b25f2f8e4"
+    },
+    {
+      "path": "bundle-adhoc-sign.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bundle-stage.receipt.json",
+      "bytes": 372,
+      "sha256": "dc2cf47155f28e23d16dd991e07b9770c7f68e9193446f466028d1a7beffe339"
+    },
+    {
+      "path": "bundle-stage.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bundle-stage.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bundle-verify.receipt.json",
+      "bytes": 355,
+      "sha256": "f6c5b535c6b74702f476236996357e3c2999387e5e7131dfa6796312fbe465fb"
+    },
+    {
+      "path": "bundle-verify.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bundle-verify.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "claim-guard.json",
+      "bytes": 247,
+      "sha256": "3a5f4b6b9a767b29367ec845d9fd291fc4b0847a21c9a0f36a4ec980299e5332"
+    },
+    {
+      "path": "claim-owned.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "claim-owned.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "claim-ready.json",
+      "bytes": 112571,
+      "sha256": "7639750bf73ff37b7cf2737fcc20620b41564ee47eabb5e5a47f1d27f110b56a"
+    },
+    {
+      "path": "claim-ready.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "claim.json",
+      "bytes": 5653,
+      "sha256": "bb934441b9f5df39e241aaa2c98a568cc4f75b6304db81069d56870bc44febb8"
+    },
+    {
+      "path": "claim.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "create.json",
+      "bytes": 4452,
+      "sha256": "4b38ef019c55316a81ab6d61e5a35feb92f11a349575c8ade7f38fc9c843befb"
+    },
+    {
+      "path": "create.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "evidence-install.log",
+      "bytes": 326,
+      "sha256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+    },
+    {
+      "path": "evidence-install.receipt.json",
+      "bytes": 536,
+      "sha256": "7cf78461ee1a72047990f6bbd924fed43d0d8a60b45c5b3eb6b8f6baf244a708"
+    },
+    {
+      "path": "evidence-knip.log",
+      "bytes": 48229,
+      "sha256": "ce6b86603cd3efdedaac1fe83195c91129c1efcbea82da728eb3940dc223836d"
+    },
+    {
+      "path": "evidence-knip.receipt.json",
+      "bytes": 541,
+      "sha256": "003f48109ba6c97d831fc51ff7420e72445f4494fe1b7ab150b2a24aa9b7da9e"
+    },
+    {
+      "path": "evidence-review.log",
+      "bytes": 345,
+      "sha256": "485d1ee807a59cfa6a3143d6ab746021d260f1c5f3ae3b42dec38376836eb6ed"
+    },
+    {
+      "path": "evidence-review.receipt.json",
+      "bytes": 546,
+      "sha256": "329267a982bf0a03280f40e37ad2ce8a53b7794463c45c405e88e508924166a7"
+    },
+    {
+      "path": "evidence-schema.log",
+      "bytes": 74,
+      "sha256": "230efb38b3e8253f5758544ea48b58396c028344651876214db9981c7bd2bced"
+    },
+    {
+      "path": "evidence-schema.receipt.json",
+      "bytes": 592,
+      "sha256": "1c6322d004fd01e275ef3e1d37152b4fe6325a76385372bc0e10dccbb84f896f"
+    },
+    {
+      "path": "evidence-triggers.log",
+      "bytes": 21488,
+      "sha256": "ee465c4d969a869fc2ff3014132abea817023eaad5c94bee62bf41b00d86b511"
+    },
+    {
+      "path": "evidence-triggers.receipt.json",
+      "bytes": 565,
+      "sha256": "a554e803e24649846f5b14f7f6354a4afd95d25cbb2c745b80519b69c5fe6f6a"
+    },
+    {
+      "path": "focused-worktree-remove.log",
+      "bytes": 673,
+      "sha256": "6d9d4ab0c4f6eff85ba28267547cfa44654e2a7f9ecd38c7a7b69db71d6d2261"
+    },
+    {
+      "path": "focused-worktree-remove.receipt.json",
+      "bytes": 588,
+      "sha256": "44caddc99d0ca78f9ffd1d7add7cf94e2559f17a68bfb372a2659210a53e756e"
+    },
+    {
+      "path": "format.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "format.receipt.json",
+      "bytes": 520,
+      "sha256": "480b9c3b008e7c600010ffaf800c6d81c711ae29fcf1a1e0cdfcf844e7e6fad2"
+    },
+    {
+      "path": "functional-final.rs",
+      "bytes": 1335585,
+      "sha256": "8777cead42cab880e61512f1a32177bf3c02e86af9e1d4cc2bc62e4039be61f3"
+    },
+    {
+      "path": "improvement-after.json",
+      "bytes": 4544,
+      "sha256": "165a49470f13ee9e267ae7c8745939be77b15dc0ae63d132740bd5f796769fb6"
+    },
+    {
+      "path": "improvement-after.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "improvement-before.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "improvement-before.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "incident/bead17.json",
+      "bytes": 43323,
+      "sha256": "7a0660505f1addfdcb6744d0ee452084baac965734a9f3e681e891069fe12c51"
+    },
+    {
+      "path": "incident/bead17.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/claim.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/claim.stderr",
+      "bytes": 89,
+      "sha256": "7de42a8b9b5a29fb541846b34204400c737ab4faa08b70241ec28ee65a7c4289"
+    },
+    {
+      "path": "incident/owned.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "incident/owned.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "incident/ready.json",
+      "bytes": 112004,
+      "sha256": "aedefa4684b5cbcce959d6d253dcb20371f5b5efdc378243941b97ed52876a95"
+    },
+    {
+      "path": "incident/ready.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "incident/recovery-bead17-latest.json",
+      "bytes": 44898,
+      "sha256": "4ba5646010425478e7769cc3dd3c2612b4f4756e1ce21fe63405e09542f3e026"
+    },
+    {
+      "path": "incident/recovery-bead17-latest.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/recovery-bead17.json",
+      "bytes": 43428,
+      "sha256": "96871cc929da8c3ef02519b98f14f6633c864dff4db56d0d7d8d2da2892ccd92"
+    },
+    {
+      "path": "incident/recovery-bead17.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/recovery-history.json",
+      "bytes": 575730,
+      "sha256": "617bc42709d2dc276c4ab752206d64e177e806777e3cfeaff302635ea92ca3bc"
+    },
+    {
+      "path": "incident/recovery-history.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/recovery-owned.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "incident/recovery-owned.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "incident/recovery-queue.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "incident/recovery-queue.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/recovery-release.json",
+      "bytes": 25672,
+      "sha256": "305ce72a10f99101a52daf2a1eebd59716099f77b7867bea906e5ed4e2f1f1ee"
+    },
+    {
+      "path": "incident/recovery-release.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/recovery-remove.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "incident/recovery-remove.stderr",
+      "bytes": 176,
+      "sha256": "8fcf3cb986da21ecca7ceedb49783d92cd02d3fbaa8cc24bba42aca52741f36e"
+    },
+    {
+      "path": "incident/recovery-state.json",
+      "bytes": 1787,
+      "sha256": "9b2acc5ad0d7cea3f23993f83bea091b67a0eaf3fd169945bef723454ce5815b"
+    },
+    {
+      "path": "incident/worktree-create.json",
+      "bytes": 319,
+      "sha256": "b0d9482bb9328e5ee772abd71bd534ca15140503d8f52eb974cfa616afca9097"
+    },
+    {
+      "path": "incident/worktree-create.receipt.json",
+      "bytes": 112,
+      "sha256": "4416dadc1500588330099c17716ff033793c51f6ec586dc2690e41041b6e9bac"
+    },
+    {
+      "path": "incident/worktree-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install-attempt-001/install-global-idle-summary.json",
+      "bytes": 2339,
+      "sha256": "ebc8f9dff3c5e8cd14388d0fc81a4c24bde2d1e3e94fae0ca210792174db80a8"
+    },
+    {
+      "path": "install-attempt-001/install-global-idle.json.gz",
+      "bytes": 613474,
+      "sha256": "f4559ae79ce5bd87ab3e5562dd5306992b864440cee76d7a9e05259a2b1599ce"
+    },
+    {
+      "path": "install-attempt-001/install-global-idle.receipt.json",
+      "bytes": 296,
+      "sha256": "3c9ad32ff4f3be4cd5a2a8b7d64a04e92738b64960bdadd35b3e022a3ca725b1"
+    },
+    {
+      "path": "install-attempt-001/install-global-idle.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install-attempt-001/install-preflight-release.receipt.json",
+      "bytes": 301,
+      "sha256": "d26bfa285baf8dfb5213054814875a92841403191244948d3f3558994519d746"
+    },
+    {
+      "path": "install-attempt-001/install-preflight-release.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install-attempt-001/install-preflight-release.stdout",
+      "bytes": 590,
+      "sha256": "8d915eee14ca780c203fcc78222c3f08c13d12d2a400b266413a4fbf9fb57442"
+    },
+    {
+      "path": "install-certified.py",
+      "bytes": 8450,
+      "sha256": "09d99039d56af4ffe1999a94b5da52ff67905a8a5abd52076e98b798699324e2"
+    },
+    {
+      "path": "install-dependencies.log",
+      "bytes": 475,
+      "sha256": "dd41304acc6120dd0381310823bc4efc42716404cc6cffdf4ef5523e0c13a0a3"
+    },
+    {
+      "path": "install-dependencies.receipt.json",
+      "bytes": 540,
+      "sha256": "40dcabe8adbb853c1542ea6e5e6888e33cfc40e86a9b07b78774dd85e05f8856"
+    },
+    {
+      "path": "install-global-idle-summary.json",
+      "bytes": 2063,
+      "sha256": "760d7110678ad526726e87a6a61129bae1662490b4e70e058b66b3c535285d42"
+    },
+    {
+      "path": "install-global-idle.json.gz",
+      "bytes": 611817,
+      "sha256": "b8da04619ccd0ed89fcd7b480855f208354347caaddf47a15eb3f96b8ec71578"
+    },
+    {
+      "path": "install-global-idle.receipt.json",
+      "bytes": 296,
+      "sha256": "62be83172bb72a9575c6f1d1f17234d0f8c2a0391918a9e95f5a311821abf69b"
+    },
+    {
+      "path": "install-global-idle.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install-preflight-release.receipt.json",
+      "bytes": 301,
+      "sha256": "5c53bb32f1381c59c60531a615aa30219366fc667f02527f0508e07faeb67b53"
+    },
+    {
+      "path": "install-preflight-release.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install-preflight-release.stdout",
+      "bytes": 590,
+      "sha256": "8d915eee14ca780c203fcc78222c3f08c13d12d2a400b266413a4fbf9fb57442"
+    },
+    {
+      "path": "install-prequit.json",
+      "bytes": 719,
+      "sha256": "b208036e2813b23dcbe1360ef3c76903a2ff527d23e7230d5fdf0b917920fc10"
+    },
+    {
+      "path": "install-source-release.json",
+      "bytes": 590,
+      "sha256": "8d915eee14ca780c203fcc78222c3f08c13d12d2a400b266413a4fbf9fb57442"
+    },
+    {
+      "path": "install-source-release.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install-staged.json",
+      "bytes": 807,
+      "sha256": "b8ed0edf62b091c69f384a859c6653124626387040887c503314fded744fed89"
+    },
+    {
+      "path": "install-staging-cleanup.json",
+      "bytes": 192,
+      "sha256": "0e694e8691a7336cd62b9131c8cd7c0c18e507aa8d8f6b78d0d0e99922043ea1"
+    },
+    {
+      "path": "install-state.json",
+      "bytes": 608,
+      "sha256": "aef8df3a01f4aa03ee02c0b1dccdc812432c4f2b7516964a3dc3333a05d86489"
+    },
+    {
+      "path": "install-verification.json",
+      "bytes": 6315,
+      "sha256": "3c4e8e60307909eea54283ca4970f8335e0952e221ed02106fc8161b03535028"
+    },
+    {
+      "path": "install-wait-queued-release.log",
+      "bytes": 3427,
+      "sha256": "9e18b9483a9433b89465582cee63610676389415f9ef40b6c181cefb349e7960"
+    },
+    {
+      "path": "install-wait-queued-release.receipt.json",
+      "bytes": 592,
+      "sha256": "d323e94b493ad0edb409c095a5bd8eaf4d218cf1edc04305994b1dedd2f886b7"
+    },
+    {
+      "path": "install-wait-release.log",
+      "bytes": 2365,
+      "sha256": "24a2333c8f91c3fd91a92099a271751cac5d1c9c90f3c6e3e8278207442fe550"
+    },
+    {
+      "path": "install-wait-release.receipt.json",
+      "bytes": 582,
+      "sha256": "bb0815aad17dc46d4dc8e6254c63bbf02eb3f341fc30fbcec80dbdec8c01d5dc"
+    },
+    {
+      "path": "install-worktree.log",
+      "bytes": 128,
+      "sha256": "5b14ee08b1454deba70a3f3ca47404868a7eaf830390a33732e504c0df1a1a67"
+    },
+    {
+      "path": "installed-app-launch.receipt.json",
+      "bytes": 251,
+      "sha256": "50d3c65033c937afa94cb53efe02e419c5f9534eb0b146d5b4638cf385180892"
+    },
+    {
+      "path": "installed-app-launch.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-app-launch.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-app-quit.receipt.json",
+      "bytes": 290,
+      "sha256": "fd765e3697e318e72fb33631034ee32fb51402cdd301f392c6862fe9413dde9f"
+    },
+    {
+      "path": "installed-app-quit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-app-quit.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-before.json",
+      "bytes": 860,
+      "sha256": "8bf7731db3365313c6646bcbb5d0a10e434829d3814c87061d6ba5510b8c0e20"
+    },
+    {
+      "path": "installed-bundle-verify.receipt.json",
+      "bytes": 301,
+      "sha256": "d9afbc04250ad841d5ad37ac15e07730389bb31bf82687434743f35931282309"
+    },
+    {
+      "path": "installed-bundle-verify.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-bundle-verify.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-cleanup-native.json",
+      "bytes": 13988,
+      "sha256": "0034428e0d3937e560bb25ee5a9befed5cb7c30b4a943afe767f9b4f8379b82b"
+    },
+    {
+      "path": "installed-cleanup-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-cli-version.receipt.json",
+      "bytes": 257,
+      "sha256": "43a83f4c773999325e427c037ebba09f9ed65680796eb5f2ae1db9eaee90a237"
+    },
+    {
+      "path": "installed-cli-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "installed-cli-version.stdout",
+      "bytes": 9,
+      "sha256": "8f972dbe61848831bc42ffdb26077d0d3295e05c3eec2fd1729dcc815a753003"
+    },
+    {
+      "path": "intended.json",
+      "bytes": 135361,
+      "sha256": "e5f490aecbde9ba49a49031d9fb32a618340738611e4c518b84783ca6c20d057"
+    },
+    {
+      "path": "intended.stderr",
+      "bytes": 127,
+      "sha256": "12436d85c84035df2e66cce50b8f9275b641cddf6b56284f7f40c57115825587"
+    },
+    {
+      "path": "peer17-coordination-native.json",
+      "bytes": 6685,
+      "sha256": "3bfb77462c1456aba185e9cc222c75edc080f43e0d98f24ed745d6c4451c584b"
+    },
+    {
+      "path": "peer17-coordination-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prebuild-global-native-summary.json",
+      "bytes": 2340,
+      "sha256": "483cbf07290893dbfe8c0f346938c05b334999d33f27d88b0caa5e271d1a89c9"
+    },
+    {
+      "path": "prebuild-global-native.json.gz",
+      "bytes": 612481,
+      "sha256": "0e306ea04683402ae2f971f9922bdd9ef0d1232ecd297170cf5e2716595aff47"
+    },
+    {
+      "path": "prefiling-native.json",
+      "bytes": 5508,
+      "sha256": "a2fb2bfc472426a3943d1ed7e1bf90387093decfff8b3c555a298632b6f895e7"
+    },
+    {
+      "path": "prefiling-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prefiling-selection.json",
+      "bytes": 217,
+      "sha256": "4655910423d62e8454a796e70880fc10ebf839df8e5b50a1a29573dc63b6c5e5"
+    },
+    {
+      "path": "red-admission-native.json",
+      "bytes": 7425,
+      "sha256": "62151aeffbf1b04ac181e7142d46b33c07649bcacd72aff573947f9c589589a6"
+    },
+    {
+      "path": "red-admission-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "red-source-bindings-v02.json",
+      "bytes": 419,
+      "sha256": "6f7b244870de753f150689629daaee45c02a1f422aab3d66bcf8149bd0c5de33"
+    },
+    {
+      "path": "red-source-bindings.json",
+      "bytes": 606,
+      "sha256": "752d16f01f8552eba2df9d44802489d61fb1df45ca8362ba655b3c12504035be"
+    },
+    {
+      "path": "red-source-v01-recovered.rs",
+      "bytes": 1335453,
+      "sha256": "40220127ef0f4ccadcca97ee3ab373a6525fcafe6fd58faa968f988c68b35b34"
+    },
+    {
+      "path": "red-source-v02.rs",
+      "bytes": 1335464,
+      "sha256": "82c3f4402f121b88c203fee733eac3067bda2b38bd4fe39ce9f31b3c3d9744ad"
+    },
+    {
+      "path": "red-worktree-remove-v02.log",
+      "bytes": 1461,
+      "sha256": "cf901e4614a322e073a4cf804e0fb788249e5b0f0309b3ddfdf277eefe914a06"
+    },
+    {
+      "path": "red-worktree-remove-v02.receipt.json",
+      "bytes": 593,
+      "sha256": "6b7ca6d08c663ee250892e91cb5821247629eaadaa1f9fa02a84546a920cfb0d"
+    },
+    {
+      "path": "red-worktree-remove.log",
+      "bytes": 4355,
+      "sha256": "a6d1691e9e82964a1a9562122ff7ab44549926aec2b5f20282978dd211e52ba7"
+    },
+    {
+      "path": "red-worktree-remove.receipt.json",
+      "bytes": 570,
+      "sha256": "2db08686d756b40bd2c36888ff5c3fd4c266e25cfdb2826b36497834b8648b9e"
+    },
+    {
+      "path": "related-worktree.log",
+      "bytes": 1464,
+      "sha256": "6ecf3dad86a4bc133bbfaeccf2567f59ede070076a31325c9954c341feb66725"
+    },
+    {
+      "path": "related-worktree.receipt.json",
+      "bytes": 569,
+      "sha256": "38c25cfab8603493be5df021a44f25826e780ea273ce250362b02c28a791e594"
+    },
+    {
+      "path": "release-build-queue.log",
+      "bytes": 758,
+      "sha256": "56cf06a39dbec6894b8cbef712bf218bd0b50be3c51de1cbda5f0eb40f4362da"
+    },
+    {
+      "path": "release-build-queue.receipt.json",
+      "bytes": 807,
+      "sha256": "859a7c3e61c84dc355ed374b62eaf9a77580027a415311c8e0f8515e7470ac35"
+    },
+    {
+      "path": "release-bundle.log",
+      "bytes": 15375,
+      "sha256": "c0108a38a48866a8eb5d14a17f73e400bdeac0c9e46f3095328ac9334d6c2020"
+    },
+    {
+      "path": "release-bundle.receipt.json",
+      "bytes": 548,
+      "sha256": "aaf626f71d87ddef945804e2478fd4f52bb4ce5a6c69e3ac9af3bce91861c4c1"
+    },
+    {
+      "path": "resource-cleanup.json",
+      "bytes": 347,
+      "sha256": "83a5336f3b22eff36772ca6d022d8f93db2d798cc1f6fc1f1a97bca0e7240fa9"
+    },
+    {
+      "path": "root-state.json",
+      "bytes": 2559,
+      "sha256": "4434c14c17474b91c123d54514370ac903c18fb0fa9105c24aad11a5c2d286ab"
+    },
+    {
+      "path": "run-in-dir.py",
+      "bytes": 1481,
+      "sha256": "977ed0045a5c2ad042a151fd7707a38c432c97a419e95dcae0e2453a0c0da0ec"
+    },
+    {
+      "path": "run-owned.py",
+      "bytes": 1441,
+      "sha256": "b018a93c7784cbd31405c2462309da2e4fa8e1aaa49c57012a81ff755737dae4"
+    },
+    {
+      "path": "run-queue.py",
+      "bytes": 1228,
+      "sha256": "a79e9e1ddd046c36aa9237468b2476e3cff745681cb117f532dbb235d665be79"
+    },
+    {
+      "path": "source-candidate-native.json",
+      "bytes": 8852,
+      "sha256": "eabde16d4e8037c47a3eed80d88d641b76403397861dd44939588784e69b3b0b"
+    },
+    {
+      "path": "source-candidate-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-commit-message.txt",
+      "bytes": 726,
+      "sha256": "b3234ee6f5171cc0dac5ebe775fed221f8271fcfdfa9a1e5da8b64f661cd8ea5"
+    },
+    {
+      "path": "source-delivery/approve-observation.json",
+      "bytes": 206,
+      "sha256": "c324345a0341f2aae2eca15dd68288af525e0c5259d4aecedafd98e00d0a36f1"
+    },
+    {
+      "path": "source-delivery/approve-return.json",
+      "bytes": 1895,
+      "sha256": "1542435c774b1b902d5752f6e7bebb7c373641594448345db763736a9a3e3b2c"
+    },
+    {
+      "path": "source-delivery/approve-return.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-delivery/candidate-return.json",
+      "bytes": 304,
+      "sha256": "d2ba68e48291d90beb8fd7ee88398621bc67cf278be2e0f8ec952090f16e8b55"
+    },
+    {
+      "path": "source-delivery/candidate-return.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-delivery/delivery-doctor.json",
+      "bytes": 2079,
+      "sha256": "93aa682da18136bf3f551ce71e830f4d0283b364900e3d06b6c1aeb1e91a612e"
+    },
+    {
+      "path": "source-delivery/delivery-doctor.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-delivery/delivery-release.json",
+      "bytes": 590,
+      "sha256": "8d915eee14ca780c203fcc78222c3f08c13d12d2a400b266413a4fbf9fb57442"
+    },
+    {
+      "path": "source-delivery/delivery-release.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-delivery/delivery-status.json",
+      "bytes": 12326,
+      "sha256": "95c210e4b5e30c0c84e9072f71d39c2b565af6b2695d4057d55fa483ded566bc"
+    },
+    {
+      "path": "source-delivery/delivery-status.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-delivery/delivery-verification.json",
+      "bytes": 3582,
+      "sha256": "a8cf1e2c870d4e729f632b30dea2cef9eb126467e766976a2dbcc1efb2f67326"
+    },
+    {
+      "path": "source-delivery/git.log",
+      "bytes": 152,
+      "sha256": "3fae3fc025458f882fcbb561af4df7a79546bb722c086b2ec9acea792eb0cef8"
+    },
+    {
+      "path": "source-delivery/preapprove-status.json",
+      "bytes": 12110,
+      "sha256": "90f85f2b81998b281bc1365eb44466a8d5ad417d7124c81613234e702242785c"
+    },
+    {
+      "path": "source-delivery/preapprove-status.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-delivery/verify-delivery.py",
+      "bytes": 3151,
+      "sha256": "ab249ba90b2fcfc59527c40b6a55ba3be5e443d48e2954a47249e301bbc88a99"
+    },
+    {
+      "path": "source-delivery/whole-source.patch",
+      "bytes": 8107,
+      "sha256": "cfb70e1901dbd0b71ad93490fd6c5fc56245eaf30d710fc23cb5271de9adf8f8"
+    },
+    {
+      "path": "source-diff.patch",
+      "bytes": 8107,
+      "sha256": "cfb70e1901dbd0b71ad93490fd6c5fc56245eaf30d710fc23cb5271de9adf8f8"
+    },
+    {
+      "path": "source-dispatch-native.json",
+      "bytes": 6840,
+      "sha256": "63d92367605d9ebb599422f8ab1a8d23f42c6e039588286be5afa4f08cd72ffb"
+    },
+    {
+      "path": "source-dispatch-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-freeze.json",
+      "bytes": 25578,
+      "sha256": "e7aee87b145954ebb33d8b1821b983b63e0517052c348888fcd2f22ad31f9a44"
+    },
+    {
+      "path": "source-promoted-native.json",
+      "bytes": 9886,
+      "sha256": "5d564326ef32b3fab035965353227a63edc20e2b779b21404b8d4b8f3d686a04"
+    },
+    {
+      "path": "source-promoted-native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "staged-bundle-verify.receipt.json",
+      "bytes": 332,
+      "sha256": "f828065d651f196d498b1ae914293aa04303a23e1b15662e61e828cf1a4162f5"
+    },
+    {
+      "path": "staged-bundle-verify.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "staged-bundle-verify.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-dreamtides-doctor-1.receipt.json",
+      "bytes": 293,
+      "sha256": "48b3f0d033f1dc7e2fde0c96de15749ec747cce97075afb9aee0ef25df18d23d"
+    },
+    {
+      "path": "startup-dreamtides-doctor-1.stderr",
+      "bytes": 148,
+      "sha256": "e75c97c800ef7776fd32eb96d977160dc84ca14283d1927d4c5e8a6a1999e0f3"
+    },
+    {
+      "path": "startup-dreamtides-doctor-1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-dreamtides-doctor-2.receipt.json",
+      "bytes": 293,
+      "sha256": "a665a4d582d594437932c8a9d475b6b94d1e7e743f1419cdbc58cd78cc8ba66c"
+    },
+    {
+      "path": "startup-dreamtides-doctor-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-dreamtides-doctor-2.stdout",
+      "bytes": 1094,
+      "sha256": "96123fc210efe9a12ae2787dcafaf6a20de9ceb40dd836d2de592ac26150a483"
+    },
+    {
+      "path": "startup-tool-doctor-1.receipt.json",
+      "bytes": 285,
+      "sha256": "f4d3ea153cf709290322d6beb8e7e90bd53b5ccdd9ab1077894d257da79da7af"
+    },
+    {
+      "path": "startup-tool-doctor-1.stderr",
+      "bytes": 148,
+      "sha256": "e75c97c800ef7776fd32eb96d977160dc84ca14283d1927d4c5e8a6a1999e0f3"
+    },
+    {
+      "path": "startup-tool-doctor-1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-tool-doctor-2.receipt.json",
+      "bytes": 286,
+      "sha256": "da5c7ec1ccf92c39e4160cb6adddd83eec73558ad00d5b7514600c426fc65615"
+    },
+    {
+      "path": "startup-tool-doctor-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-tool-doctor-2.stdout",
+      "bytes": 1069,
+      "sha256": "acc154253854769068dfa4498b9237c452559e282c1fd3f408a4ec5cb8897162"
+    },
+    {
+      "path": "unused-worktree-cleanup.json",
+      "bytes": 982,
+      "sha256": "5d643741e260e025efe46c5e3d175aa77710c5890a71baa468011b12209cf3a5"
+    },
+    {
+      "path": "unused-worktree-remove-native.json",
+      "bytes": 330,
+      "sha256": "53803fff418d3bcff6402f9c3973b9fb69de914b86389d3c0848c3a4ad6fe602"
+    },
+    {
+      "path": "unused-worktree-remove.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "whitespace.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "whitespace.receipt.json",
+      "bytes": 491,
+      "sha256": "0c7f0ac4064dc38e0a01f3f28f643c17f374c5240c25c5d197c0f1315d88264b"
+    },
+    {
+      "path": "worktree-create.json",
+      "bytes": 339,
+      "sha256": "51e92a881917b6992f0df396b2423d0620c70597f83c16f3378676891fa7a309"
+    },
+    {
+      "path": "worktree-create.receipt.json",
+      "bytes": 112,
+      "sha256": "18c7e045705a5d7000c17532ef97486f9d58a33117257f90c6f69697639a818a"
+    },
+    {
+      "path": "worktree-create.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "rawArchive": "artifacts/qa/hv-gy8x/audit/<exact final Dreamtides evidence source commit>/; final Git/delivery and post-close native receipts retained there after the immutable source cutoff.",
+  "restartSeconds": 1.754996
+}
