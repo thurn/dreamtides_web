@@ -21,5 +21,10 @@
   "eloScale": 400,
   "eloPriorGames": 1,
   "defaultBudget": "scale:1",
-  "defaultGames": 200
+  "defaultGames": 200,
+  "apollyon": {
+    "layer": 6,
+    "gamesPerIncarnation": 50,
+    "poolSeed": "apollyon-tournament-v1"
+  }
 }

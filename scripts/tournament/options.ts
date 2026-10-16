@@ -28,19 +28,21 @@ export function budgetOption(value: string) {
 }
 export function options(args: readonly string[]) {
   const { values } = parseArgs({ args: [...args], options: {
-    a: { type: "string", default: "random" }, b: { type: "string", default: "greedy" }, games: { type: "string", default: String(SETTINGS.defaultGames) },
+    a: { type: "string", default: "random" }, b: { type: "string", default: "greedy" }, games: { type: "string" },
     budget: { type: "string", default: SETTINGS.defaultBudget }, pool: { type: "string", default: "scripts/tournament/deck-pool.json" }, seed: { type: "string", default: "tournament" },
     workers: { type: "string", default: String(SETTINGS.defaultWorkers) }, "batch-ms": { type: "string", default: String(SETTINGS.maximumBatchMs) },
+    apollyon: { type: "boolean", default: false },
     "run-id": { type: "string" }, resume: { type: "boolean", default: false }, recover: { type: "boolean", default: false },
   } });
   const a = policyOption(values.a), b = policyOption(values.b);
-  if (a === b) throw new Error("Choose two distinct policies");
-  const games = integer(Number(values.games), 2);
+  if (values.apollyon ? a !== b : a === b) throw new Error(values.apollyon ? "Apollyon matrix requires one mirror policy" : "Choose two distinct policies");
+  const games = values.apollyon ? SETTINGS.apollyon.gamesPerIncarnation : integer(Number(values.games ?? SETTINGS.defaultGames), 2);
+  if (values.apollyon && values.games !== undefined) throw new Error("Matrix game count comes from the tournament catalog");
   if (games % 2 !== 0) throw new Error("Games must be even to preserve paired seats");
   const runId = values["run-id"];
   if (runId !== undefined && !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/u.test(runId)) throw new Error("Run-id must be a safe filename component");
   if (values.resume && runId === undefined) throw new Error("Resume requires --run-id");
-  return { a, b, games, seed: parseJourneySeed(values.seed), budgets: budgetOption(values.budget ?? SETTINGS.defaultBudget), pool: values.pool ?? "scripts/tournament/deck-pool.json",
+  return { a, b, games, apollyon: values.apollyon ?? false, seed: parseJourneySeed(values.seed), budgets: budgetOption(values.budget ?? SETTINGS.defaultBudget), pool: values.pool ?? "scripts/tournament/deck-pool.json",
     workers: integer(Number(values.workers), 1, SETTINGS.maximumWorkers), batchMs: integer(Number(values["batch-ms"]), 1, SETTINGS.maximumBatchMs),
     runId: runId === undefined ? undefined : parseGameId(runId), resume: values.resume ?? false, recover: values.recover ?? false };
 }

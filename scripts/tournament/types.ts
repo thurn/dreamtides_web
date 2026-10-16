@@ -6,13 +6,15 @@ import type { BattleInit, BattleResult } from "../../src/engine/state/types";
 import type { RecordedAnswer } from "../../src/engine/steps/types";
 import type { Action } from "../../src/engine/rules/actions";
 import type { ContentHash } from "../../src/types/content-hash";
-import type { AvatarId, DreamsignId, TideId, OpponentId, GameId, AffiliationId } from "../../src/types/identifiers";
+import type { AvatarId, DreamsignId, TideId, OpponentId, GameId, AffiliationId, ApollyonIncarnationId } from "../../src/types/identifiers";
 import type { CardId } from "../../src/types/card-identity";
 import type { JourneySeed } from "../../src/types/journey-seed";
 
 export interface PoolDeck {
   readonly id: OpponentId;
   readonly layer: number;
+  /** Present only for a curated boss; avatarId names its permanent Aspect. */
+  readonly incarnationId?: ApollyonIncarnationId;
   readonly avatarId: AvatarId;
   readonly abilityActive: boolean;
   readonly dreamsigns: readonly DreamsignId[];
@@ -24,6 +26,7 @@ export interface PoolDeck {
 export interface DeckPool {
   readonly schemaVersion: 1;
   readonly provenance: { readonly generatedAt: string; readonly reason: string; readonly seed: JourneySeed; readonly sourceHash: ContentHash; readonly apollyon: "hv-umm2.295" };
+  readonly apollyonAppend?: { readonly generatedAt: string; readonly reason: string; readonly sourceHash: ContentHash; readonly basePoolHash: ContentHash };
   readonly decks: readonly PoolDeck[];
 }
 export interface TournamentConfig {
@@ -35,6 +38,7 @@ export interface TournamentConfig {
   readonly poolHash: ContentHash;
   readonly sourceHash: ContentHash;
   readonly scheduleVersion: 1;
+  readonly matchup?: "apollyon";
   readonly runtime: { readonly node: string; readonly platform: NodeJS.Platform; readonly architecture: string };
 }
 export interface MatchSpec {

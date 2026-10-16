@@ -1,0 +1,232 @@
+{
+  "bead": "hv-umm2.295",
+  "phase": 5,
+  "base": "fb68c496de55ace88b1441ab76182382f4cfcf3a",
+  "dispatchUTC": "2026-10-15T22:23:11.035000+00:00",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Ordinary review invocation starting os.getloadavg()[0] at 2026-10-16T00:04:33.392959+00:00"
+      }
+    }
+  },
+  "clockQualification": "Full elapsed window includes research, native scope coordination, queue waits, partial/resumed tournaments, all checks and cleanup. Committed end is an observed pre-Git cutoff; external final-terminal.json records actual Git start/end and exact cutoff gap. No productive/idle or exclusive coding split is inferred.",
+  "timingQualification": "run.py elapsedSeconds is the wrapper observation duration, including source hash/census, up to five-second child polling tail, and lock queue/startup/resume where present. Native batch startedAt/endedAt/elapsedMs are separate; no exact queue acquisition or child CPU duration is claimed.",
+  "provenance": {
+    "generationSourceHash": "603a1cf3b4fa26d543958fb7d6b734949254de57ccd463d3291344130a849cfa",
+    "runtimeSourceHash": "2a3d8c084832f244aefd9d1ec1ec481eff11655714c713561d4af6b963505b90",
+    "poolHash": "60e07b0de4c18390d6711ad5a0cdc773caf155828120874d6339235d33c49612",
+    "scheduleHash": "a8c9410872a3af268fa0802933c4c148a5290e6931c9717322780a8b64fb0f8f",
+    "generationToRuntime": {
+      "path": "/tmp/root-295/helper/generation-runtime-epoch-proof.json",
+      "sha256": "87637b9a44840c49fe5d5c5749a522a368ea099dbc33fb37334e26d902e2bb61"
+    },
+    "qualification": "Only matrix score-target clamping and its synthetic test changed after generation. The eighteen recorded production recipe, curated builder, appender and main/worker catalog files are byte-identical. Original Atlas provenance and all 56 literal deck lines/records remain unchanged."
+  },
+  "acceptance": {
+    "completedUniqueOrdinals": 500,
+    "ordinalRange": [
+      0,
+      499
+    ],
+    "failedGameRecords": 0,
+    "incarnations": 10,
+    "gamesPerIncarnation": 50,
+    "bossPlayerAndFirstPerIncarnation": [
+      25,
+      25
+    ],
+    "distinctLayer6AtlasOpponentsPerIncarnation": 8,
+    "policyBothSeats": "greedy",
+    "iterationBudgets": {
+      "planning": 256,
+      "response": 64
+    },
+    "checksummedRawRecords": 507,
+    "representativeReplays": 10,
+    "replayQualification": "One actual completed game per incarnation replayed through public replayGame; every final state hash matches. This is not a full 500-game replay or a second 500-game tournament.",
+    "reportSha256": "c560d99b161f38e88be121ab3df0090a3dd944ccbe1805d7276e551e381b113c",
+    "actualAudit": {
+      "path": "/tmp/root-295/helper/actual-matrix-audit.json",
+      "sha256": "036dfd525e685cfe80a1a5f94356bbb690d7746c9f7389c31233c877daf3a834"
+    },
+    "auditCaller": {
+      "path": "/tmp/root-295/helper/audit-matrix.mts",
+      "sha256": "beea0ec3616ef8af0790e4fad78a06adf321113a91a775ef89766992695cd8ed"
+    },
+    "auditReceipt": {
+      "path": "/tmp/root-295/helper/actual-audit-v01.receipt.json",
+      "sha256": "338d2dd5df6188592510c3920edc1d5c5c0f1b09a6252aedc0f1b2b2952e3f07"
+    },
+    "preflight": {
+      "path": "/tmp/root-295/helper/preflight-v02.result.json",
+      "sha256": "496d3ed8a06820d09853e883b1942d3e6ad339513cfd9f6efa2b48618d63fda5"
+    },
+    "preflightReceipt": {
+      "path": "/tmp/root-295/helper/preflight-v02.receipt.json",
+      "sha256": "ccdbf95f7580170196debf7c3b36ebea00beb5f700bfee11a52dc481c78a5705"
+    }
+  },
+  "batches": [
+    {
+      "receipt": {
+        "path": "/tmp/root-295/helper/matrix-batch-v01.receipt.json",
+        "sha256": "f0d079a03bdabf63a8e7000efa781e8eb970803ca1f60aae66b141994ec71ba0"
+      },
+      "wrapperObservedSeconds": 1806.2350239999942,
+      "nativeStartedAt": "2026-10-15T22:32:28.631Z",
+      "nativeEndedAt": "2026-10-15T23:02:28.698Z",
+      "nativeElapsedMs": 1800033.36375,
+      "reason": "deadline",
+      "newCompleted": 196,
+      "unfinished": 304,
+      "workers": 2,
+      "exitCode": 0,
+      "sourceChanges": [],
+      "terminalProcessGroupRemaining": []
+    },
+    {
+      "receipt": {
+        "path": "/tmp/root-295/helper/matrix-batch-v02.receipt.json",
+        "sha256": "e1f4a8266edd2f564eae9114b6cd442ae1e9942e96fdefb64f863822319b1c42"
+      },
+      "wrapperObservedSeconds": 2023.7497507089865,
+      "nativeStartedAt": "2026-10-15T23:06:48.896Z",
+      "nativeEndedAt": "2026-10-15T23:36:48.947Z",
+      "nativeElapsedMs": 1800029.706875,
+      "reason": "deadline",
+      "newCompleted": 209,
+      "unfinished": 95,
+      "workers": 4,
+      "exitCode": 0,
+      "sourceChanges": [],
+      "terminalProcessGroupRemaining": []
+    },
+    {
+      "receipt": {
+        "path": "/tmp/root-295/helper/matrix-batch-v03.receipt.json",
+        "sha256": "90eed2da84063030b2d210e862448b1139ad8eb9b44082fa1b5dadb7e164ecfe"
+      },
+      "wrapperObservedSeconds": 1448.1030562919914,
+      "nativeStartedAt": "2026-10-15T23:37:44.393Z",
+      "nativeEndedAt": "2026-10-16T00:01:46.107Z",
+      "nativeElapsedMs": 1441696.5901249999,
+      "reason": "complete",
+      "newCompleted": 95,
+      "unfinished": 0,
+      "workers": 4,
+      "exitCode": 0,
+      "sourceChanges": [],
+      "terminalProcessGroupRemaining": []
+    }
+  ],
+  "partialQualification": "First two batches end at their native 30-minute deadline: 196 and 209 new games, then the final batch completes 95. In-flight cases remain pending until a later real completion. Existing worker API returns whole-game records; interrupted in-flight records are not fabricated. Long cases 264, 368, 378 and 497 complete successfully; no defect, exact start time or performance conclusion is inferred.",
+  "runtimeQualification": "Workers are two, four and four under the machine-wide heavy lock. Capacity observations and actual owned process groups are retained in scratch. Every recorded invocation is waited/reaped with an empty terminal process-group census; final post-check census is retained in final-runtime-census.json. No browser, server or port is used.",
+  "retainedLogs": {
+    "manifest": {
+      "path": "/tmp/root-295/helper/retained-logs/manifest.json",
+      "sha256": "9393de7ba032892a60bf87b3fc812e1f42f0e1439d8ba269052b47237f54a966"
+    },
+    "matrix": {
+      "path": "/tmp/root-295/helper/retained-logs/apollyon-sanity-v1.jsonl",
+      "sha256": "0dd6d34065aa042dd9b4cead0acd1bc7c3cfbee92842314888a38d198c12d3e6",
+      "bytes": 256538892
+    },
+    "generation": {
+      "path": "/tmp/root-295/helper/retained-logs/apollyon-pool-2026-10-15T22-30-08-584Z.jsonl",
+      "sha256": "4cf06bdc5aa2043c4ba3034616767e37411a083993d5fb28d10de3e21e5bc380",
+      "bytes": 109524
+    },
+    "qualification": "Copies are exact CLOSED native JSONL bytes outside the disposable worktree. Native files resolve inside the owned worktree and are regular files; native/copy hashes and both partial-prefix hashes match. Original runtime paths printed in the report are disposable; retained copies persist independently."
+  },
+  "validation": {
+    "focused": {
+      "path": "/tmp/root-295/helper/focused-v03.receipt.json",
+      "sha256": "08593679c1736105a389cab618d0e68bdea1b57d7ade62f3468e1e3424e79d98"
+    },
+    "nodeTypes": {
+      "path": "/tmp/root-295/helper/typecheck-v03.receipt.json",
+      "sha256": "c81e8e562530a1b917d99d5433d4192d171bb1fc9528d64ce6fbb2f6fa8ccc78"
+    },
+    "lint": {
+      "path": "/tmp/root-295/helper/draft-lint-v02.receipt.json",
+      "sha256": "513d0025ad7551eae9f41ba273978c8031be8458843f3daa7e19cfc9a7e10782"
+    },
+    "knipDraft": {
+      "path": "/tmp/root-295/helper/knip-draft-v01.receipt.json",
+      "sha256": "b790ed50c53662070aa4ca0844f77b64dac9fc7c1953c54d145ddbeffac7ba15"
+    },
+    "ordinaryReview": {
+      "path": "/tmp/root-295/helper/review-final-v01.receipt.json",
+      "sha256": "c0fda7942bdebae6140e66734578b085b77a1fc4d27fe4c2351c098fc04c99df",
+      "exitCode": 0,
+      "wrapperObservedSeconds": 20.284280458989087,
+      "relatedTestFiles": 2,
+      "relatedTests": 16
+    },
+    "knipFinal": {
+      "path": "/tmp/root-295/helper/knip-final-v01.receipt.json",
+      "sha256": "6ceb26ea3e5f5cee3947369a64d41d4d1a0d36592e2ea641fc4173a02254b23b",
+      "exitCode": 0,
+      "wrapperObservedSeconds": 5.145148999989033
+    },
+    "fullReviewQualification": "Localized tournament scripts, data and documentation; no test infrastructure, repository configuration, UI or cross-cutting engine architecture changes."
+  },
+  "failureHistory": [
+    {
+      "check": "Initial standalone Node typecheck",
+      "outcome": "exit 2: new synthetic fixture omitted required subtype and used unsupported draw reason. Corrected before runtime; typecheck-v02 and v03 pass.",
+      "receipt": {
+        "path": "/tmp/root-295/helper/initial-typecheck-failure-qualification.json",
+        "sha256": "677a8e699f4bfc36aa63c312f8d61ca27a980551b1e0e4efedf3a2631372d79c"
+      },
+      "timing": "Initial start/end/PID not captured; not invented."
+    },
+    {
+      "check": "Draft lint v01",
+      "outcome": "exit 1: twelve unnecessary assertions in new synthetic test. Corrected before focused v02/runtime.",
+      "receipt": {
+        "path": "/tmp/root-295/helper/draft-lint-v01.receipt.json",
+        "sha256": "45b6a232b090f37fd3788e5c6c996b4e43cd542cb346f5cece4a6b1975c8a4c1"
+      }
+    },
+    {
+      "check": "Preflight v01",
+      "outcome": "exit 1 before any tournament game: direct layer-six target index did not match production last-target clamping. Corrected in matrix scheduler; synthetic short/empty target cases pass.",
+      "receipt": {
+        "path": "/tmp/root-295/helper/preflight-v01.receipt.json",
+        "sha256": "962b8805f6046682a5dbafb8e0cbe1b2968e7f9f398fbc6ff5c373af143af81d"
+      }
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 99,
+    "jsdomFiles": 0
+  },
+  "falloutFiles": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "reviewQualification": "Parent dispatches the required fresh read-only Codex substantial-code review after the implementation helper is terminal; implementation does not claim independent review or promotion.",
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-16T00:04:33.392959+00:00",
+      "measuredFor": "ordinary review wrapper starting value",
+      "load": [
+        6.5,
+        7.31005859375,
+        8.998046875
+      ]
+    }
+  ],
+  "runtimeCensus": {
+    "path": "/tmp/root-295/helper/final-runtime-census.json",
+    "sha256": "9b3eb90f4928341c5bcee1f6a0a4fe62a8cdb59761952bc49bb1dacceddc5cd3"
+  },
+  "parentIndependentAudit": {
+    "path": "/tmp/root-295/parent-final-matrix-audit.json",
+    "sha256": "960dd21bbf9b4c328b2146f4db448b0b7897c094e90b71934ee8b37f1afb0712"
+  },
+  "committedPreGitCutoffUTC": "2026-10-16T00:07:01.852311+00:00",
+  "endScope": "Observed metadata cutoff before final schema/diff/source manifest and direct Git commit. Actual Git endpoint and cutoff gap are in external final-terminal.json."
+}

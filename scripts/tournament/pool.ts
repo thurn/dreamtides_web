@@ -1,9 +1,10 @@
 import { readFileSync } from "node:fs";
 import type { EngineCatalog } from "../../src/engine/catalog";
 import { parseCardId } from "../../src/types/card-identity";
-import { parseAvatarId, parseDreamsignId, parseTideId, parseOpponentId, parseAffiliationId } from "../../src/types/identifiers";
+import { parseAvatarId, parseDreamsignId, parseTideId, parseOpponentId, parseAffiliationId, parseApollyonIncarnationId } from "../../src/types/identifiers";
 import { parseJourneySeed } from "../../src/types/journey-seed";
 import { parseContentHash } from "../../src/types/content-hash";
+import type { ApollyonIncarnationContent } from "../../src/types/content";
 import type { DeckPool, PoolDeck } from "./types";
 import { digest } from "./provenance";
 import SETTINGS from "./catalog.json";
@@ -25,7 +26,7 @@ export function array(value: unknown): unknown[] {
   return value;
 }
 /** Decode identities before lookup; card repetitions are separate physical deck entries. */
-export interface PoolRules { readonly tides: ReadonlySet<PoolDeck["archetypes"][number]>; readonly affiliations: ReadonlySet<NonNullable<PoolDeck["affiliationId"]>>; readonly abilityActiveFromLayer: number; readonly dreamsignsFromLayer: number; readonly deckSize: number }
+export interface PoolRules { readonly tides: ReadonlySet<PoolDeck["archetypes"][number]>; readonly affiliations: ReadonlySet<NonNullable<PoolDeck["affiliationId"]>>; readonly abilityActiveFromLayer: number; readonly dreamsignsFromLayer: number; readonly deckSize: number; readonly incarnations?: readonly ApollyonIncarnationContent[]; readonly rosterAvatarIds?: ReadonlySet<PoolDeck["avatarId"]> }
 export function decodePool(value: unknown, catalog: EngineCatalog, rules?: PoolRules): DeckPool {
   const raw = object(value);
   if (raw.schemaVersion !== 1) throw new Error("Unsupported pool schema");
@@ -40,6 +41,10 @@ export function decodePool(value: unknown, catalog: EngineCatalog, rules?: PoolR
     seen.add(id);
     const avatarId = parseAvatarId(entry.avatarId);
     catalog.avatar(avatarId);
+    const incarnationId = entry.incarnationId === undefined ? undefined : parseApollyonIncarnationId(entry.incarnationId);
+    const incarnation = incarnationId === undefined ? undefined : rules?.incarnations?.find((boss) => boss.id === incarnationId);
+    if (incarnationId !== undefined && (incarnation === undefined || incarnation.aspect.id !== avatarId)) throw new Error("Unknown incarnation or mismatched Aspect");
+    if (incarnationId === undefined && rules?.rosterAvatarIds !== undefined && !rules.rosterAvatarIds.has(avatarId)) throw new Error("Ordinary deck requires a roster Avatar");
     const cards = array(entry.cards).map(parseCardId);
     if (cards.length === 0) throw new Error("Empty pool deck");
     for (const card of cards) catalog.card(card);
@@ -51,8 +56,10 @@ export function decodePool(value: unknown, catalog: EngineCatalog, rules?: PoolR
     if (typeof entry.abilityActive !== "boolean") throw new Error("Invalid avatar activation");
     const layer = integer(entry.layer, Math.min(...SETTINGS.layers), Math.max(...SETTINGS.layers));
     const affiliationId = entry.affiliationId === null ? null : parseAffiliationId(entry.affiliationId);
-    if (rules !== undefined && ((affiliationId !== null && !rules.affiliations.has(affiliationId)) || entry.abilityActive !== (layer >= rules.abilityActiveFromLayer) || cards.length !== rules.deckSize || dreamsigns.length !== (layer >= rules.dreamsignsFromLayer ? 1 : 0))) throw new Error("Pool deck contradicts generator metadata");
+    if (rules !== undefined && ((affiliationId !== null && !rules.affiliations.has(affiliationId)) || entry.abilityActive !== (layer >= rules.abilityActiveFromLayer) || cards.length !== rules.deckSize || (incarnation === undefined ? dreamsigns.length !== (layer >= rules.dreamsignsFromLayer ? 1 : 0) : false))) throw new Error("Pool deck contradicts generator metadata");
+    if (incarnation !== undefined && (layer !== SETTINGS.apollyon.layer || !entry.abilityActive || affiliationId !== null || JSON.stringify(dreamsigns) !== JSON.stringify(incarnation.dreamsignIds) || incarnation.deckRecipe.signatureCardIds.some((id) => cards.filter((card) => card === id).length !== 1) || incarnation.deckRecipe.archetypeTideIds.some((id) => !archetypes.includes(id)))) throw new Error("Pool boss contradicts authored recipe");
     return {
+      ...(incarnationId === undefined ? {} : { incarnationId }),
       id, avatarId, cards, dreamsigns, archetypes,
       layer,
       abilityActive: entry.abilityActive,
@@ -61,7 +68,10 @@ export function decodePool(value: unknown, catalog: EngineCatalog, rules?: PoolR
     };
   });
   if (decks.length < 2) throw new Error("Pool requires at least two decks");
-  return { schemaVersion: 1, provenance: { generatedAt, reason: text(provenance.reason), seed: parseJourneySeed(provenance.seed), sourceHash: parseContentHash(provenance.sourceHash), apollyon: "hv-umm2.295" }, decks };
+  const addition = raw.apollyonAppend === undefined ? undefined : object(raw.apollyonAppend);
+  const apollyonAppend = addition === undefined ? undefined : { generatedAt: text(addition.generatedAt), reason: text(addition.reason), sourceHash: parseContentHash(addition.sourceHash), basePoolHash: parseContentHash(addition.basePoolHash) };
+  if (apollyonAppend !== undefined && !Number.isFinite(Date.parse(apollyonAppend.generatedAt))) throw new Error("Invalid append timestamp");
+  return { schemaVersion: 1, ...(apollyonAppend === undefined ? {} : { apollyonAppend }), provenance: { generatedAt, reason: text(provenance.reason), seed: parseJourneySeed(provenance.seed), sourceHash: parseContentHash(provenance.sourceHash), apollyon: "hv-umm2.295" }, decks };
 }
 export function readPool(path: string, catalog: EngineCatalog, rules?: PoolRules) {
   const bytes = readFileSync(path);

@@ -109,7 +109,7 @@ kinds, therefore read each entry through a getter.
 ## Policy tournaments
 
 The headless Node runner compares two existing engine policies on the frozen
-Atlas deck pool. Every seed/deck pairing is played twice: deck seats, dealt
+deck pool. Every seed/deck pairing is played twice: deck seats, dealt
 cards and the starting seat stay fixed, and the policies exchange seats.
 Both policies therefore pilot both decks and move first once per pair.
 
@@ -158,6 +158,28 @@ Dreamsigns, affiliations and joined tide UUIDs. The generation JSONL records
 reconstruction details and the reason. Apollyon incarnation decks are appended
 by the dependent `hv-umm2.295` sanity task. Harness limits and statistical
 parameters live in `scripts/tournament/catalog.json`.
+
+The boss matrix uses an explicit mirror-policy mode and attributes outcomes to
+its physical incarnation seat. Append the current production boss recipes to
+an Atlas-only pool with an explicit reason; the command preserves every Atlas
+deck line and records a separate append source/hash provenance and JSONL log:
+
+```bash
+npm run tournament -- --append-apollyon --reason 'hv-umm2.295: freeze all authored provisional incarnations for the sanity matrix'
+lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run tournament -- --apollyon --a greedy --b greedy --budget scale:1 --seed apollyon-sanity-v1 --run-id apollyon-sanity-v1 --workers 2
+```
+
+The matrix catalog specifies 50 games per incarnation against layer-6 Atlas
+decks. Its 25 pairs exchange physical deck seats with the same battle seed,
+opponent and starting seat; each boss plays first 25 times. Side-specific
+shuffle streams mean exchanged decks need not receive identical deals.
+The public runner requires every authored incarnation exactly once and writes
+`docs/plan/evidence/ai/apollyon.md`, including completion counts, seat-attributed
+win rates, descriptive Wilson intervals, host load and replay-log location.
+Use the original run ID and `--resume` after a partial batch. For the Phase 7
+champion re-check, retain the baseline report and use the champion on both
+`--a` and `--b`; the per-game logs remain separated by run ID. Deliberate pool
+regeneration builds Atlas decks first, then appends the current boss recipes.
 
 ## Browser QA
 
