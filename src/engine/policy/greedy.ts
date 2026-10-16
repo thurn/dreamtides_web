@@ -2,7 +2,7 @@
  * The Greedy policy: a one-ply search. For a top-level decision it samples
  * determinizations of its view (D22), applies each legal action to each,
  * resolves the stack with both sides passing, ends a play, reposition, or
- * immediately unproductive activation's main window to match passing's phase boundary, and scores the result with a
+ * immediately unproductive activation or repeat's main window to match passing's phase boundary, and scores the result with a
  * simple evaluation: score difference, board spark, cards in hand, and
  * energy. The action with the best mean score wins. Prompts are answered
  * with the prompt heuristic (`greedyAnswer`), live and in simulation; a
@@ -74,9 +74,9 @@ function simulationSource(engine: Engine): InlineSource {
 
 /**
  * The score of `action` in the determinized `state`: the action applied,
- * then the stack resolved with both sides passing. A main-window activation
- * keeps its immediate score when it improves utility. Other main activations,
- * plays and repositions end their current window to include the same phase-boundary consequences
+ * then the stack resolved with both sides passing. A main-window activation or
+ * repeat keeps its immediate score when it improves utility. Other main activations,
+ * repeats, plays and repositions end their current window to include the same phase-boundary consequences
  * as passing. `null` when the action
  * is not legal in this sample or the simulation fails.
  */
@@ -88,20 +88,16 @@ function simulate(
   loops: { simulations: number; iterations: number },
 ): number | null {
   const source = simulationSource(engine);
-  const mainActivation = action.kind === "activate" && state.stack.length === 0;
-  const settleWindow = mainActivation || action.kind === "reposition" || (action.kind === "play" && state.stack.length === 0);
+  const productiveMainAction = (action.kind === "activate" && state.stack.length === 0) || action.kind === "repeatLoop";
+  const settleWindow = productiveMainAction || action.kind === "reposition" || (action.kind === "play" && state.stack.length === 0);
   const sameWindow = (current: BattleState) => current.turn.phase === state.turn.phase &&
     current.turn.active === state.turn.active && current.turn.turnNumber === state.turn.turnNumber;
   try {
-    // Bound the sampled work while keeping the original action in the decision and trace.
-    const simulated = action.kind === "repeatLoop"
-      ? { ...action, count: Math.min(GREEDY.loopIterationLimit, state.config.loopIterationCap, action.count === "untilVictory" ? Infinity : action.count) }
-      : action;
-    if (simulated.kind === "repeatLoop") loops.simulations += 1;
-    const applied = engine.apply(state, side, simulated, source);
-    if (simulated.kind === "repeatLoop") {
+    if (action.kind === "repeatLoop") loops.simulations += 1;
+    const applied = engine.apply(state, side, action, source);
+    if (action.kind === "repeatLoop") {
       for (const event of applied.events) {
-        if (event.kind === "loopEnded" && event.loop === simulated.loop) loops.iterations += event.iterations;
+        if (event.kind === "loopEnded" && event.loop === action.loop) loops.iterations += event.iterations;
       }
     }
     let current = applied.state;
@@ -109,9 +105,9 @@ function simulate(
     for (let passes = 0; passes <= GREEDY.stackPassLimit && current.result === null; passes++) {
       const next = engine.decision(current);
       if (next?.kind !== "respond") {
-        if (mainActivation && !endedWindow && current.stack.length === 0 && next?.kind === "main" && next.side === side && sameWindow(current)) {
+        if (productiveMainAction && !endedWindow && current.stack.length === 0 && next?.kind === "main" && next.side === side && sameWindow(current)) {
           const immediate = evaluatePosition(engine.view(current, side), side);
-          // Useful renewable activations retain their gains before an adverse boundary.
+          // Useful renewable actions retain their gains before an adverse boundary.
           if (immediate > evaluatePosition(engine.view(state, side), side)) return immediate;
         }
         // Compare a main-window candidate with passing at the same horizon. Resolve any
@@ -143,7 +139,10 @@ function candidateOrder(legal: readonly Action[]): Action[] {
 }
 
 function decideTopLevel(view: BattleView, legal: readonly Action[], ctx: PolicyContext, started: number): PolicyResult {
-  const candidates = candidateOrder(legal);
+  // The selected action and its trace carry exactly the finite work being evaluated.
+  const candidates = candidateOrder(legal).map((action): Action => action.kind === "repeatLoop"
+    ? { ...action, count: Math.min(GREEDY.loopIterationLimit, view.config.loopIterationCap, action.count === "untilVictory" ? Infinity : action.count) }
+    : action);
   const totals = candidates.map(() => ({ score: 0, visits: 0 }));
   const deadline = ctx.budget.wallClockMs === undefined ? Infinity : started + ctx.budget.wallClockMs;
   let iterations = 0;

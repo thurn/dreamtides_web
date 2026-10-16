@@ -1,6 +1,7 @@
 import "./phasing-cycle.contracts";
 import "./productive-activation.contracts";
 import "./overrides.contracts";
+import "./greedy-loop.contracts";
 // The placeholder policies, their requests, the optional-chain bound, and
 // aiDecision, on synthetic cards.
 import { describe, expect, it } from "vitest";
@@ -8,14 +9,14 @@ import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine, type Engine } from "../engine";
 import { createFoldAdapter, decisionKeyOf, sidePending, type BattleSlice, type FoldAdapter } from "../fold/slice";
 import { isLegalAnswer } from "../prompts/answers";
-import { activated, energy, event } from "../dsl/builders";
-import { discover, draw, gainEnergy, gainPoints } from "../effects/primitives";
+import { energy, event } from "../dsl/builders";
+import { discover, draw, gainPoints } from "../effects/primitives";
 import type { ConfirmPrompt, Prompt, PromptRole } from "../prompts/types";
 import { onChallenge, onDusk, onNight, triggered } from "../dsl/triggers";
 import { battleSeed, opponent, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
 import { boardState } from "../testing/board";
-import { CYCLE, LOOP } from "../testing/loop-cards";
+import { CYCLE } from "../testing/loop-cards";
 import { PROMPT_LAB_DEFINITIONS, promptLabBattle, promptLabFixture } from "../testing/prompt-lab";
 import { NO_PROMPTS } from "../steps/sources";
 import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "../testing/synthetic-cards";
@@ -310,78 +311,6 @@ describe("Greedy", () => {
     const answers = [first.state, second.state, reseeded].map((state) => runPolicy(engine, topLevelRequest(state, "enemy", "greedy", decklists)));
     expect(answers[1]).toEqual(answers[0]);
     expect(answers[2]).toEqual(answers[0]);
-  });
-
-  it("accepts a loop on offer that repeats to victory", () => {
-    const { state, ids } = board({ enemy: { back: [LOOP.freePoints.id], deck }, player: { deck }, scoreToWin: 10 });
-    const source = ids.enemy.back[0];
-    if (source == null) throw new Error("no source");
-    const once = engine.apply(state, "enemy", { kind: "activate", source, ability: 0 }, NO_PROMPTS).state;
-    const loop = engine.legalActions(once, "enemy").find((action) => action.kind === "repeatLoop");
-    expect(loop).toBeDefined();
-    const decklists = { player: entries(deck), enemy: entries([LOOP.freePoints.id, ...deck]) };
-    const result = runPolicy(engine, topLevelRequest(once, "enemy", "greedy", decklists));
-    expect(result.choice).toEqual({ kind: "action", action: loop });
-  });
-
-  it.each([undefined, 1])("bounds a non-terminating loop with battle cap %s and keeps its offered actions", (battleCap) => {
-    const energyLoop: EngineCardDefinition = { ...LOOP.freePoints, id: syntheticId(0x4514), abilities: () => [activated([], gainEnergy(1))] };
-    const looping = createEngine(testCatalog([energyLoop]));
-    const { state, ids } = boardState(looping.catalog, { active: "enemy", phase: "day", enemy: { back: [energyLoop.id], deck }, player: { deck } });
-    const source = ids.enemy.back[0];
-    if (source == null) throw new Error("no source");
-    const activatedState = looping.apply(state, "enemy", { kind: "activate", source, ability: 0 }, NO_PROMPTS).state;
-    const once = battleCap === undefined ? activatedState : { ...activatedState, config: { ...activatedState.config, loopIterationCap: battleCap } };
-    const decision = looping.decision(once);
-    if (decision === null) throw new Error("no decision");
-    const legal = looping.legalActions(once, "enemy");
-    const loop = legal.find((action) => action.kind === "repeatLoop");
-    if (loop === undefined) throw new Error("no loop");
-    expect(loop.count).toBe("untilVictory");
-    const observed: { count: number | "untilVictory"; steps: number; iterations: number }[] = [];
-    // This facade delegates every action to the real engine and observes its public steps/events.
-    const observedEngine: Engine = {
-      ...looping,
-      apply(current, side, action, answers, observe) {
-        if (action.kind !== "repeatLoop") return looping.apply(current, side, action, answers, observe);
-        const run = { count: action.count, steps: 0, iterations: 0 };
-        observed.push(run);
-        const result = looping.apply(current, side, action, answers, (after, step, events) => {
-          if (step.kind === "loopIteration") run.steps += 1;
-          observe?.(after, step, events);
-        });
-        for (const event of result.events) {
-          if (event.kind === "loopEnded" && event.loop === action.loop) run.iterations += event.iterations;
-        }
-        return result;
-      },
-    };
-    const budget = { iterations: legal.length + 1 };
-    const result = runPolicy(observedEngine, {
-      policy: "greedy", side: "enemy", key: decisionKeyOf(sliceOf(once)), view: looping.view(once, "enemy"),
-      decision: { kind: "topLevel", decision, legal },
-      decklists: { player: entries(deck), enemy: entries([energyLoop.id, ...deck]) },
-      seed: battleSeed("loop-budget"), budget,
-    });
-    const limit = AI.enginePolicy.greedy.loopIterationLimit;
-    const effectiveLimit = Math.min(limit, once.config.loopIterationCap);
-    expect(observed.length).toBeGreaterThan(0);
-    for (const run of observed) {
-      expect(run.steps).toBeLessThanOrEqual(effectiveLimit + 1);
-      expect(run.iterations).toBeLessThanOrEqual(effectiveLimit);
-      expect(typeof run.count).toBe("number");
-      if (typeof run.count !== "number") throw new Error("unbounded simulated count");
-      expect(run.count).toBeLessThanOrEqual(effectiveLimit);
-      expect(run.iterations).toBeGreaterThan(0);
-    }
-    expect(result.trace.used.iterations).toBeLessThanOrEqual(budget.iterations);
-    expect(result.trace.loopSimulation).toEqual({ iterationLimit: limit, simulations: observed.length, iterations: observed.reduce((sum, run) => sum + run.iterations, 0) });
-    expect(result.choice.kind).toBe("action");
-    if (result.choice.kind !== "action") throw new Error("not an action");
-    expect(legal).toContainEqual(result.choice.action);
-    if (result.choice.action.kind === "repeatLoop") expect(result.choice.action).toEqual(loop);
-    expect(looping.legalActions(once, "enemy")).toEqual(legal);
-    expect(once.result).toBeNull();
   });
 
   it("stops at its iteration budget and its wall-clock cap, keeping the best candidate it weighed", () => {

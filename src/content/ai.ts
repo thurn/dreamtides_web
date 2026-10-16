@@ -31,7 +31,7 @@ export const AI = {
       determinizations: 2,
       // Pass actions applied to resolve the stack after a simulated action.
       stackPassLimit: 32,
-      // Repetitions of one optional loop simulated per candidate; the live action keeps its requested count.
+      // Repetitions of one optional loop evaluated and selected per candidate.
       loopIterationLimit: 32,
       // Maximum utility credited to one character's spark in Greedy evaluation.
       sparkValueCap: 32,

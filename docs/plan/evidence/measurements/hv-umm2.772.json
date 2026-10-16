@@ -1,0 +1,700 @@
+{
+  "bead": "hv-umm2.772",
+  "base": "1e3dab088dcef4c6b4610c7e3f0e7da88e0b0fc8",
+  "scope": {
+    "production": [
+      "src/engine/policy/greedy.ts"
+    ],
+    "tests": [
+      "src/engine/policy/policy.test.ts",
+      "src/engine/policy/greedy-loop.contracts.ts"
+    ],
+    "catalogCommentOnly": "src/content/ai.ts",
+    "falloutFiles": [],
+    "configurationValuesChanged": false,
+    "normalBudgets": {
+      "turnPlanning": 256,
+      "response": 64
+    },
+    "engineOrRulesChanged": false,
+    "browserQA": "Internal policy behavior; no browser workflow/presentation change."
+  },
+  "clock": {
+    "claimUTC": "2026-10-16T19:33:19Z",
+    "helperInitialDispatchUTC": null,
+    "helperInitialDispatchQualification": "Exact initial helper dispatch was not retained by root or exposed to helper; unobserved, not inferred.",
+    "measurementCutoffUTC": "2026-10-16T20:03:21.896292+00:00",
+    "cutoffKind": "v02 final evidence freeze after mechanical contract extraction, before final schema, artifact index and amend",
+    "windowQualification": "Claim-inclusive whole assignment, including root/helper research, coordination, runtime and queues up to stated cutoff. This is broader than a helper-only editing window.",
+    "claimToCutoffMin": 30.048,
+    "actualGitReceipt": "Additive v02 actual amend return/full claim-to-Git/cutoff tail: /tmp/root772-20261016/actual-git-receipt-v02.json. Original v01 receipt retained immutable; no clock-only amend."
+  },
+  "sourceBindings": [
+    {
+      "path": "src/content/ai.ts",
+      "sha256": "2099a18b185c79cd9413e1c258921ffef41d43bf432c6f306981767b6384a36f"
+    },
+    {
+      "path": "src/engine/policy/greedy.ts",
+      "sha256": "1bf540a29faf282852cbc9462fc5c58a750e2f3c23638325d4fbc4ddaacee4f5"
+    },
+    {
+      "path": "src/engine/policy/policy.test.ts",
+      "sha256": "4b0f7fa251f7591d76d9075d482cc550907126fb9b623dc324a9ffb9a7f75e7e"
+    }
+  ],
+  "checks": [
+    {
+      "name": "focused-01",
+      "startUTC": "2026-10-16T19:43:35.276445+00:00",
+      "monotonicStart": 425350.253496333,
+      "loadStart": [
+        6.90625,
+        6.7470703125,
+        8.005859375
+      ],
+      "pid": 91721,
+      "pgid": 91721,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 240.0,
+      "endUTC": "2026-10-16T19:43:49.931278+00:00",
+      "elapsedS": 14.654714457981754,
+      "cpuUserS": 15.282202,
+      "cpuSystemS": 2.553794,
+      "loadEnd": [
+        6.45849609375,
+        6.65966796875,
+        7.95263671875
+      ],
+      "exit": 1,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/focused-01/source-epoch.json",
+      "sourceEpochSHA256": "0f7edc778336ee56206b6b372a675e3e5f82f60b17e36fbb7228a6f7bdb0a517",
+      "stdout": "/tmp/root772-20261016/focused-01/stdout.txt",
+      "stderr": "/tmp/root772-20261016/focused-01/stderr.txt"
+    },
+    {
+      "name": "focused-02",
+      "startUTC": "2026-10-16T19:44:15.155423+00:00",
+      "monotonicStart": 425390.132119416,
+      "loadStart": [
+        6.74365234375,
+        6.677734375,
+        7.9189453125
+      ],
+      "pid": 92944,
+      "pgid": 92944,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 240.0,
+      "endUTC": "2026-10-16T19:44:26.528878+00:00",
+      "elapsedS": 11.373372583999299,
+      "cpuUserS": 13.395503,
+      "cpuSystemS": 2.034716,
+      "loadEnd": [
+        6.30859375,
+        6.58837890625,
+        7.87255859375
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/focused-02/source-epoch.json",
+      "sourceEpochSHA256": "291092e02ba38e245b2e6abffec5334237c3d68fd866f5a5453f296c4bbbb649",
+      "stdout": "/tmp/root772-20261016/focused-02/stdout.txt",
+      "stderr": "/tmp/root772-20261016/focused-02/stderr.txt"
+    },
+    {
+      "name": "review-01",
+      "startUTC": "2026-10-16T19:44:47.219997+00:00",
+      "monotonicStart": 425422.196409,
+      "loadStart": [
+        5.740234375,
+        6.4365234375,
+        7.78759765625
+      ],
+      "pid": 93667,
+      "pgid": 93667,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 300.0,
+      "endUTC": "2026-10-16T19:45:34.309043+00:00",
+      "elapsedS": 47.08864954096498,
+      "cpuUserS": 114.90070300000001,
+      "cpuSystemS": 13.216413000000001,
+      "loadEnd": [
+        7.43505859375,
+        6.7919921875,
+        7.84765625
+      ],
+      "exit": 2,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/review-01/source-epoch.json",
+      "sourceEpochSHA256": "c9933f52a58f5fb4b10e8513adef0adb855c38b057b8c2f96ec351d731cd020b",
+      "stdout": "/tmp/root772-20261016/review-01/stdout.txt",
+      "stderr": "/tmp/root772-20261016/review-01/stderr.txt"
+    },
+    {
+      "name": "focused-03",
+      "startUTC": "2026-10-16T19:46:37.415831+00:00",
+      "monotonicStart": 425532.391265416,
+      "loadStart": [
+        7.22509765625,
+        6.7744140625,
+        7.7568359375
+      ],
+      "pid": 96844,
+      "pgid": 96844,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 240.0,
+      "endUTC": "2026-10-16T19:46:48.661486+00:00",
+      "elapsedS": 11.2455711250077,
+      "cpuUserS": 13.754442000000001,
+      "cpuSystemS": 1.8868179999999999,
+      "loadEnd": [
+        8.0966796875,
+        6.96484375,
+        7.81201171875
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/focused-03/source-epoch.json",
+      "sourceEpochSHA256": "978cfd1ced64c4becfacd34af2e5040c61f70d21d9743f0522f51902850ccb5d",
+      "stdout": "/tmp/root772-20261016/focused-03/stdout.txt",
+      "stderr": "/tmp/root772-20261016/focused-03/stderr.txt"
+    },
+    {
+      "name": "review-02",
+      "startUTC": "2026-10-16T19:47:04.355273+00:00",
+      "monotonicStart": 425559.330468916,
+      "loadStart": [
+        7.14599609375,
+        6.81689453125,
+        7.74462890625
+      ],
+      "pid": 97732,
+      "pgid": 97732,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 300.0,
+      "endUTC": "2026-10-16T19:47:46.326753+00:00",
+      "elapsedS": 41.97112137504155,
+      "cpuUserS": 107.342521,
+      "cpuSystemS": 12.208843,
+      "loadEnd": [
+        6.6650390625,
+        6.73291015625,
+        7.6640625
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/review-02/source-epoch.json",
+      "sourceEpochSHA256": "298a8c175af9dbfd2b5444765f7361123f4e8b4e6a97ba00cf29007b119b68f5",
+      "stdout": "/tmp/root772-20261016/review-02/stdout.txt",
+      "stderr": "/tmp/root772-20261016/review-02/stderr.txt"
+    },
+    {
+      "name": "knip-01",
+      "startUTC": "2026-10-16T19:48:19.734732+00:00",
+      "monotonicStart": 425634.709258208,
+      "loadStart": [
+        5.05615234375,
+        6.32861328125,
+        7.48388671875
+      ],
+      "pid": 99727,
+      "pgid": 99727,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 120.0,
+      "endUTC": "2026-10-16T19:48:28.388822+00:00",
+      "elapsedS": 8.654026457981672,
+      "cpuUserS": 4.351989,
+      "cpuSystemS": 2.092571,
+      "loadEnd": [
+        5.28076171875,
+        6.333984375,
+        7.47216796875
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/knip-01/source-epoch.json",
+      "sourceEpochSHA256": "dd2bc964426e767dcf14bc582742c86cbb83e4fa641b8882fc0cc8279aea50de",
+      "stdout": "/tmp/root772-20261016/knip-01/stdout.txt",
+      "stderr": "/tmp/root772-20261016/knip-01/stderr.txt"
+    },
+    {
+      "name": "witness-prefix-01",
+      "startUTC": "2026-10-16T19:49:04.783652+00:00",
+      "monotonicStart": 425679.757778208,
+      "loadStart": [
+        4.91064453125,
+        6.134765625,
+        7.353515625
+      ],
+      "pid": 1138,
+      "pgid": 1138,
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/root772-20261016/causal-witness.mts",
+        "prefix",
+        "/tmp/root772-20261016/witness-prefix-output-01"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 120.0,
+      "endUTC": "2026-10-16T19:49:08.428892+00:00",
+      "elapsedS": 3.6452241669758223,
+      "cpuUserS": 3.310085,
+      "cpuSystemS": 0.6136619999999999,
+      "loadEnd": [
+        4.67724609375,
+        6.06591796875,
+        7.32177734375
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/witness-prefix-01/source-epoch.json",
+      "sourceEpochSHA256": "41d0839fc668a52cdd108cba1c0d73390602a4ff24f7b1d6917e7d0110ac62a1",
+      "stdout": "/tmp/root772-20261016/witness-prefix-01/stdout.txt",
+      "stderr": "/tmp/root772-20261016/witness-prefix-01/stderr.txt"
+    },
+    {
+      "name": "witness-progress-01",
+      "startUTC": "2026-10-16T19:49:51.199366+00:00",
+      "monotonicStart": 425726.173081208,
+      "loadStart": [
+        4.802734375,
+        5.900390625,
+        7.1943359375
+      ],
+      "pid": 2356,
+      "pgid": 2356,
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/root772-20261016/causal-witness.mts",
+        "progress",
+        "/tmp/root772-20261016/witness-progress-output-01"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 1800.0,
+      "endUTC": "2026-10-16T19:50:25.079271+00:00",
+      "elapsedS": 33.87961779197212,
+      "cpuUserS": 35.353716,
+      "cpuSystemS": 0.9378989999999999,
+      "loadEnd": [
+        4.6640625,
+        5.75,
+        7.08642578125
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/witness-progress-01/source-epoch.json",
+      "sourceEpochSHA256": "9f36d3d2e59198b323b3ab668ef4777f71c10d21f3afc07b4f21f0614e7c26e0",
+      "stdout": "/tmp/root772-20261016/witness-progress-01/stdout.txt",
+      "stderr": "/tmp/root772-20261016/witness-progress-01/stderr.txt"
+    },
+    {
+      "name": "focused-v02",
+      "startUTC": "2026-10-16T20:01:26.491469+00:00",
+      "monotonicStart": 426421.459010625,
+      "loadStart": [
+        7.8515625,
+        6.451171875,
+        6.54296875
+      ],
+      "pid": 20661,
+      "pgid": 20661,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 240.0,
+      "endUTC": "2026-10-16T20:01:37.809302+00:00",
+      "elapsedS": 11.317743124964181,
+      "cpuUserS": 13.263081,
+      "cpuSystemS": 2.0086370000000002,
+      "loadEnd": [
+        8.06298828125,
+        6.54931640625,
+        6.57666015625
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/focused-v02/source-epoch.json",
+      "sourceEpochSHA256": "f4a262abfa78e712ecf0770497e3a7d5128034b410c42c39f6f0a21575b4e5a4",
+      "stdout": "/tmp/root772-20261016/focused-v02/stdout.txt",
+      "stderr": "/tmp/root772-20261016/focused-v02/stderr.txt"
+    },
+    {
+      "name": "review-v02",
+      "startUTC": "2026-10-16T20:01:47.559461+00:00",
+      "monotonicStart": 426442.526813958,
+      "loadStart": [
+        7.2041015625,
+        6.41552734375,
+        6.52880859375
+      ],
+      "pid": 21108,
+      "pgid": 21108,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 300.0,
+      "endUTC": "2026-10-16T20:02:29.774640+00:00",
+      "elapsedS": 42.21481687499909,
+      "cpuUserS": 107.741348,
+      "cpuSystemS": 12.417694000000001,
+      "loadEnd": [
+        6.9609375,
+        6.44140625,
+        6.53125
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/review-v02/source-epoch.json",
+      "sourceEpochSHA256": "7c3a82b2ccb35f07f1316146686aecad7dd96af51135962feca409a23124ca0c",
+      "stdout": "/tmp/root772-20261016/review-v02/stdout.txt",
+      "stderr": "/tmp/root772-20261016/review-v02/stderr.txt"
+    },
+    {
+      "name": "knip-v02",
+      "startUTC": "2026-10-16T20:02:34.105424+00:00",
+      "monotonicStart": 426489.072364666,
+      "loadStart": [
+        6.7236328125,
+        6.400390625,
+        6.51611328125
+      ],
+      "pid": 22491,
+      "pgid": 22491,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-greedy-loop-count772",
+      "timeoutS": 120.0,
+      "endUTC": "2026-10-16T20:02:38.267725+00:00",
+      "elapsedS": 4.1622719170409255,
+      "cpuUserS": 4.0871260000000005,
+      "cpuSystemS": 1.431074,
+      "loadEnd": [
+        7.14599609375,
+        6.4931640625,
+        6.5478515625
+      ],
+      "exit": 0,
+      "timedOut": false,
+      "processGroupSettled": true,
+      "sourceEpoch": "/tmp/root772-20261016/knip-v02/source-epoch.json",
+      "sourceEpochSHA256": "9c741cb50139bd621edac6129780f43d5ed07aeeaeff39d5f1713bbfa6462459",
+      "stdout": "/tmp/root772-20261016/knip-v02/stdout.txt",
+      "stderr": "/tmp/root772-20261016/knip-v02/stderr.txt"
+    }
+  ],
+  "negativeDispositions": [
+    {
+      "run": "focused-01",
+      "exit": 1,
+      "result": "92 passed, 2 failed",
+      "cause": "New privacy fixtures swapped hidden printings after loop recording, invalidating the actual engine loop signature.",
+      "repair": "Allocate hidden cards and reseed before independently recording each loop; apply each real chosen finite loop in the two valid positions.",
+      "resolvedBy": "focused-02 and focused-03"
+    },
+    {
+      "run": "review-01",
+      "exit": 2,
+      "result": "7289 tests in 45 files passed; typecheck failed.",
+      "cause": "New test computed-side decklists used unsafe structural casts and assigned readonly printing properties.",
+      "repair": "Typed player/enemy conditional helper and replacement CardInstance objects preserve branded identities.",
+      "resolvedBy": "focused-03 and review-02"
+    }
+  ],
+  "causalEvidence": {
+    "input": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.772/input-173-v01/game-173-original03.jsonl",
+    "inputBytes": 5711580,
+    "inputSHA256": "437c3ddb4c2cfbd6efaca5887fe9294855ef394988eca060baa0f7ac935844e4",
+    "immutableChainLines": 5251,
+    "prefix": {
+      "created": 1,
+      "applied": 49,
+      "steps": 257,
+      "boundaryHash": "11298d1280cd6c",
+      "verified": "Each full-line SHA chain, each real step kind/data/before-after hash/events/count, each returned call range/hash/events/answers/bounded and action-count ordinal."
+    },
+    "caller": "/tmp/root772-20261016/causal-witness.mts",
+    "callerSHA256": "3c588d63235ebc66cb91f4225a4d102dcada659f4356e1fbc29d57d707cd8d0d",
+    "supervisor": "/tmp/root772-20261016/run-check.py",
+    "supervisorSHA256": "1249d448bb69e1b5e6a02680fc1a1aa88386cf13adfc2f24aca9171bfcf49d78",
+    "catalog": "Unchanged full fuzzEngineCatalog of complete content pool (cards, Dreamwell, emblems and figments), including normal synthetic fuzz support.",
+    "request80SHA256": "df41f8775cff52b1c920f4ea636ee8781553f0d5b1efe164c3fdcf2f718dafb4",
+    "requestProtocol": "Exact public tournament request field order/key/seed/budget recipe with validated original deck-entry property order. No private caller imported, copied or executed.",
+    "firstChoice": {
+      "kind": "repeatLoop",
+      "loop": "l2",
+      "count": 32,
+      "budgetUsed": 256,
+      "determinizations": 2,
+      "simulatedRepetitions": 32,
+      "actualLoopSteps": 32,
+      "afterHash": "02827673826467",
+      "energy": 36,
+      "result": null
+    },
+    "nextChoice": {
+      "kind": "pass",
+      "budgetUsed": 256,
+      "determinizations": 2,
+      "afterHash": "15ce5bfc39ed91"
+    },
+    "originalWindow": [
+      "day",
+      "player",
+      3
+    ],
+    "finalWindow": [
+      "dusk",
+      "player",
+      3
+    ],
+    "newCommittedActions": 2,
+    "recordedAnswerReplay": {
+      "created": 1,
+      "actions": 51,
+      "finalHash": "15ce5bfc39ed91",
+      "equality": "Every create/apply hash, events, answers and feasibility-bounded result; each ScriptedSource exhausted."
+    },
+    "checkers": [
+      "invariantViolations after every step",
+      "persistent EventRedaction.check after every step",
+      "unannouncedChanges after every step",
+      "promptRedactionViolations for every answered prompt",
+      "determinizationDivergences at each new decision boundary"
+    ],
+    "artifacts": {
+      "prefix": "/tmp/root772-20261016/witness-prefix-output-01",
+      "progress": "/tmp/root772-20261016/witness-progress-output-01"
+    },
+    "claimLimitations": [
+      "Causal selected nonwinning loop and original-window progress, not a completed battle.",
+      "No acceptance game credit or source-zero gate waiver.",
+      "No engine throughput/speedup claim; command durations document bounded completion only.",
+      "Original untilVictory slow action was not rerun; original immutable evidence preserved."
+    ]
+  },
+  "coverage": {
+    "synthetic": [
+      "Both actors: finite actual chosen repeat reaches victory and matches trace.",
+      "Both actors: useful winning loop reaches target beyond one batch through legal finite decisions.",
+      "Both actors/default and cap1: observed real engine loop simulations bound count, loop steps, iterations and trace aggregates.",
+      "Both actors/default and cap1: actually applied policy choices leave saturated adverse main window and replay legally.",
+      "Both actors: valid independently recorded loops yield equal public requests/policy output under hidden allocation and battle seed changes; actual chosen finite action applies in both.",
+      "Both actors: throwing repeat and non-settling continuation are excluded from scored candidates; actual pass remains legal, inputs immutable.",
+      "Existing imported productive-activation/771 and Phasing contracts retained and passing."
+    ],
+    "failurePaths": {
+      "midStepError": "Delegating repeat-application facade throws; candidate is excluded, legal fallback executes.",
+      "unfinishedContinuation": "Delegating real repeat settles into synthetic non-settling response; stackPassLimit excludes unfinished candidate.",
+      "restartRecovery": "Every synthetic winning/saturation sequence and complete causal prefix+new sequence replay from recorded answers with exhausted sources and matching hashes.",
+      "partialWrite": "Policy returns plain values and does not persist data; input/request immutability checked.",
+      "invalidOrStaleInput": "Engine public allowedBy and Engine.apply own validation; policy consumes legal offers and derives finite admissible counts. No new invalid-input state transition.",
+      "concurrentActors": "Policy is pure over a single-side request; symmetric player/enemy cases exercise both actor orientations."
+    }
+  },
+  "resources": {
+    "processes": [
+      {
+        "run": "focused-01",
+        "pid": 91721,
+        "pgid": 91721,
+        "settled": true,
+        "exit": 1
+      },
+      {
+        "run": "focused-02",
+        "pid": 92944,
+        "pgid": 92944,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "review-01",
+        "pid": 93667,
+        "pgid": 93667,
+        "settled": true,
+        "exit": 2
+      },
+      {
+        "run": "focused-03",
+        "pid": 96844,
+        "pgid": 96844,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "review-02",
+        "pid": 97732,
+        "pgid": 97732,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "knip-01",
+        "pid": 99727,
+        "pgid": 99727,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "witness-prefix-01",
+        "pid": 1138,
+        "pgid": 1138,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "witness-progress-01",
+        "pid": 2356,
+        "pgid": 2356,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "focused-v02",
+        "pid": 20661,
+        "pgid": 20661,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "review-v02",
+        "pid": 21108,
+        "pgid": 21108,
+        "settled": true,
+        "exit": 0
+      },
+      {
+        "run": "knip-v02",
+        "pid": 22491,
+        "pgid": 22491,
+        "settled": true,
+        "exit": 0
+      }
+    ],
+    "liveProcesses": [],
+    "browserSessions": [],
+    "ports": [],
+    "heavySlot": "No heavy-class command run. Ordinary focused/review/Knip plus two own bounded public causal witness commands.",
+    "maxWitnessBatchS": 1800,
+    "timedOutCommands": []
+  },
+  "pending": [
+    "Root fresh cold read-only Codex review of the extraction range before candidate and promotion.",
+    "Actual v02 amend return and cutoff tail recorded additively outside this commit after execution."
+  ],
+  "phase": 5,
+  "recordedCommandScope": "Eleven listed validation/witness commands: original eight retained plus focused-v02/review-v02/knip-v02 on the extracted final layout. Evidence-schema and Git receipts remain outside the commit in custody to avoid self-referential hashes.",
+  "clockHistory": [
+    {
+      "epoch": "v01",
+      "clock": {
+        "claimUTC": "2026-10-16T19:33:19Z",
+        "helperInitialDispatchUTC": null,
+        "helperInitialDispatchQualification": "Exact initial helper dispatch was not retained by root or exposed to helper; unobserved, not inferred.",
+        "measurementCutoffUTC": "2026-10-16T19:55:04.088811+00:00",
+        "cutoffKind": "final evidence freeze before schema verification, six-path guard, artifact index and separately authorized Git command",
+        "windowQualification": "Claim-inclusive whole assignment, including root/helper research, coordination, runtime and queues up to stated cutoff. This is broader than a helper-only editing window.",
+        "claimToCutoffMin": 21.751,
+        "actualGitReceipt": "Additive outside-commit actual Git return and full claim-to-Git/cutoff-tail receipt: /tmp/root772-20261016/actual-git-receipt.json; no clock-only amend."
+      },
+      "actualGitReceipt": "/tmp/root772-20261016/actual-git-receipt.json"
+    }
+  ],
+  "finalSourceBindings": [
+    {
+      "path": "src/content/ai.ts",
+      "sha256": "2099a18b185c79cd9413e1c258921ffef41d43bf432c6f306981767b6384a36f"
+    },
+    {
+      "path": "src/engine/policy/greedy.ts",
+      "sha256": "1bf540a29faf282852cbc9462fc5c58a750e2f3c23638325d4fbc4ddaacee4f5"
+    },
+    {
+      "path": "src/engine/policy/policy.test.ts",
+      "sha256": "537c2163a329af2c2f897d7e0909e51a1554a5a7df5b3ff1bd514e7a0198df74"
+    },
+    {
+      "path": "src/engine/policy/greedy-loop.contracts.ts",
+      "sha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08"
+    }
+  ],
+  "sourceBindingsQualification": "Original sourceBindings and causal caller/witness receipts name the v01 test-file layout. finalSourceBindings and v02 checks name the mechanically extracted final layout; production greedy.ts and catalog comment bytes are identical across both epochs.",
+  "reviewRepair": {
+    "finding": "P3: D19 same-commit split when policy.test.ts grew beyond approximately 500 lines.",
+    "reviewReport": "/tmp/root772-20261016/cold-review-v01.json",
+    "reviewReportSHA256": "37764f620141d848628def3127b37737c207162bbfb1e1fb10885f5ef39be505",
+    "nativeAdmissionUTC": "2026-10-16T20:00:21Z",
+    "disposition": "Mechanically extract new loop helpers and both-actor cases into imported greedy-loop.contracts.ts; reuse existing fixture exports and an identical local typed slice helper.",
+    "mechanicalBodyEquality": {
+      "mechanicalBodyEquality": true,
+      "bodySHA256": "c11cf3555063cc780fc3a754aa374c1c72795e9dada85ce5cbc8fb560bcf54a0",
+      "policyTestLines": 410,
+      "loopContractLines": 221,
+      "productionEdited": false
+    },
+    "finalTestLayout": {
+      "baselinePolicyTestLines": 481,
+      "policyTestLines": 410,
+      "greedyLoopContractLines": 221,
+      "filesDelta": 1,
+      "linesDelta": 150,
+      "jsdomFilesDelta": 0
+    },
+    "preserved": "All moved assertion/fixture/action/test-name bytes; production and fixture module unchanged.",
+    "causalWitnessQualification": "No rerun: original own public causal witness retains its exact immutable source epoch and caller hash. Only test-file organization/import registration changed after that successful witness; production bytes match exactly."
+  }
+}
