@@ -11,7 +11,7 @@ import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
 import { applyDebugOp, withHistory } from "../../../debug/debug-actions";
 import { cloneState } from "../../../state/clone";
 import { deserializeState, serializeState, stateHash } from "../../../state/hash";
-import { battleSeed, opponent, SIDES, type InstanceId, type Side, type BattleSeed } from "../../../state/ids";
+import { battleSeed, opponent, SIDES, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleInit, BattleState, DeckEntry } from "../../../state/types";
 import { InlineSource, NO_PROMPTS } from "../../../steps/sources";
 import { randomLegalAnswer } from "../../../prompts/answers";
@@ -54,7 +54,7 @@ const SIGN = parseDreamsignId("5e5e5e5e-0000-4000-8000-000000058901");
 const fixture = (n: number, abilities: readonly Ability[], cost = 0): EngineCardDefinition => ({
   ...v.vanilla1, id: syntheticId(0x589000 + n), costs: [energy(cost)], status: "authored", abilities: () => abilities,
 });
-const drawer = fixture(1, [activated([], sequence(shuffleInto(), draw(1)))]);
+const drawer = fixture(1, [activated([], shuffleInto([everyIn("hand")])), activated([], draw(1))]);
 const copier = fixture(2, [activated([], createCopyInHand(self())), activated([], materializeFigmentCopy(self())), activated([], createCard(v.vanilla1.id))], 2);
 const thief = fixture(3, [activated([], gainControl(target(anyCharacter()))), activated([], takeFromAmong(opponentHand())), activated([], shuffleInto([everyIn("hand")]))]);
 const killer = { ...fixture(4, [event(dissolve(target(anyCharacter())))]), cardType: "event" as const, spark: null };
@@ -67,14 +67,14 @@ const source = fixture(10, [staticAbility(bonus(2, 1)), keyword("reclaim")]);
 const allCards = [drawer, copier, thief, killer, banisher, pump, ordinary, handFilter, response, source];
 type Entry = DeckEntry;
 const entry = (card: EngineCardDefinition): Entry => ({ cardId: card.id });
-interface Options { readonly own?: readonly Entry[]; readonly other?: readonly Entry[]; readonly placements?: BattleInit["setup"]; readonly signs?: number; readonly gate?: StaticCondition; readonly seed?: BattleSeed; readonly sign?: boolean }
+interface Options { readonly own?: readonly Entry[]; readonly other?: readonly Entry[]; readonly placements?: BattleInit["setup"]; readonly signs?: number; readonly gate?: StaticCondition; readonly sign?: boolean }
 function world(side: Side, options: Options = {}) {
   const sign: EngineDreamsignDefinition = { id: SIGN, status: "authored", abilities: () => [staticAbility(bonus(2, 1), options.gate === undefined ? {} : { while: options.gate })] };
   const engine = createEngine(testCatalog(allCards, { dreamsigns: [sign] }));
   const own = options.own ?? [entry(v.vanilla1), entry(v.vanilla2), entry(v.vanilla3), entry(v.vanilla1)];
   const other = options.other ?? [entry(v.vanilla1)];
   const decks = { player: side === "player" ? own : other, enemy: side === "enemy" ? own : other };
-  const init: BattleInit = { seed: options.seed ?? battleSeed(`c4-${side}`), startingSide: side, scoreToWin: 1000, decks, dreamwell: [],
+  const init: BattleInit = { seed: battleSeed(`c4-${side}`), startingSide: side, scoreToWin: 1000, decks, dreamwell: [],
     ...(options.sign === false ? {} : { dreamsigns: { [side]: Array.from({ length: options.signs ?? 1 }, () => SIGN) } }),
     setup: options.placements ?? { placements: [{ side, deckIndex: 0, zone: "play", slot: { rank: "back", index: 0 } }, { side, deckIndex: 1, zone: "hand" }, { side, deckIndex: 2, zone: "void" }],
       sides: { player: { currentEnergy: 10, maxEnergy: 10, score: 0 }, enemy: { currentEnergy: 10, maxEnergy: 10, score: 0 } },
@@ -283,21 +283,39 @@ describe("journey-deck spark", () => {
     expect(serializeState(saved)).toBe(before);
   });
   it.each(SIDES)("keeps private draw permutations equal and conserves sampled global origin for %s", side => {
-    const byOrigin = new Map<boolean, { state: BattleState; engine: Engine; init: BattleInit }>();
-    for (let index = 0; index < 64 && byOrigin.size < 2; index++) {
-      const w = world(side, { own: [entry(drawer), entry(v.vanilla1), entry(v.vanilla3)], seed: battleSeed(`c4-hidden-${side}-${index}`), sign: false });
-      const init = { ...w.init, decks: { ...w.init.decks, [side]: [...w.init.decks[side], entry(v.vanilla1)] } };
-      const start = w.engine.createBattle(init, NO_PROMPTS).state;
-      const added = applyDebugOp(w.engine, withHistory(slice(start)), { kind: "addCard", side, card: v.vanilla2.id, zone: "deck" }); if (added.kind !== "applied") throw Error("debug rejected");
-      const next = act(w, added.slice.committed, side, { kind: "activate", source: start.sides[side].backRank[0]!, ability: 0 }).state;
-      const drawn = next.sides[side].hand[next.sides[side].hand.length - 1];
-      byOrigin.set(next.instances[drawn].journeyDeck === true, { state: next, engine: w.engine, init });
-    }
-    expect(byOrigin.size).toBe(2); const a = byOrigin.get(true)!, b = byOrigin.get(false)!;
-    const viewer = opponent(side); expect(a.engine.view(a.state, viewer)).toEqual(b.engine.view(b.state, viewer));
-    for (const w of [a, b]) for (const random of [0.05, 0.7]) {
-      const seen = w.engine.view(w.state, viewer); const sampled = w.engine.determinize(seen, w.init.decks, () => random);
-      expect(w.engine.view(sampled, viewer)).toEqual(seen); expect(Object.values(sampled.instances).filter(c => c.journeyDeck === true)).toHaveLength(5);
+    const alternatives = [true, false].map(original => {
+      // Unique synthetic printings let public debug setup select either physical
+      // origin explicitly, after both hand cards have entered the hidden shuffle.
+      const w = world(side, { own: [entry(drawer), entry(v.vanilla1), entry(v.vanilla3), entry(v.vanilla3)], sign: false });
+      const originalId = w.state.sides[side].hand[0], caller = w.state.sides[side].backRank[0]!;
+      const added = applyDebugOp(w.engine, withHistory(slice(w.state)), { kind: "addCard", side, card: v.vanilla2.id, zone: "hand" });
+      if (added.kind !== "applied") throw Error("debug addition rejected");
+      const additionalId = added.slice.committed.sides[side].hand[0];
+      expect(additionalId).not.toBe(originalId);
+      expect(added.slice.committed.instances[originalId]).toMatchObject({ journeyDeck: true, status: { created: false } });
+      expect(added.slice.committed.instances[additionalId]).toMatchObject({ journeyDeck: false, status: { created: false } });
+      const hidden = act(w, added.slice.committed, side, { kind: "activate", source: caller, ability: 0 }).state;
+      for (const id of [originalId, additionalId]) {
+        expect(hidden.instances[id].zone).toBe("deck");
+        for (const viewer of SIDES) expect(w.engine.view(hidden, viewer).instances[id]).toBeUndefined();
+      }
+      const chosen = original ? originalId : additionalId;
+      const ordered = applyDebugOp(w.engine, withHistory(slice(hidden)), { kind: "forceDraw", side, card: original ? v.vanilla1.id : v.vanilla2.id });
+      if (ordered.kind !== "applied") throw Error("debug draw order rejected");
+      expect(ordered.slice.committed.sides[side].deck[0]).toBe(chosen);
+      const state = act(w, ordered.slice.committed, side, { kind: "activate", source: caller, ability: 1 }).state;
+      expect(state.sides[side].hand).toEqual([chosen]);
+      expect(state.instances[chosen]).toMatchObject({ journeyDeck: original, status: { created: false } });
+      expect(w.engine.view(state, opponent(side)).instances[chosen]).toBeUndefined();
+      accepts(w, state);
+      return { ...w, state };
+    });
+    const [a, b] = alternatives;
+    expect(a.engine.view(a.state, opponent(side))).toEqual(b.engine.view(b.state, opponent(side)));
+    for (const w of alternatives) for (const viewer of SIDES) for (const random of [0.05, 0.7]) {
+      const seen = w.engine.view(w.state, viewer), sampled = w.engine.determinize(seen, w.init.decks, () => random);
+      expect(w.engine.view(sampled, viewer)).toEqual(seen);
+      expect(Object.values(sampled.instances).filter(c => c.journeyDeck === true)).toHaveLength(5);
       expect(Object.values(sampled.instances).filter(c => c.journeyDeck === false && !c.status.created)).toHaveLength(1);
     }
   });

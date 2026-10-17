@@ -1,0 +1,217 @@
+{
+  "bead": "hv-umm2.786",
+  "base": "6e91c5ae731d53519cbef28d6ea09e89be026d84",
+  "kind": "Pure deterministic synthetic fixture repair; no production changes or new state transitions.",
+  "sourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/fixture-source-proof.json",
+  "runnerFreeze": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/runner-frozen.json",
+  "measurementScope": {
+    "start": "Actual first helper timestamp after initial brief read; dispatch and initial brief read are unmeasured.",
+    "end": "Friction end is the actual pre-Git evidence cutoff; external commit.receipt.json preserves the following schema/commit start and end and the short unmeasured tail. Exact helper dispatch instant and initial brief-read interval are UNKNOWN."
+  },
+  "validation": {
+    "commands": {
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "journey-deck",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/view-knowledge.test.ts",
+          "src/engine/view/hidden-card-status.test.ts"
+        ],
+        "originalToolId": 57978,
+        "originalTerminal": "actual0 collected",
+        "wallS": 10.48627499997383,
+        "childCpuS": 14.009573000000001,
+        "loadStart": [
+          4.46435546875,
+          5.1376953125,
+          6.02880859375
+        ],
+        "loadEnd": [
+          4.85986328125,
+          5.19873046875,
+          6.03955078125
+        ],
+        "pid": 74276,
+        "pgid": 74276,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/focused.log": "c4aa1a47a815c6700c191d02e8821ca885ee6b7347785cf7812932573de7000e",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/focused.inputs.json": "e737f61a928317191de20b256edec38537fa63c70d2a59d331c20f463ee9fe10",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/focused.launch.json": "93b77f5b486f17c72e0dd31653a1975783a9f8defc9b6b270c4fe35b7f9539cf",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/focused.started.json": "5c6fa333433ff14e5c033fd0e185c461485c0cddd6daa02d412f9f5b902736f8",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/focused.receipt.json": "59ffcd1af97018bdd21bd1cad4c3e56236cc415141b19d0ae82539a5ed3774d1"
+        },
+        "lateEvidenceDifferencesOnly": [],
+        "sourceInputFiles": 6107
+      },
+      "privacy": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/view/determinize.test.ts",
+          "src/engine/view/view-knowledge.test.ts",
+          "src/engine/view/hidden-card-status.test.ts",
+          "src/engine/view/challenge-privacy.test.ts",
+          "src/engine/view/determinize-loops.test.ts"
+        ],
+        "originalToolId": 6783,
+        "originalTerminal": "actual0 collected",
+        "wallS": 6.628966417047195,
+        "childCpuS": 12.213727,
+        "loadStart": [
+          5.51513671875,
+          5.32421875,
+          6.07373046875
+        ],
+        "loadEnd": [
+          5.89013671875,
+          5.4111328125,
+          6.095703125
+        ],
+        "pid": 76000,
+        "pgid": 76000,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/privacy.log": "39b729958b2887009ac3d241a0d34af39df297c77cacc5579fa6afd2249faef7",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/privacy.inputs.json": "e737f61a928317191de20b256edec38537fa63c70d2a59d331c20f463ee9fe10",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/privacy.launch.json": "9dae9f43f13e38ce2c8c9a0b1147e46998af118ce2248298f2dc9718ae72a785",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/privacy.started.json": "3542c6ad61672a5fbbeaceee30703cff40a358b4d861e13d0b9054f1bc2f4b09",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/privacy.receipt.json": "e56abeb057d55e739654d26786fc4c84375cb175d2abbb2a2e75abc5bbf35fa6"
+        },
+        "lateEvidenceDifferencesOnly": [],
+        "sourceInputFiles": 6107
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "originalToolId": 58365,
+        "originalTerminal": "actual0 collected",
+        "wallS": 34.589842540968675,
+        "childCpuS": 75.452558,
+        "loadStart": [
+          5.259765625,
+          5.30615234375,
+          6.033203125
+        ],
+        "loadEnd": [
+          5.8349609375,
+          5.44384765625,
+          6.05322265625
+        ],
+        "pid": 78590,
+        "pgid": 78590,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/review.log": "58b577ad85bd9111dca30a6d9cbd9b2509d37f11e1fd4a4dda539cf2c8351b58",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/review.inputs.json": "05dc6f168c26ebe744395056226dd4f8bdc0d0f09fb1d78844ea70f5b8c2a0e9",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/review.launch.json": "0cb2455f5f4c8ae0c781ed80dbe7a8554f17fd3f14e90d2f0260762290f0c814",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/review.started.json": "c6176d1a4b51c1fa945d0afd76ba42e57b578cf1ab7eb8be8b24df0f4d5aab91",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/review.receipt.json": "2b071afc3ec27d0657c79288d4e3e4d72494d2a84f2ec872b4d4023a30495e5a"
+        },
+        "lateEvidenceDifferencesOnly": [],
+        "sourceInputFiles": 6111
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "originalToolId": 48596,
+        "originalTerminal": "actual0 collected",
+        "wallS": 7.004267833021004,
+        "childCpuS": 6.290566999999999,
+        "loadStart": [
+          5.60791015625,
+          5.40283203125,
+          6.03515625
+        ],
+        "loadEnd": [
+          5.55908203125,
+          5.39599609375,
+          6.02880859375
+        ],
+        "pid": 81670,
+        "pgid": 81670,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/knip.log": "1a9bfb9ac27d1ecab7d370cdd248f810c83dfa7a080e501c2e5b71ce38f59760",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/knip.inputs.json": "05dc6f168c26ebe744395056226dd4f8bdc0d0f09fb1d78844ea70f5b8c2a0e9",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/knip.launch.json": "3b1083d08525f97535f2a7ddf9e33d8513c974d3cb839e127ee658d18a15a5d3",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/knip.started.json": "a57b1f145f787cb08c389c19f36ebefb1674628a2b91dfade4b47e09e4e1aa4e",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/knip.receipt.json": "7b61e8b82ef8bd27b4617aba267cbe47a1bb6b6bd1d20a20d79ec4d5851cd6a8"
+        },
+        "lateEvidenceDifferencesOnly": [],
+        "sourceInputFiles": 6111
+      }
+    },
+    "counts": {
+      "focusedC4": 94,
+      "focusedPeerFilesInitiallySkippedByNameFilter": 3,
+      "privacyUnfiltered": 120,
+      "privacyFiles": 5,
+      "reviewRelated": 5912
+    },
+    "failures": [],
+    "focusedScopeQualification": "The initial -t journey-deck selection covers the entire C4 describe, all 94 tests; three supplied privacy peers were skipped by that name filter and receive no initial credit. The separate unfiltered privacy command covers all five peers and 120 tests.",
+    "finalSchema": "Final current friction/measurement bytes are checked immediately after this evidence freeze. Actual schema result and original terminal remain external in schema.receipt.json; no pre-execution result is asserted here."
+  },
+  "originalIntent": "Committed hv-umm2.589 measurement acceptance.privacy and Hidden origin transport failurePaths: indistinguishable private draws, both-viewer projection and global conservation.",
+  "fixtureCoverage": "Two explicit origin alternatives per controller, same public sequence/counters; both cards hidden to both viewers before selection; chosen physical ID/origin asserted; opponent equality; both-viewer coherent projection at two deterministic supplied RNG values; five original/one ordinary additional global counts unchanged.",
+  "testDelta": {
+    "files": 0,
+    "lines": 18,
+    "jsdomFiles": 0
+  },
+  "failurePaths": {
+    "newTransitions": [],
+    "errorMidStepPartialResolution": "Existing whole C4 contract: keeps provenance through refusal, pending reload, cancel and partial resolution failure for %s, both controllers.",
+    "reloadRestart": "Same contract cold pending slice plus rejects C4 origin checkpoints and uses the normal persisted-genesis fallback for %s.",
+    "partialPersistentWrite": "No new writer or storage boundary; unchanged underlying persistence mechanism requires no added fixture-specific test.",
+    "invalidStaleForeignActor": "Existing refusal/pending reload/cancel contract checks foreign answer and stale cancellation; contradictory C4 current/history declarations and legacy variants remain in entire focused module.",
+    "concurrentActors": "No concurrent actor/lock introduced; both-controller existing wrong-side bounce remains; no additional concurrency test applies."
+  },
+  "D19": "Full-suite <=60 seconds and all Phase 5 runtime acceptance remain unwaived. No full, fuzz, soak, browser, performance or phase acceptance credit is claimed.",
+  "parentDuties": [
+    "Fresh independent read-only fork:none complete-source core review and finding disposition",
+    "Exact candidate submission, certified promotion and cleanup",
+    "Native completion and phase-gate continuation"
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful npm run review wrapper start",
+        "source": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/review.receipt.json"
+      },
+      "implementWindow": {
+        "startScope": "Actual implementation-start timestamp recorded after first brief read; earlier dispatch/read interval UNKNOWN",
+        "endScope": "Actual pre-Git evidence freeze cutoff; subsequent final schema and commit tail measured externally"
+      }
+    }
+  },
+  "runtime": {
+    "workers": 2,
+    "groupProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/hidden-origin786/process-groups-precommit.json",
+    "groupsAbsent": [
+      "74276",
+      "76000",
+      "78590",
+      "81670",
+      "67751"
+    ],
+    "ports": [],
+    "heavy": false,
+    "browser": false
+  },
+  "sourceBinding": {
+    "contractSHA256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+    "runnerSHA256": "51b0d1629ee29c975a4c1b7ab077e83b7d002a7ad4435c5d85bb233de166d7da",
+    "allExecutedCodeMatchesFinal": true,
+    "lateEvidence": "Only own per-bead evidence is finalized after runtime checks. Final schema binds committed evidence inputs; source audit details remain external."
+  }
+}
