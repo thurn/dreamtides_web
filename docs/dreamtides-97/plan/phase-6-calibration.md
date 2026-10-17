@@ -1,6 +1,6 @@
 # Phase 6: Calibration and Polish (M5)
 
-**Status: outline.** Its filing bead turns it into a full page.
+**Status: outline.** Phase 4's File Phase 6 bead turns it into a full page.
 
 **Goal:** measure the campaign against
 [Appendix E](../appendix-e-calibration.md) and tune it, then polish the
@@ -10,8 +10,9 @@ prototype for long play on desktop and mobile, and close the stream.
 
 ## Earliest start
 
-The phase starts at the Phase 4 gate. The simulator can start once Phase 4's
-assembly and economy systems have landed.
+The run simulator starts once Phase 4's assembly and economy beads have
+landed. Calibration loops, polish and final acceptance wait for the Phase 4
+gate, and final acceptance also waits for the Phase 5 gate.
 
 ## Task outline
 
@@ -33,10 +34,12 @@ assembly and economy systems have landed.
   - a full campaign on desktop and mobile;
   - an endgame session;
   - a save from each milestone loading in the final build.
+- **Phase end** ([P30](decisions.md#p30-phase-end-introspection)):
+  - the refactor-and-tooling pass;
+  - the gate review.
 - **Documentation end state.** Update the design documents and README to the
-  delivered game. Write `report.md`. Delete the rest of
-  `docs/dreamtides-97/plan/` except the dream briefs, which move beside their
-  dream modules.
+  delivered game. Write `report.md`, which also records what the stream
+  learned. Delete the rest of `docs/dreamtides-97/plan/`.
 
 ## Exit gate (draft)
 

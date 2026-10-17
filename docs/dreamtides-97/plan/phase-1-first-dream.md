@@ -384,7 +384,7 @@ Townsfolk barks use the same runtime ([P20](decisions.md#p20-ambient-townsfolk))
 
 ### 1.14 First dream: concept and map (creative)
 
-1. **Write the dream brief** in `evidence/dreams/<dream-uuid>.md`:
+1. **Write the dream brief** in `src/content/d97/dreams/<dream-uuid>.md`:
    - a premise and mood;
    - a tone note for the locals (it stands in for the story bible until 2.4);
    - landmarks;
@@ -445,6 +445,9 @@ The combined review/QA bead for the milestone
 4. **Fixes** for the confirmed findings, in one commit. Larger findings get
    their own beads.
 5. **Freeze save schema v1** and its golden fixture.
+6. **Commit the M1 milestone save.** Export the playthrough's snapshot to
+   `src/d97/save/fixtures/milestones/m1.json`, with the test that loads
+   every milestone fixture ([P25](decisions.md#p25-tests)).
 
 **Acceptance:**
 
@@ -492,7 +495,8 @@ Follow [workflow § Filing a phase](workflow.md#filing-a-phase) for
 ## Exit gate
 
 - M1 is playable end to end on desktop, and smoke-tested on mobile.
-- Its save loads in later builds (the v1 golden fixture is frozen).
+- Its save loads in later builds (the v1 golden fixture is frozen, and the
+  M1 milestone fixture is committed).
 - The M1 review is resolved.
 - Co-op residue is removed.
 - Phase 2 is filed.

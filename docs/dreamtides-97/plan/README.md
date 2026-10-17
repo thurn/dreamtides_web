@@ -92,15 +92,20 @@ Work runs in dependency order. Each phase page has a task graph and an
 **earliest start**. A later phase's tasks start as soon as their prerequisites
 land, so phases overlap. Gates close in order.
 
+Each phase is filed by a `filing` bead of the phase before it, timed to that
+phase's earliest start. Phase 4 holds two: one files Phase 5 once multi-act
+assembly and bag layers land, and one files Phase 6 once assembly and the
+economy land.
+
 | # | Phase | Page | Earliest start | Exit gate (summary) |
 | --- | --- | --- | --- | --- |
-| 0 | Bootstrap | [phase-0-bootstrap.md](phase-0-bootstrap.md) | now (run by the planning session) | Hive streams live; AGENTS.md and D33 updated; Phase 1 filed and admitted |
-| 1 | First dream (**M1**) | [phase-1-first-dream.md](phase-1-first-dream.md) | after Phase 0 | One medium dream playable from Avatar select to the guarded exit, saved robustly; M1 review/QA landed; co-op residue removed |
+| 0 | Bootstrap | [phase-0-bootstrap.md](phase-0-bootstrap.md) | Closed by the planning session | Hive streams live; AGENTS.md and D33 updated; Phase 1 filed and admitted |
+| 1 | First dream (**M1**) | [phase-1-first-dream.md](phase-1-first-dream.md) | now (epic `hv-rtga`) | One medium dream playable from Avatar select to the guarded exit, saved robustly; M1 review/QA landed; co-op residue removed |
 | 2 | Consolidation | [phase-2-consolidation.md](phase-2-consolidation.md) | M1 QA bead | Design docs aligned; story bible; map tooling hardened; rooms; mason refactors; first retrospective |
 | 3 | Act 1 (**M2**) | [phase-3-act-one.md](phase-3-act-one.md) | 2.2 and 2.4 | A full assembled Act 1 of about 8 catalog dreams, with doors, waypoints, Atlas, guides, sages, chests, amulets, Dreamsign slots and the incarnation |
 | 4 | Campaign (**M3**) | [phase-4-campaign.md](phase-4-campaign.md) | Phase 3 gate | Acts 2–5, Limbo and Apollyon; bag layers, refills, Avatar quests and switching; difficulty; catalog at about 40 dreams |
-| 5 | Endgame (**M4**) | [phase-5-endgame.md](phase-5-endgame.md) | Phase 4 assembly beads | Keys, key dreams, prizes, Legendary Dreamsigns, Perfected cards |
-| 6 | Calibration and polish (**M5**) | [phase-6-calibration.md](phase-6-calibration.md) | Phase 4 gate | Run simulator; Appendix E targets met or documented; mobile polish; final acceptance |
+| 5 | Endgame (**M4**) | [phase-5-endgame.md](phase-5-endgame.md) | Phase 4 multi-act assembly and bag-layer beads | Keys, key dreams, prizes, Legendary Dreamsigns, Perfected cards |
+| 6 | Calibration and polish (**M5**) | [phase-6-calibration.md](phase-6-calibration.md) | Simulator: Phase 4 assembly and economy beads; polish: Phase 4 gate | Run simulator; Appendix E targets met or documented; mobile polish; final acceptance |
 
 **Milestones never pause the stream**
 ([P8](decisions.md#p8-milestones-never-pause-the-stream)). The operator plays
@@ -113,7 +118,10 @@ combined review/QA bead at the milestone. From Phase 2 on:
 
 - each code bead gets a paired review/QA bead;
 - creative beads get batched QA beads;
-- each phase ends with a refactor-and-tooling pass and a retrospective.
+- each phase ends with a refactor-and-tooling pass and a retrospective
+  ([P30](decisions.md#p30-phase-end-introspection)). Phase 6 ends with a
+  refactor pass and a gate review; `report.md` takes the retrospective's
+  place.
 
 **Phase pages are refined lazily.** Each phase's filing bead first updates
 its phase page from what the earlier phases taught, then files the beads
@@ -139,16 +147,18 @@ Phases 3–6 are outlines until then.
 - **Delivery.** Each bead is one Conventional Commit in a Tollgate worktree,
   submitted with `tg candidate` and authorized with `tg approve --wait`. This
   plan grants promotion authority for in-scope D97 work.
-- **Validation.** The gate stage of about 60 s runs on every candidate. The
-  full suite runs later in the release stage. A red release run files a
+- **Validation.** The gate stage runs on every candidate, within a 60 s
+  budget (about 19 s median at plan time). The full suite runs later in the
+  release stage. A red release run files a
   `ci-fix` bead, which preempts everything
   ([workflow § Validation](workflow.md#validation)).
 
 ## Starting and resuming the stream
 
-Phase 0 is run by the planning session after the operator approves this plan
-([P3](decisions.md#p3-bootstrap-by-the-planning-session)). When it closes,
-the operator starts D97 executor sessions in `~/dreamtides_web` with:
+The planning session ran Phase 0
+([P3](decisions.md#p3-bootstrap-by-the-planning-session)); its record is in
+the Phase 1 epic's notes (`hv-rtga`). The operator starts D97 executor
+sessions in `~/dreamtides_web`, as many as they choose, with:
 
 ```text
 /executor dreamtides_web --stream d97 — continuous mode is explicitly
@@ -198,15 +208,19 @@ These carry over from [AGENTS.md](../../../AGENTS.md):
   [P22](decisions.md#p22-other-repositories) allows.
 - **Never break a save.** Every change to persisted D97 state ships a
   migration and a golden fixture ([P5](decisions.md#p5-saves-are-versioned-snapshots)).
+  Each milestone also commits a real save from its build as a milestone
+  fixture ([P25](decisions.md#p25-tests)).
 
 ## Evidence
 
-Everything here is run-scoped and lives under `docs/dreamtides-97/plan/`.
+These records are run-scoped and live under `docs/dreamtides-97/plan/`.
+Dream briefs are content, not evidence: each lives beside its dream module
+as `src/content/d97/dreams/<dream-uuid>.md`
+([P18](decisions.md#p18-dream-authoring-beads)).
 
 | Record | Path | Written by |
 | --- | --- | --- |
 | Pre-existing issues | `evidence/pre-existing/<bead-id>.md` | Any bead |
-| Dream briefs | `evidence/dreams/<dream-uuid>.md` | Concept-and-map beads |
 | Retrospectives | `evidence/retrospectives/<bead-id>.md` | Phase-end retrospective beads |
 | Calibration reports | `evidence/calibration/<bead-id>.md` | Phase 6 |
 | Final report | `report.md` | The Phase 6 gate |
@@ -216,9 +230,7 @@ ledger file ([workflow § Introspection](workflow.md#introspection)). Bead
 notes are the progress ledger. Phase pages are never edited to record status,
 only refined at filing time.
 
-The Phase 6 gate deletes `docs/dreamtides-97/plan/` except `report.md` and
-the dream briefs. The briefs move beside their dream modules if a later
-decision keeps them.
+The Phase 6 gate deletes `docs/dreamtides-97/plan/` except `report.md`.
 
 ## Done criteria
 
@@ -232,5 +244,6 @@ The stream is complete when all of these hold:
    Appendix E acceptance targets, or `report.md` records each miss with its
    cause and the tunable that would close it.
 4. A save written at each milestone (M1–M4) loads, migrated, in the final
-   build. The golden fixtures pin this.
+   build. Each milestone's real save is committed as a milestone fixture
+   ([P25](decisions.md#p25-tests)), and a test loads every one.
 5. The design documents describe the delivered game.

@@ -1,6 +1,6 @@
 # Phase 5: The Endgame (M4)
 
-**Status: outline.** Its filing bead turns it into a full page.
+**Status: outline.** Phase 4's File Phase 5 bead turns it into a full page.
 
 **Goal:** the endgame of keys and key dreams after Apollyon, and from Act 4
 on (Appendix C §C5–C8, Appendix A §A16).
@@ -37,5 +37,6 @@ landed. It may overlap the Phase 4 content waves.
 
 - After Apollyon, keys open key dreams, clears pay prizes and keys, and the
   endgame never runs dry.
-- Every earlier golden save loads.
+- Every golden and milestone fixture loads, migrated, and the gate commits
+  the M4 milestone fixture.
 - Reviews are resolved.

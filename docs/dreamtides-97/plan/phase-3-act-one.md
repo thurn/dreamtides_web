@@ -81,6 +81,7 @@ in place. Content beads also wait for 2.3.
 
 - Act 1 is playable end to end on desktop, with a mobile smoke check.
 - Every Phase 3 system logs per §B17.
-- The M1 and Phase 2 golden saves load, migrated.
+- Every golden and milestone fixture loads, migrated, and the gate commits
+  the M2 milestone fixture ([P25](decisions.md#p25-tests)).
 - Reviews are resolved.
 - Phase 4 is filed.

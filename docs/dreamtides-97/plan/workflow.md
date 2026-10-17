@@ -373,11 +373,12 @@ A playtest bead may:
 
 - **Pre-existing issues** go in `evidence/pre-existing/<bead-id>.md`, in the
   bead's own commit.
-- **Dream briefs** go in `evidence/dreams/<dream-uuid>.md`.
 - **Retrospectives** go in `evidence/retrospectives/<bead-id>.md`.
 - **Calibration** reports go in `evidence/calibration/<bead-id>.md`.
 
-All paths are relative to `docs/dreamtides-97/plan/`.
+All paths are relative to `docs/dreamtides-97/plan/`. Dream briefs are
+content and live beside their dream modules, as
+`src/content/d97/dreams/<dream-uuid>.md`.
 
 ## Logging
 

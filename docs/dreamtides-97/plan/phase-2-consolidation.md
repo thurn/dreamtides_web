@@ -149,7 +149,7 @@ file it.
 ### 2.10 Phase 2 gate
 
 1. Confirm `release` contains every Phase 2 commit.
-2. Check that the M1 golden save still loads.
+2. Check that the M1 milestone fixture still loads.
 3. Record the build's OID in the epic notes.
 4. Close the epic.
 

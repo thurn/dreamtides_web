@@ -52,17 +52,26 @@ act-agnostic.
 - **The Limbo map,** and the incarnations' and Apollyon's dialogue.
 - **Through-line dialogue** for the Dream Guides across acts.
 
+**Filing later phases.** Two `filing` beads run inside this phase, so the
+next phases overlap it:
+
+- **File Phase 5** (`filing=d97-phase-5`), after the multi-act assembly and
+  bag-layer beads;
+- **File Phase 6** (`filing=d97-phase-6`), after the assembly and economy
+  beads (bag layers, refills, amulets, difficulty and score targets), so the
+  simulator can start.
+
 **Phase end:**
 
 - the refactor-and-tooling pass;
 - the retrospective;
 - the gate review;
-- filing Phases 5 and 6;
 - the gate.
 
 ## Exit gate (draft)
 
 - A campaign is playable from Avatar select to Apollyon's defeat.
-- Every earlier golden save loads, migrated.
+- Every golden and milestone fixture loads, migrated, and the gate commits
+  the M3 milestone fixture.
 - The catalog holds about 40 dreams.
 - Reviews are resolved.

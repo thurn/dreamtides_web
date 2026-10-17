@@ -145,6 +145,9 @@ From Phase 2, every phase ends with three beads, in order:
    milestone playthrough passes, the milestone build's OID is recorded for
    the operator, and the next phase is filed.
 
+Phase 6, the last phase, ends with the refactor pass, a gate review and the
+gate. It has no retrospective; `report.md` records what the stream learned.
+
 A friction tag that recurs in three beads within a phase files an
 improvement bead at once, without waiting for the phase end. Improvement
 beads preserve behavior.
@@ -440,7 +443,8 @@ Each character's dialogue is a typed TS module in `src/content/d97/`:
 Each catalog dream is two beads, then batched QA:
 
 1. **Concept and map.** Writes the dream brief
-   (`evidence/dreams/<dream-uuid>.md`: premise, mood, landmarks, residents
+   (`src/content/d97/dreams/<dream-uuid>.md`, beside the dream module:
+   premise, mood, landmarks, residents
    and personas sketched, quest hooks), then builds the map module to fit it,
    with the inspector and validator clean.
 2. **Residents.** Character design (personalities and sprite recipes for
@@ -478,6 +482,14 @@ quests.
   `jsdom` tests.
 - **Golden save fixtures** are synthetic and small. Each one pins that its
   schema version loads.
+- **Milestone save fixtures** are the one exception. Each milestone's QA or
+  gate bead plays its build and commits the run's exported snapshot JSON to
+  `src/d97/save/fixtures/milestones/m<n>.json`. A test loads every milestone
+  fixture through migration and reconciliation against the current catalog,
+  and asserts only that it opens into a playable run. That is a property
+  every catalog must keep, so it is not gated on mutable data. A failure
+  means a migration or reconciliation is missing, never that the fixture
+  needs regenerating.
 - **Never assert UI strings,** dialogue copy, production map layouts or
   mutable catalog contents. Map and dialogue validators run in tests over
   synthetic fixtures, and as CLI checks over the real catalog.
