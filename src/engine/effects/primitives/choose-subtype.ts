@@ -76,8 +76,8 @@ export function mentionsChosenSubtype(node: EffectNode): boolean {
 }
 
 /**
- * `node` with each `subtype` field naming `CHOSEN_SUBTYPE` naming `subtype`
- * instead; graph aliases persist and every part that names no such field is
+ * `node` with each `subtype` or `notSubtype` field naming `CHOSEN_SUBTYPE`
+ * naming `subtype` instead; graph aliases persist and every part that names no such field is
  * shared. `originals` binds replacement objects to their enclosing identities.
  */
 export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSubtype, originals?: Map<object, object>): N {
@@ -92,7 +92,7 @@ export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSu
     memo.set(value, output);
     originals?.set(output, value);
     for (const [key, field] of Object.entries(value)) {
-      Object.assign(output, { [key]: key === "subtype" && field === CHOSEN_SUBTYPE ? subtype : replace(field) });
+      Object.assign(output, { [key]: (key === "subtype" || key === "notSubtype") && field === CHOSEN_SUBTYPE ? subtype : replace(field) });
     }
     return output;
   };

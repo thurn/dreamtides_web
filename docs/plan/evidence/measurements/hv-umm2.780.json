@@ -1,0 +1,492 @@
+{
+  "bead": "hv-umm2.780",
+  "base": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+  "rawDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780",
+  "implementWindow": {
+    "start": "2026-10-17T05:24:01.889414+00:00",
+    "end": "2026-10-17T05:29:11.086995+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "original npm run review wrapper launch, one-minute load"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "sum of actual original before-fix and both focused runs"
+      }
+    }
+  },
+  "validation": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype exclusions"
+      ],
+      "pid": 11755,
+      "pgid": 11755,
+      "exit": 1,
+      "wallS": 10.576144695281982,
+      "descendantCpuS": 11.993118,
+      "inputManifestSHA256": "42f3f16c4204195875d5d5505ad0002216693a271faece40eccd1e7e0ab5db20",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        11.2958984375,
+        8.55810546875,
+        7.68896484375
+      ],
+      "loadEnd": [
+        12.9345703125,
+        9.0,
+        7.85546875
+      ],
+      "logSHA256": "dd0dee47809923b503f08faa05f1c89e81a104bab46b30deecfd571158353605",
+      "end": "2026-10-17T05:25:09.758894+00:00",
+      "name": "beforefix",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/beforefix.receipt.json",
+      "receiptSHA256": "3ddb88ceadfa8d104d757a85086bc8047b5baec163fbca217c4ee874e3906254",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/beforefix.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/beforefix.inputs.json",
+      "inputCount": 6091,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/beforefix.runner.py",
+      "originalToolSessionId": 76718,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype exclusions|chooseSubtype graph bindings|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype$"
+      ],
+      "pid": 70080,
+      "pgid": 70080,
+      "exit": 0,
+      "wallS": 8.19900393486023,
+      "descendantCpuS": 11.14938,
+      "inputManifestSHA256": "918de61a69c620fd8b0708d29a566c67d9a0a7e4ab24ccc584555aa3e568df2c",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        8.27587890625,
+        8.3837890625,
+        7.705078125
+      ],
+      "loadEnd": [
+        8.23291015625,
+        8.37060546875,
+        7.7080078125
+      ],
+      "logSHA256": "ea8e42a7859a38317d9e91b0b2dab1870a71e9744ecd96d9fce1292c808d3126",
+      "end": "2026-10-17T05:26:24.824407+00:00",
+      "name": "focused",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused.receipt.json",
+      "receiptSHA256": "c7b24e9ea7fc52c167f4f33da44760bd61e15a4c0664314b1ca6cbf6a7b60658",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused.inputs.json",
+      "inputCount": 6091,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused.runner.py",
+      "originalToolSessionId": 56352,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "lint",
+        "--",
+        "src/engine/effects/primitives/choose-subtype.ts",
+        "src/engine/effects/primitives/contracts/choose-subtype-exclusions.contracts.ts"
+      ],
+      "pid": 71750,
+      "pgid": 71750,
+      "exit": 1,
+      "wallS": 6.646457195281982,
+      "descendantCpuS": 13.857866,
+      "inputManifestSHA256": "918de61a69c620fd8b0708d29a566c67d9a0a7e4ab24ccc584555aa3e568df2c",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        7.22705078125,
+        8.1396484375,
+        7.63671875
+      ],
+      "loadEnd": [
+        7.12841796875,
+        8.10400390625,
+        7.626953125
+      ],
+      "logSHA256": "6cb903894aabb259bb8f124fc558ec937c32d667e7f3d2755c1bcc2e44189420",
+      "end": "2026-10-17T05:26:45.396305+00:00",
+      "name": "lint-scoped",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-scoped.receipt.json",
+      "receiptSHA256": "f7ebb20c8d91498052ab3aff44f3b2afa5344f7ecf815f1ad8e414ae6858e592",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-scoped.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-scoped.inputs.json",
+      "inputCount": 6091,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-scoped.runner.py",
+      "originalToolSessionId": 53483,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "lint",
+        "--",
+        "src/engine/effects/primitives/choose-subtype.ts",
+        "src/engine/effects/primitives/contracts/choose-subtype-exclusions.contracts.ts"
+      ],
+      "pid": 72734,
+      "pgid": 72734,
+      "exit": 0,
+      "wallS": 5.955396890640259,
+      "descendantCpuS": 13.476769999999998,
+      "inputManifestSHA256": "37927a25d7ba816c2b1a482d357f63de96f7b9a20caaf316eebff3c9425b3090",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        7.03759765625,
+        8.06884765625,
+        7.6171875
+      ],
+      "loadEnd": [
+        7.5947265625,
+        8.1669921875,
+        7.654296875
+      ],
+      "logSHA256": "a543e4b098bb0d90409dfe2d1a49f0ea2f8b193c41111205635e0e8a2fc5184e",
+      "end": "2026-10-17T05:26:58.116197+00:00",
+      "name": "lint-corrected",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-corrected.receipt.json",
+      "receiptSHA256": "69a96c9fde0c5ec3f95b4f6a2ad425b3c5dd680613bf74483392183c278087cf",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-corrected.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-corrected.inputs.json",
+      "inputCount": 6091,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/lint-corrected.runner.py",
+      "originalToolSessionId": 64424,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype exclusions|chooseSubtype|floating chosen subtype|chosen floating declaration deck knowledge|notSubtype"
+      ],
+      "pid": 73923,
+      "pgid": 73923,
+      "exit": 0,
+      "wallS": 7.551114797592163,
+      "descendantCpuS": 10.400379,
+      "inputManifestSHA256": "93c84da9019a5297c317b8f21ae0f47a5539c588aa3b6940fd511a6314fa3013",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        6.9677734375,
+        8.01318359375,
+        7.60546875
+      ],
+      "loadEnd": [
+        6.59130859375,
+        7.89697265625,
+        7.568359375
+      ],
+      "logSHA256": "3e6fdb2e777f76c70ce21d48859246eedf173a387bfae85e77bbfd01ec4f063c",
+      "end": "2026-10-17T05:27:15.527623+00:00",
+      "name": "focused-final",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused-final.receipt.json",
+      "receiptSHA256": "2abf5ead29597d83ddbd750d998143cdb79248be98238b5d86daf6e8d92e815b",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused-final.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused-final.inputs.json",
+      "inputCount": 6094,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/focused-final.runner.py",
+      "originalToolSessionId": 62427,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 75239,
+      "pgid": 75239,
+      "exit": 0,
+      "wallS": 87.00143480300903,
+      "descendantCpuS": 249.65472,
+      "inputManifestSHA256": "93c84da9019a5297c317b8f21ae0f47a5539c588aa3b6940fd511a6314fa3013",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        6.33349609375,
+        7.80078125,
+        7.5380859375
+      ],
+      "loadEnd": [
+        6.5654296875,
+        7.69189453125,
+        7.53173828125
+      ],
+      "logSHA256": "df3438721320b0fb3d5c53dde2c1baea9ca670448dbb36c9b16cc542bbb7d45c",
+      "end": "2026-10-17T05:28:51.568145+00:00",
+      "name": "review",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/review.receipt.json",
+      "receiptSHA256": "4ec682fc7377ead6b6c19e398e9f09b4a32d0085b829c1d171f90f1d4b912fc0",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/review.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/review.inputs.json",
+      "inputCount": 6094,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/review.runner.py",
+      "originalToolSessionId": 61550,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 81620,
+      "pgid": 81620,
+      "exit": 0,
+      "wallS": 5.086673021316528,
+      "descendantCpuS": 5.895344000000001,
+      "inputManifestSHA256": "93c84da9019a5297c317b8f21ae0f47a5539c588aa3b6940fd511a6314fa3013",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        6.27978515625,
+        7.61376953125,
+        7.5048828125
+      ],
+      "loadEnd": [
+        6.17724609375,
+        7.5703125,
+        7.48974609375
+      ],
+      "logSHA256": "efccb96e3a36b1c6710dbe69eae9b1a0b00ed66bb4c05c6119d2044fb96f375a",
+      "end": "2026-10-17T05:29:01.049986+00:00",
+      "name": "knip",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/knip.receipt.json",
+      "receiptSHA256": "04914790c2b42fcdec2e29e4bdf7df79fe706efe38530554761eb57a49e45481",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/knip.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/knip.inputs.json",
+      "inputCount": 6094,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/knip.runner.py",
+      "originalToolSessionId": 39457,
+      "originalToolTerminalCollected": true
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 82870,
+      "pgid": 82870,
+      "exit": 0,
+      "wallS": 0.07504701614379883,
+      "descendantCpuS": 0.076126,
+      "inputManifestSHA256": "9a6a721ee3765952129480f732d80b364cafd88a7ab33528cce23efbdc0abceb",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+      "loadStart": [
+        5.75537109375,
+        7.435546875,
+        7.44287109375
+      ],
+      "loadEnd": [
+        5.75537109375,
+        7.435546875,
+        7.44287109375
+      ],
+      "logSHA256": "ea5386c215052ed702961cb8d7705e5efbb29da8622dccfcfde942c8ea8f9262",
+      "end": "2026-10-17T05:29:11.539789+00:00",
+      "name": "evidence-schema",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/evidence-schema.receipt.json",
+      "receiptSHA256": "c7772894b8e4837c4328dc6e58ca0eeb22e2127261dcde4735872ecb8e265837",
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/evidence-schema.log",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/evidence-schema.inputs.json",
+      "inputCount": 6094,
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-exclusions780/evidence-schema.runner.py",
+      "originalToolChunk": "16a139",
+      "originalToolTerminalCollected": true
+    }
+  ],
+  "sourceBinding": {
+    "sourceHead": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+    "runtimeSource": "exact uncommitted input bytes bound by each launch manifest; commit follows validation",
+    "codeAndTestSHA256": {
+      "src/engine/effects/primitives/choose-subtype.ts": "9a45a2b3efcf2089398554a55c8da88e214e0576c371b7228222b560859045e8",
+      "src/engine/effects/primitives/contracts/choose-subtype-exclusions.contracts.ts": "15df5f8df012ac5c4f45bc8bf329649c6b7213e4f3cef2da36ec9cf7ddefa7e5"
+    },
+    "finalCodeAndTestMatchFocusedAndReview": true,
+    "reviewInputsChangedAfterExecution": [
+      "docs/plan/evidence/friction/hv-umm2.780.json",
+      "docs/plan/evidence/measurements/hv-umm2.780.json"
+    ],
+    "allowedFinalEvidenceUpdates": [
+      "docs/plan/evidence/friction/hv-umm2.780.json",
+      "docs/plan/evidence/measurements/hv-umm2.780.json"
+    ],
+    "fallout": []
+  },
+  "beforefix": {
+    "base": "882e3e7b9ddb4cffca1f998972c9492bcbc31ad6",
+    "manifestSHA256": "42f3f16c4204195875d5d5505ad0002216693a271faece40eccd1e7e0ab5db20",
+    "inputCount": 6091,
+    "matchedTrackedBaseBlobs": 6090,
+    "mismatches": [],
+    "fixtureSHA256": "7b0a6ea3dc3a66e703f007ef07b3e230aabacf7a77f9ad62c9880ffbcabe6f10"
+  },
+  "failureDispositions": {
+    "beforefix": "Both actual public scenarios fail because the chosen Mage UUID is incorrectly exhausted. All6090 tracked inputs match base; the sole untracked fixture has retained exact original bytes.",
+    "focused": "88 public contracts pass before lint-only assertion cleanup; final production conditional has the same behavior.",
+    "lint-scoped": "Five unnecessary non-null assertions in new tests; corrected; no semantic production failure.",
+    "lint-corrected": "Scoped lint passes.",
+    "focused-final": "108 public contracts pass against final code/test bytes:16 new exclusion contracts plus existing choice/graph/floating/public-proof/literal-exclusion contracts.",
+    "review": "Required related aggregate passes; exact final code/test bytes.",
+    "knip": "No orphaned file or export introduced."
+  },
+  "runnerProvenance": {
+    "immutableRunner": "measure-v1.py",
+    "launchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+    "perInvocation": "Original launch bytes copied to <name>.runner.py before child launch; digest captured at launch in started and receipt records. Runner remains unchanged throughout every child invocation.",
+    "workers": 2
+  },
+  "publicCoverage": {
+    "newContracts": 16,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "contracts": [
+      "chosen negative predicate leaves chosen UUID untouched and affects distinct other UUIDs",
+      "all-types character excluded",
+      "literal negative and positive chosen predicates compose",
+      "no eligible target continues trailing score",
+      "shared versus distinct target choices, invalid chosen-type UUID rejection, saved pending prompt and cold full-intent/published-event replay",
+      "shared target gaining all types becomes ineligible on next instruction",
+      "moved-card capture retains actual exclusion movement and copiable costs",
+      "static exclusion reads source chosen subtype and remains inactive before any choice"
+    ],
+    "inputImmutability": "Original effect graph and initial fold state retained unchanged; selected public graphs frozen."
+  },
+  "existingFailurePathContracts": [
+    {
+      "file": "src/engine/effects/primitives/contracts/choose-subtype.contracts.ts",
+      "name": "reloads the type choice, rejects stale, foreign and unoffered answers, and commits exactly once",
+      "covers": [
+        "stale",
+        "foreign",
+        "invalid",
+        "cancel",
+        "concurrent",
+        "duplicate answer"
+      ]
+    },
+    {
+      "file": "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts",
+      "name": "rolls captured gameplay back after a mid-step error and replay",
+      "covers": [
+        "partial write",
+        "rollback",
+        "cold recovery"
+      ]
+    },
+    {
+      "file": "src/engine/effects/primitives/contracts/floating-subtype.contracts.ts",
+      "name": "expires a bound repeating trigger while ordinary unbound triggers remain valid",
+      "covers": [
+        "trigger expiry",
+        "ordinary unbound behavior"
+      ]
+    }
+  ],
+  "failurePathRationale": "The pure substitution adds no prompt, state, queue, expiry or error protocol. Existing public choice/capture/floating recovery contracts are exercised by focused or related checks; new exclusion scenarios add the changed eligibility boundary.",
+  "notRun": {
+    "reviewFull": "Pure field substitution in one conditional and its function documentation; no infrastructure/configuration/cross-cutting architecture change.",
+    "fuzz": "No fuzzer or step-runner edit; staged release owns fuzz smoke.",
+    "browserQA": "Internal deterministic rules binding; no presentation or UI workflow change."
+  },
+  "budget": "Related aggregate timings are scoped observations; they provide neither a full-suite D19 result nor a budget waiver.",
+  "logging": "Existing subtypeChosen and UUID-based effect outcome events reconstruct the choice and affected identities; no new event/state writer.",
+  "cleanup": {
+    "rootGroups": [
+      {
+        "pgid": 11755,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 70080,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 71750,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 72734,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 73923,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 75239,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 81620,
+        "absent": true,
+        "live": ""
+      },
+      {
+        "pgid": 82870,
+        "absent": true,
+        "live": ""
+      }
+    ],
+    "allOriginalToolsTerminalCollected": true,
+    "manualServers": [],
+    "browserContexts": []
+  },
+  "fallout": [],
+  "unresolvedInScopeIssues": [],
+  "separateKnownWork": "hv-umm2.782 nested lexical traversal and hv-umm2.779 test hermeticity remain separately owned; this source does not claim their acceptance.",
+  "evidenceScope": "Review, Knip and final focused manifests are identical6094-entry maps covering exact final production/test bytes and initial per-bead evidence. Final friction bytes are validated by evidence-schema, whose manifest covers6094 inputs including the pre-schema measurement. This final measurement adds that completed schema receipt, so it is not claimed as a validated input to its own earlier checks.",
+  "aggregateResult": {
+    "files": 356,
+    "tests": 11382,
+    "testStageS": 82.5,
+    "vitestDurationS": 72.57,
+    "lint": "pass",
+    "typecheckApp": "pass",
+    "typecheckNode": "pass",
+    "importCycles": "pass",
+    "frictionRecords": "pass"
+  }
+}
