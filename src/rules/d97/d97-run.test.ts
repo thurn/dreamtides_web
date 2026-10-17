@@ -111,8 +111,10 @@ describe("D97_START_RUN", () => {
         runSeed: run?.runSeed,
         avatarId: ROSTER_AVATAR,
         dreamId: D97_FIRST_DREAM.id,
+        activeWaypointIds: [D97_FIRST_DREAM.topology.waypointAnchorId],
       },
     });
+    expect(run?.activeWaypointIds).toEqual([D97_FIRST_DREAM.topology.waypointAnchorId]);
   });
 
   it("records the run's dream: the first catalog dream, or the dream module requested", () => {

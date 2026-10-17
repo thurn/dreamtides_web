@@ -63,7 +63,6 @@ export interface D97Encounter {
   readonly dreamsignIds: readonly DreamsignId[];
   readonly signatureCardIds: readonly CardId[];
   readonly scoreToWin: number;
-  readonly headStarts: { readonly player: number; readonly opponent: number };
   /** The player's anted copy, or null when the collection is at its floor. */
   readonly playerAnteCopyId: D97OwnedCopyId | null;
   /** The opponent's anted card, or null when its deck has none eligible. */

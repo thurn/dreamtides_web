@@ -10,6 +10,7 @@ import { sha256 } from "js-sha256";
 import { D97_CHALLENGERS, type D97ChallengerDefinition } from "../../content/d97/challengers";
 import { D97_COLLECTION } from "../../content/d97/collection";
 import { D97_ENCOUNTERS, type D97TierKnob } from "../../content/d97/encounters";
+import { D97_SHOP } from "../../content/d97/shop";
 import { D97_ACT_CHALLENGER_TIERS } from "../../content/d97/tunables";
 import {
   acquireCopy,
@@ -20,6 +21,7 @@ import {
 } from "../../d97/collection/collection";
 import type { D97Collection, D97OwnedCopy } from "../../d97/collection/types";
 import { drawFromBag, recordAcquisition } from "../../d97/collection/reward-bag";
+import { cardBaseValue, saleQuote } from "../../d97/shop/pricing";
 import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
@@ -35,7 +37,7 @@ import { getBattleInitProvider } from "../battle/journey-battle";
 import type { FoldState } from "../fold-state";
 import { advanceDefeatQuest } from "./d97-quests";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
-import { d97ContentProvider } from "./d97-content";
+import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
 import { d97RunAct, type D97Encounter, type D97Run, type D97State } from "./d97-state";
 
 /** A D97 case over the whole fold (it starts or ends a battle). */
@@ -68,6 +70,12 @@ export function encounterTier(role: D97ChallengerDefinition["role"], act: number
 /** A victory bundle's rarity budget `S` at tier `T` (Appendix A §A8). */
 export function bundleBudget(tier: number): number {
   return D97_ENCOUNTERS.bundleBase + Math.floor(tier / D97_ENCOUNTERS.bundleTierDivisor);
+}
+
+/** What this dream's shop pays for `copy` (Appendix A §A5), the ante's measure of worth. */
+function shopSaleValue(copy: D97OwnedCopy, content: D97ContentProvider): number {
+  const facts = content.cardPriceFacts(copy.cardId);
+  return facts === null ? 0 : saleQuote(copy, cardBaseValue(facts, D97_SHOP), D97_SHOP.priceBand, D97_SHOP);
 }
 
 function rarityCost(rarity: Rarity | null): number {
@@ -143,7 +151,6 @@ export function previewEncounter(
     dreamsignIds: build.dreamsignIds,
     signatureCardIds: build.signatureCardIds,
     scoreToWin: D97_ENCOUNTERS.actScoreTargets[d97RunAct(run) - 1] ?? D97_ENCOUNTERS.actScoreTargets[0] ?? 0,
-    headStarts: { player: 0, opponent: knob.headStart },
     playerAnteCopyId: playerAnte?.copyId ?? null,
     opponentAnteCardId: opponentAnte,
     extra:
@@ -175,7 +182,6 @@ export function previewEncounter(
           opponentAnteCardId: encounter.opponentAnteCardId,
           extra: encounter.extra,
           scoreToWin: encounter.scoreToWin,
-          headStarts: encounter.headStarts,
         },
       },
     ],
@@ -199,12 +205,13 @@ export function declineEncounter(d97: D97State, payload: Record<string, unknown>
  * The player's ante when a battle starts (Appendix A §A9): nothing at the
  * collection floor; the previewed copy while it stays in the active deck;
  * otherwise a uniform pick among active copies worth at least as much (by
- * rarity cost), or the most valuable active copy.
+ * `value`, the copy's sale quote in this dream, §A5), or the most valuable
+ * active copy.
  */
 export function resolvePlayerAnte(
   collection: D97Collection,
   previewed: D97OwnedCopyId | null,
-  rarity: (cardId: CardId) => Rarity | null,
+  value: (copy: D97OwnedCopy) => number,
   random: () => number,
 ): D97OwnedCopyId | null {
   if (anteAllowance(collection) <= 0) return null;
@@ -212,7 +219,6 @@ export function resolvePlayerAnte(
   if (deck.length === 0) return null;
   const original = previewed === null ? null : findCopy(collection, previewed);
   if (original !== null && original.zone === "deck") return original.copyId;
-  const value = (copy: D97OwnedCopy) => rarityCost(rarity(copy.cardId));
   if (original !== null) {
     const floor = value(original);
     const eligible = deck.filter((copy) => value(copy) >= floor);
@@ -246,7 +252,7 @@ export function beginEncounterBattle(
   if (engine === null) return null;
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const playerAnteCopyId = resolvePlayerAnte(run.collection, encounter.playerAnteCopyId, content.cardRarity, random);
+  const playerAnteCopyId = resolvePlayerAnte(run.collection, encounter.playerAnteCopyId, (copy) => shopSaleValue(copy, content), random);
   const battleId = parseBattleId(`d97:${run.runId}:${anchorId}:${String(encounter.battles)}`);
   const seed = hashSeed(`${run.runSeed}:${anchorId}:${String(encounter.battles)}`);
   const start = content.startBattle({ run, encounter, battleId, seed, playerAnteCopyId });

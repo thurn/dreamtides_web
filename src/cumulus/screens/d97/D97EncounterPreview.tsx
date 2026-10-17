@@ -3,8 +3,8 @@
 // bust beside their epithet or role, an Avatar character's ability) and the
 // stakes: the score a win takes, the ante the player risks, and what a win
 // takes from them (their ante and the advertised extra). Their three
-// signature cards follow, then a secondary details line (tier, score, both
-// head starts), and Fight and Not now. PURE: it renders from a view model and reports the two choices.
+// signature cards follow, then a secondary details line (tier and score), and
+// Fight and Not now. PURE: it renders from a view model and reports the two choices.
 
 import type { ReactElement, ReactNode } from "react";
 import { GameCard, type GameCardModel } from "../../components/card/CardView";
@@ -45,7 +45,6 @@ export interface D97EncounterPreviewView {
   };
   readonly tier: number;
   readonly scoreToWin: number;
-  readonly headStarts: { readonly player: number; readonly opponent: number };
   readonly signatureCards: readonly D97PreviewCardView[];
   /** Null when the collection is at its floor. */
   readonly playerAnte: D97PreviewCardView | null;
@@ -97,8 +96,6 @@ export function D97EncounterPreview({ view, onFight, onNotNow }: D97EncounterPre
   const details: readonly { readonly key: string; readonly text: string }[] = [
     { key: "tier", text: `Tier ${String(view.tier)}` },
     { key: "score", text: `Score ${String(view.scoreToWin)}` },
-    { key: "player-head-start", text: `Your head start ${String(view.headStarts.player)}` },
-    { key: "opponent-head-start", text: `Their head start ${String(view.headStarts.opponent)}` },
   ];
   return (
     <D97Panel kind="encounter-preview" title={opponent.name} onClose={onNotNow}>

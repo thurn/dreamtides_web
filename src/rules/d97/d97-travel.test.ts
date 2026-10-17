@@ -56,11 +56,12 @@ describe.each(D97_DREAM_MODULES.map((dream) => [dream.id, dream] as const))("dre
 
   describe("D97_ACTIVATE_WAYPOINT", () => {
     it("activates the waypoint once and makes every touch the reload place", () => {
-      const state = started();
-      expect(runOf(state).activeWaypointIds).toEqual([]);
+      // A waypoint not yet touched: the start dream's own is active from the start.
+      const begun = started();
+      const state = { ...begun, d97: { ...begun.d97!, run: { ...runOf(begun), activeWaypointIds: [] } } };
       expect(runOf(state).lastPlace).toBeNull();
       const anchorId = topology.waypointAnchorId;
-      const first = apply({ ...state, d97: { ...state.d97!, run: { ...runOf(state), returnAnchorId: topology.exitGuardianAnchorId } } }, "D97_ACTIVATE_WAYPOINT", { anchorId }, 2);
+      const first = apply({ ...state, d97: { ...state.d97, run: { ...runOf(state), returnAnchorId: topology.exitGuardianAnchorId } } }, "D97_ACTIVATE_WAYPOINT", { anchorId }, 2);
       expect(first.outcome).toBe("applied");
       expect(runOf(first.state).activeWaypointIds).toEqual([anchorId]);
       expect(runOf(first.state).lastPlace).toEqual({ kind: "waypoint", anchorId });

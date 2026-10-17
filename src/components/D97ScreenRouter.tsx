@@ -31,6 +31,16 @@ export function D97ScreenRouter({
   const head = useHead();
   const actions = useActions();
   const qaRunStartedRef = useRef(false);
+  // Returning from a battle places the player beside the opponent; opening the
+  // overworld any other way (a reload) uses the last door or waypoint. The
+  // flag is presentation only: it reads the battle this router last showed.
+  const showingBattle = d97BattleOf(battle) !== null;
+  const sawBattleRef = useRef(false);
+  if (showingBattle) sawBattleRef.current = true;
+  const returningFromBattle = !showingBattle && sawBattleRef.current;
+  useEffect(() => {
+    if (!showingBattle) sawBattleRef.current = false;
+  }, [showingBattle]);
   const screenType = d97?.screen.type ?? null;
 
   useEffect(() => {
@@ -67,13 +77,14 @@ export function D97ScreenRouter({
 
   if (d97 === undefined) return null;
   const content =
-    d97BattleOf(battle) !== null ? (
+    showingBattle ? (
       <PlayableBattleScreen />
     ) : d97.screen.type === "overworld" && d97.run !== null ? (
       <D97OverworldScreenAdapter
         run={d97.run}
         journeyContent={journeyContent}
         initialDeckEditorOpen={opensDeckEditor}
+        returningFromBattle={returningFromBattle}
       />
     ) : d97.screen.type === "sliceEnd" && d97.run !== null ? (
       <D97SliceEndScreenAdapter run={d97.run} avatars={journeyContent.avatars} />

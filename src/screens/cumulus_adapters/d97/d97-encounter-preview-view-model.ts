@@ -53,7 +53,6 @@ export function buildD97EncounterPreviewView(
     },
     tier: encounter.tier,
     scoreToWin: encounter.scoreToWin,
-    headStarts: encounter.headStarts,
     signatureCards: encounter.signatureCardIds.flatMap((cardId) => {
       const card = view(cardId);
       return card === null ? [] : [card];

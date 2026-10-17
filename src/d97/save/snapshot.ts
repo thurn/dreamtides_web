@@ -18,7 +18,7 @@ export const D97_SAVE_FORMAT = "dreamtides-97-save";
  * The current snapshot schema version. Version 1 is frozen: every change to
  * the persisted shape bumps it and adds a migration (`./migrations/`).
  */
-export const D97_SAVE_SCHEMA_VERSION = 1;
+export const D97_SAVE_SCHEMA_VERSION = 2;
 
 /** The build that wrote a snapshot: the cross-build trigger and diagnostics. */
 export interface D97SaveBuild {

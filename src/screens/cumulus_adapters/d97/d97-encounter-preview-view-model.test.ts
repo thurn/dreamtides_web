@@ -34,7 +34,6 @@ const ENCOUNTER: D97Encounter = {
   dreamsignIds: [],
   signatureCardIds: [],
   scoreToWin: 15,
-  headStarts: { player: 1, opponent: 2 },
   playerAnteCopyId: null,
   opponentAnteCardId: null,
   extra: { kind: "essence", amount: 10 },
@@ -56,7 +55,6 @@ describe("buildD97EncounterPreviewView", () => {
     expect([view.opponent.name, view.opponent.epithet]).not.toContain(AVATAR.name);
     expect(view.avatar.ability).toBeNull();
     expect(view.scoreToWin).toBe(15);
-    expect(view.headStarts).toEqual({ player: 1, opponent: 2 });
     expect(view.extraEssence).toBe(10);
   });
 

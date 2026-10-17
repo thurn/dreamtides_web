@@ -64,6 +64,8 @@ interface D97OverworldProps {
   readonly run: D97Run;
   readonly journeyContent: JourneyContent;
   readonly initialDeckEditorOpen?: boolean;
+  /** Whether this overworld opened straight from a battle, which places the player beside the opponent. */
+  readonly returningFromBattle?: boolean;
 }
 
 /** Live overworld of a started run, in the dream the run is in. */
@@ -76,6 +78,7 @@ function D97DreamOverworld({
   run,
   journeyContent,
   initialDeckEditorOpen = false,
+  returningFromBattle = false,
   dream: { dream, map, occupants: placed },
 }: D97OverworldProps & { readonly dream: D97PlayedDream }) {
   const catalog = registeredDialogueCatalog();
@@ -125,7 +128,7 @@ function D97DreamOverworld({
     },
     [run.runId],
   );
-  const travel = useD97Travel({ run, dream: dream.topology, registry, actions });
+  const travel = useD97Travel({ run, dream: dream.topology, registry, actions, returningFromBattle });
   const encounter = useD97Encounter({
     run,
     registry,

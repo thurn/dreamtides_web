@@ -18,8 +18,6 @@ export interface D97TierKnob {
   readonly transfiguredCards: number;
   /** Whether Legendary cards are candidates. */
   readonly legendaries: boolean;
-  /** The opponent's head start before difficulty and boss bonuses. */
-  readonly headStart: number;
 }
 
 export interface D97EncounterTuning {
@@ -46,8 +44,8 @@ export interface D97EncounterTuning {
 
 export const D97_ENCOUNTERS: D97EncounterTuning = {
   tierKnobs: [
-    { fromTier: 4, abilityActive: false, starterDilution: 10, dreamsigns: 0, transfiguredCards: 0, legendaries: false, headStart: 0 },
-    { fromTier: 7, abilityActive: true, starterDilution: 5, dreamsigns: 0, transfiguredCards: 0, legendaries: false, headStart: 0 },
+    { fromTier: 4, abilityActive: false, starterDilution: 10, dreamsigns: 0, transfiguredCards: 0, legendaries: false },
+    { fromTier: 7, abilityActive: true, starterDilution: 5, dreamsigns: 0, transfiguredCards: 0, legendaries: false },
   ],
   actScoreTargets: [15, 20, 25, 25, 25],
   guardianTierOffset: 3,

@@ -1,8 +1,8 @@
-// Where the player appears in a dream (Appendix B §B17): beside the anchor of
-// the battle they just left, else at the entry point of the last door they
-// stepped through or beside the last waypoint they used, else at the entry of
-// the dream's first door, or failing that the walkable tile nearest the map's
-// center.
+// Where the player appears in a dream (Appendix B §B17): returning from a
+// battle, beside the opponent they fought; otherwise, as on a reload, at the
+// entry point of the last door they stepped through or beside the last
+// waypoint they used, else at the entry of the dream's first door, or failing
+// that the walkable tile nearest the map's center.
 
 import { isWalkable, type CompiledAnchor, type CompiledDreamMap, type WalkabilityGrid } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
@@ -14,12 +14,19 @@ export type OverworldArrival =
   | { readonly kind: "beside"; readonly anchorId: DreamAnchorId }
   | { readonly kind: "entry"; readonly anchorId: DreamAnchorId };
 
-/** The arrival a run's state names: its last battle, else its last door or waypoint. */
-export function arrivalFor(run: {
-  readonly returnAnchorId: DreamAnchorId | null;
-  readonly lastPlace: { readonly kind: "door" | "waypoint"; readonly anchorId: DreamAnchorId } | null;
-}): OverworldArrival | null {
-  if (run.returnAnchorId !== null) return { kind: "beside", anchorId: run.returnAnchorId };
+/**
+ * The arrival a run's state names. Only an overworld opened straight from a
+ * battle (`returningFromBattle`) places the player beside its opponent; any
+ * other open, a reload included, uses the last door or waypoint.
+ */
+export function arrivalFor(
+  run: {
+    readonly returnAnchorId: DreamAnchorId | null;
+    readonly lastPlace: { readonly kind: "door" | "waypoint"; readonly anchorId: DreamAnchorId } | null;
+  },
+  returningFromBattle: boolean,
+): OverworldArrival | null {
+  if (returningFromBattle && run.returnAnchorId !== null) return { kind: "beside", anchorId: run.returnAnchorId };
   if (run.lastPlace === null) return null;
   return { kind: run.lastPlace.kind === "door" ? "entry" : "beside", anchorId: run.lastPlace.anchorId };
 }

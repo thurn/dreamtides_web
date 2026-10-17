@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // D97EncounterPreview contract: the preview leads with the opponent (their
 // name as the panel heading, their bust) and the stakes, ahead of the
-// signature cards and a secondary details line holding the four stats; both
+// signature cards and a secondary details line holding tier and score; both
 // antes render with their hooks; a collection at its floor shows no player
 // ante card; Fight and Not now report the player's choice.
 
@@ -30,7 +30,6 @@ const VIEW: D97EncounterPreviewView = {
   avatar: { id: testAvatarId("a"), name: "A", title: "T", ability: null, abilityActive: false },
   tier: 4,
   scoreToWin: 15,
-  headStarts: { player: 0, opponent: 0 },
   signatureCards: [card("s1"), card("s2"), card("s3")],
   playerAnte: card("p"),
   opponentAnte: card("o"),
@@ -44,7 +43,7 @@ describe("D97EncounterPreview", () => {
     renderInCumulus(<D97EncounterPreview view={VIEW} onFight={onFight} onNotNow={onNotNow} />);
     const root = document.querySelector(`[data-d97-encounter-preview="${VIEW.anchorId}"]`);
     expect(root).not.toBeNull();
-    expect(root?.querySelectorAll("[data-d97-preview-details] [data-d97-preview-stat]")).toHaveLength(4);
+    expect(root?.querySelectorAll("[data-d97-preview-details] [data-d97-preview-stat]")).toHaveLength(2);
     expect(document.querySelectorAll('[data-testid="d97-preview-signature-cards"] [data-d97-preview-card]')).toHaveLength(3);
     expect(document.querySelector('[data-testid="d97-preview-player-ante"]')).not.toBeNull();
     expect(document.querySelector("[data-d97-preview-extra]")).not.toBeNull();

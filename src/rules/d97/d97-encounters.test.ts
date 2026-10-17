@@ -148,20 +148,21 @@ describe("D97_PREVIEW_ENCOUNTER", () => {
 });
 
 describe("resolvePlayerAnte", () => {
-  it("keeps an active ante, drifts to an equal-or-better active copy, and antes nothing at the floor", () => {
+  it("keeps an active ante, drifts to an active copy of at least its sale value, and antes nothing at the floor", () => {
     const run = runOf(started());
     const deck = copiesInZone(run.collection, "deck");
-    const rarity = () => "Common" as const;
-    expect(resolvePlayerAnte(run.collection, deck[0].copyId, rarity, () => 0)).toBe(deck[0].copyId);
+    // Worth is the copy's sale value: only deck[2] is worth at least the original deck[0].
+    const value = (copy: { copyId: unknown }) => (copy.copyId === deck[2].copyId ? 99 : copy.copyId === deck[0].copyId ? 50 : 1);
+    expect(resolvePlayerAnte(run.collection, deck[0].copyId, value, () => 0)).toBe(deck[0].copyId);
     const moved = {
       ...run.collection,
       copies: run.collection.copies.map((copy) => (copy.copyId === deck[0].copyId ? { ...copy, zone: "reserve" as const } : copy)),
     };
-    const drifted = resolvePlayerAnte(moved, deck[0].copyId, rarity, () => 0);
-    expect(drifted).not.toBe(deck[0].copyId);
+    const drifted = resolvePlayerAnte(moved, deck[0].copyId, value, () => 0);
+    expect(drifted).toBe(deck[2].copyId);
     expect(findCopy(moved, drifted!)?.zone).toBe("deck");
     const floor = { ...run.collection, copies: run.collection.copies.slice(0, D97_COLLECTION.collectionFloor) };
-    expect(resolvePlayerAnte(floor, deck[0].copyId, rarity, () => 0)).toBeNull();
+    expect(resolvePlayerAnte(floor, deck[0].copyId, value, () => 0)).toBeNull();
   });
 });
 

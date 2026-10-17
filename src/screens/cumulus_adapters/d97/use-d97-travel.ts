@@ -26,12 +26,14 @@ export function useD97Travel(args: {
   readonly dream: D97DreamTopology;
   readonly registry: InteractionRegistry;
   readonly actions: GameActions;
+  /** Whether the overworld opened straight from a battle (not on a reload). */
+  readonly returningFromBattle: boolean;
 }): {
   readonly arrival: OverworldArrival | null;
   readonly veils: ReadonlyMap<DreamAnchorId, VeilVariant>;
   readonly activeWaypointIds: ReadonlySet<DreamAnchorId>;
 } {
-  const { run, dream, registry, actions } = args;
+  const { run, dream, registry, actions, returningFromBattle } = args;
   const runRef = useRef(run);
   runRef.current = run;
 
@@ -57,7 +59,7 @@ export function useD97Travel(args: {
   // Where the player stands is presentation once placed: the arrival is read
   // when the overworld opens (after a battle or a reload), not on every event.
   // A run that has not travelled yet arrives through its dream's arrival door.
-  const [arrival] = useState((): OverworldArrival => arrivalFor(run) ?? { kind: "entry", anchorId: dream.arrivalDoorAnchorId });
+  const [arrival] = useState((): OverworldArrival => arrivalFor(run, returningFromBattle) ?? { kind: "entry", anchorId: dream.arrivalDoorAnchorId });
   const veils = useMemo(() => buildD97DoorVeils(dream), [dream]);
   const activeWaypointIds = useMemo(() => new Set(run.activeWaypointIds), [run.activeWaypointIds]);
   return { arrival, veils, activeWaypointIds };

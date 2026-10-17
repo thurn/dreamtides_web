@@ -68,7 +68,8 @@ export function bagDrawLogRecord(
  * dream when omitted; an unknown dream bounces). The run's id comes from the event's seq and its seed from
  * the event's random stream, so both are recorded outcomes of this event.
  * The same stream deals the Avatar's reward bag and chooses the Standard
- * starting package; both are stored, never re-derived.
+ * starting package; both are stored, never re-derived. The start dream's
+ * waypoint is active from the start.
  */
 export function startRun(
   d97: D97State,
@@ -142,7 +143,8 @@ export function startRun(
     returnAnchorId: null,
     quests: emptyQuestState(),
     flags: [],
-    activeWaypointIds: [],
+    // The start dream's waypoint is active from the start (Appendix B §B6).
+    activeWaypointIds: [dream.topology.waypointAnchorId],
     lastPlace: null,
     shops: {},
   };
@@ -156,6 +158,7 @@ export function startRun(
           runSeed: run.runSeed,
           avatarId: run.avatarId,
           dreamId: run.dreamId,
+          activeWaypointIds: run.activeWaypointIds,
         },
       },
       {
