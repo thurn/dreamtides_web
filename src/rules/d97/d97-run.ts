@@ -135,6 +135,8 @@ export function startRun(
     returnAnchorId: null,
     quests: emptyQuestState(),
     flags: [],
+    activeWaypointIds: [],
+    lastPlace: null,
   };
   return {
     d97: { screen: { type: "overworld" }, run },

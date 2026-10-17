@@ -29,6 +29,8 @@ import {
   pathBeside,
   type InteractionRegistry,
 } from "./interactions";
+import { blockingGuardian, standingAnchors } from "./chokepoint";
+import { DreamVeil, WaypointObelisk, type VeilVariant } from "./dream-veil";
 import { idleFacing } from "./characters/animation";
 import { BADGE_HEIGHT, BADGE_WIDTH, drawBadge, orderBadges, type BadgeKind } from "./characters/badges";
 import type { CharacterLooks } from "./characters/character-looks";
@@ -42,7 +44,7 @@ import {
   PLACEHOLDER_PLAYER,
   BEATEN_TINT,
 } from "./placeholder-palette";
-import { spawnTile } from "./spawn";
+import { arrivalPlacement, type OverworldArrival } from "./spawn";
 import type { TileTextures } from "./tile-textures";
 import {
   advanceWalker,
@@ -96,8 +98,12 @@ export interface OverworldSceneOptions {
   readonly occupants: OverworldOccupants;
   /** The character the player walks as. */
   readonly playerCharacter: D97CharacterId;
-  /** The anchor the player starts beside (after its battle), if any. */
-  readonly returnAnchorId: DreamAnchorId | null;
+  /** Where the player starts: after a battle, or at the last door or waypoint used. */
+  readonly arrival: OverworldArrival | null;
+  /** Each door's veil; a door missing here shows the unexplored veil. */
+  readonly veils: ReadonlyMap<DreamAnchorId, VeilVariant>;
+  /** Activated waypoints, lit when the scene opens. */
+  readonly activeWaypointIds: ReadonlySet<DreamAnchorId>;
   /** Whether the viewport counts as desktop for zoom. */
   readonly desktop: () => boolean;
 }
@@ -116,6 +122,15 @@ export interface OverworldSceneHandle {
   readonly characters: () => OverworldCharactersState;
   /** Anchors drawn and interactive neither (quest objects out of their quest). */
   readonly hiddenAnchorIds: () => readonly DreamAnchorId[];
+  /** The anchors where they stand (beaten guardians moved aside). */
+  readonly anchors: () => readonly CompiledAnchor[];
+  /** The door veils and waypoint states drawn, for QA. */
+  readonly markers: () => OverworldMarkersState;
+}
+
+export interface OverworldMarkersState {
+  readonly veils: readonly { readonly anchorId: DreamAnchorId; readonly variant: VeilVariant }[];
+  readonly waypoints: readonly { readonly anchorId: DreamAnchorId; readonly active: boolean }[];
 }
 
 export interface OverworldCharactersState {
@@ -146,8 +161,16 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly occupants: OverworldOccupants;
   private readonly playerCharacter: D97CharacterId;
   private readonly desktop: () => boolean;
+  private readonly anchorsStanding: readonly CompiledAnchor[];
+  /** Unbeaten guardians, which close their chokepoints. */
+  private readonly standingGuardians: readonly CompiledAnchor[];
   private readonly grid: WalkabilityGrid;
   private readonly byTile: ReadonlyMap<string, CompiledAnchor>;
+  private readonly veils: ReadonlyMap<DreamAnchorId, VeilVariant>;
+  private readonly veilViews = new Map<DreamAnchorId, DreamVeil>();
+  private readonly waypointViews = new Map<DreamAnchorId, WaypointObelisk>();
+  /** The guardian tile the held direction last walked into, so one bump opens one preview. */
+  private bumped: string | null = null;
 
   private readonly world = new Container();
   private readonly ground = new Graphics();
@@ -189,14 +212,15 @@ export class OverworldScene implements OverworldSceneHandle {
     this.occupants = options.occupants;
     this.playerCharacter = options.playerCharacter;
     this.desktop = options.desktop;
-    this.grid = movementGrid(this.map, this.map.anchors);
-    this.byTile = anchorsByTile(this.map.anchors);
-    this.state = initialWalker(spawnTile(this.map, this.grid));
-    const returnAnchor = this.map.anchors.find((anchor) => anchor.id === options.returnAnchorId);
-    const beside = returnAnchor === undefined ? undefined : besideTile(this.grid, returnAnchor.at);
-    if (returnAnchor !== undefined && beside !== undefined) {
-      this.state = faceTile(placeWalker(this.state, beside), returnAnchor.at);
-    }
+    this.veils = options.veils;
+    const beaten = new Set([...this.occupants].filter(([, occupant]) => occupant.beaten === true).map(([anchorId]) => anchorId));
+    this.anchorsStanding = standingAnchors(this.map, beaten);
+    this.standingGuardians = this.anchorsStanding.filter((anchor) => anchor.kind === "guardian" && !beaten.has(anchor.id));
+    this.grid = movementGrid(this.map, this.anchorsStanding);
+    this.byTile = anchorsByTile(this.anchorsStanding);
+    const arrival = arrivalPlacement(this.map, this.anchorsStanding, this.grid, options.arrival);
+    this.state = initialWalker(arrival.tile);
+    if (arrival.face !== null) this.state = faceTile(this.state, arrival.face);
 
     this.sorted.sortableChildren = true;
     this.badges.sortableChildren = true;
@@ -209,6 +233,7 @@ export class OverworldScene implements OverworldSceneHandle {
     this.buildObjects();
     this.buildAnchors();
     this.setBadges(new Map());
+    this.setActiveWaypoints(options.activeWaypointIds);
     this.buildPlayer();
     window.addEventListener("keydown", this.onKeyDown);
     window.addEventListener("keyup", this.onKeyUp);
@@ -260,6 +285,11 @@ export class OverworldScene implements OverworldSceneHandle {
     if (this.pendingAnchor !== null && anchorIds.has(this.pendingAnchor.id)) this.pendingAnchor = null;
   }
 
+  /** Light the activated waypoints and leave the rest dormant. */
+  setActiveWaypoints(active: ReadonlySet<DreamAnchorId>): void {
+    for (const [anchorId, view] of this.waypointViews) view.setActive(active.has(anchorId));
+  }
+
   /** While a React panel is open the canvas ignores input and the walk pauses. */
   setInputEnabled(enabled: boolean): void {
     this.inputEnabled = enabled;
@@ -276,7 +306,7 @@ export class OverworldScene implements OverworldSceneHandle {
     const anchor = this.shownAnchorAt(tile);
     if (anchor !== undefined) return this.walkToAnchor(anchor);
     const path = findPath(this.grid, this.origin(), tile);
-    if (path === null) return false;
+    if (path === null) return this.walkToBlockingGuardian(tile, false);
     this.pendingAnchor = null;
     this.state = followPath(this.state, path, this.canEnter);
     return true;
@@ -285,7 +315,7 @@ export class OverworldScene implements OverworldSceneHandle {
   walkToAnchor = (anchor: CompiledAnchor): boolean => {
     if (this.hidden.has(anchor.id)) return false;
     const path = pathBeside(this.grid, this.origin(), anchor.at);
-    if (path === null) return false;
+    if (path === null) return this.walkToBlockingGuardian(anchor.at, true);
     this.pendingAnchor = anchor;
     this.state = followPath(this.state, path, this.canEnter);
     this.arriveIfIdle();
@@ -320,6 +350,13 @@ export class OverworldScene implements OverworldSceneHandle {
 
   hiddenAnchorIds = (): readonly DreamAnchorId[] => [...this.hidden];
 
+  anchors = (): readonly CompiledAnchor[] => this.anchorsStanding;
+
+  markers = (): OverworldMarkersState => ({
+    veils: [...this.veilViews].map(([anchorId, view]) => ({ anchorId, variant: view.variant })),
+    waypoints: [...this.waypointViews].map(([anchorId, view]) => ({ anchorId, active: view.isActive })),
+  });
+
   // --- building ---------------------------------------------------------------
 
   private readonly canEnter = (tile: TilePoint): boolean => isWalkable(this.grid, tile);
@@ -332,6 +369,37 @@ export class OverworldScene implements OverworldSceneHandle {
 
   private origin(): TilePoint {
     return this.state.step?.to ?? this.state.tile;
+  }
+
+  /**
+   * Walking toward something an unbeaten guardian's chokepoint closes off
+   * walks to the guardian instead, which opens its preview (Appendix B §B5).
+   */
+  private walkToBlockingGuardian(tile: TilePoint, beside: boolean): boolean {
+    const found = blockingGuardian(this.grid, this.standingGuardians, this.origin(), { tile, beside });
+    if (found === null) return false;
+    logEvent("d97_chokepoint_blocked", { mapId: this.map.id, guardianAnchorId: found.guardian.id, target: tile });
+    this.pendingAnchor = found.guardian;
+    this.state = followPath(this.state, found.path, this.canEnter);
+    this.arriveIfIdle();
+    return true;
+  }
+
+  /** A held step into an unbeaten guardian opens its preview, once per bump. */
+  private bumpGuardian(): void {
+    const direction = this.held[this.held.length - 1];
+    if (direction === undefined || !isIdle(this.state)) return;
+    const [dx, dy] = FACING_STEPS[direction];
+    const ahead: TilePoint = [this.state.tile[0] + dx, this.state.tile[1] + dy];
+    const guardian = this.standingGuardians.find((candidate) => candidate.at[0] === ahead[0] && candidate.at[1] === ahead[1]);
+    const key = guardian === undefined ? null : `${String(ahead[0])},${String(ahead[1])}`;
+    if (guardian === undefined || key === this.bumped) {
+      this.bumped = key;
+      return;
+    }
+    this.bumped = key;
+    this.state = faceTile(this.state, guardian.at);
+    this.interactWith(guardian);
   }
 
   private buildObjects(): void {
@@ -353,21 +421,31 @@ export class OverworldScene implements OverworldSceneHandle {
 
   private buildAnchors(): void {
     const { tileWidth: w, tileHeight: h } = this.map;
-    for (const anchor of this.map.anchors) {
+    this.anchorsStanding.forEach((anchor, index) => {
       const color = PLACEHOLDER_ANCHORS[anchor.kind];
-      const marker = new Graphics();
       const [x, y] = anchor.at;
-      if (anchor.kind === "door") {
-        marker.roundRect(w * 0.15, -h * 1.1, w * 0.7, h * 1.1, w * 0.3).fill(color).stroke({ color: PLACEHOLDER_OUTLINE, width: 2 });
-      } else if (anchor.kind === "waypoint") {
-        marker.poly([w / 2, -h * 1.2, w * 0.8, -h * 0.1, w * 0.2, -h * 0.1]).fill(color).stroke({ color: PLACEHOLDER_OUTLINE, width: 2 });
-      } else if (anchor.kind === "chest" || anchor.kind === "object") {
+      if (anchor.kind === "door" || anchor.kind === "waypoint") {
+        const view =
+          anchor.kind === "door"
+            ? new DreamVeil(this.veils.get(anchor.id) ?? "unexplored", w, h, index + 1)
+            : new WaypointObelisk(w, h, index + 1);
+        if (view instanceof DreamVeil) this.veilViews.set(anchor.id, view);
+        else this.waypointViews.set(anchor.id, view);
+        view.position.set(x * w, (y + 1) * h);
+        view.zIndex = (y + 1) * h;
+        view.label = `${anchor.kind}:${anchor.id}`;
+        this.sorted.addChild(view);
+        this.anchorViews.set(anchor.id, view);
+        return;
+      }
+      const marker = new Graphics();
+      if (anchor.kind === "chest" || anchor.kind === "object") {
         marker.rect(w * 0.2, -h * 0.6, w * 0.6, h * 0.5).fill(color).stroke({ color: PLACEHOLDER_OUTLINE, width: 2 });
       } else {
         const occupant = this.occupants.get(anchor.id);
         if (occupant !== undefined) {
           this.addResident(anchor, occupant);
-          continue;
+          return;
         }
         drawCapsule(marker, w, h, color);
       }
@@ -376,7 +454,7 @@ export class OverworldScene implements OverworldSceneHandle {
       marker.label = `anchor:${anchor.id}`;
       this.sorted.addChild(marker);
       this.anchorViews.set(anchor.id, marker);
-    }
+    });
   }
 
   private addResident(anchor: CompiledAnchor, occupant: NonNullable<ReturnType<OverworldOccupants["get"]>>): void {
@@ -425,8 +503,11 @@ export class OverworldScene implements OverworldSceneHandle {
       const before = this.state;
       this.state = advanceWalker(this.state, seconds, this.tunables.walkTilesPerSecond, this.canEnter);
       if (before.step !== null && this.state.step === null) this.arriveIfIdle();
+      this.bumpGuardian();
     }
     this.clock += seconds;
+    for (const view of this.veilViews.values()) view.advance(seconds);
+    for (const view of this.waypointViews.values()) view.advance(seconds);
     this.placePlayer();
     this.animateCharacters(this.inputEnabled ? seconds : 0);
     this.layout();
@@ -604,11 +685,4 @@ export class OverworldScene implements OverworldSceneHandle {
     this.held.length = 0;
     this.state = holdDirection(this.state, null, this.canEnter);
   };
-}
-
-/** The first tile beside `target` the player may enter, in facing order. */
-function besideTile(grid: WalkabilityGrid, target: TilePoint): TilePoint | undefined {
-  return Object.values(FACING_STEPS)
-    .map(([dx, dy]): TilePoint => [target[0] + dx, target[1] + dy])
-    .find((tile) => isWalkable(grid, tile));
 }

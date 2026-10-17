@@ -37,8 +37,9 @@ export function installD97QaSurface(
   map: CompiledDreamMap,
   scene: OverworldSceneHandle,
 ): () => void {
-  const anchor = (id: DreamAnchorId) => map.anchors.find((candidate) => candidate.id === id);
-  const grid = movementGrid(map, map.anchors);
+  // Anchors where they stand: a beaten guardian has stepped aside.
+  const anchor = (id: DreamAnchorId) => scene.anchors().find((candidate) => candidate.id === id);
+  const grid = movementGrid(map, scene.anchors());
   const surface: D97QaSurface = {
     state: () => {
       const walker = scene.walker();
@@ -54,9 +55,10 @@ export function installD97QaSurface(
           pathRemaining: walker.path.length,
         },
         characters: scene.characters(),
+        markers: scene.markers(),
         camera: scene.camera(),
         viewport: scene.viewport(),
-        anchors: map.anchors.map(({ id, kind, at }) => ({ id, kind, at })),
+        anchors: scene.anchors().map(({ id, kind, at }) => ({ id, kind, at })),
         hiddenAnchorIds: scene.hiddenAnchorIds(),
       };
     },

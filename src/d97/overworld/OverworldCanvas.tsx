@@ -14,6 +14,8 @@ import type { CompiledDreamMap } from "../map/compiled";
 import type { InteractionRegistry } from "./interactions";
 import { OverworldScene } from "./overworld-scene";
 import { installD97QaSurface } from "./qa-surface";
+import type { VeilVariant } from "./dream-veil";
+import type { OverworldArrival } from "./spawn";
 import { loadTileTextures, type TileTextures } from "./tile-textures";
 
 /** The canvas clear color behind the map (the void past its edges). */
@@ -27,8 +29,12 @@ export interface OverworldCanvasProps {
   readonly occupants: OverworldOccupants;
   /** The character the player walks as. */
   readonly playerCharacter: D97CharacterId;
-  /** The anchor the player starts beside (after its battle), if any. */
-  readonly returnAnchorId: DreamAnchorId | null;
+  /** Where the player starts: after a battle, or at the last door or waypoint used. */
+  readonly arrival: OverworldArrival | null;
+  /** Each door's veil; a door missing here shows the unexplored veil. */
+  readonly veils: ReadonlyMap<DreamAnchorId, VeilVariant>;
+  /** Activated waypoints; a change lights them in place. */
+  readonly activeWaypointIds: ReadonlySet<DreamAnchorId>;
   /** False while a React panel is open: the canvas ignores input. */
   readonly inputEnabled: boolean;
   /** Head icons shown in place of occupants' role badges (quest icons). */
@@ -50,7 +56,9 @@ function SceneMount({
   characterTunables,
   occupants,
   playerCharacter,
-  returnAnchorId,
+  arrival,
+  veils,
+  activeWaypointIds,
   inputEnabled,
   badges,
   hiddenAnchorIds,
@@ -59,6 +67,8 @@ function SceneMount({
   const { app, isInitialised } = useApplication();
   const sceneRef = useRef<OverworldScene | null>(null);
   const [scene, setScene] = useState<OverworldScene | null>(null);
+  const activeWaypointsRef = useRef(activeWaypointIds);
+  activeWaypointsRef.current = activeWaypointIds;
 
   useEffect(() => {
     if (!isInitialised) return;
@@ -69,7 +79,10 @@ function SceneMount({
       looks: assets.looks,
       occupants,
       playerCharacter,
-      returnAnchorId,
+      arrival,
+      veils,
+      // The scene opens with the current waypoints; later changes apply in place.
+      activeWaypointIds: activeWaypointsRef.current,
       registry,
       tunables,
       characterTunables,
@@ -84,7 +97,7 @@ function SceneMount({
       setScene(null);
       scene.destroy();
     };
-  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, returnAnchorId, tunables]);
+  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, arrival, veils, tunables]);
 
   useEffect(() => {
     sceneRef.current?.setInputEnabled(inputEnabled);
@@ -94,6 +107,10 @@ function SceneMount({
     scene?.setHiddenAnchors(hiddenAnchorIds);
     scene?.setBadges(badges);
   }, [badges, hiddenAnchorIds, scene]);
+
+  useEffect(() => {
+    scene?.setActiveWaypoints(activeWaypointIds);
+  }, [activeWaypointIds, scene]);
 
   return null;
 }

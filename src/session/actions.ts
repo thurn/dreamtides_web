@@ -444,6 +444,10 @@ export interface GameActions {
   d97OpenShop: (anchorId: DreamAnchorId) => Promise<number>;
   /** Hand a conversation off to a friendly character's service. */
   d97OpenService: (anchorId: DreamAnchorId, service: D97ServiceKind) => Promise<number>;
+  /** Touch the dream's waypoint: activates it and makes it the reload place. */
+  d97ActivateWaypoint: (anchorId: DreamAnchorId) => Promise<number>;
+  /** Step through a door; the beaten guardian's exit door ends the slice. */
+  d97StepThroughDoor: (anchorId: DreamAnchorId) => Promise<number>;
 }
 
 /**
@@ -905,5 +909,7 @@ export function makeActions(append: AppendFn): GameActions {
     d97SetFlag: (flagId, value, anchorId) => emit("D97_SET_FLAG", { flagId, value, anchorId }),
     d97OpenShop: (anchorId) => emit("D97_OPEN_SHOP", { anchorId }),
     d97OpenService: (anchorId, service) => emit("D97_OPEN_SERVICE", { anchorId, service }),
+    d97ActivateWaypoint: (anchorId) => emit("D97_ACTIVATE_WAYPOINT", { anchorId }),
+    d97StepThroughDoor: (anchorId) => emit("D97_STEP_THROUGH_DOOR", { anchorId }),
   };
 }

@@ -47,6 +47,7 @@ import * as d97Deck from "./d97/d97-deck";
 import * as d97Quests from "./d97/d97-quests";
 import type { D97Transition } from "./d97/d97-run";
 import * as d97Encounters from "./d97/d97-encounters";
+import * as d97Travel from "./d97/d97-travel";
 
 /** Engine intents a D97 game folds while its D97 battle is running. */
 const D97_BATTLE_INTENTS: ReadonlySet<EventType> = new Set(["BATTLE_ACTION", "BATTLE_ANSWER", "BATTLE_CANCEL", "BATTLE_DEBUG"]);
@@ -840,6 +841,10 @@ export function routeDomain(
       return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload, "shop"));
     case "D97_OPEN_SERVICE":
       return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload, "service"));
+    case "D97_ACTIVATE_WAYPOINT":
+      return d97Case(state, state.d97 === undefined ? null : d97Travel.activateWaypoint(state.d97, payload));
+    case "D97_STEP_THROUGH_DOOR":
+      return d97Case(state, state.d97 === undefined ? null : d97Travel.stepThroughDoor(state.d97, payload));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":

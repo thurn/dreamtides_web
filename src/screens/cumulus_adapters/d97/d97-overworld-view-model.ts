@@ -1,5 +1,9 @@
-// The pure view-model builder for the D97 overworld HUD.
+// The pure view-model builders for the D97 overworld: its HUD and its door
+// veils.
 
+import type { D97DreamTopology } from "../../../content/d97/dreams";
+import type { VeilVariant } from "../../../d97/overworld/dream-veil";
+import type { DreamAnchorId } from "../../../types/identifiers";
 import type {
   D97OverworldControlId,
   D97OverworldHudView,
@@ -33,4 +37,12 @@ export function buildD97OverworldHudView(input: D97OverworldHudInput): D97Overwo
       enabled: input.enabled.has(control.id),
     })),
   };
+}
+
+/**
+ * Each door's veil in a dream: the exit door shows the act-exit veil; every
+ * other door is unexplored, the canvas default.
+ */
+export function buildD97DoorVeils(dream: D97DreamTopology): ReadonlyMap<DreamAnchorId, VeilVariant> {
+  return new Map<DreamAnchorId, VeilVariant>([[dream.exitDoorAnchorId, "actExit"]]);
 }

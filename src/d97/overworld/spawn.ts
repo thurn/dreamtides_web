@@ -1,9 +1,28 @@
-// Where the player appears in a dream: the entry tile of its first door, or
-// failing that the walkable tile nearest the map's center. Later beads replace
-// this with the arrival door or waypoint the run recorded (Appendix B §B17).
+// Where the player appears in a dream (Appendix B §B17): beside the anchor of
+// the battle they just left, else at the entry point of the last door they
+// stepped through or beside the last waypoint they used, else at the entry of
+// the dream's first door, or failing that the walkable tile nearest the map's
+// center.
 
-import { isWalkable, type CompiledDreamMap, type WalkabilityGrid } from "../map/compiled";
+import { isWalkable, type CompiledAnchor, type CompiledDreamMap, type WalkabilityGrid } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
+import type { DreamAnchorId } from "../../types/identifiers";
+import { FACING_STEPS } from "./walker";
+
+/** Where a scene places the player when it opens. */
+export type OverworldArrival =
+  | { readonly kind: "beside"; readonly anchorId: DreamAnchorId }
+  | { readonly kind: "entry"; readonly anchorId: DreamAnchorId };
+
+/** The arrival a run's state names: its last battle, else its last door or waypoint. */
+export function arrivalFor(run: {
+  readonly returnAnchorId: DreamAnchorId | null;
+  readonly lastPlace: { readonly kind: "door" | "waypoint"; readonly anchorId: DreamAnchorId } | null;
+}): OverworldArrival | null {
+  if (run.returnAnchorId !== null) return { kind: "beside", anchorId: run.returnAnchorId };
+  if (run.lastPlace === null) return null;
+  return { kind: run.lastPlace.kind === "door" ? "entry" : "beside", anchorId: run.lastPlace.anchorId };
+}
 
 export function spawnTile(map: CompiledDreamMap, grid: WalkabilityGrid = map): TilePoint {
   const door = map.anchors.find((anchor) => anchor.kind === "door");
@@ -22,4 +41,33 @@ export function spawnTile(map: CompiledDreamMap, grid: WalkabilityGrid = map): T
     }
   }
   return best ?? [cx, cy];
+}
+
+/** The first tile beside `target` the player may enter, in facing order. */
+export function besideTile(grid: WalkabilityGrid, target: TilePoint): TilePoint | undefined {
+  return Object.values(FACING_STEPS)
+    .map(([dx, dy]): TilePoint => [target[0] + dx, target[1] + dy])
+    .find((tile) => isWalkable(grid, tile));
+}
+
+/**
+ * The player's opening tile, and the tile they face, for `arrival` among the
+ * standing `anchors`; the default spawn when the arrival names no placeable
+ * anchor.
+ */
+export function arrivalPlacement(
+  map: CompiledDreamMap,
+  anchors: readonly CompiledAnchor[],
+  grid: WalkabilityGrid,
+  arrival: OverworldArrival | null,
+): { readonly tile: TilePoint; readonly face: TilePoint | null } {
+  const anchor = arrival === null ? undefined : anchors.find((candidate) => candidate.id === arrival.anchorId);
+  if (arrival !== null && anchor !== undefined) {
+    if (arrival.kind === "entry" && anchor.entry !== undefined && isWalkable(grid, anchor.entry)) {
+      return { tile: anchor.entry, face: null };
+    }
+    const beside = besideTile(grid, anchor.at);
+    if (beside !== undefined) return { tile: beside, face: anchor.at };
+  }
+  return { tile: spawnTile(map, grid), face: null };
 }

@@ -1,7 +1,8 @@
 // Adapter for the D97 overworld: the development dream on the Pixi canvas,
 // the HUD view, the encounter preview, deck editor, quest log, conversation
 // and Menu panels, beaten opponents without badges, the quest marks over the
-// world, the return beside the last battle's anchor, and the input-focus rule
+// world, door veils and lit waypoints, the arrival beside the last battle's
+// anchor or at the last door or waypoint used, and the input-focus rule
 // (the canvas ignores input while a panel, a preview or a pending reward is
 // open). Talking to a friendly or townsperson opens their dialogue;
 // interacting with a quest object picks it up. Which panel is open is view
@@ -13,6 +14,7 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { D97_COLLECTION } from "../../../content/d97/collection";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
+import { D97_SLICE_DREAM } from "../../../content/d97/dreams";
 import { DEV_KNIGHT } from "../../../content/d97/characters/development";
 import {
   D97_ACT_CHALLENGER_TIERS,
@@ -41,6 +43,7 @@ import { buildD97OverworldHudView } from "./d97-overworld-view-model";
 import { useD97Encounter } from "./use-d97-encounter";
 import { buildD97QuestMarks } from "./d97-quest-view-model";
 import { D97QuestSurfacesAdapter } from "./D97QuestSurfacesAdapter";
+import { useD97Travel } from "./use-d97-travel";
 
 const OverworldCanvas = lazy(() =>
   import("../../../d97/overworld/OverworldCanvas").then((module) => ({
@@ -115,6 +118,7 @@ export function D97OverworldScreenAdapter({
     logEvent("d97_deck_editor_opened", { runId: run.runId });
     setPanel("deck");
   }, [run.runId]);
+  const travel = useD97Travel({ run, dream: D97_SLICE_DREAM, registry, actions });
   const encounter = useD97Encounter({ run, registry, actions, avatars: journeyContent.avatars, cardsById: cards, openDeckEditor });
   const deckView = useMemo(
     () => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize),
@@ -175,7 +179,9 @@ export function D97OverworldScreenAdapter({
             characterTunables={D97_CHARACTER_TUNABLES}
             occupants={occupants}
             playerCharacter={playerCharacter}
-            returnAnchorId={run.returnAnchorId}
+            arrival={travel.arrival}
+            veils={travel.veils}
+            activeWaypointIds={travel.activeWaypointIds}
             inputEnabled={panel === null && !encounter.open && run.quests.pendingReward === null}
             badges={marks.badges}
             hiddenAnchorIds={marks.hiddenAnchorIds}

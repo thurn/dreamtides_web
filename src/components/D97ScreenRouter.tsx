@@ -9,6 +9,7 @@ import { findD97QaScene } from "../runtime/qa-scene-entry";
 import { useActions, useConfirmedHead, useGameState } from "../session/hooks";
 import { D97AvatarSelectScreenAdapter } from "../screens/cumulus_adapters/d97/D97AvatarSelectScreenAdapter";
 import { D97OverworldScreenAdapter } from "../screens/cumulus_adapters/d97/D97OverworldScreenAdapter";
+import { D97SliceEndScreenAdapter } from "../screens/cumulus_adapters/d97/D97SliceEndScreenAdapter";
 import type { QaSceneId } from "../types/identifiers";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
@@ -71,6 +72,8 @@ export function D97ScreenRouter({
         journeyContent={journeyContent}
         initialDeckEditorOpen={opensDeckEditor}
       />
+    ) : d97.screen.type === "sliceEnd" && d97.run !== null ? (
+      <D97SliceEndScreenAdapter run={d97.run} avatars={journeyContent.avatars} />
     ) : (
       <D97AvatarSelectScreenAdapter journeyContent={journeyContent} />
     );

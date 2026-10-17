@@ -19,7 +19,7 @@ export type LocalGameRequest =
 
 /** Where a switch was invoked, for logs. */
 export interface GameSwitchSource {
-  readonly source: "main_menu";
+  readonly source: "main_menu" | "d97_slice_end";
 }
 
 export interface GameSwitchControls {

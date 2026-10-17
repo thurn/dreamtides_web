@@ -347,6 +347,8 @@ export interface EventPayloads {
   D97_SET_FLAG: { flagId: D97FlagId; value: boolean; anchorId: DreamAnchorId };
   D97_OPEN_SHOP: { anchorId: DreamAnchorId };
   D97_OPEN_SERVICE: { anchorId: DreamAnchorId; service: D97ServiceKind };
+  D97_ACTIVATE_WAYPOINT: { anchorId: DreamAnchorId };
+  D97_STEP_THROUGH_DOOR: { anchorId: DreamAnchorId };
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -534,6 +536,8 @@ const EVENT_INTENT_CLASSES = {
   D97_SET_FLAG: "gameplay",
   D97_OPEN_SHOP: "gameplay",
   D97_OPEN_SERVICE: "gameplay",
+  D97_ACTIVATE_WAYPOINT: "gameplay",
+  D97_STEP_THROUGH_DOOR: "gameplay",
 } as const satisfies Record<GameEventType, EventIntentClass>;
 
 /** Event types for which journey modifiers never run. */
@@ -693,6 +697,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   D97_SET_FLAG: true,
   D97_OPEN_SHOP: true,
   D97_OPEN_SERVICE: true,
+  D97_ACTIVATE_WAYPOINT: true,
+  D97_STEP_THROUGH_DOOR: true,
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.

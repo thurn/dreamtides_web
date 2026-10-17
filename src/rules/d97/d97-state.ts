@@ -26,7 +26,18 @@ import type {
 /** The D97 screen the run currently shows. */
 export type D97Screen =
   | { readonly type: "avatarSelect" }
-  | { readonly type: "overworld" };
+  | { readonly type: "overworld" }
+  /** The end of the M1 slice, reached through the exit door. */
+  | { readonly type: "sliceEnd" };
+
+/**
+ * The last door the player stepped through or waypoint they used, whichever
+ * was later (Appendix B §B17): a reload places the player there.
+ */
+export interface D97Place {
+  readonly kind: "door" | "waypoint";
+  readonly anchorId: DreamAnchorId;
+}
 
 /**
  * A challenger or guardian encounter, fixed when it is first previewed
@@ -85,12 +96,19 @@ export interface D97Run {
   readonly bag: D97RewardBag;
   /** Every previewed encounter, by anchor. */
   readonly encounters: Readonly<Partial<Record<DreamAnchorId, D97Encounter>>>;
-  /** The anchor the player returns beside after its battle, if any. */
+  /**
+   * The anchor the player returns beside after its battle, until they next
+   * use a door or waypoint.
+   */
   readonly returnAnchorId: DreamAnchorId | null;
   /** The held quest, finished quests, a pending reward and quest items. */
   readonly quests: D97QuestState;
   /** Story flags dialogue has set, in the order they were set. */
   readonly flags: readonly D97FlagId[];
+  /** Activated waypoints, in activation order. */
+  readonly activeWaypointIds: readonly DreamAnchorId[];
+  /** Where a reload places the player; null before any door or waypoint use. */
+  readonly lastPlace: D97Place | null;
 }
 
 /**
