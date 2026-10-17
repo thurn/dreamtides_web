@@ -1,0 +1,429 @@
+{
+  "bead": "hv-umm2.792",
+  "base": "b038b979731626b9113a03b838eacab37699f243",
+  "kind": "D19 public QA contracts with one native rejection and one shared native lifecycle tail",
+  "ownStart": "2026-10-17T09:04:52.011425+00:00",
+  "measurementScope": "Own actual start before brief read; end is pre-final-schema evidence cutoff, exact later Git end retained externally.",
+  "targetChosenBeforeEdits": {
+    "time": "2026-10-17T09:05:33.439660+00:00",
+    "targetMetric": "review wrapper test-stage wall seconds",
+    "minimumImprovementPercent": 10,
+    "sameCommandFilters": [
+      "scripts/qa/run-scenario-ownership.test.mjs",
+      "scripts/qa/run-scenario-slots.test.mjs",
+      "scripts/qa/provider-identity.test.mjs"
+    ],
+    "baselineNewParserFileAbsent": true,
+    "workers": 2,
+    "baselineSource": "b038b979731626b9113a03b838eacab37699f243",
+    "alsoRetained": [
+      "Vitest wall duration",
+      "external wall",
+      "descendant CPU",
+      "actual cumulative assertion duration",
+      "host load start/end"
+    ]
+  },
+  "matchedFocused": {
+    "baseline": {
+      "testStageS": 10.2,
+      "vitestDurationS": 9.46,
+      "assertionCumulativeMs": 18417.078877,
+      "tests": 44,
+      "files": 2,
+      "externalWallS": 15.879628916969523,
+      "descendantCpuS": 18.274637,
+      "loadStart": [
+        3.9697265625,
+        3.87451171875,
+        4.44580078125
+      ],
+      "loadEnd": [
+        4.29443359375,
+        3.9462890625,
+        4.46044921875
+      ],
+      "reportSHA256": "43deef65bec8b6691479062bb0ea704985a28c60e000699858a6a5352668d992",
+      "moduleCases": {
+        "run-scenario-ownership.test.mjs": 31,
+        "run-scenario-slots.test.mjs": 13
+      }
+    },
+    "focused": {
+      "testStageS": 7.6,
+      "vitestDurationS": 7.04,
+      "assertionCumulativeMs": 13524.700831999997,
+      "tests": 46,
+      "files": 3,
+      "externalWallS": 11.038709832995664,
+      "descendantCpuS": 14.221975,
+      "loadStart": [
+        3.8115234375,
+        3.8681640625,
+        4.41357421875
+      ],
+      "loadEnd": [
+        4.13427734375,
+        3.9375,
+        4.431640625
+      ],
+      "reportSHA256": "fca2bf5fc0d7e3dc052f0edca34d837dee660973981bb6b22bba6e7b7fe456d0",
+      "moduleCases": {
+        "run-scenario-ownership.test.mjs": 23,
+        "run-scenario-slots.test.mjs": 13,
+        "provider-identity.test.mjs": 10
+      }
+    },
+    "improvementPercent": 25.490196078431367
+  },
+  "validation": {
+    "commands": {
+      "baseline": {
+        "name": "baseline",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/qa/run-scenario-ownership.test.mjs",
+          "scripts/qa/run-scenario-slots.test.mjs",
+          "scripts/qa/provider-identity.test.mjs",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/baseline-vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-qa792",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/validation.runner.py",
+        "runnerSHA256": "5041f0493f3bfc4d161110002be982992977a8fbfdcb8ec3d9e812b5701f0488",
+        "inputsSHA256": "43dbfc78cf4650c862c1e3fd6db74f3ff04e75a06f8fd978321788e94c9f6c66",
+        "time": "2026-10-17T09:05:34.023576+00:00",
+        "load": [
+          3.9697265625,
+          3.87451171875,
+          4.44580078125
+        ],
+        "workers": "2",
+        "pid": 15874,
+        "pgid": 15874,
+        "actualExit": 0,
+        "end": "2026-10-17T09:05:49.903549+00:00",
+        "wallS": 15.879628916969523,
+        "childCpuS": 18.274637,
+        "loadEnd": [
+          4.29443359375,
+          3.9462890625,
+          4.46044921875
+        ],
+        "logSHA256": "617790efd0d7dfd5552e09d00032e4eeac6b2e34b5772c007200ed9e9a3d2885",
+        "runnerBytesUnchanged": true,
+        "originalToolId": 31769,
+        "originalTerminalChunk": "c070cc",
+        "actualTerminal": "actual0 collected original tool",
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/baseline.inputs.json": "43dbfc78cf4650c862c1e3fd6db74f3ff04e75a06f8fd978321788e94c9f6c66",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/baseline.launch.json": "8658354ddf9c2665875741ad1c53bba6af639b06866b8c9e388b88bb34c6a4b7",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/baseline.started.json": "d521cb24a88c82f949663f4b9ec2d544206b9d2e8c2a28eefc758851d7c71367",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/baseline.log": "617790efd0d7dfd5552e09d00032e4eeac6b2e34b5772c007200ed9e9a3d2885",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/baseline.receipt.json": "35d619055af28a026d9b7c817bc953f76196a8380b5d956d86eb8968836237b9"
+        }
+      },
+      "focused": {
+        "name": "focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/qa/run-scenario-ownership.test.mjs",
+          "scripts/qa/run-scenario-slots.test.mjs",
+          "scripts/qa/provider-identity.test.mjs",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/focused-vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-qa792",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/validation.runner.py",
+        "runnerSHA256": "5041f0493f3bfc4d161110002be982992977a8fbfdcb8ec3d9e812b5701f0488",
+        "inputsSHA256": "f04a98459230ac7688d209765b0ff01ab676466e75ea6e845a6fc55f25c31ec0",
+        "time": "2026-10-17T09:06:18.923514+00:00",
+        "load": [
+          3.8115234375,
+          3.8681640625,
+          4.41357421875
+        ],
+        "workers": "2",
+        "pid": 35939,
+        "pgid": 35939,
+        "actualExit": 0,
+        "end": "2026-10-17T09:06:29.962533+00:00",
+        "wallS": 11.038709832995664,
+        "childCpuS": 14.221975,
+        "loadEnd": [
+          4.13427734375,
+          3.9375,
+          4.431640625
+        ],
+        "logSHA256": "7843a90df37ec643660b4025280c4d4f01e7633bc02e3eec4feece9a8183808a",
+        "runnerBytesUnchanged": true,
+        "originalToolId": 2015,
+        "originalTerminalChunk": "2df621",
+        "actualTerminal": "actual0 collected original tool",
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/focused.inputs.json": "f04a98459230ac7688d209765b0ff01ab676466e75ea6e845a6fc55f25c31ec0",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/focused.launch.json": "40146c2e8603aaaf89e5f74006738e300bc69729c4556a753525b7cdfc7beb32",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/focused.started.json": "a5396073cd3f29ab9346bb1e40ca3f8d689c9b618842ad1bf3e945e0dc7de278",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/focused.log": "7843a90df37ec643660b4025280c4d4f01e7633bc02e3eec4feece9a8183808a",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/focused.receipt.json": "03003c32724d3b33a764850d22b34742f481ab94755bdd4d4bc4fdf81965fc83"
+        }
+      },
+      "review": {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-qa792",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/validation.runner.py",
+        "runnerSHA256": "5041f0493f3bfc4d161110002be982992977a8fbfdcb8ec3d9e812b5701f0488",
+        "inputsSHA256": "8caec81449866093d9249027dcde2a3039f1fd64ffcf15fc587706f8c56d727a",
+        "time": "2026-10-17T09:07:23.103004+00:00",
+        "load": [
+          3.8046875,
+          3.919921875,
+          4.39404296875
+        ],
+        "workers": "2",
+        "pid": 51606,
+        "pgid": 51606,
+        "actualExit": 0,
+        "end": "2026-10-17T09:07:43.198773+00:00",
+        "wallS": 20.095299582986627,
+        "childCpuS": 63.000098,
+        "loadEnd": [
+          4.38671875,
+          4.0517578125,
+          4.4296875
+        ],
+        "logSHA256": "0f3b653a08911eb0ba0e6b236fe06b23c653d49e1994d0d070e75777227754ef",
+        "runnerBytesUnchanged": true,
+        "originalToolId": 92162,
+        "originalTerminalChunk": "c2d603",
+        "actualTerminal": "actual0 collected original tool",
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/review.inputs.json": "8caec81449866093d9249027dcde2a3039f1fd64ffcf15fc587706f8c56d727a",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/review.launch.json": "3395a3f4cacf4d43e0b6712a2a591711e30cfb5a89cd25f6e23b5d8d25e94788",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/review.started.json": "e701dab2e231c2ae70abe0ad9d2b2c1d0ba2f21ca1cbee3cb3b2b3f202c92f8d",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/review.log": "0f3b653a08911eb0ba0e6b236fe06b23c653d49e1994d0d070e75777227754ef",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/review.receipt.json": "35ad8fa92948c653ce92446775d7bba9cc895d6379a55f014ccb518d869d6e48"
+        }
+      },
+      "knip": {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-qa792",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/validation.runner.py",
+        "runnerSHA256": "5041f0493f3bfc4d161110002be982992977a8fbfdcb8ec3d9e812b5701f0488",
+        "inputsSHA256": "8caec81449866093d9249027dcde2a3039f1fd64ffcf15fc587706f8c56d727a",
+        "time": "2026-10-17T09:07:51.829299+00:00",
+        "load": [
+          4.35546875,
+          4.05078125,
+          4.4267578125
+        ],
+        "workers": "2",
+        "pid": 66486,
+        "pgid": 66486,
+        "actualExit": 0,
+        "end": "2026-10-17T09:07:57.156094+00:00",
+        "wallS": 5.326378250028938,
+        "childCpuS": 6.140966000000001,
+        "loadEnd": [
+          4.32666015625,
+          4.0498046875,
+          4.423828125
+        ],
+        "logSHA256": "9a6bb960d3b9c463bce346d761c2d59a2569cddca876e8f0468dea43b41299c8",
+        "runnerBytesUnchanged": true,
+        "originalToolId": 9875,
+        "originalTerminalChunk": "2cdfda",
+        "actualTerminal": "actual0 collected original tool",
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/knip.inputs.json": "8caec81449866093d9249027dcde2a3039f1fd64ffcf15fc587706f8c56d727a",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/knip.launch.json": "b96f94fa34c4a65dcb0b0168b551dcd44c162423c3e713d22200834057d86503",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/knip.started.json": "572c58b171fd5a77e0e661bcb35d29f7c0406563ec747dd9ec727e65e8c2d954",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/knip.log": "9a6bb960d3b9c463bce346d761c2d59a2569cddca876e8f0468dea43b41299c8",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/knip.receipt.json": "1c6af1b0cc57d8e69ad04b9ece50907c3df984a7c1010597b1cf4c0c11a5ccef"
+        }
+      }
+    },
+    "failures": [],
+    "reviewScope": "All3 changed modules /46cases passed; diff-aware import-cycle/typecheck/lint/typecheck-node/schema and related tests actual0. This changes test bodies, not infrastructure.",
+    "requiredReviewKnipSchema": "review and Knip actual0 collected; final exactschema executes after this final evidence cutoff and its inputmanifest/terminal retained externally as schema.*."
+  },
+  "sourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/source-proof.json",
+  "runnerFreeze": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/validation.runner.frozen.json",
+  "testDelta": {
+    "files": 1,
+    "lines": 20,
+    "jsdomFiles": 0,
+    "expandedCases": 2,
+    "nativeIntegrationCases": -8,
+    "cheapPublicParserCases": 10
+  },
+  "coveragePreservation": {
+    "metadata": {
+      "oldNineRows": [
+        "sessionId undefined",
+        "sessionId empty",
+        "sessionId space",
+        "sessionId newline",
+        "protocolVersion undefined",
+        "protocolVersion malformed",
+        "url file scheme",
+        "url credentials",
+        "url fragment"
+      ],
+      "retainedEach": "provider-identity.test.mjs negotiated provider identity/rejects unsupported metadata",
+      "fullIntegration": "ownership rejects unsupported metadata before browser tools; newline representative; retains all existing no-call/no-close/disconnect-once/unconfirmed/no-completed/slot-free/children-gone assertions",
+      "positive": "parser accepts synthetic2031-02-03 date-form version; existing valid full-session tests remain unchanged",
+      "publication": "both rename and directory-sync full integrations exact unchanged"
+    },
+    "ports": {
+      "oldSixRows": [
+        5174,
+        5274,
+        5374,
+        65500,
+        5175,
+        5275
+      ],
+      "retainedEach": "every row keeps Promise.all two sessions, slots0/1, exact expectedports, distinct serverPIDs, sequential spawn-ready order, live actualservers, exact owner metadata, slot0 compatibility",
+      "sharedTail": "5174 row retains exact queued third-session observable/native lock, closes b, reuses its slot/ownerpath, fallback port outside a, unaffected live a; c close then occupied refusal before server or provider starts, freed slot; adds peer exactbytes/live lock assertions",
+      "whyFactorValid": "tail input uses assigned a.port and b.slot, not original requested value; all requestedFits/fallback branches remain in first two-session matrix"
+    },
+    "preservation": "Only exact first metadata family header/client fixture changed and requested-port family name/one guard/six assertion lines added; reverse-normalization reconstructs both old wholefiles byte-for-byte. All other cleanup/RPC uncertainty/record replacement/FIFO/crash/signal/descriptor bodies exact. Production, fixtures, harness, isolation, workers, catalogs, budgets unchanged.",
+    "sizeException": "slots501 lines vs495: cohesive existing concurrency/signal/ownership module gains6 explicit guard/queued/live-peer lines; no new fixture or unrelated contract merge."
+  },
+  "Sage257": {
+    "reportSHA256": "cf1d610fb095f9e4b3c0e485ecfc1a3ca541a4549a089043f9df880783b96666",
+    "covers": [
+      "hv-umm2.770",
+      "hv-umm2.771",
+      "hv-umm2.772",
+      "hv-umm2.773",
+      "hv-umm2.774",
+      "hv-umm2.775",
+      "hv-umm2.776",
+      "hv-umm2.777",
+      "hv-umm2.778",
+      "hv-umm2.779",
+      "hv-umm2.780",
+      "hv-umm2.781",
+      "hv-umm2.782",
+      "hv-umm2.783",
+      "hv-umm2.784",
+      "hv-umm2.785",
+      "hv-umm2.786",
+      "hv-umm2.787",
+      "hv-umm2.788",
+      "hv-umm2.789",
+      "hv-umm2.790",
+      "hv-umm2.791"
+    ],
+    "ledger": "one exact appended coverage line under actual792; prefix bytes/hash preserved",
+    "filedImprovements": [
+      "hv-umm2.792",
+      "hv-umm2.793",
+      "hv-umm2.794"
+    ],
+    "finalGateAudit": "Fresh final Sage with finalQA facts remains pending; this is completed prior bounded auditcoverage only."
+  },
+  "runtime": {
+    "workers": 2,
+    "heavy": false,
+    "browser": false,
+    "ports": "Only contained synthetic fixture ports; no host application/browser server",
+    "groupsProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/process-groups-precommit.json",
+    "groupsAbsent": [
+      15874,
+      35939,
+      51606,
+      66486
+    ]
+  },
+  "failurePaths": {
+    "newTransitions": [],
+    "errorMidStep": "Exact publication rename/directory-sync cases; terminal cleanup combined failures and single late failure bodies preserved",
+    "reloadRestart": "No runtime transition change; unchanged signal/crash/receipt suites and native lock authority remain",
+    "partialWrite": "Exact ownership publication and clear durability tests retained",
+    "invalidStale": "All nine parser refusal inputs; real invalid admission; exact owner-record replacement and semantic/transport uncertainty bodies retained",
+    "concurrentActors": "All six real dual sessions, one queued/native lifecycle and exact healthy-peer quarantine/evidence suites retained"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review wrapper start; os.getloadavg one-minute value (same kernel loadavg as sysctl)",
+        "source": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/review.receipt.json"
+      }
+    }
+  },
+  "D19": "Whole-suite<=60 at2workers remains unmet/unwaived. Local affected-metric reduction is measured, not whole-suite savings or finalQA/soak acceptance. Parent owns fresh core review and certification.",
+  "timingQualification": "One observed matched-filter before/after at comparableload and2workers. Baseline uses fresh-worktree/cache state; final follows baseline. This is not controlled causal A/B, estimated whole-suite savings, or a future guarantee. Same command filters/options except exclusive JSON output destination. No unchanged repeat was run to seek success.",
+  "sourceInputAudit": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-qa792/source-input-audit.json",
+  "lateEvidenceQualification": "All production/test/fixture/config/catalog/ledger bytes match successful focused/review/Knip inputs. Own four evidence files were added after focused; review and Knip saw their first revisions. Only own friction/measurements finalize after checks; final schema and Git input manifests bind all final evidence. Generated local assets are ignored and restored by successful checks; no generated outputs are committed.",
+  "hostLoadSamples": {
+    "baseline": {
+      "start": [
+        3.9697265625,
+        3.87451171875,
+        4.44580078125
+      ],
+      "end": [
+        4.29443359375,
+        3.9462890625,
+        4.46044921875
+      ]
+    },
+    "focused": {
+      "start": [
+        3.8115234375,
+        3.8681640625,
+        4.41357421875
+      ],
+      "end": [
+        4.13427734375,
+        3.9375,
+        4.431640625
+      ]
+    },
+    "review": {
+      "start": [
+        3.8046875,
+        3.919921875,
+        4.39404296875
+      ],
+      "end": [
+        4.38671875,
+        4.0517578125,
+        4.4296875
+      ]
+    },
+    "knip": {
+      "start": [
+        4.35546875,
+        4.05078125,
+        4.4267578125
+      ],
+      "end": [
+        4.32666015625,
+        4.0498046875,
+        4.423828125
+      ]
+    }
+  },
+  "evidenceCutoff": "2026-10-17T09:08:41.019513+00:00",
+  "implementWindowQualification": "Actual own-start timestamp is before initial brief read. Evidence cutoff precedes exact final schema/Git; true later commit end and elapsed tail retained externally, without backdating or claiming the cutoff is Git end."
+}

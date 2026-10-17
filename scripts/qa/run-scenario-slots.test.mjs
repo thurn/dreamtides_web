@@ -394,7 +394,7 @@ describe("concurrent QA sessions", () => {
     expect(existsSync(session.ownerPath)).toBe(uncertain);
     if (uncertain) expect(readFileSync(session.ownerPath, "utf8")).toContain("close-unconfirmed");
   });
-  it.each(/** @type {[number, [number, number]][]} */ ([[5174, [5174, 5274]], [5274, [5174, 5274]], [5374, [5174, 5274]], [65500, [5174, 5274]], [5175, [5175, 5274]], [5275, [5174, 5275]]]))("keeps requested port %s inside each held slot across queued reopening", async (requested, expected) => {
+  it.each(/** @type {[number, [number, number]][]} */ ([[5174, [5174, 5274]], [5274, [5174, 5274]], [5374, [5174, 5274]], [65500, [5174, 5274]], [5175, [5175, 5274]], [5275, [5174, 5275]]]))("keeps requested port %s inside each held slot", async (requested, expected) => {
     const { root, path } = primaryFixture();
     const connect = connectClients();
     const [a, b] = await Promise.all([open(root, "a", requested), open(root, "b", requested)]);
@@ -411,14 +411,20 @@ describe("concurrent QA sessions", () => {
     }
     // Only slot 0's record is the one single-slot peers read.
     expect([a, b].filter((session) => session.ownerPath === `${path}.owner.json`).map((session) => session.slot)).toEqual([0]);
+    // The 5174 row also owns the shared queued-reopen and occupied-port lifecycle.
+    if (requested !== 5174) return;
+    const livePeerRecord = readFileSync(a.ownerPath, "utf8");
     const third = open(root, "c", a.port);
     while (browserLeaseWaiters(path) === 0) await delay(20);
+    expect(browserLeaseWaiters(path)).toBeGreaterThan(0);
     await b.close();
     const c = await third;
     expect(c.slot).toBe(b.slot);
     expect(c.port).not.toBe(a.port);
     expect(c.ownerPath).toBe(b.ownerPath);
     expect(c.port).toBe(5174 + c.slot * 100); expect(serverRunning(a.serverPid)).toBe(true);
+    expect(readFileSync(a.ownerPath, "utf8")).toBe(livePeerRecord);
+    expect(lockHeld(browserSlotPath(path, a.slot))).toBe(true);
     await c.close(); const spawned = fixtureIo.servers.length; const connected = connect.mock.calls.length;
     fixtureIo.occupied = c.port;
     await expect(open(root, "occupied", c.port)).rejects.toThrow(/is in use/);
