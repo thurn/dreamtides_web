@@ -7,6 +7,7 @@ import { logEvent } from "../../logging";
 import { assetUrl } from "../../runtime/asset-url";
 import type { CompiledDreamMap, CompiledTileset } from "../map/compiled";
 import { gidWithoutFlags } from "../map/tiled";
+import { tileFrames } from "./tile-frames";
 
 /** Gid (without flags) to texture lookup for one map. */
 export interface TileTextures {
@@ -31,13 +32,9 @@ async function linkedSources(): Promise<ReadonlySet<string>> {
 
 function frames(tileset: CompiledTileset, source: Texture): Map<number, Texture> {
   const out = new Map<number, Texture>();
-  const columns = Math.max(1, tileset.columns);
-  for (let local = 0; local < tileset.tileCount; local += 1) {
-    const x = tileset.margin + (local % columns) * (tileset.tileWidth + tileset.spacing);
-    const y = tileset.margin + Math.floor(local / columns) * (tileset.tileHeight + tileset.spacing);
-    if (x + tileset.tileWidth > source.width || y + tileset.tileHeight > source.height) continue;
+  for (const { gid, x, y } of tileFrames(tileset, source.width, source.height)) {
     out.set(
-      tileset.firstGid + local,
+      gid,
       new Texture({ source: source.source, frame: new Rectangle(x, y, tileset.tileWidth, tileset.tileHeight) }),
     );
   }
