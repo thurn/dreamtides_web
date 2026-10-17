@@ -1,0 +1,116 @@
+{
+  "at": "2026-10-17T17:58:40.119036+00:00",
+  "base": "7bd468f2d85676ce78eede18598b2074378462cb",
+  "targetSourceSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+  "sourceRollback": "EXACT",
+  "baseTrackedFileCount": 6383,
+  "onlyTrackedDiff": [
+    "docs/plan/evidence/introspection.jsonl"
+  ],
+  "finalProcessSnapshotSHA256": "86503014285edfe6a5199245cc131aea34fb61ad18f91ad0677638bc02dc947b",
+  "ownedPGs": [
+    "1799",
+    "28211",
+    "3561",
+    "38657",
+    "5454"
+  ],
+  "ownedPGsAliveAtFinal": [],
+  "ownedFixtureRootCount": 59,
+  "ownedRootProcessesAliveAtFinal": [],
+  "ledgerAppendLines": 1,
+  "prototypeOnlyAllowedBodiesVerified": true,
+  "baselinePrototypeInputDelta": [
+    "scripts/qa/run-scenario-slots.test.mjs"
+  ],
+  "commandProofs": {
+    "baseline": {
+      "actualExit": 0,
+      "pid": 28211,
+      "pgid": 28211,
+      "ownedProcessesObserved": 182,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 17.8,
+        "userS": 10.38,
+        "systemS": 5.64
+      },
+      "receiptSHA256": "e71f671056d0a4c6ea26791c40e244dac9322f541886801d481ede9ded63ec36",
+      "stdoutSHA256": "ed614fc875af2f2d1a60edd74a007ea4ef3a84361422e186d635b74468b3b01f",
+      "stderrSHA256": "41fbbce40be2bd2f8bdd6e13bfc29f9512412b16c54c450522feb10b6102a6dd",
+      "inputsSHA256": "b0017a849beeb99579c51a1140e52618ffab4c4c50ccdc1119aaf92adbcef2b4"
+    },
+    "prototype": {
+      "actualExit": 0,
+      "pid": 38657,
+      "pgid": 38657,
+      "ownedProcessesObserved": 152,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 23.58,
+        "userS": 9.22,
+        "systemS": 6.32
+      },
+      "receiptSHA256": "b402770536f6f2d174a188d1cca7ac24fd7a624a5c713a8650933bd348c3f47d",
+      "stdoutSHA256": "b27b3a765295d6ba348ade5d9c6dec0ef54f81c26ab161041ee83027102c8f93",
+      "stderrSHA256": "b6afbe849ba178f62efa0997e59dad7747c4d4c1fda1331bc4b6f87235c6c7b4",
+      "inputsSHA256": "40aa43aecd5bd695799f79ee3451a0bc5be9917791acd56326e67fc788bd6277"
+    },
+    "review": {
+      "actualExit": 0,
+      "pid": 1799,
+      "pgid": 1799,
+      "ownedProcessesObserved": 4,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 0.3,
+        "userS": 0.23,
+        "systemS": 0.15
+      },
+      "receiptSHA256": "76f5a30fbf78988eacda14564aed81398ab00d2582904cfbe1c2fc2058ab788f",
+      "stdoutSHA256": "177fb7f5ad426f98408247314cd95805e1be1ab326f12ed462e8d3b010a679fc",
+      "stderrSHA256": "14d64bf4da8c49ba04e457530d5b8d79ce3e14fa582d7e88373400555071a0a1",
+      "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+    },
+    "knip": {
+      "actualExit": 0,
+      "pid": 3561,
+      "pgid": 3561,
+      "ownedProcessesObserved": 9,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 10.03,
+        "userS": 6.77,
+        "systemS": 3.06
+      },
+      "receiptSHA256": "c64d58b97aeb7fc518456c62d5922cc836a0a4cbc7aa95b454d97bb1efe8d1c1",
+      "stdoutSHA256": "697e63932f8b29fa7ddd68b134f25b89dfe07e492aa1f5395455a67fcf15e377",
+      "stderrSHA256": "20f9a6269d8d906e6f128706b4d27e4af3eac13457ad9f848a7ad857e896b8f1",
+      "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+    },
+    "full": {
+      "actualExit": 0,
+      "pid": 5454,
+      "pgid": 5454,
+      "ownedProcessesObserved": 549,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 152.05,
+        "userS": 375.74,
+        "systemS": 35.35
+      },
+      "receiptSHA256": "99cc9858a8c84eab9acacf95f0d0d782901a2bcc488f3188238d81668b5ee79d",
+      "stdoutSHA256": "b3ca6459d6bbfcd64109f4cbf787595ebf93c932267a25fe27bad9183e85f8f4",
+      "stderrSHA256": "71bb159cb90bdf1f50fffe4a9968de840ca7e5ea7f10073b606cd734f6416626",
+      "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+    }
+  },
+  "sage270PreservedFull": {
+    "report.json": "22a744010eba7717d0340d7c173557aa2e446d9afabba934bbbe7bb243e64f28",
+    "proposals.json": "79471f0b779925a3ce16e527a95a17222821a4a75ac644bb87aa1606100b1ead",
+    "scope-coverage.json": "245de4eda7289faf852e5ef552088c39feaead73064d02f9cf060af7d384cae3"
+  },
+  "noCausalOrFullsuiteAcceptance": true,
+  "D19Unwaived": true,
+  "verificationScope": "Byte preservation, allowed prototype regions, native receipts, aggregate CPU and post-command process-group emptiness. Snapshot process monitoring is observational and not an independent proof against escaped foreign groups; unmodified test containment joins direct owned children and actual signal descendants."
+}

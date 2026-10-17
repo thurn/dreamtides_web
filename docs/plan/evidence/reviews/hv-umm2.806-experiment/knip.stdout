@@ -1,0 +1,46 @@
+
+> dreamtides-web@0.1.0 knip
+> node scripts/review.mjs knip
+
+
+[review] prepare
+[review] prepare started at 2026-10-17T17:55:38.550Z load=21.73974609375
+
+[prepare] local art
+Linked 0 of 564 card images
+Linked 0 avatar portraits and 0 cutouts of 32
+Linked 0 of 153 dreamsign images
+Linked 0 journey images
+Linked 0 of 521 Exploration images
+Linked Dream Atlas art
+Linked 0 of 14 D97 art sources
+Asset setup complete.
+
+[prepare] D97 maps
+Compiled 0 of 1 D97 maps
+
+[prepare] D97 characters
+Resolved 35 D97 character recipes; linked 0 sheets
+
+[prepare] typed Cumulus tokens
+Unchanged src/cumulus/primitives/tokens.ts
+Tokens: 192 unique (0 duplicate declarations deduped last-wins)
+
+[prepare] workspace materializations are current in .
+[review] prepare finished in 5.7s (exit 0)
+
+[review] knip
+[review] knip started at 2026-10-17T17:55:44.210Z load=21.78564453125
+[review] knip finished in 2.5s (exit 0)
+
+[review] restore-local-assets
+[review] restore-local-assets started at 2026-10-17T17:55:46.704Z load=21.78564453125
+Linked 564 of 564 card images
+Linked 32 avatar portraits and 32 cutouts of 32
+Linked 153 of 153 dreamsign images
+Linked 226 journey images
+Linked 521 of 521 Exploration images
+Linked Dream Atlas art
+Linked 14 of 14 D97 art sources
+Asset setup complete.
+[review] restore-local-assets finished in 1.7s (exit 0)

@@ -1,0 +1,21 @@
+{
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-qa-slots806",
+  "branch": "codex/d19-qa-slots806",
+  "base": "7bd468f2d85676ce78eede18598b2074378462cb",
+  "healthy": true,
+  "scopeByteIdenticalToSage270": true,
+  "scope": [
+    {
+      "path": "scripts/qa/run-scenario-slots.test.mjs",
+      "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410"
+    },
+    {
+      "path": "scripts/qa/run-scenario.mjs",
+      "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9"
+    },
+    {
+      "path": "scripts/qa/browser-qa-capacity.mjs",
+      "sha256": "03bd65b8bd55266a4b3737acc60b0a8a667210a488800b80b1a6c17ece4e8e58"
+    }
+  ]
+}

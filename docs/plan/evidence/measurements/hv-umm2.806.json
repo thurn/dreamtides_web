@@ -1,0 +1,440 @@
+{
+  "bead": "hv-umm2.806",
+  "base": "7bd468f2d85676ce78eede18598b2074378462cb",
+  "decision": "EXACT_SOURCE_ROLLBACK_NEGATIVE_RESULT",
+  "proposal": "D19-QA-SLOT-REDUNDANT-LIFECYCLES",
+  "dispatchActualInterval": {
+    "lower": "2026-10-17T17:51:02Z",
+    "upper": "2026-10-17T17:51:40Z",
+    "qualification": "Parent before/after clock bounds, neither endpoint is an exact dispatch event."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow.start": {
+        "qualification": "Schema scalar uses actual known lower bound of38s dispatch interval; no exact dispatch asserted; friction duration includes at most38s interval uncertainty."
+      },
+      "implementWindow.end": {
+        "qualification": "Precommit evidence cutoff, refreshed immediately before final local commit; actual commit bounds retained in external handoff."
+      },
+      "hostLoad": {
+        "measuredFor": "npm run review friction-records start2026-10-17T17:55:18.794Z; actual24.2900390625"
+      }
+    }
+  },
+  "nativeClaim": {
+    "before": "2026-10-17T17:48:26.500250+00:00",
+    "after": "2026-10-17T17:48:26.645770+00:00",
+    "nativeStartedAt": "2026-10-17T17:48:27Z",
+    "actor": "01a13046-4c66-7813-9606-9913f0743415",
+    "bead": "hv-umm2.806"
+  },
+  "experiment": {
+    "order": [
+      "baseline",
+      "prototype"
+    ],
+    "completeCommand": [
+      "npm",
+      "test",
+      "--",
+      "scripts/qa/run-scenario-slots.test.mjs"
+    ],
+    "JOURNEY_TEST_WORKERS": 2,
+    "nativeCommandWallSeconds": {
+      "baseline": 17.8,
+      "prototype": 23.58
+    },
+    "nativeCommandReductionPercent": -32.47191011235954,
+    "testStageWallSeconds": {
+      "baseline": 10.1,
+      "prototype": 9.6
+    },
+    "stageReductionPercent": 4.9504950495049505,
+    "wrapperWallSeconds": {
+      "baseline": 18.039991416968405,
+      "prototype": 23.72151629201835
+    },
+    "actualExits": [
+      0,
+      0
+    ],
+    "cases": [
+      13,
+      11
+    ],
+    "acceptance": ">=10% complete-command wall reduction required; not met. Source exact rollback. No repeats or alternate cuts.",
+    "cacheAndHost": "Fresh npm install preceded baseline; baseline precedes prototype. npm test executes native prepare, module collection/setup/environment and local-art restoration. Both had busy host load23\u201325 at wrapper launch with uncontrolled peer work. First/second cache and preparation state differ; not a randomized or causal comparison. Test-stage/native-wrapper rounding and0.2s sampled monitor overhead retained separately. No low-load/fullsuite forecast.",
+    "resetAndIsolation": "Unchanged vitest.config.ts and src/testing/setup-dom.ts; module retains isolated project, all beforeEach/afterEach and actual native boundaries."
+  },
+  "rollback": {
+    "at": "2026-10-17T17:54:07.380710+00:00",
+    "sourceRollback": "EXACT",
+    "base": "7bd468f2d85676ce78eede18598b2074378462cb",
+    "path": "scripts/qa/run-scenario-slots.test.mjs",
+    "baseAndFinalSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+    "prototypeSHA256": "2e0eb51909bfa7717ccd82725c0ac8000940d1222b8265e9faf7386db50e6aa3",
+    "prototypeDiffSHA256": "fc7c140e909ebb3470b3768d8602244c473e4bb710bc9f3038f05452c9c059eb",
+    "reason": "Whole-command observed reduction below10%; whole test stage below10% too. No repeat experiment or other cuts."
+  },
+  "sage": {
+    "artifacts": {
+      "report.json": "22a744010eba7717d0340d7c173557aa2e446d9afabba934bbbe7bb243e64f28",
+      "proposals.json": "79471f0b779925a3ce16e527a95a17222821a4a75ac644bb87aa1606100b1ead",
+      "scope-coverage.json": "245de4eda7289faf852e5ef552088c39feaead73064d02f9cf060af7d384cae3"
+    },
+    "source": "5fc16ab73eb3bd99a1d2842ee22751dccef8b57e",
+    "preservation": "FULL byte-identical original report/proposals/scope; all fields and entries retained",
+    "requiredInputs": 47,
+    "requiredSemanticLines": 12269,
+    "requiredReceipts": 148,
+    "additionalReceipts": 6,
+    "verifiedByteRanges": 154,
+    "readingQualification": "Report/proposals fully read. Scope inventory, limitations and structure read as provenance; exact154 byte ranges mechanically hash-verified. No new semantic review of12269 source lines or hash-only artifacts claimed. Initial combined tool output truncation recovered through compact inventory/limits; receipt fields verified mechanically.",
+    "interimOnly": true,
+    "finalPhase5RetrospectiveOwed": true,
+    "D19Unwaived": true
+  },
+  "inputComparison": {
+    "baselineFiles": 6385,
+    "prototypeFiles": 6385,
+    "changedInputs": [
+      "scripts/qa/run-scenario-slots.test.mjs"
+    ],
+    "qualification": "All tracked files plus dependency installation lock and Vitest/Vite entry/version files hashed. Disposable generated ignored outputs and complete node_modules closure are not claimed hash-covered; npm install and native prepare/restore output retained."
+  },
+  "commandReceipts": {
+    "baseline": {
+      "actualExit": 0,
+      "pid": 28211,
+      "pgid": 28211,
+      "ownedProcessesObserved": 182,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 17.8,
+        "userS": 10.38,
+        "systemS": 5.64
+      },
+      "receiptSHA256": "e71f671056d0a4c6ea26791c40e244dac9322f541886801d481ede9ded63ec36",
+      "stdoutSHA256": "ed614fc875af2f2d1a60edd74a007ea4ef3a84361422e186d635b74468b3b01f",
+      "stderrSHA256": "41fbbce40be2bd2f8bdd6e13bfc29f9512412b16c54c450522feb10b6102a6dd",
+      "inputsSHA256": "b0017a849beeb99579c51a1140e52618ffab4c4c50ccdc1119aaf92adbcef2b4"
+    },
+    "prototype": {
+      "actualExit": 0,
+      "pid": 38657,
+      "pgid": 38657,
+      "ownedProcessesObserved": 152,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 23.58,
+        "userS": 9.22,
+        "systemS": 6.32
+      },
+      "receiptSHA256": "b402770536f6f2d174a188d1cca7ac24fd7a624a5c713a8650933bd348c3f47d",
+      "stdoutSHA256": "b27b3a765295d6ba348ade5d9c6dec0ef54f81c26ab161041ee83027102c8f93",
+      "stderrSHA256": "b6afbe849ba178f62efa0997e59dad7747c4d4c1fda1331bc4b6f87235c6c7b4",
+      "inputsSHA256": "40aa43aecd5bd695799f79ee3451a0bc5be9917791acd56326e67fc788bd6277"
+    },
+    "review": {
+      "actualExit": 0,
+      "pid": 1799,
+      "pgid": 1799,
+      "ownedProcessesObserved": 4,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 0.3,
+        "userS": 0.23,
+        "systemS": 0.15
+      },
+      "receiptSHA256": "76f5a30fbf78988eacda14564aed81398ab00d2582904cfbe1c2fc2058ab788f",
+      "stdoutSHA256": "177fb7f5ad426f98408247314cd95805e1be1ab326f12ed462e8d3b010a679fc",
+      "stderrSHA256": "14d64bf4da8c49ba04e457530d5b8d79ce3e14fa582d7e88373400555071a0a1",
+      "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+    },
+    "knip": {
+      "actualExit": 0,
+      "pid": 3561,
+      "pgid": 3561,
+      "ownedProcessesObserved": 9,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 10.03,
+        "userS": 6.77,
+        "systemS": 3.06
+      },
+      "receiptSHA256": "c64d58b97aeb7fc518456c62d5922cc836a0a4cbc7aa95b454d97bb1efe8d1c1",
+      "stdoutSHA256": "697e63932f8b29fa7ddd68b134f25b89dfe07e492aa1f5395455a67fcf15e377",
+      "stderrSHA256": "20f9a6269d8d906e6f128706b4d27e4af3eac13457ad9f848a7ad857e896b8f1",
+      "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+    },
+    "full": {
+      "actualExit": 0,
+      "pid": 5454,
+      "pgid": 5454,
+      "ownedProcessesObserved": 549,
+      "ownedGroupAliveAfter": [],
+      "nativeTimeL": {
+        "realS": 152.05,
+        "userS": 375.74,
+        "systemS": 35.35
+      },
+      "receiptSHA256": "99cc9858a8c84eab9acacf95f0d0d782901a2bcc488f3188238d81668b5ee79d",
+      "stdoutSHA256": "b3ca6459d6bbfcd64109f4cbf787595ebf93c932267a25fe27bad9183e85f8f4",
+      "stderrSHA256": "71bb159cb90bdf1f50fffe4a9968de840ca7e5ea7f10073b606cd734f6416626",
+      "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+    }
+  },
+  "nativeTerminalHandles": {
+    "install": {
+      "session": 71224,
+      "initialChunk": "529518",
+      "terminalChunk": "2c8ca9",
+      "actualExit": 0,
+      "qualification": "npm install was first worktree command. Raw output held by native tool transcript, not redirected; observed3s install is npm output, no invented whole-command wall."
+    },
+    "baseline": {
+      "session": 44533,
+      "initialChunk": "53e728",
+      "terminalChunk": "7cef48"
+    },
+    "prototype": {
+      "session": 49229,
+      "initialChunk": "42031c",
+      "terminalChunk": "3765d2"
+    },
+    "review": {
+      "session": 21656,
+      "initialChunk": "e07e44",
+      "terminalChunk": "af13df"
+    },
+    "knip": {
+      "session": 58181,
+      "initialChunk": "5b1545",
+      "terminalChunk": "e73dd0"
+    },
+    "full": {
+      "session": 73436,
+      "initialChunk": "440be9",
+      "terminalChunk": "eeca96"
+    },
+    "final-schema": {
+      "initialAndTerminalChunk": "c6ccee",
+      "actualExit": 0
+    }
+  },
+  "phaseAcceptance": false,
+  "finalPhase5SageOwed": true,
+  "D19": {
+    "seconds": 60,
+    "workers": 2,
+    "lowLoadRequired": true,
+    "waived": false
+  },
+  "coldReview": "Parent after immutable local commit; not performed by implementer",
+  "browserQA": "Not applicable to evidence-only delivery and test pruning experiment; no player behavior change.",
+  "preservation": {
+    "at": "2026-10-17T17:58:40.119036+00:00",
+    "base": "7bd468f2d85676ce78eede18598b2074378462cb",
+    "targetSourceSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+    "sourceRollback": "EXACT",
+    "baseTrackedFileCount": 6383,
+    "onlyTrackedDiff": [
+      "docs/plan/evidence/introspection.jsonl"
+    ],
+    "finalProcessSnapshotSHA256": "86503014285edfe6a5199245cc131aea34fb61ad18f91ad0677638bc02dc947b",
+    "ownedPGs": [
+      "1799",
+      "28211",
+      "3561",
+      "38657",
+      "5454"
+    ],
+    "ownedPGsAliveAtFinal": [],
+    "ownedFixtureRootCount": 59,
+    "ownedRootProcessesAliveAtFinal": [],
+    "ledgerAppendLines": 1,
+    "prototypeOnlyAllowedBodiesVerified": true,
+    "baselinePrototypeInputDelta": [
+      "scripts/qa/run-scenario-slots.test.mjs"
+    ],
+    "commandProofs": {
+      "baseline": {
+        "actualExit": 0,
+        "pid": 28211,
+        "pgid": 28211,
+        "ownedProcessesObserved": 182,
+        "ownedGroupAliveAfter": [],
+        "nativeTimeL": {
+          "realS": 17.8,
+          "userS": 10.38,
+          "systemS": 5.64
+        },
+        "receiptSHA256": "e71f671056d0a4c6ea26791c40e244dac9322f541886801d481ede9ded63ec36",
+        "stdoutSHA256": "ed614fc875af2f2d1a60edd74a007ea4ef3a84361422e186d635b74468b3b01f",
+        "stderrSHA256": "41fbbce40be2bd2f8bdd6e13bfc29f9512412b16c54c450522feb10b6102a6dd",
+        "inputsSHA256": "b0017a849beeb99579c51a1140e52618ffab4c4c50ccdc1119aaf92adbcef2b4"
+      },
+      "prototype": {
+        "actualExit": 0,
+        "pid": 38657,
+        "pgid": 38657,
+        "ownedProcessesObserved": 152,
+        "ownedGroupAliveAfter": [],
+        "nativeTimeL": {
+          "realS": 23.58,
+          "userS": 9.22,
+          "systemS": 6.32
+        },
+        "receiptSHA256": "b402770536f6f2d174a188d1cca7ac24fd7a624a5c713a8650933bd348c3f47d",
+        "stdoutSHA256": "b27b3a765295d6ba348ade5d9c6dec0ef54f81c26ab161041ee83027102c8f93",
+        "stderrSHA256": "b6afbe849ba178f62efa0997e59dad7747c4d4c1fda1331bc4b6f87235c6c7b4",
+        "inputsSHA256": "40aa43aecd5bd695799f79ee3451a0bc5be9917791acd56326e67fc788bd6277"
+      },
+      "review": {
+        "actualExit": 0,
+        "pid": 1799,
+        "pgid": 1799,
+        "ownedProcessesObserved": 4,
+        "ownedGroupAliveAfter": [],
+        "nativeTimeL": {
+          "realS": 0.3,
+          "userS": 0.23,
+          "systemS": 0.15
+        },
+        "receiptSHA256": "76f5a30fbf78988eacda14564aed81398ab00d2582904cfbe1c2fc2058ab788f",
+        "stdoutSHA256": "177fb7f5ad426f98408247314cd95805e1be1ab326f12ed462e8d3b010a679fc",
+        "stderrSHA256": "14d64bf4da8c49ba04e457530d5b8d79ce3e14fa582d7e88373400555071a0a1",
+        "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+      },
+      "knip": {
+        "actualExit": 0,
+        "pid": 3561,
+        "pgid": 3561,
+        "ownedProcessesObserved": 9,
+        "ownedGroupAliveAfter": [],
+        "nativeTimeL": {
+          "realS": 10.03,
+          "userS": 6.77,
+          "systemS": 3.06
+        },
+        "receiptSHA256": "c64d58b97aeb7fc518456c62d5922cc836a0a4cbc7aa95b454d97bb1efe8d1c1",
+        "stdoutSHA256": "697e63932f8b29fa7ddd68b134f25b89dfe07e492aa1f5395455a67fcf15e377",
+        "stderrSHA256": "20f9a6269d8d906e6f128706b4d27e4af3eac13457ad9f848a7ad857e896b8f1",
+        "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+      },
+      "full": {
+        "actualExit": 0,
+        "pid": 5454,
+        "pgid": 5454,
+        "ownedProcessesObserved": 549,
+        "ownedGroupAliveAfter": [],
+        "nativeTimeL": {
+          "realS": 152.05,
+          "userS": 375.74,
+          "systemS": 35.35
+        },
+        "receiptSHA256": "99cc9858a8c84eab9acacf95f0d0d782901a2bcc488f3188238d81668b5ee79d",
+        "stdoutSHA256": "b3ca6459d6bbfcd64109f4cbf787595ebf93c932267a25fe27bad9183e85f8f4",
+        "stderrSHA256": "71bb159cb90bdf1f50fffe4a9968de840ca7e5ea7f10073b606cd734f6416626",
+        "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+      }
+    },
+    "sage270PreservedFull": {
+      "report.json": "22a744010eba7717d0340d7c173557aa2e446d9afabba934bbbe7bb243e64f28",
+      "proposals.json": "79471f0b779925a3ce16e527a95a17222821a4a75ac644bb87aa1606100b1ead",
+      "scope-coverage.json": "245de4eda7289faf852e5ef552088c39feaead73064d02f9cf060af7d384cae3"
+    },
+    "noCausalOrFullsuiteAcceptance": true,
+    "D19Unwaived": true,
+    "verificationScope": "Byte preservation, allowed prototype regions, native receipts, aggregate CPU and post-command process-group emptiness. Snapshot process monitoring is observational and not an independent proof against escaped foreign groups; unmodified test containment joins direct owned children and actual signal descendants."
+  },
+  "hostLoadSamples": {
+    "baseline": {
+      "wrapperStart": "{ 23.05 25.46 23.33 }",
+      "wrapperEnd": "{ 25.09 25.77 23.49 }"
+    },
+    "prototype": {
+      "wrapperStart": "{ 25.34 25.83 23.55 }",
+      "wrapperEnd": "{ 20.31 24.59 23.17 }"
+    },
+    "review": {
+      "wrapperStart": "{ 24.29 25.31 23.64 }",
+      "wrapperEnd": "{ 23.15 25.06 23.56 }"
+    },
+    "knip": {
+      "wrapperStart": "{ 21.74 24.66 23.44 }",
+      "wrapperEnd": "{ 21.79 24.57 23.42 }"
+    },
+    "full": {
+      "wrapperStart": "{ 21.53 24.38 23.37 }",
+      "wrapperEnd": "{ 14.31 20.78 22.11 }"
+    }
+  },
+  "measurementClockQualification": "Receipt start is a prelaunch clock observation preceding node/npm version queries; monotonic wrapper timer begins after those queries, includes Popen and process snapshots until exit. Native time-l real is the complete command wall used for the acceptance outcome; native user/sys exclude the monitor. Wrapper aggregateChild CPU also includes ps observer calls, so it is not used as command CPU. No endpoint represents an exact dispatch.",
+  "fullReviewObservation": {
+    "files": 490,
+    "cases": 12719,
+    "allPass": true,
+    "vitestSeconds": 95.07,
+    "testStageSeconds": 95.8,
+    "nativeWholeCommandSeconds": 152.05,
+    "monitoredWrapperSeconds": 152.2184072920354,
+    "workers": 2,
+    "testStageLoadStart": 20.73486328125,
+    "D19Acceptance": false,
+    "qualification": "Required full validation of current base after exact rollback, not a low-load budget acceptance or ordered source comparison with Sage270. Full review includes current repository tests, including the other stream, without claiming or changing any other-stream bead."
+  },
+  "prototypeObservationDeletionMap": [
+    {
+      "delete": "The 65500 row's real pair of startups",
+      "retained": "The 5374 row reaches requestedFits=false for slot 0 (range5174..5273) and slot1 (5274..5373), including slot1's exact excluded upper boundary. 5274 separately pins slot0's excluded upper boundary and slot1's included lower boundary; 5174 pins slot0's included lower boundary and slot1's below-range fallback. 5175/5275 retain each slot's accepted interior."
+    },
+    {
+      "delete": "A standalone second pair solely for same-label namespace isolation",
+      "retained": "One strengthened legacy-root/game-log scenario keeps distinct invocation/capture dirs, actual live child identities and intact owned server-log bytes, concurrent saved game-log paths, unchanged legacy-root .server.log/.result.json/.jsonl/.png bytes and distinct per-invocation outputs. The initial weak case has no unique provider failure or native ownership transition."
+    },
+    {
+      "delete": "No other observation",
+      "retained": "5174 queued reopen + occupied-port refusal + peer byte/lock liveness; uncertain-provider/server-settlement failures; native owned runner SIGTERM; quarantine peer isolation; foreign listener rejection; all per-file teardown and no surviving direct children."
+    }
+  ],
+  "deliveredObservationDeletionMap": "EXACT_SOURCE_ROLLBACK: zero final test/case/assertion deletions; original13-case module is byte-identical to base.",
+  "sourceAndCallerBinding": {
+    "targetBaseSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+    "prototypeSHA256": "2e0eb51909bfa7717ccd82725c0ac8000940d1222b8265e9faf7386db50e6aa3",
+    "callerSHA256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+    "capacitySHA256": "03bd65b8bd55266a4b3737acc60b0a8a667210a488800b80b1a6c17ece4e8e58",
+    "allProductionAndConfigByteIdenticalToBase": true
+  },
+  "evidenceCutoff": "2026-10-17T17:59:56.184111+00:00",
+  "finalSchema": {
+    "name": "final-schema",
+    "command": [
+      "node",
+      "scripts/friction-triggers.mjs",
+      "--validate-records"
+    ],
+    "start": "2026-10-17T17:59:11.334334+00:00",
+    "end": "2026-10-17T17:59:11.744046+00:00",
+    "wallSeconds": 0.24083616700954735,
+    "actualExit": 0,
+    "pid": 44811,
+    "pgid": 44811,
+    "loadStart": "{ 16.17 20.42 21.91 }",
+    "loadEnd": "{ 16.17 20.42 21.91 }",
+    "aggregateChildUserS": 0.07243800000000002,
+    "aggregateChildSystemS": 0.048060000000000005,
+    "samplingQualification": "0.2s process snapshots are observational; native time-l raw stderr carries command resource totals. Snapshot calls add wall overhead. No timing assertion in CI.",
+    "samples": 1,
+    "ownedGroupAliveAfter": [],
+    "stdoutSHA256": "b85f2533f92aef4d5170bf379bc907b2d8dd57942fe826bb93ff3982e2646c62",
+    "stderrSHA256": "9d9a421537c75133e6588f10309d5b8187527d189a487ce92dc010fdc6edb537",
+    "inputsSHA256": "ab8beef3a473a1df7a709ff1d846c9d2831e6083e609ceac511e6bef4ffa3b1c"
+  },
+  "prototypeDiffEncoding": {
+    "path": "docs/plan/evidence/reviews/hv-umm2.806-experiment/prototype.diff.json",
+    "field": "utf8RawDiff",
+    "rawSHA256": "fc7c140e909ebb3470b3768d8602244c473e4bb710bc9f3038f05452c9c059eb",
+    "qualification": "Exact raw prototype git diff encoded as a JSON string to preserve whitespace-bearing context records without adding trailing whitespace to evidence source. Decode utf8RawDiff for literal diff; original bytes remain externally in scratch/prototype.diff."
+  }
+}

@@ -84,3 +84,4 @@
 {"retrospective":"2026-10-17","phase":5,"bead":"hv-umm2.799","covers":["hv-umm2.797","hv-umm2.798"]}
 {"retrospective":"2026-10-17","phase":5,"bead":"hv-umm2.800","covers":["hv-umm2.799"]}
 {"retrospective":"2026-10-17","phase":5,"bead":"hv-umm2.802","covers":["hv-umm2.800","hv-umm2.801"]}
+{"tag":"d19-qa-slot-redundant-lifecycles","phase":5,"reason":"hv-umm2.806: Sage270 D19-QA-SLOT-REDUNDANT-LIFECYCLES prototype failed the required >=10% complete-command gain (17.80s baseline,23.58s changed); exact source rollback. Full interim report/proposals/coverage and single ordered raw experiment retained. D19 and final Phase5 retrospective remain unwaived."}

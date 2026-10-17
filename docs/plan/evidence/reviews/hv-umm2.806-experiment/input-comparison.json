@@ -1,0 +1,8 @@
+{
+  "baselineFiles": 6385,
+  "prototypeFiles": 6385,
+  "changedInputs": [
+    "scripts/qa/run-scenario-slots.test.mjs"
+  ],
+  "qualification": "All tracked files plus dependency installation lock and Vitest/Vite entry/version files hashed. Disposable generated ignored outputs and complete node_modules closure are not claimed hash-covered; npm install and native prepare/restore output retained."
+}

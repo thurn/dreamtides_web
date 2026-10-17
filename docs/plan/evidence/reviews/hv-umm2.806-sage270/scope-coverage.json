@@ -1,0 +1,4202 @@
+{
+  "status": "COMPLETE_REQUIRED_SCOPE",
+  "source": "5fc16ab73eb3bd99a1d2842ee22751dccef8b57e",
+  "packet": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/packet.json",
+    "sha256": "878291c2a7b68528ed47558499381ffb4ca8547807c6e4651c454419e04e2c6a"
+  },
+  "supplement": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/supplement-primitives-v2.json",
+    "sha256": "94a941ee8e3f8ed8c47c0943e0cf06a101ca85acd449692d588e07f2fe11b1a3"
+  },
+  "requiredInputCount": 47,
+  "requiredSemanticLines": 12269,
+  "requiredReadCalls": 148,
+  "allRequiredHashesMatch": true,
+  "maxSemanticChunkBytes": 6500,
+  "required": [
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/AGENTS.md",
+      "expectedSHA256": "8b7c0708b3b03fd46232be642030ec6c1b1eefabb55f2fcaad98e543bd9ec1cc",
+      "actualSHA256": "8b7c0708b3b03fd46232be642030ec6c1b1eefabb55f2fcaad98e543bd9ec1cc",
+      "requiredLineRanges": [
+        [
+          1,
+          166
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          105
+        ],
+        [
+          106,
+          166
+        ]
+      ],
+      "requiredLines": 166,
+      "consumedRequiredLines": 166,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/AGENTS.md",
+          "sha256": "8b7c0708b3b03fd46232be642030ec6c1b1eefabb55f2fcaad98e543bd9ec1cc",
+          "expectedSha256": "8b7c0708b3b03fd46232be642030ec6c1b1eefabb55f2fcaad98e543bd9ec1cc",
+          "start": 1,
+          "end": 105,
+          "chunkIndex": 0,
+          "totalChunks": 148,
+          "toolChunkId": "c36975",
+          "marker": "sage270-required-0",
+          "kind": "semantic-body",
+          "consumedBytes": 6439,
+          "consumedSHA256": "ee3ee16f120929b33ef00ac71f7c4b0bfe27765505b3f4548c1a9b71fa7dec58",
+          "byteStart": 0,
+          "byteEnd": 6439
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/AGENTS.md",
+          "sha256": "8b7c0708b3b03fd46232be642030ec6c1b1eefabb55f2fcaad98e543bd9ec1cc",
+          "expectedSha256": "8b7c0708b3b03fd46232be642030ec6c1b1eefabb55f2fcaad98e543bd9ec1cc",
+          "start": 106,
+          "end": 166,
+          "chunkIndex": 1,
+          "totalChunks": 148,
+          "toolChunkId": "f1bbaa",
+          "marker": "sage270-required-1",
+          "kind": "semantic-body",
+          "consumedBytes": 2885,
+          "consumedSHA256": "a5d67b707f91b9d75600201da060dd5af8fa883ae885d70d2d11579b6f6c5829",
+          "byteStart": 6439,
+          "byteEnd": 9324
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/README.md",
+      "expectedSHA256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+      "actualSHA256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+      "requiredLineRanges": [
+        [
+          1,
+          334
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          115
+        ],
+        [
+          116,
+          225
+        ],
+        [
+          226,
+          334
+        ]
+      ],
+      "requiredLines": 334,
+      "consumedRequiredLines": 334,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/README.md",
+          "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "expectedSha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "start": 1,
+          "end": 115,
+          "chunkIndex": 2,
+          "totalChunks": 148,
+          "toolChunkId": "3664b1",
+          "marker": "sage270-required-2",
+          "kind": "semantic-body",
+          "consumedBytes": 6265,
+          "consumedSHA256": "e52fd5816f81ef1e3e9207a25a8c32e986f28a9a2523e35083b00202bcfd8109",
+          "byteStart": 0,
+          "byteEnd": 6265
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/README.md",
+          "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "expectedSha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "start": 116,
+          "end": 225,
+          "chunkIndex": 3,
+          "totalChunks": 148,
+          "toolChunkId": "62c862",
+          "marker": "sage270-required-3",
+          "kind": "semantic-body",
+          "consumedBytes": 6486,
+          "consumedSHA256": "0b0b1a8c71c6bd2757da2d15bcf05d421ad9901ca19c1f86c69dd1333cf3c2d8",
+          "byteStart": 6265,
+          "byteEnd": 12751
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/README.md",
+          "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "expectedSha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "start": 226,
+          "end": 334,
+          "chunkIndex": 4,
+          "totalChunks": 148,
+          "toolChunkId": "6d38ac",
+          "marker": "sage270-required-4",
+          "kind": "semantic-body",
+          "consumedBytes": 6031,
+          "consumedSHA256": "f3edecc7482b8c3c0c464f62020cfbb1702c014d5aaf08e0c7ecd48aacb7a948",
+          "byteStart": 12751,
+          "byteEnd": 18782
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/decisions.md",
+      "expectedSHA256": "9670d899fed3b8c37da95178ae80f96c7986219b5e1b616b732e803ec68b6bfa",
+      "actualSHA256": "9670d899fed3b8c37da95178ae80f96c7986219b5e1b616b732e803ec68b6bfa",
+      "requiredLineRanges": [
+        [
+          525,
+          570
+        ],
+        [
+          767,
+          815
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          525,
+          570
+        ],
+        [
+          767,
+          815
+        ]
+      ],
+      "requiredLines": 95,
+      "consumedRequiredLines": 95,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/decisions.md",
+          "sha256": "9670d899fed3b8c37da95178ae80f96c7986219b5e1b616b732e803ec68b6bfa",
+          "expectedSha256": "9670d899fed3b8c37da95178ae80f96c7986219b5e1b616b732e803ec68b6bfa",
+          "start": 525,
+          "end": 570,
+          "chunkIndex": 5,
+          "totalChunks": 148,
+          "toolChunkId": "36931f",
+          "marker": "sage270-required-5",
+          "kind": "semantic-body",
+          "consumedBytes": 2646,
+          "consumedSHA256": "aadc4f43c3229915ed6b67569cba0d0e9459b7abbaf18f681efb4b847680d789",
+          "byteStart": 21216,
+          "byteEnd": 23862
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/decisions.md",
+          "sha256": "9670d899fed3b8c37da95178ae80f96c7986219b5e1b616b732e803ec68b6bfa",
+          "expectedSha256": "9670d899fed3b8c37da95178ae80f96c7986219b5e1b616b732e803ec68b6bfa",
+          "start": 767,
+          "end": 815,
+          "chunkIndex": 6,
+          "totalChunks": 148,
+          "toolChunkId": "8f3ebc",
+          "marker": "sage270-required-6",
+          "kind": "semantic-body",
+          "consumedBytes": 2213,
+          "consumedSHA256": "f35dec0452cc37653420e7e836a9ff7d33b62c36f9ed6b63902dd47ed28555b5",
+          "byteStart": 34124,
+          "byteEnd": 36337
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/workflow.md",
+      "expectedSHA256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+      "actualSHA256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+      "requiredLineRanges": [
+        [
+          1145,
+          1243
+        ],
+        [
+          1377,
+          1475
+        ],
+        [
+          1860,
+          1907
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1145,
+          1243
+        ],
+        [
+          1377,
+          1475
+        ],
+        [
+          1860,
+          1907
+        ]
+      ],
+      "requiredLines": 246,
+      "consumedRequiredLines": 246,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/workflow.md",
+          "sha256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+          "expectedSha256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+          "start": 1145,
+          "end": 1243,
+          "chunkIndex": 7,
+          "totalChunks": 148,
+          "toolChunkId": "f5b431",
+          "marker": "sage270-required-7",
+          "kind": "semantic-body",
+          "consumedBytes": 5339,
+          "consumedSHA256": "4ba009eceb9c24a33db00ca085700d109ff058415df8863a29216f1df6fed2b2",
+          "byteStart": 59987,
+          "byteEnd": 65326
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/workflow.md",
+          "sha256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+          "expectedSha256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+          "start": 1377,
+          "end": 1475,
+          "chunkIndex": 8,
+          "totalChunks": 148,
+          "toolChunkId": "5bf3f7",
+          "marker": "sage270-required-8",
+          "kind": "semantic-body",
+          "consumedBytes": 4944,
+          "consumedSHA256": "9f0bd97d6d035f3209b1d24109b74c6840450e06036e130000740a10a544f70d",
+          "byteStart": 73205,
+          "byteEnd": 78149
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/workflow.md",
+          "sha256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+          "expectedSha256": "f48ae46a7c6264e7736c4c73c460fc36e740505a270897735dc01d7f3c66f503",
+          "start": 1860,
+          "end": 1907,
+          "chunkIndex": 9,
+          "totalChunks": 148,
+          "toolChunkId": "b3daec",
+          "marker": "sage270-required-9",
+          "kind": "semantic-body",
+          "consumedBytes": 2720,
+          "consumedSHA256": "c64b263cb001e23ddca97b6c1eff52b9e36b0ebef4d50af1709c8f34c19d08cd",
+          "byteStart": 99653,
+          "byteEnd": 102373
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/phase-5-content.md",
+      "expectedSHA256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+      "actualSHA256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+      "requiredLineRanges": [
+        [
+          619,
+          646
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          619,
+          646
+        ]
+      ],
+      "requiredLines": 28,
+      "consumedRequiredLines": 28,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/docs/plan/phase-5-content.md",
+          "sha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "expectedSha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "start": 619,
+          "end": 646,
+          "chunkIndex": 10,
+          "totalChunks": 148,
+          "toolChunkId": "48dd23",
+          "marker": "sage270-required-10",
+          "kind": "semantic-body",
+          "consumedBytes": 1315,
+          "consumedSHA256": "5928e20b2b4b2194bc2761268c4ca7321a5306d4093abdc1d4000632fcf42a40",
+          "byteStart": 34412,
+          "byteEnd": 35727
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/vitest.config.ts",
+      "expectedSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+      "actualSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+      "requiredLineRanges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "requiredLines": 115,
+      "consumedRequiredLines": 115,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/vitest.config.ts",
+          "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "expectedSha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "start": 1,
+          "end": 115,
+          "chunkIndex": 11,
+          "totalChunks": 148,
+          "toolChunkId": "a5c0e6",
+          "marker": "sage270-required-11",
+          "kind": "semantic-body",
+          "consumedBytes": 3911,
+          "consumedSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "byteStart": 0,
+          "byteEnd": 3911
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/testing/setup-dom.ts",
+      "expectedSHA256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+      "actualSHA256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+      "requiredLineRanges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "requiredLines": 48,
+      "consumedRequiredLines": 48,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/testing/setup-dom.ts",
+          "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "expectedSha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "start": 1,
+          "end": 48,
+          "chunkIndex": 12,
+          "totalChunks": 148,
+          "toolChunkId": "b152fb",
+          "marker": "sage270-required-12",
+          "kind": "semantic-body",
+          "consumedBytes": 1710,
+          "consumedSHA256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "byteStart": 0,
+          "byteEnd": 1710
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/review.mjs",
+      "expectedSHA256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+      "actualSHA256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+      "requiredLineRanges": [
+        [
+          1,
+          592
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          266
+        ],
+        [
+          267,
+          479
+        ],
+        [
+          480,
+          592
+        ]
+      ],
+      "requiredLines": 592,
+      "consumedRequiredLines": 592,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/review.mjs",
+          "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "expectedSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "start": 1,
+          "end": 266,
+          "chunkIndex": 13,
+          "totalChunks": 148,
+          "toolChunkId": "a0cfae",
+          "marker": "sage270-required-13",
+          "kind": "semantic-body",
+          "consumedBytes": 6489,
+          "consumedSHA256": "a829c305a2474a971c3286e0213d639df483f679f0a061cb1d822ff5eeb9fbc8",
+          "byteStart": 0,
+          "byteEnd": 6489
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/review.mjs",
+          "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "expectedSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "start": 267,
+          "end": 479,
+          "chunkIndex": 14,
+          "totalChunks": 148,
+          "toolChunkId": "66315b",
+          "marker": "sage270-required-14",
+          "kind": "semantic-body",
+          "consumedBytes": 6479,
+          "consumedSHA256": "01062759fd51b816001892103814ee0cc5cfaef2c8bbbc71c833b2caa02ff5ae",
+          "byteStart": 6489,
+          "byteEnd": 12968
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/review.mjs",
+          "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "expectedSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "start": 480,
+          "end": 592,
+          "chunkIndex": 15,
+          "totalChunks": 148,
+          "toolChunkId": "9470ac",
+          "marker": "sage270-required-15",
+          "kind": "semantic-body",
+          "consumedBytes": 3086,
+          "consumedSHA256": "5973f4a3b8333bb826a0b3c1eed3aeebf354294720dd0607fb1116c299aeb8b5",
+          "byteStart": 12968,
+          "byteEnd": 16054
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/package.json",
+      "expectedSHA256": "ae703e9ab86e70a541b0830888a2a296d558b642b64b09895621476a949eef4b",
+      "actualSHA256": "ae703e9ab86e70a541b0830888a2a296d558b642b64b09895621476a949eef4b",
+      "requiredLineRanges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "requiredLines": 64,
+      "consumedRequiredLines": 64,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/package.json",
+          "sha256": "ae703e9ab86e70a541b0830888a2a296d558b642b64b09895621476a949eef4b",
+          "expectedSha256": "ae703e9ab86e70a541b0830888a2a296d558b642b64b09895621476a949eef4b",
+          "start": 1,
+          "end": 64,
+          "chunkIndex": 16,
+          "totalChunks": 148,
+          "toolChunkId": "1469da",
+          "marker": "sage270-required-16",
+          "kind": "semantic-body",
+          "consumedBytes": 2300,
+          "consumedSHA256": "ae703e9ab86e70a541b0830888a2a296d558b642b64b09895621476a949eef4b",
+          "byteStart": 0,
+          "byteEnd": 2300
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/qa-session-fixture.mjs",
+      "expectedSHA256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+      "actualSHA256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+      "requiredLineRanges": [
+        [
+          1,
+          135
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          121
+        ],
+        [
+          122,
+          135
+        ]
+      ],
+      "requiredLines": 135,
+      "consumedRequiredLines": 135,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/qa-session-fixture.mjs",
+          "sha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "expectedSha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "start": 1,
+          "end": 121,
+          "chunkIndex": 17,
+          "totalChunks": 148,
+          "toolChunkId": "fbfaac",
+          "marker": "sage270-required-17",
+          "kind": "semantic-body",
+          "consumedBytes": 6346,
+          "consumedSHA256": "0964085d3d3f7ca0c0dfed212746d527fd8485f4aa0699a79e65c80dfa8b7e4b",
+          "byteStart": 0,
+          "byteEnd": 6346
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/qa-session-fixture.mjs",
+          "sha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "expectedSha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "start": 122,
+          "end": 135,
+          "chunkIndex": 18,
+          "totalChunks": 148,
+          "toolChunkId": "f667d2",
+          "marker": "sage270-required-18",
+          "kind": "semantic-body",
+          "consumedBytes": 869,
+          "consumedSHA256": "f2ba45cb9d2e486a6083e67595e0e5239988ccc71d1956cc1213565c5bb8b2cb",
+          "byteStart": 6346,
+          "byteEnd": 7215
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/qa-session-mocks.mjs",
+      "expectedSHA256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+      "actualSHA256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+      "requiredLineRanges": [
+        [
+          1,
+          91
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          91
+        ]
+      ],
+      "requiredLines": 91,
+      "consumedRequiredLines": 91,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/qa-session-mocks.mjs",
+          "sha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "expectedSha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "start": 1,
+          "end": 91,
+          "chunkIndex": 19,
+          "totalChunks": 148,
+          "toolChunkId": "3c7525",
+          "marker": "sage270-required-19",
+          "kind": "semantic-body",
+          "consumedBytes": 4633,
+          "consumedSHA256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "byteStart": 0,
+          "byteEnd": 4633
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+      "expectedSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+      "actualSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+      "requiredLineRanges": [
+        [
+          1,
+          501
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          131
+        ],
+        [
+          132,
+          242
+        ],
+        [
+          243,
+          354
+        ],
+        [
+          355,
+          464
+        ],
+        [
+          465,
+          501
+        ]
+      ],
+      "requiredLines": 501,
+      "consumedRequiredLines": 501,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "expectedSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "start": 1,
+          "end": 131,
+          "chunkIndex": 20,
+          "totalChunks": 148,
+          "toolChunkId": "8496f1",
+          "marker": "sage270-required-20",
+          "kind": "semantic-body",
+          "consumedBytes": 6414,
+          "consumedSHA256": "4c7350aaf9a96ca0973ee98d1c66ed08c11e41ba6739c26b6d5d42da244a890f",
+          "byteStart": 0,
+          "byteEnd": 6414
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "expectedSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "start": 132,
+          "end": 242,
+          "chunkIndex": 21,
+          "totalChunks": 148,
+          "toolChunkId": "b4afad",
+          "marker": "sage270-required-21",
+          "kind": "semantic-body",
+          "consumedBytes": 6392,
+          "consumedSHA256": "f2fc051679bb124d08d050f0eda6d7cf311ba60957392d17434f96b1cd5b3e8a",
+          "byteStart": 6414,
+          "byteEnd": 12806
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "expectedSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "start": 243,
+          "end": 354,
+          "chunkIndex": 22,
+          "totalChunks": 148,
+          "toolChunkId": "175fe8",
+          "marker": "sage270-required-22",
+          "kind": "semantic-body",
+          "consumedBytes": 6469,
+          "consumedSHA256": "6326d1fbe2e4e6349d09d997c6280522d5e6fa1abdda02a7b7460cfb3f4311f8",
+          "byteStart": 12806,
+          "byteEnd": 19275
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "expectedSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "start": 355,
+          "end": 464,
+          "chunkIndex": 23,
+          "totalChunks": 148,
+          "toolChunkId": "2f4ef4",
+          "marker": "sage270-required-23",
+          "kind": "semantic-body",
+          "consumedBytes": 6495,
+          "consumedSHA256": "9af6fa3b7cf4eff64523b1b9ca66b43f52a5cd4ef7e5cfee3d9f044f45eb4dc8",
+          "byteStart": 19275,
+          "byteEnd": 25770
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "expectedSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "start": 465,
+          "end": 501,
+          "chunkIndex": 24,
+          "totalChunks": 148,
+          "toolChunkId": "5ed986",
+          "marker": "sage270-required-24",
+          "kind": "semantic-body",
+          "consumedBytes": 2548,
+          "consumedSHA256": "db58beae69171cf0f3e853c48d1b7db08e6c780c03d6c971b5808891c128b2e7",
+          "byteStart": 25770,
+          "byteEnd": 28318
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-ownership.test.mjs",
+      "expectedSHA256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+      "actualSHA256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+      "requiredLineRanges": [
+        [
+          1,
+          426
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          104
+        ],
+        [
+          105,
+          188
+        ],
+        [
+          189,
+          292
+        ],
+        [
+          293,
+          388
+        ],
+        [
+          389,
+          426
+        ]
+      ],
+      "requiredLines": 426,
+      "consumedRequiredLines": 426,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "expectedSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "start": 1,
+          "end": 104,
+          "chunkIndex": 25,
+          "totalChunks": 148,
+          "toolChunkId": "a7236b",
+          "marker": "sage270-required-25",
+          "kind": "semantic-body",
+          "consumedBytes": 6445,
+          "consumedSHA256": "4f29e24cc9f2f9c686f67547a3e183c697c4d79bab5d1efe18d28b6b1368da6e",
+          "byteStart": 0,
+          "byteEnd": 6445
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "expectedSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "start": 105,
+          "end": 188,
+          "chunkIndex": 26,
+          "totalChunks": 148,
+          "toolChunkId": "205105",
+          "marker": "sage270-required-26",
+          "kind": "semantic-body",
+          "consumedBytes": 6402,
+          "consumedSHA256": "f303c22dacb3b9ff644e52afb7eba16d41e1106f31f64b0c6ea5278f93f1bbf0",
+          "byteStart": 6445,
+          "byteEnd": 12847
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "expectedSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "start": 189,
+          "end": 292,
+          "chunkIndex": 27,
+          "totalChunks": 148,
+          "toolChunkId": "67a0ab",
+          "marker": "sage270-required-27",
+          "kind": "semantic-body",
+          "consumedBytes": 6462,
+          "consumedSHA256": "b78bfa16104aa043782414d68ae085b76a8c2db3550276787f5045f26ff673fa",
+          "byteStart": 12847,
+          "byteEnd": 19309
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "expectedSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "start": 293,
+          "end": 388,
+          "chunkIndex": 28,
+          "totalChunks": 148,
+          "toolChunkId": "bb5fa6",
+          "marker": "sage270-required-28",
+          "kind": "semantic-body",
+          "consumedBytes": 6474,
+          "consumedSHA256": "6be0ca453da283d400d304b4697fe4b24c7389e270c5275afce63f378ac7a226",
+          "byteStart": 19309,
+          "byteEnd": 25783
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "expectedSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "start": 389,
+          "end": 426,
+          "chunkIndex": 29,
+          "totalChunks": 148,
+          "toolChunkId": "bc1de4",
+          "marker": "sage270-required-29",
+          "kind": "semantic-body",
+          "consumedBytes": 2697,
+          "consumedSHA256": "26c9ba47e3b135894f635c2a19ee43e343205c6a83213de1461c823ae949cd10",
+          "byteStart": 25783,
+          "byteEnd": 28480
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/provider-ownership.test.mjs",
+      "expectedSHA256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+      "actualSHA256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+      "requiredLineRanges": [
+        [
+          1,
+          275
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          106
+        ],
+        [
+          107,
+          212
+        ],
+        [
+          213,
+          275
+        ]
+      ],
+      "requiredLines": 275,
+      "consumedRequiredLines": 275,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/provider-ownership.test.mjs",
+          "sha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "expectedSha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "start": 1,
+          "end": 106,
+          "chunkIndex": 30,
+          "totalChunks": 148,
+          "toolChunkId": "5b800e",
+          "marker": "sage270-required-30",
+          "kind": "semantic-body",
+          "consumedBytes": 6390,
+          "consumedSHA256": "dad68aff6e96294dbedb3c529c97c138485ac73e024fc5a554c754108607b453",
+          "byteStart": 0,
+          "byteEnd": 6390
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/provider-ownership.test.mjs",
+          "sha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "expectedSha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "start": 107,
+          "end": 212,
+          "chunkIndex": 31,
+          "totalChunks": 148,
+          "toolChunkId": "7faa2c",
+          "marker": "sage270-required-31",
+          "kind": "semantic-body",
+          "consumedBytes": 6477,
+          "consumedSHA256": "8f0f2b42981a522d36388d652c3a6e92156471f2216fc69379c570e3aecdaaa7",
+          "byteStart": 6390,
+          "byteEnd": 12867
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/provider-ownership.test.mjs",
+          "sha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "expectedSha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "start": 213,
+          "end": 275,
+          "chunkIndex": 32,
+          "totalChunks": 148,
+          "toolChunkId": "12595e",
+          "marker": "sage270-required-32",
+          "kind": "semantic-body",
+          "consumedBytes": 3933,
+          "consumedSHA256": "55fe813635ce1012adb71fab12d2b969bbd3bb4410cbf6eaa778d0e585142753",
+          "byteStart": 12867,
+          "byteEnd": 16800
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/plan-source-packet.test.mjs",
+      "expectedSHA256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+      "actualSHA256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+      "requiredLineRanges": [
+        [
+          1,
+          235
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          135
+        ],
+        [
+          136,
+          235
+        ]
+      ],
+      "requiredLines": 235,
+      "consumedRequiredLines": 235,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/plan-source-packet.test.mjs",
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "expectedSha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "start": 1,
+          "end": 135,
+          "chunkIndex": 33,
+          "totalChunks": 148,
+          "toolChunkId": "06e0a3",
+          "marker": "sage270-required-33",
+          "kind": "semantic-body",
+          "consumedBytes": 6471,
+          "consumedSHA256": "9acdbf2923bd8052619944124f4a5d61eeca006776275ae6f53a9fb1e37957f8",
+          "byteStart": 0,
+          "byteEnd": 6471
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/plan-source-packet.test.mjs",
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "expectedSha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "start": 136,
+          "end": 235,
+          "chunkIndex": 34,
+          "totalChunks": 148,
+          "toolChunkId": "dad149",
+          "marker": "sage270-required-34",
+          "kind": "semantic-body",
+          "consumedBytes": 5356,
+          "consumedSHA256": "c0396ed6745f5dce8bd748d693dfa342485d790d4b2165c79b475842ca5efefc",
+          "byteStart": 6471,
+          "byteEnd": 11827
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+      "expectedSHA256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+      "actualSHA256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+      "requiredLineRanges": [
+        [
+          1,
+          491
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          80
+        ],
+        [
+          81,
+          151
+        ],
+        [
+          152,
+          218
+        ],
+        [
+          219,
+          283
+        ],
+        [
+          284,
+          346
+        ],
+        [
+          347,
+          407
+        ],
+        [
+          408,
+          466
+        ],
+        [
+          467,
+          491
+        ]
+      ],
+      "requiredLines": 491,
+      "consumedRequiredLines": 491,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 1,
+          "end": 80,
+          "chunkIndex": 35,
+          "totalChunks": 148,
+          "toolChunkId": "4eaff9",
+          "marker": "sage270-required-35",
+          "kind": "semantic-body",
+          "consumedBytes": 6429,
+          "consumedSHA256": "3aac389b36b3df4113fea683b8326ef26255e02c0c43685fb90b0248cdd9e381",
+          "byteStart": 0,
+          "byteEnd": 6429
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 81,
+          "end": 151,
+          "chunkIndex": 36,
+          "totalChunks": 148,
+          "toolChunkId": "8e999c",
+          "marker": "sage270-required-36",
+          "kind": "semantic-body",
+          "consumedBytes": 6424,
+          "consumedSHA256": "37ada2422160346b6751edc306fbb628a578998028f354a4b9d6418060fdefea",
+          "byteStart": 6429,
+          "byteEnd": 12853
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 152,
+          "end": 218,
+          "chunkIndex": 37,
+          "totalChunks": 148,
+          "toolChunkId": "5661d2",
+          "marker": "sage270-required-37",
+          "kind": "semantic-body",
+          "consumedBytes": 6453,
+          "consumedSHA256": "68ee9397a4a74b0a1f73d85ae3b32b80e3a0e04ddce0498a1085f7e938ebfd7f",
+          "byteStart": 12853,
+          "byteEnd": 19306
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 219,
+          "end": 283,
+          "chunkIndex": 38,
+          "totalChunks": 148,
+          "toolChunkId": "9b4ba6",
+          "marker": "sage270-required-38",
+          "kind": "semantic-body",
+          "consumedBytes": 6423,
+          "consumedSHA256": "305c03762bb3a036f2af0c1328491c70b32bfa92580313b09cfe6a5d26caeb30",
+          "byteStart": 19306,
+          "byteEnd": 25729
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 284,
+          "end": 346,
+          "chunkIndex": 39,
+          "totalChunks": 148,
+          "toolChunkId": "1ebbc0",
+          "marker": "sage270-required-39",
+          "kind": "semantic-body",
+          "consumedBytes": 6311,
+          "consumedSHA256": "0c8be6f71d1e1455a3a9ce9a7549dbf24bc784bb40ab20bd21cd4ceaa1dc8cfe",
+          "byteStart": 25729,
+          "byteEnd": 32040
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 347,
+          "end": 407,
+          "chunkIndex": 40,
+          "totalChunks": 148,
+          "toolChunkId": "2af4b8",
+          "marker": "sage270-required-40",
+          "kind": "semantic-body",
+          "consumedBytes": 6353,
+          "consumedSHA256": "4bc929c92124f1d27a920da757e969f0675797ca6c8f7983f6b1f3897953ad39",
+          "byteStart": 32040,
+          "byteEnd": 38393
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 408,
+          "end": 466,
+          "chunkIndex": 41,
+          "totalChunks": 148,
+          "toolChunkId": "098efb",
+          "marker": "sage270-required-41",
+          "kind": "semantic-body",
+          "consumedBytes": 6433,
+          "consumedSHA256": "417b6658820317b33b6f99e8e2553663915e80f993c8f9bda5b04242ebc20891",
+          "byteStart": 38393,
+          "byteEnd": 44826
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "expectedSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "start": 467,
+          "end": 491,
+          "chunkIndex": 42,
+          "totalChunks": 148,
+          "toolChunkId": "b2b2a0",
+          "marker": "sage270-required-42",
+          "kind": "semantic-body",
+          "consumedBytes": 2356,
+          "consumedSHA256": "1356f3b0885b15ca11b752d9acff89d656530ba75b84d6ab1e9ec7eae9abed78",
+          "byteStart": 44826,
+          "byteEnd": 47182
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+      "expectedSHA256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+      "actualSHA256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+      "requiredLineRanges": [
+        [
+          1,
+          475
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          86
+        ],
+        [
+          87,
+          171
+        ],
+        [
+          172,
+          261
+        ],
+        [
+          262,
+          356
+        ],
+        [
+          357,
+          453
+        ],
+        [
+          454,
+          475
+        ]
+      ],
+      "requiredLines": 475,
+      "consumedRequiredLines": 475,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "expectedSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "start": 1,
+          "end": 86,
+          "chunkIndex": 43,
+          "totalChunks": 148,
+          "toolChunkId": "9b7d93",
+          "marker": "sage270-required-43",
+          "kind": "semantic-body",
+          "consumedBytes": 6459,
+          "consumedSHA256": "d8f0d1ac03d383e46df812fb03cedfba5110d9f4f10c31b32cfc6a5810c8a3e1",
+          "byteStart": 0,
+          "byteEnd": 6459
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "expectedSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "start": 87,
+          "end": 171,
+          "chunkIndex": 44,
+          "totalChunks": 148,
+          "toolChunkId": "111119",
+          "marker": "sage270-required-44",
+          "kind": "semantic-body",
+          "consumedBytes": 6433,
+          "consumedSHA256": "53869083304aede034db611210385265f56a75a7e4c1d7a090ae3c95118d479c",
+          "byteStart": 6459,
+          "byteEnd": 12892
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "expectedSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "start": 172,
+          "end": 261,
+          "chunkIndex": 45,
+          "totalChunks": 148,
+          "toolChunkId": "77fec4",
+          "marker": "sage270-required-45",
+          "kind": "semantic-body",
+          "consumedBytes": 6431,
+          "consumedSHA256": "458514e38b74e06ba6f8cca7a520cb30bd370011db1d8975de01a134ac15cfdc",
+          "byteStart": 12892,
+          "byteEnd": 19323
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "expectedSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "start": 262,
+          "end": 356,
+          "chunkIndex": 46,
+          "totalChunks": 148,
+          "toolChunkId": "2ec238",
+          "marker": "sage270-required-46",
+          "kind": "semantic-body",
+          "consumedBytes": 6435,
+          "consumedSHA256": "ca80e0d71c3079c8f4cb8f5e4b6ea7cefaf338ed4c1f1a7b1c8a41f5acc2d772",
+          "byteStart": 19323,
+          "byteEnd": 25758
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "expectedSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "start": 357,
+          "end": 453,
+          "chunkIndex": 47,
+          "totalChunks": 148,
+          "toolChunkId": "f379ad",
+          "marker": "sage270-required-47",
+          "kind": "semantic-body",
+          "consumedBytes": 6478,
+          "consumedSHA256": "942b92e4bb0c2abe2e93513dfd71e106034b2df178f33030e560be46c6dc19ed",
+          "byteStart": 25758,
+          "byteEnd": 32236
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "expectedSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "start": 454,
+          "end": 475,
+          "chunkIndex": 48,
+          "totalChunks": 148,
+          "toolChunkId": "4f106a",
+          "marker": "sage270-required-48",
+          "kind": "semantic-body",
+          "consumedBytes": 1507,
+          "consumedSHA256": "1e45d64c13eef00928827e36ccaed7c523049466a1d2e77da647bdf320302ee8",
+          "byteStart": 32236,
+          "byteEnd": 33743
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+      "expectedSHA256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+      "actualSHA256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+      "requiredLineRanges": [
+        [
+          1,
+          361
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          156
+        ],
+        [
+          157,
+          245
+        ],
+        [
+          246,
+          344
+        ],
+        [
+          345,
+          361
+        ]
+      ],
+      "requiredLines": 361,
+      "consumedRequiredLines": 361,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "sha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "expectedSha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "start": 1,
+          "end": 156,
+          "chunkIndex": 49,
+          "totalChunks": 148,
+          "toolChunkId": "7e7b32",
+          "marker": "sage270-required-49",
+          "kind": "semantic-body",
+          "consumedBytes": 6498,
+          "consumedSHA256": "3474026d99aafdfff3c85039c7d2af9bbcbc481fa6f008a766cf2a89ba54b44b",
+          "byteStart": 0,
+          "byteEnd": 6498
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "sha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "expectedSha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "start": 157,
+          "end": 245,
+          "chunkIndex": 50,
+          "totalChunks": 148,
+          "toolChunkId": "33600a",
+          "marker": "sage270-required-50",
+          "kind": "semantic-body",
+          "consumedBytes": 6500,
+          "consumedSHA256": "d487e23eb35e1125f4d276337d1e5db300c9dcc83787393539f04a09c7763056",
+          "byteStart": 6498,
+          "byteEnd": 12998
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "sha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "expectedSha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "start": 246,
+          "end": 344,
+          "chunkIndex": 51,
+          "totalChunks": 148,
+          "toolChunkId": "ef0e79",
+          "marker": "sage270-required-51",
+          "kind": "semantic-body",
+          "consumedBytes": 6320,
+          "consumedSHA256": "3100004b01602f28c7d8ef2ed250e4981e39bef908e1fd56e8877f45e901f54f",
+          "byteStart": 12998,
+          "byteEnd": 19318
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "sha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "expectedSha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "start": 345,
+          "end": 361,
+          "chunkIndex": 52,
+          "totalChunks": 148,
+          "toolChunkId": "cf12dc",
+          "marker": "sage270-required-52",
+          "kind": "semantic-body",
+          "consumedBytes": 1839,
+          "consumedSHA256": "dc8110a9765487df5f373a371e1d8cdc0bc90f9350e837016cf83e05be3ddc3e",
+          "byteStart": 19318,
+          "byteEnd": 21157
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/core.test.ts",
+      "expectedSHA256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+      "actualSHA256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+      "requiredLineRanges": [
+        [
+          1,
+          273
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          129
+        ],
+        [
+          130,
+          224
+        ],
+        [
+          225,
+          273
+        ]
+      ],
+      "requiredLines": 273,
+      "consumedRequiredLines": 273,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/core.test.ts",
+          "sha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "expectedSha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "start": 1,
+          "end": 129,
+          "chunkIndex": 53,
+          "totalChunks": 148,
+          "toolChunkId": "59b046",
+          "marker": "sage270-required-53",
+          "kind": "semantic-body",
+          "consumedBytes": 6451,
+          "consumedSHA256": "a0fe0ca14ea60e08797323331656f6bfd7642845b78b4898b8391a6b775ec50b",
+          "byteStart": 0,
+          "byteEnd": 6451
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/core.test.ts",
+          "sha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "expectedSha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "start": 130,
+          "end": 224,
+          "chunkIndex": 54,
+          "totalChunks": 148,
+          "toolChunkId": "fef650",
+          "marker": "sage270-required-54",
+          "kind": "semantic-body",
+          "consumedBytes": 6372,
+          "consumedSHA256": "b0f1b9fb461cc031156ac75c50e5df3c6f0ccbf8956a72c3ca611b1981d6feec",
+          "byteStart": 6451,
+          "byteEnd": 12823
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/core.test.ts",
+          "sha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "expectedSha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "start": 225,
+          "end": 273,
+          "chunkIndex": 55,
+          "totalChunks": 148,
+          "toolChunkId": "a64285",
+          "marker": "sage270-required-55",
+          "kind": "semantic-body",
+          "consumedBytes": 2871,
+          "consumedSHA256": "20306df92bee16992ae2b142d22cb44948259a9488a17b0e1bc0a772aca7f450",
+          "byteStart": 12823,
+          "byteEnd": 15694
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.test.ts",
+      "expectedSHA256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+      "actualSHA256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+      "requiredLineRanges": [
+        [
+          1,
+          419
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          112
+        ],
+        [
+          113,
+          205
+        ],
+        [
+          206,
+          292
+        ],
+        [
+          293,
+          399
+        ],
+        [
+          400,
+          419
+        ]
+      ],
+      "requiredLines": 419,
+      "consumedRequiredLines": 419,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.test.ts",
+          "sha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "expectedSha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "start": 1,
+          "end": 112,
+          "chunkIndex": 56,
+          "totalChunks": 148,
+          "toolChunkId": "1df040",
+          "marker": "sage270-required-56",
+          "kind": "semantic-body",
+          "consumedBytes": 6497,
+          "consumedSHA256": "8c5cb96a0e04401c2bc7c96da0e590d8505fbb150fb1318ec7e6bae17278e60a",
+          "byteStart": 0,
+          "byteEnd": 6497
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.test.ts",
+          "sha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "expectedSha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "start": 113,
+          "end": 205,
+          "chunkIndex": 57,
+          "totalChunks": 148,
+          "toolChunkId": "7ef857",
+          "marker": "sage270-required-57",
+          "kind": "semantic-body",
+          "consumedBytes": 6468,
+          "consumedSHA256": "b1b62afb56fa6f71352aebb98f1f2fb2b93cb38f114e62cba1bef454df2fcdf9",
+          "byteStart": 6497,
+          "byteEnd": 12965
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.test.ts",
+          "sha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "expectedSha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "start": 206,
+          "end": 292,
+          "chunkIndex": 58,
+          "totalChunks": 148,
+          "toolChunkId": "cdbfaa",
+          "marker": "sage270-required-58",
+          "kind": "semantic-body",
+          "consumedBytes": 6458,
+          "consumedSHA256": "0f35cd0e1b38989c7c1d091a75a4ccd00f3e8679f893a1b14578c649d061830c",
+          "byteStart": 12965,
+          "byteEnd": 19423
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.test.ts",
+          "sha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "expectedSha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "start": 293,
+          "end": 399,
+          "chunkIndex": 59,
+          "totalChunks": 148,
+          "toolChunkId": "a297c4",
+          "marker": "sage270-required-59",
+          "kind": "semantic-body",
+          "consumedBytes": 6488,
+          "consumedSHA256": "64b3da5a2f33029c4d5108749afb5c2195b21341774484b8a9de44991fd045d6",
+          "byteStart": 19423,
+          "byteEnd": 25911
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.test.ts",
+          "sha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "expectedSha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "start": 400,
+          "end": 419,
+          "chunkIndex": 60,
+          "totalChunks": 148,
+          "toolChunkId": "8c831d",
+          "marker": "sage270-required-60",
+          "kind": "semantic-body",
+          "consumedBytes": 1046,
+          "consumedSHA256": "1ef00a544175ae7235629b839fb4f58846ce6474a7e7e1d6c58e2cdd3b997dc4",
+          "byteStart": 25911,
+          "byteEnd": 26957
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinize.test.ts",
+      "expectedSHA256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+      "actualSHA256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+      "requiredLineRanges": [
+        [
+          1,
+          486
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          126
+        ],
+        [
+          127,
+          240
+        ],
+        [
+          241,
+          360
+        ],
+        [
+          361,
+          475
+        ],
+        [
+          476,
+          486
+        ]
+      ],
+      "requiredLines": 486,
+      "consumedRequiredLines": 486,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinize.test.ts",
+          "sha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "expectedSha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "start": 1,
+          "end": 126,
+          "chunkIndex": 61,
+          "totalChunks": 148,
+          "toolChunkId": "02d938",
+          "marker": "sage270-required-61",
+          "kind": "semantic-body",
+          "consumedBytes": 6489,
+          "consumedSHA256": "513fd0c161897440b059b3b527522036a20e19956bf6ce5c5d42406063e6f1e7",
+          "byteStart": 0,
+          "byteEnd": 6489
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinize.test.ts",
+          "sha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "expectedSha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "start": 127,
+          "end": 240,
+          "chunkIndex": 62,
+          "totalChunks": 148,
+          "toolChunkId": "90a828",
+          "marker": "sage270-required-62",
+          "kind": "semantic-body",
+          "consumedBytes": 6491,
+          "consumedSHA256": "2f914126129093322733059b73b5713cb0a16050613f91a05448be45136abc18",
+          "byteStart": 6489,
+          "byteEnd": 12980
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinize.test.ts",
+          "sha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "expectedSha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "start": 241,
+          "end": 360,
+          "chunkIndex": 63,
+          "totalChunks": 148,
+          "toolChunkId": "8dbba3",
+          "marker": "sage270-required-63",
+          "kind": "semantic-body",
+          "consumedBytes": 6376,
+          "consumedSHA256": "a67e2b8ceec0c54e0562b3dba8eba08f84951e2f161ab41972f9f106d9bfa41e",
+          "byteStart": 12980,
+          "byteEnd": 19356
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinize.test.ts",
+          "sha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "expectedSha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "start": 361,
+          "end": 475,
+          "chunkIndex": 64,
+          "totalChunks": 148,
+          "toolChunkId": "3457cb",
+          "marker": "sage270-required-64",
+          "kind": "semantic-body",
+          "consumedBytes": 6494,
+          "consumedSHA256": "7bc2bc55659e22be90a1118802bc7bf9ff13d2db0f83712c508585681d686b25",
+          "byteStart": 19356,
+          "byteEnd": 25850
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinize.test.ts",
+          "sha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "expectedSha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "start": 476,
+          "end": 486,
+          "chunkIndex": 65,
+          "totalChunks": 148,
+          "toolChunkId": "1ccf96",
+          "marker": "sage270-required-65",
+          "kind": "semantic-body",
+          "consumedBytes": 708,
+          "consumedSHA256": "9a00bdf5ee7ee2afde6fa492a495923fec0b9e4a182c785f3442abf12b73a741",
+          "byteStart": 25850,
+          "byteEnd": 26558
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/content/specs/specs.test.ts",
+      "expectedSHA256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+      "actualSHA256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+      "requiredLineRanges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "requiredLines": 52,
+      "consumedRequiredLines": 52,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/content/specs/specs.test.ts",
+          "sha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+          "expectedSha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+          "start": 1,
+          "end": 52,
+          "chunkIndex": 66,
+          "totalChunks": 148,
+          "toolChunkId": "0bc968",
+          "marker": "sage270-required-66",
+          "kind": "semantic-body",
+          "consumedBytes": 1922,
+          "consumedSHA256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+          "byteStart": 0,
+          "byteEnd": 1922
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts.test.ts",
+      "expectedSHA256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+      "actualSHA256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+      "requiredLineRanges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "requiredLines": 6,
+      "consumedRequiredLines": 6,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts.test.ts",
+          "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "expectedSha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "start": 1,
+          "end": 6,
+          "chunkIndex": 67,
+          "totalChunks": 148,
+          "toolChunkId": "5d3e7c",
+          "marker": "sage270-required-67",
+          "kind": "semantic-body",
+          "consumedBytes": 311,
+          "consumedSHA256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "byteStart": 0,
+          "byteEnd": 311
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/contracts.test.ts",
+      "expectedSHA256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+      "actualSHA256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+      "requiredLineRanges": [
+        [
+          1,
+          198
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          77
+        ],
+        [
+          78,
+          169
+        ],
+        [
+          170,
+          198
+        ]
+      ],
+      "requiredLines": 198,
+      "consumedRequiredLines": 198,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/contracts.test.ts",
+          "sha256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+          "expectedSha256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+          "start": 1,
+          "end": 77,
+          "chunkIndex": 68,
+          "totalChunks": 148,
+          "toolChunkId": "e110b8",
+          "marker": "sage270-required-68",
+          "kind": "semantic-body",
+          "consumedBytes": 6411,
+          "consumedSHA256": "01c3c7df600db6d38845b0bbafc20ded22457ec22c9bd1447792c59bb8a1a04d",
+          "byteStart": 0,
+          "byteEnd": 6411
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/contracts.test.ts",
+          "sha256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+          "expectedSha256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+          "start": 78,
+          "end": 169,
+          "chunkIndex": 69,
+          "totalChunks": 148,
+          "toolChunkId": "dc1ead",
+          "marker": "sage270-required-69",
+          "kind": "semantic-body",
+          "consumedBytes": 6463,
+          "consumedSHA256": "1c6ba59509c0e2efbe6d09df88a57d215458f68fe91f29bdb3ff16e838db02bb",
+          "byteStart": 6411,
+          "byteEnd": 12874
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/contracts.test.ts",
+          "sha256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+          "expectedSha256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+          "start": 170,
+          "end": 198,
+          "chunkIndex": 70,
+          "totalChunks": 148,
+          "toolChunkId": "1f9ff4",
+          "marker": "sage270-required-70",
+          "kind": "semantic-body",
+          "consumedBytes": 2463,
+          "consumedSHA256": "16d5105177eaf324a3fefc1170483c0ca16034dfe68018eb712108f6111d21e1",
+          "byteStart": 12874,
+          "byteEnd": 15337
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/worker.ts",
+      "expectedSHA256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+      "actualSHA256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+      "requiredLineRanges": [
+        [
+          1,
+          27
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          27
+        ]
+      ],
+      "requiredLines": 27,
+      "consumedRequiredLines": 27,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/worker.ts",
+          "sha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "expectedSha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "start": 1,
+          "end": 27,
+          "chunkIndex": 71,
+          "totalChunks": 148,
+          "toolChunkId": "ece2d9",
+          "marker": "sage270-required-71",
+          "kind": "semantic-body",
+          "consumedBytes": 1294,
+          "consumedSHA256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "byteStart": 0,
+          "byteEnd": 1294
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/worker-bootstrap.mjs",
+      "expectedSHA256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+      "actualSHA256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+      "requiredLineRanges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "requiredLines": 3,
+      "consumedRequiredLines": 3,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/worker-bootstrap.mjs",
+          "sha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "expectedSha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "start": 1,
+          "end": 3,
+          "chunkIndex": 72,
+          "totalChunks": 148,
+          "toolChunkId": "000836",
+          "marker": "sage270-required-72",
+          "kind": "semantic-body",
+          "consumedBytes": 81,
+          "consumedSHA256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "byteStart": 0,
+          "byteEnd": 81
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/batch.ts",
+      "expectedSHA256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+      "actualSHA256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+      "requiredLineRanges": [
+        [
+          1,
+          90
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          90
+        ]
+      ],
+      "requiredLines": 90,
+      "consumedRequiredLines": 90,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/tournament/batch.ts",
+          "sha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "expectedSha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "start": 1,
+          "end": 90,
+          "chunkIndex": 73,
+          "totalChunks": 148,
+          "toolChunkId": "da4c8c",
+          "marker": "sage270-required-73",
+          "kind": "semantic-body",
+          "consumedBytes": 4934,
+          "consumedSHA256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "byteStart": 0,
+          "byteEnd": 4934
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/current-profile-summary.json",
+      "expectedSHA256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+      "actualSHA256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+      "requiredLineRanges": [
+        [
+          1,
+          793
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          186
+        ],
+        [
+          187,
+          373
+        ],
+        [
+          374,
+          561
+        ],
+        [
+          562,
+          691
+        ],
+        [
+          692,
+          793
+        ]
+      ],
+      "requiredLines": 793,
+      "consumedRequiredLines": 793,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/current-profile-summary.json",
+          "sha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "expectedSha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "start": 1,
+          "end": 186,
+          "chunkIndex": 74,
+          "totalChunks": 148,
+          "toolChunkId": "055d97",
+          "marker": "sage270-required-74",
+          "kind": "semantic-body",
+          "consumedBytes": 6461,
+          "consumedSHA256": "75da028ff7c4100758d70792d2d46df54443eb7a4ed731e66e2840457dd5adf3",
+          "byteStart": 0,
+          "byteEnd": 6461
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/current-profile-summary.json",
+          "sha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "expectedSha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "start": 187,
+          "end": 373,
+          "chunkIndex": 75,
+          "totalChunks": 148,
+          "toolChunkId": "d5583b",
+          "marker": "sage270-required-75",
+          "kind": "semantic-body",
+          "consumedBytes": 6469,
+          "consumedSHA256": "ac017bcc28354c791c3f1c2fc6e588cbbca1fa963898bd8c5eb31978aac2b082",
+          "byteStart": 6461,
+          "byteEnd": 12930
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/current-profile-summary.json",
+          "sha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "expectedSha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "start": 374,
+          "end": 561,
+          "chunkIndex": 76,
+          "totalChunks": 148,
+          "toolChunkId": "e29f56",
+          "marker": "sage270-required-76",
+          "kind": "semantic-body",
+          "consumedBytes": 6427,
+          "consumedSHA256": "03cd29c8cd029897ea019d93f84d2965e48935ac62ef60ce7ee9bdc2f68bda3e",
+          "byteStart": 12930,
+          "byteEnd": 19357
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/current-profile-summary.json",
+          "sha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "expectedSha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "start": 562,
+          "end": 691,
+          "chunkIndex": 77,
+          "totalChunks": 148,
+          "toolChunkId": "db16f5",
+          "marker": "sage270-required-77",
+          "kind": "semantic-body",
+          "consumedBytes": 6429,
+          "consumedSHA256": "03f8afc2f39c002eb27f09e37154f78d933ab65b0aeb48b0e8d1ec1a6747d235",
+          "byteStart": 19357,
+          "byteEnd": 25786
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/current-profile-summary.json",
+          "sha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "expectedSha256": "05511b147e9131c00a0566ea1cf58a461935de76356e279f8f50c957a2e6794e",
+          "start": 692,
+          "end": 793,
+          "chunkIndex": 78,
+          "totalChunks": 148,
+          "toolChunkId": "a00543",
+          "marker": "sage270-required-78",
+          "kind": "semantic-body",
+          "consumedBytes": 5511,
+          "consumedSHA256": "2ec76704aaaa96198a71cd2abbc1bc150d2bb13c82f52c9d89f368db6f44b9a5",
+          "byteStart": 25786,
+          "byteEnd": 31297
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/parent-fullsuite-proof.json",
+      "expectedSHA256": "c7f9571f3bd084e084a14443e2c9530206e37a77346ecee981826d5095bc995c",
+      "actualSHA256": "c7f9571f3bd084e084a14443e2c9530206e37a77346ecee981826d5095bc995c",
+      "requiredLineRanges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "requiredLines": 57,
+      "consumedRequiredLines": 57,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/parent-fullsuite-proof.json",
+          "sha256": "c7f9571f3bd084e084a14443e2c9530206e37a77346ecee981826d5095bc995c",
+          "expectedSha256": "c7f9571f3bd084e084a14443e2c9530206e37a77346ecee981826d5095bc995c",
+          "start": 1,
+          "end": 57,
+          "chunkIndex": 79,
+          "totalChunks": 148,
+          "toolChunkId": "5b02e1",
+          "marker": "sage270-required-79",
+          "kind": "semantic-body",
+          "consumedBytes": 2541,
+          "consumedSHA256": "c7f9571f3bd084e084a14443e2c9530206e37a77346ecee981826d5095bc995c",
+          "byteStart": 0,
+          "byteEnd": 2541
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/report.json",
+      "expectedSHA256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+      "actualSHA256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+      "requiredLineRanges": [
+        [
+          1,
+          116
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          93
+        ],
+        [
+          94,
+          116
+        ]
+      ],
+      "requiredLines": 116,
+      "consumedRequiredLines": 116,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/report.json",
+          "sha256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+          "expectedSha256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+          "start": 1,
+          "end": 93,
+          "chunkIndex": 80,
+          "totalChunks": 148,
+          "toolChunkId": "309833",
+          "marker": "sage270-required-80",
+          "kind": "semantic-body",
+          "consumedBytes": 6182,
+          "consumedSHA256": "bf0de33ccf0049addc56c7c3a8cf737b2a195a1aa8b46e7fcdf4d683dcaba45e",
+          "byteStart": 0,
+          "byteEnd": 6182
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/report.json",
+          "sha256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+          "expectedSha256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+          "start": 94,
+          "end": 116,
+          "chunkIndex": 81,
+          "totalChunks": 148,
+          "toolChunkId": "9b48b0",
+          "marker": "sage270-required-81",
+          "kind": "semantic-body",
+          "consumedBytes": 2776,
+          "consumedSHA256": "1ade9244f65b041ae22d8b53e4a9133126f2ebca25f8a0cfa9d227537c7da4ff",
+          "byteStart": 6182,
+          "byteEnd": 8958
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+      "expectedSHA256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+      "actualSHA256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+      "requiredLineRanges": [
+        [
+          1,
+          166
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          64
+        ],
+        [
+          65,
+          109
+        ],
+        [
+          110,
+          160
+        ],
+        [
+          161,
+          166
+        ]
+      ],
+      "requiredLines": 166,
+      "consumedRequiredLines": 166,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+          "sha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "expectedSha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "start": 1,
+          "end": 64,
+          "chunkIndex": 82,
+          "totalChunks": 148,
+          "toolChunkId": "90f05f",
+          "marker": "sage270-required-82",
+          "kind": "semantic-body",
+          "consumedBytes": 6463,
+          "consumedSHA256": "27ce4787f84d100cdbbe7980a7a3c7a7bb6f70dfbad147e262b9b96e59b77248",
+          "byteStart": 0,
+          "byteEnd": 6463
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+          "sha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "expectedSha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "start": 65,
+          "end": 109,
+          "chunkIndex": 83,
+          "totalChunks": 148,
+          "toolChunkId": "72438e",
+          "marker": "sage270-required-83",
+          "kind": "semantic-body",
+          "consumedBytes": 6325,
+          "consumedSHA256": "6c2510484d6723daa02f4b14d28a0d7030339425367a9e43045dfb0b68344540",
+          "byteStart": 6463,
+          "byteEnd": 12788
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+          "sha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "expectedSha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "start": 110,
+          "end": 160,
+          "chunkIndex": 84,
+          "totalChunks": 148,
+          "toolChunkId": "f3d4aa",
+          "marker": "sage270-required-84",
+          "kind": "semantic-body",
+          "consumedBytes": 6455,
+          "consumedSHA256": "e3092656547ab13db33a0374eeaedc95ae36e2c7af49fd372c35082c0b7828ca",
+          "byteStart": 12788,
+          "byteEnd": 19243
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+          "sha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "expectedSha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+          "start": 161,
+          "end": 166,
+          "chunkIndex": 85,
+          "totalChunks": 148,
+          "toolChunkId": "77d4af",
+          "marker": "sage270-required-85",
+          "kind": "semantic-body",
+          "consumedBytes": 400,
+          "consumedSHA256": "990e10516fa5b0b00820928429ca82fb9c6fc9d228b3b9c5b4e3f09828e84ce9",
+          "byteStart": 19243,
+          "byteEnd": 19643
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/recent-delivered-cuts.json",
+      "expectedSHA256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70",
+      "actualSHA256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70",
+      "requiredLineRanges": [
+        [
+          1,
+          96
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          96
+        ]
+      ],
+      "requiredLines": 96,
+      "consumedRequiredLines": 96,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/recent-delivered-cuts.json",
+          "sha256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70",
+          "expectedSha256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70",
+          "start": 1,
+          "end": 96,
+          "chunkIndex": 86,
+          "totalChunks": 148,
+          "toolChunkId": "9d51f0",
+          "marker": "sage270-required-86",
+          "kind": "semantic-body",
+          "consumedBytes": 4446,
+          "consumedSHA256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70",
+          "byteStart": 0,
+          "byteEnd": 4446
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/recent-outcomes.json",
+      "expectedSHA256": "e222bdad2be873b1f587a54f8978f93d13014ce552fb521dc8967504639eb5a3",
+      "actualSHA256": "e222bdad2be873b1f587a54f8978f93d13014ce552fb521dc8967504639eb5a3",
+      "requiredLineRanges": [
+        [
+          1,
+          34
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          34
+        ]
+      ],
+      "requiredLines": 34,
+      "consumedRequiredLines": 34,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/recent-outcomes.json",
+          "sha256": "e222bdad2be873b1f587a54f8978f93d13014ce552fb521dc8967504639eb5a3",
+          "expectedSha256": "e222bdad2be873b1f587a54f8978f93d13014ce552fb521dc8967504639eb5a3",
+          "start": 1,
+          "end": 34,
+          "chunkIndex": 87,
+          "totalChunks": 148,
+          "toolChunkId": "878cca",
+          "marker": "sage270-required-87",
+          "kind": "semantic-body",
+          "consumedBytes": 1427,
+          "consumedSHA256": "e222bdad2be873b1f587a54f8978f93d13014ce552fb521dc8967504639eb5a3",
+          "byteStart": 0,
+          "byteEnd": 1427
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/productive-activation.contracts.ts",
+      "expectedSHA256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+      "actualSHA256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+      "requiredLineRanges": [
+        [
+          1,
+          367
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          78
+        ],
+        [
+          79,
+          162
+        ],
+        [
+          163,
+          251
+        ],
+        [
+          252,
+          323
+        ],
+        [
+          324,
+          367
+        ]
+      ],
+      "requiredLines": 367,
+      "consumedRequiredLines": 367,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/productive-activation.contracts.ts",
+          "sha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "expectedSha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "start": 1,
+          "end": 78,
+          "chunkIndex": 88,
+          "totalChunks": 148,
+          "toolChunkId": "86bb9b",
+          "marker": "sage270-required-88",
+          "kind": "semantic-body",
+          "consumedBytes": 6482,
+          "consumedSHA256": "54f9f720c10aba7ad68f9563c887a5565ef06ab37f38e2d9f794d0fd162031e1",
+          "byteStart": 0,
+          "byteEnd": 6482
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/productive-activation.contracts.ts",
+          "sha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "expectedSha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "start": 79,
+          "end": 162,
+          "chunkIndex": 89,
+          "totalChunks": 148,
+          "toolChunkId": "acbf9f",
+          "marker": "sage270-required-89",
+          "kind": "semantic-body",
+          "consumedBytes": 6475,
+          "consumedSHA256": "cc55239cf71984ece9671d1333994f947018301d8d6c4667ac0ef4096c1a965b",
+          "byteStart": 6482,
+          "byteEnd": 12957
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/productive-activation.contracts.ts",
+          "sha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "expectedSha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "start": 163,
+          "end": 251,
+          "chunkIndex": 90,
+          "totalChunks": 148,
+          "toolChunkId": "81741b",
+          "marker": "sage270-required-90",
+          "kind": "semantic-body",
+          "consumedBytes": 6468,
+          "consumedSHA256": "18f87ea36b657996bc17e0c89f4453b10d9e4fc23e867c583b8c719b9068b8c7",
+          "byteStart": 12957,
+          "byteEnd": 19425
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/productive-activation.contracts.ts",
+          "sha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "expectedSha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "start": 252,
+          "end": 323,
+          "chunkIndex": 91,
+          "totalChunks": 148,
+          "toolChunkId": "091dee",
+          "marker": "sage270-required-91",
+          "kind": "semantic-body",
+          "consumedBytes": 6303,
+          "consumedSHA256": "50e25a8b1fa0a91945c96195df177888c447978da016ad8ee9006476c2f2f352",
+          "byteStart": 19425,
+          "byteEnd": 25728
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/productive-activation.contracts.ts",
+          "sha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "expectedSha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+          "start": 324,
+          "end": 367,
+          "chunkIndex": 92,
+          "totalChunks": 148,
+          "toolChunkId": "c6b5a9",
+          "marker": "sage270-required-92",
+          "kind": "semantic-body",
+          "consumedBytes": 4028,
+          "consumedSHA256": "e2f022e3f954a5902d2bc2932bf423f009e69951df23bf7db0d32edd7b03ef56",
+          "byteStart": 25728,
+          "byteEnd": 29756
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/phasing-cycle.contracts.ts",
+      "expectedSHA256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+      "actualSHA256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+      "requiredLineRanges": [
+        [
+          1,
+          134
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          88
+        ],
+        [
+          89,
+          134
+        ]
+      ],
+      "requiredLines": 134,
+      "consumedRequiredLines": 134,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/phasing-cycle.contracts.ts",
+          "sha256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+          "expectedSha256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+          "start": 1,
+          "end": 88,
+          "chunkIndex": 93,
+          "totalChunks": 148,
+          "toolChunkId": "4c8e15",
+          "marker": "sage270-required-93",
+          "kind": "semantic-body",
+          "consumedBytes": 6426,
+          "consumedSHA256": "ec159f33f050ba1c7345f911f308e99c66d2ba79167eb5910ef521f5d6c655ff",
+          "byteStart": 0,
+          "byteEnd": 6426
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/phasing-cycle.contracts.ts",
+          "sha256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+          "expectedSha256": "8542e3603ae1ef83477131e4ad80ac94d54bafa46e08a55c95819ccf4a44d093",
+          "start": 89,
+          "end": 134,
+          "chunkIndex": 94,
+          "totalChunks": 148,
+          "toolChunkId": "49db74",
+          "marker": "sage270-required-94",
+          "kind": "semantic-body",
+          "consumedBytes": 3754,
+          "consumedSHA256": "1f47ad72f065e90e9e97d2e15a77b35e392c17aa4a73ce4d865a554d8851de76",
+          "byteStart": 6426,
+          "byteEnd": 10180
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/greedy-loop.contracts.ts",
+      "expectedSHA256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+      "actualSHA256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+      "requiredLineRanges": [
+        [
+          1,
+          221
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          106
+        ],
+        [
+          107,
+          193
+        ],
+        [
+          194,
+          221
+        ]
+      ],
+      "requiredLines": 221,
+      "consumedRequiredLines": 221,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/greedy-loop.contracts.ts",
+          "sha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+          "expectedSha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+          "start": 1,
+          "end": 106,
+          "chunkIndex": 95,
+          "totalChunks": 148,
+          "toolChunkId": "d02777",
+          "marker": "sage270-required-95",
+          "kind": "semantic-body",
+          "consumedBytes": 6460,
+          "consumedSHA256": "0756603d7ba957c67e14c23a87cabaa47b9f5b27f0c1c0adf634cbc666d65d11",
+          "byteStart": 0,
+          "byteEnd": 6460
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/greedy-loop.contracts.ts",
+          "sha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+          "expectedSha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+          "start": 107,
+          "end": 193,
+          "chunkIndex": 96,
+          "totalChunks": 148,
+          "toolChunkId": "3fa2cb",
+          "marker": "sage270-required-96",
+          "kind": "semantic-body",
+          "consumedBytes": 6446,
+          "consumedSHA256": "f787d5db8e6659c1eee79e50139639c65f7dc50654768372ae08c73bd68872ab",
+          "byteStart": 6460,
+          "byteEnd": 12906
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/greedy-loop.contracts.ts",
+          "sha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+          "expectedSha256": "f0840f3ea28d839bfd92e1114d4a69ca807bd1995af0bb9ad67b46395d801a08",
+          "start": 194,
+          "end": 221,
+          "chunkIndex": 97,
+          "totalChunks": 148,
+          "toolChunkId": "ec9148",
+          "marker": "sage270-required-97",
+          "kind": "semantic-body",
+          "consumedBytes": 1888,
+          "consumedSHA256": "a94c1d4e60c22efc79068918b90d11d99a2b1ab735eacb1b5052111b5acccae4",
+          "byteStart": 12906,
+          "byteEnd": 14794
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.fixtures.ts",
+      "expectedSHA256": "468f4de919f381625612fbd59e86d5926ddc05ea4102bdc35a120552cc04b6f8",
+      "actualSHA256": "468f4de919f381625612fbd59e86d5926ddc05ea4102bdc35a120552cc04b6f8",
+      "requiredLineRanges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "requiredLines": 53,
+      "consumedRequiredLines": 53,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/policy/policy.fixtures.ts",
+          "sha256": "468f4de919f381625612fbd59e86d5926ddc05ea4102bdc35a120552cc04b6f8",
+          "expectedSha256": "468f4de919f381625612fbd59e86d5926ddc05ea4102bdc35a120552cc04b6f8",
+          "start": 1,
+          "end": 53,
+          "chunkIndex": 98,
+          "totalChunks": 148,
+          "toolChunkId": "dd542c",
+          "marker": "sage270-required-98",
+          "kind": "semantic-body",
+          "consumedBytes": 2654,
+          "consumedSHA256": "468f4de919f381625612fbd59e86d5926ddc05ea4102bdc35a120552cc04b6f8",
+          "byteStart": 0,
+          "byteEnd": 2654
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinization-fidelity.contracts.ts",
+      "expectedSHA256": "3f81b5ead28b6f8533f4fa74017a2fd849a08efc4ecff99e5b67742b7b7a0173",
+      "actualSHA256": "3f81b5ead28b6f8533f4fa74017a2fd849a08efc4ecff99e5b67742b7b7a0173",
+      "requiredLineRanges": [
+        [
+          1,
+          142
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          108
+        ],
+        [
+          109,
+          142
+        ]
+      ],
+      "requiredLines": 142,
+      "consumedRequiredLines": 142,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinization-fidelity.contracts.ts",
+          "sha256": "3f81b5ead28b6f8533f4fa74017a2fd849a08efc4ecff99e5b67742b7b7a0173",
+          "expectedSha256": "3f81b5ead28b6f8533f4fa74017a2fd849a08efc4ecff99e5b67742b7b7a0173",
+          "start": 1,
+          "end": 108,
+          "chunkIndex": 99,
+          "totalChunks": 148,
+          "toolChunkId": "38257a",
+          "marker": "sage270-required-99",
+          "kind": "semantic-body",
+          "consumedBytes": 6483,
+          "consumedSHA256": "90758f1d7fe80bc7897492862931ab9489103a9d90c26c06aca7bfec1ebcee71",
+          "byteStart": 0,
+          "byteEnd": 6483
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/view/determinization-fidelity.contracts.ts",
+          "sha256": "3f81b5ead28b6f8533f4fa74017a2fd849a08efc4ecff99e5b67742b7b7a0173",
+          "expectedSha256": "3f81b5ead28b6f8533f4fa74017a2fd849a08efc4ecff99e5b67742b7b7a0173",
+          "start": 109,
+          "end": 142,
+          "chunkIndex": 100,
+          "totalChunks": 148,
+          "toolChunkId": "4386a8",
+          "marker": "sage270-required-100",
+          "kind": "semantic-body",
+          "consumedBytes": 2559,
+          "consumedSHA256": "4f27a5593b7b142f5bfcfd53f933bbd0daa4143cd9c74f28fde6641a78b91a3a",
+          "byteStart": 6483,
+          "byteEnd": 9042
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+      "expectedSHA256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+      "actualSHA256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+      "requiredLineRanges": [
+        [
+          1,
+          775
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          127
+        ],
+        [
+          128,
+          244
+        ],
+        [
+          245,
+          363
+        ],
+        [
+          364,
+          481
+        ],
+        [
+          482,
+          617
+        ],
+        [
+          618,
+          763
+        ],
+        [
+          764,
+          775
+        ]
+      ],
+      "requiredLines": 775,
+      "consumedRequiredLines": 775,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 1,
+          "end": 127,
+          "chunkIndex": 101,
+          "totalChunks": 148,
+          "toolChunkId": "883deb",
+          "marker": "sage270-required-101",
+          "kind": "semantic-body",
+          "consumedBytes": 6383,
+          "consumedSHA256": "5c7580eebfe14f2ba6b87e611ec658a9ec77a61ae6bad8e1e059c783c81b8c4f",
+          "byteStart": 0,
+          "byteEnd": 6383
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 128,
+          "end": 244,
+          "chunkIndex": 102,
+          "totalChunks": 148,
+          "toolChunkId": "52d69f",
+          "marker": "sage270-required-102",
+          "kind": "semantic-body",
+          "consumedBytes": 6496,
+          "consumedSHA256": "2bf2117c8175ef0fe22324b0cbb24167fa39cef0df9c13a1d651982c1e4362f2",
+          "byteStart": 6383,
+          "byteEnd": 12879
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 245,
+          "end": 363,
+          "chunkIndex": 103,
+          "totalChunks": 148,
+          "toolChunkId": "c5a5e2",
+          "marker": "sage270-required-103",
+          "kind": "semantic-body",
+          "consumedBytes": 6455,
+          "consumedSHA256": "778f1b205f2afbb18a57fc3a9190584fbf7f1f21ea71ec9ef7ee720ab82d4075",
+          "byteStart": 12879,
+          "byteEnd": 19334
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 364,
+          "end": 481,
+          "chunkIndex": 104,
+          "totalChunks": 148,
+          "toolChunkId": "89147a",
+          "marker": "sage270-required-104",
+          "kind": "semantic-body",
+          "consumedBytes": 6416,
+          "consumedSHA256": "d3418b0b2f8daeb4522e47478f78e48e4218840f2ec9ee021c86298998a89db4",
+          "byteStart": 19334,
+          "byteEnd": 25750
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 482,
+          "end": 617,
+          "chunkIndex": 105,
+          "totalChunks": 148,
+          "toolChunkId": "08a761",
+          "marker": "sage270-required-105",
+          "kind": "semantic-body",
+          "consumedBytes": 6470,
+          "consumedSHA256": "4d4345f71d7eb2a3be4f300a553561bc84471f14c36dae3a5370f38b8b7b5482",
+          "byteStart": 25750,
+          "byteEnd": 32220
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 618,
+          "end": 763,
+          "chunkIndex": 106,
+          "totalChunks": 148,
+          "toolChunkId": "574dbf",
+          "marker": "sage270-required-106",
+          "kind": "semantic-body",
+          "consumedBytes": 6445,
+          "consumedSHA256": "8e009ea46869fdbe13a298abcd9d4ed2581a3e9be84889defc18fb15821248e6",
+          "byteStart": 32220,
+          "byteEnd": 38665
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "expectedSha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "start": 764,
+          "end": 775,
+          "chunkIndex": 107,
+          "totalChunks": 148,
+          "toolChunkId": "c2f9ff",
+          "marker": "sage270-required-107",
+          "kind": "semantic-body",
+          "consumedBytes": 685,
+          "consumedSHA256": "cdc75d34a46990f39319eac7a2f4fdb1b92850dedc3fca135091794d69a26863",
+          "byteStart": 38665,
+          "byteEnd": 39350
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+      "expectedSHA256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+      "actualSHA256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+      "requiredLineRanges": [
+        [
+          1,
+          457
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          195
+        ],
+        [
+          196,
+          355
+        ],
+        [
+          356,
+          444
+        ],
+        [
+          445,
+          457
+        ]
+      ],
+      "requiredLines": 457,
+      "consumedRequiredLines": 457,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+          "sha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "expectedSha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "start": 1,
+          "end": 195,
+          "chunkIndex": 108,
+          "totalChunks": 148,
+          "toolChunkId": "067dff",
+          "marker": "sage270-required-108",
+          "kind": "semantic-body",
+          "consumedBytes": 6497,
+          "consumedSHA256": "1308714823e439f8f531dcd016f159da04422c0af606ad53ce38fc34ebbaed44",
+          "byteStart": 0,
+          "byteEnd": 6497
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+          "sha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "expectedSha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "start": 196,
+          "end": 355,
+          "chunkIndex": 109,
+          "totalChunks": 148,
+          "toolChunkId": "7038c9",
+          "marker": "sage270-required-109",
+          "kind": "semantic-body",
+          "consumedBytes": 6455,
+          "consumedSHA256": "f3c6c752331d4a058d3a312d3cb058837f9b670be71b6ebee176b203dce9e99a",
+          "byteStart": 6497,
+          "byteEnd": 12952
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+          "sha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "expectedSha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "start": 356,
+          "end": 444,
+          "chunkIndex": 110,
+          "totalChunks": 148,
+          "toolChunkId": "e87418",
+          "marker": "sage270-required-110",
+          "kind": "semantic-body",
+          "consumedBytes": 6427,
+          "consumedSHA256": "0eb8b4e0bca16d9ca299df98d1a7ec0224207e17d0cfc2e934a2afad87343262",
+          "byteStart": 12952,
+          "byteEnd": 19379
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+          "sha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "expectedSha256": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+          "start": 445,
+          "end": 457,
+          "chunkIndex": 111,
+          "totalChunks": 148,
+          "toolChunkId": "ae0e3e",
+          "marker": "sage270-required-111",
+          "kind": "semantic-body",
+          "consumedBytes": 630,
+          "consumedSHA256": "711127168845e0514ee309c3456458361a8655c0324d54f45c3a23a171149a75",
+          "byteStart": 19379,
+          "byteEnd": 20009
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/battle/integration/deck-mods.test.ts",
+      "expectedSHA256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+      "actualSHA256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+      "requiredLineRanges": [
+        [
+          1,
+          2
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          2
+        ]
+      ],
+      "requiredLines": 2,
+      "consumedRequiredLines": 2,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/battle/integration/deck-mods.test.ts",
+          "sha256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+          "expectedSha256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+          "start": 1,
+          "end": 2,
+          "chunkIndex": 112,
+          "totalChunks": 148,
+          "toolChunkId": "d1b08b",
+          "marker": "sage270-required-112",
+          "kind": "semantic-body",
+          "consumedBytes": 152,
+          "consumedSHA256": "3e6bcd98438c6049ecfc5116fed9094cc22011504503e500ca486c39e02ea74b",
+          "byteStart": 0,
+          "byteEnd": 152
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/primitive-cost-summary.json",
+      "expectedSHA256": "345c7230155619105e757268374be72a1a7fb0ed2b100424bde0a128f30029ad",
+      "actualSHA256": "345c7230155619105e757268374be72a1a7fb0ed2b100424bde0a128f30029ad",
+      "requiredLineRanges": [
+        [
+          1,
+          213
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          194
+        ],
+        [
+          195,
+          213
+        ]
+      ],
+      "requiredLines": 213,
+      "consumedRequiredLines": 213,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/primitive-cost-summary.json",
+          "sha256": "345c7230155619105e757268374be72a1a7fb0ed2b100424bde0a128f30029ad",
+          "expectedSha256": "345c7230155619105e757268374be72a1a7fb0ed2b100424bde0a128f30029ad",
+          "start": 1,
+          "end": 194,
+          "chunkIndex": 113,
+          "totalChunks": 148,
+          "toolChunkId": "36e034",
+          "marker": "sage270-required-113",
+          "kind": "semantic-body",
+          "consumedBytes": 6497,
+          "consumedSHA256": "2c37358f8ea0a07dd55d80edfa747a67236150e67147d371106e5ac27047c7cd",
+          "byteStart": 0,
+          "byteEnd": 6497
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/primitive-cost-summary.json",
+          "sha256": "345c7230155619105e757268374be72a1a7fb0ed2b100424bde0a128f30029ad",
+          "expectedSha256": "345c7230155619105e757268374be72a1a7fb0ed2b100424bde0a128f30029ad",
+          "start": 195,
+          "end": 213,
+          "chunkIndex": 114,
+          "totalChunks": 148,
+          "toolChunkId": "0a7d44",
+          "marker": "sage270-required-114",
+          "kind": "semantic-body",
+          "consumedBytes": 1318,
+          "consumedSHA256": "f2eb67ecbfde489e17d0045d02f0d26f41c9f81d1cd154f26aa72207beb8866b",
+          "byteStart": 6497,
+          "byteEnd": 7815
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+      "expectedSHA256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+      "actualSHA256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+      "requiredLineRanges": [
+        [
+          1,
+          481
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          118
+        ],
+        [
+          119,
+          226
+        ],
+        [
+          227,
+          317
+        ],
+        [
+          318,
+          418
+        ],
+        [
+          419,
+          481
+        ]
+      ],
+      "requiredLines": 481,
+      "consumedRequiredLines": 481,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "expectedSha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "start": 1,
+          "end": 118,
+          "chunkIndex": 115,
+          "totalChunks": 148,
+          "toolChunkId": "4dccd5",
+          "marker": "sage270-required-115",
+          "kind": "semantic-body",
+          "consumedBytes": 6464,
+          "consumedSHA256": "a2ae1cf4b532c8bf8ce076072a988517c9f3a1f509b5253c181495fd336ec9bc",
+          "byteStart": 0,
+          "byteEnd": 6464
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "expectedSha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "start": 119,
+          "end": 226,
+          "chunkIndex": 116,
+          "totalChunks": 148,
+          "toolChunkId": "1fe459",
+          "marker": "sage270-required-116",
+          "kind": "semantic-body",
+          "consumedBytes": 6450,
+          "consumedSHA256": "ac7a89e91c258b13197e3856e7a41c83428a6ba76b48a3f6bfbc71522bd1a449",
+          "byteStart": 6464,
+          "byteEnd": 12914
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "expectedSha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "start": 227,
+          "end": 317,
+          "chunkIndex": 117,
+          "totalChunks": 148,
+          "toolChunkId": "05eeca",
+          "marker": "sage270-required-117",
+          "kind": "semantic-body",
+          "consumedBytes": 6483,
+          "consumedSHA256": "827474145f4fde94a64df8c235b338ca8d22f9d2b90560ac798bac5ede72ffca",
+          "byteStart": 12914,
+          "byteEnd": 19397
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "expectedSha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "start": 318,
+          "end": 418,
+          "chunkIndex": 118,
+          "totalChunks": 148,
+          "toolChunkId": "264918",
+          "marker": "sage270-required-118",
+          "kind": "semantic-body",
+          "consumedBytes": 6480,
+          "consumedSHA256": "4472e2c43ef87e71fe44fcc1c0c013c04c1ff23e17e037ad76188ff9be90457b",
+          "byteStart": 19397,
+          "byteEnd": 25877
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "expectedSha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "start": 419,
+          "end": 481,
+          "chunkIndex": 119,
+          "totalChunks": 148,
+          "toolChunkId": "59fdd9",
+          "marker": "sage270-required-119",
+          "kind": "semantic-body",
+          "consumedBytes": 5509,
+          "consumedSHA256": "f6754ff5728ddf9a48db632d4f3e4ff882bf18cbb67c7ccf91bd75a93d19f2e7",
+          "byteStart": 25877,
+          "byteEnd": 31386
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+      "expectedSHA256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+      "actualSHA256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+      "requiredLineRanges": [
+        [
+          1,
+          470
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          85
+        ],
+        [
+          86,
+          167
+        ],
+        [
+          168,
+          251
+        ],
+        [
+          252,
+          323
+        ],
+        [
+          324,
+          400
+        ],
+        [
+          401,
+          470
+        ]
+      ],
+      "requiredLines": 470,
+      "consumedRequiredLines": 470,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+          "sha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "expectedSha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "start": 1,
+          "end": 85,
+          "chunkIndex": 120,
+          "totalChunks": 148,
+          "toolChunkId": "367d10",
+          "marker": "sage270-required-120",
+          "kind": "semantic-body",
+          "consumedBytes": 6467,
+          "consumedSHA256": "c16b6967aedf09b5a86abf844ae9a7e9394333bffcd5b8aa82387c1a84b6cc86",
+          "byteStart": 0,
+          "byteEnd": 6467
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+          "sha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "expectedSha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "start": 86,
+          "end": 167,
+          "chunkIndex": 121,
+          "totalChunks": 148,
+          "toolChunkId": "77f3e0",
+          "marker": "sage270-required-121",
+          "kind": "semantic-body",
+          "consumedBytes": 6475,
+          "consumedSHA256": "fd7b5fedd661e4a625affdb5cb0ffbe9568daca3f63f9723a959f9ab69b004e9",
+          "byteStart": 6467,
+          "byteEnd": 12942
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+          "sha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "expectedSha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "start": 168,
+          "end": 251,
+          "chunkIndex": 122,
+          "totalChunks": 148,
+          "toolChunkId": "3ff6b3",
+          "marker": "sage270-required-122",
+          "kind": "semantic-body",
+          "consumedBytes": 6455,
+          "consumedSHA256": "3c4c50cd139edc3665f09a36ce56136a01698624b72a96ca27f140d471397d37",
+          "byteStart": 12942,
+          "byteEnd": 19397
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+          "sha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "expectedSha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "start": 252,
+          "end": 323,
+          "chunkIndex": 123,
+          "totalChunks": 148,
+          "toolChunkId": "01791a",
+          "marker": "sage270-required-123",
+          "kind": "semantic-body",
+          "consumedBytes": 6364,
+          "consumedSHA256": "7722def9baba4d5f828f0c84ce71d38dc6730abe951f1a854019f632bdc41d3a",
+          "byteStart": 19397,
+          "byteEnd": 25761
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+          "sha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "expectedSha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "start": 324,
+          "end": 400,
+          "chunkIndex": 124,
+          "totalChunks": 148,
+          "toolChunkId": "ab42f1",
+          "marker": "sage270-required-124",
+          "kind": "semantic-body",
+          "consumedBytes": 6441,
+          "consumedSHA256": "f70047a345ef6b74d96dc0e4dec3163c313b6f9b075d3ca11c61b799ac5eea78",
+          "byteStart": 25761,
+          "byteEnd": 32202
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/repeat-triggering-ability-privacy.contracts.ts",
+          "sha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "expectedSha256": "98a900a1a0597af9e84fd4da0db14950b6bf751fd433357a3830d312fa640b6f",
+          "start": 401,
+          "end": 470,
+          "chunkIndex": 125,
+          "totalChunks": 148,
+          "toolChunkId": "b543d6",
+          "marker": "sage270-required-125",
+          "kind": "semantic-body",
+          "consumedBytes": 4812,
+          "consumedSHA256": "e2ec52c667055ecba64ddd3949412184d359ca771c06a51a006fabe97ea0ef75",
+          "byteStart": 32202,
+          "byteEnd": 37014
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+      "expectedSHA256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+      "actualSHA256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+      "requiredLineRanges": [
+        [
+          1,
+          499
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          72
+        ],
+        [
+          73,
+          147
+        ],
+        [
+          148,
+          231
+        ],
+        [
+          232,
+          317
+        ],
+        [
+          318,
+          398
+        ],
+        [
+          399,
+          486
+        ],
+        [
+          487,
+          499
+        ]
+      ],
+      "requiredLines": 499,
+      "consumedRequiredLines": 499,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 1,
+          "end": 72,
+          "chunkIndex": 126,
+          "totalChunks": 148,
+          "toolChunkId": "c9c5fe",
+          "marker": "sage270-required-126",
+          "kind": "semantic-body",
+          "consumedBytes": 6358,
+          "consumedSHA256": "867b0df52d1bf0b7b30ac97e1beb3911de1911d91d117d6697af6bba61143a25",
+          "byteStart": 0,
+          "byteEnd": 6358
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 73,
+          "end": 147,
+          "chunkIndex": 127,
+          "totalChunks": 148,
+          "toolChunkId": "078538",
+          "marker": "sage270-required-127",
+          "kind": "semantic-body",
+          "consumedBytes": 6408,
+          "consumedSHA256": "27f1946b541594bbd52392ed39e1e492e5f54b44a956a95a7245d90a604f1d1f",
+          "byteStart": 6358,
+          "byteEnd": 12766
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 148,
+          "end": 231,
+          "chunkIndex": 128,
+          "totalChunks": 148,
+          "toolChunkId": "d5b12e",
+          "marker": "sage270-required-128",
+          "kind": "semantic-body",
+          "consumedBytes": 6450,
+          "consumedSHA256": "0dffcb4a64cfb9ab8c1d5f13969362f65132200efa0e44d7b1710bc15d7575d9",
+          "byteStart": 12766,
+          "byteEnd": 19216
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 232,
+          "end": 317,
+          "chunkIndex": 129,
+          "totalChunks": 148,
+          "toolChunkId": "ca77ae",
+          "marker": "sage270-required-129",
+          "kind": "semantic-body",
+          "consumedBytes": 6404,
+          "consumedSHA256": "e464277b0dc45f8e7ba8f6bbf2e233480e72ff0f73cc8bdab1d056ebc52a9c57",
+          "byteStart": 19216,
+          "byteEnd": 25620
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 318,
+          "end": 398,
+          "chunkIndex": 130,
+          "totalChunks": 148,
+          "toolChunkId": "3bb71d",
+          "marker": "sage270-required-130",
+          "kind": "semantic-body",
+          "consumedBytes": 6495,
+          "consumedSHA256": "da42cf760d142a93e1d2877d7a39ecee9497ea489e7b8d8188c85aa54506c555",
+          "byteStart": 25620,
+          "byteEnd": 32115
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 399,
+          "end": 486,
+          "chunkIndex": 131,
+          "totalChunks": 148,
+          "toolChunkId": "e8cac7",
+          "marker": "sage270-required-131",
+          "kind": "semantic-body",
+          "consumedBytes": 6422,
+          "consumedSHA256": "c6ed499a1e14766c22cb230f832395bc72777a591d94c6cf288673463eed6254",
+          "byteStart": 32115,
+          "byteEnd": 38537
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/disable-triggers.contracts.ts",
+          "sha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "expectedSha256": "2b3a75ddce8566a0a0c4b51550cbed003d4b65cf9a21f26c10670dd47c848ece",
+          "start": 487,
+          "end": 499,
+          "chunkIndex": 132,
+          "totalChunks": 148,
+          "toolChunkId": "f5d7ed",
+          "marker": "sage270-required-132",
+          "kind": "semantic-body",
+          "consumedBytes": 1192,
+          "consumedSHA256": "9a63d870dc2b48f245c2b6839cb293dace9595132c34336076bc96644028432c",
+          "byteStart": 38537,
+          "byteEnd": 39729
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+      "expectedSHA256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+      "actualSHA256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+      "requiredLineRanges": [
+        [
+          1,
+          534
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          84
+        ],
+        [
+          85,
+          165
+        ],
+        [
+          166,
+          235
+        ],
+        [
+          236,
+          312
+        ],
+        [
+          313,
+          381
+        ],
+        [
+          382,
+          447
+        ],
+        [
+          448,
+          527
+        ],
+        [
+          528,
+          534
+        ]
+      ],
+      "requiredLines": 534,
+      "consumedRequiredLines": 534,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 1,
+          "end": 84,
+          "chunkIndex": 133,
+          "totalChunks": 148,
+          "toolChunkId": "f5f782",
+          "marker": "sage270-required-133",
+          "kind": "semantic-body",
+          "consumedBytes": 6479,
+          "consumedSHA256": "c53535efc50e3d6500658aaa4a88f51f49041259d124f76ae3fd66bf34e7f7a8",
+          "byteStart": 0,
+          "byteEnd": 6479
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 85,
+          "end": 165,
+          "chunkIndex": 134,
+          "totalChunks": 148,
+          "toolChunkId": "d4400b",
+          "marker": "sage270-required-134",
+          "kind": "semantic-body",
+          "consumedBytes": 6477,
+          "consumedSHA256": "d3f76927da6e7b86eb35105dedd0d0270b7d82ba354848814c5b2c71a8911b63",
+          "byteStart": 6479,
+          "byteEnd": 12956
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 166,
+          "end": 235,
+          "chunkIndex": 135,
+          "totalChunks": 148,
+          "toolChunkId": "1cd1ac",
+          "marker": "sage270-required-135",
+          "kind": "semantic-body",
+          "consumedBytes": 6353,
+          "consumedSHA256": "5a886766881a2221681b5f7c16dd52041a45494166bdddaa07c3ba490836cbe1",
+          "byteStart": 12956,
+          "byteEnd": 19309
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 236,
+          "end": 312,
+          "chunkIndex": 136,
+          "totalChunks": 148,
+          "toolChunkId": "496d8a",
+          "marker": "sage270-required-136",
+          "kind": "semantic-body",
+          "consumedBytes": 6479,
+          "consumedSHA256": "2ed60dcbf5536692dda91c9076418f36c80fb260659995c0ac1d96c47077c2f4",
+          "byteStart": 19309,
+          "byteEnd": 25788
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 313,
+          "end": 381,
+          "chunkIndex": 137,
+          "totalChunks": 148,
+          "toolChunkId": "f9f2db",
+          "marker": "sage270-required-137",
+          "kind": "semantic-body",
+          "consumedBytes": 6403,
+          "consumedSHA256": "78da8d4b690090f6002ad7ac32c39cb67f1eebf042381149ecc64bf536de8f00",
+          "byteStart": 25788,
+          "byteEnd": 32191
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 382,
+          "end": 447,
+          "chunkIndex": 138,
+          "totalChunks": 148,
+          "toolChunkId": "2a38e9",
+          "marker": "sage270-required-138",
+          "kind": "semantic-body",
+          "consumedBytes": 6431,
+          "consumedSHA256": "795bac8d631163fc0ca196716bdddfe449438bc588df6be9f660769778879c10",
+          "byteStart": 32191,
+          "byteEnd": 38622
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 448,
+          "end": 527,
+          "chunkIndex": 139,
+          "totalChunks": 148,
+          "toolChunkId": "ca2b79",
+          "marker": "sage270-required-139",
+          "kind": "semantic-body",
+          "consumedBytes": 6444,
+          "consumedSHA256": "5b8184a011410836e74bc54440b44ec963dc4f2efb7b9664972df578c2364fa3",
+          "byteStart": 38622,
+          "byteEnd": 45066
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts",
+          "sha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "expectedSha256": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+          "start": 528,
+          "end": 534,
+          "chunkIndex": 140,
+          "totalChunks": 148,
+          "toolChunkId": "9bf945",
+          "marker": "sage270-required-140",
+          "kind": "semantic-body",
+          "consumedBytes": 464,
+          "consumedSHA256": "eaf3a402b900658e8e0766bb6ba38a4f67552d2ded87976850b107033e7fa83e",
+          "byteStart": 45066,
+          "byteEnd": 45530
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+      "expectedSHA256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+      "actualSHA256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+      "requiredLineRanges": [
+        [
+          1,
+          427
+        ]
+      ],
+      "consumedLineRanges": [
+        [
+          1,
+          78
+        ],
+        [
+          79,
+          144
+        ],
+        [
+          145,
+          199
+        ],
+        [
+          200,
+          272
+        ],
+        [
+          273,
+          342
+        ],
+        [
+          343,
+          391
+        ],
+        [
+          392,
+          427
+        ]
+      ],
+      "requiredLines": 427,
+      "consumedRequiredLines": 427,
+      "missingLines": [],
+      "status": "complete",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 1,
+          "end": 78,
+          "chunkIndex": 141,
+          "totalChunks": 148,
+          "toolChunkId": "a8d666",
+          "marker": "sage270-required-141",
+          "kind": "semantic-body",
+          "consumedBytes": 6360,
+          "consumedSHA256": "c33f857e33473aeb07156c533c517b500ec3514ece3f76d914a175eb6ddd8919",
+          "byteStart": 0,
+          "byteEnd": 6360
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 79,
+          "end": 144,
+          "chunkIndex": 142,
+          "totalChunks": 148,
+          "toolChunkId": "26467e",
+          "marker": "sage270-required-142",
+          "kind": "semantic-body",
+          "consumedBytes": 6481,
+          "consumedSHA256": "ec22af2f89d7f8867e7c636944c0149f34ccb59ce6a839d42556a0c1dd0d8af6",
+          "byteStart": 6360,
+          "byteEnd": 12841
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 145,
+          "end": 199,
+          "chunkIndex": 143,
+          "totalChunks": 148,
+          "toolChunkId": "b8204a",
+          "marker": "sage270-required-143",
+          "kind": "semantic-body",
+          "consumedBytes": 6457,
+          "consumedSHA256": "a9151f6a59468696bb1e232bcd0c7505068e3713a46d4f1cc2ea98e526ce8f6a",
+          "byteStart": 12841,
+          "byteEnd": 19298
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 200,
+          "end": 272,
+          "chunkIndex": 144,
+          "totalChunks": 148,
+          "toolChunkId": "b0a5c3",
+          "marker": "sage270-required-144",
+          "kind": "semantic-body",
+          "consumedBytes": 6417,
+          "consumedSHA256": "8080c80a56570d1c74b0db235c3aeccbf3625bd1c974bd825716f726aa9a530b",
+          "byteStart": 19298,
+          "byteEnd": 25715
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 273,
+          "end": 342,
+          "chunkIndex": 145,
+          "totalChunks": 148,
+          "toolChunkId": "f7e942",
+          "marker": "sage270-required-145",
+          "kind": "semantic-body",
+          "consumedBytes": 6417,
+          "consumedSHA256": "22a46eaef019dff88e74829ecbecec7c74a9dbcb59c1f010c3b58f4db973954a",
+          "byteStart": 25715,
+          "byteEnd": 32132
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 343,
+          "end": 391,
+          "chunkIndex": 146,
+          "totalChunks": 148,
+          "toolChunkId": "151179",
+          "marker": "sage270-required-146",
+          "kind": "semantic-body",
+          "consumedBytes": 6493,
+          "consumedSHA256": "ddb826361a4d6a69cf6abc9ca73803feb64405b64a9dd3bb4447b0b18cd64e8f",
+          "byteStart": 32132,
+          "byteEnd": 38625
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/effects/primitives/contracts/journey-deck-spark-modifier.contracts.ts",
+          "sha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "expectedSha256": "8f8fda66429c5cc25d15f75bb33edef99688a0c3572b56866f864698086d5c92",
+          "start": 392,
+          "end": 427,
+          "chunkIndex": 147,
+          "totalChunks": 148,
+          "toolChunkId": "ece054",
+          "marker": "sage270-required-147",
+          "kind": "semantic-body",
+          "consumedBytes": 3404,
+          "consumedSHA256": "4594f2244e31c057705a7c81fc7317eea5330db04e8bdef23940b020b39f0511",
+          "byteStart": 38625,
+          "byteEnd": 42029
+        }
+      ]
+    }
+  ],
+  "additional": [
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+      "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+      "totalLines": 827,
+      "status": "partial-exact-proposal-callers-only",
+      "consumedLineRanges": [
+        [
+          211,
+          285
+        ],
+        [
+          481,
+          550
+        ],
+        [
+          551,
+          623
+        ],
+        [
+          624,
+          696
+        ],
+        [
+          697,
+          777
+        ]
+      ],
+      "unreadLineRangesNotClaimedAsInspected": "All lines outside recorded ranges",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "lines": 827,
+          "start": 211,
+          "end": 285,
+          "kind": "additional-semantic",
+          "toolChunkId": "d8dea7",
+          "marker": "sage270-extra-0",
+          "consumedBytes": 2181,
+          "consumedSHA256": "192e9f9880d27db0821e641d0762020c36f05f332a1e55244f7c24ea511132d3",
+          "byteStart": 9325,
+          "byteEnd": 11506
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "lines": 827,
+          "start": 481,
+          "end": 550,
+          "kind": "additional-semantic",
+          "toolChunkId": "1108a6",
+          "marker": "sage270-extra-1",
+          "consumedBytes": 3498,
+          "consumedSHA256": "53d681cd4bf4cc2b55e1f88599c0cdc9ba57f0ae33907678e99d21f522269ee8",
+          "byteStart": 20706,
+          "byteEnd": 24204
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "lines": 827,
+          "start": 551,
+          "end": 623,
+          "kind": "additional-semantic",
+          "toolChunkId": "039398",
+          "marker": "sage270-extra-2",
+          "consumedBytes": 4086,
+          "consumedSHA256": "307cb73294c6bc80b4c03eecf4647c6119d260d3131f0b4a46f0993e82bcacf5",
+          "byteStart": 24204,
+          "byteEnd": 28290
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "lines": 827,
+          "start": 624,
+          "end": 696,
+          "kind": "additional-semantic",
+          "toolChunkId": "8da64e",
+          "marker": "sage270-extra-3",
+          "consumedBytes": 4375,
+          "consumedSHA256": "fe5a847f4e7fda5679d994d1025902e653ef561c265865c19a85f0920c828682",
+          "byteStart": 28290,
+          "byteEnd": 32665
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "lines": 827,
+          "start": 697,
+          "end": 777,
+          "kind": "additional-semantic",
+          "toolChunkId": "8fc050",
+          "marker": "sage270-extra-4",
+          "consumedBytes": 4027,
+          "consumedSHA256": "ac073c64bf483ecf6b6e961fb07d90d3ea7154762834eb112e3209a7dee3c08c",
+          "byteStart": 32665,
+          "byteEnd": 36692
+        }
+      ]
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/steps/kinds/begin-battle.ts",
+      "sha256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+      "totalLines": 105,
+      "status": "complete",
+      "consumedLineRanges": [
+        [
+          1,
+          105
+        ]
+      ],
+      "unreadLineRangesNotClaimedAsInspected": "All lines outside recorded ranges",
+      "receipts": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/src/engine/steps/kinds/begin-battle.ts",
+          "sha256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+          "lines": 105,
+          "start": 1,
+          "end": 105,
+          "kind": "additional-semantic",
+          "toolChunkId": "7cf696",
+          "marker": "sage270-extra-5",
+          "consumedBytes": 4764,
+          "consumedSHA256": "3a3314adb77fdcc5c7b8785f4772289286e87d1abf03c0af0da570e1b9b82aba",
+          "byteStart": 0,
+          "byteEnd": 4764
+        }
+      ]
+    }
+  ],
+  "hashOnly": [
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/packet.json",
+      "expected": "878291c2a7b68528ed47558499381ffb4ca8547807c6e4651c454419e04e2c6a",
+      "actual": "878291c2a7b68528ed47558499381ffb4ca8547807c6e4651c454419e04e2c6a",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/supplement-primitives-v2.json",
+      "expected": "94a941ee8e3f8ed8c47c0943e0cf06a101ca85acd449692d588e07f2fe11b1a3",
+      "actual": "94a941ee8e3f8ed8c47c0943e0cf06a101ca85acd449692d588e07f2fe11b1a3",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/vitest-results.json",
+      "expected": "e6f91d82c7e0068931efe11b297cab646c47e5a33adec961afc9cd179496cf70",
+      "actual": "e6f91d82c7e0068931efe11b297cab646c47e5a33adec961afc9cd179496cf70",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/module-diagnostics.json",
+      "expected": "565351f78e7718a3279c7766fc5ca88d0bcbccdd38bcb80b4d50ab39b2c541bf",
+      "actual": "565351f78e7718a3279c7766fc5ca88d0bcbccdd38bcb80b4d50ab39b2c541bf",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/profile-derived.json",
+      "expected": "67690d3edb6d6729afb422ac63ace51e9ae246fbb8d6132723324e2befeb9016",
+      "actual": "67690d3edb6d6729afb422ac63ace51e9ae246fbb8d6132723324e2befeb9016",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/fullsuite.log",
+      "expected": "018b385c5dd486dd1b12a073a2d7dbbe1ef94986a212d237ca118d30017f2136",
+      "actual": "018b385c5dd486dd1b12a073a2d7dbbe1ef94986a212d237ca118d30017f2136",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance270/fullsuite.inputs.json",
+      "expected": "09135808b0e6b87a288cd95bdf589d9763f72071eb2f56e4cb937da6cc73b659",
+      "actual": "09135808b0e6b87a288cd95bdf589d9763f72071eb2f56e4cb937da6cc73b659",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/primitive-runtime-group-projection.json",
+      "expected": "c8da9a92d6dbcb81809c5bad788d3f0ce442e54d5ba3077fb67d053761fac410",
+      "actual": "c8da9a92d6dbcb81809c5bad788d3f0ce442e54d5ba3077fb67d053761fac410",
+      "kind": "hash-only",
+      "tool": "02f866",
+      "marker": "sage270-hash-bindings",
+      "match": true
+    }
+  ],
+  "metadataAndSkillInspection": [
+    {
+      "kind": "skill-read",
+      "tool": "exec:d95c52",
+      "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+      "range": [
+        1,
+        10
+      ]
+    },
+    {
+      "kind": "skill-read",
+      "tool": "exec:7b0b27",
+      "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+      "range": [
+        1,
+        41
+      ]
+    },
+    {
+      "kind": "oversize-metadata-inspection",
+      "tool": "exec:c56995",
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/packet.json",
+      "credit": "metadata only; not source-body credit; recover required body reads in bounded chunks"
+    },
+    {
+      "kind": "metadata-inspection",
+      "tool": "exec:91c868",
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/supplement-primitives-v2.json"
+    },
+    {
+      "kind": "skill-read",
+      "path": "/Users/dthurn/dreamtides_web/.llms/skills/cumulus/SKILL.md",
+      "range": "characters 0..7000",
+      "marker": "cumulus-first"
+    },
+    {
+      "kind": "skill-read",
+      "path": "/Users/dthurn/dreamtides_web/.llms/skills/cumulus/SKILL.md",
+      "range": "characters 7000..end",
+      "tool": "7c6ba1"
+    },
+    {
+      "kind": "line-coordinate-verification",
+      "tool": "e0256c",
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario-slots.test.mjs",
+      "ranges": [
+        [
+          397,
+          397
+        ],
+        [
+          434,
+          434
+        ],
+        [
+          456,
+          491
+        ]
+      ],
+      "credit": "Already fully semantically covered in required reads; duplicate coordinate verification, not new range credit."
+    }
+  ],
+  "issues": {
+    "denied": [],
+    "requiredUnread": [],
+    "requiredPartial": [],
+    "initialOversize": [
+      {
+        "tool": "c56995",
+        "kind": "packet metadata only",
+        "disposition": "Initial packet listing exceeded requested outer byte ceiling. No source-body coverage credit; all required source bodies subsequently read through bounded semantic chunks."
+      }
+    ],
+    "truncated": [
+      {
+        "tool": "c739b6",
+        "kind": "lexical search",
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/snapshot/scripts/qa/run-scenario.mjs",
+        "disposition": "Search output truncated; no full search or file-body credit claimed. Proposal-relevant exact callers consumed separately in extra0..4."
+      }
+    ],
+    "recovered": [
+      {
+        "marker": "sage270-required-0..147",
+        "kind": "bounded source inspection",
+        "result": "Every required range consumed, no source body truncation."
+      },
+      {
+        "marker": "sage270-extra-0..4",
+        "kind": "exact caller inspection",
+        "result": "Public capture namespace, requested port selection and startup/cleanup source bodies read in bounded calls."
+      }
+    ],
+    "failedToolAttempts": [
+      {
+        "kind": "functions-eval-syntax",
+        "effect": "No shell tool ran; corrected async wrapper on next call."
+      }
+    ]
+  },
+  "authority": {
+    "applicationRuntime": 0,
+    "tests": 0,
+    "installations": 0,
+    "compilers": 0,
+    "nativeBeadOrDeliveryEffects": 0,
+    "repositoryWrites": 0,
+    "onlyWrites": "This assigned Sage270 output directory",
+    "helpersSpawned": 0
+  },
+  "qualification": "Required scope complete; additional files have only exact recorded ranges inspected. Hash-only raw runtime artifacts are NOT semantic body inspection or independently rerun checks. Parent runtime proof is retained with its qualifications. Scope written before report/proposals."
+}

@@ -1,0 +1,75 @@
+{
+  "source": "5fc16ab73eb3bd99a1d2842ee22751dccef8b57e",
+  "status": "ONE_BOUNDED_PROTOTYPE_REQUIRING_PARENT_NATIVE_ADMISSION",
+  "scopePath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/scope-coverage.json",
+  "scopeSHA256": "245de4eda7289faf852e5ef552088c39feaead73064d02f9cf060af7d384cae3",
+  "scopeWrittenFirst": true,
+  "runtimeExecutions": 0,
+  "authority": "Parent alone checks fresh native status/owner/Areas/edges, files, claims, implements and delivers; this audit is read-only and interim.",
+  "D19": {
+    "budgetSeconds": 60,
+    "workers": 2,
+    "lowHostLoad": true,
+    "waived": false,
+    "caseCountParityRequired": false
+  },
+  "prototypeRule": "One exact baseline and one exact changed-source complete affected-module test stage, including collection/setup/environment, unchanged 2 workers and current reset/isolation semantics. Preserve actual full logs, source hashes and host conditions, including failures. Require observed >=10% stage improvement or EXACT SOURCE ROLLBACK. No private-body timing, success sampling, summed wall forecast or CI speed assertion. Required review/knip and review:full for test-infrastructure scope, with a fresh read-only cold Codex review.",
+  "proposals": [
+    {
+      "key": "D19-QA-SLOT-REDUNDANT-LIFECYCLES",
+      "priority": 1,
+      "title": "Prune duplicate QA slot startup witnesses while retaining native ownership and evidence isolation",
+      "sourceCause": "run-scenario-slots.test.mjs reopens real contained launchers and native locks for each port-table row and for two overlapping same-label namespace scenarios. Current source 65500 row takes exactly the same requestedFits=false route for both held slots as retained 5374. A separate two-session same-label test is subsumed by the stronger legacy-root/game-log test when its owned-log and live-child observations are carried forward. This is contract pruning, not OS querying, process containment, locking, or provider behavior work.",
+      "exactAreas": [
+        {
+          "path": "scripts/qa/run-scenario-slots.test.mjs",
+          "bodies": "397 port-row literal: remove only [65500,[5174,5274]];457\u2013468 weaker same-label namespace case and470\u2013489 stronger legacy-root/game-log case: subsume weaker observables into stronger retained case. Keep all mocks, cleanup, remaining port rows and other tests."
+        },
+        {
+          "path": "docs/plan/evidence/{friction,measurements,pre-existing,reviews}/<new-bead>",
+          "bodies": "Own evidence and exact observation/deletion map."
+        }
+      ],
+      "implementation": "Delete only the 65500 table row. Retain 5174,5274,5374,5175,5275 with both simultaneous live slots and their exact expected selected ports. Consolidate the weaker same-label namespace case into the existing stronger legacy-root/game-log case: retain distinct captureDir and invocation paths, both contained server processes live, nonempty per-session server-log bytes preserved while the peer runs, distinct saved game-log paths, original legacy-root bytes, and distinct result/image payload paths. Keep actual native server/lease startup, all resource cleanup, and concurrent session.runPlan calls. If the owned-log sentinel needs first-session-before-second-start setup, use that setup inside this one retained case; the retained 5174 port case continues to witness two concurrent same-checkout startups with serialized spawn/ready ordering. Do not substitute mocks for the real launcher/lock boundary.",
+      "observationDeletionMap": [
+        {
+          "delete": "The 65500 row's real pair of startups",
+          "retained": "The 5374 row reaches requestedFits=false for slot 0 (range5174..5273) and slot1 (5274..5373), including slot1's exact excluded upper boundary. 5274 separately pins slot0's excluded upper boundary and slot1's included lower boundary; 5174 pins slot0's included lower boundary and slot1's below-range fallback. 5175/5275 retain each slot's accepted interior."
+        },
+        {
+          "delete": "A standalone second pair solely for same-label namespace isolation",
+          "retained": "One strengthened legacy-root/game-log scenario keeps distinct invocation/capture dirs, actual live child identities and intact owned server-log bytes, concurrent saved game-log paths, unchanged legacy-root .server.log/.result.json/.jsonl/.png bytes and distinct per-invocation outputs. The initial weak case has no unique provider failure or native ownership transition."
+        },
+        {
+          "delete": "No other observation",
+          "retained": "5174 queued reopen + occupied-port refusal + peer byte/lock liveness; uncertain-provider/server-settlement failures; native owned runner SIGTERM; quarantine peer isolation; foreign listener rejection; all per-file teardown and no surviving direct children."
+        }
+      ],
+      "exactSourceCallers": [
+        {
+          "path": "scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "ranges": [
+            [
+              211,
+              285
+            ],
+            [
+              481,
+              777
+            ]
+          ],
+          "basis": "qaInvocationDir496\u2013500 uses native mkdtemp under per-bead invocations. openQaSession524\u2013528 derives serverLog from captureDir. 674\u2013678 has one per-held-slot requestedFits predicate and fallback; 697\u2013737 starts a real owned server and publishes provider ownership;551\u2013635 attempts all cleanup and releases."
+        }
+      ],
+      "prerequisites": [],
+      "nativeOverlap": "Unknown fresh native ownership/status/Areas/edges. Parent must check before filing. No D97 claim or cross-project scope. Serialize only a real overlap with these exact test bodies, preserving semantic prerequisites.",
+      "validation": {
+        "completeAffectedModule": "scripts/qa/run-scenario-slots.test.mjs (whole module and collection/setup/environment)",
+        "expectedDeletion": "Exactly one port-table case and one redundant same-label case after strengthening retained evidence case; no blanket case parity rule.",
+        "requiredAssertions": "All retained port selections, spawn/ready order, live distinct child IDs, native locks, peer bytes, log descriptor/build cleanup, provider uncertainty, actual signal path, root legacy bytes and per-invocation result/game-log isolation still pass. Normal fixture cleanup must join every child.",
+        "acceptance": ">=10% observed complete-module stage reduction or exact rollback; no estimated or guaranteed gain. Keep all actual failed observations."
+      }
+    }
+  ]
+}

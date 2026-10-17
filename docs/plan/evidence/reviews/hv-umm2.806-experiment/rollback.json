@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-17T17:54:07.380710+00:00",
+  "sourceRollback": "EXACT",
+  "base": "7bd468f2d85676ce78eede18598b2074378462cb",
+  "path": "scripts/qa/run-scenario-slots.test.mjs",
+  "baseAndFinalSHA256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+  "prototypeSHA256": "2e0eb51909bfa7717ccd82725c0ac8000940d1222b8265e9faf7386db50e6aa3",
+  "prototypeDiffSHA256": "fc7c140e909ebb3470b3768d8602244c473e4bb710bc9f3038f05452c9c059eb",
+  "reason": "Whole-command observed reduction below10%; whole test stage below10% too. No repeat experiment or other cuts."
+}

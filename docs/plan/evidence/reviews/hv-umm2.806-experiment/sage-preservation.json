@@ -1,0 +1,18 @@
+{
+  "artifacts": {
+    "report.json": "22a744010eba7717d0340d7c173557aa2e446d9afabba934bbbe7bb243e64f28",
+    "proposals.json": "79471f0b779925a3ce16e527a95a17222821a4a75ac644bb87aa1606100b1ead",
+    "scope-coverage.json": "245de4eda7289faf852e5ef552088c39feaead73064d02f9cf060af7d384cae3"
+  },
+  "source": "5fc16ab73eb3bd99a1d2842ee22751dccef8b57e",
+  "preservation": "FULL byte-identical original report/proposals/scope; all fields and entries retained",
+  "requiredInputs": 47,
+  "requiredSemanticLines": 12269,
+  "requiredReceipts": 148,
+  "additionalReceipts": 6,
+  "verifiedByteRanges": 154,
+  "readingQualification": "Report/proposals fully read. Scope inventory, limitations and structure read as provenance; exact154 byte ranges mechanically hash-verified. No new semantic review of12269 source lines or hash-only artifacts claimed. Initial combined tool output truncation recovered through compact inventory/limits; receipt fields verified mechanically.",
+  "interimOnly": true,
+  "finalPhase5RetrospectiveOwed": true,
+  "D19Unwaived": true
+}

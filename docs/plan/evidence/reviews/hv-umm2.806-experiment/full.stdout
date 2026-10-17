@@ -1,0 +1,86 @@
+
+> dreamtides-web@0.1.0 review:full
+> node scripts/review.mjs full
+
+
+[review] prepare
+[review] prepare started at 2026-10-17T17:56:01.737Z load=21.5302734375
+
+[prepare] local art
+Linked 0 of 564 card images
+Linked 0 avatar portraits and 0 cutouts of 32
+Linked 0 of 153 dreamsign images
+Linked 0 journey images
+Linked 0 of 521 Exploration images
+Linked Dream Atlas art
+Linked 0 of 14 D97 art sources
+Asset setup complete.
+
+[prepare] D97 maps
+Compiled 0 of 1 D97 maps
+
+[prepare] D97 characters
+Resolved 35 D97 character recipes; linked 0 sheets
+
+[prepare] typed Cumulus tokens
+Unchanged src/cumulus/primitives/tokens.ts
+Tokens: 192 unique (0 duplicate declarations deduped last-wins)
+
+[prepare] workspace materializations are current in .
+[review] prepare finished in 4.3s (exit 0)
+[review] lint started at 2026-10-17T17:56:06.046Z load=22.20849609375
+[review] typecheck started at 2026-10-17T17:56:06.048Z load=22.20849609375
+[review] typecheck-node started at 2026-10-17T17:56:06.049Z load=22.20849609375
+[review] import-cycles started at 2026-10-17T17:56:06.050Z load=22.20849609375
+[review] knip started at 2026-10-17T17:56:06.050Z load=22.20849609375
+[review] friction-records started at 2026-10-17T17:56:06.051Z load=22.20849609375
+
+[review] friction-records
+Friction evidence valid: 1079 records, 41 historical unknown measurements
+[review] friction-records finished in 0.1s (exit 0)
+
+[review] knip
+[review] knip finished in 1.8s (exit 0)
+
+[review] import-cycles
+[import-cycles] 2767 modules, 5 late-bound import cycle(s), no evaluation-time reads inside a cycle
+[review] import-cycles finished in 2.6s (exit 0)
+
+[review] typecheck-node
+[review] typecheck-node finished in 6.6s (exit 0)
+
+[review] typecheck
+[review] typecheck finished in 21.2s (exit 0)
+
+[review] lint
+[review] lint finished in 42.0s (exit 0)
+
+[review] test
+[review] test started at 2026-10-17T17:56:48.046Z load=20.73486328125
+
+ RUN  v4.1.0 /Users/dthurn/dreamtides_web/.worktrees/codex-d19-qa-slots806
+
+
+ Test Files  490 passed (490)
+      Tests  12719 passed (12719)
+   Start at  10:56:48
+   Duration  95.07s (transform 16.08s, setup 792ms, import 73.88s, tests 101.36s, environment 10.69s)
+
+[review] test finished in 95.8s (exit 0)
+
+[review] bundle
+[review] bundle started at 2026-10-17T17:58:23.846Z load=13.72705078125
+The production bundle holds no development-only module.
+[review] bundle finished in 5.9s (exit 0)
+
+[review] restore-local-assets
+[review] restore-local-assets started at 2026-10-17T17:58:29.721Z load=14.31298828125
+Linked 564 of 564 card images
+Linked 32 avatar portraits and 32 cutouts of 32
+Linked 153 of 153 dreamsign images
+Linked 226 journey images
+Linked 521 of 521 Exploration images
+Linked Dream Atlas art
+Linked 14 of 14 D97 art sources
+Asset setup complete.
+[review] restore-local-assets finished in 3.8s (exit 0)

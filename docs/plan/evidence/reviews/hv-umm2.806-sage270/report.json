@@ -1,0 +1,93 @@
+{
+  "status": "COMPLETE_READ_ONLY_INTERIM_D19_ROOT_CAUSE_AUDIT",
+  "source": "5fc16ab73eb3bd99a1d2842ee22751dccef8b57e",
+  "packetPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/packet.json",
+  "packetSHA256": "878291c2a7b68528ed47558499381ffb4ca8547807c6e4651c454419e04e2c6a",
+  "supplementPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/supplement-primitives-v2.json",
+  "supplementSHA256": "94a941ee8e3f8ed8c47c0943e0cf06a101ca85acd449692d588e07f2fe11b1a3",
+  "scopePath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/scope-coverage.json",
+  "scopeSHA256": "245de4eda7289faf852e5ef552088c39feaead73064d02f9cf060af7d384cae3",
+  "scopeWrittenBeforeReportAndProposals": true,
+  "requiredCoverage": {
+    "inputs": 47,
+    "semanticLines": 12269,
+    "boundedCalls": 148,
+    "maxBodyChunkBytes": 6500,
+    "allExpectedHashesMatch": true
+  },
+  "skill": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+  "uiSkill": "/Users/dthurn/dreamtides_web/.llms/skills/cumulus/SKILL.md",
+  "runtimeExecutions": 0,
+  "nativeMutations": 0,
+  "repositoryWrites": 0,
+  "currentObservation": {
+    "files": 453,
+    "cases": 12533,
+    "status": "ALL_PASS",
+    "testStageSeconds": 96.7,
+    "vitestSeconds": 95.81,
+    "workers": 2,
+    "loadStart": 9.8843,
+    "loadEnd": 11.9219,
+    "D19": "UNSATISFIED_UNWAIVED_60S_AT_LOW_LOAD",
+    "qualification": "Parent proof read and raw artifacts hash-bound; no fresh runtime in this audit. Busy-host observation is neither low-load acceptance nor a causal comparison. Prior same-source release84.5 is dispatcher-supplied context, not independently inspected here."
+  },
+  "findings": [
+    {
+      "key": "D19-QA-SLOT-REDUNDANT-LIFECYCLES",
+      "conclusion": "One independently implementable pruning prototype has an exact retained observable map and public-source branch evidence. No gain has been measured. Parent must admit and apply >=10% whole-module acceptance or exact rollback."
+    },
+    {
+      "key": "PRIMITIVE_BODY_COST",
+      "conclusion": "Actual5929 body durations sum17549.157797ms versus17582.381666ms wholemodule body, collection2269.590916ms. This rejects grouping/hook-overhead as the asserted cause. Full required five contract files were inspected; their meaningful privacy, knowledge, actual producer, ceased origin, source condition, source cost, declaration, replay and persisted error contracts cannot be deleted by counts or metadata. Cost-composition redundancies exist, but this audit establishes no bounded >=10% complete5929-case module candidate; no speculative large cut filed."
+    }
+  ],
+  "rejectedOrUnproven": [
+    {
+      "hypothesis": "Re-run Sage269 cuts802/804/803 or change805",
+      "disposition": "All delivered. Current required test sources reflect them. 805 is friction-only correction; no repeated proposal or causal aggregate saving claim."
+    },
+    {
+      "hypothesis": "Weaken isolation/resetModules or persist global content/provider cache",
+      "disposition": "Not proposed. Complete mutable provider/import closure and deterministic contamination proof absent. setup-dom19\u201330 and Vitest project boundaries remain binding."
+    },
+    {
+      "hypothesis": "Prune realworker or prompt-interleaving tournament contract",
+      "disposition": "Not proposed. contracts.test149\u2013183 covers actual1/2 workers, interrupted one-leg prefix, equivalence and failure settlement. 74\u2013101 covers real earlier-discard policy view plus recorded prompt answer/replay. Worker source now imports manifest production path; prior766/792/800 causes are not reopened."
+    },
+    {
+      "hypothesis": "Shrink core full games or determinization continuations arbitrarily",
+      "disposition": "Not proposed. Actual target coverage counters are fed by real observed events in fuzz.ts510\u2013548; core fixtures test inclusion/exercise, hidden allocation, failure and replay. A smaller deterministic fixture would require an exact same-behavior mapping. No such measured prototype is established. samples() is real collection work, but its tests also require legal continued sampled play and anonymous/floating fidelity."
+    },
+    {
+      "hypothesis": "Cut expensive UI adapter/item/mobile tests wholesale",
+      "disposition": "Not proposed. Required sources contain player interaction, geometry, UUID provenance, authoritative redaction, suspended/recovery and actual pointer-route failure contracts. Collection dominates some modules, but no complete exact removable import source cause was established."
+    },
+    {
+      "hypothesis": "Delete primitive matrices wholesale",
+      "disposition": "Not proposed. D19 permits meaningful pruning with exact cheaper retained witnesses; no global parity ban is inferred. Current five inspected expensive contract files predominantly distinguish actual boundary/knowledge/replay conditions. No fabricated saving, metadata-only deletion or aggregate forecast."
+    },
+    {
+      "hypothesis": "Native QA ownership broad cut",
+      "disposition": "No further lock, actual ownership, OS identity, signal or provider uncertainty weakening. The one proposal deletes a duplicate value and overlapping test lifecycle while explicitly retaining these contracts."
+    }
+  ],
+  "evidenceLimits": {
+    "requiredUnread": [],
+    "requiredDenied": [],
+    "additionalPartial": "run-scenario.mjs: only recorded caller ranges211\u2013285 and481\u2013777; no full mutable import closure claimed. begin-battle.ts1\u2013105 complete additional read used to reject speculative cheap first-turn fixture.",
+    "metadataOnly": "Raw fullsuite result/diagnostics/profile/log/inputs and primitive grouping projection hash-only. Current summaries and parent proof fully read. Initial oversized packet metadata and truncated lexical search are preserved in scope issues; subsequent bounded source reads receive body credit.",
+    "validationRunHere": "None."
+  },
+  "unresolvedUnknowns": [
+    "The one prototype's complete affected-module stage gain is unmeasured; exact rollback is mandatory below10%.",
+    "The suite's actual <=60s at2workers and low host load remains unestablished. No local cut is a fullsuite forecast.",
+    "Fresh native competing ownership/Areas/edges are parent-only and unknown to this audit.",
+    "No sufficient complete mutable import/provider closure exists for cross-cutting test-isolation changes.",
+    "Required final Phase5 retrospective/Sage after actual QA, fuzz and timing remains owed, alongside stock/transfiguration/deck-mod sweep,10000fullpool soak,realdesktop/mobile journeys,minifiedQA/coldvisual, review dispositions and release convergence."
+  ],
+  "phaseAcceptance": false,
+  "retrospectiveQualification": "This is an INTERIM D19 source audit only. It does NOT satisfy the required FINAL Phase5 Sage/retrospective after actual QA/fuzz/timing. No filing or delivery authority exercised.",
+  "proposalsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage270/proposals.json",
+  "proposalsSHA256": "79471f0b779925a3ce16e527a95a17222821a4a75ac644bb87aa1606100b1ead"
+}

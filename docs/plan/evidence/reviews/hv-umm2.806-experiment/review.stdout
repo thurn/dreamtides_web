@@ -1,0 +1,10 @@
+
+> dreamtides-web@0.1.0 review
+> node scripts/review.mjs quick
+
+[review] 26 changed file(s) since 7bd468f2d856
+[review] friction-records started at 2026-10-17T17:55:18.794Z load=24.2900390625
+
+[review] friction-records
+Friction evidence valid: 1079 records, 41 historical unknown measurements
+[review] friction-records finished in 0.1s (exit 0)
