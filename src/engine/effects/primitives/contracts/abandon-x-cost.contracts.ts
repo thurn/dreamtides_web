@@ -9,7 +9,7 @@ import { isLegalAnswer } from "../../../prompts/answers";
 import type { Answer, Prompt } from "../../../prompts/types";
 import { chooseX, payCosts, planCosts } from "../../../rules/costs";
 import { stateHash } from "../../../state/hash";
-import { opponent, type Side } from "../../../state/ids";
+import { opponent, type InstanceId, type Side } from "../../../state/ids";
 import { ReplayDivergence } from "../../../steps/errors";
 import { runStep } from "../../../steps/runner";
 import { ScriptedSource } from "../../../steps/sources";
@@ -158,10 +158,33 @@ for (const side of ["player", "enemy"] as const) describe(`abandonXCost as ${sid
 
   it("lets the real Greedy prompt policy choose and pay a legal count", () => {
     const f = fixture(side);
-    const result = f.engine.apply(f.state, side, f.action, { answer: prompt => greedyAnswer(prompt, () => ({ mine: true, value: 1 }), () => new Set<number>(), 0) });
-    expect(result.events.some(event => event.kind === "abandoned")).toBe(true);
-    expect(result.state.sides[side].currentEnergy).toBe(4);
-    expect(result.state.stack[0]?.x).toBeGreaterThan(0);
+    let chosenX: number | undefined;
+    let chosenFigments: readonly InstanceId[] | undefined;
+    const result = f.engine.apply(f.state, side, f.action, { answer: prompt => {
+      const answer = greedyAnswer(prompt, () => ({ mine: true, value: 1 }), () => new Set<number>(), 0);
+      expect(isLegalAnswer(prompt, answer)).toBe(true);
+      if (prompt.purpose.role === "chooseX") {
+        if (typeof answer !== "number") throw new Error("Expected a numeric X");
+        chosenX = answer;
+      }
+      if (prompt.purpose.role === "abandonCost") {
+        if (prompt.kind !== "chooseCards" || !Array.isArray(answer)) throw new Error("Expected figment payment");
+        chosenFigments = prompt.candidates.filter(id => answer.includes(id));
+        expect(chosenFigments).toHaveLength(answer.length);
+      }
+      return answer;
+    } });
+    expect(chosenX).toBeDefined();
+    expect(chosenFigments).toHaveLength(chosenX!);
+    const abandoned = result.events.flatMap(event => event.kind === "abandoned" ? [event.instance] : []);
+    expect(abandoned).toHaveLength(chosenX!);
+    expect(new Set(abandoned)).toEqual(new Set(chosenFigments));
+    for (const id of f.figments) {
+      expect(result.state.instances[id] === undefined).toBe(chosenFigments!.includes(id));
+    }
+    expect(result.state.sides[side].currentEnergy).toBe(f.state.sides[side].currentEnergy - 1);
+    expect(result.events.filter(event => event.kind === "energyChanged" && event.cause === "payment").map(event => event.kind === "energyChanged" ? event.change : 0)).toEqual([-1]);
+    expect(result.state.stack[0]?.x).toBe(chosenX);
     expect(invariantViolations(result.state, f.engine.catalog)).toEqual([]);
   });
 

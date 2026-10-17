@@ -4,14 +4,12 @@
  * chosen count is X, at least the cost's least X, and it travels with the
  * stack item; the final banish proves every selection without search; the
  * choice survives reload, refuses stale and foreign input, and commits with
- * the play or not at all. Fractured Veil, the authored card, pays it in
- * response at Interrupt speed.
+ * the play or not at all. A synthetic fixed-cost event pays it in response
+ * at Interrupt speed.
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { additionalCost, banishXCost, energy, energyX, event, keyword, optionalCost, x } from "../../../dsl/builders";
-import fracturedVeil from "../../../../content/cards/fractured-veil-06f8cfff";
-import { engineCardFromContent } from "../../../content-catalog";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -63,10 +61,10 @@ const failsAfterPaying = synthetic(1306, () => [], {
     },
   },
 });
-/** Fractured Veil, the authored Interrupt-speed banishXCost card. */
-const veil = engineCardFromContent(fracturedVeil);
+/** Fixed 2● Interrupt: banish X, then put two of the top X cards into hand and the rest on the bottom. */
+const interruptDig = synthetic(1308, dig.abilities, { costs: [energy(2)], speed: "interrupt" });
 
-const engine = createEngine(testCatalog([banishForPoints, banishAnyForPoints, banishCharacters, pricedBanish, reclaimBanish, dig, failsAfterPaying, optionalBanish, veil]));
+const engine = createEngine(testCatalog([banishForPoints, banishAnyForPoints, banishCharacters, pricedBanish, reclaimBanish, dig, failsAfterPaying, optionalBanish, interruptDig]));
 const deck = [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id, v.vanilla5.id];
 
 /** The enemy holds an Interrupt, so the played item waits on the stack until the enemy passes. */
@@ -341,13 +339,13 @@ describe("banishXCost across suspension and failure", () => {
   });
 });
 
-describe("Fractured Veil at Interrupt speed", () => {
-  /** The enemy's turn: it plays a standard event, and the player may respond with Fractured Veil. */
+describe("banish-X dig at Interrupt speed", () => {
+  /** The enemy's turn: it plays a standard event, and the player may respond with the synthetic Interrupt. */
   function responding() {
     const setup = boardState(engine.catalog, {
       active: "enemy",
       phase: "day",
-      player: { deck, hand: [veil.id], void: [v.vanilla1.id, v.event0.id, v.vanilla2.id], energy: 3 },
+      player: { deck, hand: [interruptDig.id], void: [v.vanilla1.id, v.event0.id, v.vanilla2.id], energy: 3 },
       enemy: { deck, hand: [v.event1.id], energy: 5 },
     });
     const fold = createFoldAdapter(engine, { checkEventPrefix: true });
@@ -389,7 +387,7 @@ describe("Fractured Veil at Interrupt speed", () => {
     const chosen = ids.player.void.slice(0, 2);
     const answered = fold.reduce(opened, { kind: "answer", side: "player", promptId: fold.pending(opened)!.prompt.id, value: chosen });
     const paid = applied(answered);
-    // The enemy has no response, so priority passes and Fractured Veil, the top item, resolves to its arrangement.
+    // The enemy has no response, so priority passes and the Interrupt, the top item, resolves to its arrangement.
     const arranging = fold.pending(paid)!;
     const arrange = arranging.prompt as ArrangePrompt;
     expect(arrange.purpose.source).toBe(response);
@@ -402,7 +400,7 @@ describe("Fractured Veil at Interrupt speed", () => {
 
     const outcome = fold.reduce(paid, { kind: "answer", side: "player", promptId: arranging.prompt.id, value: [{ card: first, to: "hand" }, { card: second, to: "hand" }] });
     const resolved = applied(outcome);
-    // Neither player can respond again, so the original item resolves after Fractured Veil, from beneath it.
+    // Neither player can respond again, so the original item resolves after the Interrupt, from beneath it.
     const published = [answered, outcome].flatMap((step) => (step.kind === "applied" ? step.published : []));
     expect(published.flatMap((event) => (event.kind === "resolved" ? [event.instance] : []))).toEqual([response, original]);
     expect(resolved.committed.stack).toEqual([]);

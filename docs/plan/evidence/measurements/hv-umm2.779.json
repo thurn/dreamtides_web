@@ -1,0 +1,264 @@
+{
+  "bead": "hv-umm2.779",
+  "phase": 5,
+  "base": "a113155a1797df7fb3e6299f7f5c6361fc7b13da",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-xcost-fixtures779",
+  "rawEvidenceDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779",
+  "baseline": {
+    "head": "a113155a1797df7fb3e6299f7f5c6361fc7b13da",
+    "files": {
+      "src/engine/effects/primitives/contracts/abandon-x-cost.contracts.ts": "b1699e3ca3588ce9e0c6a623b6a68076cb8812f5f371c78bb4e9f2e9898ee67f",
+      "src/engine/effects/primitives/contracts/banish-xcost.contracts.ts": "1759257738c7f2120439875ef64b810646da1d8e2bf5e37e6552ba2bc2c1b5c4"
+    },
+    "status": ""
+  },
+  "implementationStart": "2026-10-17T06:08:04.020830+00:00",
+  "testDelta": {
+    "files": 0,
+    "lines": 21,
+    "jsdomFiles": 0
+  },
+  "newTests": 0,
+  "sourceOnlyFinding": "Two existing fixture contracts depend on a default Greedy preference and production content; source inspection supplies the baseline. No production runtime failure is claimed.",
+  "scope": "Exactly two primitive contract modules and own admitted evidence. No production, policy, content, configuration or infrastructure behavior changes.",
+  "runner": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/validate.py",
+    "sha256": "24d3d42f5712d62ff12ae171109b671b789ad17025c4d66a8ad80bab6af97fa9",
+    "frozenBeforeLaunch": true
+  },
+  "validationReceipts": [
+    {
+      "name": "focused",
+      "launch": {
+        "name": "focused",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "abandonXCost|banishXCost|banish-X dig"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-xcost-fixtures779",
+        "runnerSHA256": "24d3d42f5712d62ff12ae171109b671b789ad17025c4d66a8ad80bab6af97fa9",
+        "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/focused.inputs.json",
+        "inputManifestSHA256": "d5cb6a5962f1cb1bd88b3f5e26da572434c7dba8f750805028aa297eca2fb61c",
+        "head": "a113155a1797df7fb3e6299f7f5c6361fc7b13da",
+        "preparedAt": "2026-10-17T06:09:00.016233+00:00",
+        "load": "{ 5.44 7.21 7.01 }",
+        "workers": 2
+      },
+      "receipt": {
+        "startedAt": "2026-10-17T06:09:00.017013+00:00",
+        "pid": 18166,
+        "pgid": 18166,
+        "wrapperPid": 18122,
+        "endedAt": "2026-10-17T06:09:10.211433+00:00",
+        "exitCode": 0,
+        "wallSeconds": 10.194379749998916,
+        "childUserSeconds": 8.823317,
+        "childSystemSeconds": 2.878193,
+        "loadAfter": "{ 5.22 7.10 6.97 }",
+        "remainingProcessGroup": [],
+        "launchSHA256": "126c34e0cf5432520e694665016b8b6dbf08fbf997642d265e9cfb0a27818c3e",
+        "stdoutSHA256": "a79f06c63d3d28289cb8a49c150a674c4f82549d139fe4d45ef728f1d5c624a7",
+        "stderrSHA256": "e50d558714289c44923c74615e8661fa0eb31bedbdff320a2ee40036273fdf14"
+      },
+      "originalTerminal": {
+        "sessionId": 20175,
+        "launchChunk": "44b5a3",
+        "terminalChunk": "f3413d",
+        "actualToolExit": 0
+      },
+      "rawPrefix": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/focused",
+      "finalCodeMatchesInputs": true,
+      "inputManifestScope": "All git-tracked paths plus own admitted evidence present at launch; symlinks record target text. Workspace preparation owns generated materializations."
+    },
+    {
+      "name": "review",
+      "launch": {
+        "name": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-xcost-fixtures779",
+        "runnerSHA256": "24d3d42f5712d62ff12ae171109b671b789ad17025c4d66a8ad80bab6af97fa9",
+        "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/review.inputs.json",
+        "inputManifestSHA256": "5f940b3063e0b68476c0ecb752bafd3cc569ed6403f805231c066e3d4ba5a507",
+        "head": "a113155a1797df7fb3e6299f7f5c6361fc7b13da",
+        "preparedAt": "2026-10-17T06:09:29.526602+00:00",
+        "load": "{ 4.75 6.87 6.89 }",
+        "workers": 2
+      },
+      "receipt": {
+        "startedAt": "2026-10-17T06:09:29.527097+00:00",
+        "pid": 20420,
+        "pgid": 20420,
+        "wrapperPid": 20376,
+        "endedAt": "2026-10-17T06:10:00.822789+00:00",
+        "exitCode": 0,
+        "wallSeconds": 31.29552650003461,
+        "childUserSeconds": 71.111967,
+        "childSystemSeconds": 8.505537,
+        "loadAfter": "{ 5.82 6.92 6.91 }",
+        "remainingProcessGroup": [],
+        "launchSHA256": "63dbd523c0fa35a9efbd0f2b5d3af366543f9b7f21edc585440e01142f5c9abc",
+        "stdoutSHA256": "d2ad26f22e9807dedebe565363b1d63bd86e9f301797192661e26f62bec0db7e",
+        "stderrSHA256": "e50d558714289c44923c74615e8661fa0eb31bedbdff320a2ee40036273fdf14"
+      },
+      "originalTerminal": {
+        "sessionId": 40862,
+        "launchChunk": "185324",
+        "terminalChunk": "142e08",
+        "actualToolExit": 0
+      },
+      "rawPrefix": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/review",
+      "finalCodeMatchesInputs": true,
+      "inputManifestScope": "All git-tracked paths plus own admitted evidence present at launch; symlinks record target text. Workspace preparation owns generated materializations."
+    },
+    {
+      "name": "knip",
+      "launch": {
+        "name": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-xcost-fixtures779",
+        "runnerSHA256": "24d3d42f5712d62ff12ae171109b671b789ad17025c4d66a8ad80bab6af97fa9",
+        "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/knip.inputs.json",
+        "inputManifestSHA256": "5f940b3063e0b68476c0ecb752bafd3cc569ed6403f805231c066e3d4ba5a507",
+        "head": "a113155a1797df7fb3e6299f7f5c6361fc7b13da",
+        "preparedAt": "2026-10-17T06:10:03.054699+00:00",
+        "load": "{ 5.82 6.92 6.91 }",
+        "workers": 2
+      },
+      "receipt": {
+        "startedAt": "2026-10-17T06:10:03.055367+00:00",
+        "pid": 22781,
+        "pgid": 22781,
+        "wrapperPid": 22748,
+        "endedAt": "2026-10-17T06:10:08.170373+00:00",
+        "exitCode": 0,
+        "wallSeconds": 5.113905667036306,
+        "childUserSeconds": 4.451051,
+        "childSystemSeconds": 1.530376,
+        "loadAfter": "{ 5.59 6.86 6.89 }",
+        "remainingProcessGroup": [],
+        "launchSHA256": "87d70ce109decdae3c1703511edfcf8279543afef745f013e84854b9c0c1c696",
+        "stdoutSHA256": "fa04ae496cfffb48f244f89631d47f0727d0198a9b7a6ab1d22f1d2b59358239",
+        "stderrSHA256": "e50d558714289c44923c74615e8661fa0eb31bedbdff320a2ee40036273fdf14"
+      },
+      "originalTerminal": {
+        "sessionId": 99049,
+        "launchChunk": "8d85fb",
+        "terminalChunk": "74b53d",
+        "actualToolExit": 0
+      },
+      "rawPrefix": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/knip",
+      "finalCodeMatchesInputs": true,
+      "inputManifestScope": "All git-tracked paths plus own admitted evidence present at launch; symlinks record target text. Workspace preparation owns generated materializations."
+    }
+  ],
+  "failurePaths": {
+    "newStateTransitions": 0,
+    "errorMidStepAndPartialWrite": [
+      "rolls back energy and abandonment if the paying step fails after commitment",
+      "commits neither the banish nor the play when rules code fails after paying",
+      "recovers a persisted play that fails after paying: no banish publishes or commits, and a retry pays and plays"
+    ],
+    "reloadInvalidStaleConcurrent": [
+      "suspends, reloads and replays every choice; rejects invalid, stale and concurrent inputs without payment",
+      "reloads the banish choice unchanged, commits nothing until answered, and refuses stale, foreign, concurrent and out-of-range input"
+    ],
+    "interruptCancelAndOrdering": [
+      "opens and cancels its banish cost prompt in response, leaving the original item and the player's priority",
+      "goes on the stack above the original item with its X and resolves first"
+    ]
+  },
+  "D19": {
+    "fullSuiteTargetSeconds": 60,
+    "status": "unmet and unwaived; no full-suite, phase gate, runtime or performance credit claimed",
+    "workers": 2,
+    "testEnvironment": "node",
+    "testCasesDelta": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting sysctl observation"
+      }
+    }
+  },
+  "resourcePolicy": {
+    "heavy": false,
+    "browser": false,
+    "servers": [],
+    "ports": [],
+    "helpers": []
+  },
+  "pending": "Parent owns fresh cold core review, exact candidate qualification and promotion.",
+  "finalCodeSHA256": {
+    "src/engine/effects/primitives/contracts/abandon-x-cost.contracts.ts": "369913fcfa02f1ef3f29f4a7d3a977328a7dbb7d61deb2f0dac2ed3b1755b2d9",
+    "src/engine/effects/primitives/contracts/banish-xcost.contracts.ts": "cc64e3bd90de4e8b142c890c18d1d7fa50b37d829c9dc37e8e34c86460f9336c"
+  },
+  "installProvenance": {
+    "owner": "parent session; inherited before implementation",
+    "receipt": {
+      "pid": 11045,
+      "pgid": 11045,
+      "actualExit": 0,
+      "wallS": 2.4866685000015423,
+      "childCpuS": 5.726317,
+      "stdoutSHA256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "originalTerminal": "Parent brief records original session 15829 actual exit 0 collected; parent-install-cleanup.json records cleanup."
+  },
+  "hostLoadSamples": [
+    {
+      "name": "focused",
+      "at": "2026-10-17T06:09:00.016233+00:00",
+      "before": "{ 5.44 7.21 7.01 }",
+      "after": "{ 5.22 7.10 6.97 }"
+    },
+    {
+      "name": "review",
+      "at": "2026-10-17T06:09:29.526602+00:00",
+      "before": "{ 4.75 6.87 6.89 }",
+      "after": "{ 5.82 6.92 6.91 }"
+    },
+    {
+      "name": "knip",
+      "at": "2026-10-17T06:10:03.054699+00:00",
+      "before": "{ 5.82 6.92 6.91 }",
+      "after": "{ 5.59 6.86 6.89 }"
+    }
+  ],
+  "implementationEnd": "2026-10-17T06:10:31.965865+00:00",
+  "implementationEndScope": "Actual final evidence assembly immediately before final schema validation and commit; exact commit timestamp is available from git.",
+  "lateEvidenceQualification": {
+    "command": [
+      "node",
+      "scripts/friction-triggers.mjs",
+      "--validate-records"
+    ],
+    "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/xcost-fixtures779/schema-final.receipt.json",
+    "scope": "Final friction/evidence bytes receive a separate narrow schema qualification after this assembly. Its actual outcome and source manifest are external receipts, avoiding a self-referential validation claim."
+  },
+  "resourceHandoff": {
+    "observedAt": "2026-10-17T06:10:31.965865+00:00",
+    "validationProcessGroupsAbsent": [
+      18166,
+      20420,
+      22781
+    ],
+    "remainingOwnedServers": [],
+    "remainingOwnedHelpers": [],
+    "originalTerminalsCollected": true,
+    "schemaFinalAndCommit": "Collected separately by final handoff receipt after their actual terminals."
+  }
+}
