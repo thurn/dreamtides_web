@@ -114,9 +114,16 @@ Research inputs, outside this repository:
 7. **Endgame.** Use keys to open key dreams, clear them for Legendary cards,
    Legendary Dreamsigns and Avatars, and collect more keys.
 
-Target shape: 25–35 hours and about 110–120 battles from run start to
-Apollyon's defeat, with the collection growing from 30 cards to about 210–260.
-The endgame has no fixed length.
+**Target shape.** Only bosses block progress, so a campaign has three
+reference lengths from run start to Apollyon's defeat:
+
+| Route | Battles | Collection at Apollyon | Meaning |
+| --- | --- | --- | --- |
+| Minimum | 21 wins | — | Ten Avatar guardians, ten incarnations and Apollyon, each beaten on the first attempt. Should be very hard, reached only by exceptionally skilled and lucky players |
+| Happy path | About 60 | About 125–160 | The intended experience: about half the challengers, the required bosses and a few side battles |
+| Full clear | About 120; 25–35 hours | About 210–260 | Exhaustive exploration: nearly every challenger, some optional guardians, refills, side battles and early key dreams |
+
+Refills make the battle count unbounded above. The endgame has no fixed length.
 
 ## Glossary
 
@@ -493,21 +500,27 @@ Details: [Appendix D](appendix-d-content-reuse.md).
 
 The campaign is tuned so a successful run acquires cards within about 15% of
 Shandalar's rate per battle: a forecast 2.2 copies per battle against the
-Magician research journey's 1.92. The table compares the two;
+Magician research journey's 1.92. The rate per battle is the primary target.
+Campaign length and the final collection follow from how many optional battles
+the player chooses, so the table gives both D97 reference routes;
 [Appendix E](appendix-e-calibration.md) derives each row.
 
-| Channel (per successful campaign) | Shandalar Magician | D97 target (expected) |
-| --- | --- | --- |
-| Starting collection | 40 | 30 |
-| Victory bundles, antes included | 59 copies from 21 wins | 105–130 from about 68 wins |
-| Guardian antes and picks | 15 castle picks | 45–58 |
-| Shop and curiosity purchases | 16 | 25–40 |
-| Amulet merchant purchases | 11 | 15–24 |
-| Chests and prize duels | 5 lair finds and special duels | 15–28 |
-| Key prizes | 5 dungeon treasures | 0–2 |
-| Trials, Duplication and site outcomes | 2 bounty picks | 10–20 |
-| Removed: sales, antes, deliveries, purge costs | −37 | −30 to −60 |
-| **Collection at Apollyon** | **116** | **210–260** |
+The Shandalar column is one authored, illustrative route of 59 matches, not a
+measured average; real campaigns often fight more roaming duels. Its "21 wins"
+counts only ordinary wins that kept a bundle, out of 55 wins in all.
+
+| Channel (per successful campaign) | Shandalar Magician route | D97 happy path (about 60 battles) | D97 full clear (about 120 battles) |
+| --- | --- | --- | --- |
+| Starting collection | 40 | 30 | 30 |
+| Victory bundles, antes included | 59 copies from 21 bundle-paying wins (of 55) | 32–42 from about 23 wins | 105–130 from about 68 wins |
+| Guardian antes and picks | 15 castle picks | 46–52 | 45–58 |
+| Shop and curiosity purchases | 16 | 11–25 | 25–40 |
+| Amulet merchant purchases | 11 | 7–14 | 15–24 |
+| Chests and prize duels | 5 lair finds and special duels | 5–15 | 15–28 |
+| Key prizes | 5 dungeon treasures | 0 | 0–2 |
+| Trials, Duplication and site outcomes | 2 bounty picks | 2–11 | 10–20 |
+| Removed: sales, antes, deliveries, purge costs | −37 | −15 to −35 | −30 to −60 |
+| **Collection at Apollyon** | **116** | **125–160** | **210–260** |
 
 ## Logging
 
@@ -542,7 +555,7 @@ or changes.
 | # | Topic | Decision | Revises |
 | --- | --- | --- | --- |
 | S1 | Run shape | Five acts and Limbo form the campaign; keys open one-time key dreams; the run continues after Apollyon | R3, R16 |
-| S2 | Campaign length | 25–35 hours, about 110–120 battles to Apollyon | R3 |
+| S2 | Campaign length | About 60 battles to Apollyon on the happy path; about 120 and 25–35 hours for a full clear; the 21-win minimum route should be very hard | R3 |
 | S3 | Act tilesets | Tilesets mix within every act, across categories | R12 |
 | S4 | Act assembly | Act-agnostic authored dreams with their own NPCs and quests, assembled per run into variable topologies | R14, R16 |
 | S5 | Gating | Doors never lock; guardians block the doors they stand before; every route to an act's incarnation passes at least two guardians | R19, R26 |
@@ -620,10 +633,17 @@ appendix:
 
 ## Risks and open questions
 
-- **A larger collection.** The forecast collection at Apollyon is about twice
-  Shandalar's, from a campaign about twice as long. Playtests should check
-  that late-campaign rewards still matter and that collection screens stay
-  usable at 250 cards.
+- **A larger collection.** A full clear forecasts about 250 cards at Apollyon,
+  about twice the Shandalar route's 116, because it fights about twice as many
+  battles at a similar rate. Playtests should check that late-campaign rewards
+  still matter to a full-clear player and that collection screens stay usable
+  at 250 cards.
+- **The minimum route.** Bosses are retryable, so the 21-win route is hard only
+  if a deck that skipped optional battles loses to late bosses often. Boss
+  tiers, head starts and the bag's growth must leave that deck well behind. A
+  player at the collection floor antes nothing, so boss retries there cost only
+  time; measure whether retrying with a floor-sized deck beats fighting
+  challengers.
 - **Refill pacing.** Refills must unstick a struggling player without making
   low-tier grinding the best use of time. Measure how often players fight
   refills, and where.
