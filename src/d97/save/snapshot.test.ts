@@ -3,7 +3,7 @@
 // snapshot; foreign, newer or unmigratable saves do not decode; the golden
 // schema-version-1 save is frozen: its committed bytes never change and they
 // decode under the current migrations, version 1 to 2 dropping encounters'
-// head starts; and the golden save of the current version has exactly the
+// head starts (shown on the exported milestone save, whose encounters carry them); and the golden save of the current version has exactly the
 // shape a run folded today writes (so a change to the persisted shape must
 // bump the schema version and ship a migration, P5).
 
@@ -79,11 +79,10 @@ describe("D97 snapshots", () => {
     });
 
     it("drops an encounter's head starts on the way to version 2", () => {
-      const v1 = JSON.parse(raw) as { d97: { run: { encounters: Record<string, unknown> } } };
-      v1.d97.run.encounters = { anchor: { anchorId: "anchor", headStarts: { player: 0, opponent: 0 }, beaten: false } };
-      const decoded = decodeSnapshot(JSON.stringify(v1), D97_SAVE_MIGRATIONS);
-      const encounter = decoded?.snapshot.d97.run?.encounters as Record<string, Record<string, unknown>> | undefined;
-      expect(encounter?.anchor).toEqual({ anchorId: "anchor", beaten: false });
+      const v1 = readFileSync(new URL("./fixtures/milestones/m1.json", import.meta.url), "utf8");
+      const encounters = Object.values(decodeSnapshot(v1, D97_SAVE_MIGRATIONS)?.snapshot.d97.run?.encounters ?? {});
+      expect(encounters.length).toBeGreaterThan(0);
+      for (const encounter of encounters) expect(encounter).not.toHaveProperty("headStarts");
     });
   });
 

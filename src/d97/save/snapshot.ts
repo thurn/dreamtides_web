@@ -11,12 +11,15 @@ import { genesisFoldState, type FoldState } from "../../rules/fold-state";
 import type { BuildGitRevision } from "../../types/build-identity";
 import type { IntentKey } from "../../types/identifiers";
 import { migrateSnapshot, type D97SaveMigration } from "./migrate";
+import { parseSnapshotV2 } from "./schema-v2";
 
 export const D97_SAVE_FORMAT = "dreamtides-97-save";
 
 /**
- * The current snapshot schema version. Version 1 is frozen: every change to
- * the persisted shape bumps it and adds a migration (`./migrations/`).
+ * The current snapshot schema version. Each version is frozen: its shape is
+ * written out in its own module (`./schema-v2.ts`), type-tied to the live
+ * state, and a change to the persisted shape bumps the version and adds a
+ * migration (`./migrations/`).
  */
 export const D97_SAVE_SCHEMA_VERSION = 2;
 
@@ -67,7 +70,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 /**
  * Decode a stored snapshot, migrating it to the current schema version. Null
- * when it is not a D97 save, comes from a newer schema, or a migration fails.
+ * when it is not a D97 save, comes from a newer schema, a migration fails, or
+ * the migrated value does not match the current schema field by field.
  */
 export function decodeSnapshot(
   raw: string,
@@ -82,17 +86,9 @@ export function decodeSnapshot(
   if (!isRecord(parsed) || parsed.format !== D97_SAVE_FORMAT) return null;
   const migrated = migrateSnapshot(parsed, migrations, D97_SAVE_SCHEMA_VERSION);
   if (migrated === null) return null;
-  const value = migrated.value;
-  if (
-    !isRecord(value.d97) ||
-    !isRecord(value.build) ||
-    typeof value.seq !== "number" ||
-    !Array.isArray(value.intentKeys) ||
-    !(value.battle === null || isRecord(value.battle))
-  ) {
-    return null;
-  }
-  return { snapshot: value as unknown as D97Snapshot, migratedFrom: migrated.from === D97_SAVE_SCHEMA_VERSION ? null : migrated.from };
+  const snapshot = parseSnapshotV2(migrated.value);
+  if (snapshot === null) return null;
+  return { snapshot, migratedFrom: migrated.from === D97_SAVE_SCHEMA_VERSION ? null : migrated.from };
 }
 
 /** The fold state a snapshot restores under `genesis`. */

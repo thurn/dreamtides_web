@@ -127,9 +127,27 @@ describe("D97 saves", () => {
   });
 
   describe.each(D97_DREAMS.map((dream) => [dream.id, dream] as const))("a run in catalog dream %s", (_id, dream) => {
-    const challenger = dream.residents.find((resident) => resident.role === "challenger")!.anchorId;
-    const encounter = (anchorId: DreamAnchorId) =>
-      ({ anchorId, role: "challenger", deck: [], draftPool: [], signatureCardIds: [], opponentAnteCardId: null }) as unknown as D97Encounter;
+    const resident = dream.residents.find((candidate) => candidate.role === "challenger")!;
+    const challenger = resident.anchorId;
+    const encounter = (anchorId: DreamAnchorId): D97Encounter => ({
+      anchorId,
+      characterId: resident.characterId,
+      role: "challenger",
+      kind: "generic",
+      tier: 1,
+      avatarId: SAVE_AVATAR,
+      abilityActive: false,
+      deck: [],
+      draftPool: [],
+      dreamsignIds: [],
+      signatureCardIds: [],
+      scoreToWin: 10,
+      playerAnteCopyId: null,
+      opponentAnteCardId: null,
+      extra: null,
+      battles: 0,
+      beaten: false,
+    });
 
     /** The stored game, its snapshot's run given encounters at `anchorIds`. */
     async function storedWith(repository: GameRepository, anchorIds: readonly DreamAnchorId[]) {
