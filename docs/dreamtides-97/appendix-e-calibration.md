@@ -254,7 +254,7 @@ encounter type and tier:
   and the time from acquisition to equipping;
 - Essence and amulets by source and sink, cards sold, and unspent amulets by
   resonance;
-- win rate by tier, head-start difference and difficulty; rematch counts;
+- win rate by tier and difficulty; rematch counts;
 - refills placed and fought, by act and by the player's current act;
 - ante losses by rarity and by modification;
 - dreams entered, doors traversed, waypoints activated and fast travels;
@@ -266,8 +266,8 @@ encounter type and tier:
 
 **Simulation first.** A headless run simulator can tune the levers above before
 playtests. It replays the event log with scripted exploration, shopping and
-challenge policies, and resolves battles from a win-rate model by tier, head
-start and difficulty. Its job is to produce distributions around the expected
+challenge policies, and resolves battles from a win-rate model by tier and
+difficulty. Its job is to produce distributions around the expected
 ledgers in E3–E5. It runs three challenge policies:
 
 - **Minimum:** fights only the 21 required bosses, retrying after losses.
@@ -294,8 +294,8 @@ ledgers in E3–E5. It runs three challenge policies:
 **The minimum route.** A strong minimum-route policy should beat Apollyon
 within 25 battles in under 5% of runs, and its median campaign should take
 far more battles than the happy path, mostly boss retries. If it gets close
-to the happy path's length, harden the late bosses (tier offsets, head
-starts) before shrinking rewards.
+to the happy path's length, harden the late bosses (tier offsets, opponent
+Dreamsigns) before shrinking rewards.
 
 **Endgame:**
 

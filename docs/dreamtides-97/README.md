@@ -1,11 +1,11 @@
 # Dreamtides 97: Game Design Document
 
-**Status:** design proposal for a future game mode. It is not part of the
-active implementation plan in [`docs/plan/`](../plan/README.md), and nothing
-here changes the binding decisions in
-[`docs/plan/decisions.md`](../plan/decisions.md). Every number on these pages
-is a catalog tunable (decision D32); the values given are starting proposals
-for simulation and playtest.
+**Status:** the game design of the Dreamtides 97 mode, which the D97 stream
+builds under [its own plan](plan/README.md). That plan's
+[decisions](plan/decisions.md) bind where they differ from these pages, and
+these pages follow them (decision P27). Every number on these pages is a
+catalog tunable (decision D32); the values given are starting proposals for
+simulation and playtest.
 
 Dreamtides 97 ("D97") is a long-form run mode for the Dreamtides web client.
 A run has two parts:
@@ -140,18 +140,20 @@ Refills make the battle count unbounded above. The endgame has no fixed length.
 | **Run** | One D97 game, from Avatar choice onward. A run continues after Apollyon's defeat. |
 | **Campaign** | Acts 1–5 and Limbo, ending with Apollyon's defeat. |
 | **Act** | One stage of the campaign: several act dreams assembled at run start, ending at an incarnation. |
-| **Dream** | One authored location: a map on one tileset, with its own characters, quests and doors. |
+| **Dream** | One authored location: a map on one tileset, with its own characters, quests and doors. Dreams have no names. |
+| **Dream module** | A catalog dream's typed module: its map, its topology (waypoint, arrival door, exit door and its guardian, shop) and its residents by anchor. |
+| **Room** | A small interior map that belongs to a dream, entered through an ordinary building door. |
 | **Act dream** | A dream placed in an act. Act dreams can be revisited for the rest of the run. |
 | **Key** | An item that opens one key dream, showing only its prize. |
 | **Key dream** | A one-time dream opened by a key. It closes once every challenger in it has been fought. |
 | **Prize** | A key dream's reward for beating all its challengers: a Legendary card, a Legendary Dreamsign, an Avatar or a Perfected card. |
-| **Map** | A dream's authored layout, with anchors for characters, doors, a waypoint, a shop and chests. |
-| **Tileset** | A dream's art set, such as a dwarven dungeon or a space colony, grouped into categories. Tilesets have no mechanical effect. |
-| **Door** | A diegetic passage between dreams. Doors are two-way and blind. |
+| **Map** | A dream's layout: a map module over a Tiled source map, with an edit recipe and anchors for characters, doors, a waypoint, a shop and chests. |
+| **Tileset** | A dream's art set, such as a dwarven dungeon or a space colony, grouped into categories. Tilesets have no mechanical effect, and their names are internal labels that never appear in game. |
+| **Door** | A diegetic passage between dreams. Doors are two-way and blind; a traversed door shows at most a thumbnail of its destination's art. |
 | **Sealed door** | A door to an optional dream that opens for a toll or a quest item. |
 | **Chokepoint** | A guardian anchor in front of a door. The guardian blocks that door until beaten. |
 | **Waypoint** | An object in each dream. Touching it lets the player fast-travel to and from that dream. |
-| **Dream Atlas** | The map of every dream the player has entered and every door they've traversed; also the fast-travel screen. |
+| **Dream Atlas** | The map of every dream the player has entered and every door they've traversed, each dream shown by its tileset thumbnail; also the fast-travel screen. |
 | **Challenger** | A generic character who can be challenged to a battle, shown with an icon over their head. |
 | **Refill** | A new challenger who appears in a cleared act dream as the player fights elsewhere. |
 | **Avatar character** | One of the 32 Avatars as a character. Hostile Avatar characters are always guardians and fight with their Avatar ability. |
@@ -160,6 +162,7 @@ Refills make the battle count unbounded above. The endgame has no fixed length.
 | **Incarnation** | One of Apollyon's ten incarnations. Five guard the acts; the other five wait in Limbo. |
 | **Limbo** | The final campaign dream, beyond the Act 5 incarnation. |
 | **Friendly NPC** | A character who can't be challenged: shopkeepers, amulet merchants, sages, Dream Guides and quest givers. |
+| **Townsfolk** | Ambient residents of a dream who talk but offer no services and carry no head icon. |
 | **Cluster** | A group of map anchors where friendly NPCs gather, which acts like a small town. |
 | **Collection** | Every owned card copy. |
 | **Active deck** | The owned copies equipped for battle. |
@@ -332,17 +335,27 @@ Algorithms: [Appendix A](appendix-a-economy.md).
 - **Five acts and Limbo** (Appendix B). Each act holds 3–8 act dreams, about 25
   across the campaign, with 12–14 challengers, 2–4 Avatar guardians and one
   incarnation. Limbo is a single fixed dream.
-- **Authored dreams.** Each dream in the catalog is authored as a whole: its
-  map, tileset, friendly characters, 1–3 quests written for that tileset, and
-  any sealed doors with their tolls or quest items.
-  Dreams come in sizes from small (2–3 challengers) to large (6–8), so an act
-  might be eight small dreams or four large ones.
+- **Authored dreams.** Each dream in the catalog is authored as a whole, as a
+  dream module beside its written brief: its map, tileset, topology,
+  residents (friendly characters, 3–8 townsfolk and challenger personas, each
+  with dialogue), 1–3 quests written for that tileset, and any sealed doors
+  with their tolls or quest items. Dreams come in sizes from small (2–3
+  challengers, a map of about 60×60 tiles) to large (6–8 challengers, about
+  150×150), so an act might be eight small dreams or four large ones. See
+  [Appendix B §B2](appendix-b-dreams.md#b2-dream-catalog).
+- **Unnamed dreams.** Dreams have no names anywhere in the game: not on doors,
+  in the Atlas or in sage hints. Characters, quests and items have names.
+- **Rooms.** A dream may own rooms: small interior maps entered through
+  ordinary building doors, with no veil. A room shares its dream's waypoint
+  and tier.
 - **Assembled acts.** At run start, D97 draws dreams from the catalog for each
   act and joins them with doors into a new topology. A dream can land in any
   act; its challengers' tier comes from the act.
 - **Mixed tilesets.** An act never repeats a tileset, spans at least three
   tileset categories, and joins dreams of different categories wherever it
   can, so genre jumps begin in Act 1.
+
+Tileset names in the table below are internal labels for art sets.
 
 | Category | Example tilesets |
 | --- | --- |
@@ -352,7 +365,8 @@ Algorithms: [Appendix A](appendix-a-economy.md).
 | Nature | Enchanted forest (Wilderveil), meadow, snowfield |
 
 - **Doors** are two-way and blind. A door never reveals where it leads until
-  the player steps through.
+  the player steps through, and even then shows at most a small thumbnail of
+  the destination's art.
 - **Sealed doors.** Some dreams have a sealed door that opens for a toll in
   Essence or amulets, or for an item found through a quest. A sealed door
   always leads to an optional dream, so no route to an incarnation depends on
@@ -373,13 +387,16 @@ Algorithms: [Appendix A](appendix-a-economy.md).
 - **Waypoints.** Each dream has one. Touching it activates it. Standing at any
   activated waypoint, the player can travel free to any other.
 - **Dream Atlas.** It shows every dream the player has entered, grouped by
-  act, each traversed door, and each dream's tier, guardians and waypoint
-  status.
+  act and identified by its tileset thumbnail, each traversed door, and each
+  dream's tier, guardians, waypoint status and markers.
 - **Presentation.** The target is an isometric 3D view with click or tap to
   move. The web prototype mocks it with top-down Liberated Pixel Cup pixel art
-  in a PixiJS canvas under the existing React UI; the
-  [overworld visual guide](overworld-visual-guide.md) designs its tilesets,
-  doors, markers and characters.
+  in a PixiJS canvas under the existing React UI. Its maps are crops and edits
+  of existing LPC Tiled maps, recorded as committed recipes and compiled at
+  workspace preparation. The player walks at 4 tiles per second, with WASD,
+  the arrow keys, or a click or tap that walks there along a path, and E or
+  Space interacts. The [overworld visual guide](overworld-visual-guide.md)
+  designs its maps, doors, markers and characters.
 
 ## Encounters and battles
 
@@ -462,7 +479,8 @@ Key modifiers are future work. Details:
 
 There are no towns. Friendly NPCs stand at map anchors, and maps group some
 anchors into clusters that act like small towns. A dream's friendly
-characters are authored with it.
+characters and townsfolk are authored with it, with their dialogue as typed
+graphs whose choices write intent events.
 
 | NPC | Role |
 | --- | --- |
@@ -470,8 +488,9 @@ characters are authored with it.
 | Amulet merchant | Sells exact cards from one resonance core for that resonance's amulets |
 | Amulet changer | Sells an amulet of any resonance for Essence |
 | Dream Guide | Hosts their signature service once per appearance; every guide appears in every act |
-| Sage | Gives one free hint about a door, the way to the incarnation, or an active quest |
+| Sage | Gives one free hint about a door, the way to the incarnation, or an active quest, marking the destination on the Atlas |
 | Quest giver | Offers one of the dream's authored quests; friendly Avatar characters offer Avatar quests |
+| Townsfolk | 3–8 per dream: barks and lore, some reacting to quest or act state; no services and no head icon |
 
 **Dream Guides** wander and recur. Each has a home tileset; a guide appearing
 in a dream of their home tileset is always enhanced, and other appearances are
@@ -714,6 +733,9 @@ appendix:
 - **Content scale.** About 25 act dreams per run, with authored quests and
   characters, needs a catalog of about 40 dreams before runs stop repeating;
   key dreams draw on the same catalog.
-- **Long-lived state.** A run is a long event log that never formally ends. It
-  needs stable act, dream, anchor, quest, key and character identities, and
-  content-hash pinning across catalog revisions.
+- **Long-lived state.** A run never formally ends and must survive every later
+  build. Its durable save is a versioned snapshot written after every applied
+  event, migrated forward across schema versions and reconciled against the
+  current catalog on load, with stable act, dream, anchor, quest, key and
+  character UUIDs. D97 runs pass no content gate. See
+  [Appendix B §B17](appendix-b-dreams.md#b17-state-and-logging).

@@ -10,7 +10,8 @@ tunables.
 
 ## B1. Tilesets and maps
 
-**Tilesets** are art sets, grouped into four categories:
+**Tilesets** are art sets, grouped into four categories. Their names are
+internal labels for art sets and never appear in game:
 
 | Category | Tilesets |
 | --- | --- |
@@ -23,12 +24,22 @@ The ten Dream Guides' home dreamscapes are tilesets; the table names most of
 them, and Hope's End is one more. A tileset has no mechanical effect, except
 that a Dream Guide appearing in their home tileset is enhanced (B13).
 
-**Maps.** Each dream has one authored map, a typed TS module holding:
+**Maps.** Each dream has one map, a committed TS **map module** in
+`src/content/d97/maps/`. Maps are built in this order of preference: crops of
+existing LPC Tiled maps, reseasons and edits of those crops, and new maps
+composed from named LPC stamps for themes no existing map covers. A map
+module holds:
 
-- its UUID and tileset UUID;
-- its terrain and props, written as text so layouts can be authored and
-  reviewed in the repository;
-- its **anchors**, each with a UUID, position and kind:
+- its UUID;
+- its **source**: a Tiled map in the local LPC library, pinned by content
+  hash, or a blank canvas for a map composed from stamps;
+- its **edit recipe**: typed operations with coordinates and named stamps
+  (crop, erase a region, place a stamp, paint terrain with auto-tiling, hide a
+  layer, mark a layer as drawn above the player, override walkability), never
+  hand-edited grids;
+- its named **regions** and **landmarks**, so recipes, anchors and briefs can
+  refer to places by name;
+- its **anchors**, each with a UUID, a tile or landmark and a kind:
 
 | Anchor kind | Per map | Use |
 | --- | --- | --- |
@@ -38,42 +49,112 @@ that a Dream Guide appearing in their home tileset is enhanced (B13).
 | Guardian | 0–2 | A chokepoint: names the door anchor it blocks (B5) |
 | Challenger | 2–8, by size (B2) | A challenger |
 | Friendly | 3 or more | An authored resident or a placed friendly NPC |
+| Townsfolk | 3–8 | An ambient townsperson |
 | Chest | 1–2 | A chest; may name the guardian anchor it sits behind |
 | Object | 1 or more | A quest's lost object |
 
+A door anchor names the entry point where a player arriving through it
+stands. The shop anchor is where the dream's shopkeeper stands. Doors stand
+at least 8 tiles apart.
+
 Friendly anchors can carry a **cluster** tag. A cluster is a group of anchors,
 usually three to six, where friendly NPCs gather like a small town.
+
+**Compiling.** Neither source maps nor edited maps are committed. The recipe
+compiler materializes each edited map and its walkability grid at workspace
+preparation (`scripts/prepare-workspace.mjs`), like linked art.
+
+**Map tooling.** Agents author every map, so the tools are legible to a
+model:
+
+- **Named stamps** (`src/content/d97/stamps/`): LPC chunks such as houses,
+  tree clusters and door frames, each with a name, footprint, anchor points,
+  an above-player mask and a preview sheet.
+- **The inspector** (`npm run d97:map -- <command>`) prints per-region
+  walkability and reachability, lists landmark and anchor coordinates, checks
+  crossing time between regions at walking speed, renders PNG previews (the
+  whole map, or a zoomed region with a coordinate grid, region outlines and
+  anchor letters) to a gitignored directory, and prints validator findings by
+  coordinate.
+- **The validator** checks that anchors stand on walkable cells, that every
+  anchor is reachable from the entries, that a guarded door is unreachable
+  while its guardian stands, that doors keep their spacing, and that a
+  medium map's main route meets its crossing-time target.
+
+**Rooms.** A dream may own **rooms**: small interior maps, each a map module
+of its own, entered through ordinary building doors rather than dream doors.
+Entering one is a fade with no veil. A room belongs to its dream, shares its
+waypoint and tier, and can hold friendly NPCs, chests, quest objects and the
+shop. Building doors without a room are scenery.
 
 Limbo has one fixed map. Key dreams use catalog maps (Appendix C §C6).
 
 **Presentation.** The target is an isometric 3D view with click or tap to
 move. The web prototype renders maps as top-down Liberated Pixel Cup pixel
 art, linked into the workspace by `scripts/prepare-workspace.mjs` like card
-art and never committed; a map is either tile-built or a pre-composed
-backdrop with a walkability grid. With the art missing, the prototype renders
-flat placeholder tiles. The [overworld visual guide](overworld-visual-guide.md)
-designs the tilesets, doors, markers and characters. Clicking or tapping
-ground walks there; clicking or tapping a character, door, chest, object or
-waypoint walks to it and interacts.
+art and never committed. The renderer draws the compiled map's Tiled layers,
+with the layers the map module marks (treetops, roofs) drawn above the
+player. With the art missing, the prototype renders flat placeholder tiles.
+The [overworld visual guide](overworld-visual-guide.md) designs the maps,
+doors, markers and characters.
+
+**Walking and controls.** The player walks at 4 tiles per second.
+
+- **Desktop:** WASD or the arrow keys walk tile by tile; clicking ground walks
+  there along an A* path; clicking a character, door, chest, object or
+  waypoint walks to it and interacts; E or Space interacts with the faced
+  object.
+- **Mobile:** a tap walks or interacts.
+- While a React panel is open, the canvas ignores input.
 
 ## B2. Dream catalog
 
-Each catalog dream is authored as a whole, as one typed TS module:
+Each catalog dream is authored as a whole, as one typed **dream module** in
+`src/content/d97/dreams/`, keyed by the dream's UUID. Dreams have no names, so
+a dream module carries none:
 
 - its map and tileset (B1);
 - its **size**:
 
-  | Size | Challenger anchors | Guardian anchors |
-  | --- | --- | --- |
-  | Small | 2–3 | 0–1 |
-  | Medium | 4–5 | 1 |
-  | Large | 6–8 | 1–2 |
+  | Size | Challenger anchors | Guardian anchors | Map | Main-route crossing |
+  | --- | --- | --- | --- | --- |
+  | Small | 2–3 | 0–1 | About 60×60 tiles | About 1 minute |
+  | Medium | 4–5 | 1 | About 110×110 tiles | About 2 minutes |
+  | Large | 6–8 | 1–2 | About 150×150 tiles | About 3 minutes |
 
-- its **residents:** the shopkeeper and 1–3 quest givers, with authored
-  personas and dialogue;
+  Crossing times are at walking speed (B1). The camera never shows the whole
+  of a medium map: at 2× on desktop it shows about 30×17 tiles.
+- its **topology**, by anchor UUID on its map: its waypoint, the door a new
+  run arrives through, its exit door with the guardian anchor blocking it,
+  and its shop (B5, B6);
+- its **residents**, keyed by anchor: each names its role (which matches its
+  anchor's kind), its character (a sprite recipe), and the dialogue it
+  speaks. Residents are the shopkeeper, 1–3 quest givers and 3–8 townsfolk,
+  with authored personas. A resident challenger or guardian also names its
+  deck; in the one-dream slice the dream module seats its challengers and
+  exit guardian this way, where act assembly places them otherwise (B7);
 - its 1–3 **quests**, written for its tileset (B15);
 - personas for its generic challengers (name and sprite), suited to its
   tileset.
+
+**Dialogue** is a typed graph per character: nodes with UUIDs, lines, player
+choices and conditions on quest state, flags, act, beaten anchors and
+collection traits. A choice's effects (offer, advance or complete a quest,
+give or take an item, open the shop or a service, set a flag, start a
+challenge) each become an intent event. Which node is showing is view state.
+A validator checks node reachability, dangling references, effects legal for
+the speaker's anchor kind, and condition types.
+
+**Townsfolk** are ambient residents. Each has a sprite recipe, a short
+personality and a small dialogue tree of barks and lore, some of it reacting
+to quest or act state. They offer no services and carry no head icon. They
+fill large maps, carry the story's through-line and hint at quests.
+
+**Briefs.** Each dream module has a written brief beside it,
+`src/content/d97/dreams/<dream-uuid>.md`: its premise, mood, landmarks,
+residents and personas sketched, and quest hooks. A dream is authored in two
+steps: the brief and a map built to fit it, with the inspector and validator
+clean; then its residents, dialogue and quests.
 
 Dreams are act-agnostic: nothing in a dream fixes its tier, which comes from
 the act it lands in. The catalog targets about 40 dreams, at least 8 per
@@ -135,8 +216,9 @@ change them.
 ## B5. Doors and chokepoints
 
 **Doors are two-way, blind and never locked.** A door never shows where it
-leads until the player steps through it. After that, its tooltip names the
-destination, and the Dream Atlas records the link. Stepping through a door
+leads until the player steps through it. After that, its tooltip shows at
+most a small thumbnail of the destination's art, never a name, and the Dream
+Atlas records the link. Stepping through a door
 places the player at the matching door's entry point in the destination
 dream. Act exit doors look distinct, so the player can tell that the
 incarnation guards the way onward.
@@ -158,6 +240,11 @@ entry points while its guardian stands.
 
 Chests can stand behind a chokepoint, opening once its guardian falls.
 
+**The first slice.** Until act assembly exists, a run plays one dream. A new
+run arrives at its arrival door's entry, and stepping through its exit door
+once the guardian falls ends the slice at a summary screen that names no
+dream.
+
 ## B6. Waypoints and the Dream Atlas
 
 - **Waypoints.** Each dream has one waypoint. Touching it activates it. The
@@ -166,12 +253,13 @@ Chests can stand behind a chokepoint, opening once its guardian falls.
   the player can travel free to any other activated waypoint, arriving beside
   it.
 - **The Dream Atlas** shows:
-  - every dream the player has entered, grouped by act, with its tileset art,
-    tier and waypoint status;
+  - every dream the player has entered, grouped by act, identified by its
+    tileset thumbnail, with its tier and waypoint status, and never by a
+    name;
   - its guardians' status: unseen, seen or beaten, with the incarnation glyph
     once the player has seen it;
   - every door the player has traversed, as a link;
-  - dreams revealed by sages, as known but unvisited, with their tier;
+  - dreams marked by sages, as known but unvisited, with their tier;
   - dreams holding unbeaten challengers, including refills;
   - open key dreams, with their remaining challengers and prize;
   - markers for active quests.
@@ -188,7 +276,8 @@ Assembly fills each act's anchors:
 | Avatar guardians | 2–4 per act | Guardian anchors chosen by B4 |
 | Challengers | 12–14 per act | Challenger anchors; about one in five is an Avatar character |
 | Shop | 1 per dream | The shop anchor |
-| Residents | As authored | Their friendly anchors |
+| Residents | As authored | Their anchors, by the dream module |
+| Townsfolk | 3–8 per dream, as authored | Townsfolk anchors |
 | Amulet merchants | 1–2 per act | Each resonance at least once across Acts 1–3 |
 | Amulet changer | 1 per act from Act 2 | |
 | Sages | About one dream in two | |
@@ -265,15 +354,15 @@ Refills appear while the player is elsewhere and are marked in the Atlas.
 
 **Tier knobs:**
 
-| Tier | Typical opponents | Avatar ability | Starter dilution | Dreamsigns | Transfigured cards | Legendaries | Head start |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 4 | Act 1 challengers | dormant | 10 | 0 | 0 | no | 0 |
-| 7–8 | Act 2 challengers; Act 1 bosses | active | 5 | 0 | 0 | no | 0 |
-| 10–11 | Act 3 challengers; Act 2 bosses | active | 0 | 1 | 2 | no | 1 |
-| 13–14 | Act 4 challengers; Act 3 bosses | active | 0 | 1 | 4 | yes | 2 |
-| 16–17 | Act 5 challengers; Act 4 bosses | active | 0 | 2 | 6 | yes | 3 |
-| 18–19 | Act 5 guardians; endgame key dreams | active | 0 | 3 | 8 | yes | 4 |
-| 20 | Act 5 and Limbo incarnations | Aspect | — | curated + 2 | 10 | yes | 5 |
+| Tier | Typical opponents | Avatar ability | Starter dilution | Dreamsigns | Transfigured cards | Legendaries |
+| --- | --- | --- | --- | --- | --- | --- |
+| 4 | Act 1 challengers | dormant | 10 | 0 | 0 | no |
+| 7–8 | Act 2 challengers; Act 1 bosses | active | 5 | 0 | 0 | no |
+| 10–11 | Act 3 challengers; Act 2 bosses | active | 0 | 1 | 2 | no |
+| 13–14 | Act 4 challengers; Act 3 bosses | active | 0 | 1 | 4 | yes |
+| 16–17 | Act 5 challengers; Act 4 bosses | active | 0 | 2 | 6 | yes |
+| 18–19 | Act 5 guardians; endgame key dreams | active | 0 | 3 | 8 | yes |
+| 20 | Act 5 and Limbo incarnations | Aspect | — | curated + 2 | 10 | yes |
 
 **How to read the knobs:**
 
@@ -283,13 +372,12 @@ Refills appear while the player is elsewhere and are marked in the Atlas.
   and 1.
 - **Dreamsigns:** chosen one at a time by the builder's affinity rule from
   Dreamsigns with battle effects, excluding Legendary Dreamsigns.
-- **Head start:** the knob, plus `d` (Appendix A §A18), plus any boss bonus
-  (Appendix C).
 - **Tiers between rows** use the row below.
 
 Origin: Shandalar's opponent life of `tier + 2d` and monster decks by tier.
 Dreamtides has no life total and no AI difficulty levels (decision D24), so
-D97 converts tier into deck quality and a head start. The journey builder's
+D97 converts tier into deck quality and opponent Dreamsigns; no opponent
+starts with points (README decision S32). The journey builder's
 per-battle seed and dreamscape affiliation tides are its only inputs D97
 replaces.
 
@@ -297,9 +385,8 @@ replaces.
 
 - **Score target:** the act's target (B3); 25⍟ in key dreams; 30⍟ against
   Apollyon.
-- **Player head start:** 0⍟.
-- **Opponent head start:** the knob for its tier, plus `d`, plus any guardian
-  or Apollyon bonus (Appendix C).
+- **Starting score:** 0⍟ for both sides, at every tier and difficulty. The
+  Long Odds handicap trial (B15) is the one exception.
 - **Opening hands:** 5 each. The player goes first and skips the first draw, as
   in the journey mode.
 - **Dreamsigns:** the player's slotted Dreamsigns, and the opponent's per the
@@ -321,8 +408,7 @@ NPCs show a service or quest icon. Beaten challengers show none.
 
 - the character, and their Avatar and its ability (Avatar characters), or
   their deck source (generic characters);
-- the tier, the score target, three signature cards from the deck, and both
-  head starts;
+- the tier, the score target and three signature cards from the deck;
 - both antes (three each when high-ante), rolled at the first preview
   (Appendix A §A9);
 - the advertised extra, or the prizes of a prize duel.
@@ -389,13 +475,14 @@ Each sage gives one free hint, once per run, of a fixed kind:
 
 | Kind | Hint |
 | --- | --- |
-| Door | Names where one unexplored door in this dream leads; the destination appears in the Atlas as known, with its tier |
-| Way | Names the door in this dream that starts the shortest route to this act's incarnation |
-| Seeker | Names the dream holding the next step of an active quest; acts as a door sage when no quest is active |
+| Door | Marks where one unexplored door in this dream leads: the destination appears in the Atlas as known, with its tier and tileset thumbnail |
+| Way | Points out the door in this dream that starts the shortest route to this act's incarnation |
+| Seeker | Marks the dream holding the next step of an active quest on the Atlas; acts as a door sage when no quest is active |
 
 A door sage in a dream with no unexplored door acts as a way sage. Sages are
 optional: their hints save walking, and nothing in a run requires talking to
-one. They are D97's only source of information about unexplored doors.
+one. They are D97's only source of information about unexplored doors. A
+hint never names a dream; it marks the destination on the Atlas.
 
 Origin: `VisitTownWiseman`, Shandalar's fixed-kind settlement advice.
 
@@ -446,6 +533,9 @@ is used once the trial is won.
 | Heavy Ante | Each side antes three cards |
 | Long Odds | Takeshi begins with a 5⍟ head start |
 
+Long Odds is the one battle where a side starts with points; every other
+battle starts both sides at 0⍟ (B10).
+
 *Example:* in Act 2, Takeshi offers *Empty Hands*. The player accepts and keeps
 exploring. Later they assemble a 25-card deck with no Events from their
 collection, return to Takeshi and win. They take his ante, choose one of three
@@ -453,7 +543,10 @@ bag cards, and gain one amulet.
 
 **Flow.**
 
-- The player can accept any number of quests, and quests never expire.
+- The player holds at most one quest at a time, as in Shandalar (README
+  decision S33). A giver's offer waits until the current quest is finished or
+  abandoned; abandoning is free, and an abandoned quest can be taken again.
+  Quests never expire.
 - Every quest finishes by returning to its giver, or to the named recipient
   for errands and deliveries, which pays the reward.
 - A defeat target the player has already beaten completes that step on
@@ -489,14 +582,16 @@ bag cards, and gain one amulet.
 
 ## B17. State and logging
 
-**Event log.** A run's state is a fold of its event log. Clients write intent
-events only. Walking is view-local and never logged. These are intent events:
+**Event log.** Within a build, a run's state is a fold of its event log.
+Clients write intent events only. Walking is view-local and never logged.
+These are intent events:
 
 - step through a door, activate a waypoint, fast-travel;
 - preview a challenger, fight, choose Not now;
 - open a shop, buy, sell, restock; buy from an amulet merchant or changer;
 - use a guide site; ask a sage;
-- accept a quest, pick up an object, turn in a quest;
+- accept, advance, abandon or turn in a quest; pick up an object; choose a
+  dialogue choice that carries an effect;
 - open a chest; switch Avatar; edit the deck; slot or unslot a Dreamsign;
 - use a key.
 
@@ -504,13 +599,45 @@ Refills and bag layers derive from the fold: the refill clock counts finished
 battles, and each layer opens on the event that first enters its act or
 defeats Apollyon.
 
-A reload places the player at the entry point of the last door they stepped
-through or the last waypoint they used, whichever was later.
+**Placement.** Returning from a battle places the player beside the opponent
+they fought. A reload places the player at the entry point of the last door
+they stepped through or beside the last waypoint they used, whichever was
+later. A new run starts at its arrival door's entry.
+
+**Saves.** A run must survive every later build: tuning, content, rules and
+code changes.
+
+- **The durable save is a snapshot.** The run state is plain JSON-safe data
+  with a `schemaVersion`, persisted after every applied event. Within a build
+  the log opens with the latest snapshot as its checkpoint, and intents fold
+  through the reducer.
+- **Migrations.** Ordered pure functions take each schema version to the
+  next. Every change to the persisted shape ships one migration and a golden
+  save fixture of the previous version that must load. Across builds, the
+  game opens the migrated snapshot as a fresh log base and never re-folds old
+  events under new rules.
+- **Outcomes, not seeds, are state.** Act assembly, anchor occupants, antes,
+  shop stock, bag contents and every other generated result are written into
+  state when first produced, never re-derived from the run seed on load, so a
+  catalog or algorithm change never reshuffles a run in progress.
+- **Reconciliation on load.** Every catalog reference in a snapshot is a UUID,
+  resolved against the current catalog: a retired card maps to its
+  replacement through a committed retirement table or is compensated in
+  Essence; an occupant whose anchor was removed moves to a free anchor of the
+  same kind; a quest whose definition was removed is abandoned; new tunables
+  apply going forward. Every reconciliation is logged.
+- **Battles in progress** belong to their build. If the build changed, a
+  battle in progress restarts from its recorded setup, with the same antes
+  and no penalty.
+- **No content gate.** D97 runs are never gated out by the content-config
+  check that journey games use. The build that wrote a snapshot is recorded
+  for diagnostics.
 
 **Identities.** Acts, dreams, doors, anchors, characters, quests, objects and
 keys have stable UUIDs. Assembled content derives them from the run seed and
-the catalog's UUIDs; refills and keys derive them from the event that created
-them, so replay and logs refer to them exactly.
+the catalog's UUIDs when first produced, and the snapshot keeps them; refills
+and keys derive them from the event that created them, so logs refer to them
+exactly.
 
 **Logs**, with UUIDs and never names:
 
@@ -518,6 +645,8 @@ them, so replay and logs refer to them exactly.
   incarnation placement, quest bindings, and each anchor's occupant;
 - each opponent's seed, Avatar, constructed deck and knob values;
 - each preview's antes, extra and tier; each battle setup and result;
+- each door traversal and waypoint activation; each save migration and
+  reconciliation;
 - each bag draw and layer opening, with the Avatar; each Avatar switch;
 - each character removed or replaced when its Avatar joins the roster: act,
   dream, anchor, old and new occupant;

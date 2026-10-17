@@ -10,9 +10,11 @@ where D97 departs from it.
 
 ## A1. Notation
 
-- `d` — the difficulty level, 0 to 3; 1 is the default (A18).
+- `d` — the difficulty level: 1 Standard (the default), 2 Hard, 3 Nightmare
+  (A18).
 - `U{a..b}` — a uniform random integer from `a` to `b` inclusive. Every random
-  draw is a seeded event-log draw, so reload and replay reproduce it.
+  draw is a seeded event-log draw whose outcome is written into the run's
+  state, so a reload never re-rolls it (Appendix B §B17).
 - `a` — a dream's **act number**: 1–5 for act dreams, 6 for Limbo and key
   dreams.
 - `b` — a dream's **price band**: 1 in Acts 1–2, 2 in Acts 3–4, 3 in Act 5,
@@ -102,6 +104,12 @@ bag later draws use. Contents already rolled never change.
   rest appear only in neutral tides and reach the player through antes,
   curiosities and amulet merchants.
 
+**The first slice's bag.** Until the tide sets are authored, a run's bag is
+the tides4 pool the journey's draft would deal the chosen Avatar (its
+starter tide plus up to three of its facets, at most 2 copies of each card),
+dealt from the run seed and stored in state at run start. Its dealt counts
+are the copy targets.
+
 Origin: the tide catalog (`src/content/tides.ts`) and the draft engine's
 remaining-copies bag. The journey deals a random tides4 pool per run; D97
 replaces it with authored tide sets that grow by layers.
@@ -176,8 +184,8 @@ has no guard.
 
 ## A6. Shops and curiosities
 
-**Shops.** Every act dream and key dream has one shop at its shop anchor, run
-by a shopkeeper authored with the dream.
+**Shops.** Every act dream and key dream has one shop at its shop anchor,
+presented by the shopkeeper resident its dream module seats there.
 
 - **Slot count.** `n = b + 3`: 4, 5 or 6.
 - **Stock.** Rolled when the shop is first opened. For slot `i` (0-based):
@@ -194,7 +202,8 @@ by a shopkeeper authored with the dream.
   copy enters reserve with its price recorded, and the slot stays empty.
 - **Restock.** Once per visit, the player can pay `10 × (b + 2)` Essence (30,
   40 or 50) to re-roll every slot, including empty ones. A visit ends when the
-  player leaves the dream.
+  player leaves the dream. Until dream travel exists, the one-dream slice has
+  a single visit, so it allows one restock per run.
 - **Selling.** Every shop buys owned copies (A5).
 
 **Curiosities.** Tobias Tanglefur's guide site sells cards the bag can't
@@ -303,7 +312,7 @@ the preview says so. The opponent's ante is unchanged.
 
 **Ante drift.** If the player's anted copy has left the active deck when the
 battle starts, it re-rolls among active copies whose sale value in this dream
-is at least the original's. If there are none, it takes the highest-value
+(their sale quotes, A5) is at least the original's. If there are none, it takes the highest-value
 active copy. Unequipping a card never makes the ante cheaper.
 
 **High ante.** Each challenger of tier 13 or more (Act 4 onward, and key
@@ -509,24 +518,23 @@ random starter by color recipe, more mixed at higher difficulty.
 
 ## A18. Difficulty
 
-The player chooses `d` at run start. It never changes during a run.
+The player chooses a level at run start. It never changes during a run.
 
-| | `d = 0` | `d = 1` (default) | `d = 2` | `d = 3` |
-| --- | --- | --- | --- | --- |
-| Opponent head start bonus | +0⍟ | +1⍟ | +2⍟ | +3⍟ |
-| Starting Essence | 250 | 200 | 150 | 100 |
-| Starting amulets | 3 | 2 | 1 | 0 |
-| Starters in the starting collection | 3 | 5 | 7 | 9 |
-| Score multiplier `m(d)` | ×0.5 | ×1 | ×1.5 | ×2 |
-| Available | From the start | From the start | After beating Apollyon at `d = 1` | After beating Apollyon at `d = 2` |
+| | Standard, `d = 1` (default) | Hard, `d = 2` | Nightmare, `d = 3` |
+| --- | --- | --- | --- |
+| Starting Essence | 200 | 150 | 100 |
+| Starting amulets | 2 | 1 | 0 |
+| Starters in the starting collection | 5 | 7 | 9 |
+| Score multiplier `m(d)` | ×1 | ×1.5 | ×2 |
+| Available | From the start | From the start | After beating Apollyon on Hard |
 
-The head start bonus applies to every opponent, Apollyon included. Unlocked
-levels are stored with the player's profile, outside any run. The levels'
-player-facing names are an open question.
+Difficulty also improves every opponent's deck cards and Dreamsigns. Both
+sides start every battle at 0⍟ at every level (README decision S32). Unlocked
+levels are stored with the player's profile, outside any run.
 
 Origin: Shandalar's difficulty term, which sets starting gold `(5 − d) × 50`,
-opponent life and the starting deck's mix. D97 converts opponent life to a head
-start and the deck mix to Starter count.
+opponent life and the starting deck's mix. D97 converts opponent life to
+stronger opponent decks and Dreamsigns, and the deck mix to Starter count.
 
 ## A19. Score
 

@@ -47,7 +47,9 @@ home tileset named for their home dreamscape (Appendix B §B13).
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
 | "Layaway" | Grid City | Exploration | Enhanced Exploration |
 
-Affiliations remain flavor: affiliation weights are not applied.
+Home tileset names are internal labels for art sets; no tileset or
+dreamscape name appears in game. Affiliations remain flavor: affiliation
+weights are not applied.
 
 ## D3. Site types
 
@@ -239,5 +241,9 @@ copies, won antes, guardian picks and key prizes are plain.
 - The Dreamsigns excluded in D6.
 - Tide names and descriptions on any player-facing surface, including Augury's
   tide-package categories.
+- Dreamscape names as dream names. Dreams have no names, and tileset and
+  dreamscape names never appear in game.
+- Opponent head starts. Every battle starts both sides at 0⍟, except Master
+  Takeshi's Long Odds trial (Appendix B §B15).
 - The Special card Contemplation as a supply card. It remains available as the
   token created by Seer of the Fallen.

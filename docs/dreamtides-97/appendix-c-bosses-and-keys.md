@@ -15,7 +15,8 @@ chokepoints (Appendix B §B5), marked with a crown.
 - **Who.** Avatars are assigned to guardian seats first (Appendix B §B7), drawn
   uniformly from the Avatars other than the player's starting Avatar.
 - **Strength.** Tier `min(t + 3, 18)`, built as in Appendix B §B9, with one
-  Dreamsign and one ⍟ of head start beyond its tier's knobs.
+  Dreamsign beyond its tier's knobs. It starts the battle at 0⍟, like every
+  opponent (Appendix B §B10).
 - **Battle.** One anted battle (Appendix A §A9). A loss costs the player's
   ante, and the player can challenge the guardian again at any time with the
   same antes.
@@ -98,22 +99,23 @@ rather than castle gauntlets.
 | Dreamsigns | Those five incarnations' curated Dreamsigns |
 | Avatar slot | Apollyon's own Aspect, new content whose ability is pending until authored |
 | Score target | 30⍟ |
-| Head start | `6 + d` |
+| Starting score | 0⍟ for both sides |
 | Opening placements | Two of his signature characters start in play |
 | Ante | None |
 
 **Victory:**
 
 - records the campaign victory and its score (Appendix A §A19);
-- unlocks the next difficulty level, if any (Appendix A §A18);
+- on Hard, unlocks Nightmare (Appendix A §A18);
 - opens bag stage 6 (Appendix A §A2);
 - from then on, new keys are tier 18 (C5).
 
 The run continues: every act dream, Limbo and the endgame stay open. A loss or
 draw costs nothing; the player can prepare and challenge him again.
 
-Origin: Shandalar's final duel against Arzakon, with its opening cards in play
-and its score bonus. Shandalar's handler doesn't check the final duel's result;
+Origin: Shandalar's final duel against Arzakon, with its opening cards in play.
+D97 keeps the opening placements and drops Arzakon's life bonus, so both sides
+start at 0⍟. Shandalar's handler doesn't check the final duel's result;
 D97 requires a win.
 
 ## C5. Keys

@@ -1,8 +1,9 @@
 # Dreamtides 97: Overworld visual guide
 
-**Status:** design proposal for the web prototype of the D97 overworld. It
-belongs with the [design overview](README.md) and is not part of the active
-implementation plan in [`docs/plan/`](../plan/README.md).
+**Status:** the look of the web prototype of the D97 overworld. It belongs
+with the [design overview](README.md); the D97 stream builds it under
+[its plan](plan/README.md), whose [decisions](plan/decisions.md) bind where
+they differ from this page.
 
 This guide sets the look of the prototype's overworld: the pixel-art dreams,
 the characters standing in them, and the markers that make D97's rules
@@ -16,7 +17,10 @@ tileset themes.
 gitignored [`visual-guide/`](visual-guide/) folder beside this file. They are
 composed from Liberated Pixel Cup art and are never committed (invariant
 "Never commit image files"). A checkout without them shows broken image links;
-the text stands on its own.
+the text stands on its own. Some illustrations label a traversed door or the
+title chip with a tileset name to orient the reader; in game, dreams have no
+names, and a traversed door shows at most a thumbnail of its destination's
+art.
 
 ## Contents
 
@@ -43,9 +47,9 @@ the text stands on its own.
 3. **One art style, many genres.** All art is 32×32 LPC pixel art in a
    three-quarter top-down view, so a dwarven forge and a space station can sit
    one door apart without clashing.
-4. **Cheap to author.** A dream map is a list of terrain shapes or a
-   pre-composed backdrop with walkability overrides. Both are text a Claude
-   subagent can write and the repository can review.
+4. **Cheap to author.** A dream map is a crop of an existing LPC Tiled map
+   with a committed recipe of typed edits. Agents write and review the recipe
+   as text, and read the map back through rendered previews.
 5. **React for UI, Pixi for the world.** The world canvas draws only the map,
    characters and markers. Every panel, button and card is existing Cumulus UI.
 
@@ -65,20 +69,25 @@ genres, and a character generator with thousands of layered parts.
 | [LPC Winter Tiles](https://opengameart.org/content/lpc-winter-tiles) | Snow and ice ground, snowy pines | CC-BY 3.0, CC-BY-SA 3.0, GPL 3.0, OGA-BY 3.0 |
 | [LPC goes to space](https://opengameart.org/content/lpc-goes-to-space) and [[LPC] FraMa sci-fi extensions](https://opengameart.org/content/lpc-frama-sci-fi-extensions) | Station floors and walls, airlocks, consoles, crystals, LED walls, the waypoint obelisk | CC-BY-SA 4.0, GPL 3.0 |
 | [Universal LPC Spritesheet Character Generator](https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator) | Every character sprite | Per part: CC0, CC-BY, CC-BY-SA, OGA-BY, GPL (its `CREDITS.csv`) |
-| [LPC Revised](https://github.com/ElizaWy/LPC) by ElizaWy and contributors | Pre-composed backdrop maps in four seasons | CC-BY 3.0, OGA-BY 3.0 |
+| [LPC Revised](https://github.com/ElizaWy/LPC) by ElizaWy and contributors | Pre-composed backdrop maps in four seasons; terrain for reseasons | CC-BY 3.0, OGA-BY 3.0 |
+| [Source of Tales](https://gitlab.com/tales/sourceoftales) | Source Tiled maps: the 200×200 Mountainwatch and Goldenfields maps, caves and interiors | CC-BY-SA 3.0, GPL 3.0 |
+| [Big Island](https://github.com/seveibar/liberated-pixel-cup) and [Neverwell Moor](https://github.com/blipjoy/nm-prototype) | Further source Tiled maps | CC-BY-SA 3.0, GPL 3.0 |
 
 **What the licenses require.**
 
-- **Credit every author.** The build ships a credits screen generated from the
-  packs' attribution files and the character generator's `CREDITS.csv`,
-  filtered to the parts in use.
-- **Share-alike.** Composites of CC-BY-SA art (character sheets, baked
-  backdrops) are CC-BY-SA too. Keep them out of the repository, like all art.
-- **Prefer LPC Revised where it fits.** Its CC-BY / OGA-BY terms only ask for
-  credit.
+- **Credit every author.** Every source's license and authors are recorded in
+  the committed manifest `src/content/d97/art-sources.ts`, and the build
+  ships a credits screen generated from it, with the character generator's
+  `CREDITS.csv` filtered to the parts in use.
+- **Any license is acceptable,** NC and ND included, because D97 is a
+  non-commercial prototype.
+- **Share-alike.** Edited maps of CC-BY-SA art are CC-BY-SA too. They are
+  compiled locally and kept out of the repository, like all art.
 
-**Storage.** The art lives in the local art library and is linked into the
-gitignored `public/` tree by `scripts/setup-assets.ts`, exactly like card art.
+**Storage.** The art lives in the local art library (`~/Documents/lpc/`) and
+is linked into the gitignored `public/` tree by `scripts/setup-assets.ts`,
+exactly like card art. Conversions, such as magenta-key transparency to
+alpha, write into the library, never into the repository.
 With the art missing, the overworld renders flat placeholder tiles and
 colored capsule characters, and stays playable.
 
@@ -92,11 +101,12 @@ React 19.
 <D97OverworldScreen>                 React, Cumulus screen
   <PixiApplication>                  @pixi/react canvas, fills the screen
     <Camera>                         follows the player, integer zoom only
-      <GroundLayer/>                 tile grid or backdrop image
+      <GroundLayer/>                 the compiled map's Tiled tile layers
       <SortedLayer/>                 props, characters, door frames: y-sorted
-      <MarkerLayer/>                 head icons, veils, motes, labels
+      <AbovePlayerLayer/>            layers the map module marks: treetops, roofs
+      <MarkerLayer/>                 head icons, veils, motes, thumbnails
   </PixiApplication>
-  <OverworldHud/>                    React: title chip, currencies, controls
+  <OverworldHud/>                    React: act chip, currencies, controls
   <ChallengePreview/> ...            React: every panel and dialog
 </D97OverworldScreen>
 ```
@@ -112,107 +122,114 @@ React 19.
   player's tile. Clicking writes intent events through `src/session/actions.ts`
   (walk to an anchor, step through a door, touch a waypoint). Animation state,
   such as a walk cycle or a bobbing icon, is the only state Pixi owns.
-- **Movement.** Click or tap a tile or an object; the client walks the player
-  there along an A* path over the walkability grid at 4 tiles per second, then
-  interacts. The walk itself is presentation. The interaction is the logged
-  event, and a reload places the player at the last door or waypoint used
+- **Movement.** The player walks at 4 tiles per second. On desktop, WASD or
+  the arrow keys walk tile by tile, clicking ground walks there along an A*
+  path over the walkability grid, clicking an object walks to it and
+  interacts, and E or Space interacts with the faced object. On phones, a tap
+  walks or interacts. The walk itself is presentation. The interaction is the
+  logged event; returning from a battle places the player beside the opponent,
+  and a reload places the player at the last door or waypoint used
   ([Appendix B §B17](appendix-b-dreams.md#b17-state-and-logging)).
+- **Camera.** The camera follows the player and never shows the whole of a
+  medium map: at 2× on desktop it shows about 30×17 tiles. It keeps the
+  player clear of the HUD's control bar.
 
 ## Building maps
 
-Appendix B authors each map as a typed TS module with its terrain, props and
-a list of anchors ([§B1](appendix-b-dreams.md#b1-tilesets-and-maps)). The
-prototype supports two ways to fill that module. Both keep the walkability
-grid and the anchors as reviewable text.
+Appendix B gives each dream a map module: a source map, an edit recipe,
+named regions and landmarks, and anchors
+([§B1](appendix-b-dreams.md#b1-tilesets-and-maps)). Agents design and edit
+every map, so every format and tool suits a model: edits are recipe
+operations with coordinates and named stamps, never rows of characters. A
+model reads text one row at a time and keeps columns aligned poorly, so no
+map's source is a hand-written character grid.
 
-Maps are written by Claude subagents, so the formats suit a model rather than
-a hand-drawn grid. A model reads text one row at a time and keeps columns
-aligned poorly, so no map's source is a hand-written character grid.
+Maps are built in this order of preference:
+
+1. **Crops of existing LPC Tiled maps,** chiefly Source of Tales' 200×200
+   Mountainwatch and Goldenfields maps, its caves and interiors, Big Island
+   and Neverwell Moor.
+2. **Reseasons and edits** of those crops.
+3. **New maps composed from named stamps,** for themes no existing map
+   covers.
+
+The recipe compiler materializes the edited map and its walkability grid at
+workspace preparation, like linked art. Neither source maps nor edited maps
+are committed. The renderer draws the compiled Tiled layers, and the layers
+the module marks draw above the player.
 
 ### Tile-built maps
 
-Terrain is a list of shapes laid over a base fill: rectangles, paths and
-seeded scatters. Props and anchors are placed by tile coordinate. A compiler
-turns the shapes into the cell grid and picks LPC's bordered terrain pieces
-(the standard 3×6 block), so a pond or a dirt road gets its edges without the
-author drawing them. Every scene in [Prototype tilesets](#prototype-tilesets)
-is built this way.
+A map composed from stamps starts from a blank canvas. Its recipe paints
+terrain shapes (rectangles, paths, cell lists) with auto-tiling, so a pond or
+a dirt road gets LPC's bordered edges without the author drawing them, and
+places named stamps by tile coordinate. A crop uses the same operations to
+erase, repaint and stamp over its source. Every scene in
+[Prototype tilesets](#prototype-tilesets) is drawn this way.
 
 ```ts
-// A fragment of a tile-built map module.
-export const map = defineDreamMap({
+// A fragment of a map module: a crop of a Source of Tales map, edited.
+export default defineDreamMap({
   id: parseDreamMapId("…"),
-  tileset: parseTilesetId("…"), // Tumbleleaf Village
-  size: [22, 14],
-  terrain: [
-    { fill: "grass" },
-    { path: "dirt-road", points: [[0, 1], [21, 1]] },
-    { rect: "pond", from: [3, 2], to: [6, 4] },
-    { rect: "tilled", from: [14, 2], to: [17, 3] },
-    { scatter: "oak", from: [0, 8], to: [9, 13], density: 0.3, seed: 7 },
+  source: { kind: "tiled", path: "source-of-tales/maps/…", sha256: parseDreamMapSourceHash("…") },
+  recipe: [
+    { op: "crop", from: [40, 60], to: [149, 169] },
+    { op: "erase", from: [55, 25], to: [64, 30] },
+    { op: "stamp", stamp: EMBER_ARCH, at: [58, 26] },
+    { op: "paintTerrain", terrain: DIRT, layer: "Ground", shape: { kind: "path", points: [[0, 40], [30, 40]] } },
+    { op: "abovePlayer", layer: "Over" },
+    { op: "block", from: [12, 3], to: [14, 5] },
   ],
-  props: [{ kind: "house-brick", at: [4, 5] }],
-  anchors: [/* doors, waypoint, shop, challengers … with UUIDs */],
+  regions: [{ name: "well square", from: [52, 20], to: [76, 34] }],
+  landmarks: [{ name: "the ember arch", at: [60, 28] }],
+  anchors: [/* doors, waypoint, shop, residents, challengers … with UUIDs */],
 });
 ```
 
-Moving the pond is one edit to its rectangle, not a rewrite of every row it
+Moving the pond is one edit to its shape, not a rewrite of every row it
 crosses.
+
+**Named stamps.** A catalog of LPC chunks (houses, tree clusters, door
+frames, waypoint plinths and so on), each with a name, footprint, anchor
+points, an above-player mask and a preview sheet. The inspector extracts new
+stamps from source maps.
 
 ### The authoring loop
 
-A subagent authoring a map runs two scripts on it until both are clean:
+An agent authoring a map runs the inspector (`npm run d97:map -- <command>`)
+until it is clean:
 
+- **Inspect** prints per-region walkability and reachability summaries,
+  landmark and anchor coordinates, and the crossing time between regions at
+  walking speed.
 - **The validator** checks that every anchor stands on a walkable cell, that
-  the entry reaches every door, waypoint, shop and challenger, that props do
-  not overlap, and that doors keep their minimum spacing. It reports cells by
-  coordinate.
-- **The preview** renders the map to a PNG with the placeholder colors from
-  the [asset pipeline](#asset-pipeline) and anchor letters on top. The
-  subagent looks at the picture and fixes what reads badly: a cramped plaza,
-  a road that leads nowhere, a door hidden behind a house.
-
-The compiler also prints the cell grid as rows of characters. That printout
-is a review snapshot for humans and diffs; nobody edits it.
+  every anchor is reachable from the entries, that a guarded door is
+  unreachable while its guardian stands, that doors stand at least 8 tiles
+  apart, and that a medium map's main route meets its crossing-time target.
+  It reports findings by coordinate.
+- **The preview** renders the whole map, or a zoomed region with a
+  coordinate grid, region outlines and anchor letters, to PNGs in a
+  gitignored directory. The agent reads the pictures back and fixes what
+  reads badly: a cramped plaza, a road that leads nowhere, a door hidden
+  behind a house.
 
 ### Backdrop maps
 
-A pre-composed scene is one image drawn in a map editor. The map module pairs
-it with a walkability grid and the anchors. This is the cheapest path to a
-good-looking dream: the art is already composed, and the module is a short
-text grid.
+A pre-composed scene, such as an LPC Revised demo map, is a source like any
+other: the map module crops it and corrects its walkability with recipe
+operations. This is the cheapest path to a good-looking dream: the art is
+already composed, and the module is a short recipe.
 
 ![The LPC Revised winter demo map used as a Winterwake Fjords dream: dream veils fill the two cave mouths and the cottage door, a waypoint stands at the left, and challengers, a guardian, Sigrún, a shopkeeper, a quest giver and a sage carry their head icons.](visual-guide/backdrop-winterwake.png)
 
-The walkability grid is drafted from the backdrop's colors (water, cliffs and
-dense trees are blocked). The map module corrects the draft with rectangle
-overrides such as `{ block: [[12, 3], [14, 5]] }` or `{ open: … }`, and places
-anchors by coordinate, so the drafted grid itself is never hand-edited. The
-same validator and preview apply. In the picture below the right half shows
-blocked cells in red and anchors as letters; the text grid after it is the
-printed snapshot.
+The walkability grid comes from the source's collision data and blocking
+tile properties. The map module corrects it with rectangle overrides such as
+`{ op: "block", from: [12, 3], to: [14, 5] }` or `{ op: "open", … }`, and
+places anchors by coordinate or landmark, so the grid itself is never
+hand-edited. The same validator and preview apply. In the picture below the
+right half shows blocked cells in red and anchors as letters.
 
 ![The LPC Revised summer demo map split in two: the left half is the plain backdrop, the right half overlays a 32-pixel grid, red blocked cells and anchor letters for a door, a challenger, a chest and a shop.](visual-guide/backdrop-walkgrid.png)
-
-```text
-Legend: . walk   # cliff, wall or rock   ~ water   T trees
-        D door   W waypoint   C challenger   G guardian   S shop   F friendly
-
-######.~.#######################
-######.~~###############....####
-######.~~###############....####
-##D.##.~~##########.####.###.###
-######.~~#########...##.#.D.#.##
-#T...T~~~.T...........#.#.###.##
-#....~~~~~TT.....T.T.T###.######
-#.....~~~TT.C.....T.T.#T#.#TTT.#
-#.......~.#............#...###T#
-#.......~.............C........#
-#.......C~TTT..................#
-#.........~~~~........T........#
-#............D~.......T........#
-#T.TW.........~G...............#
-```
 
 **Seasons multiply backdrops.** LPC Revised draws its terrain in four seasons,
 and its demo map comes in all four. One authored layout can back several
@@ -234,14 +251,12 @@ of a prototype care more about what is in a dream than about its layout.
   does), the scene can be re-rendered and adapted. A preview image alone is
   fine as a reference, not as a backdrop, unless its license and authorship are
   clear.
-- **Draw new ones in [Tiled](https://www.mapeditor.org/).** A backdrop can be
-  composed in Tiled from any LPC tiles and exported as one PNG plus a
-  collision layer. The map module then imports the exported walkability
-  layer instead of a hand-written grid.
+- **Source of Tales, Big Island and Neverwell Moor** ship large Tiled maps
+  over LPC tilesets, the first choice for crops.
 
-**Choosing a path.** Use a backdrop when a fitting scene exists or a Tiled
-session is cheaper than placing props by hand. Use a tile-built map when a
-tileset has no backdrop or the layout must change often during tuning.
+**Choosing a path.** Crop an existing Tiled map when one fits the theme,
+reseason or edit it when it nearly fits, and compose from stamps only when no
+source map covers the theme.
 
 ## Shared visual language
 
@@ -260,8 +275,8 @@ around the frame, motes drifting upward and a faint rune ring on the threshold.
 | Door state | Veil | Label |
 | --- | --- | --- |
 | Unexplored | Violet swirl | None; doors are blind ([§B5](appendix-b-dreams.md#b5-doors-and-chokepoints)) |
-| Traversed | Blue swirl | The destination dream's name, shown on hover and when the player stands near |
-| Known through a sage hint | Violet swirl | The destination's name, dimmed, with an eye glyph |
+| Traversed | Blue swirl | No name; at most a small thumbnail of the destination's art, shown on hover and when the player stands near ([§B5](appendix-b-dreams.md#b5-doors-and-chokepoints)) |
+| Known through a sage hint | Violet swirl | An eye glyph; the sage marks the destination on the Atlas, never by name |
 | Guarded | The door's state color; the guardian stands on the chokepoint tile in front | None until the guardian falls |
 | Act exit | Red swirl, larger motes, brighter glow | "Act exit" nameplate |
 | Door to Limbo | White swirl | "Limbo" nameplate |
@@ -272,6 +287,8 @@ around the frame, motes drifting upward and a faint rune ring on the threshold.
   `pixi-filters` on the frame. Motes come from a small particle emitter.
 - **Stepping through.** The veil brightens and the screen fades to the veil
   color for about 300 ms, then fades in on the destination's matching door.
+- **Building doors** into a dream's rooms are ordinary scenery doors with no
+  veil; entering a room is a plain fade.
 - **Key dreams** have no door. Using a key at a waypoint opens a gold ring
   around the waypoint obelisk; touching it enters the key dream.
 
@@ -279,7 +296,8 @@ around the frame, motes drifting upward and a faint rune ring on the threshold.
 
 Every dream's waypoint is the same crystal obelisk, whatever the tileset, so
 the player learns one object. A dormant waypoint is grey stone; touching it
-lights it blue with a glow, motes and a rune ring.
+lights it blue with a glow, motes and a rune ring. The start dream's waypoint
+is lit from the start of a run.
 
 ![A dormant grey waypoint, an activated blue waypoint, a waypoint with a gold key-dream ring, a chest, a glowing lost object, a beaten challenger without an icon, and a refill arriving in a puff of dream smoke.](visual-guide/ref-objects.png)
 
@@ -303,6 +321,7 @@ purple for Dream Guides, yellow for quests and blue for sages.
   slightly desaturated. A spent Dream Guide appearance loses its badge too.
 - **Overlap.** When two badges would overlap, the one nearer the player is
   drawn on top and the other fades to half opacity.
+- **Townsfolk** never carry a badge.
 
 ### Other markers
 
@@ -317,9 +336,13 @@ purple for Dream Guides, yellow for quests and blue for sages.
 ## Prototype tilesets
 
 The prototype supports twelve tilesets: the ten Dream Guide home tilesets,
-Wilderveil's backdrop sibling the meadow, and Limbo. Each scene below is a
+Wilderveil's backdrop sibling the meadow, and Limbo. Tileset names are
+internal labels for art sets and never appear in game. Each scene below is a
 mockup at 2× of a 22×13-tile excerpt, with characters and markers placed as
-the game would show them.
+the game would show them. The "Map path" column names each scene's starting
+point; every path is a source plus recipe operations
+([Building maps](#building-maps)). The first dream built is a 110×110 crop
+of Source of Tales' Mountainwatch.
 
 | Tileset | Category | Guide at home | Map path |
 | --- | --- | --- | --- |
@@ -488,31 +511,39 @@ a desaturating violet color matrix.
 
 ## Characters
 
-Every character is a composite from the [Universal LPC character
-generator](https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator):
-a body, a head, and layers of hair, clothes, headwear and held items, each
-recolored from the generator's palettes. Sprites are 64×64 frames with
-walk-cycle, idle and emote sheets in four directions.
+Every character is layered from the [Universal LPC character
+generator](https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator)'s
+sheets: a body, a head, and layers of hair, clothes, headwear and held items.
+The renderer stacks a recipe's layer sheets at runtime as sprites that share
+one animation frame, in the generator's z-order. When a look loads, each
+layer is recolored from the generator's palettes and cut into 64×64 frames,
+with walk-cycle and idle sheets in four directions. Nothing is pre-composed,
+so a recipe edit shows up on the next reload.
 
-A character's look is a **recipe** in a D97 catalog module keyed by the
-character's UUID:
+A character's look is a **recipe** in a D97 catalog module
+(`src/content/d97/characters/`) keyed by the character's UUID. Each part
+names a generator sheet and a palette or variant per color slot:
 
 ```ts
-export const sigrunSprite = characterSprite({
-  characterId: parseCharacterId("…"), // Sigrún
+export const SIGRUN = characterSprite({
+  id: parseD97CharacterId("…"), // Sigrún
   body: "female",
   skin: "light",
   parts: [
-    ["heads_human_female"],
-    ["hair_braid2", "strawberry"],
-    ["torso_clothes_longsleeve", "navy"],
-    ["torso_chainmail", "silver"],
-    ["legs_leggings", "gray"],
-    ["feet_boots_fold", "brown"],
-    ["hat_helmet_spangenhelm_viking", "silver"],
+    { sheet: sheet("heads_human_female") },
+    { sheet: sheet("hair_braid2"), colors: ["strawberry"] },
+    { sheet: sheet("torso_clothes_longsleeve"), colors: ["navy"] },
+    { sheet: sheet("torso_chainmail"), colors: ["silver"] },
+    { sheet: sheet("legs_leggings"), colors: ["gray"] },
+    { sheet: sheet("feet_boots_fold"), colors: ["brown"] },
+    { sheet: sheet("hat_helmet_spangenhelm_viking"), colors: ["silver"] },
   ],
 });
 ```
+
+Workspace preparation resolves recipes against the local generator into a
+character manifest; a recipe naming a missing sheet or palette draws as a
+capsule and logs a warning.
 
 ### Avatar characters
 
@@ -557,7 +588,8 @@ a head icon.
 
 Friendly NPC roles each have one recognizable outfit, and every tileset has
 generic challenger personas suited to it
-([§B2](appendix-b-dreams.md#b2-dream-catalog)).
+([§B2](appendix-b-dreams.md#b2-dream-catalog)). Townsfolk are dressed for
+their dream, with no role outfit and no badge.
 
 ![Six friendly NPC roles (shopkeeper, amulet merchant, amulet changer, sage, quest giver, prize duelist) and ten generic personas, one per tileset, from a hedge-hare to a Grid City runner.](visual-guide/characters-npcs.png)
 
@@ -570,35 +602,36 @@ generic challenger personas suited to it
 ## The React overlay
 
 All UI is existing Cumulus React code drawn over the canvas. The canvas never
-draws text except door nameplates and head badges.
+draws text except the act-exit and Limbo nameplates and head badges.
 
 ![The Tumbleleaf scene with a React overlay: a dream title chip at the top left, a currency bar at the top right, a control bar of Deck, Atlas, Quests, Dreamsigns and Menu at the bottom, and a challenge preview panel with three GameCard placeholders, the antes, the extra, and Fight and Not now buttons.](visual-guide/ref-hud.png)
 
 | Surface | Component |
 | --- | --- |
-| Dream title, act, tier, waypoint status | Cumulus glass chip |
+| Act, tier, waypoint status (never a dream name) | Cumulus glass chip |
 | Essence, amulets, keys | Cumulus status row |
-| Deck, Atlas, Quests, Dreamsigns, Menu | Cumulus control bar (`Pressable`) |
+| Deck, Atlas, Quests, Dreamsigns, Menu | Cumulus control bar; each control appears once its surface exists |
 | Challenge preview | Cumulus panel with `GameCard` signature cards, antes, extra, Fight / Not now |
-| Shops, guide services, quest log, deck editor | Existing journey-mode screens, adapted |
+| Dialogue | Cumulus panel showing the speaker, the line and the player's choices |
+| Shops, guide services, quest log, deck editor | Existing journey-mode screens, adapted by D97 adapters |
 | Dream Atlas | The existing atlas components (`AtlasNode`, `AtlasEdge`), with each node showing its tileset thumbnail |
 
 - **Hover and tap.** Hovering a character or door shows a small React tooltip
-  anchored to its screen position; on touch, the first tap selects and the
-  second interacts.
+  anchored to its screen position. On touch, a tap walks or interacts.
 - **Input focus.** While a React panel is open, the canvas ignores clicks and
   pauses the player's walk.
 
 ## Asset pipeline
 
-- **Tile atlases.** A build script reads the linked LPC sheets and emits Pixi
-  spritesheet JSON for each named tile and prop, from a hand-written catalog
-  of crop rectangles. The catalog, not the PNGs, is versioned.
-- **Character sheets.** A script composes each recipe into a walk and idle
-  sheet per character at workspace preparation, like other disposable
-  materializations. Recipes are versioned; composites are not.
-- **Backdrops.** Backdrop PNGs are linked art; their walkability grids and
-  anchors live in the map modules.
+- **Compiled maps.** Workspace preparation runs the recipe compiler over
+  every map module and writes each compiled map, with its tile layers,
+  tilesets and walkability grid, into the gitignored `public/` tree. The map
+  modules and stamp catalog, not the maps or PNGs, are versioned. The
+  renderer cuts tile frames from the linked Tiled tilesets.
+- **Character manifest.** Workspace preparation resolves every recipe against
+  the local generator into a manifest of layer sheets and palette swaps. The
+  renderer layers and recolors the sheets when a look loads. Recipes are
+  versioned; no composite exists.
 - **Placeholders.** With any sheet missing, tiles render as flat colors by
   terrain class and characters as colored capsules with their head icons, so
   QA can run without art.
@@ -609,15 +642,13 @@ draws text except door nameplates and head badges.
 
 ## Open questions
 
-- **Backdrop repetition.** How many dreams can share a seasonal layout before
-  players notice? A playtest with both paths answers it.
+- **Source repetition.** How many dreams can crop the same source map or
+  share a seasonal layout before players notice? Playtests answer it.
 - **Grid City and Farpoint overlap.** Both lean on the same sci-fi pack. A
   modern-city LPC pack would separate them.
 - **Elven realm and pirate island art.** Both need a sourcing pass.
 - **Avatar silhouettes at 1×.** Some Avatars read alike on a phone; a pass on
   hats and colors should make each one distinct.
-- **Share-alike composites.** Character and backdrop composites inherit
-  CC-BY-SA; confirm that is acceptable for every distribution channel.
 
 ## Attribution
 
