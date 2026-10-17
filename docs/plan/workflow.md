@@ -933,8 +933,15 @@ unpromoted commit.
 
 ### Updating a worktree
 
-Only the session that owns a bead rebases its worktree onto `staging`,
-because `tg update` records a Tollgate intent under the session's identity:
+The owning session selects the procedure by the worktree's source commits.
+Repairs to an unlanded candidate stay in its existing worktree and use the
+single-source update below. A clean QA or gate companion with zero unique
+source commits uses the clean-companion procedure. Neither procedure permits
+raw Git reset, rebase, ref manipulation, `git worktree add`, manual branch
+creation, or empty commits to satisfy an update precondition.
+
+**Single owned source commit.** Only the session that owns the bead runs
+`tg update`, which records a Tollgate intent under that session's identity:
 
 1. From the worktree root, run `tg --no-launch update`.
 2. Check that no update intent is left pending: the worktree's `HEAD^`
@@ -974,6 +981,52 @@ the same worktree:
    A required review uses the final base/source range; replace an earlier
    review-debt range in the notes. Only the session runs native update and
    candidate actions; the helper performs the bounded edits and commits.
+
+**Clean companion with zero unique source commits.** The owning session can
+refresh its own clean companion through native removal and recreation:
+
+1. Prove that this session created and still owns the companion; a matching
+   name or a path supplied by another session is insufficient. Record its
+   absolute path, native creation name, branch, exact `HEAD`, and the
+   certified `staging` OID used for comparison. Verify zero unique source
+   commits against that OID, a clean index and tracked tree, and no rebase
+   in progress. A worktree carrying an owned source commit or an unlanded
+   candidate takes the single-source path instead.
+2. Settle every own writer, helper, server, browser/provider operation and
+   native candidate effect that can touch the companion. Confirm no pending
+   update or pending/uncertain candidate operation, using native status and
+   `doctor` evidence. If ownership, settlement, or source state is uncertain,
+   stop and resolve it before removal; never cancel foreign work.
+3. Inventory untracked paths, including ignored ledgers and artifacts. Every
+   path to preserve must be named and owned. Copy those files to durable
+   scratch storage outside the companion, recording original and backup
+   paths, exact bytes and SHA-256, and row counts for JSONL ledgers. Verify
+   the backup against the originals before displacing only those named
+   files. Unknown paths stop the refresh. Preserve historical source and
+   applicability qualifications with the files; never use broad cleanup or
+   delete foreign paths. Recheck the clean tracked/index state and native
+   removal eligibility after preservation.
+4. From a durable sibling or primary repository command directory, without
+   editing the primary checkout, run
+   `tg --no-launch worktree remove <owned-absolute-path> --json`.
+   Collect its actual terminal result and verify the returned path and
+   branch. Then run `tg --no-launch worktree create <same-owned-name> --json`
+   and verify the returned path and branch match the recorded companion.
+   A failed or uncertain result requires native diagnosis before another
+   effect; never substitute Git commands. Capture `staging` before creation,
+   then recheck actual `staging` and the created `HEAD`: bind the new source
+   to the certified tip actually selected, accounting for a concurrent
+   promotion rather than assuming the earlier OID remained current.
+5. Restore the preserved files to their exact paths and verify their bytes,
+   hashes and ledger row counts against the backups. Retain the backups and
+   historical qualifications. Run `npm install` in the fresh companion and
+   collect its result. Rebuild source guards, dependency receipts and
+   harness/server bindings against the actual new `HEAD`, check source
+   integrity, and obtain new source admission and every required
+   applicability approval before any QA or runtime. Historical QA remains
+   evidence for its recorded source; it grants neither acceptance credit on
+   the new source nor permission to run a private harness. Record the exact
+   new source, preservation checks, settled effects and fresh bindings.
 
 ### A session as implementer
 

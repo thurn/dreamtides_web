@@ -1,0 +1,195 @@
+{
+  "bead": "hv-umm2.774",
+  "phase": 5,
+  "source": {
+    "base": "da68e4aa2583be92fd07bb63d4b7b4853c91a5f4",
+    "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-774-clean-zero-refresh",
+    "artifactDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/clean-zero-refresh774/implementation",
+    "claimUTC": "2026-10-17T02:21:01Z",
+    "exactHelperDispatchUTC": null,
+    "firstTimestampObservation": "2026-10-17T02:23:20Z",
+    "windowQualification": "Claim-inclusive elapsed window includes parent bootstrap; exact helper dispatch timestamp is unknown. First timestamp observation is not a dispatch timestamp. End is the final evidence write immediately before commit.",
+    "implementationEnd": "2026-10-17T02:24:40.619946+00:00",
+    "writerSHA256": {
+      "docs/plan/workflow.md": "ad8191eed308ea4dd6809e400bc6e688d481d26d9c69d2c3e6b15b7d1382761c"
+    }
+  },
+  "contract": {
+    "scope": "Updating a worktree section only plus these three own evidence files. Documentation only; no actual refresh, app, browser, fuzz, test or private harness invocation.",
+    "references": {
+      "observedAt": "2026-10-17T02:23:51.143230+00:00",
+      "references": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/clean-zero-refresh774/worktree-remove-help.txt",
+          "bytes": 295,
+          "sha256": "6fc445c5a9be82106e63aa79cec16667be88d6e54a7452595afe692386544d59"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/clean-zero-refresh774/worktree-create-help.txt",
+          "bytes": 295,
+          "sha256": "30ebfb9e0a466f68ec002735ebf1189f81ddedcd01c666348395f1ecdd3e7a7a"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/qa-source-preparation143/native-refresh-operations.json",
+          "bytes": 2704,
+          "sha256": "bdcd271d855e083f3eef40da5a3f3f81663db49dc27d38c8f479e70b9398bb35"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/qa-source-preparation143/preconditions.json",
+          "bytes": 1641,
+          "sha256": "003913431497069150ba47feb3c87091d58bdff60099c0d228b8fcb5559dbf5e"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/qa-source-preparation143/fresh-source-qualification.json",
+          "bytes": 1857,
+          "sha256": "fdebeb5f5023b295d061c288e680a3f610d98eef748b93434446ed11c941eb11"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/qa-source-preparation143/historical-full-ledger-a.jsonl",
+          "bytes": 6218876,
+          "sha256": "10f911fb84554265b48aa720584eb2327335fe894d411a3cdd623f529a3c1798",
+          "rows": 1705,
+          "matchesOriginalPreservationReceipt": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/qa-source-preparation143/historical-full-ledger-b.jsonl",
+          "bytes": 8149515,
+          "sha256": "deeaa73d66699c9252cd51344a669f0c807d2a82b72cbdebbf8879ea3f2a0882",
+          "rows": 2208,
+          "matchesOriginalPreservationReceipt": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/retrospective212/reviewer/improvement-proposals.json",
+          "bytes": 13416,
+          "sha256": "5c1bca3363990ec2174509cbe2cc8caeaf6d82b2667ae442a388c413420ce254"
+        }
+      ],
+      "nativeHelpQualification": "Saved current CLI help read only; parent reported actual exit 0 for both help commands. No native command executed by helper.",
+      "historicalNativeOperations": {
+        "count": 4,
+        "allExitZero": true,
+        "acceptance": "Historical procedure/reference support only; no current-source runtime or Phase 5 acceptance credit."
+      },
+      "scope": "Workflow text outside Updating a worktree is byte-identical to base."
+    },
+    "performanceClaim": "None. No waiting, CPU saving or speed target inferred from historical operations.",
+    "acceptanceCredit": "Documentation and reference verification on this source only. Historical source and QA qualifications remain attached to their original evidence."
+  },
+  "bootstrap": {
+    "npmInstall": {
+      "qualification": "Parent supplied: original terminal 20958 collected with actual exit 0 before helper dispatch; not rerun by helper.",
+      "preExistingAudit": {
+        "moderate": 9,
+        "high": 7,
+        "critical": 1,
+        "total": 17
+      }
+    }
+  },
+  "validation": {
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-774-clean-zero-refresh",
+      "startedAt": "2026-10-17T02:24:02.421634+00:00",
+      "endedAt": "2026-10-17T02:24:02.786664+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.3628829170484096,
+      "reapedChildUserSeconds": 0.20533,
+      "reapedChildSystemSeconds": 0.101272,
+      "cpuScope": "Whole command and reaped descendants; excludes unrelated host CPU. Sequential commands have no command-group overlap.",
+      "sysctlLoadAtStart": "{ 3.76 5.91 6.54 }",
+      "pid": 33252,
+      "processGroup": 33252,
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/clean-zero-refresh774/implementation/review.log",
+      "terminalCollected": true,
+      "scope": "Diff-aware documentation review planned only friction schema validation; no tests were scheduled."
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-774-clean-zero-refresh",
+      "startedAt": "2026-10-17T02:24:02.787172+00:00",
+      "endedAt": "2026-10-17T02:24:10.607235+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 7.817505250044633,
+      "reapedChildUserSeconds": 5.157362,
+      "reapedChildSystemSeconds": 1.9851410000000003,
+      "cpuScope": "Whole command and reaped descendants; excludes unrelated host CPU. Sequential commands have no command-group overlap.",
+      "sysctlLoadAtStart": "{ 3.76 5.91 6.54 }",
+      "pid": 33342,
+      "processGroup": 33342,
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/clean-zero-refresh774/implementation/knip.log",
+      "terminalCollected": true,
+      "scope": "Maintained preparation, Knip and local-asset restoration; temporary isolated-preparation optional-art warnings, final restoration reported local art linked."
+    },
+    "evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-774-clean-zero-refresh",
+      "startedAt": "2026-10-17T02:24:10.608037+00:00",
+      "endedAt": "2026-10-17T02:24:10.683186+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.0725269999820739,
+      "reapedChildUserSeconds": 0.055444999999999744,
+      "reapedChildSystemSeconds": 0.022165999999999908,
+      "cpuScope": "Whole command and reaped descendants; excludes unrelated host CPU. Sequential commands have no command-group overlap.",
+      "sysctlLoadAtStart": "{ 3.70 5.86 6.52 }",
+      "pid": 34013,
+      "processGroup": 34013,
+      "log": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/clean-zero-refresh774/implementation/evidence-schema.log",
+      "terminalCollected": true
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "cleanup": {
+    "runtimeStarted": false,
+    "nativeEffectsByHelper": false,
+    "qualification": "Parent owns native candidate, promotion, fresh review routing and worktree cleanup.",
+    "observedAt": "2026-10-17T02:24:40.619946+00:00",
+    "commandProcessGroups": {
+      "review": {
+        "processGroup": 33252,
+        "remainingProcesses": [],
+        "terminalCollected": true,
+        "exitCode": 0
+      },
+      "knip": {
+        "processGroup": 33342,
+        "remainingProcesses": [],
+        "terminalCollected": true,
+        "exitCode": 0
+      },
+      "evidence-schema": {
+        "processGroup": 34013,
+        "remainingProcesses": [],
+        "terminalCollected": true,
+        "exitCode": 0
+      }
+    },
+    "allOwnCommandGroupsAbsent": true,
+    "allOwnTerminalsCollected": true
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review command start; sysctl -n vm.loadavg, 1-minute value."
+      }
+    }
+  },
+  "reviewFull": "Not required for bounded prose and own evidence; no infrastructure, configuration or cross-cutting architecture changes.",
+  "timingQualification": "Actual wall and reaped-child CPU per sequential command. Host-load observations describe command start. No pure waiting or savings measurement. Parent bootstrap timing and exact helper dispatch are unknown."
+}
