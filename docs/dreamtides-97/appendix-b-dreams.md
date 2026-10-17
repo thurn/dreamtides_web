@@ -202,7 +202,8 @@ Assembly fills each act's anchors:
   appears at most once as a character: Avatar guardians first, then the two
   Avatar quest givers, then challengers. Once every Avatar has appeared, the
   remaining Avatar-character challenger spots take generic characters. Key
-  dreams may feature any Avatar.
+  dreams may feature any Avatar outside the roster. The player never meets an
+  Avatar on their roster as a character (B16).
 - **Generic characters** take personas from their dream's authored list,
   falling back to a shared persona catalog by tileset. Each has a **deck
   source**: a uniformly random Avatar whose tide set its deck is built from.
@@ -469,6 +470,17 @@ bag cards, and gain one amulet.
   prize (Appendix C §C8). Avatars met as challengers or guardians can't be
   unlocked by beating them.
 - **The roster** holds the starting Avatar and every unlocked Avatar.
+- **No self-encounters.** The player never meets a roster Avatar as a
+  character, since the player walks the overworld as their current Avatar.
+  Assembly and key dreams place only Avatars outside the roster (B7). When an
+  Avatar joins the roster, every character of that Avatar leaves the world:
+  - an unbeaten challenger's anchor takes a new generic challenger at once,
+    with antes rolled at its first preview;
+  - an unbeaten guardian is replaced by an Avatar outside the roster that has
+    not yet appeared in the campaign, or any Avatar outside the roster when
+    none remains, at the same tier;
+  - a beaten character, and the friendly Avatar character whose quest
+    unlocked it, steps away.
 - **Switching.** While standing at an activated waypoint, outside battle, the
   player can switch to any Avatar on the roster, for free and as often as they
   like. The new Avatar is in play from the next battle, and its bag becomes the
@@ -507,6 +519,8 @@ them, so replay and logs refer to them exactly.
 - each opponent's seed, Avatar, constructed deck and knob values;
 - each preview's antes, extra and tier; each battle setup and result;
 - each bag draw and layer opening, with the Avatar; each Avatar switch;
+- each character removed or replaced when its Avatar joins the roster: act,
+  dream, anchor, old and new occupant;
 - each refill: act, dream, anchor and new challenger;
 - each roll at first reveal: shop stock, curiosities, bundles, chests, prize
   duel prizes, card-choice offers;

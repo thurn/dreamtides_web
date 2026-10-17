@@ -206,6 +206,10 @@ and rarity), never to tides or resonance.
   share the most cards with the current Avatar's, so the collection the player
   has built stays useful after a switch. Every other Avatar is a key prize. The
   player can switch among unlocked Avatars at any waypoint, outside battle.
+- **No self-encounters.** The player walks the overworld as their current
+  Avatar and never meets an unlocked Avatar as a character: when an Avatar
+  joins the roster, its characters leave the world and are replaced. See
+  [Appendix B §B16](appendix-b-dreams.md#b16-avatar-characters-and-switching).
 - **Switching changes the bag.** Each Avatar keeps its own bag for the whole
   run. Switching makes the new Avatar's bag the source of random rewards. The
   collection is unchanged. Bag copy targets count every copy the player has

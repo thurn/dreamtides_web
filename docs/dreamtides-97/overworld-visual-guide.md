@@ -517,11 +517,11 @@ waypoint ([§B16](appendix-b-dreams.md#b16-avatar-characters-and-switching)) swa
 on the spot, with a short puff of dream smoke. The scenes on this page show a
 player whose Avatar is Ossian.
 
-- **Telling the player apart.** The player's Avatar always stands on a gold
-  rune ring, and never carries a head icon.
-- **The same Avatar elsewhere.** An Avatar the player is using can still
-  appear as another character, such as a key-dream challenger. That
-  character keeps its head icon and has no ring, so the two never read alike.
+The player never meets a roster Avatar as a character
+([§B16](appendix-b-dreams.md#b16-avatar-characters-and-switching)), so the
+player's sprite is unique in the world. A gold rune ring under the player
+marks "you" at a glance among crowds of characters; the player never carries
+a head icon.
 
 ### Friendly NPCs and generic personas
 
