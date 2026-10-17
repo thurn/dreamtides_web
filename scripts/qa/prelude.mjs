@@ -383,6 +383,79 @@
  *   door to the first battle with no development-only parameter: Avatar
  *   selection, every Layer 1 site, and Battle Start, up to the player's
  *   phase button. `atFrontDoor` runs once the front door shows.
+ * @property {(options?: { timeout?: number, label?: string }) => Promise<BattleState>} win
+ *   Development builds only (`debug=1`): at the human's decision, raises the
+ *   near side's score through the engine debug panel's Score stepper, one
+ *   press at a time, until the battle shows its result surface, which opens
+ *   over the panel. Resolves with the victory state; fails on another result,
+ *   `__caps`, `timeout` (default 60 000 ms), or at once in a `--prod` run.
+ */
+
+/**
+ * A Dreamtides 97 panel or screen `qa.d97.waitForPanel` waits for, by its
+ * test hook: the overworld and dream-loading screens
+ * (`[data-d97-screen]`), the framed popups (`[data-d97-panel]`), a
+ * resident's dialogue, the shop and its sell panel, the deck editor, and
+ * the slice end.
+ *
+ * @typedef {"overworld" | "dream-loading" | "encounter-preview" | "quest-log" | "quest-reward" | "menu" | "dialogue" | "shop" | "shop-sell" | "deck-editor" | "slice-end"} D97PanelName
+ */
+
+/**
+ * The walker as `window.__d97.state().player` reports it
+ * (`src/d97/overworld/qa-surface.ts`).
+ *
+ * @typedef {{ tile: [number, number], facing: string, faced: [number, number], walking: boolean, pathRemaining: number }} D97Player
+ */
+
+/**
+ * The part of `window.__d97.state()` the helpers read; the rest (markers,
+ * characters, camera, viewport) passes through untyped.
+ *
+ * @typedef {{ mapId: import("../../src/types/identifiers").DreamMapId, player: D97Player, anchors: Array<{ id: import("../../src/types/identifiers").DreamAnchorId, kind: string, at: [number, number] }>, markers: any, characters: any } & Record<string, unknown>} D97State
+ */
+
+/**
+ * The development-only `window.__d97` surface.
+ *
+ * @typedef {object} D97Surface
+ * @property {() => D97State} state
+ * @property {(anchorId: import("../../src/types/identifiers").DreamAnchorId) => boolean} walkTo
+ * @property {() => boolean} interact
+ * @property {(anchorId: import("../../src/types/identifiers").DreamAnchorId, side?: import("../../src/d97/overworld/walker").Facing) => boolean} teleport
+ */
+
+/**
+ * `qa.d97`: the Dreamtides 97 overworld through the development-only
+ * `window.__d97` surface. Every helper first waits for the surface, which
+ * the overworld scene installs when it mounts and a dev-server reload
+ * removes briefly, and fails with the player's state when an action returns
+ * false.
+ *
+ * @typedef {object} D97Helpers
+ * @property {(options?: { timeout?: number }) => Promise<D97State>} state
+ * @property {(anchorId: import("../../src/types/identifiers").DreamAnchorId, options?: { timeout?: number }) => Promise<D97Player>} walkTo
+ *   Walks to the anchor and interacts with it, as a click on it would, then
+ *   waits until the walker stops (default 60 000 ms in all).
+ * @property {(anchorId: import("../../src/types/identifiers").DreamAnchorId, side?: import("../../src/d97/overworld/walker").Facing, options?: { timeout?: number }) => Promise<D97Player>} teleport
+ *   Stands beside the anchor facing it, writing no event.
+ * @property {(options?: { timeout?: number }) => Promise<D97Player>} interact
+ *   Interacts with the faced anchor, as the interact key would.
+ * @property {(panel: D97PanelName, options?: { timeout?: number, minOpacity?: number }) => Promise<{ panel: D97PanelName, id: string | null }>} waitForPanel
+ *   Waits until the panel is rendered (default 15 000 ms); `id` is its keyed
+ *   hook's value where it has one: the anchor of an encounter preview or a
+ *   shop, the node of a dialogue.
+ */
+
+/**
+ * `qa.touch`: touch input dispatched as pointer events.
+ *
+ * @typedef {object} TouchHelpers
+ * @property {(target: string | Target, ms?: number, options?: { timeout?: number, minOpacity?: number }) => Promise<{ x: number, y: number }>} longPress
+ *   Waits until the target is rendered and uncovered at its centre, as
+ *   `click` does, then dispatches a touch `pointerdown` there, holds `ms`
+ *   (default 600), and dispatches the `pointerup`, as a finger held on an
+ *   InfoCard source would.
  */
 
 /**
@@ -430,6 +503,8 @@
  * @property {(stage: LabStageInput, options?: { card?: string, variant?: string, as?: "player" | "enemy", timeout?: number }) => Promise<{ battleId: import("../../src/types/identifiers").BattleId, player: LabPhysicalSide, enemy: LabPhysicalSide }>} labStage
  *   Opens one declared scene, verifies its immutable initial board, and returns physical IDs even when the AI has already moved.
  * @property {BattleDriver} battle
+ * @property {D97Helpers} d97
+ * @property {TouchHelpers} touch
  * @property {() => Promise<void>} rest Moves the pointer outside the viewport.
  * @property {(name: string, options?: { fullPage?: boolean, clip?: Rect, element?: string | Target, pad?: number, minOpacity?: number }) => Promise<string>} capture
  *   Writes `<captureDir>/<name>.png` in device pixels, pointer at rest: the
@@ -1186,9 +1261,160 @@ export async function createQa(page, config) {
     },
   };
 
+  /** @type {Record<D97PanelName, { selector: string, key: string | null }>} */
+  const D97_PANELS = {
+    overworld: { selector: "[data-d97-screen=overworld]", key: null },
+    "dream-loading": { selector: "[data-d97-screen=dream-loading]", key: null },
+    "encounter-preview": { selector: "[data-d97-encounter-preview]", key: "data-d97-encounter-preview" },
+    "quest-log": { selector: "[data-d97-panel=quest-log]", key: null },
+    "quest-reward": { selector: "[data-d97-panel=quest-reward]", key: null },
+    menu: { selector: "[data-d97-panel=menu]", key: null },
+    dialogue: { selector: "[data-d97-dialogue-node]", key: "data-d97-dialogue-node" },
+    shop: { selector: "[data-d97-shop]", key: "data-d97-shop" },
+    "shop-sell": { selector: "[data-d97-shop-sell]", key: null },
+    "deck-editor": { selector: "[data-d97-deck-editor]", key: null },
+    "slice-end": { selector: "[data-testid=d97-slice-end-screen]", key: null },
+  };
+
+  /**
+   * Waits for `window.__d97`, which the overworld scene installs on mount
+   * and a dev-server reload removes briefly.
+   *
+   * @param {string} label
+   * @param {number} timeout
+   */
+  const d97Surface = (label, timeout) =>
+    qa.waitFor(`${label}: window.__d97 (the development overworld surface)`,
+      () => /** @type {Window & { __d97?: D97Surface }} */ (window).__d97 !== undefined || null, null, { timeout });
+
+  /**
+   * Calls one `window.__d97` action and fails, with the player's state and
+   * the anchor's, when it returns false.
+   *
+   * @param {"walkTo" | "teleport" | "interact"} action
+   * @param {unknown[]} args
+   * @param {string} label
+   * @param {number} deadline
+   * @returns {Promise<D97Player>}
+   */
+  const d97Act = async (action, args, label, deadline) => {
+    for (;;) {
+      await d97Surface(label, Math.max(1, deadline - Date.now()));
+      const outcome = await read(({ name, values }) => {
+        const surface = /** @type {Window & { __d97?: D97Surface }} */ (window).__d97;
+        if (surface === undefined) return null;
+        const call = /** @type {(...args: unknown[]) => boolean} */ (surface[name]);
+        const ok = call(...values);
+        const state = surface.state();
+        const id = values[0];
+        return {
+          ok,
+          player: state.player,
+          anchor: typeof id === "string" ? state.anchors.find((anchor) => anchor.id === id) ?? null : null,
+          anchors: state.anchors.length,
+        };
+      }, { name: action, values: args }, { timeout: Math.max(1, deadline - Date.now()) });
+      if (outcome === null) {
+        // Removed between the wait and the call: a reload; wait for it again.
+        if (Date.now() >= deadline) throw timeoutError(`${label}: window.__d97 vanished and did not return`);
+        continue;
+      }
+      if (!outcome.ok) {
+        const anchor = args.length === 0
+          ? ""
+          : outcome.anchor === null
+            ? `; the anchor is not among the scene's ${String(outcome.anchors)} anchors`
+            : `; the anchor is a ${outcome.anchor.kind} at ${JSON.stringify(outcome.anchor.at)}`;
+        throw new Error(`${label}: window.__d97.${action} returned false${anchor}; player ${JSON.stringify(outcome.player)}`);
+      }
+      return outcome.player;
+    }
+  };
+
+  /** @type {D97Helpers} */
+  const d97 = {
+    async state({ timeout = 15_000 } = {}) {
+      const deadline = Date.now() + timeout;
+      for (;;) {
+        await d97Surface("qa.d97.state", Math.max(1, deadline - Date.now()));
+        const state = await read(() => /** @type {Window & { __d97?: D97Surface }} */ (window).__d97?.state() ?? null, null,
+          { timeout: Math.max(1, deadline - Date.now()) });
+        if (state !== null) return state;
+        if (Date.now() >= deadline) throw timeoutError("qa.d97.state: window.__d97 vanished and did not return");
+      }
+    },
+    async walkTo(anchorId, { timeout = 60_000 } = {}) {
+      const label = `qa.d97.walkTo ${anchorId}`;
+      const deadline = Date.now() + timeout;
+      await d97Act("walkTo", [anchorId], label, deadline);
+      const player = await qa.waitFor(`${label}: the walker stops`, () => {
+        const state = /** @type {Window & { __d97?: D97Surface }} */ (window).__d97?.state();
+        return state !== undefined && !state.player.walking ? state.player : null;
+      }, null, { timeout: Math.max(1, deadline - Date.now()) });
+      note(label, player);
+      return player;
+    },
+    async teleport(anchorId, side, { timeout = 15_000 } = {}) {
+      const label = `qa.d97.teleport ${anchorId}${side === undefined ? "" : ` ${side}`}`;
+      const player = await d97Act("teleport", side === undefined ? [anchorId] : [anchorId, side], label, Date.now() + timeout);
+      note(label, player);
+      return player;
+    },
+    async interact({ timeout = 15_000 } = {}) {
+      const player = await d97Act("interact", [], "qa.d97.interact", Date.now() + timeout);
+      note("qa.d97.interact", player);
+      return player;
+    },
+    async waitForPanel(panel, { timeout = 15_000, minOpacity = 0.95 } = {}) {
+      const hook = Object.hasOwn(D97_PANELS, panel) ? D97_PANELS[panel] : undefined;
+      if (hook === undefined) throw new Error(`qa.d97.waitForPanel: unknown panel ${String(panel)}; one of ${Object.keys(D97_PANELS).join(", ")}`);
+      await poll(`qa.d97.waitForPanel ${panel}`, { kind: "rendered", target: { selector: hook.selector }, minOpacity }, timeout);
+      const id = hook.key === null
+        ? null
+        : await read(({ selector, key }) => document.querySelector(selector)?.getAttribute(key) ?? null, { selector: hook.selector, key: hook.key });
+      return { panel, id };
+    },
+  };
+
+  /** @type {TouchHelpers} */
+  const touch = {
+    async longPress(rawTarget, ms = 600, { timeout = 15_000, minOpacity = 0.95 } = {}) {
+      const target = asTarget(rawTarget);
+      const label = `qa.touch.longPress ${describe(target)}`;
+      const point = await poll(label, { kind: "hit", target, minOpacity }, timeout);
+      /** @param {"pointerdown" | "pointerup"} type */
+      const dispatch = (type) => read(({ kind, x, y }) => {
+        // A touch pointer is implicitly captured: its pointerup goes to the pointerdown's target.
+        const held = /** @type {Window & { __qaTouchHeld?: Element }} */ (window);
+        const element = kind === "pointerup" && held.__qaTouchHeld?.isConnected === true
+          ? held.__qaTouchHeld
+          : document.elementFromPoint(x, y);
+        if (kind === "pointerup") delete held.__qaTouchHeld;
+        if (element === null) return false;
+        if (kind === "pointerdown") held.__qaTouchHeld = element;
+        element.dispatchEvent(new PointerEvent(kind, {
+          bubbles: true, cancelable: true, composed: true, pointerId: 1, pointerType: "touch", isPrimary: true,
+          clientX: x, clientY: y, button: 0, buttons: kind === "pointerdown" ? 1 : 0,
+        }));
+        return true;
+      }, { kind: type, x: point.x, y: point.y });
+      if (!(await dispatch("pointerdown"))) throw new Error(`${label}: nothing at (${String(point.x)}, ${String(point.y)}) to press`);
+      await page.waitForTimeout(ms);
+      if (!(await dispatch("pointerup"))) throw new Error(`${label}: nothing at (${String(point.x)}, ${String(point.y)}) to release`);
+      return { x: point.x, y: point.y };
+    },
+  };
+
+  /** @param {string} label @param {unknown} [data] */
+  const note = (label, data) => {
+    log.push(data === undefined ? { label } : { label, data });
+  };
+
   /** @type {Omit<Qa, "battle">} */
   const qa = {
     page,
+    d97,
+    touch,
     baseUrl: config.baseUrl,
     bead: config.bead,
     captureDir: config.captureDir,
@@ -1476,9 +1702,7 @@ export async function createQa(page, config) {
       if (capsCount(state.caps) > 0) throw new Error(`${label}: __caps ${JSON.stringify(state.caps)}`);
     },
 
-    note(label, data) {
-      log.push(data === undefined ? { label } : { label, data });
-    },
+    note,
 
     sleep: (ms) => page.waitForTimeout(ms),
 
@@ -2144,5 +2368,48 @@ export function createBattleDriver(qa) {
     return { sites };
   };
 
-  return { state, pass, answer, tap, playUntil, waitFor, eventCursor, events, waitForEvents, promptOrAutoAnswer, enterFirstBattle };
+  /** @type {BattleDriver["win"]} */
+  const win = async ({ timeout = 60_000, label = "win" } = {}) => {
+    const name = `qa.battle.${label}`;
+    if (qa.prod) throw new Error(`${name}: raises the score through the engine debug panel, which only development builds have; run without --prod`);
+    const PANEL = "[data-testid=engine-debug-panel]";
+    const SIDE = "[data-engine-debug-side]";
+    const SCORE_UP = "[data-testid=engine-debug-score] button:last-of-type";
+    const deadline = Date.now() + timeout;
+    const remaining = () => Math.max(1, deadline - Date.now());
+    // A debug action applies at a decision boundary; the human's is one the AI host does not race.
+    let battle = await waitFor(
+      (current) => current.result !== null || (current.probe !== null && !current.probe.inFlight && current.probe.decision?.side === "player"),
+      { label: `${label}: the human's decision (the probe needs debug=1)`, timeout: remaining() },
+    );
+    if (battle.result === null) {
+      if (!(await qa.isVisible(PANEL))) await qa.click("[data-testid=engine-debug-open]", { timeout: remaining() });
+      await qa.waitVisible(PANEL, { timeout: remaining() });
+      const side = await qa.read((selector) => document.querySelector(selector)?.getAttribute("data-engine-debug-side") ?? null, SIDE);
+      if (side !== "player") {
+        await qa.click(`${SIDE} button:nth-of-type(1)`, { timeout: remaining() });
+        await qa.waitFor(`${name}: the debug panel's player side`, (selector) =>
+          document.querySelector(selector)?.getAttribute("data-engine-debug-side") === "player", SIDE, { timeout: remaining() });
+      }
+      const scoreToWin = battle.probe?.scoreToWin ?? 0;
+      for (let presses = 0; battle.result === null; presses++) {
+        if (battle.probe?.ended === true) {
+          battle = await waitFor((current) => current.result !== null, { label: `${label}: the result surface`, timeout: remaining() });
+          break;
+        }
+        if (presses > scoreToWin) throw new Error(`${name}: ${String(presses)} Score presses did not end the battle; ${describe(battle)}`);
+        const reached = battle.probe?.scores.player ?? 0;
+        await qa.click(SCORE_UP, { timeout: remaining() });
+        battle = await waitFor(
+          (current) => (current.probe?.scores.player ?? 0) > reached || current.probe?.ended === true || current.result !== null,
+          { label: `${label}: score ${String(reached + 1)}`, timeout: remaining() },
+        );
+      }
+    }
+    if (battle.result !== "victory") throw new Error(`${name}: the battle ended in ${String(battle.result)}; ${describe(battle)}`);
+    qa.note(name, { scores: battle.probe?.scores ?? null });
+    return battle;
+  };
+
+  return { state, pass, answer, tap, playUntil, waitFor, eventCursor, events, waitForEvents, promptOrAutoAnswer, enterFirstBattle, win };
 }

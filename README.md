@@ -731,6 +731,38 @@ battle uses it rather than its own pass loop:
   the first battle: Avatar selection, every Layer 1 site, and Battle Start,
   up to the player's phase button. It uses no development-only parameter,
   so it runs with `--prod`; `query: "debug=1"` adds the probe in a dev run.
+- `qa.battle.win({ timeout?, label? })` wins the current battle in a
+  development run with `debug=1`: at the human's decision it opens the engine
+  debug panel and presses the player's Score stepper
+  (`[data-testid=engine-debug-score]`) one point at a time until the result
+  surface shows, and resolves with the victory state. It fails on another
+  result, `__caps`, `timeout` (default 60 s), and at once with `--prod`. It
+  works on Dreamtides 97 battles too.
+
+**Dreamtides 97.** `qa.d97` drives the overworld through the development-only
+`window.__d97` surface (`src/d97/overworld/qa-surface.ts`). Each helper first
+waits for the surface, which the overworld scene installs on mount and a
+dev-server reload removes briefly, and an action that returns false fails
+with the player's state and the anchor's kind and tile:
+
+- `qa.d97.state()` returns `window.__d97.state()`: `player`, `anchors`,
+  `markers`, `characters`, and the rest.
+- `qa.d97.walkTo(anchorId, { timeout? })` walks to the anchor and interacts,
+  as a click would, then waits until the walker stops (default 60 s) and
+  returns the player.
+- `qa.d97.teleport(anchorId, side?)` stands beside the anchor facing it,
+  writing no event; `qa.d97.interact()` interacts with the faced anchor.
+- `qa.d97.waitForPanel(name, { timeout?, minOpacity? })` waits for a D97
+  screen or panel by name: `overworld`, `dream-loading`,
+  `encounter-preview`, `quest-log`, `quest-reward`, `menu`, `dialogue`,
+  `shop`, `shop-sell`, `deck-editor`, or `slice-end`. It returns
+  `{ panel, id }`, where `id` is the preview's or shop's anchor, or the
+  dialogue's node.
+
+`qa.touch.longPress(target, ms?)` holds a finger on a target, as on an
+InfoCard source: it waits until the target is rendered and uncovered, then
+dispatches a touch `pointerdown` at its centre, holds `ms` (default 600), and
+dispatches the `pointerup` to the same element.
 
 Tracked scenarios:
 
@@ -764,6 +796,13 @@ Tracked scenarios:
   The enemy uses the normal policy selection
   (`--arg ai=<policy>` adds `?ai=` to the entry). Its waits use test IDs,
   data attributes, and card UUIDs, never copy.
+- `d97-slice` starts a Dreamtides 97 run on the development dream
+  (`?goto=d97-overworld&debug=1`) on desktop and mobile, walks to the
+  challenger nearest the arrival tile (`qa.d97.walkTo`), waits for its
+  encounter preview, fights and wins the battle (`qa.battle.win`), and takes
+  the reward's Continue back to the overworld, where it checks the persisted
+  log's applied battle begin and end. Three steps per viewport; it captures
+  each stage.
 - `card-lab-play` is the card sweep's per-card run (below).
 - `card-lab-stage` opens a lab with `--arg card=<uuid>` and stages
   `--arg stage=hand:player:<uuid>,play:enemy:<uuid>,void:player:<uuid>` through

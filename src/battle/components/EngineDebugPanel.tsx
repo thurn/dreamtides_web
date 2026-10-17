@@ -209,6 +209,7 @@ export default function EngineDebugPanel({
             decrementDisabled={sideState.score === 0}
             onDecrement={() => submit({ kind: "setScore", side, score: sideState.score - 1 })}
             onIncrement={() => submit({ kind: "setScore", side, score: sideState.score + 1 })}
+            testId="engine-debug-score"
           />
           <GlassButton
             label={COPY.reveal}
