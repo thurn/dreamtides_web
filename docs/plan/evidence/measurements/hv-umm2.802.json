@@ -1,0 +1,2816 @@
+{
+  "bead": "hv-umm2.802",
+  "phase": 5,
+  "sourceBase": "f4adea9e370ec379a3517321655ba1c7603072e8",
+  "stream": "default",
+  "status": "OBSERVED_LOCAL_PROTOTYPE_ACCEPTED_PENDING_PARENT_COLD_AND_NATIVE_DELIVERY",
+  "observation": {
+    "metric": "Complete scripts/review.mjs test stage INCLUDING collection/setup/environment of whole existing presentation module",
+    "workers": 2,
+    "baselineS": 3.3,
+    "prototypeS": 2.9,
+    "observedReductionPercent": 12.12121212121212,
+    "thresholdPercent": 10,
+    "thresholdSatisfied": true,
+    "baselineVitestS": 2.57,
+    "prototypeVitestS": 2.38,
+    "qualifications": [
+      "Single ordered baseline then prototype; module/OS cache warmth, source/routing and host load differ. Rounded stage values are recorded exactly; this is an observed local comparison, not a causal estimate or an aggregate forecast.",
+      "Prepare and restore assets wrapper time is excluded from chosen metric. Complete module stage includes collection/setup/environment and all10 cases.",
+      "Actual routing isolated to shared-dom follows unchanged module-mock regex and DOM pragma. Setup still resets modules/timers/globals/env per file.",
+      "Native release is parent-owned. Current fullsuite26882.48Vitest/83.6stage>60 remains FAIL_UNWAIVED; no fullsuite rerun or browser/fuzz/phase acceptance here."
+    ]
+  },
+  "experimentContract": {
+    "at": "2026-10-17T13:41:57.350441+00:00",
+    "source": "f4adea9e370ec379a3517321655ba1c7603072e8",
+    "targetSHA256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+    "baselineCommand": [
+      "npm",
+      "test",
+      "--",
+      "src/battle/components/battle-presentation.test.tsx",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/baseline-results.json"
+    ],
+    "prototypeCommand": [
+      "npm",
+      "test",
+      "--",
+      "src/battle/components/battle-presentation.test.tsx",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/prototype-results.json"
+    ],
+    "metric": "Complete review test stage including collection/setup/environment, rounded reported wall seconds; wrapper prepare-workspace excluded.",
+    "workers": 2,
+    "thresholdObservedPercent": 10,
+    "rule": "one ordered baseline/prototype; no causal forecast; exact code rollback below threshold or public contract failure",
+    "observationDeletionMap": [
+      {
+        "delete": "42\u201353 private subclass/hoisted counter and194\u2013209 private constructor-count subscriptions/assertions",
+        "retained": "Public success: existing194\u2013216 play/answer, two batches, nonempty presented events, every presented eventState defined. Existing232\u2013251 tests cancelled/retried memoized reload;278\u2013294 tests reloaded prompt without historical batches;164\u2013192 contains failed answer and recovered retry."
+      },
+      {
+        "delete": "A promise of exact Context instantiation cardinality",
+        "retained": "Public fold reuse witness already in src/engine/fold/fold-observation.test.ts56\u201392: memoized event identity, bounded snapshot count, same observed state references on another observed fold.94\u2013147 adds sparse-source capability identity;149\u2013173 covers newly published answer observations. No claim that retained tests assert exact private constructor totals."
+      },
+      {
+        "delete": "No other public feed, probe, teardown, identity, timing/dwell or guidance observation",
+        "retained": "battle-presentation254\u2013275 probe sequence/index/UUID provenance;218\u2013229 unmount behavior;331\u2013425 ordinary queue/guidance/notice ordering. Keep full module selection."
+      }
+    ],
+    "readLimitations": [
+      "Initial combined native bead display truncated ancestor history; complete own record recovered091a35. Ancestor bodies not needed or claimed.",
+      "Source multioutput786009 and9d11e2 truncated; presentation tail300:426 recovered9d11e2, public fold first1:100 and render-cleanup recovered87c97d; remaining fold94:173, dom1:130 and adapter1:180 visible9d11e2. No blanket semantic claim over unrelated files."
+    ]
+  },
+  "preservation": {
+    "status": "PASS",
+    "beforeSHA256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+    "afterSHA256": "b7f953356cf25ac7883365ce8772280c6c90fcb1cd227c992c9a5010d8aabbc3",
+    "exactAuthorizedTextTransformation": true,
+    "otherNineCaseBodiesByteEqual": true,
+    "allExistingFixtureImportCleanupHelpersByteEqualOutsideExactAuthorizedEdits": true,
+    "casesBaseline": [
+      [
+        "published engine event subscriber contains a failed answer, publishes no batch, and continues from the reducer's recovered slice",
+        "passed"
+      ],
+      [
+        "published engine event subscriber reads each applied intent's observed states without running a step or search again",
+        "passed"
+      ],
+      [
+        "published engine event subscriber observes no fold once the feed unmounts",
+        "passed"
+      ],
+      [
+        "published engine event subscriber observes a play cancelled and retried after a reload, whose run the reload memoized unobserved",
+        "passed"
+      ],
+      [
+        "published engine event subscriber records the probe's events by sequence and batch index with the engine's own identities",
+        "passed"
+      ],
+      [
+        "published engine event subscriber starts a reloaded prompt with no historical batches and publishes its answer",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching fully presents an unowned enemy play before its figment teaching and retains the later travel",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching skips only the exact completed sequence/index and restores a checkpoint over an empty reload queue",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching binds readiness to each checkpoint while an intervening ordinary item completes",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching finishes a prior notice before teaching and raises a later notice only after the checkpoint",
+        "passed"
+      ]
+    ],
+    "casesPrototype": [
+      [
+        "published engine event subscriber contains a failed answer, publishes no batch, and continues from the reducer's recovered slice",
+        "passed"
+      ],
+      [
+        "published engine event subscriber publishes play and answer batches with complete presented event states",
+        "passed"
+      ],
+      [
+        "published engine event subscriber observes no fold once the feed unmounts",
+        "passed"
+      ],
+      [
+        "published engine event subscriber observes a play cancelled and retried after a reload, whose run the reload memoized unobserved",
+        "passed"
+      ],
+      [
+        "published engine event subscriber records the probe's events by sequence and batch index with the engine's own identities",
+        "passed"
+      ],
+      [
+        "published engine event subscriber starts a reloaded prompt with no historical batches and publishes its answer",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching fully presents an unowned enemy play before its figment teaching and retains the later travel",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching skips only the exact completed sequence/index and restores a checkpoint over an empty reload queue",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching binds readiness to each checkpoint while an intervening ordinary item completes",
+        "passed"
+      ],
+      [
+        "ordinary visuals ordered around durable teaching finishes a prior notice before teaching and raises a later notice only after the checkpoint",
+        "passed"
+      ]
+    ],
+    "caseCount": 10,
+    "renamedCase": {
+      "from": "reads each applied intent's observed states without running a step or search again",
+      "to": "publishes play and answer batches with complete presented event states"
+    },
+    "actualRouting": {
+      "baseline": "isolated",
+      "prototype": "shared-dom"
+    },
+    "wholeTestStagesS": {
+      "baseline": 3.3,
+      "prototype": 2.9,
+      "combined": 3.6
+    },
+    "observedGainPercent": 12.12121212121212,
+    "testDelta": {
+      "files": 0,
+      "lines": -22,
+      "jsdomFiles": 0
+    },
+    "allUnrelatedCodeFilesCount": 2738,
+    "semanticLimit": "Hash census proves byte identity, not semantic reads of unrelated bodies.",
+    "unrelatedBaselineRegularFileCount": 6180,
+    "originalProofSHA256": "4611802e624befa2bfe5552118c8d8c435d0563babe0255be5d1651712cb1599",
+    "codeCountQualification": "Count2738 includes .ts/.tsx/.mjs/.js/.json paths outside docs; whole unrelated regular census is authoritative for every other extension too."
+  },
+  "statefulClosure": {
+    "freshEngine": "Each test resets faulting/playerCard, builds new synthetic Engine and registers fixture providers.",
+    "teardown": "Each afterEach act-unmounts every retained root, awaits all LocalGame.close operations then clears all six provider seams. Hook effect cleanup returns log unsubscribe and observer removal; adapter/observer WeakMaps key exact engine objects.",
+    "globalState": "Pending engine log map is module-local and setup vi.resetModules remains per file. Fake timer restoration and DOM restoration/render cleanup unchanged.",
+    "publicWitness": "Successful real local game appends play then answer, exactly two batches, nonempty presented events, every presented eventState defined. Exact constructor cardinality is intentionally outside retained observation; fold-observation existing4 cases retain actual memoized event and state identities.",
+    "combinedControl": "Actual normal-routing3 complete modules23/23 cases PASS including replay registration/clear and all4 fold observations. This does not assert exhaustive global cache closure."
+  },
+  "localCommands": {
+    "setup": {
+      "name": "setup",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/setup.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "ea398c9b5572d4156047cf27594a569c297a7e618d84b20b8527bc68798ce0dc",
+      "time": "2026-10-17T13:38:24.693459+00:00",
+      "load": [
+        3.06103515625,
+        3.994140625,
+        5.43505859375
+      ],
+      "workers": "2",
+      "pid": 97490,
+      "pgid": 97490,
+      "actualExit": 0,
+      "end": "2026-10-17T13:38:27.740837+00:00",
+      "wallS": 3.0470768330269493,
+      "childCpuS": 6.562093999999999,
+      "loadEnd": [
+        3.0556640625,
+        3.9775390625,
+        5.42041015625
+      ],
+      "logSHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/setup.receipt.json",
+      "receiptSHA256": "ff28ef5350a890b2228b831e0d16eeb7fad46b19e8dd971ecea64561b43ff0a8",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/setup.inputs.json",
+      "actualToolReferences": {
+        "original": 27294,
+        "launch": "a5c752",
+        "terminal": "4230a9"
+      }
+    },
+    "pre-dispatch-friction": {
+      "name": "pre-dispatch-friction",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "ea398c9b5572d4156047cf27594a569c297a7e618d84b20b8527bc68798ce0dc",
+      "time": "2026-10-17T13:38:42.886824+00:00",
+      "load": [
+        3.13525390625,
+        3.9462890625,
+        5.38330078125
+      ],
+      "workers": "2",
+      "pid": 98013,
+      "pgid": 98013,
+      "actualExit": 0,
+      "end": "2026-10-17T13:38:43.085368+00:00",
+      "wallS": 0.19827441696543247,
+      "childCpuS": 0.18593300000000001,
+      "loadEnd": [
+        3.13525390625,
+        3.9462890625,
+        5.38330078125
+      ],
+      "logSHA256": "407e10e0248af59da1265c5531233f048cc142f02fa0337d61010dde277fc1ff",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/pre-dispatch-friction.receipt.json",
+      "receiptSHA256": "f7bf4d147c953a140ba68ae91adbd68b578e1368b95929c3ee4d68ac643a276f",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/pre-dispatch-friction.inputs.json",
+      "actualToolReferences": {
+        "terminal": "4b71f6"
+      }
+    },
+    "baseline": {
+      "name": "baseline",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/components/battle-presentation.test.tsx",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/baseline-results.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "ea398c9b5572d4156047cf27594a569c297a7e618d84b20b8527bc68798ce0dc",
+      "time": "2026-10-17T13:42:01.671813+00:00",
+      "load": [
+        2.81982421875,
+        3.60546875,
+        4.9521484375
+      ],
+      "workers": "2",
+      "pid": 3423,
+      "pgid": 3423,
+      "actualExit": 0,
+      "end": "2026-10-17T13:42:10.252045+00:00",
+      "wallS": 8.579908374988008,
+      "childCpuS": 9.484282000000002,
+      "loadEnd": [
+        3.54833984375,
+        3.73388671875,
+        4.9814453125
+      ],
+      "logSHA256": "819af1602a74b6869e35fcf016552733cf3aabf7e065b5454d3ca4deabb4edc0",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/baseline.receipt.json",
+      "receiptSHA256": "2337778f2ffcc04c57a79ecd7ccb7d094182376bb3b43312762aacb557dc1b44",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/baseline.inputs.json",
+      "actualToolReferences": {
+        "original": 47493,
+        "launch": "248101",
+        "terminal": "9697c0"
+      }
+    },
+    "prototype": {
+      "name": "prototype",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/components/battle-presentation.test.tsx",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/prototype-results.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "c22ca99e32b4b5c66be84a16fe95ee11f8fe5f2160ae27add0d7a00a11d15140",
+      "time": "2026-10-17T13:42:31.970357+00:00",
+      "load": [
+        2.9609375,
+        3.58837890625,
+        4.8994140625
+      ],
+      "workers": "2",
+      "pid": 4159,
+      "pgid": 4159,
+      "actualExit": 0,
+      "end": "2026-10-17T13:42:37.810773+00:00",
+      "wallS": 5.840090833022259,
+      "childCpuS": 7.675515000000001,
+      "loadEnd": [
+        3.2001953125,
+        3.61767578125,
+        4.89453125
+      ],
+      "logSHA256": "9e5a51aba16ecceaa7f63e7aa620d6eaa36d8acd72e5002b6abd9c2619a876e6",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/prototype.receipt.json",
+      "receiptSHA256": "177311ed7f477442ca92c8c657941f4e9fab0cb42de5f6dc1d36201a4b47f2aa",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/prototype.inputs.json",
+      "actualToolReferences": {
+        "original": 55600,
+        "launch": "37aa80",
+        "terminal": "730ab5"
+      }
+    },
+    "combined": {
+      "name": "combined",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/components/battle-presentation.test.tsx",
+        "src/engine/fold/fold-observation.test.ts",
+        "src/rules/replay/replay.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/combined-results.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "c22ca99e32b4b5c66be84a16fe95ee11f8fe5f2160ae27add0d7a00a11d15140",
+      "time": "2026-10-17T13:42:46.802408+00:00",
+      "load": [
+        3.02392578125,
+        3.57373046875,
+        4.87158203125
+      ],
+      "workers": "2",
+      "pid": 4479,
+      "pgid": 4479,
+      "actualExit": 0,
+      "end": "2026-10-17T13:42:53.315599+00:00",
+      "wallS": 6.512838417023886,
+      "childCpuS": 11.00322,
+      "loadEnd": [
+        3.654296875,
+        3.68701171875,
+        4.89599609375
+      ],
+      "logSHA256": "0fe07fdbe172addb9557c765663a02f51cd20c4d119c0d13d94ba25f9fdb9345",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/combined.receipt.json",
+      "receiptSHA256": "414e5e6485d96840eea7afc19746e39ea98ab917d81d26f50397f5160b63a359",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/combined.inputs.json",
+      "actualToolReferences": {
+        "original": 34888,
+        "launch": "9c911a",
+        "terminal": "0966aa"
+      }
+    },
+    "compile-preservation": {
+      "name": "compile-preservation",
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/preservation.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "c22ca99e32b4b5c66be84a16fe95ee11f8fe5f2160ae27add0d7a00a11d15140",
+      "time": "2026-10-17T13:43:39.959463+00:00",
+      "load": [
+        3.994140625,
+        3.78662109375,
+        4.87060546875
+      ],
+      "workers": "2",
+      "pid": 5627,
+      "pgid": 5627,
+      "actualExit": 0,
+      "end": "2026-10-17T13:43:39.997080+00:00",
+      "wallS": 0.03738275001524016,
+      "childCpuS": 0.029986999999999986,
+      "loadEnd": [
+        3.994140625,
+        3.78662109375,
+        4.87060546875
+      ],
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/compile-preservation.receipt.json",
+      "receiptSHA256": "f5a8c09a2a62aac8fb6c934329ddb0db58ab4cf9002a7493a1db9908ce66638d",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/compile-preservation.inputs.json",
+      "actualToolReferences": {
+        "terminal": "9947a6"
+      }
+    },
+    "preservation": {
+      "name": "preservation",
+      "command": [
+        "python3",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/preservation.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "c22ca99e32b4b5c66be84a16fe95ee11f8fe5f2160ae27add0d7a00a11d15140",
+      "time": "2026-10-17T13:43:44.334023+00:00",
+      "load": [
+        3.9140625,
+        3.7734375,
+        4.859375
+      ],
+      "workers": "2",
+      "pid": 5720,
+      "pgid": 5720,
+      "actualExit": 0,
+      "end": "2026-10-17T13:43:44.502575+00:00",
+      "wallS": 0.16828616696875542,
+      "childCpuS": 0.16367099999999998,
+      "loadEnd": [
+        3.9140625,
+        3.7734375,
+        4.859375
+      ],
+      "logSHA256": "5dc3f42885409b2683c9912326fad0c9b9d95a1b50ad8b98f8c3e5f17b309560",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/preservation.receipt.json",
+      "receiptSHA256": "1c6f2e218719046a1e1d24b9a6de71204ee8dcc6d8de7b0d54523bd5fbf1f230",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/preservation.inputs.json",
+      "actualToolReferences": {
+        "terminal": "bc7396"
+      }
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "e9e27e8109f444648369553a997106f980c07b70f29294aa0df0ce3cb5c8d87f",
+      "time": "2026-10-17T13:45:09.968025+00:00",
+      "load": [
+        3.4296875,
+        3.67236328125,
+        4.716796875
+      ],
+      "workers": "2",
+      "pid": 7377,
+      "pgid": 7377,
+      "actualExit": 0,
+      "end": "2026-10-17T13:45:25.987410+00:00",
+      "wallS": 16.018911833001766,
+      "childCpuS": 49.26416700000001,
+      "loadEnd": [
+        3.54833984375,
+        3.6875,
+        4.70361328125
+      ],
+      "logSHA256": "e3ffe2e59d1072c2fc7fa259e2c270f14bae0be0e50efd34bc01bda2b0e2752e",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/review.receipt.json",
+      "receiptSHA256": "e732cc70577bf721991066c174291c4572df93e5c31faf56560812b59c97518a",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/review.inputs.json",
+      "actualToolReferences": {
+        "original": 87553,
+        "launch": "48a02a",
+        "terminal": "af46ef"
+      }
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-presentation802",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/validation.runner.py",
+      "runnerSHA256": "8ed803215c9fd0f27e48f9451d38ebe376bf29dfc9927f83c8a15cf9b71dc780",
+      "inputsSHA256": "e9e27e8109f444648369553a997106f980c07b70f29294aa0df0ce3cb5c8d87f",
+      "time": "2026-10-17T13:46:20.379710+00:00",
+      "load": [
+        3.31884765625,
+        3.57470703125,
+        4.59423828125
+      ],
+      "workers": "2",
+      "pid": 8866,
+      "pgid": 8866,
+      "actualExit": 0,
+      "end": "2026-10-17T13:46:25.309489+00:00",
+      "wallS": 4.9294338329928,
+      "childCpuS": 5.749091,
+      "loadEnd": [
+        3.29296875,
+        3.56494140625,
+        4.58447265625
+      ],
+      "logSHA256": "e95019c78358ecb2e7d882bd7f42d5297b203408c848c1545311e1db6ec3a619",
+      "runnerBytesUnchanged": true,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/knip.receipt.json",
+      "receiptSHA256": "e3683589797030f05152fa13d5480ff5997291c57856ce5de164738925b8279e",
+      "inputsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/knip.inputs.json",
+      "actualToolReferences": {
+        "original": 68771,
+        "launch": "903534",
+        "terminal": "26a6e2"
+      }
+    }
+  },
+  "timing": {
+    "nativeClaimStartUtc": "2026-10-17T13:37:54Z",
+    "firstHelperActionUtc": "2026-10-17T13:41:00.905937+00:00",
+    "evidenceCutoffUtc": "2026-10-17T13:46:56.572371+00:00",
+    "claimToCutoffS": 542.572371,
+    "committedWindowQualification": "Conservative claim-to-evidence-cutoff lower bound. Actual commit completion and cutoff tail are unknown in this committed record and captured by external commit.end.json and implementation-final-proof.json; never inferred from Git authored date."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting os.getloadavg one-minute sample when review complete; baseline start otherwise"
+      }
+    }
+  },
+  "sage269": {
+    "ownership": "This bead persists the interim audit and one covers800/801 ledger entry. Siblings reference this record; this is not final Phase5 Sage.",
+    "source": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+    "artifacts": {
+      "packet.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/packet.json",
+        "sha256": "f87b8f3fce6039986aed4928ba2fe3f884029ea5dfdea8d6e7356b6886a2f2bc"
+      },
+      "scope-coverage.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/scope-coverage.json",
+        "sha256": "006c9238fd3258bb15e59b34b66cbcd11d73c93ab4d21384ac019edb43695f34"
+      },
+      "report.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/report.json",
+        "sha256": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5"
+      },
+      "proposals.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+        "sha256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d"
+      },
+      "parent-qualified.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/parent-qualified.json",
+        "sha256": "1257eec085ba562b24d49fa3a298832ece1dfbad0054be71167abc6e32c23607"
+      }
+    },
+    "report": {
+      "status": "COMPLETE_READ_ONLY_INTERIM_D19_ROOT_CAUSE_AUDIT",
+      "source": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+      "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268",
+      "packetPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/packet.json",
+      "packetSHA256": "f87b8f3fce6039986aed4928ba2fe3f884029ea5dfdea8d6e7356b6886a2f2bc",
+      "scopePath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/scope-coverage.json",
+      "scopeSHA256": "006c9238fd3258bb15e59b34b66cbcd11d73c93ab4d21384ac019edb43695f34",
+      "scopeWrittenFirst": true,
+      "proposalsPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/proposals.json",
+      "proposalsSHA256": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d",
+      "skill": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+      "runtimeExecutions": 0,
+      "nativeMutations": 0,
+      "repositoryWrites": 0,
+      "phaseAcceptance": false,
+      "currentActual": {
+        "source": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+        "original": 27794,
+        "collectedTerminal": "120117",
+        "parentQualification": "8f92c7",
+        "exit": 0,
+        "files": 440,
+        "tests": 12450,
+        "VitestS": 82.48,
+        "testStageS": 83.6,
+        "workers": 2,
+        "loadStart": 5.75048828125,
+        "loadEnd": 6.97021484375,
+        "D19": "FAIL_UNWAIVED_60S",
+        "qualification": "Parent separately launched frozen268 after host materially quieter; original packet truthfully said unrun at dispatch. Supplemental current268 profile independently hashed. Six raw bindings,40 diagnostics and330 topcase occurrence/status/duration rows matched independently across36 summaries. No causal attribution to cuts/load or projected removable wall.",
+        "cumulativeDiagnosticOnly": {
+          "collectS": 63.18645612400019,
+          "bodyS": 89.1198064580001,
+          "setupS": 0.6392405510000435,
+          "environmentS": 8.864400905000492
+        }
+      },
+      "historical266": {
+        "source": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+        "original": 4211,
+        "terminal": "52b265",
+        "VitestS": 89.38,
+        "testStageS": 90.4,
+        "loadStart": 11.29833984375,
+        "loadEnd": 12.23828125,
+        "D19": "FAIL_UNWAIVED",
+        "qualification": "Pre800801 source. Raw result+diagnostics hash checked and all335 projected actual rows/40 diagnostics matched. Different source and load; retain all observations, do not infer causal savings."
+      },
+      "sourceFindings": [
+        {
+          "key": "D19-PRESENTATION-PUBLIC-OBSERVATION",
+          "conclusion": "D19 explicitly authorizes deleting private constructor cardinality. Remaining public feed/recovery/queue contracts and existing fold observation identity witnesses permit eliminating the unnecessary context module mock. The possible collection gain must be observed; content graph paths still exist."
+        },
+        {
+          "key": "D19-SCOPED-CANONICAL-REGISTRY",
+          "conclusion": "Root reducer already has explicit registry injection, but canonical decoder has four singleton-captured validation sites. A bounded common factory can bind one fixed registry consistently through reducer+codec, preserving real storage recovery and source behavior, and eliminate test export mocking. This changes production construction and needs native admission/cold core review/full validation."
+        },
+        {
+          "key": "D19-CLONE-HASH-EXPLICIT-STATE",
+          "conclusion": "Clone/hash data-preservation contracts are cheaper to witness with a bounded explicit structural state set than full random games and all-state repetition. Retain specialized optional/printing/hash mutation and alias controls; prune broad random repetition, with measured whole-module acceptance."
+        }
+      ],
+      "rejectedOrUnproven": [
+        {
+          "hypothesis": "Remove resetModules / weaken shared isolation or cache content globally",
+          "disposition": "Not proposed. No complete global mutable provider/cache/import closure is established; retain all setup/config semantics. Removing a specific unneeded module mock is conditional on no remaining mocks and normal config routing, never forced sharing."
+        },
+        {
+          "hypothesis": "Remove eager engine content reexports alone",
+          "disposition": "Prior267 alternative real checkpoint paths remain relevant; current tests still use real canonical validators. Proposed mock/factory cuts do not assert the content graph disappears. No barrel-only gain claim."
+        },
+        {
+          "hypothesis": "Delete the expensive journey receipt/state tests because their body is tiny",
+          "disposition": "Rejected. They test distinct paid/refusal/identity/LOAD/checkpoint-recovery contracts. Their cost is collection and test mocking; retain actual35/70 public cases and malformed intake paths in the scoped canonical proposal."
+        },
+        {
+          "hypothesis": "Broad primitive matrix count cut",
+          "disposition": "No new full module/body contract-pruning proof established here.5929cases/14.62s body prioritize future evidence but do not justify deletion. Prior267 cost-composition review is a scoped source limit, not a permanent parity rule."
+        },
+        {
+          "hypothesis": "Another native ports/signal/OS-query cleanup cut",
+          "disposition": "No additional native lifecycle weakening proposed.800801 already delivered;766/792/q331 are prior delivered causes. Port table repeats expensive sessions but changing it needs exact public cheaper witness plus full lock/ownership/cleanup proof; not filed in this3proposal packet."
+        },
+        {
+          "hypothesis": "Simply shrink core targeted-fuzzer games or determinization continuation loops",
+          "disposition": "Fullgame target coverage uses actual observed dreamwell/emblem/figment events and replay hashes; determinize tests require hidden/floating/legal continuations. No full exact cheaper mapping completed. Do not replace them with fabricated coverage or arbitrary early stop."
+        },
+        {
+          "hypothesis": "Fix D19 by summing selected body/collection cuts",
+          "disposition": "Rejected.268 remains82.48/83.6>60. Proposed local reductions carry no aggregate prediction or phase acceptance."
+        }
+      ],
+      "statefulBoundary": "No broad reset/isolation weakening. Local mutable engine/provider/React/log cleanup and scoped fixed registry boundary are detailed per proposal. Default canonical validators, UUID brands, hidden views, event sequence, persistence hashes, ownership and durability remain mandatory. Prototype validation includes deterministic noninterference, actual checkpoint rejection/replay and normal test routing.",
+      "nativeProjection": {
+        "all24Read": true,
+        "rawAdmitted1168SHA256": "64fc9943c69b6d14381e50da9f2fa19c7a32b72c71c003646fd060322e0a123f",
+        "everyProjectedFieldMatchesRaw": true,
+        "qualification": "Notes and unrelated ancestor history omitted; parent must inspect fresh actual status/owner/Areas/edges before filing.658 owns evidence/native scheduling, Phase7.19 different budget/registrar bodies; D97stream remains separate."
+      },
+      "retainedEvidenceAndAuthority": {
+        "accepted800801": "Six parent proof hashes matched. Historical focused>=10% observations accepted with their qualifiers; no current aggregate forecast or repeated recommendations for same accepted cuts.",
+        "accepted17Static": "Parent current-source static composition receipt read/hash-verified; retained as parent evidence, no fresh17review claim.",
+        "justiciar": "Recovery JSON read/hash-verified: no pause/stop/deferral and no budget waiver. Original evidence retained; work continues through parent.",
+        "filing": "At most3 independently bounded prototypes; parent alone files/claims/promotes after current native checks. No additional agent spawning or authority expansion."
+      },
+      "remainingAcceptance": [
+        "D19 fullsuite<=60s at2workers/lowhostload after independently accepted cuts; current268fails.",
+        "Whole affectedmodule stage gain>=10% or exactrollback for each proposed speedchange.",
+        "All full stock/transfiguration/deck-mod samples,10000fullpool soak and interactive replay share,real desktop/mobile journeys,minified QA/coldvisual,final Sage and dispositions,release convergence.",
+        "Any changed canonical source must receive exact new cold review; previous accepted17 composition cannot silently cover a new factory."
+      ],
+      "retrospectiveQualification": "Interim source audit for parent hv-umm2.46; covered friction800/801 evidence read. No final Phase5 Sage/retrospective ledger or runtime acceptance credit.",
+      "completedAt": "2026-10-17T13:31:55.128136+00:00",
+      "supplementalParentPolicyUpdate": "Parent reports later staging f4adea9e370ec379a3517321655ba1c7603072e8 differs only in D97 documents and stream-policy demarcation; no runtime/test/config source difference. Frozen737 packet and this coverage stay bound737. New policy bytes not independently audited here; parent applies current policy before admission."
+    },
+    "proposals": {
+      "source": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+      "scopePath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/scope-coverage.json",
+      "scopeSHA256": "006c9238fd3258bb15e59b34b66cbcd11d73c93ab4d21384ac019edb43695f34",
+      "status": "SOURCE_SUPPORTED_BOUNDED_PROTOTYPES_REQUIRING_NATIVE_ADMISSION",
+      "runtimeExecutions": 0,
+      "authority": "Parent files/claims after fresh actual native owner/Areas/edge check; auditor performs no native actions.",
+      "D19": {
+        "fullSuiteBudgetS": 60,
+        "workers": 2,
+        "lowHostLoadRequired": true,
+        "waiver": false,
+        "caseCountParityRequired": false
+      },
+      "prototypeRule": "For each independently admitted prototype, preserve one exact baseline and one exact changed-source complete affected-module review test stage at unchanged2workers and current setup/isolation policy; collection/setup/environment count. Retain original actual logs/load/source bindings. Require observed stage gain>=10% or exact source rollback. No private-body-only metric, added timing assertion, discarded failure, sum-to-wall forecast or success sampling. Required review/knip; test infrastructure/cross-cutting source also review:full. Fresh read-only cold Codex review with exact inputs; parent verifies findings/dispositions. Final phase fullsuite<=60 and other acceptance remain owed.",
+      "proposals": [
+        {
+          "key": "D19-PRESENTATION-PUBLIC-OBSERVATION",
+          "priority": 1,
+          "title": "Replace the presentation constructor counter with retained public observation witnesses",
+          "cause": "One vi.mock of engine/steps/context exists solely to count a private Context constructor. That forces this large real-fold/React test into isolated, while its needed contracts are published state/event observations. Current268 reports2608.26ms collection and74.74ms body; these are module diagnostics, not predicted wall savings.",
+          "exactAreas": [
+            {
+              "path": "src/battle/components/battle-presentation.test.tsx",
+              "bodies": "42\u201353 counter/hoisted module mock;194\u2013216 successful play/answer witness and introductory comment2\u20137 only as needed; preserve every other fixture/test/cleanup body."
+            },
+            {
+              "path": "docs/plan/evidence/{friction,measurements,pre-existing,reviews}/<new-bead>",
+              "bodies": "Own evidence only; no shared metrics edit before parent admission."
+            }
+          ],
+          "implementation": "Remove only CountedContext/counting mock and assertions of constructor totals. Keep the existing real local-game successful play then answer, two published batches, nonempty presented events and complete eventStates. Name it for those observable contracts. Module auto-classifies shared-dom through unchanged vitest config. No production source or global reset changes.",
+          "observationDeletionMap": [
+            {
+              "delete": "42\u201353 private subclass/hoisted counter and194\u2013209 private constructor-count subscriptions/assertions",
+              "retained": "Public success: existing194\u2013216 play/answer, two batches, nonempty presented events, every presented eventState defined. Existing232\u2013251 tests cancelled/retried memoized reload;278\u2013294 tests reloaded prompt without historical batches;164\u2013192 contains failed answer and recovered retry."
+            },
+            {
+              "delete": "A promise of exact Context instantiation cardinality",
+              "retained": "Public fold reuse witness already in src/engine/fold/fold-observation.test.ts56\u201392: memoized event identity, bounded snapshot count, same observed state references on another observed fold.94\u2013147 adds sparse-source capability identity;149\u2013173 covers newly published answer observations. No claim that retained tests assert exact private constructor totals."
+            },
+            {
+              "delete": "No other public feed, probe, teardown, identity, timing/dwell or guidance observation",
+              "retained": "battle-presentation254\u2013275 probe sequence/index/UUID provenance;218\u2013229 unmount behavior;331\u2013425 ordinary queue/guidance/notice ordering. Keep full module selection."
+            }
+          ],
+          "statefulClosureAndControls": [
+            "Every test builds fresh Engine beforeEach91\u2013108; faulting/playerCard reset there. Root unmount111\u2013115 releases useEventOutcomes and observeEngineFolds subscriptions. Games.close flushes/unsubscribes before provider clear.",
+            "Fixture-provider closure read1\u2013489: register472\u2013478 and clear482\u2013488 are symmetric for lifecycle/deck/draft/sites/battle-init/completion. Per-engine adapter/observation WeakMaps engine-battle61\u201380,111\u2013121; they retain no cross-test engine identity. Pending log map82\u201396 remains protected by unchanged per-file vi.resetModules.",
+            "Keep setup-dom19\u201330 registry/timer/global/env reset, render-cleanup1\u201320 and dom-globals1\u2013130. Keep fake timer use/reset327\u2013329. No config override/forced shared include or cache persistence.",
+            "Prototype deterministic contamination check runs this full file with existing fold-observation and replay-provider tests under shared-dom/shared normal routing; repeat ordered neighboring files in a single2worker test invocation only when needed to diagnose a new failure, never select successful runs. Require no leaked roots/provider states/events into fresh engine fixtures."
+          ],
+          "prerequisites": [],
+          "nativeOverlap": "Projected24 unfinished records contain no writer of this test body. Phase7 AI scopes are different bodies;658 is evidence/native scheduling only. D97 epic grants no main-stream source ownership. Parent fresh actual check before filing.",
+          "prototypeValidation": {
+            "completeModule": "src/battle/components/battle-presentation.test.tsx",
+            "retainedAdditional": "src/engine/fold/fold-observation.test.ts and synthetic replay provider checks",
+            "gainCondition": "Whole complete presentation-module stage including collection/setup/environment >=10% or exact rollback; moving from isolated is a hypothesis until observed.",
+            "coldReview": "Verify actual config auto-classification after removal, retained success/recovery/queue contracts and provider/render cleanup; do not merely accept fewer constructor assertions."
+          }
+        },
+        {
+          "key": "D19-SCOPED-CANONICAL-REGISTRY",
+          "priority": 1,
+          "title": "Bind the canonical engine configuration to an explicit immutable journey registry",
+          "cause": "Committed purge tests replace only journeyModifierRegistry via vi.mock because GAME_ENGINE_CONFIG.decode closes over that singleton. Existing reducer injection is insufficient: real checkpoint decoding still consults the production singleton. This mock forces isolated collection of2744.99ms for only28.40ms body in268.",
+          "exactAreas": [
+            {
+              "path": "src/rules/replay/replay.ts",
+              "bodies": "39\u201375 canonical configuration construction only: one small factory returning the same reducer/genesis/encode/decode/hash wiring; keep default GAME_ENGINE_CONFIG and replayLog callers."
+            },
+            {
+              "path": "src/rules/journey/journey-committed-purge-prevention.test.ts",
+              "bodies": "15\u201337 registry import/mock, local synthetic registry/config construction, explicit config uses throughout129\u2013253; retain all35 existing public cases and malformed-input rows. Add only small public registry noninterference witness if existing cases do not discriminate it."
+            },
+            {
+              "path": "docs/plan/evidence/{friction,measurements,pre-existing,reviews}/<new-bead>",
+              "bodies": "Own evidence only."
+            }
+          ],
+          "implementation": "Expose a canonical factory taking a fixed JourneyModifierRegistry (default the production singleton). Reuse the exact12-validator decode body/order, binding the chosen registry into all four registry-dependent calls: subtype62,typeRemap63,opening66,committedPurge71. Bind the same registry into reduceGameEvent fourth argument. Preserve production GAME_ENGINE_CONFIG default references/bytes/hash/genesis, including reducer function identity when default if needed; no alternate test decoder. Tests construct the current synthetic shield+fruit registry explicitly and use the returned canonical config for every real decode/log/localgame operation. Per-test genesis overrides and the observer-fault reducer override remain as currently authored, with the chosen registry explicit. Remove only module export mocking, allowing normal shared project routing.",
+          "observationDeletionMap": [
+            {
+              "delete": "Test-only module registry-export substitution29\u201337",
+              "retained": "Same synthetic preventPurge and purgedCardEssence definitions, but held in local immutable registry. Preserve direct reducer apply55 fourth arg and every existing paid/settled/gained/lost/source-loss/UUID/duplicate source behavior86\u2013177."
+            },
+            {
+              "delete": "Implicit reliance on mocked singleton in GAME_ENGINE_CONFIG decode/reducer",
+              "retained": "Actual canonical codec at129\u2013133,164\u2013197; malformed receipt rows178\u2013190 and malformed containers191\u2013198 must reject on BOTH LOAD_STATE and canonical decode. No JSON.parse shortcut or direct private validation substitute."
+            },
+            {
+              "delete": "No persisted lifecycle observation",
+              "retained": "200\u2013214 log dedup/replay/checkpoint continuation;215\u2013231 real repository persisted paid and settled reopen, malformed checkpoint hash-matching injection, checkpointRejected true and exact event recovery;234\u2013252 observer throw containment and original-result retry."
+            }
+          ],
+          "statefulClosureAndControls": [
+            "createJourneyModifierRegistry157\u2013304 builds a fresh UUID-keyed Map from copied/frozen definitions, returns frozen per-instance closure. Its temporary run cursors are call-local; production registry308\u2013351 remains immutable. Factory adds no module-global setter/cache.",
+            "reduceGameEvent102\u2013136 forwards registry to routeDomain and finishTransition; finishTransition145\u2013255 and LOAD_STATE791\u2013792 preserve same registry. lifecycle423\u2013493/552\u2013653 propagates it through shape validation and receipt lookup.",
+            "Canonical decoder58\u201372 must preserve every existing validator; only registry argument capture changes. Committed receipt validator1\u201344 is lookup-only. Portable parse/save1\u2013225 validates envelope and forwards journey; LOAD_STATE still performs real semantic intake.",
+            "Localgame80\u2013169 passes supplied config into create/open and verifiedCheckpoint decode/hash;189\u2013316 passes it to createLocalLog and preserves atomic writes/flush/close. local-log139\u2013300 and fold123\u2013216 invoke supplied config and preserve seq/idempotence/failure containment.",
+            "Test beforeEach83 explicitly installs site/deck providers; afterEach84 clears both. All real created/reopened games close at215\u2013231. Registry-local config persists only within module under unchanged per-file module reset. No global singleton patch, no provider reset reduction.",
+            "Deterministic contamination witness interleaves two different scoped registries and default config against same synthetic receipt: accepting registry accepts; missing/wrong source rejects; creating/using scoped config leaves default registry lookup and decoder outcome unchanged. Keep exact valid/legacy/source-loss acceptance and malformed checkpoint recovery."
+          ],
+          "callers": "Lexical GAME_ENGINE_CONFIG census found73 source consumers; only non-test production files are replay.ts,use-local-game.ts,game-log.ts. Actual production use-local-game151\u2013235 passes unchanged constant to open/create; game-log89\u2013122 uses unchanged hash. Census does not claim73 full file bodies read.",
+          "prerequisites": [],
+          "nativeOverlap": "No projected unfinished writer owns replay configuration or committed-purge test bodies. Phase7.19 registry/budget transport is different source. This is cross-cutting canonical config infrastructure and must be admitted as its own bead, core-reviewed and review:full validated. Parent fresh actual native Areas check required.",
+          "prototypeValidation": {
+            "completeModule": "src/rules/journey/journey-committed-purge-prevention.test.ts including all35 cases, collection/setup/environment",
+            "additional": "Existing replay.test.ts, actual local-game/checkpoint continuation and LOAD_STATE contracts; default canonical fixture parity and new scoped-registry noninterference if needed.",
+            "gainCondition": ">=10% complete affected committed-purge-module stage or exact rollback. Entire config-related validation still mandatory; no claim factory alone removes content graph.",
+            "coldReview": "Review complete canonical source diff and exact default/caller wiring; verify all12 validators/order and four registry sites, real checkpoint fallback, no skipped malformed rows or permissive test decoder."
+          }
+        },
+        {
+          "key": "D19-CLONE-HASH-EXPLICIT-STATE",
+          "priority": 1,
+          "title": "Replace random-game clone/hash expansion with bounded explicit state witnesses",
+          "cause": "clone.test22\u201338 generates two full Random games during module collection, then repeatedly traverses every committed state and mutates every leaf of a large sample. These tests need structural JSON/identity/hash contracts; hundreds of successive game states are a broad fuzzer-shaped fixture. Current268 costs449.57ms collection plus1568.78ms body; copying equality463.57ms, serialize/hash equality456.27ms, every-leaf sensitivity412.81ms.",
+          "exactAreas": [
+            {
+              "path": "src/engine/state/clone.test.ts",
+              "bodies": "2\u201338 fuzzer imports/engine/full-game STATES construction;102\u2013181 repetition fixtures and collision probe. Keep generic helpers/copyJson/canonicalHash contracts as useful. Bounded typed fixture may remain local to this file, or one private sibling fixture only if file otherwise breaches~500lines."
+            },
+            {
+              "path": "docs/plan/evidence/{friction,measurements,pre-existing,reviews}/<new-bead>",
+              "bodies": "Own evidence only."
+            }
+          ],
+          "implementation": "Build a small explicit synthetic BattleState witness set from existing initialState/boardState and typed data. Cover empty/legacy optionals and populated nested containers, all three Printing kinds, ordinary/modified variants, present/absent optional status/instance/state fields, and both sides. Exercise clone JSON-roundtrip equality, alias freedom, source immutability, serialization/hash equality and key-order independence once per distinct shape. Keep leaf mutation sensitivity on the small populated state plus per-printing/optional-presence variants, so it remains exhaustive over the witness rather than over hundreds of copied instances. Delete the two random full-game generators and repeated per-committed-state loops.",
+          "observationDeletionMap": [
+            {
+              "delete": "22\u201338 two seeded complete games solely to obtain clone/hash input states",
+              "retained": "Explicit minimal+populated typed state witnesses exercise same plain-data contracts. Fuzz harness itself remains unchanged; no saved production fixture or mutable catalog expectation."
+            },
+            {
+              "delete": "Repeated equality/hash/serialization over every game step102\u2013119,140\u2013155",
+              "retained": "For each distinct witness: clone equals JSON round trip; clone shares no object/array; source unchanged after nested clone mutation; serialized roundtrip equals state and keeps hash; reverse-key copy same hash. Preserve optional absent/present and nonempty containers."
+            },
+            {
+              "delete": "Large repeated physical-instance leaf matrix158\u2013171 and broad sampled collision sweep174\u2013181",
+              "retained": "Small populated state leaf-path matrix, all specialized instance/status/variant/printing branches and scalar/container type distinctions; same-state clone hash equals original and deliberate data mutations differ. canonicalHash185\u2013222 retains JSON semantics/type/array-order/field-key distinctions. Do not promise statistical collision freedom over arbitrary runtime states."
+            }
+          ],
+          "explicitFixtureShapeRequirements": [
+            "Ordinary card, figment numeric spark, figmentCopy null and numeric spark; repeated UUID physical instances and separate owners/controllers.",
+            "Variant amplified plus present/absent transfigurations, transfigurationApplications, deckMods nested typeChange, typeRemap; optional gainedAbilities/lostAbilities, playedViaAlternativeCost absent/false/true, journeyDeck absent/false/true and poolCandidates.",
+            "Every required BattleState top-level field populated at least once; optionals draftPools,rememberedCards,linkedBanished,firstEventHistory,characterScoring present plus legacy absence. Both side state/turn/dreamwell nested arrays/objects; null and non-null avatar/challenge/result/priority.",
+            "Nonempty stack card/ability shape, trigger queue, floating/payable, turnLog nested records and loop tracker containers, even if some are typed synthetic snapshot data rather than one coherent gameplay transition. This tests data-preserving operations; no rules outcome is inferred from synthetic snapshot construction.",
+            "Fixture types use actual exported types/branded helpers. Never cast away missing required fields. Keep public branch witness inventory in bead evidence so optional-field additions receive explicit review."
+          ],
+          "statefulClosureAndControls": [
+            "cloneState181\u2013220 builds a new object; typed instance/side/turn/dreamwell copies and generic copyJson have no global registry/cache. hash.ts1\u2013323 constructs a fresh StructuralHasher per stateHash/canonicalHash call. Only reads plain data.",
+            "boardState1\u2013152 builds independent state via initialState; initialState179\u2013266 allocates containers and copies inputs. No game log, provider registration, native process, timers or mutable production catalog needs sharing.",
+            "No setup/config/reset/isolation changes. Optional data branches must remain represented before deleting random inputs; prototype is rejected if complete explicit witnesses cannot be constructed within bounded scope."
+          ],
+          "prerequisites": [],
+          "nativeOverlap": "No projected unfinished writer owns clone.test.ts. Production clone/hash/types remain read-only. Independent of presentation and canonical-config proposals; parent fresh actual owner/Areas check required.",
+          "prototypeValidation": {
+            "completeModule": "src/engine/state/clone.test.ts, including collection/setup/environment and all retained structural cases",
+            "additional": "Typecheck fixture shapes; existing public clone/hash consumers as related tests; review and knip. Test-infrastructure nature requires review:full.",
+            "gainCondition": ">=10% complete module review test-stage improvement or exact rollback, retaining original observation even if failed.",
+            "coldReview": "Verify observation map, specialized field/printing/optional coverage and clone alias/mutation checks; avoid merely sampling a random trace or deleting every-leaf coverage without the bounded typed replacement."
+          }
+        }
+      ]
+    },
+    "scopeCoverageProvenance": {
+      "status": "COMPLETE_READ_ONLY_SOURCE_AUDIT_COVERAGE",
+      "writtenBeforeReports": true,
+      "writtenAt": "2026-10-17T13:26:58.166447+00:00",
+      "source": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+      "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268",
+      "packetPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/packet.json",
+      "packetSHA256": "f87b8f3fce6039986aed4928ba2fe3f884029ea5dfdea8d6e7356b6886a2f2bc",
+      "requiredInputCount": 34,
+      "requiredRangesComplete": true,
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/AGENTS.md",
+          "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+          "bytes": 8068,
+          "lines": 145,
+          "role": "required-0",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                145
+              ],
+              "chunkSHA256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90"
+            }
+          ],
+          "repoPath": "AGENTS.md",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "81ea8571ee85929ccc15c9a853d76877ee6d92b1",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/docs/plan/decisions.md",
+          "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+          "bytes": 51785,
+          "lines": 1170,
+          "role": "required-1",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                762,
+                809
+              ],
+              "chunkSHA256": "83f50850b76c35c0c7478d7d4254823584328862b34010b76e8d85d57b146584"
+            }
+          ],
+          "repoPath": "docs/plan/decisions.md",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "0fc6442e8092215f921d83af94184afebf8a8ada",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/docs/plan/workflow.md",
+          "sha256": "ad8191eed308ea4dd6809e400bc6e688d481d26d9c69d2c3e6b15b7d1382761c",
+          "bytes": 107712,
+          "lines": 2004,
+          "role": "required-2",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1127,
+                1138
+              ],
+              "chunkSHA256": "4d421b4287f37cbc1ec1f09deb361cf03b5313d1ac412ff5a24c970f4d5fe702"
+            },
+            {
+              "lineRange": [
+                1377,
+                1467
+              ],
+              "chunkSHA256": "ab381b2d870f171f89447af10c87a9d1bc4a652545c208fa1e23b92f3db78141"
+            }
+          ],
+          "repoPath": "docs/plan/workflow.md",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "5a1d7f7eb01ec65b125bcac1f65f1c4499f54d2a",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/docs/plan/phase-5-content.md",
+          "sha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "bytes": 35727,
+          "lines": 646,
+          "role": "required-3",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                604,
+                646
+              ],
+              "chunkSHA256": "3dab1d5c1d975b49deb4d7827d0b062b7631fb7039363988844682cf4c98cbf0"
+            }
+          ],
+          "repoPath": "docs/plan/phase-5-content.md",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "0a6440d6fbc4aa569074734adaceab16ba97cba0",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/vitest.config.ts",
+          "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "bytes": 3911,
+          "lines": 115,
+          "role": "required-4",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                115
+              ],
+              "chunkSHA256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8"
+            }
+          ],
+          "repoPath": "vitest.config.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "b817e62d2bfa87f77dbafa14ceac425f0356a1e9",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/testing/setup-dom.ts",
+          "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "bytes": 1710,
+          "lines": 48,
+          "role": "required-5",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                48
+              ],
+              "chunkSHA256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5"
+            }
+          ],
+          "repoPath": "src/testing/setup-dom.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "d95de940fdb151421a90cf536e1cfd588f4b0ea9",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/review.mjs",
+          "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "bytes": 16054,
+          "lines": 592,
+          "role": "required-6",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                592
+              ],
+              "chunkSHA256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3"
+            }
+          ],
+          "repoPath": "scripts/review.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "d088dcfa8bcf8477db7c075a24640e0f72fe259e",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/package.json",
+          "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+          "bytes": 2249,
+          "lines": 63,
+          "role": "required-7",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                63
+              ],
+              "chunkSHA256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed"
+            }
+          ],
+          "repoPath": "package.json",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "92f9bd25167dec9b7ca1cd899ac15e679f8b0b8c",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/qa/qa-session-fixture.mjs",
+          "sha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "bytes": 7215,
+          "lines": 135,
+          "role": "required-8",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                135
+              ],
+              "chunkSHA256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67"
+            }
+          ],
+          "repoPath": "scripts/qa/qa-session-fixture.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "fce5aa348cb1ca731aa95e2f52f3aa4444cb774a",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/qa/qa-session-mocks.mjs",
+          "sha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "bytes": 4633,
+          "lines": 91,
+          "role": "required-9",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                91
+              ],
+              "chunkSHA256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516"
+            }
+          ],
+          "repoPath": "scripts/qa/qa-session-mocks.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "96d29943645046364681482d56e66d8a025e3cfb",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "bytes": 28318,
+          "lines": 501,
+          "role": "required-10",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                255
+              ],
+              "chunkSHA256": "7e45476552e07dec845394b815cdf0cbf90ad526f6df156296faf79a5f3ee8ce"
+            },
+            {
+              "lineRange": [
+                256,
+                501
+              ],
+              "chunkSHA256": "54563b7c5e415a9153f0f8291d0f5599291b6c65ed66b283549934f4211b7219"
+            }
+          ],
+          "repoPath": "scripts/qa/run-scenario-slots.test.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "bf4f1bf3ec775bcad37fedb45df470667b903bab",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "bytes": 28480,
+          "lines": 426,
+          "role": "required-11",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                220
+              ],
+              "chunkSHA256": "4ec2a655aec776274c80f1c2529afd8b3496e64f2cfa8ee395cab2069f2132c9"
+            },
+            {
+              "lineRange": [
+                221,
+                426
+              ],
+              "chunkSHA256": "d9dab09a3410150b3f471ef84341f84823dd06772d5c1b8d24a00de6f5b08979"
+            }
+          ],
+          "repoPath": "scripts/qa/run-scenario-ownership.test.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "202aeaf5d246842b77c9596150980d4755816cf7",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/qa/provider-ownership.test.mjs",
+          "sha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "bytes": 16800,
+          "lines": 275,
+          "role": "required-12",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                275
+              ],
+              "chunkSHA256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d"
+            }
+          ],
+          "repoPath": "scripts/qa/provider-ownership.test.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "75234f5fea129608ffd0678a4d333b0f26693025",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/plan-source-packet.test.mjs",
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "bytes": 11827,
+          "lines": 235,
+          "role": "required-13",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                235
+              ],
+              "chunkSHA256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd"
+            }
+          ],
+          "repoPath": "scripts/plan-source-packet.test.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "a0a07d9b5c8ddd26fb7b94d1341e334813036513",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/battle/components/battle-presentation.test.tsx",
+          "sha256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+          "bytes": 21785,
+          "lines": 426,
+          "role": "required-14",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                225
+              ],
+              "chunkSHA256": "03f7b53fc5e065b5d05208bbb64764839afc0f91543cc6578fe0908beff45b80"
+            },
+            {
+              "lineRange": [
+                226,
+                426
+              ],
+              "chunkSHA256": "44ae0a9d3dc4697c364e6869c043c8d65a78868de60957ddb445bc8a00068da2"
+            }
+          ],
+          "repoPath": "src/battle/components/battle-presentation.test.tsx",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "2d1a20f107e80e26f7a434d14cf022e0c0ff808b",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/journey-committed-purge-prevention.test.ts",
+          "sha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+          "bytes": 20788,
+          "lines": 255,
+          "role": "required-15",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                255
+              ],
+              "chunkSHA256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05"
+            }
+          ],
+          "repoPath": "src/rules/journey/journey-committed-purge-prevention.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "8d019006785d52d4093c45f0917c0894c6a3e289",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "bytes": 47182,
+          "lines": 491,
+          "role": "required-16",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                170
+              ],
+              "chunkSHA256": "8bc08fe112b1484fe07e3ce1ec3fe8617d1fcb2ad54c1a851dab1f319a74e345"
+            },
+            {
+              "lineRange": [
+                171,
+                335
+              ],
+              "chunkSHA256": "01d5e823c4d020b7015266b1ef78d4c31766cadb04ddbd16349a7d3175f85db2"
+            },
+            {
+              "lineRange": [
+                336,
+                491
+              ],
+              "chunkSHA256": "9f7bc0c5f2d43fbe6d23c0fb93e4ae0fea33d0bc087d4fd7aaaaae81ac181a6a"
+            }
+          ],
+          "repoPath": "src/rules/journey/journey-deck-entry.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "b1e14c1daa36db34d0c237dfcdef6f8a03d30323",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "bytes": 33743,
+          "lines": 475,
+          "role": "required-17",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                240
+              ],
+              "chunkSHA256": "fcdc0e4ec55cdf12085e5749a37d5ed313af305b77b7440e24225a33843fd7eb"
+            },
+            {
+              "lineRange": [
+                241,
+                475
+              ],
+              "chunkSHA256": "ff32a8904a7b3e730eb946fe8f281912400a51dcacdc3b18b1a9d0c124b98e11"
+            }
+          ],
+          "repoPath": "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "db4bc50d4bcaf9b01590aa7073ece0c06eb785c2",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "sha256": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+          "bytes": 21157,
+          "lines": 361,
+          "role": "required-18",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                190
+              ],
+              "chunkSHA256": "1671250604f044dc9165e02a362a7aa1f95894fc2113fb82f82c6fa643e90ad7"
+            },
+            {
+              "lineRange": [
+                191,
+                361
+              ],
+              "chunkSHA256": "8b19114246c971850f888047045a06f8bbb8853cf7b813e3275fa75ff6ef9aa3"
+            }
+          ],
+          "repoPath": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "d3b493197fa5beb81b1cda42b8b6cb2c96663e4b",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/core.test.ts",
+          "sha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "bytes": 15694,
+          "lines": 273,
+          "role": "required-19",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                273
+              ],
+              "chunkSHA256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8"
+            }
+          ],
+          "repoPath": "src/engine/core.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "e241c603e899c9cfc618cb4f401d5d95fe6a569e",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/policy/policy.test.ts",
+          "sha256": "de5586173cd3c3868d5ce9e44153fe08315935b4ad5e8b2f3c9c36d89e083161",
+          "bytes": 26957,
+          "lines": 419,
+          "role": "required-20",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                220
+              ],
+              "chunkSHA256": "c8b1fd0e7cb3f6487238c84ca39f17dd119c1f7466a3e6b7bf78742af9663fce"
+            },
+            {
+              "lineRange": [
+                221,
+                419
+              ],
+              "chunkSHA256": "6b4ec12236182fd68466014d20504502d250c2658ae23ab6d25d5d4462d77ad7"
+            }
+          ],
+          "repoPath": "src/engine/policy/policy.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "5d45dac5b37d48464f3a66d87bd692c0ca5cb1af",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/state/clone.test.ts",
+          "sha256": "ac7a178a2ed7dce00d0f3e100498d87235da2d7a9f2d8ceb25c85c82d83fa3a3",
+          "bytes": 6542,
+          "lines": 223,
+          "role": "required-21",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                223
+              ],
+              "chunkSHA256": "ac7a178a2ed7dce00d0f3e100498d87235da2d7a9f2d8ceb25c85c82d83fa3a3"
+            }
+          ],
+          "repoPath": "src/engine/state/clone.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "3749afae7b468f16cbfcc7b64170658953eca871",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/view/determinize.test.ts",
+          "sha256": "a8765c4dde0ab4358c2e0713091621ad8f8b4c5fe1436256fee3c1f159090c63",
+          "bytes": 26558,
+          "lines": 486,
+          "role": "required-22",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                245
+              ],
+              "chunkSHA256": "321d03b6c03b4f235dbb6676c8cf5b85d0042b275dad38847d409d341cde5b70"
+            },
+            {
+              "lineRange": [
+                246,
+                486
+              ],
+              "chunkSHA256": "cec453ccd560ca9b0ae0e5bc0531b106ea649c290b224fb9fd76da44da245e56"
+            }
+          ],
+          "repoPath": "src/engine/view/determinize.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "77a589c2c76f9bd307bed6e0f58e95b5330715ee",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/content/specs/specs.test.ts",
+          "sha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+          "bytes": 1922,
+          "lines": 52,
+          "role": "required-23",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                52
+              ],
+              "chunkSHA256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3"
+            }
+          ],
+          "repoPath": "src/content/specs/specs.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "89a5ed12923f98f104dfc676af399e3be9eea670",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/effects/primitives/contracts.test.ts",
+          "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "bytes": 311,
+          "lines": 6,
+          "role": "required-24",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                6
+              ],
+              "chunkSHA256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948"
+            }
+          ],
+          "repoPath": "src/engine/effects/primitives/contracts.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "4a1801eefec3a1ee82e5e8adf165de75e133ef0d",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/unfinished-projection.json",
+          "sha256": "f65e4794937b8320fb9898400974f1b1883b4dc90bafd44f886b1ae75862e402",
+          "bytes": 72084,
+          "lines": 327,
+          "role": "required-25",
+          "semanticRendering": "Complete JSON semantic record render in groups0:8,8:16,16:24;19:22 recovered after truncation. All24 projected fields independently equal admitted-all raw; omitted raw notes/unrelated ancestors not read.",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                327
+              ],
+              "chunkSHA256": "f65e4794937b8320fb9898400974f1b1883b4dc90bafd44f886b1ae75862e402"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/profile-summary.json",
+          "sha256": "11484018692288c41eae39bd6ac934ad38d9cdd847f9e0c7b6ebfb4ff6180f36",
+          "bytes": 146719,
+          "lines": 2866,
+          "role": "required-26",
+          "semanticRendering": "All top-level scalar/object fields; all20 collect+20 body diagnostics; all37 module summaries and335 actual top10 rows compact-rendered in groups0:13,13:26,26:37 after truncation recovery. Redundant row.file fields mechanically equal parent file. Full omitted raw test bodies/names not read.",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                2866
+              ],
+              "chunkSHA256": "11484018692288c41eae39bd6ac934ad38d9cdd847f9e0c7b6ebfb4ff6180f36"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/recent-delivered-cuts.json",
+          "sha256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70",
+          "bytes": 4446,
+          "lines": 96,
+          "role": "required-27",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                96
+              ],
+              "chunkSHA256": "2fe3ce8dd71d33dedd18f75479ef058ab3a0aef408a5305945d891338af1cc70"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/report.json",
+          "sha256": "69a5352d3d1534dc06f36eef018a343f80cc81568f2f6a1077493acc4f8f1cc7",
+          "bytes": 9184,
+          "lines": 131,
+          "role": "required-28",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                131
+              ],
+              "chunkSHA256": "69a5352d3d1534dc06f36eef018a343f80cc81568f2f6a1077493acc4f8f1cc7"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/post801-resume268/justiciar-recovery.json",
+          "sha256": "0b591896aede3b2223459ae596d1044d39d2133d07e539a3f9b739d8ae5de91a",
+          "bytes": 2965,
+          "lines": 34,
+          "role": "required-29",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                34
+              ],
+              "chunkSHA256": "0b591896aede3b2223459ae596d1044d39d2133d07e539a3f9b739d8ae5de91a"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/post801-resume268/parent-all17-current-source-static-proof.json",
+          "sha256": "b4df05d65d5a7971ef6e79dffa0ccac1de429fb375bfd3a558f8bdbc025fbd61",
+          "bytes": 2066,
+          "lines": 42,
+          "role": "required-30",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                42
+              ],
+              "chunkSHA256": "b4df05d65d5a7971ef6e79dffa0ccac1de429fb375bfd3a558f8bdbc025fbd61"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/post801-resume268/friction.receipt.json",
+          "sha256": "888c39de469351dd76620d4c73a22556b3a6f7494581be6dbd835d8a44dca427",
+          "bytes": 973,
+          "lines": 32,
+          "role": "required-31",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                32
+              ],
+              "chunkSHA256": "888c39de469351dd76620d4c73a22556b3a6f7494581be6dbd835d8a44dca427"
+            }
+          ]
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/docs/plan/evidence/friction/hv-umm2.800.json",
+          "sha256": "1a16894565b54fbfe59381e66796dfddac43490a2bf6cf91fbf22d0a9cac0e64",
+          "bytes": 562,
+          "lines": 24,
+          "role": "required-32",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                24
+              ],
+              "chunkSHA256": "1a16894565b54fbfe59381e66796dfddac43490a2bf6cf91fbf22d0a9cac0e64"
+            }
+          ],
+          "repoPath": "docs/plan/evidence/friction/hv-umm2.800.json",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "22e76a3f9c230ef4c24ffda4c683ce2adccea30b",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/docs/plan/evidence/friction/hv-umm2.801.json",
+          "sha256": "199c72cb35aeda59e8fdcc6ee7d92acd688122129d5690a92a51836c1285db9f",
+          "bytes": 554,
+          "lines": 24,
+          "role": "required-33",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                24
+              ],
+              "chunkSHA256": "199c72cb35aeda59e8fdcc6ee7d92acd688122129d5690a92a51836c1285db9f"
+            }
+          ],
+          "repoPath": "docs/plan/evidence/friction/hv-umm2.801.json",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "fcf3c611c248e9ff4c22dcde3c023dccbddb485a",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/state/clone.ts",
+          "sha256": "b5c6b8b6265fc3408e089d52f062f518556978dd3c96554c0a3d20d4306b6c38",
+          "bytes": 7621,
+          "lines": 220,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                220
+              ],
+              "chunkSHA256": "b5c6b8b6265fc3408e089d52f062f518556978dd3c96554c0a3d20d4306b6c38"
+            }
+          ],
+          "repoPath": "src/engine/state/clone.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "c22e6b1b330674e05b36171d990699d70da7801c",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/state/hash.ts",
+          "sha256": "bb2aa42fdcd95b763baaf318822cdc69b7f6f481e13648dc29240f1a80e6a100",
+          "bytes": 11493,
+          "lines": 323,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                323
+              ],
+              "chunkSHA256": "bb2aa42fdcd95b763baaf318822cdc69b7f6f481e13648dc29240f1a80e6a100"
+            }
+          ],
+          "repoPath": "src/engine/state/hash.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "ef4a89cb09f5607922a4f95d8009e4b191c908b3",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/state/types.ts",
+          "sha256": "481352d4ec327c920ab8740399611b1175198a04da881c8e5d7a018c101b7f65",
+          "bytes": 45419,
+          "lines": 1021,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                397
+              ],
+              "chunkSHA256": "2096bd0d38eed61b424a5adc3167da4c3628b931fe11909b5e6d601c189887db"
+            },
+            {
+              "lineRange": [
+                585,
+                1021
+              ],
+              "chunkSHA256": "0db4caa4ecd49407fc82c967ee3ddb24d4799cda71724bcc5c3b175eea571d48"
+            }
+          ],
+          "repoPath": "src/engine/state/types.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "f63b308a998d9f871ea570f54a6ca52b9c61162f",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/testing/board.ts",
+          "sha256": "e413fa76285203d1e25697e175307ede6fee09c1a9ea472e8f07e1b96d24e0d7",
+          "bytes": 6417,
+          "lines": 152,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                152
+              ],
+              "chunkSHA256": "e413fa76285203d1e25697e175307ede6fee09c1a9ea472e8f07e1b96d24e0d7"
+            }
+          ],
+          "repoPath": "src/engine/testing/board.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "ba3dd450af8270e59449de0e556670c4aff1c25b",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "bytes": 39350,
+          "lines": 775,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                403,
+                606
+              ],
+              "chunkSHA256": "b91c1c54db8160099ae450c6691a1ec0f71892bf30863b72b440ca2a17f0d514"
+            }
+          ],
+          "repoPath": "src/engine/testing/fuzz.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "54bb3ba9668fd0aba35fdf0d4213010cf7663b85",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/battle/components/battle-presentation.ts",
+          "sha256": "0a0f0ee2056dce949c5aa3027133efffdd043bc8b6b3078671484ef39ea60eae",
+          "bytes": 9841,
+          "lines": 200,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                200
+              ],
+              "chunkSHA256": "0a0f0ee2056dce949c5aa3027133efffdd043bc8b6b3078671484ef39ea60eae"
+            }
+          ],
+          "repoPath": "src/battle/components/battle-presentation.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "cebcab33b9761c910de0c8e724f819bfdefe3a67",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/replay/replay.ts",
+          "sha256": "945e388232e063a80d8ed8b1f967cc497c021f5131868f3af2016c17637e47c2",
+          "bytes": 5241,
+          "lines": 121,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                121
+              ],
+              "chunkSHA256": "945e388232e063a80d8ed8b1f967cc497c021f5131868f3af2016c17637e47c2"
+            }
+          ],
+          "repoPath": "src/rules/replay/replay.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "e168300388b081dc5af42b177413ea8a8a12da9a",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/reducer.ts",
+          "sha256": "87c182b16444c251028dd1043326a36a2ed91b1ce984140de266e4e15019ec5e",
+          "bytes": 47582,
+          "lines": 859,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                270
+              ],
+              "chunkSHA256": "a05a4cc3b5827f4dc87db397eb76f950224053665141a985f3c5f120032c9938"
+            },
+            {
+              "lineRange": [
+                340,
+                435
+              ],
+              "chunkSHA256": "18ba16f191bbb715cbd35e0fe8bdd6b59134a9c46ee34b2e65d27e2b9f1443e3"
+            },
+            {
+              "lineRange": [
+                785,
+                797
+              ],
+              "chunkSHA256": "539bd1559224f5f402dbf0365f0aad2b269a8651d11c6e7445632b627c7823a9"
+            }
+          ],
+          "repoPath": "src/rules/reducer.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "775c62a9573a0fc2bc34d709fa3007429d9cd9f5",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/state/journey-save-files.ts",
+          "sha256": "04e6777dd69e61f2555f2c37a7488be6e7c6a499f67a358da9755dc660aa15be",
+          "bytes": 6515,
+          "lines": 225,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                225
+              ],
+              "chunkSHA256": "04e6777dd69e61f2555f2c37a7488be6e7c6a499f67a358da9755dc660aa15be"
+            }
+          ],
+          "repoPath": "src/state/journey-save-files.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "88525fb44d9ebb382f80fcf2eae1eb749fe4b37c",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/modifier-registry.ts",
+          "sha256": "2230e9e7bf14ae951cf96ee76efdb7055bfb731278847632c57a22245391036e",
+          "bytes": 27668,
+          "lines": 351,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                351
+              ],
+              "chunkSHA256": "2230e9e7bf14ae951cf96ee76efdb7055bfb731278847632c57a22245391036e"
+            }
+          ],
+          "repoPath": "src/rules/journey/modifier-registry.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "861a5d9fe7beda2e7a71725ae1c3a5daad1c0c75",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/session/local-game.ts",
+          "sha256": "9ef33aee82bb7843db2a81bada828de673d1ff32fa337830f5c26e7ce026f22a",
+          "bytes": 9744,
+          "lines": 316,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                316
+              ],
+              "chunkSHA256": "9ef33aee82bb7843db2a81bada828de673d1ff32fa337830f5c26e7ce026f22a"
+            }
+          ],
+          "repoPath": "src/session/local-game.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "c35d71ea5cce8637b2340b23bc3241224bfdfc77",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/journey-committed-purge-state.ts",
+          "sha256": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2",
+          "bytes": 3312,
+          "lines": 44,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                44
+              ],
+              "chunkSHA256": "6ca6395779a1f8745296c04b34a35c402813d4c3cbc24ad9d7c4f346fa2d31a2"
+            }
+          ],
+          "repoPath": "src/rules/journey/journey-committed-purge-state.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "979ae6c90f6b3b1ad14e6d9e9fc3ca03638bb8b0",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/eventlog/fold.ts",
+          "sha256": "fc2c79f2d59b151410e827b0d74a0728524635f2bd1d10d9769cc162a4a6b623",
+          "bytes": 9145,
+          "lines": 244,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                244
+              ],
+              "chunkSHA256": "fc2c79f2d59b151410e827b0d74a0728524635f2bd1d10d9769cc162a4a6b623"
+            }
+          ],
+          "repoPath": "src/eventlog/fold.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "61249cfdd0995e5ac80c9ba911b1cb2c8b48c7ed",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/eventlog/local-log.ts",
+          "sha256": "074c439c39fcf3b5e5824fb6e43400401aad94465339f6ce66bf0e6c3a040fd5",
+          "bytes": 9916,
+          "lines": 300,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                85,
+                300
+              ],
+              "chunkSHA256": "cd9528f69a7b8fc51a5773707a43aaf74a4b302f95303a0d86f05c27bb8492f7"
+            }
+          ],
+          "repoPath": "src/eventlog/local-log.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "6a2565edbad7ee3c4b290defceabe09df8b774d2",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/lifecycle.ts",
+          "sha256": "a5fe2f1bc7d66c6dc97b4870679e56fcaec8fd537b4797205671d02b5640f849",
+          "bytes": 29148,
+          "lines": 665,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                105,
+                126
+              ],
+              "chunkSHA256": "94a6f2581c0fbe1bceea4fab7c05c708094cbb6be3dc315ae7762e218ae6d30f"
+            },
+            {
+              "lineRange": [
+                420,
+                495
+              ],
+              "chunkSHA256": "f78dc429c6f71da7193a5a53846ccdc7e6f46ec3527a1049fd18946ae404e654"
+            },
+            {
+              "lineRange": [
+                552,
+                657
+              ],
+              "chunkSHA256": "735cdd5eeba7d060e083d2087c407299bf1a0d528c2435f55a9e8e7d62c045e3"
+            }
+          ],
+          "repoPath": "src/rules/journey/lifecycle.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "03eba1ec29744e22e009989b70ecbf679d727da1",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/replay/fixture-providers.ts",
+          "sha256": "4021fe8f4cf22585dc3aa0db3d0ac6a9d963aff0947d750dc6d45ec1936a8f3a",
+          "bytes": 15771,
+          "lines": 489,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                333
+              ],
+              "chunkSHA256": "9206aee70ca8155e9a9b076efd8df39ae3a852c5d74f3cd0f77b0bcfecd9fab4"
+            },
+            {
+              "lineRange": [
+                334,
+                489
+              ],
+              "chunkSHA256": "dac5e578509e6f0435c1f8c7daf2bf424193b76c19f89060647dcbda61090a04"
+            }
+          ],
+          "repoPath": "src/rules/replay/fixture-providers.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "d3366c837b787f2dce1620c1ee819a764a8d0ce8",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/session/providers/register-game-providers.ts",
+          "sha256": "0ba00d007f719018645471d45c6ed2187802ab4dd06790d559ca5580235a1820",
+          "bytes": 4808,
+          "lines": 95,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                95
+              ],
+              "chunkSHA256": "0ba00d007f719018645471d45c6ed2187802ab4dd06790d559ca5580235a1820"
+            }
+          ],
+          "repoPath": "src/session/providers/register-game-providers.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "99aad444e2ce6ee7eca927ca826dc8ce80e9dcc4",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/battle/engine-battle.ts",
+          "sha256": "624ed0e0f7eff2fbc6a53e3414cf6fe5bec5fc7861aab067b511b17bfa94e7aa",
+          "bytes": 26418,
+          "lines": 581,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                330
+              ],
+              "chunkSHA256": "44b671f6ce6df5e9a797eb30f1a767d726fb6ce03a1a2879226115c02216e63a"
+            }
+          ],
+          "repoPath": "src/rules/battle/engine-battle.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "23ef4df6204c71bc04d018a593b786424ff44c9a",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/battle/journey-battle.ts",
+          "sha256": "0882e6846aeb293a98613084d71e38c72b5cf08a7f350479fb31b5ad1dd6c823",
+          "bytes": 16618,
+          "lines": 433,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                150
+              ],
+              "chunkSHA256": "7e5e503ba0bc4dfa4eafa67b6fc51588c4e165991aa62252a2403a45f18b44c7"
+            }
+          ],
+          "repoPath": "src/rules/battle/journey-battle.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "3141c975465a9af138d926e4a420fca6a3d9a200",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/deck.ts",
+          "sha256": "58878ec6863ed746780e23d79aedb5075fab090866cef79d144e50e80a59d23a",
+          "bytes": 21195,
+          "lines": 581,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                90
+              ],
+              "chunkSHA256": "d976a76403b5b37fcecc86baa84152951fb2f976532525fa45b2bafcd4db339d"
+            }
+          ],
+          "repoPath": "src/rules/journey/deck.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "dd9b17f44b3c2b4eeb66c6d77c2ce0af1bae4264",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/sites.ts",
+          "sha256": "e3749ef98a08bc61d268ed9684ff3b2e2125c94d9fee95cb979b750d23c5eb02",
+          "bytes": 47797,
+          "lines": 1233,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                115
+              ],
+              "chunkSHA256": "5f9a36bad02e3f494ced1dffb6e829514cec26c30095b9d30ab1c4fff300113b"
+            },
+            {
+              "lineRange": [
+                210,
+                236
+              ],
+              "chunkSHA256": "c6e730eae77e9a7e2bbbbe216596e63c30109623e2fa7ff2867f9e391999e566"
+            }
+          ],
+          "repoPath": "src/rules/journey/sites.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "1fda44291bdca847a2b50e67a7d06e4927c04b12",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939,
+          "lines": 827,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                519,
+                741
+              ],
+              "chunkSHA256": "1361b8d6c11986916e190ab328cf1c2bff99aa26ac70c7bdf3e2188c297575ea"
+            }
+          ],
+          "repoPath": "scripts/qa/run-scenario.mjs",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "be6eac8e46138b2b791dbc863e4ffd4b0fc33bba",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/fold/slice.ts",
+          "sha256": "c73796785eff9c2ecd6909dc286e13e982011f03f64694dc8531d8ea46a6c02e",
+          "bytes": 34822,
+          "lines": 758,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                280,
+                505
+              ],
+              "chunkSHA256": "ef46b5a193b6ef364daeaddacd4aa5869ae59f8a54ab1de615aa7e33369ddb2b"
+            }
+          ],
+          "repoPath": "src/engine/fold/slice.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "48bb4a3c3650e4e48b0c959a62bbe1d2b78f38f4",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/fold/fold-observation.test.ts",
+          "sha256": "375732c9bada1c5ff858b680b5da88af0b2dd1034733483a0745e38a4fc0eee0",
+          "bytes": 12779,
+          "lines": 175,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                175
+              ],
+              "chunkSHA256": "375732c9bada1c5ff858b680b5da88af0b2dd1034733483a0745e38a4fc0eee0"
+            }
+          ],
+          "repoPath": "src/engine/fold/fold-observation.test.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "9b44ebab5870f63523932e9dc0ca6f631cf54aa3",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/session/use-local-game.ts",
+          "sha256": "0c0cb717d864d7968ffcdd42a98407f6a2894032351829168ea3e20b8a5ea0eb",
+          "bytes": 13543,
+          "lines": 457,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                151,
+                235
+              ],
+              "chunkSHA256": "8f0281acd1cc6756eedeb7c28a2536cd68305749cb80562e23aed5bc5abf2976"
+            }
+          ],
+          "repoPath": "src/session/use-local-game.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "eadfa29fba7e1983108af47dd8081dec313733b3",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/session/game-log.ts",
+          "sha256": "5070777c79a95314c6feb1bf819edc72c788511bfa4848851fa5e1cbaadc8456",
+          "bytes": 6037,
+          "lines": 173,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                89,
+                122
+              ],
+              "chunkSHA256": "10d638ee886b508fd6a87a39087907a4963f637d94b3a0591cf07b38b8c972c4"
+            }
+          ],
+          "repoPath": "src/session/game-log.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "51e2f20db4cf3a679b0c2cda54b70d6a14368472",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/state/create.ts",
+          "sha256": "8a694e88fa8d856880ef309b6e39e84fcd38fafdb1191116471941fc65c30869",
+          "bytes": 11935,
+          "lines": 266,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                266
+              ],
+              "chunkSHA256": "8a694e88fa8d856880ef309b6e39e84fcd38fafdb1191116471941fc65c30869"
+            }
+          ],
+          "repoPath": "src/engine/state/create.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "f952b45b559456ed576744b9df837ca515ee555f",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/engine/loops/types.ts",
+          "sha256": "fbbdc5831fefc74742c958264aba37233fbf7f220a2c9bf44a6354df2c5a9561",
+          "bytes": 5375,
+          "lines": 148,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                148
+              ],
+              "chunkSHA256": "fbbdc5831fefc74742c958264aba37233fbf7f220a2c9bf44a6354df2c5a9561"
+            }
+          ],
+          "repoPath": "src/engine/loops/types.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "52f8b5ce5515b30846021cbc8de2f21142c929d0",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/journey-subtype.ts",
+          "sha256": "9ba5134b7a68a07af3a0c6bddda05e0a470e5fefdccb46f0b47e5126abebb182",
+          "bytes": 24215,
+          "lines": 226,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                222,
+                226
+              ],
+              "chunkSHA256": "894f9902570d6cc8ab1a64ed713fcaf975efd63d70cd9ac19eab3ddfafa12dc7"
+            }
+          ],
+          "repoPath": "src/rules/journey/journey-subtype.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "8468d18fb5adaebf603fe78f7596f2bbaefc9c74",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/journey-type-remap.ts",
+          "sha256": "fa2b0eb5234662b66d3aa702a57f3aa29a7548c1f98fe888c0aeeef20d87e0e5",
+          "bytes": 10738,
+          "lines": 130,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                122,
+                130
+              ],
+              "chunkSHA256": "1a55f32daadb2514593c5c81bb207b82dc2c900ea6f80a201096d6d1e95b43a3"
+            }
+          ],
+          "repoPath": "src/rules/journey/journey-type-remap.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "22ff377ce23d295b15a04abeb11854e51496d672",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/journey-battle-init.ts",
+          "sha256": "cb57193ebd22f52836a1d1a2a466315fd78baa122e140ba4716e71949251d06b",
+          "bytes": 14449,
+          "lines": 201,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                170,
+                201
+              ],
+              "chunkSHA256": "d521386bd6d1c67438c0c4731e5b5aa2184d32c03a7065d1b82d7fa4f28b5f97"
+            }
+          ],
+          "repoPath": "src/rules/journey/journey-battle-init.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "44ae7739893e43e0445dfe22acd0a6e96f3c81e6",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/journey/draft.ts",
+          "sha256": "a51990ee69f79f0d3b131a4329934fec2b2f18684ec9d4e3de508f5b6afbd508",
+          "bytes": 14693,
+          "lines": 372,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                73,
+                89
+              ],
+              "chunkSHA256": "05435407dd9790236b9b4078264ca52c5e26909d1d57c1504456b54effc30a3b"
+            }
+          ],
+          "repoPath": "src/rules/journey/draft.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "6faabcf28bc14d2ebe2c9ccbd271d352b08dbaca",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/testing/dom-globals.ts",
+          "sha256": "b386de655cfc825c7728a783cc3066b869021675805d48f079a440d8cd07b117",
+          "bytes": 4444,
+          "lines": 130,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                130
+              ],
+              "chunkSHA256": "b386de655cfc825c7728a783cc3066b869021675805d48f079a440d8cd07b117"
+            }
+          ],
+          "repoPath": "src/testing/dom-globals.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "81bfe142e09f9ff59225babde63325885af41d31",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/cumulus/testing/render-cleanup.ts",
+          "sha256": "fa3837d001fe66444863d57d3281a3f5c9da413880c7f45942fc2a1339e41c6d",
+          "bytes": 648,
+          "lines": 20,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                20
+              ],
+              "chunkSHA256": "fa3837d001fe66444863d57d3281a3f5c9da413880c7f45942fc2a1339e41c6d"
+            }
+          ],
+          "repoPath": "src/cumulus/testing/render-cleanup.ts",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "cb79b648342ae70f44f89986388e40ad46579581",
+          "gitBlobBytesEqual": true
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+          "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9",
+          "bytes": 744,
+          "lines": 8,
+          "role": "role-instructions-and-project-binding",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                8
+              ],
+              "chunkSHA256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9"
+            }
+          ]
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+          "sha256": "d53d3593dc7374e41ae44275d21deae88418dcb841b47f97240616bca9accf52",
+          "bytes": 5365,
+          "lines": 28,
+          "role": "role-instructions-and-project-binding",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                28
+              ],
+              "chunkSHA256": "d53d3593dc7374e41ae44275d21deae88418dcb841b47f97240616bca9accf52"
+            }
+          ]
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/shared/filing.md",
+          "sha256": "c44c7ae88e1ebd790ddc9e1f3f449bb76b5bf9e4ba0ad1f511a0e18a88a022c1",
+          "bytes": 5947,
+          "lines": 24,
+          "role": "role-instructions-and-project-binding",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                24
+              ],
+              "chunkSHA256": "c44c7ae88e1ebd790ddc9e1f3f449bb76b5bf9e4ba0ad1f511a0e18a88a022c1"
+            }
+          ]
+        },
+        {
+          "path": "/Users/dthurn/brain/hive.json",
+          "sha256": "c32e575291380bd6ca073f5882385c3d4fba90fee02204969f330f6caa5782cc",
+          "bytes": 998,
+          "lines": 37,
+          "role": "role-instructions-and-project-binding",
+          "semanticRendering": "literal numbered source",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                37
+              ],
+              "chunkSHA256": "c32e575291380bd6ca073f5882385c3d4fba90fee02204969f330f6caa5782cc"
+            }
+          ]
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/current268-profile-summary.json",
+          "sha256": "95dd658ffff755f4b5d87cd6c37e79b9a72ce74fd7f2efb16cc6c9c4493c7cc5",
+          "bytes": 145502,
+          "lines": 2849,
+          "role": "additional-current-profile",
+          "semanticRendering": "All top-level fields/rawBindings,20collect+20body diagnostics,36module summaries/330actualcase rows in compact groups0:13,13:26,26:36. Redundant per-case file equals parent. Every projected record independently matched raw occurrence/status/duration; omitted raw12450rows not semantically read.",
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                2849
+              ],
+              "chunkSHA256": "95dd658ffff755f4b5d87cd6c37e79b9a72ce74fd7f2efb16cc6c9c4493c7cc5"
+            }
+          ]
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/src/rules/invariants.ts",
+          "repoPath": "src/rules/invariants.ts",
+          "sha256": "495ea21e031edd74c92031af81543d4684bc919826a758080843811625b8c558",
+          "bytes": 11003,
+          "lines": 219,
+          "role": "additional-scope-limited-source",
+          "semanticRendering": "literal numbered source",
+          "gitSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+          "gitBlob": "c864ab4192d94fe2a36f8aa8e9abfd27b5103972",
+          "gitBlobBytesEqual": true,
+          "readChunks": [
+            {
+              "lineRange": [
+                1,
+                102
+              ],
+              "chunkSHA256": "cb8c07e8f75818fd8cf57da8a60fbf527145c3e9f729b8e33420b6fb1c41f3b9"
+            },
+            {
+              "lineRange": [
+                210,
+                219
+              ],
+              "chunkSHA256": "256c696a45fab915f272aba462d07d5397432f6d329b7f8f80f35209c50b8d4c"
+            }
+          ]
+        }
+      ],
+      "hashOnlyBindings": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/fullsuite.log",
+          "sha256": "9d41a12d51e0f7ff5e242d3f3c5501084857f5875b788faa3b6bfe9fc7817b01",
+          "bytes": 127686,
+          "purpose": "current268 raw custody; exact projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/fullsuite.receipt.json",
+          "sha256": "5118a40eaef2a6382a86bf5595b835fae57c700b7b26a7b2170b20f2618ce098",
+          "bytes": 1340,
+          "purpose": "current268 raw custody; exact projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/fullsuite.inputs.json",
+          "sha256": "a6e3c750a2204ebcb969358a5bbd740d4e17e2bdc6eda4d16c4b2fb2334e4ddd",
+          "bytes": 753868,
+          "purpose": "current268 raw custody; exact projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/vitest-results.json",
+          "sha256": "772b339d5e23fc7bc8dd89f6e844dde24cfa4908417e6d8c4717b3501faa7f93",
+          "bytes": 4438606,
+          "purpose": "current268 raw custody; exact projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/module-diagnostics.json",
+          "sha256": "214ea23f085bdd8b08c29fe929d3e84df1a7287eb1849555adf9ba399ee09c5c",
+          "bytes": 203158,
+          "purpose": "current268 raw custody; exact projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/profile-derived.json",
+          "sha256": "370c7bd9752bfc84bd7bd93f76e9738f4569d0ea64a356834ae52e014790a39d",
+          "bytes": 4108718,
+          "purpose": "current268 raw custody; exact projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/vitest-results.json",
+          "sha256": "b5594059e9f01194948e4483efbb7a3cfafc3bd5beb0db026b38bb535ed9dee0",
+          "bytes": 4439121,
+          "purpose": "historical266 raw custody; projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/module-diagnostics.json",
+          "sha256": "f1544833200568edc94d54d832c5974b94b1f5a8fd2167776862b2be9a15e3c0",
+          "bytes": 202666,
+          "purpose": "historical266 raw custody; projected rows/diagnostics matched mechanically",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance268/module-diagnostics-reporter.mjs",
+          "sha256": "e78806bccf23a1b4c71aa6fbdbe99b028a9198e6410025ce94c9c73f613d4c3f",
+          "bytes": 922,
+          "purpose": "parent reporter/source binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/node_modules/vitest/dist/chunks/reporters.d.DVUYHHhe.d.ts",
+          "sha256": "f674236a803d2856a3f2efe4ef536d62d9e435c5b4d08079f7387756bb31e529",
+          "bytes": 109838,
+          "purpose": "parent reporter/source binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/node_modules/vitest/dist/chunks/cli-api.DuT9iuvY.js",
+          "sha256": "724787b27a4e45a7d49c29767cb541f8574a7eb14aa7e04c088be4e210d73e69",
+          "bytes": 489006,
+          "purpose": "parent reporter/source binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-268/node_modules/vitest/dist/chunks/cac.CWGDZnXT.js",
+          "sha256": "01540910000c80f04ae3a92d952f2f8683d348b901572257b3b5ee53992b937e",
+          "bytes": 94822,
+          "purpose": "parent reporter/source binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/parent-validation-proof.json",
+          "sha256": "f34e14f659764a991d1fd195f1bb4abad77870eb792e26f04cca67e4f1f9fc37",
+          "bytes": 6755,
+          "purpose": "delivered800801 parent proof binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/parent-cold-proof.json",
+          "sha256": "45b387e5389b99cf1152db0ad05783f6bea7d7981c5055bc80dddd537ef83245",
+          "bytes": 2105,
+          "purpose": "delivered800801 parent proof binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/parent-delivery-proof.json",
+          "sha256": "6194da6ffc3005d97d2f751525906f30d027ce647478467ca332cdddc9571c5e",
+          "bytes": 2563,
+          "purpose": "delivered800801 parent proof binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/parent-validation-proof.json",
+          "sha256": "ecf508d4fc1dac29fbf2222c8ad1aec10bad9913b905f550fdbe75d6ffb95b85",
+          "bytes": 5520,
+          "purpose": "delivered800801 parent proof binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/parent-cold-proof.json",
+          "sha256": "3d645cc6eaa99af5bc95168dd83fa4cc2dc5d3dc2c3662f01b9dbb0a0b836a75",
+          "bytes": 2667,
+          "purpose": "delivered800801 parent proof binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/parent-delivery-proof.json",
+          "sha256": "9d12f18db5ccd0c5d634b50619016fd32a1535072521e0f5c628183bb14f3ddb",
+          "bytes": 2580,
+          "purpose": "delivered800801 parent proof binding, hash only",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage269/admitted-all.json",
+          "sha256": "64fc9943c69b6d14381e50da9f2fa19c7a32b72c71c003646fd060322e0a123f",
+          "bytes": 14065664,
+          "purpose": "All24 projected fields matched raw1168; raw notes/history not semantic credit",
+          "semanticCredit": false
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/post801-resume268/install.inputs.json",
+          "sha256": "786834f719198ff37a9f6077f1821a6566671ca223ea7029ae3caaa5683e86de",
+          "bytes": 752835,
+          "purpose": "original regular manifest mechanical binding only",
+          "semanticCredit": false
+        }
+      ],
+      "projectionChecks": {
+        "historical266": {
+          "moduleSummaries": 37,
+          "actualCaseRows": 335,
+          "topDiagnostics": 40
+        },
+        "current268": {
+          "moduleSummaries": 36,
+          "actualCaseRows": 330,
+          "topDiagnostics": 40
+        },
+        "native": {
+          "projectedUnfinished": 24,
+          "rawAdmitted": 1168,
+          "everyProjectedFieldMatches": true
+        }
+      },
+      "truncationRecoveries": [
+        "3363b7 truncated middle: recovered all4,5,7,8,9,27 in163c27 and6 ined81f7; required0:3 and28:33 visible fully.",
+        "7b8aaa profile caseSummary truncation: recovered all37 module rows/top335 in da0d27,e70098,def954; topCollect/topTests fully visible.",
+        "4ed267 nativeprojection middle truncation recovered19:22 in c5e0ff.",
+        "7ce7a5 mixed inventory/source output truncated: clone/fullhash recovered120fd5 and29571d; lexical inventory is metadata only, not whole-body semanticcredit.",
+        "d2c7dd provider/source multioutput truncated: fixture tail334:489 and enginebattle1:72 recovered94fb4f; other shown source chunks recorded precisely."
+      ],
+      "limitations": [
+        "Only declared additional ranges received semantic credit; rg caller/name/inventory censuses do not imply full module reads.",
+        "All6182 current regular file bodies and raw all12450case rows were not semantically read; current fullrun source validation is parent-qualified evidence.",
+        "Fresh native actual owner/Areas/edges checks remain parent duty before filing.",
+        "No runtime, install, tests, browser, application imports, repository helpers or native bd/tg/Hive executed; no source writes.",
+        "No complete global reset/cache/import closure established and no reset/isolation/config weakening is proposed.",
+        "Accepted17 static review composition retained as parent evidence, not re-reviewed here."
+      ],
+      "runtimeExecutions": 0,
+      "nativeMutations": 0,
+      "repositoryWrites": 0,
+      "finalizedAt": "2026-10-17T13:31:55.127005+00:00",
+      "worktreeStatusAtFinish": "git status --short empty",
+      "supplementalParentPolicyUpdate": "Parent reports later staging f4adea9e370ec379a3517321655ba1c7603072e8 differs only in D97 documents and stream-policy demarcation; no runtime/test/config source difference. Frozen737 packet and this coverage stay bound737. New policy bytes not independently audited here; parent applies current policy before admission."
+    },
+    "parentQualification": {
+      "status": "PARENT_ACCEPTED_READ_ONLY_SAGE269",
+      "at": "2026-10-17T13:33:44.743196+00:00",
+      "source": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+      "packetSHA256": "f87b8f3fce6039986aed4928ba2fe3f884029ea5dfdea8d6e7356b6886a2f2bc",
+      "artifacts": {
+        "scope-coverage.json": "006c9238fd3258bb15e59b34b66cbcd11d73c93ab4d21384ac019edb43695f34",
+        "report.json": "4f8829e6f0f04338a36b805a4fb0fb9f6b558fb7202dab1a93a9e409bf67e7c5",
+        "proposals.json": "9e2af9fcb5d3d6486e3dbbc05e29dc28b39fbf611884ac4d621502316e426b1d"
+      },
+      "requiredInputs": 34,
+      "requiredSemanticLines": 9863,
+      "allScopeRecordsHashesGitBlobsChunksVerified": 74,
+      "scopeChunksVerified": 92,
+      "hashOnlyBindingsVerified": 20,
+      "all6182CurrentRegularInputsMatch": true,
+      "profileProjectionsIndependentlyVerified": [
+        {
+          "name": "profile-summary.json",
+          "summaries": 37,
+          "actualTopRows": 335,
+          "diagnostics": 40
+        },
+        {
+          "name": "current268-profile-summary.json",
+          "summaries": 36,
+          "actualTopRows": 330,
+          "diagnostics": 40
+        }
+      ],
+      "native1168Raw24ProjectionFieldsVerified": true,
+      "scopeBeforeReports": true,
+      "freshHelperTerminal": true,
+      "truncationRecoveries": [
+        "3363b7 truncated middle: recovered all4,5,7,8,9,27 in163c27 and6 ined81f7; required0:3 and28:33 visible fully.",
+        "7b8aaa profile caseSummary truncation: recovered all37 module rows/top335 in da0d27,e70098,def954; topCollect/topTests fully visible.",
+        "4ed267 nativeprojection middle truncation recovered19:22 in c5e0ff.",
+        "7ce7a5 mixed inventory/source output truncated: clone/fullhash recovered120fd5 and29571d; lexical inventory is metadata only, not whole-body semanticcredit.",
+        "d2c7dd provider/source multioutput truncated: fixture tail334:489 and enginebattle1:72 recovered94fb4f; other shown source chunks recorded precisely."
+      ],
+      "limitations": [
+        "Only declared additional ranges received semantic credit; rg caller/name/inventory censuses do not imply full module reads.",
+        "All6182 current regular file bodies and raw all12450case rows were not semantically read; current fullrun source validation is parent-qualified evidence.",
+        "Fresh native actual owner/Areas/edges checks remain parent duty before filing.",
+        "No runtime, install, tests, browser, application imports, repository helpers or native bd/tg/Hive executed; no source writes.",
+        "No complete global reset/cache/import closure established and no reset/isolation/config weakening is proposed.",
+        "Accepted17 static review composition retained as parent evidence, not re-reviewed here."
+      ],
+      "currentD19": "82.48/83.6>60 FAIL_UNWAIVED",
+      "runtime": 0,
+      "phaseAcceptance": false,
+      "finalPhaseRetrospective": false,
+      "parentSourceReads": {
+        "wholeCanonicalReplay": "43c2f2",
+        "realCheckpointVerification": "ca3e7e",
+        "actualPersistedRecoveryAndObserverRetry": "69144e",
+        "wholePublicFoldObservation": "9cdfeb",
+        "presentationSuccessfulCounterAndReload": "34800e",
+        "wholeClonetest1to180": "c55897",
+        "sourceBirthPrerequisites": "ecfc59/04a2fb/e5f95f/df0c4f and native732/32census9b3867"
+      },
+      "adoptionDispositions": {
+        "defaultStreamNewPolicy": "e74a29 normative delta read; hiveexecutorready4a088d filtersdefault, no d97claim. FreshnewWTreadsupdatedAGENTS/normative.",
+        "cloneLocalFullReview": "Ordinary local private fixture/test-only edit is not shared test infrastructure under AGENTS Verification; require focused/review/Knip and native release checks. Localreview:full only actual shared infrastructure/config/crosscutting scope, including canonicalfactory. This corrects auditor blanketclassification, not plan requirement relaxation.",
+        "allThree": "Bounded source prototypes only, exactwholemodule>=10percent orrollback; freshcold/nativecompletion and final60/QA remainunwaived."
+      }
+    },
+    "sourceApplicability": {
+      "at": "2026-10-17T13:39:02.021626+00:00",
+      "auditSource": "73781ea3344dd4716747d3cedb781cfe4f2350b2",
+      "newBase": "f4adea9e370ec379a3517321655ba1c7603072e8",
+      "delta": [
+        "AGENTS.md",
+        "docs/dreamtides-97/appendix-c-bosses-and-keys.md",
+        "docs/dreamtides-97/plan/README.md",
+        "docs/dreamtides-97/plan/decisions.md",
+        "docs/dreamtides-97/plan/phase-0-bootstrap.md",
+        "docs/dreamtides-97/plan/phase-1-first-dream.md",
+        "docs/dreamtides-97/plan/phase-2-consolidation.md",
+        "docs/dreamtides-97/plan/phase-3-act-one.md",
+        "docs/dreamtides-97/plan/phase-5-endgame.md",
+        "docs/dreamtides-97/plan/workflow.md",
+        "docs/plan/decisions.md",
+        "docs/plan/workflow.md"
+      ],
+      "allExecutableRuntimeTestConfigBytesEqual": true,
+      "policyDeltaRead": "e74a29 and fresh802AGENTS7aa276; updatedexecutorab5dd5/sharedentry976051/filingc5b285/deliveryf276a8, defaultcontinuous7b2d7e",
+      "noD97Claims": true
+    },
+    "adoptionDispositions": {
+      "defaultStreamNewPolicy": "e74a29 normative delta read; hiveexecutorready4a088d filtersdefault, no d97claim. FreshnewWTreadsupdatedAGENTS/normative.",
+      "cloneLocalFullReview": "Ordinary local private fixture/test-only edit is not shared test infrastructure under AGENTS Verification; require focused/review/Knip and native release checks. Localreview:full only actual shared infrastructure/config/crosscutting scope, including canonicalfactory. This corrects auditor blanketclassification, not plan requirement relaxation.",
+      "allThree": "Bounded source prototypes only, exactwholemodule>=10percent orrollback; freshcold/nativecompletion and final60/QA remainunwaived."
+    },
+    "semanticCustody": "Full Sage report/proposals/scope provenance and parent qualification are persisted verbatim as JSON values. Implementer read report/proposals and scope metadata, not every Sage source body; no imported semantic reread credit. No omitted scope records, chunks, hash-only bindings, recoveries or limits. Source737 packet remains bound737; newerf4 policy read/applied by parent as recorded."
+  },
+  "validationLimits": [
+    "Private ordinary test-only change; no authorized shared infrastructure/config/cross-cutting edit. Local review:full not required under AGENTS; parent native gate/release remain.",
+    "No production or UI behavior change; browser QA not applicable. Fresh cold review, certification/promotion/cleanup and native resolution belong to parent and are pending here.",
+    "Initial combined native/source displays truncated; exact targeted recoveries described in experimentContract. Raw logs retained. Preparation warnings are complete in raw logs; their bodies were not all semantically read.",
+    "Read-only source search0b4945 returned2 because guessed hooks.tsx path absent; actual hooks.ts discovered72aa5c and subscription187:199 readf3f623. No test/source/index/native effect."
+  ],
+  "remainingAcceptance": [
+    "D19 fullsuite<=60s at2workers/lowhostload after independently accepted cuts; current268fails.",
+    "Whole affectedmodule stage gain>=10% or exactrollback for each proposed speedchange.",
+    "All full stock/transfiguration/deck-mod samples,10000fullpool soak and interactive replay share,real desktop/mobile journeys,minified QA/coldvisual,final Sage and dispositions,release convergence.",
+    "Any changed canonical source must receive exact new cold review; previous accepted17 composition cannot silently cover a new factory."
+  ]
+}
