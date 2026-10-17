@@ -49,15 +49,12 @@ import ts from "typescript";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { APOLLYON_INCARNATIONS } from "../src/content/apollyon";
-import { AVATARS } from "../src/content/avatars";
-import { CARDS } from "../src/content/cards";
 import type { ContentStatus } from "../src/content/define";
-import { DREAMSIGNS } from "../src/content/dreamsigns";
-import { DREAMWELL_CARDS } from "../src/content/dreamwell";
-import { EXPLORATION } from "../src/content/exploration";
-import { FIGMENTS } from "../src/content/figments";
-import { TRANSFIGURATION } from "../src/content/transfiguration";
+import type { inventoryCatalogs } from "./content-inventory-catalogs";
+
+type InventoryCatalogs = typeof inventoryCatalogs;
+const isDirectCli = process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const catalogs = isDirectCli ? (await import("./content-inventory-catalogs")).inventoryCatalogs : undefined;
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUTPUT = "docs/plan/evidence/content-inventory.json";
@@ -1131,7 +1128,8 @@ export function classifyInventoryText(text: string) {
 const tagsOf = (text: string, rules: readonly Rule[] = RULES): string[] => applyRules(text, rules).map((rule) => rule.tag);
 const joined = (text: string, amplifiedText: string | undefined): string => (amplifiedText === undefined ? text : `${text}\n${amplifiedText}`);
 
-function buildEntities(): EntityRecord[] {
+function buildEntities(catalogs: InventoryCatalogs): EntityRecord[] {
+  const { APOLLYON_INCARNATIONS, AVATARS, CARDS, DREAMSIGNS, DREAMWELL_CARDS, EXPLORATION, FIGMENTS, TRANSFIGURATION } = catalogs;
   const clarifications = clarificationsByUuid();
   const rulesDecisions = evidenceByUuid("docs/plan/evidence/rules-decisions");
   const cardIssues = evidenceByUuid("docs/plan/evidence/card-issues");
@@ -1689,7 +1687,7 @@ function refreshRegistrationAreas(): void {
   console.log(`refreshed ${OUTPUT} registration Areas`);
 }
 
-function main(): void {
+function main(catalogs: InventoryCatalogs): void {
   if (process.argv.includes("--refresh-registration-areas")) {
     refreshRegistrationAreas();
     return;
@@ -1699,7 +1697,7 @@ function main(): void {
     try { capabilityExists.validate(entry.forms); }
     catch (error) { throw new Error(`capability ${entry.name}: ${String(error)}`); }
   }
-  const records = buildEntities();
+  const records = buildEntities(catalogs);
   const ids = records.map((record) => record.id);
   const duplicates = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))].sort(compare);
   if (duplicates.length > 0) throw new Error(`duplicate UUIDs: ${duplicates.join(", ")}`);
@@ -1788,4 +1786,4 @@ function main(): void {
   console.log(`wrote ${OUTPUT}: ${String(records.length)} entities, ${String(beads.length)} beads`);
 }
 
-if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (isDirectCli && catalogs !== undefined) main(catalogs);

@@ -1,0 +1,3104 @@
+{
+  "bead": "hv-umm2.796",
+  "sourceBase": "c8af4c075118dda8643d12551f972732a3b30686",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+  "evidenceCutoffUtc": "2026-10-17T10:21:14.012752+00:00",
+  "ownStartBeforeBriefRead": true,
+  "ownStart": {
+    "actual_start_utc": "2026-10-17T10:16:58.779793+00:00"
+  },
+  "windowQualification": "Friction end is the actual evidence cutoff immediately before final schema and commit; parent qualifies the actual commit tail externally. No future timestamp was invented.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper start; actual one-minute os.getloadavg observation"
+      },
+      "implementWindow": {
+        "measuredFor": "actual helper start before brief through evidence cutoff; commit tail externally bound within one-minute tolerance"
+      }
+    }
+  },
+  "target": {
+    "metric": "scripts/review.mjs complete THREE-module test-stage wall including collection/setup; unchanged two workers",
+    "freeze": {
+      "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+      "metric": "complete three inventory module test-stage wall including collection and setup",
+      "workers": 2,
+      "minimumImprovementPercent": 10,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "scripts/content-inventory-journey.test.ts",
+        "scripts/content-inventory-variants.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/baseline.vitest.json"
+      ],
+      "finalOnlyDifference": "exclusive final JSON output path"
+    },
+    "baselineStageS": 4.7,
+    "finalStageS": 3.0,
+    "observedImprovementPercent": 36.17021276595745,
+    "minimumPercent": 10,
+    "accepted": true,
+    "defaultVitestS": [
+      3.91,
+      2.48
+    ],
+    "defaultImportS": [
+      6.86,
+      4.17
+    ],
+    "defaultTransformS": [
+      2.21,
+      0.203
+    ],
+    "defaultBodyS": [
+      0.606,
+      0.556
+    ],
+    "qualification": "One ordered baseline/final observation, not an interleaved or controlled causal study. Earlier baseline and later final have different cache/order and changing host load. Cumulative import fields are not removable serial cost; no per-edge savings, future guarantee or aggregate <=60 claim. No timing assertion or mutable-data CI test added."
+  },
+  "preservation": {
+    "normalizationOutsidePrecisePlumbingByteEqual": true,
+    "verbatimImports": [
+      "import { APOLLYON_INCARNATIONS } from \"../src/content/apollyon\";",
+      "import { AVATARS } from \"../src/content/avatars\";",
+      "import { CARDS } from \"../src/content/cards\";",
+      "import { DREAMSIGNS } from \"../src/content/dreamsigns\";",
+      "import { DREAMWELL_CARDS } from \"../src/content/dreamwell\";",
+      "import { EXPLORATION } from \"../src/content/exploration\";",
+      "import { FIGMENTS } from \"../src/content/figments\";",
+      "import { TRANSFIGURATION } from \"../src/content/transfiguration\";"
+    ],
+    "bindingUsesBaseline": {
+      "APOLLYON_INCARNATIONS": [
+        52,
+        1255
+      ],
+      "AVATARS": [
+        53,
+        1192
+      ],
+      "CARDS": [
+        54,
+        1153
+      ],
+      "DREAMSIGNS": [
+        56,
+        1179
+      ],
+      "DREAMWELL_CARDS": [
+        57,
+        1196
+      ],
+      "EXPLORATION": [
+        58,
+        1236
+      ],
+      "FIGMENTS": [
+        59,
+        1209
+      ],
+      "TRANSFIGURATION": [
+        60,
+        1223
+      ]
+    },
+    "entityLoopOrder": [
+      "CARDS",
+      "DREAMSIGNS",
+      "AVATARS",
+      "DREAMWELL_CARDS",
+      "FIGMENTS",
+      "TRANSFIGURATION",
+      "EXPLORATION",
+      "APOLLYON_INCARNATIONS"
+    ],
+    "testSHA256": {
+      "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/scripts/content-inventory-variants.test.ts": "a4d1bd892af60405c914a813f3a53f56c4f2fbd076ee5046903fd167d835fd14",
+      "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/scripts/content-inventory.test.ts": "b565ea21745aa87d19935a83ee2cfad38a66845058349a790a1d735b63bc8635",
+      "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/scripts/content-inventory-journey.test.ts": "b30d1d09a7b03e2d21c45a92cd9aceb4f24176cfce9c0a15d98e07d31a1e446e"
+    },
+    "all127CasesNamesStatusesEqual": true,
+    "caseContracts": [
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings declares owning factory modules and the production registration seam",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings diagnoses an unregistered public builder",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings does not silently ignore registration on an incompatible type form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings keeps incomplete or unrelated journeyEssence support unavailable",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings keeps incomplete or unrelated journeySites support unavailable",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyBattleInit without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyDeckEntry without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyDraft without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyDuplication without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyEssence without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyOnGain without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyPurge without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyShop without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeySites without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings recognizes registered callable journeyTransfiguration without executing it",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings resolves exported and imported aliases for journeyEssence",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings resolves exported and imported aliases for journeySites",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-journey.test.ts",
+        "public journey inventory bindings uses a fresh source snapshot after registration changes while retaining the original",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification claims only the parameterized clause, so a fixed clause in the same text keeps its form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps Reclaim grants to named, moved, or self cards on the fixed grant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps a zero-admitting discard cost without a least X: \"Discard X cards: Gain 1\u25cf.\"",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps a zero-admitting discard cost without a least X: \"Discard a card: Gain 1\u25cf.\"",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps a zero-admitting discard cost without a least X: \"To play this event, discard X cards. Draw X+1 cards.\"",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps fixed and character-selector bounds on their fixed forms",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps the fixed abandon cost for a fixed count",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification keeps triggered and void-reading abilities off the activated-from-void variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"1\u25cf, Abandon X figments: Dissolve an enemy with X\u2726.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"2\u25cf, Banish a card from your void: Materialize this character from your void.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"Abandon this character: Dissolve an enemy with \u2726 less than or equal to this character's \u2726.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"Choose up to two \u2264X\u25cf cost events in your void to gain reclaim 0\u25cf.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"Gain X\u235f.\\n\\nReclaim \u2013 Discard X cards.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"Once per turn, when you abandon a character or discard a character, that card gains reclaim.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"When you discard a card, it gains reclaim.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"\u25b8Dawn: Choose an event in your void with cost less than or equal to this character's \u2726. That event gains reclaim 0\u25cf.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory-variants.test.ts",
+        "inventory parameterized variant classification routes \"\u25b8Materialized: Discover a \u22642\u2726 character.\" to its variant",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "declared capability lifecycle diagnoses a retired history alternative even while its sibling binding remains available",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "declared capability lifecycle requires explicit retirement of the 'export' declaration",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "declared capability lifecycle requires explicit retirement of the 'literal' declaration",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "declared capability lifecycle requires explicit retirement of the 'member' declaration",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "declared capability lifecycle requires explicit retirement of the 'option' declaration",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory cost modifier classification retains the static first-in-turn cost requirement",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory cost modifier classification retains the static second-in-turn cost requirement",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory cost modifier classification retains the static third-in-turn cost requirement",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory cost modifier classification uses the one-shot modifier for a next-card discount: When you abandon a character, the next character you play this turn costs 2\u25cf less.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory cost modifier classification uses the one-shot modifier for a next-card discount: When you discard a card, your next card this turn costs 1\u25cf less.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory cost modifier classification uses the one-shot modifier for a next-card discount: When you play your second card in a turn, your next character this turn costs 1\u25cf less.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts covers every actual descriptor with an independent intended authoring fixture",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts diagnoses missing modules and stale exported names instead of projecting missing capabilities",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts diagnoses semantic API renames while accepting explicit rebound metadata",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts distinguishes own-card subtype overrides from selector/conditional-figment remaps",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts keeps every binding valid when representation discriminator fields are renamed",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts permits only the declared missing stage for intentional pending features",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts requires actual first-occasion descriptors beyond source-local oncePerTurn",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts requires the actual void option and tracks its pending stage precisely",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'abandonXCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'activatedFromVoid' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'alternativeCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'alternativePlayResult' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'atEndOfTurnTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'banishFromAnyVoidCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'banishFromHandCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'banishXCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'boundSourceSpark' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'cardFilterBounds' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'cardFilterSparkBounds' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'conditionCardCounts' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'conditionControls' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'conditionCostPaid' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'conditionEnergyAtLeast' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'conditionalAlternativeCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'costModifierNthOrigin' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'discardCostFilter' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'discardCostFilterMin' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'discardHandCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'drawTriggerFilter' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'firstTimeEachTurn' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'functionalZones' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'giveOpponentPointsCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'grantReclaimTriggeringCard' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'historyRefs' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'materializeNthTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'oncePerTurn' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'playCondition' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'pointsCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'randomSelection' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'returnCost' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'selectorBounds' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'selectorChallenger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'selectorFigment' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'selectorHasAbility' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'speedFast' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'stackSelectorBounds' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'staticZones' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'storedCounters' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'triggerNth' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'turnHistory' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'typeRemap' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'valueCardStats' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'valueHandSize' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'valueZoneCounts' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'voidTargetXBound' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenCopyTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenDiscardSelfTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenDissolvedTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenErodeTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenForeseeTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenPlayFromVoidTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenPutIntoVoidTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenReclaimTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenRemovesEnemyTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'whenReturnTrigger' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts resolves 'zoneCardRefs' on its intended synthetic module/export/form",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory descriptor contracts validates every alternative so a working branch cannot mask a stale binding",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification classifies whole-hand discard in an effect separately from a payment",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification keeps chosen discard requirements and prompts: Discard X cards: Gain 1\u25cf.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification keeps chosen discard requirements and prompts: Discard a card: Gain 1\u25cf.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification keeps chosen discard requirements and prompts: Discard an event: Gain 1\u25cf.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification keeps the chosen prompt when both discard costs appear in the same clause",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification uses mandatory whole-hand payment without a chosen-discard prompt: Discard your hand: Gain 1\u25cf.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification uses mandatory whole-hand payment without a chosen-discard prompt: Reclaim \u2013 Discard your hand",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory discard cost classification uses mandatory whole-hand payment without a chosen-discard prompt: To play this event, discard your hand. Gain 1\u235f.",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory exported capabilities keeps alternative forms independent and recognizes actual absence",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory exported capabilities keeps every supported descriptor stable under representation-field rename and reformatting",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory exported capabilities rejects missing modules/exports, private declarations and noncallable values",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory exported capabilities requires the semantic option on the matching registered variant, not merely its generic builder",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory exported capabilities resolves callable exports, aliases and type-only reexports without executing modules",
+        "passed"
+      ],
+      [
+        "scripts/content-inventory.test.ts",
+        "inventory exported capabilities resolves inherited option forms and aliases with one shared module model",
+        "passed"
+      ]
+    ],
+    "rootValueImportClosure": "typescript and node:fs/node:path/node:url; one conditional bootstrap; ContentStatus/catalog shape imports erased",
+    "consumerCensus": "knip.jsonc:18:    \"scripts/content-inventory.ts\",\nscripts/content-inventory-journey.test.ts:5:import { inventoryCapabilityResolver, inventoryJourneyCapabilities, type InventoryCapabilityForm } from \"./content-inventory\";\nscripts/content-inventory.test.ts:2:import { classifyInventoryText, inventoryCapabilityResolver, inventoryDslCapabilities, type InventoryCapabilityForm } from \"./content-inventory\";\nscripts/content-inventory.ts:4: *   npx tsx scripts/content-inventory.ts           # writes the inventory\nscripts/content-inventory.ts:5: *   npx tsx scripts/content-inventory.ts --check   # exits 1 when the file is stale\nscripts/content-inventory.ts:6: *   npx tsx scripts/content-inventory.ts --refresh-registration-areas [--check]\nscripts/content-inventory.ts:10: * Emits docs/plan/evidence/content-inventory.json: one record per catalog\nscripts/content-inventory.ts:53:import type { inventoryCatalogs } from \"./content-inventory-catalogs\";\nscripts/content-inventory.ts:57:const catalogs = isDirectCli ? (await import(\"./content-inventory-catalogs\")).inventoryCatalogs : undefined;\nscripts/content-inventory.ts:60:const OUTPUT = \"docs/plan/evidence/content-inventory.json\";\nscripts/content-inventory.ts:1680:      console.error(`${OUTPUT} registration Areas are stale; run npx tsx scripts/content-inventory.ts --refresh-registration-areas`);\nscripts/content-inventory.ts:1747:        \"Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss.\",\nscripts/content-inventory.ts:1779:      console.error(`${OUTPUT} is stale; run npx tsx scripts/content-inventory.ts`);\nscripts/content-inventory-variants.test.ts:2:import { classifyInventoryText } from \"./content-inventory\";\nscripts/bead-entities.ts:51:      new URL(\"../docs/plan/evidence/content-inventory.json\", import.meta.url), \"utf8\",\n",
+    "sixPublicDeclarationsUnchanged": true
+  },
+  "validation": {
+    "originalActualTerminals": {
+      "baseline": {
+        "session": 87276,
+        "chunk": "54da7c",
+        "exit": 0
+      },
+      "final": {
+        "session": 95937,
+        "chunk": "c6b3b3",
+        "exit": 0
+      },
+      "parity": {
+        "session": 3241,
+        "chunk": "60d30b",
+        "exit": 0
+      },
+      "review": {
+        "session": 52480,
+        "chunk": "2d131c",
+        "exit": 0
+      },
+      "knip": {
+        "session": 13535,
+        "chunk": "03f242",
+        "exit": 0
+      },
+      "preservation": {
+        "session": null,
+        "chunk": "1a5ba7",
+        "exit": 0
+      }
+    },
+    "receipts": {
+      "baseline": {
+        "name": "baseline",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts",
+          "scripts/content-inventory-journey.test.ts",
+          "scripts/content-inventory-variants.test.ts",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/baseline.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/validation.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "8910b5a5433f75083a6f48f73a9aefe7da90a07e5e3a9cb87a0d66e0c7598a5d",
+        "time": "2026-10-17T10:17:24.453928+00:00",
+        "load": [
+          2.8623046875,
+          4.1904296875,
+          5.501953125
+        ],
+        "workers": "2",
+        "pid": 21527,
+        "pgid": 21527,
+        "actualExit": 0,
+        "end": "2026-10-17T10:17:34.095048+00:00",
+        "wallS": 9.64067024999531,
+        "childCpuS": 16.32763,
+        "loadEnd": [
+          3.1904296875,
+          4.216796875,
+          5.49560546875
+        ],
+        "logSHA256": "b963e2875d8bee2385b11ebd1287b5e77e766fd98acf887899ca9a76bc6d1eea",
+        "runnerBytesUnchanged": true
+      },
+      "final": {
+        "name": "final",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts",
+          "scripts/content-inventory-journey.test.ts",
+          "scripts/content-inventory-variants.test.ts",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/final.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/validation.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+        "time": "2026-10-17T10:17:55.036643+00:00",
+        "load": [
+          3.00830078125,
+          4.08642578125,
+          5.4111328125
+        ],
+        "workers": "2",
+        "pid": 22223,
+        "pgid": 22223,
+        "actualExit": 0,
+        "end": "2026-10-17T10:18:00.916122+00:00",
+        "wallS": 5.879115540999919,
+        "childCpuS": 12.331043,
+        "loadEnd": [
+          3.08740234375,
+          4.0849609375,
+          5.40283203125
+        ],
+        "logSHA256": "66c56fd55dcfaa44a2fea0b3d630b28a03db2debaf978a465f31885c48d1be17",
+        "runnerBytesUnchanged": true
+      },
+      "parity": {
+        "name": "parity",
+        "command": [
+          "python3",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/parity.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/validation.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+        "time": "2026-10-17T10:18:36.996870+00:00",
+        "load": [
+          2.99462890625,
+          3.9482421875,
+          5.298828125
+        ],
+        "workers": "2",
+        "pid": 23157,
+        "pgid": 23157,
+        "actualExit": 0,
+        "end": "2026-10-17T10:19:44.716847+00:00",
+        "wallS": 67.71856633300195,
+        "childCpuS": 94.799058,
+        "loadEnd": [
+          4.123046875,
+          4.09228515625,
+          5.25048828125
+        ],
+        "logSHA256": "fb2a1b69b898d4cac32fb9daaf7e0445780d2c871c691e75d96a1ea76419cc96",
+        "runnerBytesUnchanged": true
+      },
+      "review": {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/validation.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+        "time": "2026-10-17T10:19:18.441815+00:00",
+        "load": [
+          3.9130859375,
+          4.05029296875,
+          5.27197265625
+        ],
+        "workers": "2",
+        "pid": 24040,
+        "pgid": 24040,
+        "actualExit": 0,
+        "end": "2026-10-17T10:19:34.064580+00:00",
+        "wallS": 15.622276208014227,
+        "childCpuS": 60.184848,
+        "loadEnd": [
+          4.146484375,
+          4.09619140625,
+          5.26611328125
+        ],
+        "logSHA256": "0897411a620831f11bca145b6112354965b5b1146201fac2f9fdfbaf55ba7298",
+        "runnerBytesUnchanged": true
+      },
+      "knip": {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/validation.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+        "time": "2026-10-17T10:19:45.648396+00:00",
+        "load": [
+          4.03271484375,
+          4.07373046875,
+          5.23681640625
+        ],
+        "workers": "2",
+        "pid": 24630,
+        "pgid": 24630,
+        "actualExit": 0,
+        "end": "2026-10-17T10:19:50.619173+00:00",
+        "wallS": 4.970428250031546,
+        "childCpuS": 5.773267999999999,
+        "loadEnd": [
+          3.94970703125,
+          4.0556640625,
+          5.2236328125
+        ],
+        "logSHA256": "5cffb49b4e1ea26e742fe5a824e0187b13054e96547b0bbf037c0cfd49fb816a",
+        "runnerBytesUnchanged": true
+      },
+      "preservation": {
+        "name": "preservation",
+        "command": [
+          "python3",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/preservation.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/validation.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+        "time": "2026-10-17T10:20:24.627712+00:00",
+        "load": [
+          3.26611328125,
+          3.8876953125,
+          5.12158203125
+        ],
+        "workers": "2",
+        "pid": 25513,
+        "pgid": 25513,
+        "actualExit": 0,
+        "end": "2026-10-17T10:20:24.673170+00:00",
+        "wallS": 0.045190666045527905,
+        "childCpuS": 0.041236999999999996,
+        "loadEnd": [
+          3.26611328125,
+          3.8876953125,
+          5.12158203125
+        ],
+        "logSHA256": "a4593b9ceaedf344ac6ace8e3ad535f5fdd292fbba6b7f56540d08ec96e5cbc5",
+        "runnerBytesUnchanged": true
+      }
+    },
+    "finalSchema": "Run after these final evidence bytes; actual original terminal, full all-file input manifest and result are bound externally in implementation-final-proof.json.",
+    "npmInstall": {
+      "parentOriginalSession": 63886,
+      "actualTerminal": "1c05d3",
+      "exit": 0,
+      "receipt": {
+        "name": "install",
+        "command": [
+          "npm",
+          "install"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/setup.runner.py",
+        "runnerSHA256": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+        "inputsSHA256": "8910b5a5433f75083a6f48f73a9aefe7da90a07e5e3a9cb87a0d66e0c7598a5d",
+        "time": "2026-10-17T10:15:55.465835+00:00",
+        "load": [
+          4.6484375,
+          4.8369140625,
+          5.84912109375
+        ],
+        "workers": "2",
+        "pid": 19478,
+        "pgid": 19478,
+        "actualExit": 0,
+        "end": "2026-10-17T10:15:57.931765+00:00",
+        "wallS": 2.465615916007664,
+        "childCpuS": 5.391192,
+        "loadEnd": [
+          4.6484375,
+          4.8369140625,
+          5.84912109375
+        ],
+        "logSHA256": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789",
+        "runnerBytesUnchanged": true
+      }
+    },
+    "scope": "Internal scripts-only CLI dependency refactor. No test infrastructure/config/cross-cutting application change: review:full and browser QA are outside this bounded local verification. Parent owns fullsuite, cold core review and native certification."
+  },
+  "hostLoadSamples": {
+    "baseline": {
+      "start": [
+        2.8623046875,
+        4.1904296875,
+        5.501953125
+      ],
+      "end": [
+        3.1904296875,
+        4.216796875,
+        5.49560546875
+      ]
+    },
+    "final": {
+      "start": [
+        3.00830078125,
+        4.08642578125,
+        5.4111328125
+      ],
+      "end": [
+        3.08740234375,
+        4.0849609375,
+        5.40283203125
+      ]
+    },
+    "parity": {
+      "start": [
+        2.99462890625,
+        3.9482421875,
+        5.298828125
+      ],
+      "end": [
+        4.123046875,
+        4.09228515625,
+        5.25048828125
+      ]
+    },
+    "review": {
+      "start": [
+        3.9130859375,
+        4.05029296875,
+        5.27197265625
+      ],
+      "end": [
+        4.146484375,
+        4.09619140625,
+        5.26611328125
+      ]
+    },
+    "knip": {
+      "start": [
+        4.03271484375,
+        4.07373046875,
+        5.23681640625
+      ],
+      "end": [
+        3.94970703125,
+        4.0556640625,
+        5.2236328125
+      ]
+    },
+    "preservation": {
+      "start": [
+        3.26611328125,
+        3.8876953125,
+        5.12158203125
+      ],
+      "end": [
+        3.26611328125,
+        3.8876953125,
+        5.12158203125
+      ]
+    }
+  },
+  "parity": {
+    "status": "ALL_FINITE_CONTRACTS_PASS",
+    "commandCount": 27,
+    "rootRelativePath": "scripts/content-inventory.ts",
+    "sameInitialSourceCounts": {
+      "baseline": 6147,
+      "final": 6148
+    },
+    "copyRule": "Independent byte copies of every tracked regular file; only node_modules and the intentional entry symlink use symlinks. No source hardlinks. Baseline root uses exact saved base bytes; final adds only bootstrap and root plumbing. No tracked production projection was generated in the worktree.",
+    "manifestQualification": "Per-case *.shadow-inputs.json are POST-command source manifests, not prelaunch snapshots. Initial exact source maps are in parity-results.json. The exclusive shadow copies are mutated only by the driver: stale output, synthetic refresh projection, catalog RangeError prefix and deleted type-only prompt source. The tool source writes only its inventory output; each row includes before/after output hashes and post-command manifest hash. Source inputs therefore derive from initial maps plus explicit driver deltas. Frozen enclosing runner captures all real worktree inputs and descendant CPU/load/owned PG.",
+    "errorQualification": "Failure classes/messages/status/empty stdout/output no-write match after normalizing distinct scratch root path. Stack filenames and line positions differ with import placement; no catch or relabel added. Catalog RangeError precedes deleted-source ENOENT in both direct CLI epochs; final nonCLI skips the throwing catalog but still fails on real source read.",
+    "generatedBytesSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+    "refreshedBytesSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+    "graphPreserved": true,
+    "rows": [
+      {
+        "epoch": "baseline",
+        "name": "generate",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:37.598864+00:00",
+        "wallS": 5.060316250019241,
+        "end": "2026-10-17T10:18:42.659392+00:00",
+        "exit": 0,
+        "stdout": "wrote docs/plan/evidence/content-inventory.json: 1209 entities, 199 beads\n",
+        "stdoutSHA256": "8b28733f9326cead4494ed6fd498f34e1cf9e0a55817b02208fe7c9a88bc4e35",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "cce6aa761aaff276275ad9ff8cc702cff0a59a57818daee36f429eeee518e715",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": false,
+        "sourceManifestSHA256": "2e291f8d864d63d45341bc5e063b81deafc2228ecef6cd458b1b91aea916dc1a"
+      },
+      {
+        "epoch": "baseline",
+        "name": "check-current",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:42.662439+00:00",
+        "wallS": 2.4117322500096634,
+        "end": "2026-10-17T10:18:45.074219+00:00",
+        "exit": 0,
+        "stdout": "docs/plan/evidence/content-inventory.json is current\n",
+        "stdoutSHA256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "2e291f8d864d63d45341bc5e063b81deafc2228ecef6cd458b1b91aea916dc1a"
+      },
+      {
+        "epoch": "baseline",
+        "name": "check-stale",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:45.077395+00:00",
+        "wallS": 2.3862541670096107,
+        "end": "2026-10-17T10:18:47.463698+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "2ac6dc03a9ffd596e453252f29680a410a2cc781667f87a19359156439673bbe",
+        "beforeOutputSHA256": "b2fd113c4d8747f71d0e33693f2c81462c20a746d96756d5c9fa4daad3d63ab9",
+        "afterOutputSHA256": "b2fd113c4d8747f71d0e33693f2c81462c20a746d96756d5c9fa4daad3d63ab9",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "28f87db40fb3c5c7743239df57b0816a6c75748bdbd3087fcfd32c33a6789180"
+      },
+      {
+        "epoch": "baseline",
+        "name": "refresh-check-stale",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--refresh-registration-areas",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:47.466036+00:00",
+        "wallS": 2.4238363329786807,
+        "end": "2026-10-17T10:18:49.889917+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "6b488632374b2b4b8ac737a8f43c36e47cb5c47ecf216446af9321b8c2b18fdf",
+        "beforeOutputSHA256": "b7fe5a4fb7fbfdfea604a20b342dd08ccfd04c47c327628b3af255269f6ea7ba",
+        "afterOutputSHA256": "b7fe5a4fb7fbfdfea604a20b342dd08ccfd04c47c327628b3af255269f6ea7ba",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "a5eada5f6483f201381b66fcb302700fa8f165472d7798e50f44906eb8886923"
+      },
+      {
+        "epoch": "baseline",
+        "name": "refresh",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--refresh-registration-areas"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:49.891647+00:00",
+        "wallS": 2.351735833042767,
+        "end": "2026-10-17T10:18:52.243427+00:00",
+        "exit": 0,
+        "stdout": "refreshed docs/plan/evidence/content-inventory.json registration Areas\n",
+        "stdoutSHA256": "4da6975006e72f94bd6288c0acd0d02ae871e2efb42287ca360e7ab47b94a9af",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "b7fe5a4fb7fbfdfea604a20b342dd08ccfd04c47c327628b3af255269f6ea7ba",
+        "afterOutputSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+        "outputUnchanged": false,
+        "sourceManifestSHA256": "a355df844f3a463e9142e84b0935a35cec690acb96492602eabd4ef874bc0103"
+      },
+      {
+        "epoch": "baseline",
+        "name": "refresh-check-current",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--refresh-registration-areas",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:52.245469+00:00",
+        "wallS": 2.349485042039305,
+        "end": "2026-10-17T10:18:54.594998+00:00",
+        "exit": 0,
+        "stdout": "docs/plan/evidence/content-inventory.json registration Areas are current\n",
+        "stdoutSHA256": "8b4f8a26e0ce7a58fd9a4785c477d2ad791bdc10c18fa05ed4553fa8d113f058",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+        "afterOutputSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "a355df844f3a463e9142e84b0935a35cec690acb96492602eabd4ef874bc0103"
+      },
+      {
+        "epoch": "baseline",
+        "name": "import-unrelated",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:54.597263+00:00",
+        "wallS": 2.3358534590224735,
+        "end": "2026-10-17T10:18:56.933162+00:00",
+        "exit": 0,
+        "stdout": "{\"exports\":[\"classifyInventoryText\",\"inventoryCapabilityResolver\",\"inventoryDslCapabilities\",\"inventoryJourneyCapabilities\"],\"sync\":true}\n",
+        "stdoutSHA256": "77f203958dc049717ff9a32e89487c329cc04dafa748f2971519393164a06409",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "c218377dc1911bf3c9b6c44eabe55c8c8abe3731bbb4785948349191c27cd7d3"
+      },
+      {
+        "epoch": "baseline",
+        "name": "import-absent",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:56.935509+00:00",
+        "wallS": 2.4354315000236966,
+        "end": "2026-10-17T10:18:59.370986+00:00",
+        "exit": 0,
+        "stdout": "{\"exports\":[\"classifyInventoryText\",\"inventoryCapabilityResolver\",\"inventoryDslCapabilities\",\"inventoryJourneyCapabilities\"],\"sync\":true}\n",
+        "stdoutSHA256": "77f203958dc049717ff9a32e89487c329cc04dafa748f2971519393164a06409",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "ef9c1f8d361d76a981d807fd7928c7126fd6b3d902a57a36200d6f6d48f2eca5"
+      },
+      {
+        "epoch": "baseline",
+        "name": "symlink-entry",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-link.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:18:59.375454+00:00",
+        "wallS": 2.3602667080122046,
+        "end": "2026-10-17T10:19:01.735767+00:00",
+        "exit": 0,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "ec9f64321012d3c07496bdab5655536030f9b1a1c99a016a6361215c68f87f01"
+      },
+      {
+        "epoch": "baseline",
+        "name": "catalog-failure",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:19:01.738160+00:00",
+        "wallS": 1.6902197920135222,
+        "end": "2026-10-17T10:19:03.428413+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "61265e947c984e1ec4e02680e12ce8107f59a2cac2ab893a6af84718c6b09f17",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "0ee2614d2d4ab300addee9c46640839f61e73c877856c98c7d27b7c23ba4f188"
+      },
+      {
+        "epoch": "baseline",
+        "name": "both-failures",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:19:03.430835+00:00",
+        "wallS": 1.6975362919620238,
+        "end": "2026-10-17T10:19:05.128407+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "61265e947c984e1ec4e02680e12ce8107f59a2cac2ab893a6af84718c6b09f17",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "bfc25118de1bfb62e5cebdd18fc957c39ad3cf705733982b3ced2b39f0600399"
+      },
+      {
+        "epoch": "baseline",
+        "name": "source-failure",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:19:05.130800+00:00",
+        "wallS": 2.4283838330302387,
+        "end": "2026-10-17T10:19:07.559229+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "0dc38fe8bfc5b8ddfb459e8cbef88fa1675c0863c2d2694b4ec052fa99992395",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "f7958863e7bba3c15e12c70b3be3f37e8235052568e39b5e49d92ad75386f706"
+      },
+      {
+        "epoch": "baseline",
+        "name": "import-source-failure",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-baseline",
+        "start": "2026-10-17T10:19:07.561529+00:00",
+        "wallS": 2.325043542019557,
+        "end": "2026-10-17T10:19:09.886617+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "66457411cbdae0408e9117522a0caeaaefca88284337eb67977a725945088640",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "f7958863e7bba3c15e12c70b3be3f37e8235052568e39b5e49d92ad75386f706"
+      },
+      {
+        "epoch": "final",
+        "name": "generate",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:10.457013+00:00",
+        "wallS": 2.9669806250021793,
+        "end": "2026-10-17T10:19:13.424057+00:00",
+        "exit": 0,
+        "stdout": "wrote docs/plan/evidence/content-inventory.json: 1209 entities, 199 beads\n",
+        "stdoutSHA256": "8b28733f9326cead4494ed6fd498f34e1cf9e0a55817b02208fe7c9a88bc4e35",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "cce6aa761aaff276275ad9ff8cc702cff0a59a57818daee36f429eeee518e715",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": false,
+        "sourceManifestSHA256": "1b7ced4815c5d9a7691975e42b54a45c28e7b07123e7bfd556c70b5a450410c9"
+      },
+      {
+        "epoch": "final",
+        "name": "check-current",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:13.428278+00:00",
+        "wallS": 2.5180109160137363,
+        "end": "2026-10-17T10:19:15.946341+00:00",
+        "exit": 0,
+        "stdout": "docs/plan/evidence/content-inventory.json is current\n",
+        "stdoutSHA256": "dd71741421fa680a35c9ac132e4c77a3526538fe88f4c1722b735261a8d8b4f3",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "1b7ced4815c5d9a7691975e42b54a45c28e7b07123e7bfd556c70b5a450410c9"
+      },
+      {
+        "epoch": "final",
+        "name": "check-stale",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:15.950490+00:00",
+        "wallS": 2.5316382499877363,
+        "end": "2026-10-17T10:19:18.482176+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "2ac6dc03a9ffd596e453252f29680a410a2cc781667f87a19359156439673bbe",
+        "beforeOutputSHA256": "b2fd113c4d8747f71d0e33693f2c81462c20a746d96756d5c9fa4daad3d63ab9",
+        "afterOutputSHA256": "b2fd113c4d8747f71d0e33693f2c81462c20a746d96756d5c9fa4daad3d63ab9",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "cf788dbffef3e4948e96fe11f11efd9fa12e70b1f5e2e31898ba14cc429660bb"
+      },
+      {
+        "epoch": "final",
+        "name": "refresh-check-stale",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--refresh-registration-areas",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:18.486319+00:00",
+        "wallS": 3.0798187910113484,
+        "end": "2026-10-17T10:19:21.566196+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "6b488632374b2b4b8ac737a8f43c36e47cb5c47ecf216446af9321b8c2b18fdf",
+        "beforeOutputSHA256": "b7fe5a4fb7fbfdfea604a20b342dd08ccfd04c47c327628b3af255269f6ea7ba",
+        "afterOutputSHA256": "b7fe5a4fb7fbfdfea604a20b342dd08ccfd04c47c327628b3af255269f6ea7ba",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "54f803f7c4ff3cd2f9544fa995d48061c888a4c9507a84dd132cdcccae9cae18"
+      },
+      {
+        "epoch": "final",
+        "name": "refresh",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--refresh-registration-areas"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:21.569937+00:00",
+        "wallS": 3.1095828330144286,
+        "end": "2026-10-17T10:19:24.679583+00:00",
+        "exit": 0,
+        "stdout": "refreshed docs/plan/evidence/content-inventory.json registration Areas\n",
+        "stdoutSHA256": "4da6975006e72f94bd6288c0acd0d02ae871e2efb42287ca360e7ab47b94a9af",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "b7fe5a4fb7fbfdfea604a20b342dd08ccfd04c47c327628b3af255269f6ea7ba",
+        "afterOutputSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+        "outputUnchanged": false,
+        "sourceManifestSHA256": "6c425f3b0f2abe2579f29dd6d00c63e78b70971a58772f4e6b259900959f2689"
+      },
+      {
+        "epoch": "final",
+        "name": "refresh-check-current",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts",
+          "--refresh-registration-areas",
+          "--check"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:24.683789+00:00",
+        "wallS": 2.6353087089955807,
+        "end": "2026-10-17T10:19:27.319151+00:00",
+        "exit": 0,
+        "stdout": "docs/plan/evidence/content-inventory.json registration Areas are current\n",
+        "stdoutSHA256": "8b4f8a26e0ce7a58fd9a4785c477d2ad791bdc10c18fa05ed4553fa8d113f058",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+        "afterOutputSHA256": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "6c425f3b0f2abe2579f29dd6d00c63e78b70971a58772f4e6b259900959f2689"
+      },
+      {
+        "epoch": "final",
+        "name": "import-unrelated",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:27.323229+00:00",
+        "wallS": 2.3171489170053974,
+        "end": "2026-10-17T10:19:29.640425+00:00",
+        "exit": 0,
+        "stdout": "{\"exports\":[\"classifyInventoryText\",\"inventoryCapabilityResolver\",\"inventoryDslCapabilities\",\"inventoryJourneyCapabilities\"],\"sync\":true}\n",
+        "stdoutSHA256": "77f203958dc049717ff9a32e89487c329cc04dafa748f2971519393164a06409",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "66ba849ea1a23c12258fa2f0b98d0d004e317770fb1dae32a67a5037f482f3c0"
+      },
+      {
+        "epoch": "final",
+        "name": "import-absent",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:29.644884+00:00",
+        "wallS": 2.4434668329777196,
+        "end": "2026-10-17T10:19:32.088403+00:00",
+        "exit": 0,
+        "stdout": "{\"exports\":[\"classifyInventoryText\",\"inventoryCapabilityResolver\",\"inventoryDslCapabilities\",\"inventoryJourneyCapabilities\"],\"sync\":true}\n",
+        "stdoutSHA256": "77f203958dc049717ff9a32e89487c329cc04dafa748f2971519393164a06409",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "964b35b92fcca904b18616554ac2df948d2dbe6f0860e48656530943a227a258"
+      },
+      {
+        "epoch": "final",
+        "name": "symlink-entry",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-link.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:32.092606+00:00",
+        "wallS": 2.3977336249663495,
+        "end": "2026-10-17T10:19:34.490387+00:00",
+        "exit": 0,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "0c5982c975afab535acc3f5d0732844fd789309ab2c0e42760a34460b4bd5907"
+      },
+      {
+        "epoch": "final",
+        "name": "catalog-failure",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:34.494265+00:00",
+        "wallS": 1.8178348750225268,
+        "end": "2026-10-17T10:19:36.312139+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "05d851b5adcfd836c1cfd4d97ebb934e599a88ba7829a7e97cfa1a2f1d013c77",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "6470b33716b8b38fcaac7835a5536c8496d3c1352b01efdc7cd4f78ab32e9e15"
+      },
+      {
+        "epoch": "final",
+        "name": "import-skips-catalog",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:36.315867+00:00",
+        "wallS": 2.2035739170387387,
+        "end": "2026-10-17T10:19:38.519483+00:00",
+        "exit": 0,
+        "stdout": "{\"exports\":[\"classifyInventoryText\",\"inventoryCapabilityResolver\",\"inventoryDslCapabilities\",\"inventoryJourneyCapabilities\"],\"sync\":true}\n",
+        "stdoutSHA256": "77f203958dc049717ff9a32e89487c329cc04dafa748f2971519393164a06409",
+        "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "6470b33716b8b38fcaac7835a5536c8496d3c1352b01efdc7cd4f78ab32e9e15"
+      },
+      {
+        "epoch": "final",
+        "name": "both-failures",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:38.523200+00:00",
+        "wallS": 1.7534206249983981,
+        "end": "2026-10-17T10:19:40.276656+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "05d851b5adcfd836c1cfd4d97ebb934e599a88ba7829a7e97cfa1a2f1d013c77",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "3eb1ea195aa975870b95444906636aa34a743dcee143b1a5c12bcf9d9e3ead06"
+      },
+      {
+        "epoch": "final",
+        "name": "source-failure",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/content-inventory.ts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:40.280354+00:00",
+        "wallS": 2.3177322919946164,
+        "end": "2026-10-17T10:19:42.598132+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "70a17168f2c05896c3b4d258d1d782261a2175767298b455c2fec66d63860209",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "58848b7640f6fc41d48f825dedf886a06480beaf0b39bcde00f9cb9437ebf86c"
+      },
+      {
+        "epoch": "final",
+        "name": "import-source-failure",
+        "command": [
+          "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-bootstrap796/node_modules/.bin/tsx",
+          "scripts/parity-import.mts"
+        ],
+        "cwd": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796/shadow-final",
+        "start": "2026-10-17T10:19:42.602280+00:00",
+        "wallS": 2.105152125004679,
+        "end": "2026-10-17T10:19:44.707476+00:00",
+        "exit": 1,
+        "stdout": "",
+        "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSHA256": "f6835cea5a46127013cb49617a10f8ac12f5ab1ad0472581690c55567bcbd9d1",
+        "beforeOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "afterOutputSHA256": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+        "outputUnchanged": true,
+        "sourceManifestSHA256": "58848b7640f6fc41d48f825dedf886a06480beaf0b39bcde00f9cb9437ebf86c"
+      }
+    ]
+  },
+  "processCleanup": [
+    {
+      "name": "baseline",
+      "pgid": 21527,
+      "absent": true
+    },
+    {
+      "name": "final",
+      "pgid": 22223,
+      "absent": true
+    },
+    {
+      "name": "parity",
+      "pgid": 23157,
+      "absent": true
+    },
+    {
+      "name": "review",
+      "pgid": 24040,
+      "absent": true
+    },
+    {
+      "name": "knip",
+      "pgid": 24630,
+      "absent": true
+    },
+    {
+      "name": "preservation",
+      "pgid": 25513,
+      "absent": true
+    }
+  ],
+  "fallout": "Knip passed; no unused file/export/dependency introduced. Existing tests are byte-identical, zero test files/lines/jsdom delta.",
+  "retrospective": {
+    "line": {
+      "retrospective": "2026-10-17",
+      "phase": 5,
+      "bead": "hv-umm2.796",
+      "covers": [
+        "hv-umm2.795"
+      ]
+    },
+    "prefixProof": {
+      "prefixSHA256": "876298e64cf1499455bb8f6983ea46f8fc1c8ad35d4c6648d7747ff19770b2d4",
+      "appendedLineSHA256": "519b64349b33c59c429fab657825d83ea54e2afaad2586c43459aa5e4f7109a2",
+      "prefixPreserved": true
+    },
+    "sage261FullReport": {
+      "role": "Fresh read-only Sage D19 next-cut audit",
+      "status": "COMPLETE_BOUNDED_SOURCE_BACKED_CLI_BOOTSTRAP_PROTOTYPE_REQUIRED_NEXT",
+      "source": "c8af4c075118dda8643d12551f972732a3b30686",
+      "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260",
+      "actualOwnStartUtc": "2026-10-17T10:07:59Z",
+      "actualOwnStartBeforeBriefRead": true,
+      "completedAtUtc": "2026-10-17T10:13:03Z",
+      "scope": "Interim Phase5 gate46 D19 audit after795; one uncoveredfriction record andtwo comments. Parent alone files/claims/implements/delivers. No finalQAretrospective orphaseacceptance credit.",
+      "fullsuite": {
+        "status": "ACTUAL_FULLSUITE_PASS_D19_BUDGET_FAIL_UNWAIVED",
+        "at": "2026-10-17T10:05:16.302026+00:00",
+        "source": "c8af4c075118dda8643d12551f972732a3b30686",
+        "originalTool": 20057,
+        "actualCollectedTerminal": "136777",
+        "actualExit": 0,
+        "allInputFilesMatchFinal": 6147,
+        "externalInputs": {
+          "reporter": {
+            "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/module-diagnostics-reporter.mjs",
+            "sha256": "e78806bccf23a1b4c71aa6fbdbe99b028a9198e6410025ce94c9c73f613d4c3f"
+          },
+          "reporterApi": {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/node_modules/vitest/dist/chunks/reporters.d.DVUYHHhe.d.ts",
+            "sha256": "f674236a803d2856a3f2efe4ef536d62d9e435c5b4d08079f7387756bb31e529"
+          },
+          "reporterImplementation": {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/node_modules/vitest/dist/chunks/cli-api.DuT9iuvY.js",
+            "sha256": "724787b27a4e45a7d49c29767cb541f8574a7eb14aa7e04c088be4e210d73e69"
+          },
+          "reporterCli": {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/node_modules/vitest/dist/chunks/cac.CWGDZnXT.js",
+            "sha256": "01540910000c80f04ae3a92d952f2f8683d348b901572257b3b5ee53992b937e"
+          }
+        },
+        "runnerSHA256": "5e674ae077ea45582aa45a18d924f420ecf827e7fd9e03b831ae772cf5ac939f",
+        "workers": 2,
+        "files": 440,
+        "tests": 12452,
+        "VitestDurationS": 83.83,
+        "testStageS": 84.7,
+        "wallS": 90.52269595803227,
+        "childCpuS": 205.60375,
+        "load": [
+          6.38037109375,
+          7.921875,
+          7.43359375
+        ],
+        "loadEnd": [
+          7.314453125,
+          7.78076171875,
+          7.421875
+        ],
+        "PGAbsent": 41282,
+        "D19BudgetS": 60,
+        "D19Satisfied": false,
+        "rawLogSHA256": "4c711846fc6d03e18013189030bd1f794d6245a09e33fe567f1b747460812a0f",
+        "rawResultSHA256": "00d2a1f99ba715e2e3fd3fb3ecded3af7e12803c4eb03a47e460cbe93321a7d7",
+        "rawDiagnosticSHA256": "93f7320a51d52fd727a95e6056f9dc8cfe98e60e9d88f3dcb0dadc3637576170",
+        "profileSHA256": "35f61e0597bf98d2cd45b3829474f72451473c2791a7d9be4eeea0ffccd431d9",
+        "phaseAcceptance": false,
+        "next": "Continue fullphase acceptance ifbudgetpasses; otherwise requiredbounded Sage audit/source-backednextcut, no unchangedaggregate retry orwaiver."
+      },
+      "comparison": {
+        "D19": {
+          "targetS": 60,
+          "actualVitestS": 83.83,
+          "actualReviewTestStageS": 84.7,
+          "vitestExcessS": 23.83,
+          "stageExcessS": 24.7,
+          "stageExcessPercent": 41.166666666666664,
+          "unwaived": true
+        },
+        "gate": {
+          "bead": "hv-umm2.795",
+          "dependenciesS": 4.933,
+          "reviewGateS": 21.957,
+          "combinedS": 26.89,
+          "targetS": 60,
+          "actualExit": 0,
+          "qualification": "One candidate, not representative >=10-code-candidate median; second supplied nativecomment carries exact CI stage outcomes."
+        },
+        "release": {
+          "lastTarget": "acb63a8cbbe1641752d62c2ad9c4bb2931af1524",
+          "lastCompletedS": 935.632,
+          "dependenciesS": 4.969,
+          "reviewFullS": 140.923,
+          "fuzzS": 789.638,
+          "targetS": 300,
+          "staging": "c8af4c075118dda8643d12551f972732a3b30686",
+          "release": "acb63a8cbbe1641752d62c2ad9c4bb2931af1524",
+          "lagCommits": 1,
+          "currentState": "pending",
+          "activeRun": "01a1494d-3bc9-7de1-a10c-6686140f1cca",
+          "holds": [],
+          "promotionPause": null,
+          "qualification": "Latest completed actual935.632>300. Current c8af run running343.108s at snapshot, not completed/failure/convergence. No new sharedworkflowcause established or3comparable-load trigger inferred; prior weighted-fuzz/engine performance obligations/dispositions remain, cost notdeclared unavoidable."
+        },
+        "review": {
+          "actualS": 14.648450209002476,
+          "targetS": 45,
+          "qualification": "795 test-only bounded change; not typical one-filelogic benchmark."
+        },
+        "focused": {
+          "actualComplete795ModuleExternalS": 9.51621587498812,
+          "targetS": 10,
+          "actualCompleteModuleTestStageS": 4.7,
+          "adjacentTwoModuleExternalS": 6.997727250040043,
+          "qualification": "Complete795file9.516external<10; adjacent6.998 is2module scope; no false comparable threeconsecutive overruns."
+        },
+        "795Target": {
+          "metric": "Complete inventory module review test-stage wall including collection; frozen before edits",
+          "baselineS": 7.8,
+          "finalS": 4.7,
+          "observedImprovementPercent": 39.743589743589745,
+          "requiredPercent": 10,
+          "all92CaseNamesAndStatusesPreserved": true,
+          "qualification": "One ordered before/after observation at unchanged2workers. Cache/order and changing host load prevent controlled causal or future/fullsuite guarantees. Compiler setup moved into collection is counted by chosen whole boundary. Actual import3.45->3.75s; Vitest7.04->3.85s. No timing assertion added."
+        },
+        "waiting": "795 implementation5.029876833minutes is conservative predispatch->commit window, observedhelperstart09:52:28.949338 occurred afterbriefread peractual note; retain explicit distinction. Parent binds finalcommit tail13.835402externally. Two comments record certification/review/cleanup/capacity. No new recurring wait defect in emptyfriction record."
+      },
+      "profileQualification": {
+        "cumulativeFields": {
+          "collectDuration": 62479.14864500006,
+          "setupDuration": 645.6488669999708,
+          "prepareDuration": 122.86766800004727,
+          "environmentSetupDuration": 8843.342169000254,
+          "duration": 90895.60987599993
+        },
+        "defaultTransformS": 14.2,
+        "allImportDurationMapsEmpty": true,
+        "meaning": "Collection includes imports andsuitecallbacks. Cumulativeworker times are not serialwallsegments orremovablecost. Exactsource8cataloguseclosure proves unnecessary eager runtime dependency forpublic API imports, not itsindividual duration.",
+        "causality": "Prior106.46->current83.83 involves source/cache/order/hostvariation; whole23second change is not attributed solely795. Current body23.592ms vscollect2496.830ms confirms distinct remaining setupwork, not an invitation to repeat fixturebodycut.",
+        "host": "18logicalCPU64GiB,70percentmemoryfree,load6.380->7.314,spareobservedcapacity; preserve D17, nohardloadtarget orcapacitywaiver."
+      },
+      "uncoveredCoverage": [
+        {
+          "bead": "hv-umm2.795",
+          "nativeStatus": "closed",
+          "resolution": "completed",
+          "frictionEntries": 0,
+          "commentsRead": 2,
+          "currentSource": "c8af4c075118dda8643d12551f972732a3b30686",
+          "disposition": "Delivered source795 immutable compilerfixture improvement andfreshparent-qualifiedcoldreview recognized; no additionalfixtureduplicatework. Real new collectionboundary proposed. Bothclaim/contractscope anddelivery/review/CI/cleanup comment evidence retained."
+        }
+      ],
+      "proposals": [
+        {
+          "key": "D19-INVENTORY-CLI-CATALOG-BOOTSTRAP",
+          "title": "Load inventory runtime catalogs at the direct CLI boundary while preserving source analysis APIs",
+          "priority": 1,
+          "runNext": true,
+          "kind": "bounded reversible internal tooling prototype, source-backed import/setup separation",
+          "labels": [
+            "introspection",
+            "test-cut",
+            "core-review"
+          ],
+          "Areas": [
+            "scripts/content-inventory.ts",
+            "scripts/content-inventory-catalogs.ts (new exact eight-value bootstrap only)",
+            "scripts/content-inventory*.test.ts (existing127cases unchanged; new synthetic public CLI/import parity contract only if needed)",
+            "docs/plan/evidence/friction/<own-bead>.json",
+            "docs/plan/evidence/measurements/<own-bead>.json",
+            "docs/plan/evidence/pre-existing/<own-bead>.md",
+            "docs/plan/evidence/reviews/<own-bead>.md",
+            "docs/plan/evidence/introspection.jsonl (one auditcoverage line covers795)"
+          ],
+          "sourceEvidence": [
+            {
+              "path": "scripts/content-inventory.ts",
+              "lines": "48-62",
+              "observation": "Only runtime application imports at this root are the eight catalogs at52-60; ContentStatus55 is type-only. Other runtime imports are TypeScript and Node builtins."
+            },
+            {
+              "path": "scripts/content-inventory.ts",
+              "lines": "104-197,941-1000,1083-1131",
+              "observation": "Capability resolver constructs CompilerHost/Program/TypeChecker and queries symbols/source only. Classifier uses real eager filesystem/source availability and metadata. These remain intact; compiler source reading does not execute catalog modules."
+            },
+            {
+              "path": "scripts/content-inventory.ts",
+              "lines": "1134-1270",
+              "observation": "Every use of all8catalogbindings is exclusively inside buildEntities. Exact uses: CARDS1153,DREAMSIGNS1179,AVATARS1192,DREAMWELL_CARDS1196,FIGMENTS1209,TRANSFIGURATION1223,EXPLORATION1236,APOLLYON1255."
+            },
+            {
+              "path": "scripts/content-inventory.ts",
+              "lines": "1662-1791",
+              "observation": "buildEntities called only from private main1702. Direct CLI guard1791 is exact resolve(argv[1])===fileURLToPath(import.meta.url), gated argv[1]defined. Refresh, normal generation,--check/status/writes and pretty/order all remain existing code."
+            },
+            {
+              "path": "scripts/content-inventory.test.ts",
+              "lines": "2;795fixture current459lines",
+              "observation": "Imports public classifyInventoryText/inventoryCapabilityResolver/inventoryDslCapabilities/type only; preserve current79592cases and synthetic fixture map bytes."
+            },
+            {
+              "path": "scripts/content-inventory-journey.test.ts",
+              "lines": "1-113",
+              "observation": "Imports public resolver/journeycapabilities/types only; real synthetic filesystem APIs use constructor states, aliases,noncallable,registration refusal and fresh source snapshot; all18cases kept."
+            },
+            {
+              "path": "scripts/content-inventory-variants.test.ts",
+              "lines": "1-80",
+              "observation": "Imports classifier only; all17cases kept."
+            },
+            {
+              "path": "package.json;tsconfig.node.json;src/testing/setup-dom.ts;vitest.config.ts",
+              "lines": "package1-22;node config full;setup1-48;vitest1-115",
+              "observation": "Tooling ESM/ES2022 supports conditional top-level await; existing perfile reset andmock isolation/2workers are binding and unchanged."
+            }
+          ],
+          "currentActualMeasuredCost": {
+            "moduleDiagnostics": [
+              {
+                "path": "scripts/content-inventory.test.ts",
+                "environmentSetupDuration": 0.03600000000005821,
+                "prepareDuration": 0.0766250000015134,
+                "collectDuration": 2496.829749999997,
+                "setupDuration": 0.7652079999970738,
+                "duration": 23.59229100000084,
+                "importDurations": {}
+              },
+              {
+                "path": "scripts/content-inventory-journey.test.ts",
+                "environmentSetupDuration": 0.03600000000005821,
+                "prepareDuration": 0.034292000003915746,
+                "collectDuration": 1003.4062910000066,
+                "setupDuration": 0.534749999998894,
+                "duration": 540.5491669999974,
+                "importDurations": {}
+              },
+              {
+                "path": "scripts/content-inventory-variants.test.ts",
+                "environmentSetupDuration": 0.03600000000005821,
+                "prepareDuration": 0.039165999995020684,
+                "collectDuration": 671.0861670000013,
+                "setupDuration": 0.828416999996989,
+                "duration": 13.080334000005678,
+                "importDurations": {}
+              }
+            ],
+            "collectionSumMs": 4171.322208000005,
+            "bodySumMs": 577.2217920000039,
+            "cases": 127,
+            "qualification": "Actual current fullsuite module diagnostics, not a separate focused baseline, not peredge attribution, not removable cost or wall savings. importDurations all empty. Collection includes imports AND suite callbacks;127cases includes79592 plus journey18 plus variants17."
+          },
+          "finiteAdmissionAndImplementation": [
+            "Before edits, freeze the exact source/runner/reporter and complete three-module command at unchanged2workers as the chosen affected whole test-stage wall metric INCLUDING collection/setup; collect actual baseline receipt and cases. This is the affected boundary even if one test becomes relatively cheap. Do not use assertion time or sum of collect diagnostics as the target.",
+            "Verify whole-source literal-binding census: all8runtime catalog values have exactly one use each inside buildEntities and no application import outside the eight static declarations. Confirm the three direct importing test modules plus knip entry/CLI documentation are the complete nonCLIconsumer census; no other app source imports the tool. If a hidden consumer contradicts this proof, stay within a finite source-first correction before editing, without an approval hold.",
+            "Create one small catalog bootstrap with the same eight static import declarations in original order: APOLLYON_INCARNATIONS,AVATARS,CARDS,DREAMSIGNS,DREAMWELL_CARDS,EXPLORATION,FIGMENTS,TRANSFIGURATION (original52-60). Export one inferred typed object carrying the exact original values, in this order; no clones,sorting,serialization,UUID substitution,registration calls,facade barrel ornew catalog factory. ContentStatus remains type-only.",
+            "At the current tool root, compute exactly the existing direct-CLI identity predicate (argv[1] defined then resolve(argv[1])===fileURLToPath(import.meta.url)); conditionally await that bootstrap only when true, BEFORE original ROOT/probe/map initialization executes (and therefore before941-1000 source probes). Keep TypeScript/Node imports first. ESM/ES2022 is already configured; no config changes. No catalogs are awaited for nonCLIimport callers.",
+            "Pass the typed exact8value object through private main to private buildEntities and destructure only there. Preserve explicit entity loop order CARDS,DREAMSIGNS,AVATARS,DREAMWELL,FIGMENTS,TRANSFIGURATION,EXPLORATION,APOLLYON. Do not enumerate the bootstrap namespace or substitute object iteration. Bottom main invocation uses the SAME previously computed identity outcome and requires realcatalogobject. No empty/fake fallback.",
+            "Keep all six public named declarations at the same source module: InventoryCapabilityForm,InventoryCapabilityResolver,inventoryCapabilityResolver,inventoryDslCapabilities,inventoryJourneyCapabilities,classifyInventoryText. Names/signatures/references/definitions stay unchanged; public functions remain synchronous. Conditional module evaluation may await only direct CLI; native ESM import settlement is retained. Keep every eager real source/compiler probe and classifier/descriptor/planner/pretty/refresh logic bytewise apart from typed argument plumbing.",
+            "Do not catch/relabel failures or change exit handling. Original catalog bootstrap must finish before source probes for direct CLI, preserving catalog initializer order and catalog-error precedence over source-probe errors. Unrelated application runtime modules/engine cycles/registration getter tables stay untouched. TLA rejected import must propagate as failed CLI module evaluation; qualify stack filenames separately from failure class/message/status/stdout behavior.",
+            "If any same-contract preservation fails, or chosen full3module boundary gains less than10percent, revert this prototype. Do not expand into general engine bootstrap or a new opaque module loader; resolve the bounded failed hypothesis and return exact next source unknown."
+          ],
+          "retainedUniqueContracts": [
+            "All127existing expanded test names/outcomes, including79592cases/90fixtureliteral inputs/84assertionexpressions/17namespacedstates. No tests removed, compiler defaults mocked, reset weakened orreal source availability replaced by a fixture.",
+            "All public source-only capability resolution: aliases/type-only reexports,missing/private/noncallable exports,pending lifecycle and every stale alternative,semantic option variants,registered journey factory/constructor matching,readonly fresh source snapshots.",
+            "Classification and metadata references/order, source ROOT resolution and probes against actualengine modules,duplicate/unknown tag checks and real existing/new availability. Do not convert eager probe state to lazy/memoized/injected synthetic results.",
+            "Direct CLI identity behavior for argv absent, importedmodule with unrelated argv, normal direct path and same resolve/fileURL semantics (including existing symlink behavior). Import must not invoke main/writefiles; direct invocation still loads actualcatalogs before sourceprobes.",
+            "Generation entity UUIDs/order,source object identity,planner assignments/edges/areas,generatedBy scripts/content-inventory.ts,pretty bytes/newline,output target,normal and--check exit/status/stdout/write rules; refresh-registration-areas graph-preserving path likewise.",
+            "Historical hv-n5lj.15 cycle/load-time invariant retained: do not move initialization into engine registries or build namespace objects inside engine cycles. New bootstrap is scripts-only and catalogs do not import scripts/content-inventory."
+          ],
+          "functionalParityProof": [
+            "Provide a literal import/binding/use map and exact diff proving all8catalog root declarations move verbatim in originalorder to one bootstrap; inferred types keep readonly value shapes and original object references. Existing private entity loops and CLI behavior bytes unchanged except arguments, so use sites retain semantic values and order.",
+            "Re-run complete3modules with exact127case names,statuses,and nofixture/assertion changes. Source-only public importing boundary has no alternate runtime catalog route: its remaining valueimports are TypeScript+Node builtins; compiler reads source AST without execution. Show current static/dynamic import closure and no cycle back to tool root.",
+            "In source-exact scratch shadow copies (baseline/final, same relative scripts/content-inventory.ts and same catalogs/probe files), collect actual normal-generation output bytes/stdout/exit and compare exact output hashes. This is manual parity evidence, NOT a committed mutable production-data assertion or approval to regenerate tracked projection.",
+            "Run --check on matching generatedscratchoutputs (exit0,no write) and deliberately stale outputs (exit1,no write), refresh-registration-areas with andwithout --check on same fixtureprojection preserving graph. Preserve stdout/stderr cause/status/no partialwrite for failingcatalog/source fixtures; demonstrate catalogfailure precedes sourcefailure in direct CLI, while nonCLIimport skipscatalogexecution and keeps real sourceanalysis failures. No catches to manufacture parity.",
+            "Validate nonCLIpublic export availability/synchronous returncontracts and direct identity branches with isolated synthetic CLI/import fixtures or manual source-bound receipt. Do not add private implementation tests merely asserting helper filename orbound import table."
+          ],
+          "prerequisites": {
+            "semantic": [
+              "hv-umm2.795 already closed/completed at c8af; current127contracts and canonicalsourceanalysis are baseline"
+            ],
+            "newUnfinished": [],
+            "serialization": "Parent fresh native census/Areas required before filing. Serialize only incompatible edits to catalog imports/directentry/private buildEntities/main, not all users of scripts/ orsharedfilename. No known new active writer established by this read-only audit.",
+            "finalJoin": "Parent adds delivered improvement to hv-umm2.46 final acceptance join before admission; no gatecredit until closedcompleted/currentD19 andremainingQA obligations met."
+          },
+          "validation": [
+            "npm test -- scripts/content-inventory.test.ts scripts/content-inventory-journey.test.ts scripts/content-inventory-variants.test.ts at2workers, complete before/after chosen wholeboundary INCLUDINGcollection>=10percent orrollback; source manifests/actualterminals/receipts/loadCPU/cacheorder qualifications and ownedPGcleanup.",
+            "Bounded scratch CLI/import/parity checks above, npm run review and npm run knip; real source probes/compiler and testreset unchanged.",
+            "This is a bounded internal CLI dependency refactor, not a harness/config/applicationarchitecture change. Local review:full is required only if actual implementation broadens into test infrastructure, repositorywideconfig orcrosscutting architecture per AGENTS.md Verification; do not impose an invented mandatory fullreview orapprovalgate on the bounded prototype. Tollgate retains its normal gates/releases.",
+            "Fresh read-only fork_turns:none Codex review exactbase/head/diff andwholechangedmodules/parity evidence, marked core-review for this semantic toolingboundary; parent verifies findings/dispositions/certifieddelivery.",
+            "After actual accepted cut, parent collects one justified current fullsuite under unchangedD17 andfrozenreporter. If still>60, nextsource-backedcut obligation remains; no unchangedretry orwaiver."
+          ],
+          "savings": "UNKNOWN; no peredge timing required as a prerequisite for filing this reversible source-backed prototype. Actualwholeaffected>=10includingcollection orrollback is mandatory duringimplementation. No forecast that thisalone reaches60."
+        }
+      ],
+      "priorKnownSourceApplicableDiagnoses": {
+        "sourceApplicability": "All54current hashes mechanicallyverified;53unchanged,only795testchanged andfreshparentaccepted. Prior collection/rejection conclusions reused as qualified facts.",
+        "collectionDiagnoses": [
+          {
+            "area": "battle-presentation.test.tsx3580.386mscollect",
+            "source": "value createEngine barrel at11; fixture-providers77 also same barrel. engine/index16-21 reexports content-catalog; content-catalog1-9 imports full content groups.",
+            "qualification": "Real statically reachable eager dependency. Not proof entire3580ms comes from catalog or leaf substitution saves it. Production presentation/card model also imports runtime/card-type-remap with eager CARDS/FIGMENTS; no standalone guessed leaf-import speed bead."
+          },
+          {
+            "area": "journey-deck-entry.test.ts3383.933mscollect",
+            "source": "test23/77 imports broad real registerGameProviders only for cleanup; register-game-providers loads battle-init-provider->journey-content-engine->engine content functions. Test6 itself needs real createJourneyTransfigurationProvider->journey-content-engine; character contract imported at1 uses journey-on-gain-fixtures broad clear too.",
+            "qualification": "Replacing one cleanup import does not remove independent production source authority paths. Preserve public transition/canonical/source validation and do not substitute textless fixtures to evade them."
+          },
+          {
+            "area": "journey-committed-purge-prevention.test.ts3331.411mscollect",
+            "source": "vi.mock modifier-registry26-38 uses importOriginal, evaluating actual fixed catalog registry before replacing singleton with explicit two synthetic modifiers; real canonical codec reads same mocked registry. modifier-registry1-64 imports authored sources and308-351 instantiates production registry.",
+            "qualification": "Eager original evaluation is source-backed; factory extraction would alter module/cycle boundaries and requires independent cause/coverage/initializer validation. No measured peredge cost or safe speed cut proven here. Preserve mock isolation, canonical codec/refusal/reload/LOAD tests; no ad hoc decode."
+          },
+          {
+            "area": "inventory2901.356mscollect",
+            "source": "content-inventory imports allcontent groups54-60; top-level source probes941-948 and primitive initialization979-982 construct real compiler and probe sources before synthetic tests.",
+            "qualification": "Existing eager I/O and compiler are demonstrated source causes of import work. Do not attribute2901ms separately; classifier existing/new requires actual probe map. First proposed cut stays in test fixtures; no careless lazy-cycle/extraction or mutabledata replacement."
+          },
+          {
+            "area": "MobileBattleScreen.controls2641.484mscollect",
+            "source": "synthetic makeView/cards fixture renders full actualscreen. CardView value imports card-database/glossary/materializedfigments; runtime card-type-remap imports catalogs.",
+            "qualification": "Current interaction/drop/geometry callbacks are distinct public contracts. Mocking away actual screen invalidates those boundaries; no speculative pruning from duration."
+          },
+          {
+            "area": "presentation-items2346.955mscollect",
+            "source": "test12 and engine-battle-presentation.fixtures7 value engine barrel; real engine-card-model->runtime/card-type-remap remains eager.",
+            "qualification": "Do not claim test-only leaf import removes all catalogs. Retain authoritative observation snapshots, hidden identity, continuations and notices."
+          },
+          {
+            "area": "primitives2284.243mscollect/20088.771mstests5929assertions",
+            "source": "contracts.test6 eager glob. Most ../../../engine references inside contracts resolve src/engine/engine.ts leaf (not src/engine/index.ts); path-depth distinction verified. top costly selected bodies store-counters145-158 realresponse dissolve/bounce; random-pool239-259 covers side/mixed/holder/viewer/two hidden candidates.",
+            "qualification": "No wholesale branch reduction: unique public reset/payment/hidden/invariant/reload cases. Prior rejected event-copy continuations remain. Count is not budget; constructor/setup differences need exact branch mapping before cutting."
+          }
+        ],
+        "rejectedCuts": [
+          {
+            "area": "native lease/order/reconciliation suites",
+            "actualAssertionMs": 11264.371874999975,
+            "reason": "Distinct kernel arrival order, single-slot peer interoperability, crash/EOF recovery, replacement identity/receipt preservation, post-signal ambiguity/zombie/descendant checks and interrupted public CLI quarantine. Source establishes unique safety boundaries; test count alone is not redundancy."
+          },
+          {
+            "area": "run-scenario-boundaries actual signal6case matrix",
+            "actualAssertionMs": 3517.157750000002,
+            "reason": "Keep all actual SIGINT/SIGTERM initial/interruption/concurrent lifecycle cases in proposed cut. Mapping130/143, cached cleanup, diagnostic failure and contained descendants are distinct execution checks; no arbitrary matrix deletion."
+          },
+          {
+            "area": "tournament actual Node worker lifecycle",
+            "actualAssertionMs": 6337.929208000001,
+            "reason": "Unique real bootstrap, partialprefix cancellation,1to2worker resume digest equality and invalid game shutdown. Direct game/replay tests do not prove worker settlement. Baseline-worker-leg substitution could be investigated separately, but no currently measured phase-specific reduction supports filing it as a verified speed fix."
+          },
+          {
+            "area": "core mixed targeted fuzz fullgames",
+            "actualAssertionMs": 3462.8229580000116,
+            "reason": "Counters account actual emblem/Dreamwell/materialized events and partial failure. fuzzEngineCatalog/randomDeck always combine broad FUZZ_SYNTHETIC with provided pool; merely shrinking pool.cards does not remove that mix. No fake engine or disabled invariant/replay substitution authorized."
+          },
+          {
+            "area": "plan-source-packet CLI",
+            "actualAssertionMs": 2740.693459999995,
+            "reason": "Current six tests pin exact byte reconstruction, UTF8 boundaries, immutable commit versus replace refs/current epochs, no writes, no partial stdout and restart. Parser-format invalid values have some shared branches, but1340ms rejection family alone is insufficient reason to lose distinct external CLI contracts or export private helpers."
+          },
+          {
+            "area": "closed event-copy continuations",
+            "actualAssertionMs": 2624.0547089999745,
+            "reason": "Actual prompt/rollback/reload terminal loop; temporary/banishment lifetimes, hidden/persistent histories and dormant stopping listeners are different safety guards. Retain them; source complexity/case count alone does not justify pruning."
+          },
+          {
+            "area": "relax module reset/mock isolation or change worker budgets",
+            "reason": "setup-dom resets registry perfile and config explicitly isolates mock callers to prevent cached mock contamination. Preserve both; do not hide collectioncost by sharing mutable modules."
+          },
+          {
+            "area": "unchanged aggregate retries",
+            "reason": "Current actual pass exceeds60; one postactualrepair aggregate already collected. Next action is bounded test-cut, no retry for favorable source/cache/load lottery."
+          },
+          {
+            "area": "pure leaf-import quick fix as sufficient optimization",
+            "reason": "Verified alternate catalog paths remain in real display/source-authority providers, so no supported removablecost or >=10% claim. Keep useful source diagnosis for a separately bounded actual fix."
+          },
+          {
+            "area": "factory/catalog extraction during this audit",
+            "reason": "Source-side module boundary and cycle semantics require a separate bounded design/validation. Historical hv-n5lj.15 initializer/cycle invariants must survive; this audit authorizes no source changes."
+          }
+        ],
+        "updatedDisposition": "The former factory/catalog-extraction question is now bounded by an exact scripts-only8catalog CLI bootstrap proposal with finite admission/parity proof. General engine/factory/registry separation stays unproven and is not filed. Alternate catalog paths in actual presentation/providers remain, so guessed leafimport swaps are not proposed as adequate cuts."
+      },
+      "newRecurringWorkflowFindings": [],
+      "newTriggerDispositions": [],
+      "draftRetrospectiveLine": {
+        "retrospective": "2026-10-17",
+        "phase": 5,
+        "bead": "PARENT_BIND_ACTUALNEXTBEAD",
+        "covers": [
+          "hv-umm2.795"
+        ]
+      },
+      "requiredNext": "Parent independentlyqualifies freshscope/nativecensus/overlap; file onebounded D19-INVENTORY-CLI-CATALOG-BOOTSTRAP testcut/introspection/core-review linked finalgate; claim and run oneimplementationhelper. Freeze actual whole3module baseline beforeedit; preserve exact publicAPI/directCLI/canonicaloutput/initializererrorordering and realsourceprobes. Require>=10whole3module includingcollection orrollback. No budgetapprovalhold/peredge-prerequisite/unchangedaggregate retry.",
+      "validationClassification": "Bounded internal CLI module boundary uses focused3module+CLIparity/npmreview/knip andfreshCodexcoldreview. AGENTS requires localreview:full only foractualtestinfra/config/crosscuttingarchitecture scope; thisproposal does not alterthose. Tollgate normal CI/release remain. If implementation widens into suchscope, do requiredfullcheck underD17 rather thaninferapprovalhold.",
+      "coverage": {
+        "source": "c8af4c075118dda8643d12551f972732a3b30686",
+        "actualOwnStartUtc": "2026-10-17T10:07:59Z",
+        "actualStartBeforeBriefRead": true,
+        "sourceBindings": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/AGENTS.md",
+            "repoPath": "AGENTS.md",
+            "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+            "semanticReadRanges": "1-145 full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/README.md",
+            "repoPath": "docs/plan/README.md",
+            "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+            "semanticReadRanges": "rg targeted phase/workflow/metrics references; earlier qualified same-source facts reused"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/decisions.md",
+            "repoPath": "docs/plan/decisions.md",
+            "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+            "semanticReadRanges": "520-590,762-828; applicable D17/D19/D20/D42"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/workflow.md",
+            "repoPath": "docs/plan/workflow.md",
+            "sha256": "ad8191eed308ea4dd6809e400bc6e688d481d26d9c69d2c3e6b15b7d1382761c",
+            "semanticReadRanges": "1293-1465,1850-1915,1139-1170; targeted search other sections"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/phase-5-content.md",
+            "repoPath": "docs/plan/phase-5-content.md",
+            "sha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+            "semanticReadRanges": "340-405,619-646; applicable phase gate"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/evidence/metrics.md",
+            "repoPath": "docs/plan/evidence/metrics.md",
+            "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+            "semanticReadRanges": "1-100,1108-1150 plus targeted budget matches; remainder not reread"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/vitest.config.ts",
+            "repoPath": "vitest.config.ts",
+            "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+            "semanticReadRanges": "1-115 full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/testing/setup-dom.ts",
+            "repoPath": "src/testing/setup-dom.ts",
+            "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+            "semanticReadRanges": "1-48 full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory.ts",
+            "repoPath": "scripts/content-inventory.ts",
+            "sha256": "6349a388cea9ed8678a7d2ffe2e8da0fba72f0957c764adf9e6d546f690094e7",
+            "semanticReadRanges": "48-239,480-505,925-1278,1662-1791 plus whole-file binding/definition/reference searches; unchanged rule/metadata/planner middle not semantically reread"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory.test.ts",
+            "repoPath": "scripts/content-inventory.test.ts",
+            "sha256": "b565ea21745aa87d19935a83ee2cfad38a66845058349a790a1d735b63bc8635",
+            "semanticReadRanges": "1-85,235-295,390-459 with displayed truncation recovery needed for 429-459 if editing; remaining795fixture preservation reused from qualified source audit, not fresh semantic reread"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory-journey.test.ts",
+            "repoPath": "scripts/content-inventory-journey.test.ts",
+            "sha256": "b30d1d09a7b03e2d21c45a92cd9aceb4f24176cfce9c0a15d98e07d31a1e446e",
+            "semanticReadRanges": "1-113 full in two overlapping outputs (95-113 recovery)"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory-variants.test.ts",
+            "repoPath": "scripts/content-inventory-variants.test.ts",
+            "sha256": "a4d1bd892af60405c914a813f3a53f56c4f2fbd076ee5046903fd167d835fd14",
+            "semanticReadRanges": "1-80 full in later untruncated output"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/rules/journey/modifier-registry.ts",
+            "repoPath": "src/rules/journey/modifier-registry.ts",
+            "sha256": "2230e9e7bf14ae951cf96ee76efdb7055bfb731278847632c57a22245391036e",
+            "semanticReadRanges": "1-218 and290-351;219-289 first output truncated, not claimed read; unchanged prior diagnoses reused"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/session/providers/register-game-providers.ts",
+            "repoPath": "src/session/providers/register-game-providers.ts",
+            "sha256": "0ba00d007f719018645471d45c6ed2187802ab4dd06790d559ca5580235a1820",
+            "semanticReadRanges": "1-95 full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/session/providers/battle-init-provider.ts",
+            "repoPath": "src/session/providers/battle-init-provider.ts",
+            "sha256": "40ea8fd07559bd0abb9e15516d46e5fde2ed1c02b1d448417417e22b491ae90f",
+            "semanticReadRanges": "1-105; unchanged prior diagnosis reused"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/session/providers/journey-content-engine.ts",
+            "repoPath": "src/session/providers/journey-content-engine.ts",
+            "sha256": "99f931de2485f0eb5789dcb2fd7f90aba0bb34d91f02191b443cf24e1f05d5d2",
+            "semanticReadRanges": "1-118 full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/rules/journey/journey-deck-entry.test.ts",
+            "repoPath": "src/rules/journey/journey-deck-entry.test.ts",
+            "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+            "semanticReadRanges": "targeted imports and first95; initial1192line output truncated, no whole semantic read claim"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/rules/journey/journey-committed-purge-prevention.test.ts",
+            "repoPath": "src/rules/journey/journey-committed-purge-prevention.test.ts",
+            "sha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+            "semanticReadRanges": "targeted imports/mock29-34; initial1192line output truncated, no whole semantic read claim"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/engine/effects/primitives/contracts.test.ts",
+            "repoPath": "src/engine/effects/primitives/contracts.test.ts",
+            "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+            "semanticReadRanges": "1-6 full; unchanged contract diagnoses reused, no fresh all5929case audit"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/apollyon.ts",
+            "repoPath": "src/content/apollyon.ts",
+            "sha256": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+            "semanticReadRanges": "1-65 only; immutable unchanged catalog runtime closure, not whole semantic read"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/avatars/index.ts",
+            "repoPath": "src/content/avatars/index.ts",
+            "sha256": "345089e59758fe41672228f544b62f069e104e03d2fbc8c493e8fc9604755a35",
+            "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/cards/index.ts",
+            "repoPath": "src/content/cards/index.ts",
+            "sha256": "540e5f4eb4c99d75401ad26f1370e7de87f5395bd25949d857ca913910d6f001",
+            "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/dreamsigns/index.ts",
+            "repoPath": "src/content/dreamsigns/index.ts",
+            "sha256": "0f87cdc4a0628e05a2023ba7baae7cd081aa17a1170ba86f2d0c04f53031788a",
+            "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/dreamwell/index.ts",
+            "repoPath": "src/content/dreamwell/index.ts",
+            "sha256": "ef2679b375af996706fd3e953dd6dc608234751d99286eace52d4a7a3a2882fb",
+            "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/figments/index.ts",
+            "repoPath": "src/content/figments/index.ts",
+            "sha256": "02cd16671aeb688b3e47f5c77e65f0729ccc5b55324f9090ebae5cee0b6c2298",
+            "semanticReadRanges": "1-26 full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/exploration.ts",
+            "repoPath": "src/content/exploration.ts",
+            "sha256": "a67492d561a8d06062faecb767b7eab02e8db36f59d495998dc2b88b9bc43ec7",
+            "semanticReadRanges": "1-35 only"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/transfiguration.ts",
+            "repoPath": "src/content/transfiguration.ts",
+            "sha256": "8b1a894318d35d81522c1a0c590830413a06e4572b2c1c3732ea21023251bf96",
+            "semanticReadRanges": "1-40 only"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/package.json",
+            "repoPath": "package.json",
+            "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+            "semanticReadRanges": "1-22 only, ESM type module verified"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/tsconfig.json",
+            "repoPath": "tsconfig.json",
+            "sha256": "da84d9c5a853a225a5141217a39e08dc047f6755a0b046c2fc7b72e92f35c5b9",
+            "semanticReadRanges": "full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/tsconfig.node.json",
+            "repoPath": "tsconfig.node.json",
+            "sha256": "43758d179dbc45ece9ff19a6612b44532fe83cf19bad6b49cc27c6c4fd9b7c9b",
+            "semanticReadRanges": "full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/evidence/friction/hv-umm2.795.json",
+            "repoPath": "docs/plan/evidence/friction/hv-umm2.795.json",
+            "sha256": "b7c9345863844ff1ad6c1d939657f2458e3a83ea1eb586b24933153eaa3c4def",
+            "semanticReadRanges": "full"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/evidence/measurements/hv-umm2.795.json",
+            "repoPath": "docs/plan/evidence/measurements/hv-umm2.795.json",
+            "sha256": "7347c35e150735785f3c117c26d5e5e62451c74aae8c792a697cd3da688aa3f6",
+            "semanticReadRanges": "all top-level keys; full target,validation check summaries,window,normalization,host samples,remaining; fixture summary counts/mapping flags and sage qualification; individual90literalhashes/84assertions/92caseassignments and embedded oldreport are mechanically hashed/qualified facts, not fresh semantic reread"
+          }
+        ],
+        "skillBindings": [
+          {
+            "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+            "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9",
+            "semanticReadRanges": "full"
+          },
+          {
+            "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+            "sha256": "27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3",
+            "semanticReadRanges": "full"
+          },
+          {
+            "path": "/Users/dthurn/.llms/skills/shared/filing.md",
+            "sha256": "4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47",
+            "semanticReadRanges": "full"
+          },
+          {
+            "path": "/Users/dthurn/.llms/skills/wt/SKILL.md",
+            "sha256": "5212b7d5595fa0d30c140b27df9d80f61ee381d7715165ae5a947ec9c3b7ddaf",
+            "semanticReadRanges": "attempted incidental read truncated; no execution/ownership claim applied"
+          },
+          {
+            "path": "/Users/dthurn/brain/hive.json",
+            "sha256": "c32e575291380bd6ca073f5882385c3d4fba90fee02204969f330f6caa5782cc",
+            "semanticReadRanges": "full bootstrap binding"
+          }
+        ],
+        "rawBindingsFile": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/audit-bindings.json",
+        "mechanicalVerification": {
+          "parentBindings": 13,
+          "priorSourceBindings": 54,
+          "priorSourceUnchanged": 53,
+          "changedOnly795TestFreshParentColdAccepted": true,
+          "allFullsuiteInputs": 6147,
+          "mismatches": 0
+        },
+        "semanticCoverage": {
+          "uncoveredFriction": {
+            "beads": [
+              "hv-umm2.795"
+            ],
+            "wholeRecordRead": true,
+            "entryCount": 0
+          },
+          "measurement": "Direct target/windows/validation/checksummary/fixture summary and qualification; full embedded97binding audit is reused aspreviousqualified facts, not reread",
+          "native": "All two795comment bodies read; ownmetadata/status/acceptance and parent-qualified delivery fields. Huge embedded description/proposal/history truncated output is not a whole-text semantic reread. Gate current context read in full.",
+          "profiles": "All440public module diagnostic fields mechanically filtered/summed; top30collection andselected topTests semantically examined. All12452names/status counted mechanically, only127inventorymodule names/status selected as current affected boundary. No semantic review all12452contracts.",
+          "history": "Default500events sequences36374-36873,2026-10-17T05:58:17.681566Z through10:06:17.703547Z;selected795candidate and latestrelease events. No exhaustive history absence claim.",
+          "priorRetrospectives": "Last of35line records inspected plus all currentfrictiontrigger disposition block;795 covers792793794; no newtag lines needed.",
+          "priorDiagnoses": "Earlier Sage259 collection/rejectedcuts and sourceapplicability reused;54currenthashes checked,53unchanged; compilerfixturetest only changed and freshparentaccepted. No need rerun huge unchanged engine audit.",
+          "closure": "Every catalog identifier use in entireinventory root mechanically enumerated, relevant function blocks/sourceprobe/rootimports/publicexports/CLIguards read; content leafcatalog bodies are unchanged and not semantically reread. Their exact source hashes/root ranges recorded, preserving value identity/order is implementation acceptance.",
+          "limitations": [
+            "Several exploratory outputs were truncated. Only listed recovered ranges count as freshsemanticreads; hashing is not semanticreading.",
+            "No app imports/runtime experiments/tests/build/install/browser/server/fuzz/nativewrites/repositorywrites/delegation performed.",
+            "No actual peredgecost/savings attribution orwholefocused3module baseline measured by this audit.",
+            "This interimD19 audit carries no phase/runtime/QA acceptance credit."
+          ]
+        },
+        "allTwoCommentsCovered": true,
+        "newTriggerDispositions": []
+      },
+      "bindingsFile": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/audit-bindings.json",
+      "scopePreservation": [
+        "No runtime/application imports/tests/build/install/nativewrites/repositorywrites/delegation/browser/server/fuzz performed; only read commands andscratch JSON writes.",
+        "Stock2088/transfig1024/mod480,10000fullpoolRandom+Greedy games,desktop/mobile3realbattles each,minifiedproductionstate/interactions/geometry/errorbuffer,coldvisual/latestfinalSage/release==staging/finalgatecommit allremainrequired.",
+        "No broadenginearchitecture,gameplay/rules/tunings/defaultpolicy/content/schema/state/workers/isolation/reset weakening,source-generation orbudgetwaiver.",
+        "No sourcecost/savings guarantee, no <=60 forecast; fullsuite remainsfailedbudget."
+      ],
+      "finalScratchVerification": {
+        "sourceHeadExact": true,
+        "sourceGitStatusShort": "",
+        "all6147InputsReadHashMatch": true,
+        "parent13BindingsMatch": true,
+        "prior54CurrentBindingsMatch": true,
+        "rawBindingCount": 38,
+        "sourceBindingCount": 32,
+        "skillBindingCount": 5,
+        "artifactSHA256": {
+          "proposals": "649b200183988f150a320a895b264deba8c98c9d645392d36489585682994ba3",
+          "coverage": "188fc40c2340e28e7a45c3d60cc46db080c1c9e3d9c251fc70023cfd4a7c199e",
+          "bindings": "a6e96721083038fce460e4b01df95eeb2e7f74dcb2a9e7a36c81f7761d946a84",
+          "draftRetrospective": "8aee0e52c7be37f8deae022f37fe76cbac68981be0f26165b7883fe8f3b78e44"
+        }
+      }
+    },
+    "sage261FullProposal": [
+      {
+        "key": "D19-INVENTORY-CLI-CATALOG-BOOTSTRAP",
+        "title": "Load inventory runtime catalogs at the direct CLI boundary while preserving source analysis APIs",
+        "priority": 1,
+        "runNext": true,
+        "kind": "bounded reversible internal tooling prototype, source-backed import/setup separation",
+        "labels": [
+          "introspection",
+          "test-cut",
+          "core-review"
+        ],
+        "Areas": [
+          "scripts/content-inventory.ts",
+          "scripts/content-inventory-catalogs.ts (new exact eight-value bootstrap only)",
+          "scripts/content-inventory*.test.ts (existing127cases unchanged; new synthetic public CLI/import parity contract only if needed)",
+          "docs/plan/evidence/friction/<own-bead>.json",
+          "docs/plan/evidence/measurements/<own-bead>.json",
+          "docs/plan/evidence/pre-existing/<own-bead>.md",
+          "docs/plan/evidence/reviews/<own-bead>.md",
+          "docs/plan/evidence/introspection.jsonl (one auditcoverage line covers795)"
+        ],
+        "sourceEvidence": [
+          {
+            "path": "scripts/content-inventory.ts",
+            "lines": "48-62",
+            "observation": "Only runtime application imports at this root are the eight catalogs at52-60; ContentStatus55 is type-only. Other runtime imports are TypeScript and Node builtins."
+          },
+          {
+            "path": "scripts/content-inventory.ts",
+            "lines": "104-197,941-1000,1083-1131",
+            "observation": "Capability resolver constructs CompilerHost/Program/TypeChecker and queries symbols/source only. Classifier uses real eager filesystem/source availability and metadata. These remain intact; compiler source reading does not execute catalog modules."
+          },
+          {
+            "path": "scripts/content-inventory.ts",
+            "lines": "1134-1270",
+            "observation": "Every use of all8catalogbindings is exclusively inside buildEntities. Exact uses: CARDS1153,DREAMSIGNS1179,AVATARS1192,DREAMWELL_CARDS1196,FIGMENTS1209,TRANSFIGURATION1223,EXPLORATION1236,APOLLYON1255."
+          },
+          {
+            "path": "scripts/content-inventory.ts",
+            "lines": "1662-1791",
+            "observation": "buildEntities called only from private main1702. Direct CLI guard1791 is exact resolve(argv[1])===fileURLToPath(import.meta.url), gated argv[1]defined. Refresh, normal generation,--check/status/writes and pretty/order all remain existing code."
+          },
+          {
+            "path": "scripts/content-inventory.test.ts",
+            "lines": "2;795fixture current459lines",
+            "observation": "Imports public classifyInventoryText/inventoryCapabilityResolver/inventoryDslCapabilities/type only; preserve current79592cases and synthetic fixture map bytes."
+          },
+          {
+            "path": "scripts/content-inventory-journey.test.ts",
+            "lines": "1-113",
+            "observation": "Imports public resolver/journeycapabilities/types only; real synthetic filesystem APIs use constructor states, aliases,noncallable,registration refusal and fresh source snapshot; all18cases kept."
+          },
+          {
+            "path": "scripts/content-inventory-variants.test.ts",
+            "lines": "1-80",
+            "observation": "Imports classifier only; all17cases kept."
+          },
+          {
+            "path": "package.json;tsconfig.node.json;src/testing/setup-dom.ts;vitest.config.ts",
+            "lines": "package1-22;node config full;setup1-48;vitest1-115",
+            "observation": "Tooling ESM/ES2022 supports conditional top-level await; existing perfile reset andmock isolation/2workers are binding and unchanged."
+          }
+        ],
+        "currentActualMeasuredCost": {
+          "moduleDiagnostics": [
+            {
+              "path": "scripts/content-inventory.test.ts",
+              "environmentSetupDuration": 0.03600000000005821,
+              "prepareDuration": 0.0766250000015134,
+              "collectDuration": 2496.829749999997,
+              "setupDuration": 0.7652079999970738,
+              "duration": 23.59229100000084,
+              "importDurations": {}
+            },
+            {
+              "path": "scripts/content-inventory-journey.test.ts",
+              "environmentSetupDuration": 0.03600000000005821,
+              "prepareDuration": 0.034292000003915746,
+              "collectDuration": 1003.4062910000066,
+              "setupDuration": 0.534749999998894,
+              "duration": 540.5491669999974,
+              "importDurations": {}
+            },
+            {
+              "path": "scripts/content-inventory-variants.test.ts",
+              "environmentSetupDuration": 0.03600000000005821,
+              "prepareDuration": 0.039165999995020684,
+              "collectDuration": 671.0861670000013,
+              "setupDuration": 0.828416999996989,
+              "duration": 13.080334000005678,
+              "importDurations": {}
+            }
+          ],
+          "collectionSumMs": 4171.322208000005,
+          "bodySumMs": 577.2217920000039,
+          "cases": 127,
+          "qualification": "Actual current fullsuite module diagnostics, not a separate focused baseline, not peredge attribution, not removable cost or wall savings. importDurations all empty. Collection includes imports AND suite callbacks;127cases includes79592 plus journey18 plus variants17."
+        },
+        "finiteAdmissionAndImplementation": [
+          "Before edits, freeze the exact source/runner/reporter and complete three-module command at unchanged2workers as the chosen affected whole test-stage wall metric INCLUDING collection/setup; collect actual baseline receipt and cases. This is the affected boundary even if one test becomes relatively cheap. Do not use assertion time or sum of collect diagnostics as the target.",
+          "Verify whole-source literal-binding census: all8runtime catalog values have exactly one use each inside buildEntities and no application import outside the eight static declarations. Confirm the three direct importing test modules plus knip entry/CLI documentation are the complete nonCLIconsumer census; no other app source imports the tool. If a hidden consumer contradicts this proof, stay within a finite source-first correction before editing, without an approval hold.",
+          "Create one small catalog bootstrap with the same eight static import declarations in original order: APOLLYON_INCARNATIONS,AVATARS,CARDS,DREAMSIGNS,DREAMWELL_CARDS,EXPLORATION,FIGMENTS,TRANSFIGURATION (original52-60). Export one inferred typed object carrying the exact original values, in this order; no clones,sorting,serialization,UUID substitution,registration calls,facade barrel ornew catalog factory. ContentStatus remains type-only.",
+          "At the current tool root, compute exactly the existing direct-CLI identity predicate (argv[1] defined then resolve(argv[1])===fileURLToPath(import.meta.url)); conditionally await that bootstrap only when true, BEFORE original ROOT/probe/map initialization executes (and therefore before941-1000 source probes). Keep TypeScript/Node imports first. ESM/ES2022 is already configured; no config changes. No catalogs are awaited for nonCLIimport callers.",
+          "Pass the typed exact8value object through private main to private buildEntities and destructure only there. Preserve explicit entity loop order CARDS,DREAMSIGNS,AVATARS,DREAMWELL,FIGMENTS,TRANSFIGURATION,EXPLORATION,APOLLYON. Do not enumerate the bootstrap namespace or substitute object iteration. Bottom main invocation uses the SAME previously computed identity outcome and requires realcatalogobject. No empty/fake fallback.",
+          "Keep all six public named declarations at the same source module: InventoryCapabilityForm,InventoryCapabilityResolver,inventoryCapabilityResolver,inventoryDslCapabilities,inventoryJourneyCapabilities,classifyInventoryText. Names/signatures/references/definitions stay unchanged; public functions remain synchronous. Conditional module evaluation may await only direct CLI; native ESM import settlement is retained. Keep every eager real source/compiler probe and classifier/descriptor/planner/pretty/refresh logic bytewise apart from typed argument plumbing.",
+          "Do not catch/relabel failures or change exit handling. Original catalog bootstrap must finish before source probes for direct CLI, preserving catalog initializer order and catalog-error precedence over source-probe errors. Unrelated application runtime modules/engine cycles/registration getter tables stay untouched. TLA rejected import must propagate as failed CLI module evaluation; qualify stack filenames separately from failure class/message/status/stdout behavior.",
+          "If any same-contract preservation fails, or chosen full3module boundary gains less than10percent, revert this prototype. Do not expand into general engine bootstrap or a new opaque module loader; resolve the bounded failed hypothesis and return exact next source unknown."
+        ],
+        "retainedUniqueContracts": [
+          "All127existing expanded test names/outcomes, including79592cases/90fixtureliteral inputs/84assertionexpressions/17namespacedstates. No tests removed, compiler defaults mocked, reset weakened orreal source availability replaced by a fixture.",
+          "All public source-only capability resolution: aliases/type-only reexports,missing/private/noncallable exports,pending lifecycle and every stale alternative,semantic option variants,registered journey factory/constructor matching,readonly fresh source snapshots.",
+          "Classification and metadata references/order, source ROOT resolution and probes against actualengine modules,duplicate/unknown tag checks and real existing/new availability. Do not convert eager probe state to lazy/memoized/injected synthetic results.",
+          "Direct CLI identity behavior for argv absent, importedmodule with unrelated argv, normal direct path and same resolve/fileURL semantics (including existing symlink behavior). Import must not invoke main/writefiles; direct invocation still loads actualcatalogs before sourceprobes.",
+          "Generation entity UUIDs/order,source object identity,planner assignments/edges/areas,generatedBy scripts/content-inventory.ts,pretty bytes/newline,output target,normal and--check exit/status/stdout/write rules; refresh-registration-areas graph-preserving path likewise.",
+          "Historical hv-n5lj.15 cycle/load-time invariant retained: do not move initialization into engine registries or build namespace objects inside engine cycles. New bootstrap is scripts-only and catalogs do not import scripts/content-inventory."
+        ],
+        "functionalParityProof": [
+          "Provide a literal import/binding/use map and exact diff proving all8catalog root declarations move verbatim in originalorder to one bootstrap; inferred types keep readonly value shapes and original object references. Existing private entity loops and CLI behavior bytes unchanged except arguments, so use sites retain semantic values and order.",
+          "Re-run complete3modules with exact127case names,statuses,and nofixture/assertion changes. Source-only public importing boundary has no alternate runtime catalog route: its remaining valueimports are TypeScript+Node builtins; compiler reads source AST without execution. Show current static/dynamic import closure and no cycle back to tool root.",
+          "In source-exact scratch shadow copies (baseline/final, same relative scripts/content-inventory.ts and same catalogs/probe files), collect actual normal-generation output bytes/stdout/exit and compare exact output hashes. This is manual parity evidence, NOT a committed mutable production-data assertion or approval to regenerate tracked projection.",
+          "Run --check on matching generatedscratchoutputs (exit0,no write) and deliberately stale outputs (exit1,no write), refresh-registration-areas with andwithout --check on same fixtureprojection preserving graph. Preserve stdout/stderr cause/status/no partialwrite for failingcatalog/source fixtures; demonstrate catalogfailure precedes sourcefailure in direct CLI, while nonCLIimport skipscatalogexecution and keeps real sourceanalysis failures. No catches to manufacture parity.",
+          "Validate nonCLIpublic export availability/synchronous returncontracts and direct identity branches with isolated synthetic CLI/import fixtures or manual source-bound receipt. Do not add private implementation tests merely asserting helper filename orbound import table."
+        ],
+        "prerequisites": {
+          "semantic": [
+            "hv-umm2.795 already closed/completed at c8af; current127contracts and canonicalsourceanalysis are baseline"
+          ],
+          "newUnfinished": [],
+          "serialization": "Parent fresh native census/Areas required before filing. Serialize only incompatible edits to catalog imports/directentry/private buildEntities/main, not all users of scripts/ orsharedfilename. No known new active writer established by this read-only audit.",
+          "finalJoin": "Parent adds delivered improvement to hv-umm2.46 final acceptance join before admission; no gatecredit until closedcompleted/currentD19 andremainingQA obligations met."
+        },
+        "validation": [
+          "npm test -- scripts/content-inventory.test.ts scripts/content-inventory-journey.test.ts scripts/content-inventory-variants.test.ts at2workers, complete before/after chosen wholeboundary INCLUDINGcollection>=10percent orrollback; source manifests/actualterminals/receipts/loadCPU/cacheorder qualifications and ownedPGcleanup.",
+          "Bounded scratch CLI/import/parity checks above, npm run review and npm run knip; real source probes/compiler and testreset unchanged.",
+          "This is a bounded internal CLI dependency refactor, not a harness/config/applicationarchitecture change. Local review:full is required only if actual implementation broadens into test infrastructure, repositorywideconfig orcrosscutting architecture per AGENTS.md Verification; do not impose an invented mandatory fullreview orapprovalgate on the bounded prototype. Tollgate retains its normal gates/releases.",
+          "Fresh read-only fork_turns:none Codex review exactbase/head/diff andwholechangedmodules/parity evidence, marked core-review for this semantic toolingboundary; parent verifies findings/dispositions/certifieddelivery.",
+          "After actual accepted cut, parent collects one justified current fullsuite under unchangedD17 andfrozenreporter. If still>60, nextsource-backedcut obligation remains; no unchangedretry orwaiver."
+        ],
+        "savings": "UNKNOWN; no peredge timing required as a prerequisite for filing this reversible source-backed prototype. Actualwholeaffected>=10includingcollection orrollback is mandatory duringimplementation. No forecast that thisalone reaches60."
+      }
+    ],
+    "sage261RawBindings": {
+      "raw": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/brief.txt",
+          "sha256": "de999dba2b83f690b2de578be50541d2e36b48082acd60bf295549221deb8c92",
+          "bytes": 7671,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/current-profile-summary.json",
+          "sha256": "e467bcb48db7475585f75c79f5e3e3c399a43f7369790590f420413b92710e31",
+          "bytes": 28148,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/doctor.json",
+          "sha256": "6d35c6037846e86f9f87a1f3235905431720945dae18c85ed28b195ec52cd748",
+          "bytes": 2078,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/doctor.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/earlier-sage-source-applicability.json",
+          "sha256": "e264f27e2549115f9e1209d2567b2b3a0b2ba70126275762d7c7c66c575b4d07",
+          "bytes": 15431,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/friction-triggers.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/friction-triggers.stdout",
+          "sha256": "98b38db3a549495f790448d26cae812f68c0fe28b6949d8bd5385a7bec45db90",
+          "bytes": 22811,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/gate-current-context.json",
+          "sha256": "84cd7f484c4f020ad193b5e52ad8016399521c540e3564f735fead1fabfeca2d",
+          "bytes": 1264,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/historical-cycle-repair.json",
+          "sha256": "f3e670b2a7fa0e45f433a56e44c545f88b229127eca61f974e755d85cc87914a",
+          "bytes": 8852,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/historical-cycle-repair.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/history.json",
+          "sha256": "4e2f6e8333433bdd7b4331ba8f8d88f10baac9d8a17611c753fd66b7ec614b78",
+          "bytes": 583361,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/history.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/hv-umm2.46.json",
+          "sha256": "6ddd9255e197386da2406029612ada345d7a7bb1f7dd3dc842a72f7743440562",
+          "bytes": 5387521,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/hv-umm2.46.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/hv-umm2.795-comments.json",
+          "sha256": "bf7428d32254d263b58c4df43e25c2f0e1bbf4552fae1ebcb8e32ae7f219f93b",
+          "bytes": 2788,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/hv-umm2.795-comments.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/hv-umm2.795.json",
+          "sha256": "5816fde0fe97b677f337e9e82643a2542363d12d865c6c063c01cb43abf74f06",
+          "bytes": 207698,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/hv-umm2.795.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/parent-before-dispatch.json",
+          "sha256": "26affe8c05fa2fa068e3b04bc20b3d7e4d74def15e620d585cebc1287de57dc3",
+          "bytes": 3478,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/prior-phase5-retrospectives.json",
+          "sha256": "f94ef5eefb7fc847dfa9c13f6a6ff9f35c0cd8f5a073ee9bb93754be1afcf3af",
+          "bytes": 21021,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/release.json",
+          "sha256": "7ceb06c81669d63c22c7baee52883693f713a8f540cd3502114b3d090a81f325",
+          "bytes": 27518,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/release.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/uncovered-phase5-friction.json",
+          "sha256": "29dc81f6fc16133695f6d3dc9b3979cf015109252f5456113b4540e55ef14d13",
+          "bytes": 391,
+          "semanticScope": "See coverage.json; hash is mechanical, not a whole-file semantic read claim."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/parent-fullsuite-proof.json",
+          "sha256": "3afc8bbfa49d70dc0595c9156808ce3e1c938370f94b8190ef26a69124bd1d3d",
+          "bytes": 2303,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/fullsuite.receipt.json",
+          "sha256": "694c3a683269ee005d91a60cb91ab5a0b7032182ebecbf4911d31957fe6073a5",
+          "bytes": 1321,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/fullsuite.launch.json",
+          "sha256": "493a1bb1e6e91ab2f3dd6fc467c12297e1c34fbc7806e6010695ec5cacc38930",
+          "bytes": 984,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/fullsuite.log",
+          "sha256": "4c711846fc6d03e18013189030bd1f794d6245a09e33fe567f1b747460812a0f",
+          "bytes": 127589,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/vitest-results.json",
+          "sha256": "00d2a1f99ba715e2e3fd3fb3ecded3af7e12803c4eb03a47e460cbe93321a7d7",
+          "bytes": 4439602,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/module-diagnostics.json",
+          "sha256": "93f7320a51d52fd727a95e6056f9dc8cfe98e60e9d88f3dcb0dadc3637576170",
+          "bytes": 203002,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/profile-derived.json",
+          "sha256": "35f61e0597bf98d2cd45b3829474f72451473c2791a7d9be4eeea0ffccd431d9",
+          "bytes": 4109685,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/fullsuite.inputs.json",
+          "sha256": "b26c54e0ffb8aabd3a93c6670c34aee4ba8cf862317f2e3e786fd88158f962d3",
+          "bytes": 749682,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/fullsuite-admission.json",
+          "sha256": "077bef4486c2dbd17bf4ec335c7e5d874c1d891416c47f8d3183be6175889c8a",
+          "bytes": 1172,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/host-processes.txt",
+          "sha256": "53a0e8f5dc0250c72acc795af2aa4ffd707931b806a260d1d577f18312bf739e",
+          "bytes": 106919,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/memory.txt",
+          "sha256": "e9ccd6a0c8acda247f8ded8088f12a576d3d92139582d799962b37b48db9f1ec",
+          "bytes": 531,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance260/hardware.txt",
+          "sha256": "0ea8709a4ef51ea03bf6d7e5213f4a4348ce415825a03d61e3cb1a3f1d573f01",
+          "bytes": 42,
+          "semanticScope": "Selected fields/filtered diagnostics or parent-qualified custody; see coverage."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage259/report.json",
+          "sha256": "bf25f9e0821cfaa0b4160b0d34f26ca64ec54a7a61556d0b74880065a64ef03a",
+          "bytes": 30167,
+          "semanticScope": "Prior qualified report facts; selected diagnoses/rejected hypotheses reused."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage259/parent-qualified.json",
+          "sha256": "8ace01777581ecded9c796ea810d57d3b1b446f228c8873eb0837f80e3eebdce",
+          "bytes": 2428,
+          "semanticScope": "Prior qualified report facts; selected diagnoses/rejected hypotheses reused."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage259/coverage.json",
+          "sha256": "318711fc2def4bacceec1a43273749e39358f8e47bb448bda9de30a0e46333e2",
+          "bytes": 31470,
+          "semanticScope": "Prior qualified report facts; selected diagnoses/rejected hypotheses reused."
+        }
+      ],
+      "parent13RawBindingsVerified": true,
+      "all54PriorCurrentBindingsVerified": true,
+      "all6147RunInputHashesVerified": true,
+      "catalogIdentifierOccurrenceClosure": {
+        "APOLLYON_INCARNATIONS": [
+          52,
+          1255
+        ],
+        "AVATARS": [
+          53,
+          1192
+        ],
+        "CARDS": [
+          54,
+          1153
+        ],
+        "DREAMSIGNS": [
+          56,
+          1179
+        ],
+        "DREAMWELL_CARDS": [
+          57,
+          1196
+        ],
+        "EXPLORATION": [
+          58,
+          1236
+        ],
+        "FIGMENTS": [
+          59,
+          1209
+        ],
+        "TRANSFIGURATION": [
+          60,
+          1223
+        ]
+      },
+      "source": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/AGENTS.md",
+          "repoPath": "AGENTS.md",
+          "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+          "semanticReadRanges": "1-145 full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/README.md",
+          "repoPath": "docs/plan/README.md",
+          "sha256": "9bde8f67153f6ef9483fd4703270ece6f7c2b55b6ee3440acfa2414fb2477199",
+          "semanticReadRanges": "rg targeted phase/workflow/metrics references; earlier qualified same-source facts reused"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/decisions.md",
+          "repoPath": "docs/plan/decisions.md",
+          "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+          "semanticReadRanges": "520-590,762-828; applicable D17/D19/D20/D42"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/workflow.md",
+          "repoPath": "docs/plan/workflow.md",
+          "sha256": "ad8191eed308ea4dd6809e400bc6e688d481d26d9c69d2c3e6b15b7d1382761c",
+          "semanticReadRanges": "1293-1465,1850-1915,1139-1170; targeted search other sections"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/phase-5-content.md",
+          "repoPath": "docs/plan/phase-5-content.md",
+          "sha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "semanticReadRanges": "340-405,619-646; applicable phase gate"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/evidence/metrics.md",
+          "repoPath": "docs/plan/evidence/metrics.md",
+          "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+          "semanticReadRanges": "1-100,1108-1150 plus targeted budget matches; remainder not reread"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/vitest.config.ts",
+          "repoPath": "vitest.config.ts",
+          "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "semanticReadRanges": "1-115 full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/testing/setup-dom.ts",
+          "repoPath": "src/testing/setup-dom.ts",
+          "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "semanticReadRanges": "1-48 full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory.ts",
+          "repoPath": "scripts/content-inventory.ts",
+          "sha256": "6349a388cea9ed8678a7d2ffe2e8da0fba72f0957c764adf9e6d546f690094e7",
+          "semanticReadRanges": "48-239,480-505,925-1278,1662-1791 plus whole-file binding/definition/reference searches; unchanged rule/metadata/planner middle not semantically reread"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory.test.ts",
+          "repoPath": "scripts/content-inventory.test.ts",
+          "sha256": "b565ea21745aa87d19935a83ee2cfad38a66845058349a790a1d735b63bc8635",
+          "semanticReadRanges": "1-85,235-295,390-459 with displayed truncation recovery needed for 429-459 if editing; remaining795fixture preservation reused from qualified source audit, not fresh semantic reread"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory-journey.test.ts",
+          "repoPath": "scripts/content-inventory-journey.test.ts",
+          "sha256": "b30d1d09a7b03e2d21c45a92cd9aceb4f24176cfce9c0a15d98e07d31a1e446e",
+          "semanticReadRanges": "1-113 full in two overlapping outputs (95-113 recovery)"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/scripts/content-inventory-variants.test.ts",
+          "repoPath": "scripts/content-inventory-variants.test.ts",
+          "sha256": "a4d1bd892af60405c914a813f3a53f56c4f2fbd076ee5046903fd167d835fd14",
+          "semanticReadRanges": "1-80 full in later untruncated output"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/rules/journey/modifier-registry.ts",
+          "repoPath": "src/rules/journey/modifier-registry.ts",
+          "sha256": "2230e9e7bf14ae951cf96ee76efdb7055bfb731278847632c57a22245391036e",
+          "semanticReadRanges": "1-218 and290-351;219-289 first output truncated, not claimed read; unchanged prior diagnoses reused"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/session/providers/register-game-providers.ts",
+          "repoPath": "src/session/providers/register-game-providers.ts",
+          "sha256": "0ba00d007f719018645471d45c6ed2187802ab4dd06790d559ca5580235a1820",
+          "semanticReadRanges": "1-95 full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/session/providers/battle-init-provider.ts",
+          "repoPath": "src/session/providers/battle-init-provider.ts",
+          "sha256": "40ea8fd07559bd0abb9e15516d46e5fde2ed1c02b1d448417417e22b491ae90f",
+          "semanticReadRanges": "1-105; unchanged prior diagnosis reused"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/session/providers/journey-content-engine.ts",
+          "repoPath": "src/session/providers/journey-content-engine.ts",
+          "sha256": "99f931de2485f0eb5789dcb2fd7f90aba0bb34d91f02191b443cf24e1f05d5d2",
+          "semanticReadRanges": "1-118 full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/rules/journey/journey-deck-entry.test.ts",
+          "repoPath": "src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "semanticReadRanges": "targeted imports and first95; initial1192line output truncated, no whole semantic read claim"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/rules/journey/journey-committed-purge-prevention.test.ts",
+          "repoPath": "src/rules/journey/journey-committed-purge-prevention.test.ts",
+          "sha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+          "semanticReadRanges": "targeted imports/mock29-34; initial1192line output truncated, no whole semantic read claim"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/engine/effects/primitives/contracts.test.ts",
+          "repoPath": "src/engine/effects/primitives/contracts.test.ts",
+          "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "semanticReadRanges": "1-6 full; unchanged contract diagnoses reused, no fresh all5929case audit"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/apollyon.ts",
+          "repoPath": "src/content/apollyon.ts",
+          "sha256": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+          "semanticReadRanges": "1-65 only; immutable unchanged catalog runtime closure, not whole semantic read"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/avatars/index.ts",
+          "repoPath": "src/content/avatars/index.ts",
+          "sha256": "345089e59758fe41672228f544b62f069e104e03d2fbc8c493e8fc9604755a35",
+          "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/cards/index.ts",
+          "repoPath": "src/content/cards/index.ts",
+          "sha256": "540e5f4eb4c99d75401ad26f1370e7de87f5395bd25949d857ca913910d6f001",
+          "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/dreamsigns/index.ts",
+          "repoPath": "src/content/dreamsigns/index.ts",
+          "sha256": "0f87cdc4a0628e05a2023ba7baae7cd081aa17a1170ba86f2d0c04f53031788a",
+          "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/dreamwell/index.ts",
+          "repoPath": "src/content/dreamwell/index.ts",
+          "sha256": "ef2679b375af996706fd3e953dd6dc608234751d99286eace52d4a7a3a2882fb",
+          "semanticReadRanges": "1-32,last12; rest mechanical binding only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/figments/index.ts",
+          "repoPath": "src/content/figments/index.ts",
+          "sha256": "02cd16671aeb688b3e47f5c77e65f0729ccc5b55324f9090ebae5cee0b6c2298",
+          "semanticReadRanges": "1-26 full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/exploration.ts",
+          "repoPath": "src/content/exploration.ts",
+          "sha256": "a67492d561a8d06062faecb767b7eab02e8db36f59d495998dc2b88b9bc43ec7",
+          "semanticReadRanges": "1-35 only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/src/content/transfiguration.ts",
+          "repoPath": "src/content/transfiguration.ts",
+          "sha256": "8b1a894318d35d81522c1a0c590830413a06e4572b2c1c3732ea21023251bf96",
+          "semanticReadRanges": "1-40 only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/package.json",
+          "repoPath": "package.json",
+          "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+          "semanticReadRanges": "1-22 only, ESM type module verified"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/tsconfig.json",
+          "repoPath": "tsconfig.json",
+          "sha256": "da84d9c5a853a225a5141217a39e08dc047f6755a0b046c2fc7b72e92f35c5b9",
+          "semanticReadRanges": "full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/tsconfig.node.json",
+          "repoPath": "tsconfig.node.json",
+          "sha256": "43758d179dbc45ece9ff19a6612b44532fe83cf19bad6b49cc27c6c4fd9b7c9b",
+          "semanticReadRanges": "full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/evidence/friction/hv-umm2.795.json",
+          "repoPath": "docs/plan/evidence/friction/hv-umm2.795.json",
+          "sha256": "b7c9345863844ff1ad6c1d939657f2458e3a83ea1eb586b24933153eaa3c4def",
+          "semanticReadRanges": "full"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-260/docs/plan/evidence/measurements/hv-umm2.795.json",
+          "repoPath": "docs/plan/evidence/measurements/hv-umm2.795.json",
+          "sha256": "7347c35e150735785f3c117c26d5e5e62451c74aae8c792a697cd3da688aa3f6",
+          "semanticReadRanges": "all top-level keys; full target,validation check summaries,window,normalization,host samples,remaining; fixture summary counts/mapping flags and sage qualification; individual90literalhashes/84assertions/92caseassignments and embedded oldreport are mechanically hashed/qualified facts, not fresh semantic reread"
+        }
+      ],
+      "skillsAndBinding": [
+        {
+          "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+          "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9",
+          "semanticReadRanges": "full"
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+          "sha256": "27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3",
+          "semanticReadRanges": "full"
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/shared/filing.md",
+          "sha256": "4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47",
+          "semanticReadRanges": "full"
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/wt/SKILL.md",
+          "sha256": "5212b7d5595fa0d30c140b27df9d80f61ee381d7715165ae5a947ec9c3b7ddaf",
+          "semanticReadRanges": "attempted incidental read truncated; no execution/ownership claim applied"
+        },
+        {
+          "path": "/Users/dthurn/brain/hive.json",
+          "sha256": "c32e575291380bd6ca073f5882385c3d4fba90fee02204969f330f6caa5782cc",
+          "semanticReadRanges": "full bootstrap binding"
+        }
+      ]
+    },
+    "parentQualification": {
+      "at": "2026-10-17T10:14:24.193325+00:00",
+      "status": "PARENT_QUALIFIED_BOUNDED_SOURCE_AUDIT",
+      "source": "c8af4c075118dda8643d12551f972732a3b30686",
+      "bindings": {
+        "raw": 38,
+        "source": 32,
+        "skillsAndBinding": 5
+      },
+      "reportSHA256": "5e75a4ae7193266069c12420299ad1155b3d5f2bbf0c963b4f866823eb1e4bba",
+      "semanticCoverage": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage261/coverage.json",
+      "limits": "Semantic coverage exactly as stated, no all-source review from hashes; zero runtime/phase acceptance; finite prototype savings UNKNOWN; whole3module>=10%orrollback; D19 unwaived",
+      "next": "Fresh native scope census then bounded bootstrap bead with semantic prereq795 and gatejoin before project admission."
+    },
+    "qualification": "Report, exact proposal, all 38 raw +32 source+5 skill bindings and semantic coverage persist here. Hash qualification is not fresh semantic reading of every historic source. No runtime/phase acceptance supplied by Sage."
+  },
+  "externalArtifacts": {
+    "scratch": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-bootstrap796",
+    "sha256": {
+      "metric-freeze.json": "0f5fc9aed4aad9af31d3f697be35ac94bca5f6c0640701014dca52047c0a250b",
+      "validation.runner.py": "63974a4261213e8c434f50bcd18d9f28b76223e5b3fe39a96ed2dcf1192db66c",
+      "parity.py": "e44b24019cf8f460c55b6357465e2ccbe87eb6e252a220a3abaedeeaccd8cb54",
+      "parity-results.json": "1d57602c00749403f21748db088bcd07a7e61c8da40d65e6373196d2f63b6b96",
+      "preservation.py": "24ad688e56c202574dcfb85e923abd38a5d94f4c19e7e22adccab09d3207ff8b",
+      "source-proof.json": "03085a4544268562b1c7a112df863599cfabb1fcbe9db6f4b9257183198d1b84",
+      "baseline.vitest.json": "77e5ab26aaa1c6864bb90a1f3676a8387d619334a7652b919f70951ab5934807",
+      "final.vitest.json": "6b5103531d27696e0b08abd7ced6c919c11c0029f521a484422f98add2dc90ad",
+      "baseline-generated.json": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+      "final-generated.json": "45062910e4bae2e5ad1ac740d9a34858b681556ffbd1fa5485fc156f821ff63c",
+      "baseline-refreshed.json": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+      "final-refreshed.json": "54c70fb4b815b7dc84bc111ae3a10993555f022aa6645fec91f5d35c97f4b0b3",
+      "ledger-prefix.json": "32a404ae6ab372ca95feefcad16a58aa310ca57430dde498180c2e5330ce4868",
+      "baseline.inputs.json": "8910b5a5433f75083a6f48f73a9aefe7da90a07e5e3a9cb87a0d66e0c7598a5d",
+      "baseline.launch.json": "a4cea8f0739168434dc21f22e6abafcf0de97c9e0729232f08d460acd4b52a69",
+      "baseline.started.json": "a10552e8eb092844d6034e45d31c82ac673943f170acf206499fbc07a56ef640",
+      "baseline.receipt.json": "ca7fd0d406386e9ec8fc3471df2bdfa8ef0522fa87fdfe4ded6dd78afefbd254",
+      "baseline.log": "b963e2875d8bee2385b11ebd1287b5e77e766fd98acf887899ca9a76bc6d1eea",
+      "final.inputs.json": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+      "final.launch.json": "753fe9c80f2553b53dbe48f992a9d3e7545bf09a0166231ca85ed1690e020f1e",
+      "final.started.json": "6554aa4e7a26f90b5b5306b10e00c74e017bdd982c31a4fb2bc76f47a6eb2e67",
+      "final.receipt.json": "814a9da540bc2ebee532a2bfc8a4350af5f13c9ac68e14a8e18ff893f739b3b7",
+      "final.log": "66c56fd55dcfaa44a2fea0b3d630b28a03db2debaf978a465f31885c48d1be17",
+      "parity.inputs.json": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+      "parity.launch.json": "889dd7bea9625c23d14848a13baf6d3719496e9cfddd51a349aa37394a395027",
+      "parity.started.json": "30d1ec571b5a6442d21d10067c8b94f2734acd83dbb741ac2ffa2dfabe766219",
+      "parity.receipt.json": "09de14dc592a48f01a05cd9cbbae0396907c397c3ad939d0ea2b725b506c56cb",
+      "parity.log": "fb2a1b69b898d4cac32fb9daaf7e0445780d2c871c691e75d96a1ea76419cc96",
+      "review.inputs.json": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+      "review.launch.json": "049364986889b9e02b7c6f84d700049a6f02c8b58ef6a20a011e22168a8e2421",
+      "review.started.json": "eb5289b749797a5f5cc5f64576ecaf60d7d7714260b5652d2fd86e60ca869e17",
+      "review.receipt.json": "5853ea18fffba8379e51bdd640d9d391e2d947d251837322eb8133a0e2e17c31",
+      "review.log": "0897411a620831f11bca145b6112354965b5b1146201fac2f9fdfbaf55ba7298",
+      "knip.inputs.json": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+      "knip.launch.json": "c80bfb1810fa173100f0c6f59b81669b326d2f753787eafe0c1e3076c470b21f",
+      "knip.started.json": "14227c5c7082e083efca990203a728a1783fca7321c1427e546f57758b8555aa",
+      "knip.receipt.json": "684c09eeb97ac66661366f7f261c9a5cab135edb1472456cc3c155c8364684e6",
+      "knip.log": "5cffb49b4e1ea26e742fe5a824e0187b13054e96547b0bbf037c0cfd49fb816a",
+      "preservation.inputs.json": "a6dec14f812ee65121c8cccf7a61f2d577dbaf677d3a9477a56de86316cfb96a",
+      "preservation.launch.json": "a44312af8a218005a7fe1e0f132c17c627ce37757cd3daab13e6b1aad4d1d1ec",
+      "preservation.started.json": "f25c51fa17a5ca2f90aa81492f1d50edf6519ec41ad6751d9d15c6cdccecd37c",
+      "preservation.receipt.json": "6a68d1753eca3cc98f8d99519ae7d9872ef69ab39e0a75a2181f1de939b4144f",
+      "preservation.log": "a4593b9ceaedf344ac6ace8e3ad535f5fdd292fbba6b7f56540d08ec96e5cbc5"
+    }
+  },
+  "remaining": "Parent cold review/certification/cleanup; justified current fullsuite after this accepted cut; binding D19<=60; stock2088/transfiguration1024/modifier480,10000 fullpool Random+Greedy games, desktop/mobile three real battles each, minified smoke, cold visual/latest QA/Sage/release convergence/final gate commit all remain unwaived."
+}
