@@ -124,6 +124,13 @@ export type CardBrowserPresentation = "embedded" | "overlay" | "fullScreen";
 /** How a transactional card picker integrates with its host surface. */
 export type CardPickerPresentation = "embedded" | "overlay";
 
+/**
+ * How densely a gallery packs cards on narrow screens. `standard` fits the
+ * most cards; `readable` uses fewer, larger columns so card text reads in
+ * place on a phone. Desktop layouts are the same for both.
+ */
+export type CardGalleryDensity = "standard" | "readable";
+
 interface CardPanelBaseProps<EntryId extends string> {
   /** Header title, rendered as an `<h2>`. */
   title: string;
@@ -146,6 +153,8 @@ export interface CardBrowserPanelProps<
   toolbar?: CardBrowserToolbar;
   /** Host integration. `overlay` is floating on desktop and full-bleed on mobile. */
   presentation?: CardBrowserPresentation;
+  /** Card density on narrow screens. Defaults to `standard`. */
+  density?: CardGalleryDensity;
   /** Fires when an enabled card tile is activated. */
   onCardPress?: (entryId: EntryId) => void;
   /** Fires when a draggable card entry begins a native drag. */
@@ -172,6 +181,8 @@ export interface CardPickerPanelProps<
 > extends CardPanelBaseProps<EntryId> {
   /** Host integration. `overlay` is floating on desktop and full-bleed on mobile. */
   presentation?: CardPickerPresentation;
+  /** Card density on narrow screens. Defaults to `standard`. */
+  density?: CardGalleryDensity;
   /** Optional one-or-two-action GlassButton footer below the card grid. */
   footerActions?:
     | readonly [CardPickerFooterAction]

@@ -24,15 +24,17 @@ function frameForPresentation(
  */
 export function CardBrowserPanel<EntryId extends string = DeckEntryId>({
   presentation = "embedded",
+  density = "standard",
   ...props
 }: CardBrowserPanelProps<EntryId>): ReactElement {
   const isDesktop = useIsDesktop();
+  const readable = density === "readable";
   return (
     <GallerySurface
       {...props}
       role="browser"
-      columns={isDesktop ? "five" : "four"}
-      cardSize={isDesktop ? "standard" : "compact"}
+      columns={isDesktop ? "five" : readable ? "two" : "four"}
+      cardSize={isDesktop || readable ? "standard" : "compact"}
       frame={frameForPresentation(presentation, isDesktop)}
       spacing={isDesktop ? "regular" : "compact"}
       heightMode={presentation === "embedded" ? "content" : "fill"}

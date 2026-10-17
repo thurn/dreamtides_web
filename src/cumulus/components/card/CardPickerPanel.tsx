@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import {
   cardGallerySurface,
+  type CardGalleryDensity,
   type CardPickerPanelProps,
   type CardPickerPresentation,
 } from "./card-gallery-surface";
@@ -13,8 +14,9 @@ function pickerColumnsFor(
   cardCount: number,
   isDesktop: boolean,
   presentation: CardPickerPresentation,
+  density: CardGalleryDensity,
 ): "two" | "three" | "four" | "five" {
-  const maximum = isDesktop ? 5 : presentation === "overlay" ? 2 : 4;
+  const maximum = isDesktop ? 5 : presentation === "overlay" || density === "readable" ? 2 : 4;
   const count = Math.max(2, Math.min(maximum, cardCount));
   if (count === 2) return "two";
   if (count === 3) return "three";
@@ -28,6 +30,7 @@ function pickerColumnsFor(
  */
 export function CardPickerPanel<EntryId extends string = DeckEntryId>({
   presentation = "embedded",
+  density = "standard",
   ...props
 }: CardPickerPanelProps<EntryId>): ReactElement {
   const isDesktop = useIsDesktop();
@@ -35,13 +38,15 @@ export function CardPickerPanel<EntryId extends string = DeckEntryId>({
     <GallerySurface
       {...props}
       role="picker"
-      columns={pickerColumnsFor(props.cards.length, isDesktop, presentation)}
+      columns={pickerColumnsFor(props.cards.length, isDesktop, presentation, density)}
       cardSize={
         isDesktop
           ? props.cards.length <= 3
             ? "reading"
             : "standard"
-          : "compact"
+          : density === "readable"
+            ? "standard"
+            : "compact"
       }
       frame={
         presentation === "overlay" && !isDesktop ? "fullBleed" : "floating"

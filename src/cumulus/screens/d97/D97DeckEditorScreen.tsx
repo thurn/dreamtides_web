@@ -2,7 +2,9 @@
 // over the run's collection, switching between the active deck and the
 // reserve. Pressing a deck card unequips it into the reserve; pressing a
 // reserve card equips it. At the minimum deck size the deck's cards are
-// disabled, so the deck can never drop below it.
+// disabled, so the deck can never drop below it. On phones the cards sit in
+// two readable columns, and a press and hold reveals a card's full text
+// without moving it.
 // PURE: it renders from a view model and reports each move by owned-copy id;
 // the adapter records the move as an intent. Which half is shown is local
 // view state.
@@ -47,6 +49,9 @@ export interface D97DeckEditorScreenProps {
 
 type D97DeckEditorZone = "deck" | "reserve";
 
+/** How a touch player reads a card before moving it. */
+const READ_HINT = "Press and hold a card to read it.";
+
 /** The editor's widest desktop measure. */
 const EDITOR_MAX_WIDTH_PX = 1180;
 
@@ -87,6 +92,8 @@ export function D97DeckEditorScreen({
         ? `Tap a card to move it to your reserve. Your deck needs at least ${String(view.minimumDeckSize)} cards.`
         : `Your deck is at its minimum of ${String(view.minimumDeckSize)} cards.`
       : "Tap a card to add it to your deck.";
+  // Touch screens have no hover: tell the player how to read a card first.
+  const subtitleWithHint = isDesktop ? subtitle : `${subtitle} ${READ_HINT}`;
 
   return (
     <AnimatePresence>
@@ -135,7 +142,7 @@ export function D97DeckEditorScreen({
           >
             <CardBrowserPanel<D97OwnedCopyId>
               title="Edit Deck"
-              subtitle={subtitle}
+              subtitle={subtitleWithHint}
               rightAccessory={{
                 kind: "glassButton",
                 button: {
@@ -167,6 +174,7 @@ export function D97DeckEditorScreen({
                   : "Your reserve is empty. New cards arrive here."
               }
               presentation="overlay"
+              density="readable"
               onCardPress={zone === "deck" ? onUnequip : onEquip}
               testId="d97-deck-editor-panel"
             />

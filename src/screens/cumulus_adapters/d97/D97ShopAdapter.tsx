@@ -6,6 +6,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { D97_COLLECTION } from "../../../content/d97/collection";
 import { D97_SHOP } from "../../../content/d97/shop";
+import { useIsDesktop } from "../../../cumulus/primitives/use-is-desktop";
 import { CardShopSiteScreen } from "../../../cumulus/screens/CardShopSiteScreen";
 import { D97ShopSellPanel } from "../../../cumulus/screens/d97/D97ShopSellPanel";
 import { guideDialogueLines } from "../../../data/dreamscapes";
@@ -42,6 +43,7 @@ export function D97ShopAdapter({
   readonly onClose: () => void;
 }) {
   const actions = useActions();
+  const isDesktop = useIsDesktop();
   const [selling, setSelling] = useState(false);
   const shop = run.shops[anchorId];
   const guide = useMemo(() => {
@@ -93,6 +95,7 @@ export function D97ShopAdapter({
       onRestock={restock}
       onClose={leave}
       sellAction={{ label: "Sell Cards", onPress: openSell, testId: "d97-shop-sell-open" }}
+      {...(isDesktop ? {} : { hint: "Press and hold a card to read it." })}
     />
   );
 }

@@ -40,6 +40,9 @@ export interface D97ShopSellPanelProps {
 
 type D97SellZone = "reserve" | "deck";
 
+/** How a touch player reads a card before selling it. */
+const READ_HINT = "Press and hold a card to read it.";
+
 /** The panel's widest desktop measure. */
 const SELL_MAX_WIDTH_PX = 1180;
 
@@ -95,13 +98,13 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
       >
         <CardBrowserPanel<D97OwnedCopyId>
           title="Sell Cards"
-          subtitle={
+          subtitle={`${
             view.atFloor
               ? `You cannot sell below ${String(view.collectionFloor)} cards.`
               : deckLocked
                 ? `Your deck cannot go below ${String(view.minimumDeckSize)} cards.`
                 : "Tap a card to sell it for the price shown."
-          }
+          }${isDesktop ? "" : ` ${READ_HINT}`}`}
           rightAccessory={{
             kind: "glassButton",
             button: { label: "Done", variant: "accent", onPress: onClose, testId: "d97-shop-sell-done" },
@@ -121,6 +124,7 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
           cards={shown}
           emptyLabel={zone === "reserve" ? "Your reserve is empty." : "Your deck is empty."}
           presentation="overlay"
+          density="readable"
           onCardPress={onSell}
           testId="d97-shop-sell-panel"
         />

@@ -352,6 +352,31 @@ describe("CardPickerPanel", () => {
   });
 });
 
+describe("gallery density", () => {
+  const cards = ["A", "B", "C", "D", "E"].map((name) => ({ entryId: parseDeckEntryId(name), model: model(name) }));
+  const surface = (container: HTMLElement, role: string) =>
+    container.querySelector<HTMLElement>(`[data-gallery-role=${role}]`)?.dataset;
+
+  it("uses two standard-size columns for readable galleries on narrow screens", () => {
+    desktop = false;
+    const browser = renderInCumulus(<CardBrowserPanel title={"Deck"} cards={cards} density="readable" />);
+    expect(surface(browser.container, "browser")?.galleryColumns).toBe("2");
+    expect(surface(browser.container, "browser")?.galleryCardSize).toBe("standard");
+    const picker = renderInCumulus(<CardPickerPanel title={"Shop"} cards={cards} density="readable" />);
+    expect(surface(picker.container, "picker")?.galleryColumns).toBe("2");
+    expect(surface(picker.container, "picker")?.galleryCardSize).toBe("standard");
+  });
+
+  it("keeps the standard narrow layout by default and the same desktop layout for both", () => {
+    desktop = false;
+    const dense = renderInCumulus(<CardBrowserPanel title={"Deck"} cards={cards} />);
+    expect(surface(dense.container, "browser")?.galleryColumns).toBe("4");
+    desktop = true;
+    const wide = renderInCumulus(<CardBrowserPanel title={"Deck"} cards={cards} density="readable" />);
+    expect(surface(wide.container, "browser")?.galleryColumns).toBe("5");
+  });
+});
+
 describe("CardChoiceGrid", () => {
   it("renders entries in order and routes stable entry ids", () => {
     const choose = vi.fn();
