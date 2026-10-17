@@ -119,6 +119,46 @@ initialization" at page load, which the dev server hides. Registries that
 share a cycle with their entries, such as the effect primitives and the step
 kinds, therefore read each entry through a getter.
 
+## D97 tooling
+
+`npm run d97:map -- <command>` inspects, previews and validates D97 dream maps
+and manages the stamp catalog (decision P12). `<map>` is a catalog map id, a
+map module path (`.ts`), or a Tiled map path (`.tmx`/`.tmj`, relative to the
+LPC library or absolute), which compiles with no recipe, regions or anchors.
+
+```bash
+npm run d97:map -- inspect <map>
+npm run d97:map -- preview <map> [--region <name>] [--rect x,y,w,h] [--scale <factor>] [--out <dir>]
+npm run d97:map -- validate <map>          # or --all for the whole catalog
+npm run d97:map -- stamps list
+npm run d97:map -- stamps extract --from <map> --rect x,y,w,h --name <name> [--out <dir>]
+```
+
+- **inspect** prints the size class, entries, walkable areas, per-region
+  walkability and reachability, landmark and anchor tables, the main route
+  and region-to-region crossing times at walking speed.
+- **preview** writes PNGs and a `legend.txt` to the gitignored
+  `artifacts/d97/previews/<map>/`: `map.png` (the whole map, downscaled, with
+  region outlines, anchor letters and the main route) and one zoom per region
+  (or the `--region`, plus any `--rect`) with a labelled coordinate grid and
+  blocked cells tinted red. `--scale` multiplies the 32-pixel tile size. It
+  prints each path with its pixel size. Without the LPC library it draws
+  walkability colours instead of tiles.
+- **validate** prints findings by coordinate and exits 1 on errors: anchors
+  on blocked cells, anchors no entry reaches, guarded doors (and chests
+  behind guardians) reachable while their guardian stands, doors closer than
+  the minimum spacing, and a main route outside its size class's crossing
+  target.
+- **stamps extract** cuts a rectangle of a compiled map into a new stamp
+  module in `src/content/d97/stamps/` (list it in that directory's
+  `index.ts`) and writes its preview sheet to
+  `artifacts/d97/previews/stamps/`.
+
+Entries are door entry tiles and waypoints; the main route is the longest
+shortest walk between two doors' entry tiles (`src/d97/map/routes.ts`). Walking
+speed, size classes, crossing targets and door spacing are tunables in
+`src/content/d97/map-tuning.ts`.
+
 ## Policy tournaments
 
 The headless Node runner compares two existing engine policies on the frozen

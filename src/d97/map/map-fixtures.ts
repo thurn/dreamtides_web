@@ -1,7 +1,9 @@
 // Synthetic Tiled fixtures for the D97 map tests: a tiny "library" with an
 // 8×6 TMX town (CSV data, an external oversized tileset, collision tile and
 // object layers, a group layer, a tile object and a flipped tile), its TMJ twin, and the
-// assets (a stamp and an LPC-layout terrain) recipes place.
+// assets (a stamp and an LPC-layout terrain) recipes place. For the map tools'
+// tests, `compiledFromRows` builds a compiled map straight from rows of
+// walkability characters.
 
 import {
   parseD97StampId,
@@ -9,9 +11,10 @@ import {
   parseDreamAnchorId,
   parseDreamMapId,
 } from "../../types/identifiers";
+import type { CompiledAnchor, CompiledDreamMap } from "./compiled";
 import { lpcTerrainCorners, type DreamStamp, type DreamTerrain } from "./assets";
 import { dreamMapSourceHash } from "./compile";
-import { defineDreamMap, type DreamMapDefinition } from "./definition";
+import { defineDreamMap, type DreamMapDefinition, type DreamMapRegion } from "./definition";
 import type { TiledTileset } from "./tiled";
 
 export const FIXTURE_MAP_PATH = "maps/town.tmx";
@@ -245,4 +248,47 @@ export function fixtureDefinition(
     anchors: [],
     ...overrides,
   });
+}
+
+/** Anchor ids for maps built by `compiledFromRows`. */
+export const ROW_ANCHORS = {
+  doorA: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7101"),
+  doorB: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7102"),
+  doorC: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7103"),
+  guardian: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7104"),
+  chest: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7105"),
+  shop: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7106"),
+  waypoint: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7107"),
+} as const;
+
+/**
+ * A compiled map from rows of characters, `#` blocked and anything else
+ * walkable, with no tilesets or layers, 32-pixel tiles, and the given
+ * anchors and regions.
+ */
+export function compiledFromRows(
+  rows: readonly string[],
+  anchors: readonly CompiledAnchor[] = [],
+  regions: readonly DreamMapRegion[] = [],
+): CompiledDreamMap {
+  const width = rows[0]?.length ?? 0;
+  if (rows.some((row) => row.length !== width)) throw new Error("rows differ in length");
+  const walkable = rows.map((row) => Array.from(row, (cell) => (cell === "#" ? "0" : "1")).join("")).join("");
+  return {
+    format: 1,
+    id: FIXTURE_MAP_ID,
+    sourceSha256: null,
+    width,
+    height: rows.length,
+    tileWidth: 32,
+    tileHeight: 32,
+    tilesets: [],
+    layers: [],
+    objects: [],
+    walkable,
+    abovePlayer: "0".repeat(walkable.length),
+    regions,
+    landmarks: [],
+    anchors,
+  };
 }
