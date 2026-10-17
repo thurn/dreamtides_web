@@ -288,9 +288,10 @@ it("replays a copied-card target prompt, rejects stale/cancel input, and rolls b
   expect(current.committed.turnLog.played.player).toHaveLength(1);
 });
 
+const SYNTHETIC_CONTINUATION_THRESHOLD = 8;
 /** Real public copy occasions, with synthetic permanent emblems and passive backgrounds. */
 function continuation(side: Side, hand: boolean, ephemeral = false, options: {
-  body?: (copy: ResolvingEffect) => ResolvingEffect; extra?: readonly Ability[]; created?: boolean; temporary?: boolean; banished?: boolean;
+  body?: (copy: ResolvingEffect) => ResolvingEffect; extra?: readonly Ability[]; created?: boolean; temporary?: boolean; banished?: boolean; syntheticThreshold?: boolean;
   deckGuard?: { player: PlayerRef; cards: readonly EngineCardDefinition["id"][] };
 } = {}) {
   const repeated = p.copyCard(triggeringCard());
@@ -316,7 +317,7 @@ function continuation(side: Side, hand: boolean, ephemeral = false, options: {
     ], void: [subject.id], ...(options.deckGuard?.player === "opponent" ? { deck: options.deckGuard.cards } : {}) },
     { back: [v.vanilla1.id, v.vanilla2.id, ...(options.deckGuard ? [guard.id] : [])], ...(options.banished ? { hand: [v.vanilla1.id] } : {}),
       ...(options.deckGuard?.player === "you" ? { deck: options.deckGuard.cards } : {}) }, [subject, maker, temporary, guard, jailer]);
-  let state = f.state;
+  let state = options.syntheticThreshold ? { ...f.state, config: { ...f.state.config, mandatoryLoopCheckFrom: SYNTHETIC_CONTINUATION_THRESHOLD } } : f.state;
   if (options.banished) {
     const source = f.ids[side].back[f.ids[side].back.length - 1]; if (source == null) throw new Error("Expected live banishment source");
     const made = f.engine.apply(state, side, { kind: "activate", source, ability: 0 }, NO_PROMPTS);
@@ -408,9 +409,9 @@ for (const side of SIDES) describe(`${side} closed event-copy continuations`, ()
     expect(result.events.some(e => e.kind === "winConditionMet" && e.side === f.other && e.sources.includes(guard))).toBe(true);
   });
   it.each(["you", "opponent"] as const)("preserves an empty-deck victory reached by real copy draws beyond the threshold ref=%s", player => {
-    const limit = continuation(side, false).state.config.mandatoryLoopCheckFrom + 5;
+    const limit = continuation(side, false, false, { syntheticThreshold: true }).state.config.mandatoryLoopCheckFrom + 5;
     const addressed = player === "you" ? opponent(side) : side;
-    const f = continuation(side, false, false, { deckGuard: { player, cards: Array.from({ length: limit }, () => v.vanilla1.id) },
+    const f = continuation(side, false, false, { syntheticThreshold: true, deckGuard: { player, cards: Array.from({ length: limit }, () => v.vanilla1.id) },
       extra: [triggered(whenCopyTrigger(), p.draw(1, player === "you" ? "opponent" : "you"))] });
     const result = f.engine.apply(f.state, side, { kind: "play", card: f.card, from: "hand" }, witnessAnswers(f.state));
     expect(result.state.result).toEqual({ kind: "victory", winner: f.other, reason: "winCondition" });
@@ -419,7 +420,7 @@ for (const side of SIDES) describe(`${side} closed event-copy continuations`, ()
   });
 
   it("keeps genuine prompts, partial-copy rollback and competing input stable through terminal reload", () => {
-    const f = continuation(side, false); const fold = createFoldAdapter(f.engine, { checkEventPrefix: true });
+    const f = continuation(side, false, false, { syntheticThreshold: true }); const fold = createFoldAdapter(f.engine, { checkEventPrefix: true });
     let current = slice(f.state); const published: EngineEvent[] = []; const answers = witnessAnswers(f.state);
     const apply = (intent: Parameters<typeof fold.reduce>[1]) => {
       const result = fold.reduce(current, intent);
@@ -452,15 +453,15 @@ for (const side of SIDES) describe(`${side} closed event-copy continuations`, ()
   });
 
   it.each([false, true])("preserves a dormant hand-count victory beyond the mandatory threshold temporary=%s", temporary => {
-    const initial = continuation(side, true); const count = initial.state.config.mandatoryLoopCheckFrom + 5;
-    const f = continuation(side, true, true, { temporary, extra: [winCondition({ cond: "cardsIn", player: "you", zone: "hand", atLeast: count })] });
+    const initial = continuation(side, true, false, { syntheticThreshold: true }); const count = initial.state.config.mandatoryLoopCheckFrom + 5;
+    const f = continuation(side, true, true, { syntheticThreshold: true, temporary, extra: [winCondition({ cond: "cardsIn", player: "you", zone: "hand", atLeast: count })] });
     const result = f.engine.apply(f.state, side, { kind: "play", card: f.card, from: "hand" }, NO_PROMPTS);
     expect(result.state.result).toEqual({ kind: "victory", winner: side, reason: "winCondition" });
     expect(result.state.sides[side].hand).toHaveLength(count);
   });
 
   it("lets a real stopping mode finish after the mandatory threshold", () => {
-    const f = continuation(side, false, false, { body: copy => p.chooseOne(copy, p.sequence()) });
+    const f = continuation(side, false, false, { syntheticThreshold: true, body: copy => p.chooseOne(copy, p.sequence()) });
     const limit = f.state.config.mandatoryLoopCheckFrom + 3;
     const result = f.engine.apply(f.state, side, { kind: "play", card: f.card, from: "hand" }, witnessAnswers(f.state, (prompt, state) =>
       prompt.kind === "chooseMode" && typeof prompt.purpose.source === "object" ? (state.stack.length < limit ? 0 : 1) : undefined));
@@ -468,9 +469,9 @@ for (const side of SIDES) describe(`${side} closed event-copy continuations`, ()
   });
 
   it.each([false, true, "banished"] as const)("lets a dormant interfering copy listener prevent the original and finish background=%s", temporary => {
-    const base = continuation(side, false); const limit = 20 + base.state.config.mandatoryLoopCheckFrom * 2;
+    const base = continuation(side, false, false, { syntheticThreshold: true }); const limit = 20 + base.state.config.mandatoryLoopCheckFrom * 2;
     const stop = p.prevent(stackItem({ cardType: "event" }));
-    const f = continuation(side, false, false, { temporary: temporary === true, banished: temporary === "banished", extra: [
+    const f = continuation(side, false, false, { syntheticThreshold: true, temporary: temporary === true, banished: temporary === "banished", extra: [
       triggered(whenCopyTrigger(), p.gainEnergy(1)),
       triggered(whenCopyTrigger(), temporary === "banished" ? p.sequence(p.returnToHand({ kind: "all", selector: { controller: "you" } }), stop) : stop,
         { oncePerTurn: true, condition: { cond: "energyAtLeast", amount: limit } }),
