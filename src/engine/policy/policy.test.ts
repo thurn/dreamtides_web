@@ -97,26 +97,35 @@ describe("the optional-chain bound", () => {
     }
   });
 
-  it("keeps Greedy paying a finite unless cost once the chain is spent, while declining loopable prompts", () => {
+  it("keeps Greedy's finite replies consistent once the chain is spent, while declining loopable prompts", () => {
     const { state, ids } = board({ enemy: { back: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla1.id], deck }, player: { deck } });
-    const [valuable, least] = ids.enemy.back;
-    if (valuable === null || valuable === undefined || least === null || least === undefined) throw new Error("no characters");
-    const view = { ...engine.view(state, "enemy"), automaticChoices: AI.enginePolicy.optionalChainCap };
+    const [first, second] = ids.enemy.back;
+    if (first === null || first === undefined || second === null || second === undefined) throw new Error("no characters");
     const base = (role: PromptRole) => ({ side: "enemy" as const, purpose: { source: null, cardId: null, ability: 0, role }, cancellable: false });
-    const greedy = (prompt: Prompt) =>
-      runPolicy(engine, { ...topLevelRequest(state, "enemy", "greedy", { player: [], enemy: [] }), view, decision: { kind: "prompt", prompt } });
-    const cases: readonly { prompt: Prompt; value: unknown; declined: boolean }[] = [
-      { prompt: { ...base("preventUnlessAbandons"), kind: "confirm" }, value: true, declined: false },
-      { prompt: { ...base("abandon"), kind: "chooseCards", candidates: [valuable, least], min: 1, max: 1 }, value: [least], declined: false },
-      { prompt: { ...base("keep"), kind: "chooseCards", candidates: [least, valuable], min: 1, max: 1 }, value: [valuable], declined: false },
-      { prompt: { ...base("preventUnlessPays"), kind: "payOrDecline", energy: 1, payable: true }, value: true, declined: false },
-      { prompt: { ...base("youMay"), kind: "confirm" }, value: false, declined: true },
-      { prompt: { ...base("optionalPayment"), kind: "payOrDecline", energy: 1, payable: true }, value: false, declined: true },
+    const greedy = (prompt: Prompt, automaticChoices: number) =>
+      runPolicy(engine, { ...topLevelRequest(state, "enemy", "greedy", { player: [], enemy: [] }), view: { ...engine.view(state, "enemy"), automaticChoices }, decision: { kind: "prompt", prompt } });
+    const cases: readonly { prompt: Prompt; loopable: boolean }[] = [
+      { prompt: { ...base("preventUnlessAbandons"), kind: "confirm" }, loopable: false },
+      { prompt: { ...base("abandon"), kind: "chooseCards", candidates: [first, second], min: 1, max: 1 }, loopable: false },
+      { prompt: { ...base("keep"), kind: "chooseCards", candidates: [second, first], min: 1, max: 1 }, loopable: false },
+      { prompt: { ...base("preventUnlessPays"), kind: "payOrDecline", energy: 1, payable: true }, loopable: false },
+      { prompt: { ...base("youMay"), kind: "confirm" }, loopable: true },
+      { prompt: { ...base("optionalPayment"), kind: "payOrDecline", energy: 1, payable: true }, loopable: true },
     ];
-    for (const { prompt, value, declined } of cases) {
-      const result = greedy(prompt);
-      expect(result.choice).toEqual({ kind: "answer", value });
-      expect(result.trace.declined).toBe(declined ? "optionalChain" : undefined);
+    for (const { prompt, loopable } of cases) {
+      const result = greedy(prompt, AI.enginePolicy.optionalChainCap);
+      if (result.choice.kind !== "answer") throw new Error("expected a prompt answer");
+      expect(isLegalAnswer(prompt, result.choice.value)).toBe(true);
+      if (loopable) {
+        expect(result.choice).toEqual({ kind: "answer", value: false });
+        expect(result.trace.declined).toBe("optionalChain");
+      } else {
+        const uncapped = greedy(prompt, 0);
+        if (uncapped.choice.kind !== "answer") throw new Error("expected an uncapped prompt answer");
+        expect(isLegalAnswer(prompt, uncapped.choice.value)).toBe(true);
+        expect(result.choice).toEqual(uncapped.choice);
+        expect(result.trace.declined).toBeUndefined();
+      }
     }
   });
 

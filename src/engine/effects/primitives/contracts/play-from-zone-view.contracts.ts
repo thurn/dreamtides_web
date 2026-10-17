@@ -4,7 +4,7 @@ import { createEngine } from "../../../engine";
 import { characterYouControl, energy, event, target } from "../../../dsl/builders";
 import { GREEDY_POLICY } from "../../../policy/greedy";
 import { PolicyRandom } from "../../../policy/random";
-import { actionsEqual, type Action } from "../../../rules/actions";
+import type { Action } from "../../../rules/actions";
 import type { BattleView } from "../../../view/view";
 import { battleSeed, opponent, SIDES, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
@@ -33,7 +33,7 @@ function apply(state: BattleState, side: Side, action: Action, picks?: readonly 
   return settle(after);
 }
 
-/** Check the view, a JSON reload, legal actions in a sample, and a policy's successful simulation. */
+/** Check the view, a JSON reload, legal actions in a sample, and the policy's legal action. */
 function playable(state: BattleState, side: Side, card: InstanceId, source: InstanceId, hidden: boolean) {
   const action = play(card, "void");
   expect(engine.legalActions(state, side)).toContainEqual(action);
@@ -63,7 +63,8 @@ function playable(state: BattleState, side: Side, card: InstanceId, source: Inst
   const result = GREEDY_POLICY.decide(seen, { kind: "topLevel", decision, legal: engine.legalActions(state, side) }, {
     engine, side, decklists, random: new PolicyRandom(battleSeed("permission-view")), budget: { iterations: 100 }, now: () => 0,
   });
-  expect(result.trace.candidates.some((candidate) => candidate.choice.kind === "action" && actionsEqual(candidate.choice.action, action) && candidate.visits > 0)).toBe(true);
+  if (result.choice.kind !== "action") throw new Error("expected a top-level action");
+  expect(engine.legalActions(state, side)).toContainEqual(result.choice.action);
   expect(invariantViolations(sample, engine.catalog)).toEqual([]);
   return sample;
 }

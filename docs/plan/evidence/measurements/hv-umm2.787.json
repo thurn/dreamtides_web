@@ -1,0 +1,235 @@
+{
+  "bead": "hv-umm2.787",
+  "base": "83f9bd631112511b11c357b18a0f488b56733ca7",
+  "kind": "Pure synthetic fixture quality repair; production behavior and all other test bodies retain their source bytes.",
+  "sourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/fixture-source-proof.json",
+  "runnerFreeze": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/runner-frozen.json",
+  "scopeExtension": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/area-audit-policy-table/native-scope-proof.json",
+  "measurementScope": {
+    "start": "Actual own timestamp before first brief read; exact dispatch instant remains unknown, parent-before-dispatch.json retains a separate earlier observation.",
+    "end": "Actual pre-schema/Git evidence cutoff. Subsequent schema and commit tail are measured externally in original receipts; no invented exact commit-end timestamp."
+  },
+  "validation": {
+    "commands": {
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "prevent unless the opponent abandons|returnAllButOne|playFromZone view"
+        ],
+        "originalToolId": 63527,
+        "originalTerminal": "actual0 collected",
+        "wallS": 10.421924958005548,
+        "childCpuS": 11.953073000000002,
+        "loadStart": [
+          4.58837890625,
+          5.44482421875,
+          6.39306640625
+        ],
+        "loadEnd": [
+          4.744140625,
+          5.44677734375,
+          6.38232421875
+        ],
+        "pid": 12475,
+        "pgid": 12475,
+        "inputFiles": 6111,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/focused.log": "57aad7984d952f9cd1f93656d01aa9f1e6bcfb98079390d385ef7f889040d840",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/focused.inputs.json": "5a63dd3a51c52874fb22c176bc5fe0e29450c73cf17a720f19cde31f693a4593",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/focused.launch.json": "d76eeb2baa9b319b1ae30498cae73b7c14459b63c075cf984c14ac0ee0a6ef42",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/focused.started.json": "0be59948c48b5b0b9e8e986102e15f66c878df9dd89a81dd56fe5e5529bfb2a9",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/focused.receipt.json": "ccc9c312c8f61dedaf89b79364b807ba7a50819bba826289d9c5ba3742843b89"
+        }
+      },
+      "policy": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts"
+        ],
+        "originalToolId": 44537,
+        "originalTerminal": "actual0 collected",
+        "wallS": 12.27391579200048,
+        "childCpuS": 17.062418,
+        "loadStart": [
+          5.00439453125,
+          5.48876953125,
+          6.3916015625
+        ],
+        "loadEnd": [
+          4.9970703125,
+          5.47216796875,
+          6.375
+        ],
+        "pid": 13555,
+        "pgid": 13555,
+        "inputFiles": 6111,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy.log": "b3d0d7d6dc989f02ee65dbdeb0e45c894374ba04bb8e3c3d67dc549fc780a89a",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy.inputs.json": "5a63dd3a51c52874fb22c176bc5fe0e29450c73cf17a720f19cde31f693a4593",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy.launch.json": "a8e3c71dcc9c30c0d3202544eb55a681cbffb3004ead6ff79ec28120ea784abb",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy.started.json": "de324e75013406e54e3e78efac5aede85391c35b10af8fbbacc1c40baa1a8f50",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy.receipt.json": "0ae0fa26eb9a364c768b6a6d3f816e9d3f8a563d301cec02b49b243df3269c5e"
+        }
+      },
+      "policy-final": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts"
+        ],
+        "originalToolId": 73908,
+        "originalTerminal": "actual0 collected",
+        "wallS": 11.820841625041794,
+        "childCpuS": 16.156129,
+        "loadStart": [
+          4.78955078125,
+          5.17724609375,
+          6.15625
+        ],
+        "loadEnd": [
+          4.5810546875,
+          5.12109375,
+          6.125
+        ],
+        "pid": 20835,
+        "pgid": 20835,
+        "inputFiles": 6115,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy-final.log": "85432fb7b5eb082249744da234d60381a222cf402ef7771d61829a92bf7f576d",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy-final.inputs.json": "af4237a2eb085c8515cec5f93a9dfd0efaf5cff0103beb1a6e9090ba4a9eb4ac",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy-final.launch.json": "1f932f4a64846e73cdb40e540523babab17b373788d90274d68c3a5a914898af",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy-final.started.json": "b55344b5b271ad11690a01b50eb6c5de547134ebd7893ef886034d954a7c1457",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/policy-final.receipt.json": "68c33463685d200cfabfffdb60c23459410ad3a7440b4170c568e1e6db21a38a"
+        }
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "originalToolId": 91471,
+        "originalTerminal": "actual0 collected",
+        "wallS": 30.567949125019368,
+        "childCpuS": 86.940288,
+        "loadStart": [
+          4.6142578125,
+          5.11865234375,
+          6.1181640625
+        ],
+        "loadEnd": [
+          5.7666015625,
+          5.37060546875,
+          6.17529296875
+        ],
+        "pid": 21672,
+        "pgid": 21672,
+        "inputFiles": 6115,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/review.log": "0b1d93fd5e795b15e73a39f4fc5e2f56ebfdfb6aae06d86bf119a51da8383ae5",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/review.inputs.json": "90ef173cae4ab8476f7a47c3c217130b468197f7d985dcf28caaeeaa3aed0f82",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/review.launch.json": "575df9fc56c49e972cd221b361a4d4bde3409229c8a1c94a2f3067a8ebf46555",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/review.started.json": "a3488a796ef8f2c444412d640d519bde6f37b70db65d4549d3e05a88ee07cfc5",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/review.receipt.json": "12bfbe5bd0bc57c236fff8376999f4c49c409f824bc8efa52e3a0601c4cf0701"
+        }
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "originalToolId": 94245,
+        "originalTerminal": "actual0 collected",
+        "wallS": 4.8927171669784,
+        "childCpuS": 5.638617000000001,
+        "loadStart": [
+          5.48828125,
+          5.32470703125,
+          6.14892578125
+        ],
+        "loadEnd": [
+          5.36865234375,
+          5.30224609375,
+          6.13623046875
+        ],
+        "pid": 22455,
+        "pgid": 22455,
+        "inputFiles": 6115,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/knip.log": "42190cf32898772f9277cc3d82056f0235c2e8d081bc6491a061ee2492696c27",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/knip.inputs.json": "90ef173cae4ab8476f7a47c3c217130b468197f7d985dcf28caaeeaa3aed0f82",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/knip.launch.json": "b5abac30e52b659e877ca9f591fc4f7570863173e4e1a577902aacc1b0d7bd46",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/knip.started.json": "082b585ccd5a29ec2e15b5a61365565d1fee2c8a5bf953fc05dd5259c507671b",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/knip.receipt.json": "94612b0fd2621fc476b80481ecfa0b13e4a81f6ae38105e03b5ddab7e8345939"
+        }
+      }
+    },
+    "counts": {
+      "focusedEntireThreeContractDescribes": 23,
+      "focusedUnrelatedSkipped": 5888,
+      "initialPolicyEarlierSource": 94,
+      "finalPolicyUnfiltered": 94,
+      "reviewRelatedFinalSource": 6005,
+      "reviewFiles": 2
+    },
+    "failures": [],
+    "sourceInputAudit": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/source-input-audit.json",
+    "finalSchema": "Executed after this exact evidence freeze. Its actual result and original terminal are external in schema.receipt.json."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 48,
+    "jsdomFiles": 0,
+    "expandedCases": -1
+  },
+  "precedence": "Current AGENTS forbids gating default algorithm choices. Historical403 lowest-value criterion yields to that policy; finite-role cap equality and independent public consequences remain. Original499 keep/reload contract remains.",
+  "counterfactual": "A restored all-role cap decline differs from the real uncapped finite confirmation on the current synthetic prompt. The capped-versus-uncapped equality fails before the fold. No production mutation or before-fix runtime is claimed.",
+  "failurePaths": {
+    "newTransitions": [],
+    "errorMidStep": "Existing prevent case rolls back an error after the abandonment without committing or publishing any of it.",
+    "reloadRestart": "Existing prevent reconstructs both prompts after reload; keep integration reconstructs saved slice and applies actual legal keeper; permission view uses JSON reconstruction.",
+    "partialPersistentWrite": "No storage boundary or persistent writer is introduced; no new fixture-specific test applies.",
+    "invalidStaleForeignConcurrent": "Existing prevent reconstructs both prompts and rejects foreign, invalid, stale and concurrent input. Keep integration retains empty/multiple/foreign/cancel refusal and unchanged committed hash.",
+    "permission": "Unchanged explicit continuations cover both controllers and source departures, hidden identity, sample legal permission, consumption and turn expiry.",
+    "bothUnlessBranches": "Existing explicit accept and decline contracts remain; real capped result selects the branch consumed here."
+  },
+  "runtime": {
+    "workers": 2,
+    "groupProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/process-groups-precommit.json",
+    "groupsAbsent": [
+      12475,
+      13555,
+      20835,
+      21672,
+      22455
+    ],
+    "ports": [],
+    "heavy": false,
+    "browser": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review wrapper start",
+        "source": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/greedy-legal-fixtures787/review.receipt.json"
+      },
+      "implementWindow": {
+        "startScope": "Actual own start before brief read; parent earlier observation retained separately",
+        "endScope": "Actual pre-schema/Git evidence cutoff; later tail externally measured"
+      }
+    }
+  },
+  "D19": "Full-suite <=60s remains unmet/unwaived. No full, soak, fuzz, browser, performance or Phase5 acceptance credit.",
+  "parentDuties": [
+    "Fresh read-only fork:none whole-source core review and independent finding disposition",
+    "Exact candidate certification, promotion, cleanup and native completion"
+  ]
+}

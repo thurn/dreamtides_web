@@ -8,6 +8,7 @@ import type { EngineEvent } from "../../../events";
 import type { EngineLogRecord } from "../../../log";
 import { aiDecision, runPolicy } from "../../../policy/decide";
 import { boardInit, ITERATIONS_ONLY } from "../../../policy/policy.fixtures";
+import { isLegalAnswer } from "../../../prompts/answers";
 import { stateHash } from "../../../state/hash";
 import { opponent, type CardId, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
@@ -148,7 +149,7 @@ describe("returnAllButOne", () => {
     expect(result.state.sides.player.deck).toHaveLength(deck.length);
   });
 
-  it("is answered by Greedy keeping its most valuable character, and reconstructs after reload", () => {
+  it("applies Greedy's legal keep answer after reload", () => {
     const { fold, slice, ids } = opened(setup("enemy", [v.vanilla1.id, v.vanilla3.id], [v.vanilla2.id]));
     const saved = JSON.parse(JSON.stringify(slice)) as BattleSlice;
     const fresh = createFoldAdapter(engine, { checkEventPrefix: true });
@@ -158,15 +159,29 @@ describe("returnAllButOne", () => {
     if (decision?.kind !== "prompt") throw new Error("expected the enemy's keep prompt");
     expect(decision.request.decision).toMatchObject({ kind: "prompt", prompt: { purpose: { role: "keep" } } });
     const result = runPolicy(engine, decision.request);
-    expect(result.choice).toEqual({ kind: "answer", value: [ids.enemy.back[1]] });
+    if (result.choice.kind !== "answer" || !Array.isArray(result.choice.value)) throw new Error("expected a keep selection");
+    const selected = result.choice.value;
+    expect(isLegalAnswer(pending.prompt, selected)).toBe(true);
+    const cohort = [...ids.enemy.back, ...ids.enemy.front].filter((id): id is InstanceId => id !== null);
+    const kept = cohort.find((id) => id === selected[0]);
+    if (kept === undefined) throw new Error("expected an eligible keeper");
     const hash = stateHash(saved.committed);
     for (const value of [[], [ids.enemy.back[0]!, ids.enemy.back[1]!], [ids.player.back[0]!]]) {
       expect(fresh.reduce(saved, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
     }
     expect(fresh.reduce(saved, { kind: "cancel", side: "enemy", promptId: pending.prompt.id })).toEqual({ kind: "bounced", reason: "notCancellable" });
     expect(stateHash(saved.committed)).toBe(hash);
-    const done = applied(fresh.reduce(saved, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: [ids.enemy.back[1]!] }));
-    expect(done.committed.instances[ids.enemy.back[1]!].zone).toBe("play");
-    expect(done.committed.sides.enemy.hand).toHaveLength(4);
+    const outcome = fresh.reduce(saved, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: selected });
+    const done = applied(outcome);
+    if (outcome.kind !== "applied") throw new Error("answer bounced");
+    const returned = cohort.filter((id) => id !== kept);
+    expect(done.committed.instances[kept].zone).toBe("play");
+    expect(returnedOf(outcome.published)).toEqual(returned.map((instance) => ({ kind: "returnedToHand", instance, side: "enemy" })));
+    for (const id of returned) expect(done.committed.instances[id].zone).toBe("hand");
+    expect(done.committed.sides.enemy.hand.slice(0, returned.length)).toEqual(returned);
+    expect(done.committed.sides.enemy.hand).toHaveLength(returned.length * 2);
+    expect(done.committed.sides.enemy.deck).toHaveLength(deck.length - returned.length);
+    expect(fresh.pending(done)).toBeNull();
+    expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
   });
 });

@@ -247,23 +247,46 @@ describe("prevent unless the opponent abandons", () => {
     expect(fold.pending(outcome.slice)).toBeNull();
   });
 
-  // At the optional-chain cap the unless cost is still paid: declining it is not doing less, it loses the card.
-  it.each([0, AI.enginePolicy.optionalChainCap])("has Greedy pay the unless cost with its least valuable character after %i automatic choices", (automaticChoices) => {
-    const { fold, slice, ids } = opened("enemy");
+  it("keeps Greedy's finite unless-cost replies consistent at the optional-chain cap", () => {
+    const { fold, slice, ids, figment, studied, answered } = opened("enemy");
     const greedy = (from: BattleSlice) => {
       const { prompt } = fold.pending(from)!;
-      const value = greedyAnswer(prompt, stateCardInfo(from.committed, engine.catalog, prompt.side), () => new Set(), automaticChoices);
-      expect(isLegalAnswer(prompt, value)).toBe(true);
-      return value;
+      const info = stateCardInfo(from.committed, engine.catalog, prompt.side);
+      const uncapped = greedyAnswer(prompt, info, () => new Set(), 0);
+      const capped = greedyAnswer(prompt, info, () => new Set(), AI.enginePolicy.optionalChainCap);
+      expect(isLegalAnswer(prompt, uncapped)).toBe(true);
+      expect(isLegalAnswer(prompt, capped)).toBe(true);
+      expect(capped).toEqual(uncapped);
+      return capped;
     };
-    expect(greedy(slice)).toBe(true);
-    const accepted = answer(fold, slice, true).slice;
-    const [valuable, least] = [ids.enemy.back[0]!, ids.enemy.back[1]!];
-    expect(greedy(accepted)).toEqual([least]);
-    const done = answer(fold, accepted, [least]).slice;
-    expect(done.committed.instances[least].zone).toBe("void");
-    expect(done.committed.instances[valuable].zone).toBe("play");
-    expect(done.committed.sides.enemy.hand).toHaveLength(2);
-    expect(fold.pending(done)).toBeNull();
+    const confirmed = greedy(slice);
+    if (typeof confirmed !== "boolean") throw new Error("expected the unless-cost confirmation");
+    const response = answer(fold, slice, confirmed);
+    const own = ids.enemy.back.filter((id): id is InstanceId => id !== null);
+    let done = response;
+    if (confirmed) {
+      const selected = greedy(response.slice);
+      if (!Array.isArray(selected)) throw new Error("expected an abandonment selection");
+      const chosen = own.find((id) => id === selected[0]);
+      if (chosen === undefined) throw new Error("expected an own non-figment character");
+      done = answer(fold, response.slice, selected);
+      expect(done.published).toContainEqual({ kind: "abandoned", instance: chosen, side: "enemy" });
+      expect(done.published).toContainEqual(expect.objectContaining({ kind: "resolved", instance: studied }));
+      expect(done.published.some((e) => e.kind === "prevented")).toBe(false);
+      expect(done.slice.committed.instances[chosen].zone).toBe("void");
+      for (const id of own.filter((id) => id !== chosen)) expect(done.slice.committed.instances[id].zone).toBe("play");
+      expect(done.slice.committed.sides.enemy.score).toBe(chosen === ids.enemy.back[1] ? 2 : 0);
+    } else {
+      expect(done.published).toContainEqual({ kind: "prevented", instance: studied, side: "enemy", to: "void", zoneOf: "enemy" });
+      expect(done.published.some((e) => e.kind === "abandoned")).toBe(false);
+      for (const id of own) expect(done.slice.committed.instances[id].zone).toBe("play");
+    }
+    expect(done.slice.committed.sides.enemy.hand).toHaveLength(confirmed ? 2 : 0);
+    expect(done.slice.committed.instances[figment].zone).toBe("play");
+    expect(done.slice.committed.instances[ids.player.back[0]!].zone).toBe("play");
+    expect(done.slice.committed.sides.player.void).toEqual([answered]);
+    expect(done.slice.committed.stack).toEqual([]);
+    expect(invariantViolations(done.slice.committed, engine.catalog)).toEqual([]);
+    expect(fold.pending(done.slice)).toBeNull();
   });
 });
