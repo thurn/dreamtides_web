@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.777",
+  "phase": 5,
+  "implementMin": 27.568777763843535,
+  "implementWindow": {
+    "start": "2026-10-17T02:53:21.582418+00:00",
+    "end": "2026-10-17T03:20:55.709084+00:00"
+  },
+  "windowQualification": "Elapsed first instrumented original implementation through revision2 evidence, including the parent cold-review/candidate-cancellation gap. Separate instrumented windows are retained in measurements; this is not productive editing-only time.",
+  "localValidationS": {
+    "original-baseline-both-original": 7.004718333017081,
+    "original-baseline-original": 6.719053165987134,
+    "original-baseline": 6.707638166029938,
+    "original-evidence-schema": 0.0732403330039233,
+    "original-focused-final": 25.831962708965875,
+    "original-focused-final2": 22.9967962919618,
+    "original-focused-v2": 11.316779082990251,
+    "original-install": 2.7197179999784566,
+    "original-knip-final": 4.050424040993676,
+    "original-knip": 4.982768249989022,
+    "original-membership-v3": 5.694972208992112,
+    "original-membership-v4": 4.145981792011298,
+    "original-repair-focused": 7.20835262502078,
+    "original-review-final": 80.5981827089563,
+    "original-review-first": 78.43030891701346,
+    "original-review-full": 121.6561512920307,
+    "revision2-baseline-F1": 8.474565792013891,
+    "revision2-focused": 22.28365225001471,
+    "revision2-knip-final": 4.452101541974116,
+    "revision2-review-full": 126.86460441700183,
+    "revision2-review": 82.37423329101875
+  },
+  "hostLoad": 6.63134765625,
+  "testDelta": {
+    "files": 1,
+    "lines": 321,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

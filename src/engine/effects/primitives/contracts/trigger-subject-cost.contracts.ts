@@ -156,6 +156,105 @@ describe("triggering subject copiable cost", () => {
     }
   });
 
+  it.each(SIDES.flatMap(viewer => [false, true].map(narrowFirst => ({ viewer, narrowFirst }))))("intersects every observed same-draw filter for $viewer/narrowFirst=$narrowFirst", ({ viewer, narrowFirst }) => {
+    const holder = opponent(viewer);
+    const broad = triggered(whenDraw("opponent", 1), p.gainPoints(triggerSubjectCost()));
+    const narrow = triggered(whenDraw("opponent", 1, { costAtMost: 1 }), p.gainPoints(triggerSubjectCost()));
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x777001), abilities: () => narrowFirst ? [narrow, broad] : [broad, narrow] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x777002), abilities: () => [event(p.draw(1))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] },
+      [holder]: { hand: [draw.id], deck: [v.vanilla1.id, v.vanilla3.id] } });
+    const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const drawn = step(engine, cast.state, { kind: "resolveTop" }), view = engine.view(drawn.state, viewer);
+    expect(view.triggerQueue).toHaveLength(2);
+    expect(view.triggerQueue.every(item => item.subjectCostHidden === true && item.subject === null)).toBe(true);
+    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [draw.id, v.vanilla1.id, v.vanilla3.id].map(cardId => ({ cardId })) };
+    let draws = 0;
+    for (const random of [() => 0, () => 0.4, () => 0.99, () => draws++ < 2 ? 0.99 : 0]) {
+      const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, random);
+      expect(sample.triggerQueue.map(item => item.lastKnownSubjectCost)).toEqual([1, 1]);
+      expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
+      const first = step(engine, sample, { kind: "resolveTrigger" });
+      expect(step(engine, first.state, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(2);
+    }
+  });
+
+  it.each(SIDES.flatMap(viewer => [false, true].map(narrowFirst => ({ viewer, narrowFirst }))))("preserves filtered draw uncertainty and replay for $viewer/narrowFirst=$narrowFirst", ({ viewer, narrowFirst }) => {
+    const holder = opponent(viewer);
+    const broad = triggered(whenDraw("opponent", 1), p.gainPoints(triggerSubjectCost()));
+    const narrow = triggered(whenDraw("opponent", 1, { costAtMost: 1 }), p.gainPoints(triggerSubjectCost()));
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x777003), abilities: () => narrowFirst ? [narrow, broad] : [broad, narrow] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x777004), abilities: () => [event(p.draw(1))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const views = [[v.vanilla0.id, v.vanilla1.id, v.vanilla3.id], [v.vanilla1.id, v.vanilla0.id, v.vanilla3.id]].map(deck => {
+      const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] }, [holder]: { hand: [draw.id], deck } });
+      const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+      return engine.view(step(engine, cast.state, { kind: "resolveTop" }).state, viewer);
+    });
+    expect(views[0]).toEqual(views[1]);
+    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [draw.id, v.vanilla0.id, v.vanilla1.id, v.vanilla3.id].map(cardId => ({ cardId })) };
+    for (const entropy of [0, 0.4, 0.99]) {
+      const samples = views.map(view => engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => entropy));
+      expect(stateHash(samples[0])).toBe(stateHash(samples[1]));
+      const cost = samples[0].triggerQueue[0].lastKnownSubjectCost!;
+      expect([0, 1]).toContain(cost);
+      expect(samples[0].triggerQueue.map(item => item.lastKnownSubjectCost)).toEqual([cost, cost]);
+      expect(comparableView(engine.view(samples[0], viewer))).toEqual(comparableView(views[0]));
+      const resolved = samples.map(sample => step(engine, step(engine, sample, { kind: "resolveTrigger" }).state, { kind: "resolveTrigger" }));
+      expect(resolved[0].state.sides[viewer].score).toBe(2 * cost);
+      expect(stateHash(resolved[0].state)).toBe(stateHash(resolved[1].state));
+      expect(resolved[0].events).toEqual(resolved[1].events);
+    }
+  });
+
+  it.each(SIDES.flatMap(viewer => [false, true].map(narrowFirst => ({ viewer, narrowFirst }))))("keeps jointly filtered numbered draws separate for $viewer/narrowFirst=$narrowFirst", ({ viewer, narrowFirst }) => {
+    const holder = opponent(viewer);
+    const broad = triggered(whenDraw("opponent", 1), p.gainPoints(triggerSubjectCost()));
+    const narrow = triggered(whenDraw("opponent", 1, { costAtMost: 1 }), p.gainPoints(triggerSubjectCost()));
+    const second = triggered(whenDraw("opponent", 2, { costAtLeast: 3 }), p.gainPoints(triggerSubjectCost()));
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x777005), abilities: () => narrowFirst ? [narrow, broad, second] : [broad, narrow, second] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x777006), abilities: () => [event(p.draw(2))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] }, [holder]: { hand: [draw.id], deck: [v.vanilla1.id, v.vanilla3.id] } });
+    const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const view = engine.view(step(engine, cast.state, { kind: "resolveTop" }).state, viewer);
+    expect(view.triggerQueue).toHaveLength(3);
+    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [draw.id, v.vanilla1.id, v.vanilla3.id].map(cardId => ({ cardId })) };
+    const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => 0.4);
+    expect(sample.triggerQueue.map(item => item.lastKnownSubjectCost)).toEqual([1, 1, 3]);
+    expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
+  });
+
+  it.each(SIDES.flatMap(viewer => [false, true].map(alternativesFirst => ({ viewer, alternativesFirst }))))("retains compatible shared draws across branch preferences for $viewer/alternativesFirst=$alternativesFirst", ({ viewer, alternativesFirst }) => {
+    const holder = opponent(viewer);
+    const alternatives = triggered(either(whenDraw("opponent", 1, { costAtMost: 1 }), whenDraw("opponent", 1, { costAtLeast: 3 })), p.gainPoints(triggerSubjectCost()));
+    const broad = triggered(whenDraw("opponent", 1), p.gainPoints(triggerSubjectCost()));
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x777007), abilities: () => alternativesFirst ? [alternatives, broad] : [broad, alternatives] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x777008), abilities: () => [event(p.draw(1))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] }, [holder]: { hand: [draw.id], deck: [v.vanilla3.id] } });
+    const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const drawn = step(engine, cast.state, { kind: "resolveTop" }), view = engine.view(drawn.state, viewer), before = structuredClone(view);
+    expect(view.triggerQueue).toHaveLength(2);
+    expect(view.triggerQueue.every(item => item.subjectCostHidden === true && item.subject === null)).toBe(true);
+    expect(drawn.state.instances[initial.ids[holder].hand[0]].zone).toBe("void");
+    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [draw.id, v.vanilla3.id].map(cardId => ({ cardId })) };
+    for (const entropy of [0, 0.4, 0.99]) {
+      const samples = [view, structuredClone(view)].map(seen => engine.determinize(seen, { player: lists.player, enemy: lists.enemy }, () => entropy));
+      expect(stateHash(samples[0])).toBe(stateHash(samples[1]));
+      const cost = samples[0].triggerQueue[0].lastKnownSubjectCost!;
+      expect([0, 3]).toContain(cost);
+      expect(samples[0].triggerQueue.map(item => item.lastKnownSubjectCost)).toEqual([cost, cost]);
+      expect(comparableView(engine.view(samples[0], viewer))).toEqual(comparableView(view));
+      const resolved = samples.map(sample => step(engine, step(engine, sample, { kind: "resolveTrigger" }).state, { kind: "resolveTrigger" }));
+      expect(resolved[0].state.sides[viewer].score).toBe(2 * cost);
+      expect(stateHash(resolved[0].state)).toBe(stateHash(resolved[1].state));
+      expect(resolved[0].events).toEqual(resolved[1].events);
+      expect(view).toEqual(before);
+    }
+  });
+
   it.each(SIDES)("samples equal public views independently of the actual hidden drawn cost for %s", viewer => {
     const holder = opponent(viewer);
     const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x560044), abilities: () => [triggered(whenDraw("opponent", 1), p.gainPoints(triggerSubjectCost()))] };

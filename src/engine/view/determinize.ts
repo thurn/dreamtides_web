@@ -66,7 +66,7 @@ import { isFixedEffect } from "./knowledge";
 import { freshStatus, variantOf } from "../state/create";
 import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, CharacterScorer, FirstEventHistory, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
+import type { BattleState, CardInstance, CharacterScorer, FirstEventHistory, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, Printing, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
 import {
   characteristicsView,
   type BattleView,
@@ -184,52 +184,81 @@ function queuedOccurrencePairs(state: BattleState, view: BattleView) {
 }
 
 function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklists: Decklists, catalog: EngineCatalog, random: () => number): void {
-  const sharedDraws = new Map<string, number>();
+  type Candidate = { id: InstanceId | undefined; cost: number; key: string | undefined; side: Side; tuple: string };
+  const sharedDraws = new Map<string, Candidate>();
   const assignedDraws = new Map<Side, Set<InstanceId>>();
   const layers = new Layers(state, catalog);
-  const visibleQueue = queuedOccurrencePairs(state, view);
   const matches = (filter: CardFilter | undefined, card: Omit<FilterSubject, "cost">, cost: number) =>
     filter === undefined || matchesFilter({ ...card, cost }, filter);
-  for (const { shown, get, set } of visibleQueue) {
-    if (shown.subjectCostHidden !== true || shown.origin === null) continue;
-    const restored = get();
-    const body = triggerBody(catalog, restored.origin, restored.ability, restored.node);
-    const domains = (trigger: Trigger): { sides: readonly Side[]; filter?: CardFilter; key?: string }[] => {
-      if (trigger.on === "either") return trigger.triggers.flatMap(domains);
-      // Current matching can conceal draws and created discards in another hand. Self, play, board and void occasions expose their subject at matching.
-      if (trigger.on !== "draw" && (trigger.on !== "discard" || trigger.self === true)) return [];
-      const sides = "player" in trigger && (trigger.player === "you" || trigger.player === "opponent")
-        ? [trigger.player === "you" ? shown.controller : opponent(shown.controller)] : SIDES;
-      const viableSides = sides.filter(side => side !== view.viewer && (trigger.on !== "draw" || (view.turnLog.drawn[side] > 0 && (trigger.nth === undefined || trigger.nth <= view.turnLog.drawn[side]))));
-      if (viableSides.length === 0) return [];
-      return [{ sides: viableSides, ...("filter" in trigger ? { filter: trigger.filter } : {}),
-        ...(trigger.on === "draw" && trigger.nth !== undefined && viableSides.length === 1 ? { key: `draw:${viableSides[0]}:${String(trigger.nth)}` } : {}) }];
-    };
-    const candidates = domains(body.trigger).flatMap<{ id: InstanceId | undefined; cost: number; key: string | undefined; side: Side }>(domain => {
+  const domains = (trigger: Trigger, controller: Side): { sides: readonly Side[]; filter?: CardFilter; key?: string }[] => {
+    if (trigger.on === "either") return trigger.triggers.flatMap(branch => domains(branch, controller));
+    // Current matching can conceal draws and created discards in another hand. Self, play, board and void occasions expose their subject at matching.
+    if (trigger.on !== "draw" && (trigger.on !== "discard" || trigger.self === true)) return [];
+    const sides = "player" in trigger && (trigger.player === "you" || trigger.player === "opponent")
+      ? [trigger.player === "you" ? controller : opponent(controller)] : SIDES;
+    const viableSides = sides.filter(side => side !== view.viewer && (trigger.on !== "draw" || (view.turnLog.drawn[side] > 0 && (trigger.nth === undefined || trigger.nth <= view.turnLog.drawn[side]))));
+    if (viableSides.length === 0) return [];
+    return [{ sides: viableSides, ...("filter" in trigger ? { filter: trigger.filter } : {}),
+      ...(trigger.on === "draw" && trigger.nth !== undefined && viableSides.length === 1 ? { key: `draw:${viableSides[0]}:${String(trigger.nth)}` } : {}) }];
+  };
+  const readers = queuedOccurrencePairs(state, view).flatMap(pair => {
+    if (pair.shown.subjectCostHidden !== true || pair.shown.origin === null) return [];
+    const restored = pair.get();
+    return [{ ...pair, domains: domains(triggerBody(catalog, restored.origin, restored.ability, restored.node).trigger, pair.shown.controller) }];
+  });
+  // Every unambiguous reader constrains the same physical draw, regardless of queue order.
+  // Multiple branches of one reader are alternatives; separate readers are joint observations.
+  const constraints = new Map<string, (typeof readers[number]["domains"])[]>();
+  for (const reader of readers) {
+    const key = reader.domains[0]?.key;
+    if (key === undefined || !reader.domains.every(domain => domain.key === key)) continue;
+    const observed = constraints.get(key) ?? [];
+    observed.push(reader.domains);
+    constraints.set(key, observed);
+  }
+  for (const { domains, get, set } of readers) {
+    const candidates = domains.flatMap<Candidate>(domain => {
+      const observed = domain.key === undefined ? [] : constraints.get(domain.key) ?? [];
+      const compatibleWithEveryReader = (card: Omit<FilterSubject, "cost">, cost: number) =>
+        matches(domain.filter, card, cost) && observed.every(branches => branches.some(branch => matches(branch.filter, card, cost)));
       const compatible = Object.values(state.instances).filter(instance => {
         if (!domain.sides.includes(instance.controller)) return false;
         const printed = instanceCard(catalog, instance);
-        return matches(domain.filter, { ...layers.of(instance.id), speed: printed.speed }, fixedEnergy(printed.costs));
+        return compatibleWithEveryReader({ ...layers.of(instance.id), speed: printed.speed }, fixedEnergy(printed.costs));
       });
+      const previous = domain.key === undefined ? undefined : sharedDraws.get(domain.key);
+      // Once a numbered subject is bound, compatibility precedes a branch's hidden/public preference.
+      // A later reader must retain that same physical tuple whenever its observed branch union admits it.
+      if (previous?.id !== undefined) {
+        const bound = compatible.find(instance => instance.id === previous.id);
+        return bound !== undefined && canonicalHash({ printing: bound.printing, variant: bound.variant }) === previous.tuple &&
+          fixedEnergy(instanceCard(catalog, bound).costs) === previous.cost ? [previous] : [];
+      }
       // Current hidden holdings constrain the latent subject; public records remain possible after it moved.
       const hidden = compatible.filter(instance => instance.zone === "hand" || instance.zone === "deck");
-      const live = (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id, cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
-      if (live.length > 0) return live;
+      const live = (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id,
+        tuple: canonicalHash({ printing: instance.printing, variant: instance.variant }),
+        cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
+      if (live.length > 0 && previous === undefined) return live;
       // Public copiable tuples constrain a ceased copy without identifying its historical original.
-      const printedSubject = (card: ReturnType<typeof instanceCard>, variant: Variant) => ({
-        ...card, namedTriggers: namedTriggersOf(card.abilities(variant)),
+      const printedSubject = (card: ReturnType<typeof instanceCard>, variant: Variant, printing: Printing) => ({
+        ...card, namedTriggers: namedTriggersOf(card.abilities(variant)), tuple: canonicalHash({ printing, variant }),
       });
-      const forms: readonly Variant[] = domain.filter?.hasAbility === undefined ? [BASE_VARIANT] : [BASE_VARIANT, { amplified: true }];
+      const hasAbility = [domain, ...observed.flat()].some(branch => branch.filter?.hasAbility !== undefined);
+      const forms: readonly Variant[] = hasAbility ? [BASE_VARIANT, { amplified: true }] : [BASE_VARIANT];
       const historical = [
-        ...catalog.cardDefinitions.flatMap(card => forms.map(variant => printedSubject(instanceCard(catalog, { printing: { kind: "card", cardId: card.id }, variant }), variant))),
-        ...Object.values(view.instances).filter(instance => instance.printing.kind === "card").map(instance => printedSubject(instanceCard(catalog, instance), instance.variant)),
+        ...catalog.cardDefinitions.flatMap(card => forms.map(variant => printedSubject(instanceCard(catalog, { printing: { kind: "card", cardId: card.id }, variant }), variant, { kind: "card", cardId: card.id }))),
+        ...Object.values(view.instances).filter(instance => instance.printing.kind === "card").map(instance => printedSubject(instanceCard(catalog, instance), instance.variant, instance.printing)),
         ...SIDES.flatMap(side => decklists[side].map(entry => {
           const variant = variantOf(entry);
-          return printedSubject(instanceCard(catalog, { printing: { kind: "card", cardId: entry.cardId }, variant }), variant);
+          return printedSubject(instanceCard(catalog, { printing: { kind: "card", cardId: entry.cardId }, variant }), variant, { kind: "card", cardId: entry.cardId });
         })),
       ];
-      return historical.filter(card => matches(domain.filter, { ...card, allTypes: false, spark: card.spark === "x" ? 0 : card.spark }, fixedEnergy(card.costs)))
-        .map(card => ({ id: undefined, cost: fixedEnergy(card.costs), key: domain.key, side: domain.sides[0] }));
+      return historical.filter(card => compatibleWithEveryReader({ ...card, allTypes: false, spark: card.spark === "x" ? 0 : card.spark }, fixedEnergy(card.costs)))
+        .map(card => ({ id: undefined, tuple: card.tuple, cost: fixedEnergy(card.costs), key: domain.key, side: domain.sides[0] }));
+    }).filter(candidate => {
+      const previous = candidate.key === undefined ? undefined : sharedDraws.get(candidate.key);
+      return previous === undefined || previous.id === candidate.id && previous.tuple === candidate.tuple && previous.cost === candidate.cost;
     });
     const existing = candidates.find(candidate => candidate.key !== undefined && sharedDraws.has(candidate.key));
     const unused = candidates.filter(candidate => candidate.key === undefined || candidate.id === undefined || !assignedDraws.get(candidate.side)?.has(candidate.id));
@@ -237,14 +266,13 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
     const available = unused.length === 0 ? candidates : unused;
     const selected = existing ?? available[Math.floor(random() * available.length)];
     if (selected === undefined) throw new Error("Cannot determinize hidden subject cost without a compatible sampled card");
-    const cost = selected.key === undefined ? selected.cost : sharedDraws.get(selected.key) ?? selected.cost;
     if (selected.key !== undefined && !sharedDraws.has(selected.key)) {
-      sharedDraws.set(selected.key, cost);
+      sharedDraws.set(selected.key, selected);
       const assigned = assignedDraws.get(selected.side) ?? new Set<InstanceId>();
       if (selected.id !== undefined) assigned.add(selected.id);
       assignedDraws.set(selected.side, assigned);
     }
-    set({ ...get(), lastKnownSubjectCost: cost, subjectHiddenFrom: [view.viewer] });
+    set({ ...get(), lastKnownSubjectCost: selected.cost, subjectHiddenFrom: [view.viewer] });
   }
 }
 
@@ -403,8 +431,8 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     }
   }
   let next = highest(view, "i") + 1;
-  // Reserve anonymous history identities before minting hidden instances.
-  // Most facts name no current card; a first-character member relation is rebound after hidden dealing.
+  // Reserve unbound play/materialization identities before minting hidden instances.
+  // A first-character member relation is rebound after hidden dealing.
   const anonymous = <T extends { readonly instance: InstanceId | null }>(cards: readonly T[]) => cards.map((card) => {
     const instance: InstanceId = card.instance ?? `i${next++}`;
     return { ...copy(card), instance };
@@ -438,14 +466,6 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return { current: restore(history.current, true), previous: restore(history.previous, false) };
   })();
   const materializedCards = { player: anonymous(view.turnLog.materialized.player), enemy: anonymous(view.turnLog.materialized.enemy) };
-  const departures = (kind: "leftPlay" | "dissolved" | "abandoned") => ({
-    player: anonymous(view.turnLog[kind]?.player ?? []), enemy: anonymous(view.turnLog[kind]?.enemy ?? []),
-  });
-  const leftPlayCards = departures("leftPlay"), dissolvedCards = departures("dissolved"), abandonedCards = departures("abandoned");
-  const discardedCards = {
-    player: (view.turnLog.discardedCards?.player ?? []).map((id): InstanceId => id ?? `i${next++}`),
-    enemy: (view.turnLog.discardedCards?.enemy ?? []).map((id): InstanceId => id ?? `i${next++}`),
-  };
   const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean, poolCandidates?: CardInstance["poolCandidates"], journeyDeck = !created): InstanceId => {
     const id: InstanceId = `i${next}`;
     next += 1;
@@ -552,8 +572,24 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     instances[id] = { ...instances[id], ...(descriptor.journeyDeck === undefined ? {} : { journeyDeck: descriptor.journeyDeck }), printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
     assigned.set(descriptor.member, id);
   }
-  // Only the first played character retains this observer-local physical relation.
-  // Other anonymous history stays a historical fact without a current member.
+  const turnMember = (reference: import("./view").TurnMemberView): InstanceId => {
+    if (typeof reference === "string") return reference;
+    if (reference === null) return `i${next++}`;
+    const member = reference.member, id = assigned.get(member);
+    if (!Number.isSafeInteger(member) || member < 0 || Object.keys(reference).some(key => key !== "member") || id === undefined ||
+        (instances[id]?.zone !== "hand" && instances[id]?.zone !== "deck")) throw new Error("Cannot determinize turn history without its observed hidden member");
+    return id;
+  };
+  const departures = (kind: "leftPlay" | "dissolved" | "abandoned") => {
+    const restore = (side: Side) => (view.turnLog[kind]?.[side] ?? []).map(card => ({ ...copy(card), instance: turnMember(card.instance) }));
+    return { player: restore("player"), enemy: restore("enemy") };
+  };
+  const leftPlayCards = departures("leftPlay"), dissolvedCards = departures("dissolved"), abandonedCards = departures("abandoned");
+  const discardedCards = {
+    player: (view.turnLog.discardedCards?.player ?? []).map(turnMember),
+    enemy: (view.turnLog.discardedCards?.enemy ?? []).map(turnMember),
+  };
+  // The first played character shares its observer-local physical member with other records.
   for (const side of SIDES) {
     const first = view.turnLog.played[side].findIndex(card => card.cardType === "character");
     view.turnLog.played[side].forEach((shown, index) => {

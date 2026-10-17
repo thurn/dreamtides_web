@@ -1933,7 +1933,12 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   matching. Public draw counters exclude
   impossible branches while keeping an earlier queued ordinal
   viable after later draws. Readers of the same declared side and draw ordinal
-  share the sampled value; genuine branch ambiguity remains unresolved.
+  jointly constrain the sampled subject tuple before receiving its shared value:
+  each observed reader's filter must match, while alternative branches within a
+  reader remain alternatives. A bound compatible subject tuple stays shared before
+  a later branch applies its hidden/public candidate preference, including public
+  or historical tuples. Separate numbered draws allocate distinct available sampled
+  cards. Genuine branch ambiguity remains unresolved.
   Legacy absence remains an absent binding. The saved queue validates
   the optional finite nonnegative number. Resolving contexts supply null
   when no binding exists, which reads as 0; static scopes reject the value.
@@ -2559,7 +2564,14 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   unremembered cards. After hidden dealing, sampling binds a numeric member to
   that exact dealt physical card; the observer sees neither its physical ID nor
   its position. Missing legacy markers retain the anonymous fallback. Other
-  anonymous histories reserve identities without creating current instances.
+  anonymous play and materialization histories reserve identities without creating
+  current instances. Current-turn discarded, left-play, dissolved and abandoned
+  membership records use visible physical IDs or shared `{ member }` references
+  to existing observed hidden-card descriptors. Sampling binds each member to its
+  actual dealt card after hidden dealing, preserving repeated records and distinct
+  physical copies. The reference exposes neither hidden zone, position nor physical
+  identity; current-zone consumers use the sampled placement. Ceased and
+  unremembered records retain unbound historical identities.
   Stored costs keep authoritative and simulated
   cost-bounded play counts equal. A legacy record missing its cost recovers
   it only from a visible instance in a view; a hidden or ceased legacy cost

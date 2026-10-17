@@ -1,0 +1,626 @@
+{
+  "bead": "hv-umm2.777",
+  "phase": 5,
+  "base": "106d1e7defea7a6d1fef3de180305e4582469380",
+  "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-view-constraints777",
+  "sourceSHA256": {
+    "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+    "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+    "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+    "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+    "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+    "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+    "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+    "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+  },
+  "currentValidationArtifactDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2",
+  "originalSource": "29dbf5f0b93de306fd9b24883e9ed973710bc576",
+  "originalEvidence": {
+    "measurements": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/original-measurements29db.json",
+      "bytes": 28226,
+      "sha256": "9786357deee05b1cdb187c4127f11fd92302ba4d40baa85f80ebacd76721eb6e"
+    },
+    "friction": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/original-friction29db.json",
+      "bytes": 980,
+      "sha256": "7b6cca0a685ac3a2a34a16f77835e6093cbdec4a6373596c724e0de14b0a2d24"
+    },
+    "rawArtifacts": {
+      "baseline-both-original.receipt.json": {
+        "bytes": 401,
+        "sha256": "5e9afee292f62f2a84796de8fe0c1d45f3f38add9353f605b5bbf2a066d0992c"
+      },
+      "baseline-both-original.stderr": {
+        "bytes": 50456,
+        "sha256": "68d7096ce100e7c2b700c54d7d5f9f51fc6c5785d3cb6c7e78319748ad6978c4"
+      },
+      "baseline-both-original.stdout": {
+        "bytes": 2036,
+        "sha256": "efe53f899f22629acde977323706609ae2855fff22c420041076014e50d5a585"
+      },
+      "baseline-original.receipt.json": {
+        "bytes": 401,
+        "sha256": "62a7e75eff9ae5a78d7485e117fe2c51cf14d90e86c0fd2ec227010cd7d7965c"
+      },
+      "baseline-original.stderr": {
+        "bytes": 49323,
+        "sha256": "ee0d844532626b55073ea4931bcb950f2828a8b363955898be1d49d8eadb8fb9"
+      },
+      "baseline-original.stdout": {
+        "bytes": 1865,
+        "sha256": "fcddc25671252e78b568532c91a219fedd98a9a5db162b13ef1dcdbf9aa48453"
+      },
+      "baseline.receipt.json": {
+        "bytes": 412,
+        "sha256": "36ee3e8a9f0a8f79b220fc87449b0e1aa5e267aaf6d8a944fc2c0d676d1a45cc"
+      },
+      "baseline.stderr": {
+        "bytes": 59089,
+        "sha256": "496544c3e9db04e714a9808bb4a2470621b12d6f04646149b7f7a5de47653641"
+      },
+      "baseline.stdout": {
+        "bytes": 1389,
+        "sha256": "0b6c539fd601ba658ca9114624c00f99c9a3c561c4bdffc97b204b20421af597"
+      },
+      "evidence-schema.receipt.json": {
+        "bytes": 2333,
+        "sha256": "16b2379e86be68fcfe4672054b021efd2f0aeb348e1ead4eb207acc4fd724adf"
+      },
+      "evidence-schema.stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "evidence-schema.stdout": {
+        "bytes": 74,
+        "sha256": "42827e5039c681ca0d628facc7ea2fb1661e4c3cdce31b83f256de4d6726ffa1"
+      },
+      "focused-final.receipt.json": {
+        "bytes": 389,
+        "sha256": "591f6bb50a4de2167da611dedb7ebc9eb1d7eb31e65a50cdd8b80228e8b7c4f9"
+      },
+      "focused-final.stderr": {
+        "bytes": 49373,
+        "sha256": "586a9e517c1eef526a161db5aecbfccf7f9bc446d29a0a216fb8f2376bad6948"
+      },
+      "focused-final.stdout": {
+        "bytes": 1859,
+        "sha256": "d6f675fde6f1d1a9c2ef24b55b01eb6bedf2baf4c2654a448f64ad0d8d529e16"
+      },
+      "focused-final2.receipt.json": {
+        "bytes": 396,
+        "sha256": "0494c5f1c776dd3bf8c91bad8896db2465f7a69dd2452ac305d8710d3eb54bc5"
+      },
+      "focused-final2.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "focused-final2.stdout": {
+        "bytes": 1553,
+        "sha256": "473fe7215058aad76b3024f637c57ca55a2302feb552ddfcf8d960b4f2855421"
+      },
+      "focused-v2.receipt.json": {
+        "bytes": 489,
+        "sha256": "8e71962fc887dcbfad51ed0d89912718d668db4b4dc15bded8930de723c0ad87"
+      },
+      "focused-v2.stderr": {
+        "bytes": 66784,
+        "sha256": "797d1f831a2edd580515aed397ca54d27cd7b53e6aebf8831e72d079a2cd29a5"
+      },
+      "focused-v2.stdout": {
+        "bytes": 2714,
+        "sha256": "f9943c20b7c512cddd675c163debe055b88a169c612430fc8423c368664f1d55"
+      },
+      "install.receipt.json": {
+        "bytes": 233,
+        "sha256": "b42fa9a82d8c06476a2186af931c54421a73d60e31e80e9f9710d0793cb3065f"
+      },
+      "install.stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "install.stdout": {
+        "bytes": 326,
+        "sha256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c"
+      },
+      "knip-final.receipt.json": {
+        "bytes": 2279,
+        "sha256": "2a12b5108b165d5c30341368f3aca928e52f8b037bcf03f2c64f9aaa4e20a3b2"
+      },
+      "knip-final.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "knip-final.stdout": {
+        "bytes": 1131,
+        "sha256": "55cc69acd191e9fc45367cba497cf803515a646cd8d557f6dde2bd01a01b7728"
+      },
+      "knip.receipt.json": {
+        "bytes": 251,
+        "sha256": "92324173f0332506fa06ef86703329bd73bb20186f9f8e13f5f5c76f4fabd5c3"
+      },
+      "knip.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "knip.stdout": {
+        "bytes": 1134,
+        "sha256": "e2b76657c4bfcfb542cf9e44f9c47c2310ab25d8268ecbaeae1b24e912a8f573"
+      },
+      "membership-v3.receipt.json": {
+        "bytes": 296,
+        "sha256": "4e3ce964a16dd140c1c3e35485b866b42e0b87453138ba93af65244155c6955e"
+      },
+      "membership-v3.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "membership-v3.stdout": {
+        "bytes": 1474,
+        "sha256": "b98c5032b9db5dc269ea9f425ce8189ce33a4a8e0b078cca41e0681e86f3fa75"
+      },
+      "membership-v4.receipt.json": {
+        "bytes": 297,
+        "sha256": "4f6204c72615c14b9dcf206cad4da50dd280b7fd80ae9cc621fe400a976b0cce"
+      },
+      "membership-v4.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "membership-v4.stdout": {
+        "bytes": 1475,
+        "sha256": "5ce36b57e9cdadd0dbbb7045b0f2982f3076752d0716493badc9905b882b3806"
+      },
+      "repair-focused.receipt.json": {
+        "bytes": 396,
+        "sha256": "d796aa3a041a4ca20e86a8901dd525e4fb4114bf7f2df1350e6bd74c495ba539"
+      },
+      "repair-focused.stderr": {
+        "bytes": 49323,
+        "sha256": "ee0d844532626b55073ea4931bcb950f2828a8b363955898be1d49d8eadb8fb9"
+      },
+      "repair-focused.stdout": {
+        "bytes": 1865,
+        "sha256": "3c277c549e1c6b6cf64a7b01634d97248541424f7f56df00f103579def79ae6f"
+      },
+      "review-final.receipt.json": {
+        "bytes": 2087,
+        "sha256": "9aae6c7fce605eb47da58a7f886cfbab31509d298f560b3dbff513f6324a3e23"
+      },
+      "review-final.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "review-final.stdout": {
+        "bytes": 2143,
+        "sha256": "72585f951a71c321ae13bfad6674476168eb09454cd122f1ca23c7d61629d460"
+      },
+      "review-first.receipt.json": {
+        "bytes": 255,
+        "sha256": "f807a32ec34a4d2558ebcf777fa2d2c64b303e4bb5d40b3d8870347f4ce8d589"
+      },
+      "review-first.stderr": {
+        "bytes": 48133,
+        "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+      },
+      "review-first.stdout": {
+        "bytes": 5342,
+        "sha256": "fc600ce0cdb57b0ad1ac9d0ba8899bb44d698299097e98e7a579b92eab479786"
+      },
+      "review-full.receipt.json": {
+        "bytes": 2171,
+        "sha256": "cf6b41e64609559c7a41f41c69aed1a0f30b4234df5093b4210ecfa5220f3d34"
+      },
+      "review-full.stderr": {
+        "bytes": 100074,
+        "sha256": "e168efe5b0e4ea5d62b1f99b9b2a36ad1c6b9da97cb4fc04319f5fe92b19ed3c"
+      },
+      "review-full.stdout": {
+        "bytes": 2612,
+        "sha256": "549967b31978c520c700d8fe20d2e0bfd29bda9433f41f9ce4661b5ff405e1e1"
+      }
+    },
+    "validationCounters": {
+      "focused": {
+        "passed": 6002,
+        "owningFiles": 9
+      },
+      "reviewRelated": {
+        "passed": 11290,
+        "owningFiles": 356
+      },
+      "reviewFull": {
+        "passed": 12319,
+        "owningFiles": 439,
+        "testStageSeconds": 85.4,
+        "budgetQualification": "The observed full test stage exceeds the D19 60-second target; no budget waiver or speedup claim."
+      }
+    },
+    "qualification": "Original 29db source validation and complete cold review are historical. That immutable source object, original raw receipts and cold scope/report remain retained. Current source validation is revision2 only.",
+    "processQualification": "The original 16 command receipts contain 15 recorded process groups; those 15 were observed absent. The npm install receipt records a wrapper PID, actual exit0 and reaped child CPU, but no initial process group. Parent observed the install wrapper gone and no retained worktree handles. No claim of 16 recorded process-group proofs is made."
+  },
+  "revision2": {
+    "finding": "Cold Codex F1: branch-local hidden/public preference excluded a compatible already selected shared numbered draw tuple, causing valid-view determinization to throw.",
+    "coldReport": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/cold-review/results/report.json",
+      "bytes": 7889,
+      "sha256": "4c45266611ac8de38a335c0c386367158b1eb24b43b25f3306f78275a80b5e95"
+    },
+    "parentQualification": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/cold-review/results/parent-qualification.json",
+      "bytes": 1166,
+      "sha256": "a65a181be3e25624d154bb859cd67268a19416a9df237634c78bae9ca8080502"
+    },
+    "beforeFix": "baseline-F1:2 failures (both actors, alternatives-first),2 passing reverse-order controls on original 29db production code. Exact exception and8 source/test/doc hashes retained.",
+    "repair": "Validate a bound live numbered subject against all observed compatible branch constraints before applying per-branch hidden/public preference. A bound historical tuple reaches its historical domain even when a later reader offers live cards. Exact physical ID/copiable tuple/cost consistency remains enforced.",
+    "coverage": "Original54 new cases retained plus4 F1 cases: both actors and reader orders, low/high same-key alternative branch union plus broad reader, deterministic entropy0/0.4/0.99, coherent legal captured costs, comparable views, unchanged input views, cloned-view determinization equality and repeated resolution event/state-hash equality.",
+    "scope": "Revision2 changes only determinize.ts, trigger-subject-cost.contracts.ts, the already admitted subject-restoration design paragraph and own777 measurements/friction. Member transport, its42 cases and other source inputs remain byte-identical to29db.",
+    "window": {
+      "start": "2026-10-17T03:16:46.815304+00:00",
+      "end": "2026-10-17T03:20:55.709084+00:00",
+      "seconds": 248.89377975463867,
+      "qualification": "First instrumented revision2 regression through final evidence write; includes test and validation waits, not productive editing-only time."
+    }
+  },
+  "validation": {
+    "baseline-F1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains compatible shared draws across branch preferences"
+      ],
+      "started": 1792207006.815304,
+      "ended": 1792207015.289985,
+      "wallSeconds": 8.474565792013891,
+      "exit": 1,
+      "childCpuSeconds": 9.059451,
+      "pid": 44990,
+      "pgid": 44990,
+      "terminal": true,
+      "sourceBeforeSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "208bae1f53df1e78f9abb1ed61ba77c49e4050fd5c34ddfdbfb218b5c7d16b5a",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "7024d1f8070472c6fd2aa447ea416fdd91df6f49f7534386bb4cfadc313e75b4"
+      },
+      "sourceAfterSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "208bae1f53df1e78f9abb1ed61ba77c49e4050fd5c34ddfdbfb218b5c7d16b5a",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "7024d1f8070472c6fd2aa447ea416fdd91df6f49f7534386bb4cfadc313e75b4"
+      }
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view",
+        "src/engine/testing/determinization-fidelity.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "started": 1792207034.492138,
+      "ended": 1792207056.776098,
+      "wallSeconds": 22.28365225001471,
+      "exit": 0,
+      "childCpuSeconds": 34.211541,
+      "pid": 45621,
+      "pgid": 45621,
+      "terminal": true,
+      "sourceBeforeSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      },
+      "sourceAfterSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      }
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "started": 1792207183.189738,
+      "ended": 1792207187.641897,
+      "wallSeconds": 4.452101541974116,
+      "exit": 0,
+      "childCpuSeconds": 5.906162,
+      "pid": 78403,
+      "pgid": 78403,
+      "terminal": true,
+      "sourceBeforeSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      },
+      "sourceAfterSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      }
+    },
+    "review-full": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "started": 1792207111.105482,
+      "ended": 1792207237.971861,
+      "wallSeconds": 126.86460441700183,
+      "exit": 0,
+      "childCpuSeconds": 324.65890199999996,
+      "pid": 47268,
+      "pgid": 47268,
+      "terminal": true,
+      "sourceBeforeSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      },
+      "sourceAfterSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      }
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "started": 1792207076.730133,
+      "ended": 1792207159.1055171,
+      "wallSeconds": 82.37423329101875,
+      "exit": 0,
+      "childCpuSeconds": 224.56863700000002,
+      "pid": 46470,
+      "pgid": 46470,
+      "terminal": true,
+      "sourceBeforeSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      },
+      "sourceAfterSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      }
+    },
+    "evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "started": 1792207255.7351942,
+      "ended": 1792207255.803104,
+      "wallSeconds": 0.06791295803850517,
+      "exit": 0,
+      "childCpuSeconds": 0.072408,
+      "pid": 80592,
+      "pgid": 80592,
+      "terminal": true,
+      "sourceBeforeSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      },
+      "sourceAfterSHA256": {
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "b451b1f375dcda82a8468d2937fbca848e3b7d8e89886c949858e060479d5fc9",
+        "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "54752c8744549243dec557e72edf7a3789961262cbbde74483a87b14663a0649",
+        "src/engine/effects/primitives/contracts/turn-history.contracts.ts": "44aaa945eb99d449b6f3a9f611ebe1e0371dff6604f0b7cbedf1604877a4316a",
+        "src/engine/view/determinize.ts": "d5dc6a10ae1ab14c844adddb9fff0d7b3d33675930d65674537994c2d1d69b69",
+        "src/engine/view/view.ts": "ca6c334534afa7bc561446fb8e242a8a74d7a02a890af1f8db9fb35e28099ace",
+        "src/engine/view/turn-membership.fixtures.ts": "1c8a8f7fd93e49c82aa7f283753a6f2f92b46cb45b21e9eec7aae985273b61c9",
+        "src/engine/view/turn-membership.test.ts": "b573bf12f16bb095a426b7c1d9a0aab2a2d1322b321cef283603ce7c696a15e8",
+        "docs/plan/engine-design.md": "e89427fc50e66cd0287324a63b91b81b9b99cc36baee1a5bedc7811f738f5b98"
+      }
+    }
+  },
+  "validationCounters": {
+    "focused": {
+      "passed": 6006,
+      "owningFiles": 9
+    },
+    "review": {
+      "passed": 11294,
+      "owningFiles": 356
+    },
+    "review-full": {
+      "passed": 12323,
+      "owningFiles": 439
+    }
+  },
+  "rawArtifacts": {
+    "baseline-F1.receipt.json": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/baseline-F1.receipt.json",
+      "bytes": 2408,
+      "sha256": "f5c62e310d1dadce3694bd747359c467f08dbfbfba42a3d0d3d705ffc53cc9fb"
+    },
+    "baseline-F1.stderr": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/baseline-F1.stderr",
+      "bytes": 49519,
+      "sha256": "5621adf6513019f1b3d990fa71cc5a46c348cee841904bc5fe9e1debe5848c4c"
+    },
+    "baseline-F1.stdout": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/baseline-F1.stdout",
+      "bytes": 1880,
+      "sha256": "a8c7ea72a3f8a878e392d08600369fef1a5e28e7bcf12eb592e075e9ed09c860"
+    },
+    "focused.receipt.json": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/focused.receipt.json",
+      "bytes": 2416,
+      "sha256": "b0aab598e5679d4ac95e85b00d315abc6c13525922f5a7f4702995fcaa56e07a"
+    },
+    "focused.stderr": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/focused.stderr",
+      "bytes": 48133,
+      "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+    },
+    "focused.stdout": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/focused.stdout",
+      "bytes": 1553,
+      "sha256": "a877580f4da90474e8a3f9b41695d63a2d3be1a14099ab9bc7e68ae0f024bad6"
+    },
+    "knip-final.receipt.json": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/knip-final.receipt.json",
+      "bytes": 2279,
+      "sha256": "bad39c9a508383e58be69819023e6c0117e9f3253419f309a422a2e6080ce920"
+    },
+    "knip-final.stderr": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/knip-final.stderr",
+      "bytes": 48133,
+      "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+    },
+    "knip-final.stdout": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/knip-final.stdout",
+      "bytes": 1137,
+      "sha256": "fdfa2f3019fce66ac5438e6d55369ed5a0fd40a6d2ed2f4ca0cb31b030c7a155"
+    },
+    "review-full.receipt.json": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/review-full.receipt.json",
+      "bytes": 2377,
+      "sha256": "0bc15db1cbb2a9e285e38fbec1de4f2a3172c3e8c64d325482842df47c601f8a"
+    },
+    "review-full.stderr": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/review-full.stderr",
+      "bytes": 100074,
+      "sha256": "146d18717818c2c0211e49de6d09e1295c4d2abb9acd5c51897b47282e67596c"
+    },
+    "review-full.stdout": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/review-full.stdout",
+      "bytes": 2623,
+      "sha256": "fb9cd064060f4ae55bb75b1f055e2ec99c79f526a99887cd11f6dc9c876dfe7c"
+    },
+    "review.receipt.json": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/review.receipt.json",
+      "bytes": 2292,
+      "sha256": "bc295e29d170f4beb6436f465a373d7b735452db3ed5a09f3e78161dac24facd"
+    },
+    "review.stderr": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/review.stderr",
+      "bytes": 48133,
+      "sha256": "9df8761610bec8264717db4fff27edd5ef8c87364320e9e53b33c1f12edacdc2"
+    },
+    "review.stdout": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/review.stdout",
+      "bytes": 2382,
+      "sha256": "edaa0c7445727163b4736f0244a14fe4715685141a29094fd954f6872d78aa5e"
+    },
+    "evidence-schema.stdout": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/evidence-schema.stdout",
+      "bytes": 74,
+      "sha256": "42827e5039c681ca0d628facc7ea2fb1661e4c3cdce31b83f256de4d6726ffa1"
+    },
+    "evidence-schema.stderr": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/evidence-schema.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "evidence-schema.receipt.json": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/view-constraints-repair/revision2/evidence-schema.receipt.json",
+      "bytes": 2323,
+      "sha256": "3a15971389ddf232d14b2cd5ccdf04c4bf2aa2613a6b50c467b2754dcb4af913"
+    }
+  },
+  "currentCommandProcessGroupsAfterAllCommands": {
+    "baseline-F1": [],
+    "focused": [],
+    "knip-final": [],
+    "review-full": [],
+    "review": [],
+    "evidence-schema": []
+  },
+  "sourceGuards": "Every final focused/review/full/Knip command captured matching hashes before and after for all7 task code/test files and engine-design.md. All8 hashes match the final working source; evidence-only edits follow runtime validation.",
+  "contracts": {
+    "EV-1": "All unambiguous observed readers of a numbered draw jointly constrain compatible subject tuples before any reader gets a sampled scalar. Alternative branches within a reader remain alternatives. Shared readers reuse the same compatible tuple and distinct numbered draws retain separate allocation.",
+    "EV-2": "Current-turn discarded/left-play/dissolved/abandoned records retain visible IDs or existing observed anonymous hidden member bindings. Hidden member bindings resolve only to dealt descriptor-assigned cards, shared across records. Ceased or unremembered records retain unbound historical IDs. Anonymous descriptors reveal neither hidden zone nor slot/order/physical ID.",
+    "coverage": "12 new draw cases and 42 new turn-member cases, using synthetic UUID fixtures, both actors, broad/narrow reader order, filtered draw uncertainty and distinct ordinals, hidden-world equality, actual sampled current-zone consumers, repeated and distinct same-printing physical cards, re-exposure, ceased and unknown records, invalid member rejection, serialization and public action/event replay. Revision2 additionally covers4 mixed same-key alternative/broad reader cases;58 new cases total.",
+    "opposingViewQualification": "Opposing-view membership may occupy any eligible sampled hidden hand/deck location under the existing no-zone descriptor convention. Consumer expectations use the sampled current zone and include nonempty deterministic deck cases. Owner-view visible hands force all concealed members into deck and match authoritative membership.",
+    "acceptanceCredit": "Bounded source validation and full maintained suite only; final gate46 browser matrix, fresh complete formal reviews and 10000-game acceptance remain parent duties. Browser QA is unnecessary for this internal view sampling repair."
+  },
+  "testDelta": {
+    "newOwningTestFiles": 1,
+    "newFixtureFiles": 1,
+    "newTestCases": 58,
+    "newOwningTestLines": 134,
+    "newFixtureLines": 79,
+    "existingContractNetLines": 108,
+    "netTestAndFixtureLines": 321,
+    "jsdomFiles": 0
+  },
+  "environment": {
+    "testWorkers": 2,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "hostLoadAtEvidence": 6.63134765625,
+    "cpuQualification": "Per-command reaped child user+system CPU; excludes agent/tool/remote CPU. Ordinary review and full review overlap; wall durations are not additive elapsed time.",
+    "budgetQualification": "D19 test/runtime targets remain unwaived. Current full-stage timing is retained in its raw stdout; no speedup or gate46 completion is inferred."
+  },
+  "acceptanceCredit": "Bounded repair validation only. Parent retains fresh changed-source cold review, exact candidate approval/delivery and gate46 final current-source browser/10000-game acceptance."
+}

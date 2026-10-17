@@ -293,12 +293,14 @@ describe("exact current-turn history", () => {
     expect(determinizationDivergences(engine, dissolved, decks(dissolved), battleSeed("history-public"), 0)).toEqual([]);
     const hidden = play(dissolved, side, b.ids[side].hand[1]).state;
     const view = engine.view(hidden, opponent(side));
-    expect(view.turnLog.dissolved?.[side].map(card => card.instance)).toEqual([null, null]);
+    expect(view.turnLog.dissolved?.[side].map(card => card.instance)).toEqual(view.hiddenCards?.[side].map(({ member }) => ({ member })));
+    expect(view.hiddenCards?.[side]).toHaveLength(2);
     expect(read(hidden, side, dissolvedThisTurn())).toBe(2);
     expect(determinizationDivergences(engine, hidden, decks(hidden), battleSeed("history-hidden"), 0)).toEqual([]);
     const sampled = engine.determinize(view, decks(hidden), () => 0.5);
     const hiddenIds = new Set([...sampled.sides[side].deck, ...sampled.sides[side].hand]);
-    expect(sampled.turnLog.dissolved?.[side].some(card => hiddenIds.has(card.instance))).toBe(false);
+    expect(sampled.turnLog.dissolved?.[side].every(card => hiddenIds.has(card.instance))).toBe(true);
+    expect(new Set(sampled.turnLog.dissolved?.[side].map(card => card.instance)).size).toBe(2);
     expect(read(sampled, side, dissolvedThisTurn())).toBe(2);
     expect(read(sampled, side, eventsPlayedThisTurn())).toBe(2);
   });

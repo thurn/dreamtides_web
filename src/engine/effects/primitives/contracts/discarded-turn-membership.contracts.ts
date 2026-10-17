@@ -180,7 +180,7 @@ describe("current-zone discarded physical membership", () => {
     expect(entered(play(out.state, side, out.state.sides[side].hand.find(id => out.state.instances[id].printing.kind === "card" && out.state.instances[id].printing.cardId === D.deckWake.id)!))).toEqual([]);
   });
 
-  it.each(SIDES)("redacts %s unknown historical identities and reserves independent anonymous sampled IDs", side => {
+  it.each(SIDES)("binds %s concealed discarded members to actual sampled physical cards", side => {
     const b = setup(side, [D.two.id, v.vanilla0.id, v.vanilla0.id, D.hide.id, D.deckWake.id]);
     const discarded = play(b.state, side, b.ids[side].hand[0]).state;
     expect(determinizationDivergences(engine, discarded, decks(discarded), battleSeed("discard-members-visible"), 0)).toEqual([]);
@@ -189,10 +189,17 @@ describe("current-zone discarded physical membership", () => {
     expect(comparableView(engine.view(knownSample, side))).toEqual(comparableView(knownView));
     const hidden = play(discarded, side, b.ids[side].hand[3]).state;
     const seen = engine.view(hidden, opponent(side));
-    expect(seen.turnLog.discardedCards?.[side]).toEqual([null, null]);
+    expect(seen.turnLog.discardedCards?.[side]).toEqual(seen.hiddenCards?.[side].map(({ member }) => ({ member })));
+    expect(seen.hiddenCards?.[side]).toHaveLength(2);
     const sample = engine.determinize(seen, decks(hidden), () => 0.5);
     expect(new Set(physical(sample, side)).size).toBe(2);
-    expect(physical(sample, side).some(id => sample.instances[id] !== undefined)).toBe(false);
+    expect(physical(sample, side).every(id => sample.instances[id] !== undefined)).toBe(true);
+    const inDeck = sample.sides[side].deck.filter(id => physical(sample, side).includes(id));
+    expect(inDeck.length).toBeGreaterThan(0);
+    const ownView = engine.view(hidden, side), ownSample = engine.determinize(ownView, decks(hidden), () => 0.5);
+    expect(physical(ownSample, side).every(id => ownSample.instances[id]?.zone === "deck")).toBe(true);
+    const simulated = play(ownSample, side, b.ids[side].hand[4]);
+    expect(new Set(entered(simulated))).toEqual(new Set(physical(ownSample, side)));
     expect(comparableView(engine.view(sample, opponent(side)))).toEqual(comparableView(seen));
     // Authoritative physical history stays with the same cards after a blind shuffle.
     const real = play(hidden, side, b.ids[side].hand[4]);
