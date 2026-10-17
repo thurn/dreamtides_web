@@ -27,7 +27,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { homedir } from "node:os";
-import { join, resolve } from "node:path";
+import { basename, dirname, join, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseCardId, type CardId } from "../src/types/card-identity.ts";
 
@@ -59,6 +59,11 @@ export interface ArtCatalog {
     readonly bossIconArtName: string;
     readonly bossFigureArtName: string;
   };
+  /** D97 LPC sources: library directories and their served subtrees. */
+  readonly d97ArtSources: readonly {
+    readonly directory: string;
+    readonly served: readonly string[];
+  }[];
 }
 
 /** Where the local art library and the served `public/` tree live. */
@@ -77,6 +82,8 @@ export interface ArtPaths {
   readonly dreamscapeIconArtDir: string;
   readonly dreamGuideArtDir: string;
   readonly tutorialDialogueFrameArtPath: string;
+  /** The D97 LPC art library (P23), one directory per source. */
+  readonly d97ArtLibraryDir: string;
 }
 
 /**
@@ -147,6 +154,7 @@ export function defaultArtPaths(root: string, home: string): ArtPaths {
       "UIelements",
       "Round_frame.png",
     ),
+    d97ArtLibraryDir: join(documents, "lpc"),
   };
 }
 
@@ -225,6 +233,18 @@ function linkIfPresent(
   }
   linkExisting(refresh, source, destination);
   return true;
+}
+
+/** Writes a generated JSON file atomically through the staging directory. */
+function writeGeneratedJson(
+  refresh: ArtRefresh,
+  destination: string,
+  value: unknown,
+): void {
+  const staged = join(refresh.stagingDir, basename(destination));
+  writeFileSync(staged, `${JSON.stringify(value, null, 2)}\n`);
+  renameSync(staged, destination);
+  refresh.entries.add(destination);
 }
 
 /** Prune generated symlinks, preserving directory identity and foreign files. */
@@ -373,14 +393,11 @@ function linkJourneyArt(paths: ArtPaths, refresh: ArtRefresh): void {
       `  Warning: journey art directory not found at ${paths.journeyArtDir}`,
     );
   }
-  const metadata = join(journeysDir, "imageId-extension.json");
-  const staged = join(refresh.stagingDir, "imageId-extension.json");
-  writeFileSync(
-    staged,
-    `${JSON.stringify(extensions, null, 2)}\n`,
+  writeGeneratedJson(
+    refresh,
+    join(journeysDir, "imageId-extension.json"),
+    extensions,
   );
-  renameSync(staged, metadata);
-  refresh.entries.add(metadata);
   console.log(
     `Linked ${String(Object.keys(extensions).length)} journey images`,
   );
@@ -514,6 +531,54 @@ function linkAtlasArt(
   console.log("Linked Dream Atlas art");
 }
 
+/**
+ * D97 LPC art: each library source's served subtrees link, as directories,
+ * into `public/d97/<directory>/<subtree>`. `public/d97/art-library.json` lists
+ * the sources found in the library, so the overworld draws placeholders for
+ * the others without probing for missing files.
+ */
+function linkD97Art(
+  catalog: ArtCatalog,
+  paths: ArtPaths,
+  refresh: ArtRefresh,
+): void {
+  const d97Dir = join(paths.publicDir, "d97");
+  prepareDir(refresh, d97Dir);
+  const linked: string[] = [];
+  if (existsSync(paths.d97ArtLibraryDir)) {
+    for (const source of catalog.d97ArtSources) {
+      const sourceDir = join(paths.d97ArtLibraryDir, source.directory);
+      if (!existsSync(sourceDir)) {
+        console.warn(`  Warning: missing D97 art source ${sourceDir}`);
+        continue;
+      }
+      for (const subtree of source.served) {
+        let parent = d97Dir;
+        for (const segment of dirname(join(source.directory, subtree)).split(sep)) {
+          parent = join(parent, segment);
+          prepareDir(refresh, parent);
+        }
+        linkIfPresent(
+          refresh,
+          join(sourceDir, subtree),
+          join(d97Dir, source.directory, subtree),
+        );
+      }
+      linked.push(source.directory);
+    }
+  } else {
+    console.warn(
+      `  Warning: D97 art library not found at ${paths.d97ArtLibraryDir}; D97 draws placeholders`,
+    );
+  }
+  writeGeneratedJson(refresh, join(d97Dir, "art-library.json"), {
+    sources: linked,
+  });
+  console.log(
+    `Linked ${String(linked.length)} of ${String(catalog.d97ArtSources.length)} D97 art sources`,
+  );
+}
+
 /** Links every referenced art file into `paths.publicDir`. */
 export function linkArt(catalog: ArtCatalog, paths: ArtPaths): void {
   mkdirSync(paths.publicDir, { recursive: true });
@@ -554,6 +619,7 @@ export function linkArt(catalog: ArtCatalog, paths: ArtPaths): void {
       );
     }
     linkAtlasArt(catalog, paths, refresh);
+    linkD97Art(catalog, paths, refresh);
     for (const dir of refresh.directories) pruneGenerated(refresh, dir);
   } finally {
     rmSync(refresh.stagingDir, { recursive: true, force: true });
@@ -572,6 +638,9 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
   const { DREAMSCAPES } = await import("../src/content/dreamscapes.ts");
   const { DREAM_GUIDES } = await import("../src/content/guides.ts");
   const { ATLAS } = await import("../src/content/atlas.ts");
+  const { D97_ART_SOURCES } = await import(
+    "../src/content/d97/art-sources.ts"
+  );
   const imageNumberByCardId = new Map<CardId, number>(
     CARDS.map((card) => [parseCardId(card.id), card.imageNumber]),
   );
@@ -612,6 +681,7 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
       bossIconArtName: ATLAS.boss.iconArtKey,
       bossFigureArtName: ATLAS.boss.figureArtKey,
     },
+    d97ArtSources: D97_ART_SOURCES,
   };
 }
 

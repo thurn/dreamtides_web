@@ -195,6 +195,11 @@ const CATALOG: ArtCatalog = {
     bossIconArtName: "limbo-icon",
     bossFigureArtName: "apollyon",
   },
+  d97ArtSources: [
+    { directory: "tiles-pack", served: ["files"] },
+    { directory: "game-repo", served: ["resources/img"] },
+    { directory: "generator", served: [] },
+  ],
 };
 
 describe("art linker", () => {
@@ -435,6 +440,53 @@ describe("art linker", () => {
     } finally {
       await stopActors(fixture.actors);
     }
+  });
+
+  it("links D97 library sources by subtree and records which are present", () => {
+    const root = fixtureRoot();
+    const paths = defaultArtPaths(join(root, "repo"), join(root, "home"));
+    const library = paths.d97ArtLibraryDir;
+    touch(join(library, "tiles-pack", "files", "terrain.png"));
+    touch(join(library, "game-repo", "resources", "img", "grass.png"));
+    touch(join(library, "game-repo", "code.js"));
+
+    linkArt(CATALOG, paths);
+
+    const d97 = join(paths.publicDir, "d97");
+    expect(readlinkSync(join(d97, "tiles-pack", "files"))).toBe(
+      join(library, "tiles-pack", "files"),
+    );
+    expect(existsSync(join(d97, "game-repo", "resources", "img", "grass.png"))).toBe(true);
+    expect(existsSync(join(d97, "game-repo", "code.js"))).toBe(false);
+    expect(existsSync(join(d97, "generator"))).toBe(false);
+    const manifest = join(d97, "art-library.json");
+    expect(JSON.parse(readFileSync(manifest, "utf8"))).toEqual({
+      sources: ["tiles-pack", "game-repo"],
+    });
+
+    rmSync(join(library, "game-repo"), { recursive: true });
+    linkArt(CATALOG, paths);
+
+    expect(existsSync(join(d97, "game-repo"))).toBe(false);
+    expect(readlinkSync(join(d97, "tiles-pack", "files"))).toBe(
+      join(library, "tiles-pack", "files"),
+    );
+    expect(JSON.parse(readFileSync(manifest, "utf8"))).toEqual({
+      sources: ["tiles-pack"],
+    });
+  });
+
+  it("records no D97 sources when the library is absent", () => {
+    const root = fixtureRoot();
+    const paths = defaultArtPaths(join(root, "repo"), join(root, "home"));
+
+    linkArt(CATALOG, paths);
+
+    const d97 = join(paths.publicDir, "d97");
+    expect(readdirSync(d97)).toEqual(["art-library.json"]);
+    expect(
+      JSON.parse(readFileSync(join(d97, "art-library.json"), "utf8")),
+    ).toEqual({ sources: [] });
   });
 
   it("parses the trailing image number from journey art filenames", () => {

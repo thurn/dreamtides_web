@@ -16,6 +16,12 @@ deck at sites, and fights seven card battles, the last against Apollyon.
   Dreamsign portraits under `~/Documents/synty/avatars/` and
   `~/Documents/dreamsigns/filtered/`. Missing art produces setup warnings and
   broken images, but the game still runs.
+- Optional D97 overworld art: the LPC art library at `~/Documents/lpc/`, one
+  directory per source listed, with its pin, licenses and authors, in
+  `src/content/d97/art-sources.ts`. Setup links each source's served subtrees
+  into `public/d97/` and lists the sources it found in
+  `public/d97/art-library.json`; without the library, setup warns and D97
+  draws placeholders.
 
 ## Running
 
