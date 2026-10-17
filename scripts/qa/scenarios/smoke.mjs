@@ -9,10 +9,10 @@ export default async function smoke(qa) {
   const { sites } = await qa.battle.enterFirstBattle({
     seed: qa.args.seed ?? "1",
     atFrontDoor: async () => {
-      await qa.capture(`smoke-${mode}-front-door`);
+      await qa.capture(`smoke-${mode}-${qa.viewportName}-front-door`);
     },
   });
-  await qa.capture(`smoke-${mode}-battle-start`);
+  await qa.capture(`smoke-${mode}-${qa.viewportName}-battle-start`);
 
   // Until the far side has taken a turn and the near side may act again.
   const run = await qa.battle.playUntil(
@@ -20,6 +20,6 @@ export default async function smoke(qa) {
     { label: "one AI turn", timeout: 180_000 },
   );
   await qa.assertCaps("after the AI turn");
-  await qa.capture(`smoke-${mode}-after-ai-turn`);
+  await qa.capture(`smoke-${mode}-${qa.viewportName}-after-ai-turn`);
   return { sites, turns: run.history, responds: run.responds };
 }

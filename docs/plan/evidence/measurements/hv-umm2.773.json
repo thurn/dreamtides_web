@@ -1,0 +1,382 @@
+{
+  "bead": "hv-umm2.773",
+  "phase": 5,
+  "source": {
+    "base": "d163e136c2fcb7d7485ccb8c5241bfb0ecaac372",
+    "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-773-smoke-captures",
+    "artifactDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/smoke-captures773/implementation",
+    "claimUTC": "2026-10-17T02:11:37+00:00",
+    "firstExactHelperObservation": "2026-10-17T02:13:16Z",
+    "implementationEnd": "2026-10-17T02:18:00.053482+00:00",
+    "windowQualification": "Claim-inclusive elapsed window includes parent bootstrap. Exact helper dispatch timestamp is unknown. First helper observation is an observation, not a dispatch timestamp. End is the final evidence write immediately before commit.",
+    "writerSHA256": {
+      "scripts/qa/scenarios/smoke.mjs": "3f3506fa0828e7636f55ef9aad90bde1b3da9d4e5ebc5dbadd34a033a3cfd5aa",
+      "scripts/qa/scenarios/smoke.test.mjs": "d3fe5aa836a8e4ec80ae2fcf832aefcadfae9d939a437c4ed2b01926a628143d"
+    }
+  },
+  "contract": {
+    "scope": "Three stock smoke capture basenames include qa.viewportName. Journey, battle, Caps, navigation, capture helper and runner behavior use their maintained code.",
+    "synthetic": "Two dev/prod cases run serialized stock smoke through runScenarioPlan and createQa against a synthetic battle/page destination sink. Six report entries must resolve to six retained destinations with matching per-entry CSS dimensions.",
+    "originalFailedBaseline": {
+      "log": "focused-before.log",
+      "exitCode": 1,
+      "casesFailed": 2,
+      "failure": "Six reported captures share three destinations, expected six.",
+      "testCopy": "failed-baseline.test.mjs",
+      "testSHA256": "55aa6383f66274fc5af9458361d2c739008eb2ba32aa8afe412786f002cac062"
+    },
+    "performanceClaim": "None. Historical 35B recovery measured 62.64650887501193 seconds wall and 18.170982 reaped-child CPU. Those are source-scoped observed recovery costs, without forecast savings.",
+    "acceptanceCredit": "Bounded capture correctness on this source. Historical 35/35B/92 are immutable; final Phase 5 gate and source acceptance belong to hv-umm2.46."
+  },
+  "validation": {
+    "focused-before": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/scenarios/smoke.test.mjs"
+      ],
+      "exitCode": 1,
+      "wallS": 5.22,
+      "userS": 4.12,
+      "systemS": 1.86,
+      "log": "focused-before.log",
+      "count": {
+        "failed": 2
+      }
+    },
+    "focused-after": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/scenarios/smoke.test.mjs"
+      ],
+      "exitCode": 0,
+      "wallS": 3.73,
+      "userS": 3.14,
+      "systemS": 1.34,
+      "log": "focused-after.log",
+      "count": {
+        "passed": 2
+      }
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-773-smoke-captures",
+      "startedAt": "2026-10-17T02:16:38.577969+00:00",
+      "endedAt": "2026-10-17T02:16:50.627006+00:00",
+      "exitCode": 2,
+      "elapsedSeconds": 12.048983332992066,
+      "reapedChildUserSeconds": 40.960057,
+      "reapedChildSystemSeconds": 7.229576,
+      "sysctlLoadAtStart": "{ 5.23 7.13 6.77 }",
+      "pid": 98861,
+      "processGroup": 98861,
+      "cpuScope": "Whole command group including preparation/restoration; remote provider and unrelated host CPU excluded.",
+      "log": "review.log",
+      "qualification": "First review exposed only new synthetic test-host lint/type issues: Promise-return annotations, optional call argument, and VM result cast. Fixed within assigned smoke.test.mjs; final review and its two related tests pass."
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-773-smoke-captures",
+      "startedAt": "2026-10-17T02:16:59.394340+00:00",
+      "endedAt": "2026-10-17T02:17:11.199003+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 11.804617124958895,
+      "reapedChildUserSeconds": 34.430529,
+      "reapedChildSystemSeconds": 6.691592,
+      "sysctlLoadAtStart": "{ 6.01 7.21 6.81 }",
+      "pid": 516,
+      "processGroup": 516,
+      "cpuScope": "Whole command group including preparation/restoration; remote provider and unrelated host CPU excluded.",
+      "log": "review-final.log",
+      "counts": {
+        "files": 1,
+        "passed": 2
+      }
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-773-smoke-captures",
+      "startedAt": "2026-10-17T02:17:18.189119+00:00",
+      "endedAt": "2026-10-17T02:17:22.697995+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 4.50888329197187,
+      "reapedChildUserSeconds": 4.271029,
+      "reapedChildSystemSeconds": 1.468041,
+      "sysctlLoadAtStart": "{ 5.91 7.13 6.79 }",
+      "pid": 2212,
+      "processGroup": 2212,
+      "cpuScope": "Whole command group including preparation/restoration; remote provider and unrelated host CPU excluded.",
+      "log": "knip.log"
+    },
+    "evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-773-smoke-captures",
+      "startedAt": "2026-10-17T02:17:46.499478+00:00",
+      "endedAt": "2026-10-17T02:17:46.574061+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 0.07461841695476323,
+      "reapedChildUserSeconds": 0.055171,
+      "reapedChildSystemSeconds": 0.023621,
+      "sysctlLoadAtStart": "{ 5.36 6.88 6.71 }",
+      "pid": 4240,
+      "processGroup": 4240,
+      "cpuScope": "Whole command group including preparation/restoration; remote provider and unrelated host CPU excluded.",
+      "log": "evidence-schema.log"
+    }
+  },
+  "browser": {
+    "command": [
+      "node",
+      "scripts/qa/run-scenario.mjs",
+      "smoke",
+      "--bead",
+      "hv-umm2.773",
+      "--prod",
+      "--viewports",
+      "desktop,mobile"
+    ],
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.773/invocations/run-DzWzyf",
+    "rawReport": "smoke-prod.result.json",
+    "stdout": "production-smoke.stdout.log",
+    "stderr": "production-smoke.stderr.log",
+    "invocation": "run-DzWzyf",
+    "process": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "smoke",
+        "--bead",
+        "hv-umm2.773",
+        "--prod",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-773-smoke-captures",
+      "startedAt": "2026-10-17T02:14:21.146494+00:00",
+      "runnerPid": 89137,
+      "runnerProcessGroup": 89137,
+      "hostLoadAtStart": [
+        8.8359375,
+        8.291015625,
+        7.048828125
+      ],
+      "provider": "http://localhost:8931/mcp",
+      "serverOwnedByMaintainedRunner": true,
+      "endedAt": "2026-10-17T02:15:42.499262+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 81.3521039999905,
+      "reapedChildUserSeconds": 11.466021,
+      "reapedChildSystemSeconds": 3.6380529999999998,
+      "cpuScope": "This wrapper reaped its smoke runner; excludes remote MCP provider CPU and unrelated host work."
+    },
+    "captures": [
+      {
+        "file": "smoke-prod-desktop-front-door.png",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "bytes": 1957701,
+        "sha256": "3c3cd61a4265a4d8f027194e729706e9aea17e91af423edbb4c667b98b63c189",
+        "href": "http://localhost:5274/?seed=1&game=ajnu5d"
+      },
+      {
+        "file": "smoke-prod-desktop-battle-start.png",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "bytes": 3364768,
+        "sha256": "2b0fdd4d1f4249470902063d995952360dadaac9b03823d2d26673515f10d0b0",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?seed=1&game=ajnu5d"
+      },
+      {
+        "file": "smoke-prod-desktop-after-ai-turn.png",
+        "css": [
+          1440,
+          900
+        ],
+        "png": [
+          2880,
+          1800
+        ],
+        "bytes": 3460436,
+        "sha256": "3e7b05ca84bd9c1c285ef9b8cca3fb412e07a32760730e1817e0feb6983bb809",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?seed=1&game=ajnu5d"
+      },
+      {
+        "file": "smoke-prod-mobile-front-door.png",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "bytes": 850979,
+        "sha256": "7ac4957037fc2291d9b665dcf62206ddc7d79ebc82a4787f13adc7559b70dd07",
+        "href": "http://localhost:5274/?seed=1&game=nmxtmw"
+      },
+      {
+        "file": "smoke-prod-mobile-battle-start.png",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "bytes": 1286416,
+        "sha256": "084a0104eec7fb8e0c9a12a262b691b19e3a0411ec7f7e4bbe3195afb908466b",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?seed=1&game=nmxtmw"
+      },
+      {
+        "file": "smoke-prod-mobile-after-ai-turn.png",
+        "css": [
+          390,
+          844
+        ],
+        "png": [
+          780,
+          1688
+        ],
+        "bytes": 1299877,
+        "sha256": "fc18ea9dec7ee692915087a43f2b1b85e42acc117108220a80d823870ca12df6",
+        "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?seed=1&game=nmxtmw"
+      }
+    ],
+    "originalCaps": [],
+    "result": {
+      "desktop": {
+        "sites": [
+          "Draft",
+          "Draft",
+          "DreamsignRevelation",
+          "Purge",
+          "Battle"
+        ],
+        "turns": [
+          "near:day",
+          "near:night",
+          "far:dawn",
+          "far:dusk",
+          "near:dawn",
+          "near:day"
+        ],
+        "responds": 1
+      },
+      "mobile": {
+        "sites": [
+          "Draft",
+          "Draft",
+          "DreamsignRevelation",
+          "Purge",
+          "Battle"
+        ],
+        "turns": [
+          "near:day",
+          "near:night",
+          "far:dawn",
+          "far:dusk",
+          "near:dawn",
+          "near:day"
+        ],
+        "responds": 1
+      }
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "path": "smoke-prod-desktop.jsonl",
+        "gameId": "ajnu5d",
+        "selectedBy": "url",
+        "rows": 164,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "smoke-prod-mobile.jsonl",
+        "gameId": "nmxtmw",
+        "selectedBy": "url",
+        "rows": 161,
+        "reason": null
+      }
+    ],
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "build": 7573,
+      "serve": 7988,
+      "scenario": 72868,
+      "total": 80953
+    },
+    "navigation": "Both original qa.navigation records assert outcome=succeeded, listenerCleanup=removed, error=null and observationErrors=[]. Full records preserved in raw report.",
+    "geometryAndReachability": "Stock enterFirstBattle/playUntil uses maintained waitVisible/hitPoint-gated clicks; original workflow finished on both viewports. Capture helper asserts CSS geometry and original __caps at every capture.",
+    "visualInspection": "All six PNGs opened with view_image: desktop/mobile avatar chooser, battle start, and after-AI interaction states. Both layouts render and the final near-side action control remains visible.",
+    "capacity": "Maintained browser admission only, slot 1, port 5274, global MCP http://localhost:8931/mcp. Current workflow excludes run-scenario from heavy commands, including its own production build; parent corrected the initial brief via native comment 01a147a2-e36f-7288-80c5-f0354ad4a1bf. No heavy command or foreign job cancellation.",
+    "providerCustody": "Original admitted owner copied to .browser-qa.slot-1.lock.owner.json.original in scratch. Exit 0 and cleared owner record follow confirmed browser_close and settled RPCs in maintained cleanup."
+  },
+  "reviewFull": "Not required: additive focused regression and bounded scenario capture names, with no test infrastructure, config or cross-cutting architecture change. JOURNEY_TEST_WORKERS=2.",
+  "cleanup": {
+    "runner": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "server": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "port": {
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "ownerRecordExists": false,
+    "serverRecordExists": false,
+    "observedAt": "2026-10-17T02:16:14.550124+00:00",
+    "commandProcessGroups": {
+      "review": [],
+      "review-final": [],
+      "knip": []
+    },
+    "qualification": "All own execution terminals collected. Production runner exited 0 after confirmed provider/browser and owned server cleanup; runner/server absent, port 5274 free, owner/server records absent. Parent owns native delivery, cold review routing and worktree cleanup."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final command group start; sysctl -n vm.loadavg, 1-minute value 6.01"
+      }
+    }
+  },
+  "timingQualification": "Focused timings are /usr/bin/time whole-command wall/user/system scopes. Production timing is wrapper wall and reaped-child CPU; remote provider and whole-host CPU are unknown. Nested runner wallMs are not added to whole-command timings. Concurrent native release validation was observed; no speed comparison is made."
+}
