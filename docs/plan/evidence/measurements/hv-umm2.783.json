@@ -1,0 +1,625 @@
+{
+  "bead": "hv-umm2.783",
+  "base": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+  "rawDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783",
+  "implementWindow": {
+    "start": "2026-10-17T05:08:16.372494+00:00",
+    "end": "2026-10-17T05:17:13.898269+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "original npm run review wrapper start"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "sum of actual before-fix/focused attempts including diagnosed fixture failures; all originals retained"
+      }
+    }
+  },
+  "validation": [
+    {
+      "name": "beforefix-public-v2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen floating declaration deck knowledge"
+      ],
+      "pid": 82846,
+      "pgid": 82846,
+      "exit": 1,
+      "wallS": 7.6523730754852295,
+      "descendantCpuS": 10.323208000000001,
+      "loadStart": [
+        8.8134765625,
+        7.853515625,
+        7.5673828125
+      ],
+      "loadEnd": [
+        8.587890625,
+        7.822265625,
+        7.55810546875
+      ],
+      "logSHA256": "bccc24045a807040eba051404575aced531147712defe0101f0adf51ddf9733e",
+      "end": "2026-10-17T05:10:52.015137+00:00",
+      "originalToolSessionId": 4698,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public-v2.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public-v2.receipt.json",
+      "receiptSHA256": "e22f68480996a6647a8a27a468dfc443eeedf1a3c74227ed8b2f308a48e2e6a1",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public-v2.inputs.json",
+      "inputManifestSHA256": "dd4dfbae629dc0fc651dce5cbbebfba594216080280e19a6f83c8910487424c1",
+      "inputCount": 2729
+    },
+    {
+      "name": "beforefix-public-v3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen floating declaration deck knowledge"
+      ],
+      "pid": 84063,
+      "pgid": 84063,
+      "exit": 1,
+      "wallS": 7.680302143096924,
+      "descendantCpuS": 10.417387,
+      "loadStart": [
+        8.109375,
+        7.74560546875,
+        7.53369140625
+      ],
+      "loadEnd": [
+        7.4775390625,
+        7.62158203125,
+        7.49169921875
+      ],
+      "logSHA256": "79c902927d5330fa1e602687fe23c068e677e94c5593b32c7bbf12efc7242d1b",
+      "end": "2026-10-17T05:11:08.364830+00:00",
+      "originalToolSessionId": 93095,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public-v3.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public-v3.receipt.json",
+      "receiptSHA256": "866abc9d20284c13b0d9c0d3e17103dff43073beab043bd582d35ebbb80c0de2",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public-v3.inputs.json",
+      "inputManifestSHA256": "097745d71cff10dcbb8389d048c1095190e1e2cedd7b1686f602cf1c642403c0",
+      "inputCount": 2729
+    },
+    {
+      "name": "beforefix-public",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen floating declaration deck knowledge"
+      ],
+      "pid": 79906,
+      "pgid": 79906,
+      "exit": 1,
+      "wallS": 8.438857078552246,
+      "descendantCpuS": 11.398489000000001,
+      "loadStart": [
+        9.548828125,
+        7.89404296875,
+        7.5732421875
+      ],
+      "loadEnd": [
+        9.34423828125,
+        7.87890625,
+        7.56982421875
+      ],
+      "logSHA256": "18f2ff8d5cc9c52818c5e49ed34482fec8dfff7c6c9ad16593a3589af188847d",
+      "end": "2026-10-17T05:10:27.862790+00:00",
+      "originalToolSessionId": 57687,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public.receipt.json",
+      "receiptSHA256": "bbaf11998d621bd72d813339076ab62cb38810e7ffffcec4aec745283951dad9",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix-public.inputs.json",
+      "inputManifestSHA256": "4fbef51d5135c9afdcf24412e3ecf72c6da5567a8941950cf064f0537bd762bd",
+      "inputCount": 2729
+    },
+    {
+      "name": "beforefix",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/floating-subtype-knowledge.contracts.ts"
+      ],
+      "pid": 77127,
+      "pgid": 77127,
+      "exit": 1,
+      "wallS": 7.794840097427368,
+      "descendantCpuS": 6.538268999999999,
+      "loadStart": [
+        11.3212890625,
+        8.04443359375,
+        7.6162109375
+      ],
+      "loadEnd": [
+        10.5830078125,
+        7.9931640625,
+        7.6025390625
+      ],
+      "logSHA256": "3d7b6486f1df9812e9b9e4c11a81d5c2a5c9271a5fefafe4d5ef5ce45f4fbeef",
+      "end": "2026-10-17T05:10:04.794973+00:00",
+      "originalToolSessionId": 89861,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix.receipt.json",
+      "receiptSHA256": "7be6910b06bb341af032472006a116540ff51bd85ddb9944d3cb6eec142e9fd0",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/beforefix.inputs.json",
+      "inputManifestSHA256": "4fbef51d5135c9afdcf24412e3ecf72c6da5567a8941950cf064f0537bd762bd",
+      "inputCount": 2729
+    },
+    {
+      "name": "fixed-initial",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen floating declaration deck knowledge"
+      ],
+      "pid": 85994,
+      "pgid": 85994,
+      "exit": 0,
+      "wallS": 7.951326847076416,
+      "descendantCpuS": 10.84268,
+      "loadStart": [
+        6.6318359375,
+        7.42724609375,
+        7.42431640625
+      ],
+      "loadEnd": [
+        6.3740234375,
+        7.3466796875,
+        7.3955078125
+      ],
+      "logSHA256": "43f66655a66f19df355ed0e29007a2ab5ef53e5fa288a8bd8173c1f3057d07c3",
+      "end": "2026-10-17T05:11:33.788350+00:00",
+      "originalToolSessionId": 71708,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/fixed-initial.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/fixed-initial.receipt.json",
+      "receiptSHA256": "1ef1d9872a5e0161279fcbad765bf1c14002111ea6471d84b06fced93a1c528b",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/fixed-initial.inputs.json",
+      "inputManifestSHA256": "4eb65084df2109272677fbf657b96172c243a2b29e952ea739bd1109600eb091",
+      "inputCount": 2729
+    },
+    {
+      "name": "focused-expanded",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen floating declaration deck knowledge"
+      ],
+      "pid": 91161,
+      "pgid": 91161,
+      "exit": 1,
+      "wallS": 9.78247618675232,
+      "descendantCpuS": 10.806412,
+      "inputManifestSHA256": "6a4370426c2cc3852dfef5585749834ec8a73b19cb665ee56a758a8c3f43339a",
+      "runnerSHA256": "898cba9a38dd3bb9649be7d28feb08f723229428ed69358ac454f7e7309939df",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        4.93310546875,
+        6.7333984375,
+        7.15869140625
+      ],
+      "loadEnd": [
+        5.2373046875,
+        6.7412109375,
+        7.15625
+      ],
+      "logSHA256": "0214b845b597522f5cdd1c57a4ffc4b34e8d9731382fc6aa7bd0ed7c208828d1",
+      "end": "2026-10-17T05:12:48.923656+00:00",
+      "originalToolSessionId": 46643,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/focused-expanded.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/focused-expanded.receipt.json",
+      "receiptSHA256": "89db1cfd32ec88d4f8f062c029ef390317ef06b505fceb3f295e830f3519ddfa",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/focused-expanded.inputs.json",
+      "inputCount": 6087
+    },
+    {
+      "name": "focused-guards-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen floating declaration deck knowledge"
+      ],
+      "pid": 93165,
+      "pgid": 93165,
+      "exit": 0,
+      "wallS": 12.515708923339844,
+      "descendantCpuS": 12.048771,
+      "inputManifestSHA256": "7f0e875be5fc00f00181de1e1e5b7b5c76b44f634eb8cdcbc409544d9ae2e3b9",
+      "runnerSHA256": "898cba9a38dd3bb9649be7d28feb08f723229428ed69358ac454f7e7309939df",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        5.0302734375,
+        6.6220703125,
+        7.1064453125
+      ],
+      "loadEnd": [
+        5.39794921875,
+        6.62353515625,
+        7.09765625
+      ],
+      "logSHA256": "1f9a87d4e4db2f0a2cbf3f1c83536685eab1aa87527590f43340417b775e6b2b",
+      "end": "2026-10-17T05:13:19.965164+00:00",
+      "originalToolSessionId": 75315,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/focused-guards-corrected.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/focused-guards-corrected.receipt.json",
+      "receiptSHA256": "9dc7fad5a28e9446f373c62fd970b0ab68e0bf38d1dd4902d3ca3a77eeebd2cd",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/focused-guards-corrected.inputs.json",
+      "inputCount": 6087
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 99861,
+      "pgid": 99861,
+      "exit": 0,
+      "wallS": 5.982970714569092,
+      "descendantCpuS": 6.92204,
+      "inputManifestSHA256": "369fcb1b372321efbd3ebb0187a1ea23fa00e596a9c243bf707f8f984296d6d6",
+      "runnerSHA256": "898cba9a38dd3bb9649be7d28feb08f723229428ed69358ac454f7e7309939df",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        5.09423828125,
+        6.2587890625,
+        6.91552734375
+      ],
+      "loadEnd": [
+        5.40673828125,
+        6.30419921875,
+        6.927734375
+      ],
+      "logSHA256": "12c0feaf7f5a6e55e408fa6d464b127d604c082967a40d0091bbd5e07e2499f3",
+      "end": "2026-10-17T05:14:45.187408+00:00",
+      "originalToolSessionId": 50945,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/knip.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/knip.receipt.json",
+      "receiptSHA256": "f8b85c955108a93eaf3188abfd1dfce98961c1525d6a68d90b0a1e413d7e5b1d",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/knip.inputs.json",
+      "inputCount": 6087
+    },
+    {
+      "name": "lint-scoped",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/engine/effects/interpreter.ts",
+        "src/engine/effects/primitives/contracts/floating-subtype-knowledge.contracts.ts"
+      ],
+      "pid": 93292,
+      "pgid": 93292,
+      "exit": 0,
+      "wallS": 3.623195171356201,
+      "descendantCpuS": 5.6505730000000005,
+      "inputManifestSHA256": "7f0e875be5fc00f00181de1e1e5b7b5c76b44f634eb8cdcbc409544d9ae2e3b9",
+      "runnerSHA256": "898cba9a38dd3bb9649be7d28feb08f723229428ed69358ac454f7e7309939df",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        5.0302734375,
+        6.6220703125,
+        7.1064453125
+      ],
+      "loadEnd": [
+        5.02783203125,
+        6.5947265625,
+        7.09375
+      ],
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "end": "2026-10-17T05:13:11.721914+00:00",
+      "originalToolSessionId": 86775,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/lint-scoped.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/lint-scoped.receipt.json",
+      "receiptSHA256": "595375a5d27fcdb5da7cbefe4f8ed3e34acbb60f7aa183d272ac0fa55342f5d1",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/lint-scoped.inputs.json",
+      "inputCount": 6087
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 99700,
+      "pgid": 99700,
+      "exit": 0,
+      "wallS": 83.67318415641785,
+      "descendantCpuS": 224.820784,
+      "inputManifestSHA256": "369fcb1b372321efbd3ebb0187a1ea23fa00e596a9c243bf707f8f984296d6d6",
+      "runnerSHA256": "48490c7933be2aaf41e0a574805a207c76b4a2455b8b695635b0da77563615a0",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        4.9287109375,
+        6.24658203125,
+        6.9150390625
+      ],
+      "loadEnd": [
+        6.294921875,
+        6.42822265625,
+        6.921875
+      ],
+      "logSHA256": "984fd06878fcf487587c1a8d25ce98a5751503ac62743e6cb411b7cce77ffd27",
+      "end": "2026-10-17T05:16:01.737205+00:00",
+      "originalToolSessionId": 89389,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/review.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/review.receipt.json",
+      "receiptSHA256": "f7b80772cdcdf7208519fa6236bd139493915bfde8421b7494701595ec171fb9",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/review.inputs.json",
+      "inputCount": 6087
+    },
+    {
+      "name": "typecheck-scoped",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 95297,
+      "pgid": 95297,
+      "exit": 0,
+      "wallS": 18.307321071624756,
+      "descendantCpuS": 32.82988,
+      "inputManifestSHA256": "369fcb1b372321efbd3ebb0187a1ea23fa00e596a9c243bf707f8f984296d6d6",
+      "runnerSHA256": "898cba9a38dd3bb9649be7d28feb08f723229428ed69358ac454f7e7309939df",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        5.65966796875,
+        6.6240234375,
+        7.0888671875
+      ],
+      "loadEnd": [
+        5.4462890625,
+        6.5166015625,
+        7.03955078125
+      ],
+      "logSHA256": "b9971e429e1232109a0d7fbd32f8f7c9b18ff1c4ca471c1ce0aa78f75e89ce07",
+      "end": "2026-10-17T05:13:54.273900+00:00",
+      "originalToolSessionId": 83266,
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/typecheck-scoped.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/typecheck-scoped.receipt.json",
+      "receiptSHA256": "5009b4cd3d490367c3266fd05367225d6e0023819997dea242d790274f3db3f7",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/typecheck-scoped.inputs.json",
+      "inputCount": 6087
+    },
+    {
+      "name": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 11747,
+      "pgid": 11747,
+      "exit": 0,
+      "wallS": 0.06919026374816895,
+      "descendantCpuS": 0.07432,
+      "inputManifestSHA256": "348ae6ca5fec415986edf5b81f067abc48d5a406d0622423d7fc982e97f137e0",
+      "runnerSHA256": "48490c7933be2aaf41e0a574805a207c76b4a2455b8b695635b0da77563615a0",
+      "sourceHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+      "loadStart": [
+        5.009765625,
+        5.9501953125,
+        6.69091796875
+      ],
+      "loadEnd": [
+        5.009765625,
+        5.9501953125,
+        6.69091796875
+      ],
+      "logSHA256": "32ce070cf943702f680e6c69ac03d5a3a958608f8786f188353f3f635f375def",
+      "end": "2026-10-17T05:17:22.446029+00:00",
+      "originalToolChunk": "5cd1b2",
+      "originalToolTerminalCollected": true,
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/evidence-schema.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/evidence-schema.receipt.json",
+      "receiptSHA256": "bc95f0f67082b2c746a785355ce1754d51c8a7d44477a101dd1281f4a1ca53fb",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/public-trigger-proof783/evidence-schema.inputs.json",
+      "inputCount": 6090
+    }
+  ],
+  "sourceBinding": {
+    "baselineHead": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+    "runtimeSource": "uncommitted exact input bytes bound by each manifest; commit assembled after validation",
+    "all6087ReviewInputsStillMatch": true,
+    "sourceAndTestHashes": {
+      "src/engine/effects/interpreter.ts": "3e0d9b1a90c19980731761488bcd851d71306019aa917f4f6a446f016a254dc2",
+      "src/engine/effects/primitives/contracts/floating-subtype-knowledge.contracts.ts": "9073c5a201518ba1fc89127b9d82186e8a14565872a896ea28a2c713973ff64a",
+      "docs/plan/engine-design.md": "a3406ebd56df73fd7d0993323c610f5a3293a48fe139e122dcd997189f7a101f"
+    },
+    "reviewManifest": "review.inputs.json",
+    "auxiliaryEvidenceManifest": "review-auxiliary-evidence-inputs.json",
+    "changedPathsOutsideAreas": [],
+    "fallout": [],
+    "allRequiredPublicProofImportersInspected": [
+      "src/engine/effects/interpreter.ts: materializeDeckBounds and banishDeckWindows",
+      "src/engine/effects/primitives/draw-matching.ts: publicFilter"
+    ],
+    "productionWriterScope": "publicAbilityEffect and withChosenSubtype import only",
+    "noLexicalStateQueueParserEdits": true
+  },
+  "beforefix": {
+    "base": "784ccb544463d4a290308bab8b75b8c6d5e453aa",
+    "manifest": "beforefix-public-v3.inputs.json",
+    "manifestSHA256": "097745d71cff10dcbb8389d048c1095190e1e2cedd7b1686f602cf1c642403c0",
+    "inputCount": 2729,
+    "matchedTrackedBaseBlobs": 2728,
+    "untrackedFixture": "src/engine/effects/primitives/contracts/floating-subtype-knowledge.contracts.ts",
+    "fixtureSHA256": "fc0da346894b12112313204c11356b0e30cd44b00d055c0b6999320f6f2835cd",
+    "mismatches": [],
+    "originalToolSessionId": 93095,
+    "actualExit": 1,
+    "expectedFailures": 8,
+    "passedControls": 4,
+    "failure": "observable public known deck UUID missing at forced index1",
+    "earlierAttempts": [
+      "beforefix: wrong contract non-entrypoint, no tests run",
+      "beforefix-public: fixture attempted to read absent observation",
+      "beforefix-public-v2: fixture omitted observation option"
+    ]
+  },
+  "failureDispositions": {
+    "beforefix": "incorrect non-entrypoint filter: no tests selected; not regression credit",
+    "beforefix-public": "fixture did not exclude absent event observations; not regression credit",
+    "beforefix-public-v2": "fixture did not request fold observation snapshots; not regression credit",
+    "beforefix-public-v3": "8 actual expected observable known-index regressions; 4 controls pass; exact unchanged baseline verified",
+    "focused-expanded": "16 synthetic guard fixtures invoked the declared effect twice; fixture corrected before successful38-contract run",
+    "fixed-initial": "original12 contracts pass with bounded production fix",
+    "focused-guards-corrected": "38 final contracts pass",
+    "review": "356 related files /11366 tests pass; lint, app/node typechecks, import cycles and evidence schema all pass",
+    "knip": "pass; no orphaned export/file introduced"
+  },
+  "runnerProvenance": {
+    "initial": "measure-initial.py reconstructs original baseline/fixed-initial runner",
+    "trackedInputs": "measure-tracked-inputs.py is reconstructed after execution from the current scratch runner by reversing its untracked-file inventory addition; reconstructed SHA256898cba9a38dd3bb9649be7d28feb08f723229428ed69358ac454f7e7309939df. It is not contemporaneous launch attestation.",
+    "reviewReceiptDigestCaveat": "The original review receipt runnerSHA256 field was sampled at exit, after the scratch file was expanded for future untracked-evidence capture during the active aggregate. Its launch script is inferred from the prelaunch editing record and unchanged6087-entry inventory, with the tracked-input version reconstructed separately; no contemporaneous launch digest was captured. The original receipt remains immutable. Actual source/input manifests, command and original tool exit are independent evidence.",
+    "current": "measure.py additionally captures all untracked nonignored inputs for the final evidence schema check"
+  },
+  "publicCoverage": {
+    "newContracts": 38,
+    "requiredRegressionMatrix": "both controllers x materialize/banish x floating/delayed; both viewers at every observed removal boundary; unknown deeper slot; saved load and cold intent/event replay; immutable input/catalog",
+    "otherNewControls": [
+      "ordinary unbound",
+      "bound nonmatching",
+      "independent retained Mage/Warrior bindings",
+      "full public maximum across hidden top2/top4 branches",
+      "asymmetric hidden source",
+      "changed UUID origin",
+      "changed amplified variant",
+      "opaque synthetic hook with matching declared tree",
+      "drawMatching specialized public predicate"
+    ]
+  },
+  "existingFailurePathContracts": [
+    {
+      "file": "src/engine/effects/primitives/contracts/choose-subtype.contracts.ts",
+      "name": "reloads the type choice, rejects stale, foreign and unoffered answers, and commits exactly once",
+      "covers": [
+        "stale",
+        "foreign",
+        "invalid",
+        "cancel",
+        "concurrent",
+        "duplicate answer"
+      ]
+    },
+    {
+      "file": "src/engine/effects/primitives/contracts/floating-subtype.contracts.ts",
+      "name": "retains a future nested installation and queued target binding across restart for both controllers",
+      "covers": [
+        "queued target restart",
+        "foreign/stale/invalid target",
+        "concurrent",
+        "cancel"
+      ]
+    },
+    {
+      "file": "src/engine/effects/primitives/contracts/floating-subtype.contracts.ts",
+      "name": "rolls back a partial installation and recovers identically after restart for both controllers",
+      "covers": [
+        "installation error",
+        "rollback",
+        "cold recovery"
+      ]
+    },
+    {
+      "file": "src/engine/effects/primitives/contracts/materialize-deck-knowledge.contracts.ts",
+      "name": "rolls back actual materialization and its knowledge changes when resolution throws",
+      "covers": [
+        "materialization/knowledge rollback"
+      ]
+    },
+    {
+      "file": "src/engine/effects/primitives/contracts/banish-deck-knowledge.contracts.ts",
+      "name": "rolls back the banishment and its knowledge changes when resolution throws",
+      "covers": [
+        "banishment/knowledge rollback"
+      ]
+    }
+  ],
+  "failurePathRationale": "The changed proof is pure, offers no prompt and writes no state; existing public prompt/trigger and movement recovery contracts run in the successful related suite. No additional cancellation/error protocol is introduced.",
+  "notRun": {
+    "reviewFull": "bounded public declaration proof; no test infrastructure, repository configuration or cross-cutting architecture change",
+    "localFuzz": "no fuzzer or step-runner change; release stage owns staged fuzz smoke",
+    "browserQA": "internal proof inference and synthetic headless public views; no presentation or interaction change"
+  },
+  "budget": "Related test stage80.5s and Vitest duration70.64s are scoped observations; this is not a full D19 suite measurement and grants no waiver.",
+  "cleanup": {
+    "recordedRootGroups": [
+      11747,
+      77127,
+      79906,
+      82846,
+      84063,
+      85994,
+      91161,
+      93165,
+      93292,
+      95297,
+      99700,
+      99861
+    ],
+    "allAbsent": true,
+    "live": [],
+    "onlyRecordedGroupsInspected": true,
+    "manuallyStartedServers": [],
+    "browserContexts": [],
+    "toolSessions": {
+      "beforefix": 89861,
+      "beforefix-public": 57687,
+      "beforefix-public-v2": 4698,
+      "beforefix-public-v3": 93095,
+      "fixed-initial": 71708,
+      "focused-expanded": 46643,
+      "focused-guards-corrected": 75315,
+      "lint-scoped": 86775,
+      "typecheck-scoped": 83266,
+      "review": 89389,
+      "knip": 50945
+    },
+    "allOriginalToolsTerminalCollected": true,
+    "directTerminalTools": [
+      {
+        "name": "evidence-schema",
+        "toolChunk": "5cd1b2",
+        "actualExit": 0,
+        "collected": true
+      }
+    ]
+  },
+  "qaAssets": [],
+  "logging": "Existing source UUID/chosen-subtype trigger events identify the deterministic declaration; no new event/state schema or writer is introduced.",
+  "fallout": [],
+  "unresolvedInScopeIssues": [],
+  "evidenceScope": "The successful review6087-input manifest covers tracked files plus the new contract; untracked initial evidence bytes are separately preserved in review-auxiliary-evidence-inputs.json. Final schema captures tracked and all untracked nonignored files, including final friction bytes. This measurement adds that final receipt after its execution; semantic source/test/doc and friction bytes remain unchanged."
+}

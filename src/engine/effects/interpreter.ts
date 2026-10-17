@@ -33,6 +33,7 @@ import { effectiveSpark } from "../rules/spark";
 import { charactersInPlay } from "../rules/zones";
 import type { BanishCardsNode, BanishNamedCardsNode } from "./primitives/banish-cards";
 import type { MaterializeNode } from "./primitives/materialize";
+import { withChosenSubtype } from "./primitives/choose-subtype";
 import { primitiveDefinition, resolvePrimitiveUnchecked } from "./registry";
 import type { CapturedCardsSpec, CardRef, EffectEnv, EffectNode, MovedCards, ResolutionChoiceScope } from "./types";
 
@@ -977,8 +978,10 @@ function deckRemovalWindows(ctx: StepContext, node: EffectNode, env: EffectEnv):
 /**
  * The declared effect `viewer` can attribute to the ability `env` resolves:
  * `viewer` identifies its source, which still has the origin the ability
- * resolves from, and that origin's declaration at `env.ability` is the tree
- * resolving. `null` when nothing public proves it, as for an opaque synthetic
+ * resolves from, and that origin's declaration at `env.ability`, either plain
+ * or specialized by its retained public type choice, is the tree resolving.
+ * The whole declaration supplies proof across every branch. `null` when
+ * nothing public proves it, as for an opaque synthetic
  * resolver; callers then infer nothing from the ability's text.
  */
 export function publicAbilityEffect(ctx: StepContext, env: EffectEnv, viewer: Side): EffectNode | null {
@@ -987,8 +990,12 @@ export function publicAbilityEffect(ctx: StepContext, env: EffectEnv, viewer: Si
   if (origin === null || JSON.stringify(origin) !== JSON.stringify(env.origin)) return null;
   if (origin.kind === "card" && ctx.catalog.card(origin.cardId).synthetic?.resolve !== undefined) return null;
   const ability = originAbilities(ctx.catalog, origin)[env.ability];
-  if (ability === undefined || !("effect" in ability) || JSON.stringify(ability.effect) !== JSON.stringify(env.root)) return null;
-  return ability.effect;
+  if (ability === undefined || !("effect" in ability)) return null;
+  const root = JSON.stringify(env.root);
+  if (JSON.stringify(ability.effect) === root) return ability.effect;
+  if (env.chosenSubtype === undefined) return null;
+  const specialized = withChosenSubtype(ability.effect, env.chosenSubtype);
+  return JSON.stringify(specialized) === root ? specialized : null;
 }
 
 /** Public deck-materialization windows, independent of the selected hidden branch. */

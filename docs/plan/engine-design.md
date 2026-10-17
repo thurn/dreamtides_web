@@ -1119,6 +1119,11 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   occurrence carries `chosenSubtype` into its resolving environment, including
   any further floating installations. Saves, views, reconstruction and trigger
   logs carry this plain scalar binding; legacy records may omit it.
+  Public deck-knowledge proofs compare the complete resolving root with its
+  identified source's current declaration, or that declaration specialized by
+  the retained type choice. The matching complete declaration supplies bounds
+  across all hidden branches and matching-draw filters. Attribution requires
+  the same current origin and variant and excludes opaque synthetic resolvers.
 - **`triggerAbility`** enqueues a named trigger outside its occasion
   (`triggerNamed`).
 - **Disabled triggers** (`disableTriggers`, optionally while a condition
