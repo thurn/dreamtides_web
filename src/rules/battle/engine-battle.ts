@@ -48,7 +48,9 @@ import {
   actionFromUnknown,
   answerFromUnknown,
   engineBattleOf,
+  journeyBattleOf,
   promptIdFromUnknown,
+  tutorialBattleOf,
   sideFromUnknown,
   type BattleFoldState,
   type EngineBattleFold,
@@ -399,14 +401,15 @@ function startSlice(engine: Engine, battle: BattleFoldState, event: CommittedEve
     event.type === "BEGIN_TUTORIAL_BATTLE" && tutorial.restartNumber === 0 && payload.tutorialRunId === tutorial.tutorialRunId ||
     event.type === "RESTART_TUTORIAL_BATTLE" && tutorial.restartNumber > 0 && payload.battleId === tutorialBattleId(tutorial.tutorialRunId,tutorial.restartNumber-1)
   );
+  const hostSiteId = journeyBattleOf(battle)?.init.siteId ?? tutorialBattleOf(battle)?.init.siteId;
   if (startsTutorial || event.type === "BEGIN_BATTLE" && battle.mode.kind === "journey") {
-    if (!startsTutorial && payload.siteId !== battle.init.siteId) return null;
+    if (!startsTutorial && payload.siteId !== hostSiteId) return null;
     const outcome = foldAdapterFor(engine).start(battle.engine.init);
     return outcome.kind === "applied" && outcome.error === null ? outcome.slice : null;
   }
   if (event.type === "LOAD_STATE") {
     const loaded = payload.battle;
-    if (!isRecord(loaded) || !isRecord(loaded.init) || loaded.init.siteId !== battle.init.siteId || tutorial !== null && loaded.init.battleId !== battle.init.battleId) return null;
+    if (!isRecord(loaded) || !isRecord(loaded.init) || hostSiteId === undefined || loaded.init.siteId !== hostSiteId || tutorial !== null && loaded.init.battleId !== battle.init.battleId) return null;
     const fold = parseEngineBattleFold(loaded.engine, engine.catalog);
     return fold?.slice ?? null;
   }
@@ -557,7 +560,7 @@ export function replayEngineBattle<T>(
 }
 
 /** The engine battle's result once its battle is over, else `null`. */
-export function engineBattleResult(battle: JourneyBattleFoldState): EngineBattleResult | null {
+export function engineBattleResult(battle: { readonly engine: EngineBattleFold }): EngineBattleResult | null {
   return battle.engine.slice.committed.result;
 }
 

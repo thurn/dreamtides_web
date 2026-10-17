@@ -518,6 +518,7 @@ export const auguryArchetypeIdFromUnknown = identityDecoder(
 );
 export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const d97OwnedCopyIdFromUnknown = identityDecoder(parseD97OwnedCopyId);
+export const dreamAnchorIdFromUnknown = identityDecoder(parseDreamAnchorId);
 export const battleCardIdFromUnknown = identityDecoder(parseBattleCardId);
 export const clientIdFromUnknown = identityDecoder(parseClientId);
 export const cardTypeChangePredicateIdFromUnknown = identityDecoder(

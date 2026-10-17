@@ -25,6 +25,9 @@ export const PLACEHOLDER_ANCHORS: Readonly<Record<DreamAnchorKind, number>> = {
   townsfolk: 0xb8c4cc,
 };
 
+/** The tint that slightly desaturates a beaten opponent. */
+export const BEATEN_TINT = 0xa8a8a8;
+
 /** The outline drawn around every placeholder shape. */
 export const PLACEHOLDER_OUTLINE = 0x15191d;
 

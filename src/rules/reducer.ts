@@ -45,6 +45,10 @@ import {
 import * as d97Run from "./d97/d97-run";
 import * as d97Deck from "./d97/d97-deck";
 import type { D97Transition } from "./d97/d97-run";
+import * as d97Encounters from "./d97/d97-encounters";
+
+/** Engine intents a D97 game folds while its D97 battle is running. */
+const D97_BATTLE_INTENTS: ReadonlySet<EventType> = new Set(["BATTLE_ACTION", "BATTLE_ANSWER", "BATTLE_CANCEL", "BATTLE_DEBUG"]);
 import type { FoldState } from "./fold-state";
 import type { JourneyPurgeOccurrence, JourneyPurgeTransition, JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
@@ -56,7 +60,7 @@ import {
   reduceEngineIntentWithCommits,
 } from "./battle/engine-battle";
 import type { Engine } from "../engine";
-import { journeyBattleOf, tutorialBattleOf } from "./battle/fold";
+import { journeyBattleOf, playableBattleOf, tutorialBattleOf } from "./battle/fold";
 import { battleGuidanceOf } from "./battle/journey-tutorial-guidance";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
@@ -217,7 +221,7 @@ function finishTransition(
       before: before.journey,
       journey: result.state.journey,
       dreamsignGains: journeyDreamsignGains(before.journey, result.state.journey, event),
-      battleBinding: result.state.battle === null ? null : { battleId: result.state.battle.init.battleId, mode: result.state.battle.mode.kind },
+      battleBinding: result.state.battle === null || result.state.battle.mode.kind === "d97" ? null : { battleId: result.state.battle.init.battleId, mode: result.state.battle.mode.kind },
       loopBattleBinding: observesJourneyLoops(result.state.journey, id => modifiers.lookup(id)) || result.state.journey.pendingJourneyLoop !== undefined ? journeyLoopBattleBinding(result.state) : null,
       eventType: event.type,
       seq, random, transfigurations,
@@ -239,10 +243,11 @@ function finishTransition(
   if (result.outcome === "applied" && result.state.journey.journeyDraw === undefined && event.type === "RESOLVE_JOURNEY_PURGE" && before.journey.screen.type === "journeyPurge" && before.journey.screen.choice.kind === "beforeBattle") {
     const finalJourney = result.state.journey;
     const transition = finishBeforeBattlePurge(result.state, before.journey.screen.choice, ctx);
-    if (transition === null || transition.state.battle === null) return bounce(before);
-    const committed = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: transition.state.battle.init.battleId, siteId: transition.state.battle.init.siteId, seq, steps: transition.committedSteps });
+    const purgedBattle = transition === null ? null : journeyBattleOf(transition.state.battle);
+    if (transition === null || purgedBattle === null) return bounce(before);
+    const committed = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: purgedBattle.init.battleId, siteId: purgedBattle.init.siteId, seq, steps: transition.committedSteps });
     result = { ...result, state: { ...transition.state, journey: committed.journey }, logRecords: [...(result.logRecords ?? []), ...committed.logRecords,
-      { event: "journey_before_battle_started", fields: { siteId: before.journey.screen.choice.siteId, earnedSeq: before.journey.screen.choice.earnedSeq, battleId: transition.state.battle.init.battleId, entryIds: finalJourney.deck.map(({ entryId }) => entryId), essence: finalJourney.essence, dreamsignIds: finalJourney.dreamsigns.map(({ id }) => id) } }] };
+      { event: "journey_before_battle_started", fields: { siteId: before.journey.screen.choice.siteId, earnedSeq: before.journey.screen.choice.earnedSeq, battleId: purgedBattle.init.battleId, entryIds: finalJourney.deck.map(({ entryId }) => entryId), essence: finalJourney.essence, dreamsignIds: finalJourney.dreamsigns.map(({ id }) => id) } }] };
   }
 
   return enforceInvariants(event, result, modifiers);
@@ -303,7 +308,7 @@ function reduceEngineDebug(
   ctx: EventContext,
 ): FoldState | null {
   const engine = battleEngine();
-  const battle = journeyBattleOf(state.battle);
+  const battle = playableBattleOf(state.battle);
   if (engine === null || battle === null) {
     return null;
   }
@@ -364,8 +369,10 @@ export function routeDomain(
     // Unrecognized type string — recorded no-op, never a throw.
     return bounce(state);
   }
-  // Mode isolation: a D97 game folds only D97 events, a journey game none.
-  if (isD97EventType(event.type) !== (state.d97 !== undefined)) {
+  // Mode isolation: a D97 game folds only D97 events, and its battle's engine
+  // intents; a journey game folds no D97 event.
+  const d97BattleIntent = state.battle?.mode.kind === "d97" && D97_BATTLE_INTENTS.has(event.type);
+  if (!d97BattleIntent && isD97EventType(event.type) !== (state.d97 !== undefined)) {
     return bounce(state);
   }
   if (state.journey.journeyDraw !== undefined && isGameplayEventType(event.type)) return bounce(state);
@@ -758,8 +765,9 @@ export function routeDomain(
         return { state: prepared, outcome: "applied", logRecords: [{ event: "journey_before_battle_purge_prepared", fields: { ...choice, deckSize: journey.deck.length } }] };
       }
       const transition = journeyBattle.beginBattleWithCommits(state, payload, ctx);
-      if (transition === null || transition.state.battle === null) return bounce(state);
-      const applied = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: transition.state.battle.init.battleId, siteId: transition.state.battle.init.siteId, seq: ctx.seq, steps: transition.committedSteps });
+      const begun = transition === null ? null : journeyBattleOf(transition.state.battle);
+      if (transition === null || begun === null) return bounce(state);
+      const applied = modifiers.applyBattleCommits({ journey: transition.state.journey, battleId: begun.init.battleId, siteId: begun.init.siteId, seq: ctx.seq, steps: transition.committedSteps });
       return { state: { ...transition.state, journey: applied.journey }, outcome: "applied", logRecords: applied.logRecords };
     }
     case "RESOLVE_STARTER_PURGE": {
@@ -780,8 +788,9 @@ export function routeDomain(
     case "BATTLE_CANCEL": {
       const transition = reduceEngineIntentWithCommits(state,type,payload,ctx,battleEngine());
       let next = transition?.state ?? null;
-      const applied = next?.battle?.mode.kind === "journey" && transition !== null
-        ? modifiers.applyBattleCommits({ journey: next.journey, battleId: next.battle.init.battleId, siteId: next.battle.init.siteId, seq: ctx.seq, steps: transition.committedSteps }) : null;
+      const nextJourneyBattle = next === null ? null : journeyBattleOf(next.battle);
+      const applied = next !== null && nextJourneyBattle !== null && transition !== null
+        ? modifiers.applyBattleCommits({ journey: next.journey, battleId: nextJourneyBattle.init.battleId, siteId: nextJourneyBattle.init.siteId, seq: ctx.seq, steps: transition.committedSteps }) : null;
       if (next !== null && applied !== null) next = { ...next, journey: applied.journey };
       const base = foldCase(state,next);
       const result = base.outcome === "applied" && applied !== null ? { ...base, logRecords: applied.logRecords } : base;
@@ -800,6 +809,14 @@ export function routeDomain(
       return d97Case(state, state.d97 === undefined ? null : d97Deck.equipCopy(state.d97, payload));
     case "D97_UNEQUIP_COPY":
       return d97Case(state, state.d97 === undefined ? null : d97Deck.unequipCopy(state.d97, payload));
+    case "D97_PREVIEW_ENCOUNTER":
+      return d97Case(state, d97Encounters.previewEncounter(state, payload, ctx));
+    case "D97_DECLINE_ENCOUNTER":
+      return d97Case(state, state.d97 === undefined ? null : d97Encounters.declineEncounter(state.d97, payload));
+    case "D97_BEGIN_BATTLE":
+      return d97FoldCase(state, d97Encounters.beginEncounterBattle(state, payload, ctx));
+    case "D97_END_BATTLE":
+      return d97FoldCase(state, d97Encounters.endEncounterBattle(state, ctx));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":
@@ -859,6 +876,12 @@ function frontDoorCase(
     state: { ...state, frontDoor: nextFrontDoor },
     outcome: "applied",
   };
+}
+
+/** Wrap a whole-fold D97 result: `null` bounces, its state applies. */
+function d97FoldCase(state: FoldState, transition: d97Encounters.D97FoldTransition | null): ReduceResult {
+  if (transition === null) return bounce(state);
+  return { state: transition.state, outcome: "applied", logRecords: transition.logRecords };
 }
 
 /** Wrap a D97 domain result: `null` bounces, a new D97 slice applies. */

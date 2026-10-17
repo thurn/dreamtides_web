@@ -25,7 +25,7 @@ import { DEBUG_ZONES, revealHiddenZones, type DebugOp, type DebugZone } from "..
 import type { BattleSlice, HistoryEntry } from "../../engine/fold/slice";
 import { logEvent } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
-import type { JourneyBattleFoldState } from "../../rules/battle/fold";
+import type { PlayableBattleFoldState } from "../../rules/battle/fold";
 import { useActions } from "../../session/hooks";
 import { useJourney } from "../../state/journey-context";
 import { isCardId, parseCardId, type CardId } from "../../types/card-identity";
@@ -80,7 +80,7 @@ export default function EngineDebugPanel({
   events,
 }: {
   readonly engine: Engine;
-  readonly battle: JourneyBattleFoldState;
+  readonly battle: PlayableBattleFoldState;
   readonly battleId: BattleId;
   /** View-only visibility of the closed opener; the probe and open rail stay mounted. */
   readonly openerVisible: boolean;

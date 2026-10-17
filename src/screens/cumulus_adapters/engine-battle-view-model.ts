@@ -137,6 +137,8 @@ export interface EngineBattleViewInput {
   readonly opponentName: string;
   readonly essenceReward: number;
   readonly resultDismissed: boolean;
+  /** What leaving a defeat or draw does; a journey run resets by default. */
+  readonly resultContinuation?: "resetRun" | "returnToDream";
   /** The presentation's current visual and its key, or `null` while it shows none. */
   readonly visual?: { readonly key: PresentationId; readonly visual: PresentationVisual } | null;
   /** The opponent's card the visual reveals, as the human sees it once played. */
@@ -319,7 +321,11 @@ function resultView(input: EngineBattleViewInput): MobileBattleResultView | null
       turnCount: view.turn.sideTurns[human],
     };
   }
-  return { outcome: result.kind === "draw" ? "draw" : "defeat", dismissed: input.resultDismissed };
+  return {
+    outcome: result.kind === "draw" ? "draw" : "defeat",
+    dismissed: input.resultDismissed,
+    ...(input.resultContinuation === undefined ? {} : { continuation: input.resultContinuation }),
+  };
 }
 
 function inspectorSide(view: BattleView, side: Side): MobileBattleInspectorSideView {

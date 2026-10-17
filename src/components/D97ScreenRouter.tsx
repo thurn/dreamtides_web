@@ -11,6 +11,8 @@ import { D97AvatarSelectScreenAdapter } from "../screens/cumulus_adapters/d97/D9
 import { D97OverworldScreenAdapter } from "../screens/cumulus_adapters/d97/D97OverworldScreenAdapter";
 import type { QaSceneId } from "../types/identifiers";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
+import { d97BattleOf } from "../rules/battle/fold";
 
 /** The path a D97 game shows in the address bar. */
 const D97_PATHNAME = "/d97";
@@ -22,7 +24,7 @@ export function D97ScreenRouter({
   readonly journeyContent: JourneyContent;
   readonly gotoScene?: QaSceneId | null;
 }) {
-  const d97 = useGameState().d97;
+  const { d97, battle } = useGameState();
   const confirmedHead = useConfirmedHead();
   const actions = useActions();
   const qaRunStartedRef = useRef(false);
@@ -61,7 +63,9 @@ export function D97ScreenRouter({
 
   if (d97 === undefined) return null;
   const content =
-    d97.screen.type === "overworld" && d97.run !== null ? (
+    d97BattleOf(battle) !== null ? (
+      <PlayableBattleScreen />
+    ) : d97.screen.type === "overworld" && d97.run !== null ? (
       <D97OverworldScreenAdapter
         run={d97.run}
         journeyContent={journeyContent}
@@ -71,7 +75,7 @@ export function D97ScreenRouter({
       <D97AvatarSelectScreenAdapter journeyContent={journeyContent} />
     );
   return (
-    <ErrorBoundary scope={`screen:d97:${d97.screen.type}`} resetKey={d97.screen.type}>
+    <ErrorBoundary scope={`screen:d97:${battle === null ? d97.screen.type : "battle"}`} resetKey={battle === null ? d97.screen.type : battle.init.battleId}>
       {content}
     </ErrorBoundary>
   );

@@ -7,7 +7,7 @@
 
 import { Container, Graphics, Sprite, type Application, type FederatedPointerEvent } from "pixi.js";
 import type { D97CharacterTunables, D97OverworldTunables } from "../../content/d97/tunables";
-import type { D97CharacterId } from "../../types/identifiers";
+import type { D97CharacterId, DreamAnchorId } from "../../types/identifiers";
 import { logEvent } from "../../logging";
 import type { CompiledAnchor, CompiledDreamMap, WalkabilityGrid } from "../map/compiled";
 import { isWalkable } from "../map/compiled";
@@ -40,11 +40,13 @@ import {
   PLACEHOLDER_GROUND,
   PLACEHOLDER_OUTLINE,
   PLACEHOLDER_PLAYER,
+  BEATEN_TINT,
 } from "./placeholder-palette";
 import { spawnTile } from "./spawn";
 import type { TileTextures } from "./tile-textures";
 import {
   advanceWalker,
+  FACING_STEPS,
   faceTile,
   facedTile,
   followPath,
@@ -94,6 +96,8 @@ export interface OverworldSceneOptions {
   readonly occupants: OverworldOccupants;
   /** The character the player walks as. */
   readonly playerCharacter: D97CharacterId;
+  /** The anchor the player starts beside (after its battle), if any. */
+  readonly returnAnchorId: DreamAnchorId | null;
   /** Whether the viewport counts as desktop for zoom. */
   readonly desktop: () => boolean;
 }
@@ -180,6 +184,11 @@ export class OverworldScene implements OverworldSceneHandle {
     this.grid = movementGrid(this.map, this.map.anchors);
     this.byTile = anchorsByTile(this.map.anchors);
     this.state = initialWalker(spawnTile(this.map, this.grid));
+    const returnAnchor = this.map.anchors.find((anchor) => anchor.id === options.returnAnchorId);
+    const beside = returnAnchor === undefined ? undefined : besideTile(this.grid, returnAnchor.at);
+    if (returnAnchor !== undefined && beside !== undefined) {
+      this.state = faceTile(placeWalker(this.state, beside), returnAnchor.at);
+    }
 
     this.sorted.sortableChildren = true;
     this.badges.sortableChildren = true;
@@ -200,12 +209,15 @@ export class OverworldScene implements OverworldSceneHandle {
   }
 
   destroy(): void {
-    this.app.ticker.remove(this.onTick);
-    this.app.stage.off("pointertap", this.onPointerTap);
     window.removeEventListener("keydown", this.onKeyDown);
     window.removeEventListener("keyup", this.onKeyUp);
     window.removeEventListener("blur", this.releaseKeys);
-    this.world.destroy({ children: true });
+    // When the canvas unmounts, @pixi/react may destroy the application (its
+    // ticker, stage and display tree) before this cleanup runs.
+    const app = this.app as Partial<Application>;
+    app.ticker?.remove(this.onTick);
+    app.stage?.off("pointertap", this.onPointerTap);
+    if (!this.world.destroyed) this.world.destroy({ children: true });
   }
 
   /** While a React panel is open the canvas ignores input and the walk pauses. */
@@ -329,6 +341,7 @@ export class OverworldScene implements OverworldSceneHandle {
     view.position.set(x * w + w / 2, (y + 1) * h);
     view.zIndex = (y + 1) * h;
     view.label = `character:${anchor.id}`;
+    if (occupant.beaten === true) view.tint = BEATEN_TINT;
     this.sorted.addChild(view);
     let badge: Graphics | null = null;
     if (occupant.badge !== null) {
@@ -545,4 +558,11 @@ export class OverworldScene implements OverworldSceneHandle {
     this.held.length = 0;
     this.state = holdDirection(this.state, null, this.canEnter);
   };
+}
+
+/** The first tile beside `target` the player may enter, in facing order. */
+function besideTile(grid: WalkabilityGrid, target: TilePoint): TilePoint | undefined {
+  return Object.values(FACING_STEPS)
+    .map(([dx, dy]): TilePoint => [target[0] + dx, target[1] + dy])
+    .find((tile) => isWalkable(grid, tile));
 }

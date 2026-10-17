@@ -290,7 +290,7 @@ describe("journey -> battle -> reward -> Atlas", () => {
     const journey = after.journey;
     expect(after.battle).toBeNull();
     expect(journey.completionLevel).toBe(1);
-    expect(journey.essence).toBe(before.journey.essence + (before.battle?.init.essenceReward ?? 0));
+    expect(journey.essence).toBe(before.journey.essence + (journeyBattleOf(before.battle)?.init.essenceReward ?? 0));
     expect(journey.atlas.nodes[NODE_ID].state).toBe("completed");
     expect(journey.atlas.nodes[NEXT_NODE_ID].state).toBe("available");
     expect(journey.currentDreamscape).toBeNull();

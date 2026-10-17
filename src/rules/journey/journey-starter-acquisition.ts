@@ -2,7 +2,7 @@ import type { ReducerLogRecord } from "../../eventlog/types";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, parseBattleId, siteIdFromUnknown, type SiteId } from "../../types/identifiers";
 import type { JourneyDreamsignGain, JourneyOnGainEffect, JourneyPurgeTransition, JourneyStarterPurgeSource, JourneyState, JourneySuspendedBattle, Screen } from "../../types/journey";
-import type { BattleFoldState } from "../battle/fold";
+import { journeyBattleOf, type BattleFoldState } from "../battle/fold";
 import type { JourneyModifierRegistry } from "./modifier-registry";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
 import { validJourneyDreamsignScreen } from "./journey-on-gain";
@@ -76,7 +76,8 @@ export function validStarterBattleBinding(journey: JourneyState, battle: BattleF
   if (binding === null) return battle === null;
   if (battle === null || battle.init.battleId !== binding.battleId || battle.mode.kind !== binding.mode) return false;
   const screen = continuation.type === "journeyDreamsign" && (continuation.choice.kind === "copy" || continuation.choice.kind === "openingHand") ? continuation.choice.continuation : continuation;
-  return binding.mode === "tutorial" || screen.type === "site" && screen.siteId === battle.init.siteId && journey.currentDreamscape === battle.init.nodeId && journey.completionLevel === battle.init.completionLevelAtStart;
+  const init = journeyBattleOf(battle)?.init;
+  return binding.mode === "tutorial" || init !== undefined && screen.type === "site" && screen.siteId === init.siteId && journey.currentDreamscape === init.nodeId && journey.completionLevel === init.completionLevelAtStart;
 }
 export function validStarterPurgeIntent(journey: JourneyState, payload: Record<string, unknown>, battle: BattleFoldState | null, registry: JourneyModifierRegistry): boolean {
   if (journey.screen.type !== "journeyStarterPurge" || !validStarterPurgeScreen(journey.screen, journey, registry) || !validStarterBattleBinding(journey, battle)) return false;

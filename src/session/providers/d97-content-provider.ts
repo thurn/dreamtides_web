@@ -4,6 +4,7 @@
 // caps, then the cards of rarities bags never hold left out), keyed by card UUID and with no logging,
 // so a fold may call it any number of times.
 
+import { buildD97OpponentDeck, startD97Battle, type D97BattleContent } from "../../battle/integration/d97-battle";
 import { resolvePool } from "../../data/cards-v2-database";
 import { D97_COLLECTION } from "../../content/d97/collection";
 import type { JourneyContent } from "../../data/journey-content";
@@ -34,7 +35,19 @@ export function createD97ContentProvider(
   }
   const starterNumbers = new Set(pool.starterCardNumbers);
   const bagRarities = new Set<Rarity>(D97_COLLECTION.bagRarities);
+  const battleContent: D97BattleContent = {
+    cardDatabase: content.cardDatabase,
+    cardsById: new Map([...content.cardDatabase.values()].map((card) => [card.id, card])),
+    avatars: content.avatars,
+    dreamsignTemplates: content.dreamsignTemplates,
+    dreamwellCardIds: content.dreamwellCards.map((card) => card.id),
+    opponentsData: content.opponentsData,
+    tides4Decks,
+    tides4Tuning: pool.tides4Tuning,
+  };
   return {
+    buildOpponentDeck: (input) => buildD97OpponentDeck(battleContent, input),
+    startBattle: (input) => startD97Battle(battleContent, input),
     avatarIds: new Set(content.avatars.map((avatar) => avatar.id)),
     tideAffinityIndex:
       tides4Decks === undefined

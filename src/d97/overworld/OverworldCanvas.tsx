@@ -5,7 +5,7 @@
 import { Application, useApplication } from "@pixi/react";
 import { useEffect, useRef, useState } from "react";
 import type { D97CharacterTunables, D97OverworldTunables } from "../../content/d97/tunables";
-import type { D97CharacterId } from "../../types/identifiers";
+import type { D97CharacterId, DreamAnchorId } from "../../types/identifiers";
 import { loadCharacterLooks, type CharacterLooks } from "./characters/character-looks";
 import type { OverworldOccupants } from "./occupants";
 import { DESKTOP_MIN_WIDTH } from "../../cumulus/primitives/use-is-desktop";
@@ -26,6 +26,8 @@ export interface OverworldCanvasProps {
   readonly occupants: OverworldOccupants;
   /** The character the player walks as. */
   readonly playerCharacter: D97CharacterId;
+  /** The anchor the player starts beside (after its battle), if any. */
+  readonly returnAnchorId: DreamAnchorId | null;
   /** False while a React panel is open: the canvas ignores input. */
   readonly inputEnabled: boolean;
 }
@@ -43,6 +45,7 @@ function SceneMount({
   characterTunables,
   occupants,
   playerCharacter,
+  returnAnchorId,
   inputEnabled,
   assets,
 }: OverworldCanvasProps & { readonly assets: SceneAssets }) {
@@ -58,6 +61,7 @@ function SceneMount({
       looks: assets.looks,
       occupants,
       playerCharacter,
+      returnAnchorId,
       registry,
       tunables,
       characterTunables,
@@ -70,7 +74,7 @@ function SceneMount({
       sceneRef.current = null;
       scene.destroy();
     };
-  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, tunables]);
+  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, returnAnchorId, tunables]);
 
   useEffect(() => {
     sceneRef.current?.setInputEnabled(inputEnabled);

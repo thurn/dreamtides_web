@@ -30,7 +30,7 @@ import type {
 import { SELECTION_RULES_VERSION } from "../reward-selection";
 import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
-import type { AvatarId, D97OwnedCopyId } from "../types/identifiers";
+import type { AvatarId, D97OwnedCopyId, DreamAnchorId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { CardId, CardSubtype } from "../types/card-identity";
@@ -403,6 +403,14 @@ export interface GameActions {
   d97EquipCopy: (copyId: D97OwnedCopyId) => Promise<number>;
   /** Move a D97 deck copy into the reserve. Unkeyed, like `d97EquipCopy`. */
   d97UnequipCopy: (copyId: D97OwnedCopyId) => Promise<number>;
+  /** First preview of a challenger or guardian: fixes its deck, antes and extra. */
+  d97PreviewEncounter: (anchorId: DreamAnchorId) => Promise<number>;
+  /** Not now: leave a previewed encounter for later. */
+  d97DeclineEncounter: (anchorId: DreamAnchorId) => Promise<number>;
+  /** Fight a previewed encounter. */
+  d97BeginBattle: (anchorId: DreamAnchorId) => Promise<number>;
+  /** Settle the finished D97 battle and return to the overworld. */
+  d97EndBattle: () => Promise<number>;
 }
 
 /**
@@ -846,5 +854,11 @@ export function makeActions(append: AppendFn): GameActions {
       emit("D97_START_RUN", { avatarId }, parseIntentKey("d97-start-run")),
     d97EquipCopy: (copyId) => emit("D97_EQUIP_COPY", { copyId }),
     d97UnequipCopy: (copyId) => emit("D97_UNEQUIP_COPY", { copyId }),
+    // An encounter is fixed once: repeated first previews share its key.
+    d97PreviewEncounter: (anchorId) =>
+      emit("D97_PREVIEW_ENCOUNTER", { anchorId }, parseIntentKey(`d97-preview:${anchorId}`)),
+    d97DeclineEncounter: (anchorId) => emit("D97_DECLINE_ENCOUNTER", { anchorId }),
+    d97BeginBattle: (anchorId) => emit("D97_BEGIN_BATTLE", { anchorId }),
+    d97EndBattle: () => emit("D97_END_BATTLE", {}),
   };
 }

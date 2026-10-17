@@ -67,5 +67,12 @@ export function syntheticD97Content(
         copies: index % 3 === 0 ? 2 : 1,
       })),
     }),
+    buildOpponentDeck: ({ deckSize, signatureCount }) => ({
+      deck: poolCards.slice(0, deckSize),
+      draftPool: poolCards,
+      dreamsignIds: [],
+      signatureCardIds: poolCards.slice(0, signatureCount),
+    }),
+    startBattle: () => null,
   };
 }

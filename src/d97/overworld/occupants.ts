@@ -12,6 +12,8 @@ export interface OverworldOccupant {
   readonly character: D97CharacterId;
   readonly badge: BadgeKind | null;
   readonly scale: OccupantScale;
+  /** A beaten opponent stays as an ordinary, slightly desaturated character. */
+  readonly beaten?: true;
 }
 
 export type OverworldOccupants = ReadonlyMap<DreamAnchorId, OverworldOccupant>;

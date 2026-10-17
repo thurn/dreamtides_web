@@ -25,7 +25,7 @@ import type { BattleSlice } from "../../engine/fold/slice";
 import type { BattleState } from "../../engine/state/types";
 import type { CommittedEvent } from "../../eventlog/local-log";
 import { replayEngineBattle, type EngineBattleReplay } from "../../rules/battle/engine-battle";
-import type { JourneyBattleFoldState } from "../../rules/battle/fold";
+import type { PlayableBattleFoldState } from "../../rules/battle/fold";
 import { ENGINE_BATTLE_LOG_COPY, engineBattleLogText, type EngineBattleLogWords } from "../../runtime/battle-prompt-messages";
 
 /** One event of the battle log, as the human saw it. */
@@ -105,7 +105,7 @@ export interface EngineBattleLog {
 /** The newest replay of a game's event list, for one battle and viewer. */
 interface KeptReplay {
   readonly engine: Engine;
-  readonly battle: JourneyBattleFoldState["init"];
+  readonly battle: PlayableBattleFoldState["init"];
   readonly human: Side;
   /** The fold slice a done replay reproduced; `null` while it is partial. */
   readonly slice: BattleSlice | null;
@@ -121,7 +121,7 @@ const kept = new WeakMap<readonly CommittedEvent[], KeptReplay>();
  */
 function advance(
   engine: Engine,
-  battle: JourneyBattleFoldState,
+  battle: PlayableBattleFoldState,
   events: readonly CommittedEvent[],
   human: Side,
   budget: number,
@@ -169,7 +169,7 @@ function advance(
  */
 export function engineBattleLog(
   engine: Engine,
-  battle: JourneyBattleFoldState,
+  battle: PlayableBattleFoldState,
   events: readonly CommittedEvent[],
   human: Side,
 ): EngineBattleLog | null {
@@ -189,7 +189,7 @@ export function engineBattleLog(
  */
 export function warmEngineBattleLog(
   engine: Engine,
-  battle: JourneyBattleFoldState,
+  battle: PlayableBattleFoldState,
   events: readonly CommittedEvent[],
   human: Side,
 ): boolean {

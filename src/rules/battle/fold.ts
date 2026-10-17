@@ -28,12 +28,12 @@ import type { TransfigurationType } from "../../types/journey";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import type { CardId } from "../../types/card-identity";
 import { parseCardId, parseCardName } from "../../types/card-identity";
-import type { AtlasNodeId, BattleCardId, BattleId, DreamwellCardId, PresentationId, PromptId, SiteId, TutorialRunId, TutorialTriggerId } from "../../types/identifiers";
+import type { AtlasNodeId, BattleCardId, BattleId, D97CharacterId, D97OwnedCopyId, DreamAnchorId, DreamwellCardId, PresentationId, PromptId, SiteId, TutorialRunId, TutorialTriggerId } from "../../types/identifiers";
 import { parseAtlasNodeId, parseAvatarId, parseApollyonIncarnationId, parseBattleId, parseDreamsignId, parseDreamwellCardId, parseOpponentId, parsePromptId, parseSiteId } from "../../types/identifiers";
 import type { PolicyOverrideContext, PolicyOverrideSelection } from "../../engine/policy/overrides";
 import { parseJourneyBattleGuidance } from "./tutorial-load";
 
-export type BattleFoldState = JourneyBattleFoldState | TutorialBattleFoldState;
+export type BattleFoldState = JourneyBattleFoldState | TutorialBattleFoldState | D97BattleFoldState;
 export interface JourneyBattleFoldState {
   readonly mode: JourneyBattleMode;
   readonly init: JourneyBattleInit;
@@ -50,21 +50,14 @@ export interface JourneyBattleGuidance {
 }
 
 /**
- * The IMMUTABLE journey side of a journey battle: its identity, the journey
- * position `END_BATTLE` hands off to, the reward a victory pays, and what the
- * battle screen displays. The engine init of the same battle owns the game
- * itself: the seed, both decks, the Dreamwell, the score target, the
- * starting side, and the next-battle effects.
+ * What the engine battle screen displays of any hosted battle: its identity,
+ * both sides' Avatars and the cards both decks deal.
  */
-export interface JourneyBattleInit {
+export interface BattleDisplayInit {
   readonly battleId: BattleId;
-  readonly siteId: SiteId;
-  /** The Atlas node the battle takes place in. */
-  readonly nodeId: AtlasNodeId | null;
-  readonly completionLevelAtStart: number;
-  /** The essence a victory pays. */
+  /** The essence a victory pays, shown on the result. */
   readonly essenceReward: number;
-  /** Whether the opponent's Avatar ability is active at this layer. */
+  /** Whether the opponent's Avatar ability is active in this battle. */
   readonly opponentAbilityActive: boolean;
   readonly enemyDescriptor: BattleEnemyDescriptor;
   readonly avatarSummary: BattleAvatarSummary | null;
@@ -75,6 +68,42 @@ export interface JourneyBattleInit {
    * and transfiguration.
    */
   readonly cardDefinitions: readonly BattleDeckCardDefinition[];
+}
+
+/**
+ * The IMMUTABLE journey side of a journey battle: its identity, the journey
+ * position `END_BATTLE` hands off to, the reward a victory pays, and what the
+ * battle screen displays. The engine init of the same battle owns the game
+ * itself: the seed, both decks, the Dreamwell, the score target, the
+ * starting side, and the next-battle effects.
+ */
+export interface JourneyBattleInit extends BattleDisplayInit {
+  readonly siteId: SiteId;
+  /** The Atlas node the battle takes place in. */
+  readonly nodeId: AtlasNodeId | null;
+  readonly completionLevelAtStart: number;
+}
+
+/**
+ * The IMMUTABLE D97 side of a Dreamtides 97 battle: the encounter it settles
+ * and the antes resolved when it began. `D97_END_BATTLE` settles the outcome
+ * from the engine result.
+ */
+export interface D97BattleInit extends BattleDisplayInit {
+  readonly anchorId: DreamAnchorId;
+  readonly characterId: D97CharacterId;
+  readonly role: "challenger" | "guardian";
+  readonly tier: number;
+  /** The player's anted copy after the floor and drift, or null. */
+  readonly playerAnteCopyId: D97OwnedCopyId | null;
+  /** The card the opponent antes, or null. */
+  readonly opponentAnteCardId: CardId | null;
+}
+
+export interface D97BattleFoldState {
+  readonly mode: D97BattleMode;
+  readonly init: D97BattleInit;
+  readonly engine: EngineBattleFold;
 }
 
 
@@ -110,8 +139,9 @@ export interface TutorialBattleFoldState {
   readonly overrideCommits: readonly PolicyOverrideSelection[];
 }
 
-export type BattleMode = JourneyBattleMode | TutorialBattleMode;
+export type BattleMode = JourneyBattleMode | TutorialBattleMode | D97BattleMode;
 export interface JourneyBattleMode { readonly kind: "journey" }
+export interface D97BattleMode { readonly kind: "d97" }
 export interface TutorialBattleMode {
   readonly kind: "tutorial";
   readonly tutorialRunId: TutorialRunId;
@@ -123,6 +153,14 @@ export function tutorialBattleOf(battle: BattleFoldState | null): TutorialBattle
 }
 export function journeyBattleOf(battle: BattleFoldState | null): JourneyBattleFoldState | null {
   return battle?.mode.kind === "journey" ? battle as JourneyBattleFoldState : null;
+}
+export function d97BattleOf(battle: BattleFoldState | null): D97BattleFoldState | null {
+  return battle?.mode.kind === "d97" ? battle as D97BattleFoldState : null;
+}
+/** A battle the engine battle screen plays: a journey or a D97 battle. */
+export type PlayableBattleFoldState = JourneyBattleFoldState | D97BattleFoldState;
+export function playableBattleOf(battle: BattleFoldState | null): PlayableBattleFoldState | null {
+  return journeyBattleOf(battle) ?? d97BattleOf(battle);
 }
 export function engineBattleOf(battle: BattleFoldState | null): BattleFoldState | null { return battle; }
 export function battleModeOf(battle: BattleFoldState): BattleMode { return battle.mode; }

@@ -1,5 +1,7 @@
 // Adapter for the D97 overworld: the development dream on the Pixi canvas,
-// the HUD view, the deck editor and Menu panels, and the input-focus rule
+// the HUD view, the encounter preview, deck editor and Menu panels, beaten
+// opponents without badges, the return beside the last battle's anchor, and
+// the input-focus rule
 // (the canvas ignores input while a panel is open). Which panel is open is
 // view state; every equip and unequip is recorded as an intent. Wiring only.
 // The canvas module (and Pixi with it) loads on first use, so journey
@@ -17,6 +19,7 @@ import {
 import { GlassButton } from "../../../cumulus/components/controls/GlassButton";
 import { GlassDialog } from "../../../cumulus/components/overlay/GlassDialog";
 import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
+import { D97EncounterPreview } from "../../../cumulus/screens/d97/D97EncounterPreview";
 import {
   D97OverworldScreen,
   type D97OverworldControlId,
@@ -31,6 +34,7 @@ import { useActions } from "../../../session/hooks";
 import type { D97OwnedCopyId } from "../../../types/identifiers";
 import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
 import { buildD97OverworldHudView } from "./d97-overworld-view-model";
+import { useD97Encounter } from "./use-d97-encounter";
 
 const OverworldCanvas = lazy(() =>
   import("../../../d97/overworld/OverworldCanvas").then((module) => ({
@@ -66,7 +70,13 @@ export function D97OverworldScreenAdapter({
   readonly journeyContent: JourneyContent;
   readonly initialDeckEditorOpen?: boolean;
 }) {
-  const { map, occupants } = currentDream();
+  const { map, occupants: placed } = currentDream();
+  // Beaten opponents stay as ordinary characters: no badge, desaturated.
+  const beatenKey = Object.values(run.encounters).filter((encounter) => encounter?.beaten === true).map((encounter) => encounter?.anchorId).join(",");
+  const occupants = useMemo(() => {
+    const beaten = new Set(beatenKey.split(","));
+    return new Map([...placed].map(([anchorId, occupant]) => [anchorId, beaten.has(anchorId) ? { ...occupant, badge: null, beaten: true as const } : occupant]));
+  }, [beatenKey, placed]);
   // The player walks as their Avatar's recipe, or the development knight
   // while the Avatar has none.
   const playerCharacter = useMemo(
@@ -95,6 +105,11 @@ export function D97OverworldScreenAdapter({
     [run.essence],
   );
   const cards = useMemo(() => cardsByUuid(journeyContent.cardDatabase), [journeyContent.cardDatabase]);
+  const openDeckEditor = useCallback(() => {
+    logEvent("d97_deck_editor_opened", { runId: run.runId });
+    setPanel("deck");
+  }, [run.runId]);
+  const encounter = useD97Encounter({ run, registry, actions, avatars: journeyContent.avatars, cardsById: cards, openDeckEditor });
   const deckView = useMemo(
     () => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize),
     [run.collection, cards],
@@ -139,7 +154,8 @@ export function D97OverworldScreenAdapter({
             characterTunables={D97_CHARACTER_TUNABLES}
             occupants={occupants}
             playerCharacter={playerCharacter}
-            inputEnabled={panel === null}
+            returnAnchorId={run.returnAnchorId}
+            inputEnabled={panel === null && !encounter.open}
           />
         </Suspense>
       }
@@ -152,6 +168,9 @@ export function D97OverworldScreenAdapter({
             onUnequip={unequip}
             onClose={closeDeck}
           />
+          {encounter.preview !== null && (
+            <D97EncounterPreview view={encounter.preview} onFight={encounter.fight} onNotNow={encounter.notNow} />
+          )}
           {panel === "menu" && (
             <GlassDialog title={"Menu"} presentation="popup" onClose={closePanel}>
               <GlassButton label={"Resume"} testId="d97-menu-resume" onPress={closePanel} />

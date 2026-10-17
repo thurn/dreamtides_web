@@ -41,7 +41,7 @@ import { promptView } from "../../engine";
 import { decisionKeyOf, sidePending, type DecisionKey } from "../../engine/fold/slice";
 import { logEvent, logEventOnce } from "../../logging";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
-import { journeyBattleOf } from "../../rules/battle/fold";
+import { playableBattleOf } from "../../rules/battle/fold";
 import { battleGuidanceOf } from "../../rules/battle/journey-tutorial-guidance";
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
@@ -130,7 +130,7 @@ type BoardHandlers = Required<
 const NO_TARGETS: readonly BattleCardId[] = [];
 
 export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
-  const battle = journeyBattleOf(useGameState().battle);
+  const battle = playableBattleOf(useGameState().battle);
   const actions = useActions();
   const { cardDatabase, journeyContent } = useJourney();
   const isDesktop = useIsDesktop();
@@ -148,7 +148,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   const [resultDismissed, setResultDismissed] = useState(false);
 
   if (battle === null) {
-    throw new Error("EngineBattleScreen requires a journey battle");
+    throw new Error("EngineBattleScreen requires a journey or D97 battle");
   }
   const fold = battle.engine;
   const { init } = battle;
@@ -360,6 +360,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
         opponentName: init.enemyDescriptor.name,
         essenceReward: init.essenceReward,
         resultDismissed,
+        ...(battle.mode.kind === "d97" ? { resultContinuation: "returnToDream" as const } : {}),
         visual: guidanceHeld || head?.visual == null ? null : { key: head.key, visual: head.visual },
         revealedCard:
           !guidanceHeld && head?.visual?.kind === "reveal"
@@ -717,15 +718,18 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     ],
   );
 
+  // A journey battle hands off to the journey; a D97 battle settles its encounter.
+  const endBattle = battle.mode.kind === "d97" ? actions.d97EndBattle : actions.endBattle;
+
   function handleResultAction(action: MobileBattleResultAction): void {
     if (result === null) return;
     const won = result.kind === "victory" && result.winner === HUMAN;
     if (action === "continue" && won) {
       logEvent("battle_engine_reward_continued", { battleId, essenceReward: init.essenceReward });
-      void actions.endBattle();
+      void endBattle();
     } else if (action === "reset" && !won) {
       logEvent("battle_engine_defeat_continued", { battleId, result });
-      void actions.endBattle();
+      void endBattle();
     } else if (action === "reopen") {
       setResultDismissed(false);
     } else if (action === "dismiss") {

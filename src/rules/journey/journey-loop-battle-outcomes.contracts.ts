@@ -1,3 +1,4 @@
+import { journeyBattleOf } from "../battle/fold";
 import { afterEach, describe, expect, it } from "vitest";
 import { clearGameProviders } from "../../session/providers/register-game-providers";
 import { registerReplayFixtureProviders } from "../replay/fixture-providers";
@@ -7,7 +8,7 @@ import { endLoopBattle, liveLoopBattle } from "./journey-loop-integration.fixtur
 describe("journey draw after actual battle bookkeeping", () => {
   afterEach(() => { clearGameProviders(); registerReplayFixtureProviders(); });
   it.each([{ outcome: "victory", final: false }, { outcome: "victory", final: true }, { outcome: "defeat", final: false }, { outcome: "draw", final: false }] as const)("preserves actual $outcome reward/completion and earlier summary, final=$final", ({ outcome, final }) => {
-    const f = liveLoopBattle(outcome, final), beforeEssence = f.state.journey.essence, reward = f.state.battle!.init.essenceReward;
+    const f = liveLoopBattle(outcome, final), beforeEssence = f.state.journey.essence, reward = journeyBattleOf(f.state.battle)!.init.essenceReward;
     const ended = endLoopBattle(f, outcome), prefix = structuredClone(ended.journey);
     expect(ended.battle).toBeNull(); expect(ended.journey.screen).toMatchObject({ type: "journeyTransfiguration", choice: { returnTo: outcome === "victory" ? final ? "journeyComplete" : "atlas" : "journeyFailed" } });
     expect(prefix.essence).toBe(beforeEssence + (outcome === "victory" ? reward : 0));

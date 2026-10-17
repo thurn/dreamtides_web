@@ -17,10 +17,10 @@ function pass(state: FoldState, engine: Engine) {
 describe("journey Essence from real committed battle steps", () => {
   it("pays an actual opening automatic removal from BEGIN_BATTLE, without waiting for a later intent", () => {
     const w = battleWorld({ openingRemoval: true, held: [BONE, SKULL] });
-    const before = { ...w.state, battle: null }, result = apply(before, "BEGIN_BATTLE", { siteId: w.state.battle!.init.siteId });
+    const before = { ...w.state, battle: null }, result = apply(before, "BEGIN_BATTLE", { siteId: journeyBattleOf(w.state.battle)!.init.siteId });
     expect(result.outcome).toBe("applied"); expect(result.state.journey.essence).toBe(before.journey.essence + 7);
     expect(result.logRecords?.filter((row) => row.fields.hook === "battle_step_committed")).toHaveLength(1);
-    expect(apply(result.state, "BEGIN_BATTLE", { siteId: w.state.battle!.init.siteId }).state).toBe(result.state);
+    expect(apply(result.state, "BEGIN_BATTLE", { siteId: journeyBattleOf(w.state.battle)!.init.siteId }).state).toBe(result.state);
   });
   it.each([false, true])("pays each real outside-Challenge dissolve/banish and each physical source once, banish=%s", (banished) => {
     const w = battleWorld({ held: [BONE, SKULL, BONE], ...(banished ? { effect: banish(target(anyCharacter())) } : {}) });

@@ -6,7 +6,7 @@ import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modif
 import { journeyOnGain, validJourneyDreamsignScreen, validDreamsignBattleBinding } from "./journey-on-gain";
 import { validStarterPurgeScreen, validStarterBattleBinding } from "./journey-starter-acquisition";
 import { journeyTransfigurationCard, validJourneyTransfigurationScreen, type JourneyTransfigurationProvider } from "./journey-transfiguration";
-import type { BattleFoldState } from "../battle/fold";
+import { journeyBattleOf, type BattleFoldState } from "../battle/fold";
 import { validAfterBattleChoice } from "./journey-after-battle";
 import { validJourneyPurgeScreen } from "./journey-purge";
 import { validJourneyDuplicationScreen } from "./journey-duplication";
@@ -123,8 +123,9 @@ export function validJourneyAcquisitionBattleBinding(journey: JourneyState, batt
   const { suspendedBattle: binding, continuation } = journey.screen.choice;
   if (binding === null) return battle === null;
   if (battle === null || battle.init.battleId !== binding.battleId || battle.mode.kind !== binding.mode) return false;
-  return binding.mode === "tutorial" || continuation.type === "site" && continuation.siteId === battle.init.siteId &&
-    journey.currentDreamscape === battle.init.nodeId && journey.completionLevel === battle.init.completionLevelAtStart;
+  const init = journeyBattleOf(battle)?.init;
+  return binding.mode === "tutorial" || init !== undefined && continuation.type === "site" && continuation.siteId === init.siteId &&
+    journey.currentDreamscape === init.nodeId && journey.completionLevel === init.completionLevelAtStart;
 }
 
 /** A starter permission cannot renumber an unresolved acquired Mug occurrence. */

@@ -8,6 +8,7 @@ import type {
   DeckEntryId,
   AvatarId,
   D97OwnedCopyId,
+  DreamAnchorId,
   DreamsignId,
   ExplorationActionId,
   FrontDoorActionId,
@@ -324,6 +325,10 @@ export interface EventPayloads {
   D97_START_RUN: { avatarId: AvatarId };
   D97_EQUIP_COPY: { copyId: D97OwnedCopyId };
   D97_UNEQUIP_COPY: { copyId: D97OwnedCopyId };
+  D97_PREVIEW_ENCOUNTER: { anchorId: DreamAnchorId };
+  D97_DECLINE_ENCOUNTER: { anchorId: DreamAnchorId };
+  D97_BEGIN_BATTLE: { anchorId: DreamAnchorId };
+  D97_END_BATTLE: Record<string, never>;
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -496,6 +501,10 @@ const EVENT_INTENT_CLASSES = {
   D97_START_RUN: "gameplay",
   D97_EQUIP_COPY: "gameplay",
   D97_UNEQUIP_COPY: "gameplay",
+  D97_PREVIEW_ENCOUNTER: "gameplay",
+  D97_DECLINE_ENCOUNTER: "gameplay",
+  D97_BEGIN_BATTLE: "gameplay",
+  D97_END_BATTLE: "gameplay",
 } as const satisfies Record<GameEventType, EventIntentClass>;
 
 /** Event types for which journey modifiers never run. */
@@ -640,6 +649,10 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   D97_START_RUN: true,
   D97_EQUIP_COPY: true,
   D97_UNEQUIP_COPY: true,
+  D97_PREVIEW_ENCOUNTER: true,
+  D97_DECLINE_ENCOUNTER: true,
+  D97_BEGIN_BATTLE: true,
+  D97_END_BATTLE: true,
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.

@@ -6,7 +6,7 @@ import { parseBattleCardId, parsePresentationId, type DreamwellCardId, type Pres
 import { cardIdFromUnknown, type CardId } from "../../types/card-identity";
 import type { TutorialTriggerDefinition, TutorialTriggerEvent } from "../../types/tutorial";
 import type { FoldState } from "../fold-state";
-import type { BattleFoldState, JourneyBattleFoldState, TutorialBattleDisplayInit, TutorialCheckpoint, TutorialGuidancePresentation, TutorialGuidanceSource } from "./fold";
+import { journeyBattleOf, type BattleFoldState, type JourneyBattleFoldState, type TutorialBattleDisplayInit, type TutorialCheckpoint, type TutorialGuidancePresentation, type TutorialGuidanceSource } from "./fold";
 import { batchStates, foldAdapterFor } from "./engine-battle";
 import { matchTutorialGuidance } from "./tutorial-guidance";
 import { createBattleCardDisplayResolver } from "../../battle/card-display-definition";
@@ -21,10 +21,10 @@ export interface BattleGuidanceHost {
 export function battleGuidanceOf(battle: BattleFoldState | null): BattleGuidanceHost | null {
   if (battle === null) return null;
   if (battle.mode.kind === "tutorial") return battle as import("./fold").TutorialBattleFoldState;
-  const journey = battle as JourneyBattleFoldState;
-  const guidance = journey.guidance;
-  return guidance === undefined ? null : {
-    init: { ...battle.init, tutorialTriggers: guidance.tutorialTriggers, dreamwellDeck: guidance.dreamwellDeck },
+  const journey = journeyBattleOf(battle);
+  const guidance = journey?.guidance;
+  return journey === null || guidance === undefined ? null : {
+    init: { ...journey.init, tutorialTriggers: guidance.tutorialTriggers, dreamwellDeck: guidance.dreamwellDeck },
     engine: battle.engine,
     checkpoints: guidance.checkpoints,
   };

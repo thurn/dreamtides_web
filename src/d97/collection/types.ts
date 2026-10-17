@@ -8,8 +8,12 @@ import type {
   TideId,
 } from "../../types/identifiers";
 
-/** How an owned copy entered the collection. Later channels join this union. */
-export type D97AcquisitionChannel = "starting" | "bag";
+/**
+ * How an owned copy entered the collection: the starting package, a bag
+ * draw, a won ante, or a victory bundle's bag draw. Later channels join this
+ * union.
+ */
+export type D97AcquisitionChannel = "starting" | "bag" | "ante" | "bundle";
 
 /** Where an owned copy and its acquisition came from. */
 export interface D97CopyProvenance {

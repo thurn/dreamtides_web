@@ -27,7 +27,7 @@ describe("earned optional pre-init purges", () => {
     const world = battleWorld({ openingRemoval: true, held: [BONE, SKULL] });
     const mods = createJourneyModifierRegistry([journeyPurge(SOURCE, { kind: "beforeBattlePurge", minimumDeckSize: 0 }), journeyEssence(BONE, { kind: "enemyRemovalOutsideChallengeEssence", amount: 7 })]);
     const s = { ...world.state, battle: null, journey: { ...world.state.journey, dreamsigns: [...world.state.journey.dreamsigns, sign(SOURCE)], deck: initial().journey.deck } };
-    const siteId = world.state.battle!.init.siteId;
+    const siteId = journeyBattleOf(world.state.battle)!.init.siteId;
     const p = apply(s, "BEGIN_BATTLE", { siteId, seedOverride: 123 }, mods, { seq: 91 });
     expect(p.state.battle).toBeNull(); expect(p.state.journey.essence).toBe(s.journey.essence);
     takeEngineLogRecords(91); takeEngineLogRecords(92);
@@ -49,7 +49,7 @@ describe("earned optional pre-init purges", () => {
       s.journey.atlas = { ...s.journey.atlas, nodes: { ...Object.fromEntries(prior.map((item) => [item.id, item])), [nodeId]: node }, layers: [...prior.map((item) => [item.id]), [nodeId]], bossNodeId: nodeId };
 
       const p = pending(s), result = apply(p, "RESOLVE_JOURNEY_PURGE", payload(p));
-      expect(result.state.battle?.init.completionLevelAtStart).toBe(completionLevel);
+      expect(journeyBattleOf(result.state.battle)?.init.completionLevelAtStart).toBe(completionLevel);
     }
   });
 

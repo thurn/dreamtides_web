@@ -99,6 +99,7 @@ export function journeyLoopBattleBinding(state: FoldState): JourneyLoopBattleBin
   const battle = state.battle;
   if (battle === null) return null;
   if (battle.mode.kind === "journey") return { battleId: battle.init.battleId, mode: "journey" };
+  if (battle.mode.kind !== "tutorial") return null;
   if (state.frontDoor.tutorial?.runId !== battle.mode.tutorialRunId || state.frontDoor.phase !== "tutorial") throw new Error("Journey loop tutorial binding mismatch");
   return { battleId: battle.init.battleId, mode: "tutorial", tutorialRunId: battle.mode.tutorialRunId };
 }

@@ -21,6 +21,11 @@ export type MobileBattleResultView =
   | {
       readonly outcome: "defeat" | "draw";
       readonly dismissed: boolean;
+      /**
+       * What leaving the result does: reset a journey run, or return to a
+       * Dreamtides 97 dream. Defaults to `resetRun`.
+       */
+      readonly continuation?: "resetRun" | "returnToDream";
     };
 
 export type MobileBattleResultAction =
@@ -350,8 +355,8 @@ function DefeatOrDrawResult({
                 onPress={() => onAction?.("dismiss")}
               />
               <GlassButton
-                label={"Reset Run…"}
-                variant="danger"
+                label={view.continuation === "returnToDream" ? "Return to the Dream" : "Reset Run…"}
+                variant={view.continuation === "returnToDream" ? "default" : "danger"}
                 disabled={onAction === undefined}
                 testId="battle-result-reset"
                 onPress={() => onAction?.("reset")}

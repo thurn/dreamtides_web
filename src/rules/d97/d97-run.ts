@@ -130,6 +130,8 @@ export function startRun(
     battlesFought,
     collection,
     bag,
+    encounters: {},
+    returnAnchorId: null,
   };
   return {
     d97: { screen: { type: "overworld" }, run },

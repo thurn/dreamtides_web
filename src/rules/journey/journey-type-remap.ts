@@ -2,7 +2,7 @@ import { isTypeRemap } from "../../engine/dsl/type-remap";
 import type { CardSubtype } from "../../types/card-identity";
 import { dreamsignIdFromUnknown, parseBattleId, siteIdFromUnknown } from "../../types/identifiers";
 import type { FoldState } from "../fold-state";
-import type { BattleFoldState } from "../battle/fold";
+import { journeyBattleOf, type BattleFoldState } from "../battle/fold";
 import type { JourneyDreamsignGain, JourneyDreamsignTypeRemapChoice, JourneyState, JourneySuspendedBattle, Screen } from "../../types/journey";
 import type { JourneyModifierRegistry } from "./modifier-registry";
 import { validJourneyDreamsignScreen } from "./journey-on-gain";
@@ -100,7 +100,8 @@ export function validTypeRemapBattleBinding(journey: JourneyState, battle: Battl
   let screen: Screen = journey.screen.choice.continuation;
   if (screen.type === "journeyStarterPurge") screen = screen.choice.continuation;
   if (screen.type === "journeyDreamsign" && (screen.choice.kind === "copy" || screen.choice.kind === "openingHand")) screen = screen.choice.continuation;
-  return binding.mode === "tutorial" || screen.type === "site" && screen.siteId === battle.init.siteId && journey.currentDreamscape === battle.init.nodeId && journey.completionLevel === battle.init.completionLevelAtStart;
+  const init = journeyBattleOf(battle)?.init;
+  return binding.mode === "tutorial" || init !== undefined && screen.type === "site" && screen.siteId === init.siteId && journey.currentDreamscape === init.nodeId && journey.completionLevel === init.completionLevelAtStart;
 }
 
 export function validTypeRemapIntent(journey: JourneyState, payload: Record<string, unknown>, battle: BattleFoldState | null, registry: JourneyModifierRegistry): boolean {
