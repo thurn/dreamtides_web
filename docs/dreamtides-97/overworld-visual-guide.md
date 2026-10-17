@@ -43,8 +43,9 @@ the text stands on its own.
 3. **One art style, many genres.** All art is 32×32 LPC pixel art in a
    three-quarter top-down view, so a dwarven forge and a space station can sit
    one door apart without clashing.
-4. **Cheap to author.** A dream map can be a tile grid or a pre-composed
-   backdrop plus a walkability grid. Both are text the repository can review.
+4. **Cheap to author.** A dream map is a list of terrain shapes or a
+   pre-composed backdrop with walkability overrides. Both are text a Claude
+   subagent can write and the repository can review.
 5. **React for UI, Pixi for the world.** The world canvas draws only the map,
    characters and markers. Every panel, button and card is existing Cumulus UI.
 
@@ -119,35 +120,60 @@ React 19.
 
 ## Building maps
 
-Appendix B authors each map as a typed TS module with a tile grid written as
-rows of characters and a list of anchors
-([§B1](appendix-b-dreams.md#b1-tilesets-and-maps)). The prototype supports two
-ways to fill that module. Both keep the walkability grid and the anchors as
-reviewable text.
+Appendix B authors each map as a typed TS module with its terrain, props and
+a list of anchors ([§B1](appendix-b-dreams.md#b1-tilesets-and-maps)). The
+prototype supports two ways to fill that module. Both keep the walkability
+grid and the anchors as reviewable text.
+
+Maps are written by Claude subagents, so the formats suit a model rather than
+a hand-drawn grid. A model reads text one row at a time and keeps columns
+aligned poorly, so no map's source is a hand-written character grid.
 
 ### Tile-built maps
 
-The tile grid names terrain per cell through a legend, and props are placed
-on top. Terrain uses LPC's standard 3×6 terrain block, so the renderer can
-draw bordered patches (a dirt road on grass, a pond, a lava pool) from a
-rectangle. Every scene in [Prototype tilesets](#prototype-tilesets) is built
-this way.
+Terrain is a list of shapes laid over a base fill: rectangles, paths and
+seeded scatters. Props and anchors are placed by tile coordinate. A compiler
+turns the shapes into the cell grid and picks LPC's bordered terrain pieces
+(the standard 3×6 block), so a pond or a dirt road gets its edges without the
+author drawing them. Every scene in [Prototype tilesets](#prototype-tilesets)
+is built this way.
 
 ```ts
 // A fragment of a tile-built map module.
 export const map = defineDreamMap({
   id: parseDreamMapId("…"),
   tileset: parseTilesetId("…"), // Tumbleleaf Village
-  legend: { ".": "grass", "=": "dirt-road", "~": "pond", "f": "tilled" },
-  rows: [
-    "..........===.........",
-    "======================",
-    "...~~~~.......ffff....",
+  size: [22, 14],
+  terrain: [
+    { fill: "grass" },
+    { path: "dirt-road", points: [[0, 1], [21, 1]] },
+    { rect: "pond", from: [3, 2], to: [6, 4] },
+    { rect: "tilled", from: [14, 2], to: [17, 3] },
+    { scatter: "oak", from: [0, 8], to: [9, 13], density: 0.3, seed: 7 },
   ],
-  props: [{ kind: "house-brick", at: [4, 5] }, { kind: "oak", at: [1, 4] }],
+  props: [{ kind: "house-brick", at: [4, 5] }],
   anchors: [/* doors, waypoint, shop, challengers … with UUIDs */],
 });
 ```
+
+Moving the pond is one edit to its rectangle, not a rewrite of every row it
+crosses.
+
+### The authoring loop
+
+A subagent authoring a map runs two scripts on it until both are clean:
+
+- **The validator** checks that every anchor stands on a walkable cell, that
+  the entry reaches every door, waypoint, shop and challenger, that props do
+  not overlap, and that doors keep their minimum spacing. It reports cells by
+  coordinate.
+- **The preview** renders the map to a PNG with the placeholder colors from
+  the [asset pipeline](#asset-pipeline) and anchor letters on top. The
+  subagent looks at the picture and fixes what reads badly: a cramped plaza,
+  a road that leads nowhere, a door hidden behind a house.
+
+The compiler also prints the cell grid as rows of characters. That printout
+is a review snapshot for humans and diffs; nobody edits it.
 
 ### Backdrop maps
 
@@ -158,9 +184,13 @@ text grid.
 
 ![The LPC Revised winter demo map used as a Winterwake Fjords dream: dream veils fill the two cave mouths and the cottage door, a waypoint stands at the left, and challengers, a guardian, Sigrún, a shopkeeper, a quest giver and a sage carry their head icons.](visual-guide/backdrop-winterwake.png)
 
-The walkability grid can be drafted from the backdrop's colors (water, cliffs
-and dense trees are blocked) and then corrected by hand. In the picture below
-the right half shows blocked cells in red and anchors as letters.
+The walkability grid is drafted from the backdrop's colors (water, cliffs and
+dense trees are blocked). The map module corrects the draft with rectangle
+overrides such as `{ block: [[12, 3], [14, 5]] }` or `{ open: … }`, and places
+anchors by coordinate, so the drafted grid itself is never hand-edited. The
+same validator and preview apply. In the picture below the right half shows
+blocked cells in red and anchors as letters; the text grid after it is the
+printed snapshot.
 
 ![The LPC Revised summer demo map split in two: the left half is the plain backdrop, the right half overlays a 32-pixel grid, red blocked cells and anchor letters for a door, a challenger, a chest and a shop.](visual-guide/backdrop-walkgrid.png)
 

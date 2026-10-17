@@ -26,8 +26,8 @@ that a Dream Guide appearing in their home tileset is enhanced (B13).
 **Maps.** Each dream has one authored map, a typed TS module holding:
 
 - its UUID and tileset UUID;
-- a tile grid, written as rows of characters with a legend, so layouts can be
-  authored and reviewed as text;
+- its terrain and props, written as text so layouts can be authored and
+  reviewed in the repository;
 - its **anchors**, each with a UUID, position and kind:
 
 | Anchor kind | Per map | Use |
