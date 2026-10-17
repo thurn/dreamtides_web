@@ -6,5 +6,6 @@
 // it.
 
 import type { D97CatalogStamp } from "../../../d97/map/stamps";
+import emberArch684f3b39 from "./ember-arch-684f3b39";
 
-export const D97_STAMPS: readonly D97CatalogStamp[] = [];
+export const D97_STAMPS: readonly D97CatalogStamp[] = [emberArch684f3b39];

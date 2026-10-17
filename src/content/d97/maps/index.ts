@@ -8,8 +8,9 @@ import type { DreamStamp, DreamTerrain } from "../../../d97/map/assets";
 import type { DreamMapDefinition } from "../../../d97/map/definition";
 import type { D97StampId, D97TerrainId } from "../../../types/identifiers";
 import { D97_STAMPS } from "../stamps";
+import map3229d6c7 from "./3229d6c7-0700-4f37-9b07-921e3dccb8b6";
 
-export const D97_DREAM_MAPS: readonly DreamMapDefinition[] = [];
+export const D97_DREAM_MAPS: readonly DreamMapDefinition[] = [map3229d6c7];
 
 export const D97_MAP_STAMPS: ReadonlyMap<D97StampId, DreamStamp> = new Map(
   D97_STAMPS.map((stamp) => [stamp.id, stamp]),
