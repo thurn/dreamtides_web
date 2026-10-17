@@ -3,7 +3,7 @@ import { chooseOnResolution, conditionHolds, purposeOf, resolveEffect } from "..
 import type { QueuedTrigger } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { originAbilities } from "../rules/activation";
-import { hasImmutableRepeatAllowance, hasNamedTrigger, ruleReactionBody, triggerBody } from "./body";
+import { hasImmutableRepeatAllowance, hasNamedTrigger, ruleReactionBody, triggerBody, type TriggerBody } from "./body";
 import { observeRuleReactions } from "./rule-reactions";
 
 /**
@@ -20,7 +20,7 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const { source, controller, origin, ability, node, subject, gain, scored, discardedCount, captured, lastKnownSourceSpark, lastKnownSubjectCost, lastKnownSubjectSpark, linkedSource } = trigger;
-  const body = trigger.kind === "dreamwellBonus"
+  const body: Pick<TriggerBody, "effect" | "root" | "condition" | "originals"> = trigger.kind === "dreamwellBonus"
     ? dreamwellBody(ctx, trigger)
     : trigger.kind === "ruleReaction" ? ruleReactionBody(ctx.catalog, origin, ability) : triggerBody(ctx.catalog, origin, ability, node, trigger.chosenSubtype);
   if (trigger.repeated !== undefined) {
@@ -40,6 +40,8 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
+    ...(body.originals === undefined ? {} : { originals: body.originals }),
+    ...(trigger.chosenSubtype !== undefined && node !== null ? { retainedSubtype: { node, subtype: trigger.chosenSubtype } } : {}),
     ...(trigger.chosenSubtype === undefined ? {} : { chosenSubtype: trigger.chosenSubtype }),
     ...(trigger.abandonedNamed === undefined ? {} : { abandonedNamed: trigger.abandonedNamed }),
     ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),

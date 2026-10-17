@@ -1,0 +1,1185 @@
+{
+  "bead": "hv-umm2.782",
+  "base": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+  "sourceQualification": "Each command records the unchanged Git HEAD and a complete launch-time tracked/untracked input manifest. Code/test hashes below identify the final source; later evidence-only updates are documentation, without self-referential runtime credit. Parent owns final OID verification, cold review and certification.",
+  "design": {
+    "lexical": "A nested chooseSubtype owns its then subtree; positive and negative placeholders bind in the nearest type choice.",
+    "canonical": "Generic transient originalOf and canonical mode/target maps preserve authored object identities, enclosing mode zero, moved-card records and floating indexes against the canonical catalog root.",
+    "retained": "triggerBody specializes only its indexed callback and supplies a transient replacement map. resolveBody reconstructs a readonly callback index/type proof descriptor independently of inner choices. No new saved-state shape.",
+    "publicProof": "The complete guarded public declaration is reconstructed around the one callback scope. Other hidden branches remain in the maximum; nested choice placeholders stay unbound until chosen.",
+    "scope": "Native parent scope amendment and originalOf fallout acknowledgement precede the extra trigger-body/resolve and public-proof edits; no matcher/view/determinize/parser/state protocol edits."
+  },
+  "finalCodeInputs": {
+    "src/engine/effects/interpreter.ts": "49ae64bd0fc63548707c37a33230cddd5d8fea805326374ff8431b4376f5447b",
+    "src/engine/effects/primitives/choose-subtype.ts": "d722093723a17a86ee343e44adbe6f617de1ab94b9e3eadb22df0b5d85ae4a85",
+    "src/engine/effects/primitives/contracts/choose-subtype-nesting.contracts.ts": "8357f17a25c7faeb4538d45261084b2c627e3b0d5b8f1d864078041db92a1673",
+    "src/engine/effects/types.ts": "489e65b3f86c254ff688079fb21d0835b04a8a9c0f145408a83414c2d07371ce",
+    "src/engine/triggers/body.ts": "0b24b884f33b4620ee1b20eb2b573db45c5ee3c8416ab3452db3f64ecd73c581",
+    "src/engine/triggers/resolve.ts": "955f4d34e3e4166a7703f5dfa48b3cd9ae1a479768003cc2dcedb6a62225cf0a"
+  },
+  "beforeFix": {
+    "fixture": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.original.contracts.ts",
+    "fixtureSHA256": "1d611a03504918a71c1ffa15f6fb3c71a6646dd98df0065e78e84cbd809bee25",
+    "lines": 52,
+    "actualExit": 1,
+    "result": "Four public failing assertions: direct nested draw plus later delayed callback, both controllers; physical Mage IDs observed instead of inner Warrior. No production edits before this original run.",
+    "parentProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/parent-beforefix-proof.json"
+  },
+  "runs": {
+    "beforefix": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting"
+      ],
+      "pid": 74299,
+      "pgid": 74299,
+      "exit": 1,
+      "wallS": 9.865640878677368,
+      "descendantCpuS": 11.484877000000001,
+      "inputManifestSHA256": "5d1a1c5a25cd34e8913682ede42b6239cff50ef94c1410c1d196ccbedf640859",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        4.68896484375,
+        6.36279296875,
+        7.03125
+      ],
+      "loadEnd": [
+        4.50927734375,
+        6.26806640625,
+        6.9892578125
+      ],
+      "logSHA256": "6a3085e8e098646ef2ebf742d1f164e08172b222a8951c1d45b811a3ce50b2fe",
+      "end": "2026-10-17T05:36:37.637129+00:00",
+      "rawReceiptSHA256": "3c6b0ca529bb3b92c9b70a8b47b951eebcb41aa31d7b960b63d18815e5ae4492",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.receipt.json",
+          "sha256": "3c6b0ca529bb3b92c9b70a8b47b951eebcb41aa31d7b960b63d18815e5ae4492"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.inputs.json",
+          "sha256": "5d1a1c5a25cd34e8913682ede42b6239cff50ef94c1410c1d196ccbedf640859"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.log",
+          "sha256": "6a3085e8e098646ef2ebf742d1f164e08172b222a8951c1d45b811a3ce50b2fe"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.started.json",
+          "sha256": "4e4af08929934a6730b8ecdbc64bf1a546ef19dff822331cefb9c2b07a6dc809"
+        }
+      }
+    },
+    "focused-canonical": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting|chooseSubtype graph bindings|chosen subtype exclusions|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype"
+      ],
+      "pid": 51829,
+      "pgid": 51829,
+      "exit": 0,
+      "wallS": 12.6349937915802,
+      "descendantCpuS": 12.873838,
+      "inputManifestSHA256": "1e366163c9cbfe3d65f4dc75ed1c95439ead099eb5da327b70998df960c0668d",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        7.85400390625,
+        7.2021484375,
+        7.1376953125
+      ],
+      "loadEnd": [
+        7.7958984375,
+        7.21142578125,
+        7.1416015625
+      ],
+      "logSHA256": "85e2c35e1915b0fdb010e6635444ab301132dee9aa86a0c727e57d09ee98e9b7",
+      "end": "2026-10-17T05:42:07.925849+00:00",
+      "rawReceiptSHA256": "5a1fe9989998624c82d7a4ab3798136bd61940d2356424bb7f45044b64c0a1f0",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-canonical.receipt.json",
+          "sha256": "5a1fe9989998624c82d7a4ab3798136bd61940d2356424bb7f45044b64c0a1f0"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-canonical.inputs.json",
+          "sha256": "1e366163c9cbfe3d65f4dc75ed1c95439ead099eb5da327b70998df960c0668d"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-canonical.log",
+          "sha256": "85e2c35e1915b0fdb010e6635444ab301132dee9aa86a0c727e57d09ee98e9b7"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-canonical.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-canonical.started.json",
+          "sha256": "e51eef63d7f44375742ce3c2504b1e2af8bdf695a310d5f0242154021ee2f75f"
+        }
+      }
+    },
+    "focused-final-source": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting|chooseSubtype graph bindings|chosen subtype exclusions|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype"
+      ],
+      "pid": 49476,
+      "pgid": 49476,
+      "exit": 0,
+      "wallS": 11.909378051757812,
+      "descendantCpuS": 12.271678,
+      "inputManifestSHA256": "8f848a0c002a2c1fe4ec1a06389ff2890b60ed4b399538df9904c644c0945b2a",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        7.5458984375,
+        7.083984375,
+        7.095703125
+      ],
+      "loadEnd": [
+        8.19873046875,
+        7.244140625,
+        7.1513671875
+      ],
+      "logSHA256": "151d1c9eb7d71c153a90f8296b06cf9a3aceb78399c3bce7bc9b28dc0463e0bc",
+      "end": "2026-10-17T05:41:44.430071+00:00",
+      "rawReceiptSHA256": "a4139681d40c90865317c958362a91b154502439a19be768c3875c16736de7ca",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final-source.receipt.json",
+          "sha256": "a4139681d40c90865317c958362a91b154502439a19be768c3875c16736de7ca"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final-source.inputs.json",
+          "sha256": "8f848a0c002a2c1fe4ec1a06389ff2890b60ed4b399538df9904c644c0945b2a"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final-source.log",
+          "sha256": "151d1c9eb7d71c153a90f8296b06cf9a3aceb78399c3bce7bc9b28dc0463e0bc"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final-source.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final-source.started.json",
+          "sha256": "0e5f14c80fb41fbad5012066966c90d7fb0790378742f8257e6357119855b248"
+        }
+      }
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting|chooseSubtype graph bindings|chosen subtype exclusions|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype"
+      ],
+      "pid": 46274,
+      "pgid": 46274,
+      "exit": 0,
+      "wallS": 10.945803880691528,
+      "descendantCpuS": 12.547094,
+      "inputManifestSHA256": "18b59668164c3dacc3b512d5d1bb559009e6f37e23f4bf140ae207e5ed3ae025",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        8.42041015625,
+        7.1240234375,
+        7.1083984375
+      ],
+      "loadEnd": [
+        8.8232421875,
+        7.25146484375,
+        7.1533203125
+      ],
+      "logSHA256": "cc060e71f467a1a1c5d6b85429ebff3321bc97405bb24176fd2fe1b066da3b7a",
+      "end": "2026-10-17T05:41:06.595254+00:00",
+      "rawReceiptSHA256": "0ffa51fadbef63feb2e1842d336a2257b11045c978a06602935f0d82ff789e23",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final.receipt.json",
+          "sha256": "0ffa51fadbef63feb2e1842d336a2257b11045c978a06602935f0d82ff789e23"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final.inputs.json",
+          "sha256": "18b59668164c3dacc3b512d5d1bb559009e6f37e23f4bf140ae207e5ed3ae025"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final.log",
+          "sha256": "cc060e71f467a1a1c5d6b85429ebff3321bc97405bb24176fd2fe1b066da3b7a"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final.started.json",
+          "sha256": "ff45417540bf4edcea80ca299323208e8bebde2862c8469ce1c4fc618594d96d"
+        }
+      }
+    },
+    "focused-first": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting|chooseSubtype graph bindings|chosen subtype exclusions|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype"
+      ],
+      "pid": 89514,
+      "pgid": 89514,
+      "exit": 1,
+      "wallS": 12.821189165115356,
+      "descendantCpuS": 13.671385000000003,
+      "inputManifestSHA256": "1884b41ba18de9dd275c9e173e604bc536a79503c9d04108763df51d951b414a",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        10.068359375,
+        6.92724609375,
+        7.037109375
+      ],
+      "loadEnd": [
+        10.72119140625,
+        7.22412109375,
+        7.140625
+      ],
+      "logSHA256": "c5803578049773580dd1203746ce90b3fd23f52a10aa9d7d0f0d6e2b064741a1",
+      "end": "2026-10-17T05:40:10.688100+00:00",
+      "rawReceiptSHA256": "c759197fb2d226d5d40dfcd9a0d1b9dd7b5fc191ae938ea56518d7fac42e716f",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-first.receipt.json",
+          "sha256": "c759197fb2d226d5d40dfcd9a0d1b9dd7b5fc191ae938ea56518d7fac42e716f"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-first.inputs.json",
+          "sha256": "1884b41ba18de9dd275c9e173e604bc536a79503c9d04108763df51d951b414a"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-first.log",
+          "sha256": "c5803578049773580dd1203746ce90b3fd23f52a10aa9d7d0f0d6e2b064741a1"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-first.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-first.started.json",
+          "sha256": "55c34c5beec4636ddb2e8429a3e1494af3231de77d7b26325bce19de61de6d0c"
+        }
+      }
+    },
+    "focused-lint-final": {
+      "command": [
+        "npx",
+        "eslint",
+        "src/engine/effects/primitives/choose-subtype.ts",
+        "src/engine/effects/interpreter.ts",
+        "src/engine/effects/types.ts",
+        "src/engine/triggers/body.ts",
+        "src/engine/triggers/resolve.ts",
+        "src/engine/effects/primitives/contracts/choose-subtype-nesting.contracts.ts"
+      ],
+      "pid": 57297,
+      "pgid": 57297,
+      "exit": 0,
+      "wallS": 3.566240072250366,
+      "descendantCpuS": 5.660002999999999,
+      "inputManifestSHA256": "6f72e064dacf1f542ec7ca5b6f26648575bbe456795acad36f8060c7f842a5c1",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        5.26318359375,
+        6.60205078125,
+        6.91796875
+      ],
+      "loadEnd": [
+        5.26318359375,
+        6.60205078125,
+        6.91796875
+      ],
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "end": "2026-10-17T05:43:14.050617+00:00",
+      "rawReceiptSHA256": "c335e1a47b2c0b5c82cdc41e8349baa2fd9e626f7d4bb5db4dff99668f91b962",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint-final.receipt.json",
+          "sha256": "c335e1a47b2c0b5c82cdc41e8349baa2fd9e626f7d4bb5db4dff99668f91b962"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint-final.inputs.json",
+          "sha256": "6f72e064dacf1f542ec7ca5b6f26648575bbe456795acad36f8060c7f842a5c1"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint-final.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint-final.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint-final.started.json",
+          "sha256": "b9430c9ea009b604757d47694553b16ddf707ed77375bc87719b8a4668a97d3e"
+        }
+      }
+    },
+    "focused-lint": {
+      "command": [
+        "npx",
+        "eslint",
+        "src/engine/effects/primitives/choose-subtype.ts",
+        "src/engine/effects/interpreter.ts",
+        "src/engine/effects/types.ts",
+        "src/engine/triggers/body.ts",
+        "src/engine/triggers/resolve.ts",
+        "src/engine/effects/primitives/contracts/choose-subtype-nesting.contracts.ts"
+      ],
+      "pid": 52376,
+      "pgid": 52376,
+      "exit": 1,
+      "wallS": 19.266324996948242,
+      "descendantCpuS": 6.452652,
+      "inputManifestSHA256": "1e366163c9cbfe3d65f4dc75ed1c95439ead099eb5da327b70998df960c0668d",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        7.865234375,
+        7.21533203125,
+        7.142578125
+      ],
+      "loadEnd": [
+        7.287109375,
+        7.13330078125,
+        7.115234375
+      ],
+      "logSHA256": "9f40b0c04d3b15b263a74f54e89de42dba3efd0220461de26ffbfcd758373292",
+      "end": "2026-10-17T05:42:21.369601+00:00",
+      "rawReceiptSHA256": "3ab7cdd23f0963c57ffa378c64e45e029b14aaff5db010baaee1a5fb92deb23b",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint.receipt.json",
+          "sha256": "3ab7cdd23f0963c57ffa378c64e45e029b14aaff5db010baaee1a5fb92deb23b"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint.inputs.json",
+          "sha256": "1e366163c9cbfe3d65f4dc75ed1c95439ead099eb5da327b70998df960c0668d"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint.log",
+          "sha256": "9f40b0c04d3b15b263a74f54e89de42dba3efd0220461de26ffbfcd758373292"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint.started.json",
+          "sha256": "cf9ff9e9b63b86191458dca66f1eb781573fd9e45817695fe6a0de0e8f794323"
+        }
+      }
+    },
+    "focused-second": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting|chooseSubtype graph bindings|chosen subtype exclusions|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype"
+      ],
+      "pid": 91452,
+      "pgid": 91452,
+      "exit": 0,
+      "wallS": 10.834656953811646,
+      "descendantCpuS": 12.026462,
+      "inputManifestSHA256": "8dd0d9a1bf090127a2a3527a088075da512d1ea70ee7cc0f2b3e20f94e39f307",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        10.0556640625,
+        7.19921875,
+        7.1328125
+      ],
+      "loadEnd": [
+        9.90576171875,
+        7.2587890625,
+        7.154296875
+      ],
+      "logSHA256": "52a562c14e27c96d56e884dafae81d1c650fa62cd2825e785deeaad063abbbb5",
+      "end": "2026-10-17T05:40:30.506164+00:00",
+      "rawReceiptSHA256": "7650cca8fcab2da474857cfee40699639fa0b50cebc7e40b13080d08da40d35a",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-second.receipt.json",
+          "sha256": "7650cca8fcab2da474857cfee40699639fa0b50cebc7e40b13080d08da40d35a"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-second.inputs.json",
+          "sha256": "8dd0d9a1bf090127a2a3527a088075da512d1ea70ee7cc0f2b3e20f94e39f307"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-second.log",
+          "sha256": "52a562c14e27c96d56e884dafae81d1c650fa62cd2825e785deeaad063abbbb5"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-second.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-second.started.json",
+          "sha256": "e8a338797e62cb16a23354eebdc28c9e036d979d31852aec54c0e20ef37b5fa5"
+        }
+      }
+    },
+    "focused-valid-scope": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chosen subtype nesting|chooseSubtype graph bindings|chosen subtype exclusions|floating chosen subtype|chosen floating declaration deck knowledge|chooseSubtype"
+      ],
+      "pid": 63773,
+      "pgid": 63773,
+      "exit": 0,
+      "wallS": 12.51703405380249,
+      "descendantCpuS": 11.263508,
+      "inputManifestSHA256": "4d01eac2710e91c1702386abad41a4ddd1f4160039bd4081d2137b7e98193dd7",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        4.734375,
+        6.1005859375,
+        6.6923828125
+      ],
+      "loadEnd": [
+        4.701171875,
+        6.04736328125,
+        6.666015625
+      ],
+      "logSHA256": "162c23d1248d0eab441c714b001775eb59601c96f2b90562670e4cfdd95abb37",
+      "end": "2026-10-17T05:44:52.425162+00:00",
+      "rawReceiptSHA256": "447f50ac4bafc0baac6a11daa3ebff821e8c3f77a9314cf5125b270552a31ffc",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-valid-scope.receipt.json",
+          "sha256": "447f50ac4bafc0baac6a11daa3ebff821e8c3f77a9314cf5125b270552a31ffc"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-valid-scope.inputs.json",
+          "sha256": "4d01eac2710e91c1702386abad41a4ddd1f4160039bd4081d2137b7e98193dd7"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-valid-scope.log",
+          "sha256": "162c23d1248d0eab441c714b001775eb59601c96f2b90562670e4cfdd95abb37"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-valid-scope.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-valid-scope.started.json",
+          "sha256": "1b378ef336ddcca45587a1d7ef362544355295ca78512c1ba1295e23f8b4e385"
+        }
+      }
+    },
+    "full": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 74892,
+      "pgid": 74892,
+      "exit": 0,
+      "wallS": 131.54089617729187,
+      "descendantCpuS": 334.902289,
+      "inputManifestSHA256": "d40330b5367b8752c831705abb61a9e7c66e24449442aa8d350607ead8850596",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        5.62890625,
+        6.07470703125,
+        6.58251953125
+      ],
+      "loadEnd": [
+        6.2841796875,
+        6.18115234375,
+        6.54931640625
+      ],
+      "logSHA256": "379128ab7af99c9e2660f3c0b84eaee7d7c798b2560372846c2c0adf9154725e",
+      "end": "2026-10-17T05:49:24.737394+00:00",
+      "rawReceiptSHA256": "fc78048d8fe1083f55b71118a1511502c52d6085d366192a2684aee44d80fc1c",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/full.receipt.json",
+          "sha256": "fc78048d8fe1083f55b71118a1511502c52d6085d366192a2684aee44d80fc1c"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/full.inputs.json",
+          "sha256": "d40330b5367b8752c831705abb61a9e7c66e24449442aa8d350607ead8850596"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/full.log",
+          "sha256": "379128ab7af99c9e2660f3c0b84eaee7d7c798b2560372846c2c0adf9154725e"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/full.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/full.started.json",
+          "sha256": "5d77740c09d324a75c3cf5ba72a8286f3e6641b91624a58d6f5c592df50b03fe"
+        }
+      }
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 73725,
+      "pgid": 73725,
+      "exit": 0,
+      "wallS": 5.111953020095825,
+      "descendantCpuS": 5.824503999999999,
+      "inputManifestSHA256": "d40330b5367b8752c831705abb61a9e7c66e24449442aa8d350607ead8850596",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        6.12451171875,
+        6.18359375,
+        6.62939453125
+      ],
+      "loadEnd": [
+        6.1142578125,
+        6.18017578125,
+        6.62548828125
+      ],
+      "logSHA256": "6676161dadd0ff048d165b20362ad85517cc13b80307b3abc0357df1eb101e81",
+      "end": "2026-10-17T05:47:03.695226+00:00",
+      "rawReceiptSHA256": "88bfb72584fb0c225cc31324971eea49c20c5167e7d04406e37ee20dd6261ff3",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/knip.receipt.json",
+          "sha256": "88bfb72584fb0c225cc31324971eea49c20c5167e7d04406e37ee20dd6261ff3"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/knip.inputs.json",
+          "sha256": "d40330b5367b8752c831705abb61a9e7c66e24449442aa8d350607ead8850596"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/knip.log",
+          "sha256": "6676161dadd0ff048d165b20362ad85517cc13b80307b3abc0357df1eb101e81"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/knip.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/knip.started.json",
+          "sha256": "bec7362f5893304bb613d2dab72978edf424e59e53dedd366fc7114c1eb79344"
+        }
+      }
+    },
+    "lint-valid-scope": {
+      "command": [
+        "npx",
+        "eslint",
+        "src/engine/effects/primitives/choose-subtype.ts",
+        "src/engine/effects/interpreter.ts",
+        "src/engine/effects/types.ts",
+        "src/engine/triggers/body.ts",
+        "src/engine/triggers/resolve.ts",
+        "src/engine/effects/primitives/contracts/choose-subtype-nesting.contracts.ts"
+      ],
+      "pid": 64890,
+      "pgid": 64890,
+      "exit": 0,
+      "wallS": 3.321335792541504,
+      "descendantCpuS": 5.364619,
+      "inputManifestSHA256": "4d01eac2710e91c1702386abad41a4ddd1f4160039bd4081d2137b7e98193dd7",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        4.64501953125,
+        6.01318359375,
+        6.650390625
+      ],
+      "loadEnd": [
+        4.64501953125,
+        6.01318359375,
+        6.650390625
+      ],
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "end": "2026-10-17T05:44:58.345763+00:00",
+      "rawReceiptSHA256": "a4bf6f57aaa77e0e94651b14c9608b682b70031e15f23e2e64da7f0d773bf5d0",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/lint-valid-scope.receipt.json",
+          "sha256": "a4bf6f57aaa77e0e94651b14c9608b682b70031e15f23e2e64da7f0d773bf5d0"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/lint-valid-scope.inputs.json",
+          "sha256": "4d01eac2710e91c1702386abad41a4ddd1f4160039bd4081d2137b7e98193dd7"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/lint-valid-scope.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/lint-valid-scope.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/lint-valid-scope.started.json",
+          "sha256": "41f0b64dcf30c672a02c46bda8e724b3838f5aa07cd3e439a8ea22071621d6f8"
+        }
+      }
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 67477,
+      "pgid": 67477,
+      "exit": 0,
+      "wallS": 81.77316808700562,
+      "descendantCpuS": 218.08538199999998,
+      "inputManifestSHA256": "d40330b5367b8752c831705abb61a9e7c66e24449442aa8d350607ead8850596",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        4.43310546875,
+        5.83447265625,
+        6.5625
+      ],
+      "loadEnd": [
+        6.39697265625,
+        6.23779296875,
+        6.65087890625
+      ],
+      "logSHA256": "255de7082ee083da46e0bb15de9a3adcc7d9b8adf9a14352bc69245488dc14e6",
+      "end": "2026-10-17T05:46:50.859207+00:00",
+      "rawReceiptSHA256": "ad5612bf1a9d59986a85b6a41aca04fe4f66363074054a7699f51e006473b0e2",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review-final.receipt.json",
+          "sha256": "ad5612bf1a9d59986a85b6a41aca04fe4f66363074054a7699f51e006473b0e2"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review-final.inputs.json",
+          "sha256": "d40330b5367b8752c831705abb61a9e7c66e24449442aa8d350607ead8850596"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review-final.log",
+          "sha256": "255de7082ee083da46e0bb15de9a3adcc7d9b8adf9a14352bc69245488dc14e6"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review-final.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review-final.started.json",
+          "sha256": "a2378eed6e4fa8006f9dcfca77510aa2a27203f75667e4a1c56eaceeae30e169"
+        }
+      }
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 60185,
+      "pgid": 60185,
+      "exit": 143,
+      "wallS": 34.502952337265015,
+      "descendantCpuS": 0.24150800000000003,
+      "inputManifestSHA256": "12fc99a38db2740d5cbcc951688741e437365f808e9df20bac60975e0f190d60",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        5.09228515625,
+        6.4091796875,
+        6.83251953125
+      ],
+      "loadEnd": [
+        4.78662109375,
+        6.17578125,
+        6.72900390625
+      ],
+      "logSHA256": "5a739aad63c7417281198621882f0ebb9c90012988bbf8e7fd23a7eab8100135",
+      "end": "2026-10-17T05:44:24.742518+00:00",
+      "rawReceiptSHA256": "e60b59ed2a8b994a8a8a13df1cfc3be1fe3af27cc9ec0207baf170fa59e06eda",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review.receipt.json",
+          "sha256": "e60b59ed2a8b994a8a8a13df1cfc3be1fe3af27cc9ec0207baf170fa59e06eda"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review.inputs.json",
+          "sha256": "12fc99a38db2740d5cbcc951688741e437365f808e9df20bac60975e0f190d60"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review.log",
+          "sha256": "5a739aad63c7417281198621882f0ebb9c90012988bbf8e7fd23a7eab8100135"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review.started.json",
+          "sha256": "47376b38be28f94295259b3b2ece448a0ba91f1c010a5c15fc45e96f181a9c68"
+        }
+      }
+    },
+    "typecheck-final": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 57361,
+      "pgid": 57361,
+      "exit": 143,
+      "wallS": 73.54114389419556,
+      "descendantCpuS": 0.254567,
+      "inputManifestSHA256": "6f72e064dacf1f542ec7ca5b6f26648575bbe456795acad36f8060c7f842a5c1",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        5.26318359375,
+        6.60205078125,
+        6.91796875
+      ],
+      "loadEnd": [
+        4.78662109375,
+        6.17578125,
+        6.72900390625
+      ],
+      "logSHA256": "935ee3dded27e048539868212d44611959f10bf11cc6f1bc16ddeaaf4557d17a",
+      "end": "2026-10-17T05:44:24.688365+00:00",
+      "rawReceiptSHA256": "b901b0d47614cca7d1a713c6b932c2601caaa07886119489536fac285d2663af",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-final.receipt.json",
+          "sha256": "b901b0d47614cca7d1a713c6b932c2601caaa07886119489536fac285d2663af"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-final.inputs.json",
+          "sha256": "6f72e064dacf1f542ec7ca5b6f26648575bbe456795acad36f8060c7f842a5c1"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-final.log",
+          "sha256": "935ee3dded27e048539868212d44611959f10bf11cc6f1bc16ddeaaf4557d17a"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-final.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-final.started.json",
+          "sha256": "9e93d3bc92ab239308cf55b2b3858e909c6fd3d378d861dd4bcc1e06f18abc64"
+        }
+      }
+    },
+    "typecheck-valid-scope": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 65385,
+      "pgid": 65385,
+      "exit": 0,
+      "wallS": 10.064383029937744,
+      "descendantCpuS": 16.630081,
+      "inputManifestSHA256": "4d01eac2710e91c1702386abad41a4ddd1f4160039bd4081d2137b7e98193dd7",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        4.51318359375,
+        5.962890625,
+        6.62890625
+      ],
+      "loadEnd": [
+        4.66748046875,
+        5.947265625,
+        6.615234375
+      ],
+      "logSHA256": "87c5b4c8d0107dcfdf79311f0813b9482d2c2a12d562c18ea42b08466d301c97",
+      "end": "2026-10-17T05:45:12.226894+00:00",
+      "rawReceiptSHA256": "f2ee73c68b8b8fa3d9c277710436b02fae5d57e32a754e466d53491918829763",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-valid-scope.receipt.json",
+          "sha256": "f2ee73c68b8b8fa3d9c277710436b02fae5d57e32a754e466d53491918829763"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-valid-scope.inputs.json",
+          "sha256": "4d01eac2710e91c1702386abad41a4ddd1f4160039bd4081d2137b7e98193dd7"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-valid-scope.log",
+          "sha256": "87c5b4c8d0107dcfdf79311f0813b9482d2c2a12d562c18ea42b08466d301c97"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-valid-scope.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-valid-scope.started.json",
+          "sha256": "dc4ef664e46c79aa0d0623acc418d7f564325c0faf4cbc58547c75119c9298d7"
+        }
+      }
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 52493,
+      "pgid": 52493,
+      "exit": 2,
+      "wallS": 21.264677047729492,
+      "descendantCpuS": 34.94801399999999,
+      "inputManifestSHA256": "1e366163c9cbfe3d65f4dc75ed1c95439ead099eb5da327b70998df960c0668d",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        7.865234375,
+        7.21533203125,
+        7.142578125
+      ],
+      "loadEnd": [
+        7.0234375,
+        7.0810546875,
+        7.0966796875
+      ],
+      "logSHA256": "a383de2d93e9b7134453266dd333343350eb36b33d5040c96853c500906f1859",
+      "end": "2026-10-17T05:42:24.507709+00:00",
+      "rawReceiptSHA256": "01508ca96cfa6bd46a97dae51b5a9bfc49b16a41debf4627f6e1376a03b23975",
+      "raw": {
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck.receipt.json",
+          "sha256": "01508ca96cfa6bd46a97dae51b5a9bfc49b16a41debf4627f6e1376a03b23975"
+        },
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck.inputs.json",
+          "sha256": "1e366163c9cbfe3d65f4dc75ed1c95439ead099eb5da327b70998df960c0668d"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck.log",
+          "sha256": "a383de2d93e9b7134453266dd333343350eb36b33d5040c96853c500906f1859"
+        },
+        "runner.py": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck.runner.py",
+          "sha256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck.started.json",
+          "sha256": "4c57144422fcb3dadab974e0d35f965f5e904f28ed237ce56e1abea8ece05fa1"
+        }
+      }
+    },
+    "evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs"
+      ],
+      "pid": 16835,
+      "pgid": 16835,
+      "exit": 0,
+      "wallS": 0.07297205924987793,
+      "descendantCpuS": 0.076974,
+      "inputManifestSHA256": "ccb1e253ae1c120f1049124577e9f73bbfc2b051b7ec1e21eacb0567c9781db2",
+      "runnerLaunchSHA256": "bbbd265a728f9ca9a94b902948cc00d365a58ad4e07a59571397ad410a30fad2",
+      "runnerBytesUnchanged": true,
+      "sourceHead": "c4f568698132cabcf7f045f6ef5e1ed3e5056413",
+      "loadStart": [
+        5.4130859375,
+        5.98974609375,
+        6.4716796875
+      ],
+      "loadEnd": [
+        5.4130859375,
+        5.98974609375,
+        6.4716796875
+      ],
+      "logSHA256": "4d109a3bdffa283f94ec4072b2f693dee3fa7c418c4c656b6aeeb1ccbc0a1ce6",
+      "end": "2026-10-17T05:49:48.505169+00:00"
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 293,
+    "jsdomFiles": 0
+  },
+  "contracts": {
+    "new": 24,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "fixture": "Synthetic cards/UUIDs only; no UI strings, production content, private-helper equality, timing or default-policy assertions.",
+    "covered": [
+      "Different outer/inner types and outer siblings",
+      "Independent conditional and sibling type scopes, positive and negative predicates",
+      "Shared moved instruction and capture reads across scopes with different copiable costs",
+      "Shared versus distinct equal-looking target objects across scopes",
+      "Enclosing shared mode zero",
+      "Canonical shared floating instruction installed in outer and inner scopes",
+      "Both floating and delayed callbacks, later inner choices and further callback installations",
+      "Saved-state public parser, suspended and committed reload, full intent and published-event replay",
+      "Foreign/illegal/stale/duplicate answers; concurrent actions; noncancellable resolution choices",
+      "Nested partial draws/installations roll back and recover identically after error",
+      "Retained public matching-draw proof after a different inner choice; original 38 public-proof controls"
+    ],
+    "existingControls": [
+      "chooseSubtype ordinary single/self/static/source departure/hidden-source/public choice/empty legal choices",
+      "chooseSubtype graph bindings capture rollback/no legal target/shared payable duration",
+      "chosen subtype exclusions literal/all-types/static/shared captures",
+      "floating chosen subtype independent same-node installs, captured cards, departure spark, expiry and malformed saved bindings",
+      "chosen floating declaration deck knowledge full hidden-branch maxima and attribution guards"
+    ],
+    "cancellation": "Type choices occur after the play commit point and in trigger resolution, hence notCancellable is the applicable contract; ordinary precommit cancellation protocol is unchanged.",
+    "browser": "Internal engine binding architecture only; no changed player-facing presentation or browser/server launched.",
+    "phaseAcceptance": "No local soak, complete Phase 5 final-source 10k or browser acceptance credit."
+  },
+  "failurePaths": {
+    "beforefix": "Expected 4 public failures on unchanged exact base.",
+    "focused-first": "Introduced WIP lost initial callback target bindings (2 existing tests); canonical initial maps repaired it before aggregate. All raw failure retained.",
+    "lint-typecheck": "Own initial fixture typing and TriggerBody union typing failed focused ESLint/typecheck; repaired before successful valid-scope checks.",
+    "cancelled-preparation": "Original review and typecheck-final groups were verified owned and terminated at preparation before a parent-requested scoped fixture correction. Both original tools returned 143; no aggregate credit. cancel-preparation-originals.json and pre-correction-cleanup.json retain custody.",
+    "modeZeroFixture": "Parent identified an unbound placeholder in the first mode-zero fixture. Final fixture puts mode zero under outerMage then innerWarrior; prior focused receipts remain historical.",
+    "focused-earlier": "Successful earlier focused runs have their own frozen fixture manifests; final source is qualified against final successful focused/aggregate/full runs, not relabeled."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review command starting load when available; otherwise focused-canonical command starting load"
+      }
+    }
+  },
+  "performance": "Record actual wall/descendant CPU and per-stage timings; no speedup or budget claim. D19 60s phase-gate target remains unwaived.",
+  "remaining": "Parent must perform fresh read-only Codex core review, native certification and final phase acceptance.",
+  "originalToolTerminals": {
+    "beforefix": {
+      "originalTool": 15335,
+      "actualTerminalExit": 1,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/beforefix.receipt.json",
+      "receiptSHA256": "3c6b0ca529bb3b92c9b70a8b47b951eebcb41aa31d7b960b63d18815e5ae4492"
+    },
+    "focused-first": {
+      "originalTool": 36111,
+      "actualTerminalExit": 1,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-first.receipt.json",
+      "receiptSHA256": "c759197fb2d226d5d40dfcd9a0d1b9dd7b5fc191ae938ea56518d7fac42e716f"
+    },
+    "focused-second": {
+      "originalTool": 33603,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-second.receipt.json",
+      "receiptSHA256": "7650cca8fcab2da474857cfee40699639fa0b50cebc7e40b13080d08da40d35a"
+    },
+    "focused-final": {
+      "originalTool": 13508,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final.receipt.json",
+      "receiptSHA256": "0ffa51fadbef63feb2e1842d336a2257b11045c978a06602935f0d82ff789e23"
+    },
+    "focused-final-source": {
+      "originalTool": 40260,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-final-source.receipt.json",
+      "receiptSHA256": "a4139681d40c90865317c958362a91b154502439a19be768c3875c16736de7ca"
+    },
+    "focused-canonical": {
+      "originalTool": 26971,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-canonical.receipt.json",
+      "receiptSHA256": "5a1fe9989998624c82d7a4ab3798136bd61940d2356424bb7f45044b64c0a1f0"
+    },
+    "focused-lint": {
+      "originalTool": 53889,
+      "actualTerminalExit": 1,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint.receipt.json",
+      "receiptSHA256": "3ab7cdd23f0963c57ffa378c64e45e029b14aaff5db010baaee1a5fb92deb23b"
+    },
+    "typecheck": {
+      "originalTool": 55563,
+      "actualTerminalExit": 2,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck.receipt.json",
+      "receiptSHA256": "01508ca96cfa6bd46a97dae51b5a9bfc49b16a41debf4627f6e1376a03b23975"
+    },
+    "focused-lint-final": {
+      "originalTool": 3242,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-lint-final.receipt.json",
+      "receiptSHA256": "c335e1a47b2c0b5c82cdc41e8349baa2fd9e626f7d4bb5db4dff99668f91b962"
+    },
+    "typecheck-final": {
+      "originalTool": 36970,
+      "actualTerminalExit": 143,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-final.receipt.json",
+      "receiptSHA256": "b901b0d47614cca7d1a713c6b932c2601caaa07886119489536fac285d2663af"
+    },
+    "review": {
+      "originalTool": 42573,
+      "actualTerminalExit": 143,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review.receipt.json",
+      "receiptSHA256": "e60b59ed2a8b994a8a8a13df1cfc3be1fe3af27cc9ec0207baf170fa59e06eda"
+    },
+    "focused-valid-scope": {
+      "originalTool": 73792,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/focused-valid-scope.receipt.json",
+      "receiptSHA256": "447f50ac4bafc0baac6a11daa3ebff821e8c3f77a9314cf5125b270552a31ffc"
+    },
+    "lint-valid-scope": {
+      "originalTool": 71331,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/lint-valid-scope.receipt.json",
+      "receiptSHA256": "a4bf6f57aaa77e0e94651b14c9608b682b70031e15f23e2e64da7f0d773bf5d0"
+    },
+    "typecheck-valid-scope": {
+      "originalTool": 34874,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/typecheck-valid-scope.receipt.json",
+      "receiptSHA256": "f2ee73c68b8b8fa3d9c277710436b02fae5d57e32a754e466d53491918829763"
+    },
+    "review-final": {
+      "originalTool": 14642,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/review-final.receipt.json",
+      "receiptSHA256": "ad5612bf1a9d59986a85b6a41aca04fe4f66363074054a7699f51e006473b0e2"
+    },
+    "knip": {
+      "originalTool": 15350,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/knip.receipt.json",
+      "receiptSHA256": "88bfb72584fb0c225cc31324971eea49c20c5167e7d04406e37ee20dd6261ff3"
+    },
+    "full": {
+      "originalTool": 39878,
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/full.receipt.json",
+      "receiptSHA256": "fc78048d8fe1083f55b71118a1511502c52d6085d366192a2684aee44d80fc1c"
+    },
+    "evidence-schema": {
+      "originalTool": "immediate exec chunk887624",
+      "actualTerminalExit": 0,
+      "collected": true,
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/evidence-schema.receipt.json",
+      "receiptSHA256": "d25600ff047544f8176e2b7d4d82c8816ef9a31a4206f04bde8c60a42f2049cd"
+    }
+  },
+  "cleanup": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/cleanup.json",
+    "sha256": "ca16b3755c18f2886b42936052ef6e7fd380c71fccf015f08068046924bcca7c",
+    "commandRoots": 18,
+    "syntheticFixtureGroups": 58,
+    "uniqueGroups": 76,
+    "status": "ALL_RECORDED_GROUPS_ABSENT"
+  },
+  "scopeQualification": {
+    "frozenSourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-nesting782/final-source-input-proof.json",
+    "successfulFinalCodeAndDesignChecks": [
+      "focused-valid-scope",
+      "lint-valid-scope",
+      "typecheck-valid-scope",
+      "review-final",
+      "knip",
+      "full"
+    ],
+    "laterChanges": "Only per-bead evidence updates; no source/test/design edits after final successful validation manifests. Final evidence is documentation and is not itself assigned full-runtime credit.",
+    "frictionSchemaExact": true
+  },
+  "fullSummary": {
+    "files": 439,
+    "tests": 12435,
+    "testStageS": 94.6,
+    "vitestWallS": 93.96,
+    "wholeWallS": 131.54089617729187,
+    "descendantCpuS": 334.902289,
+    "bundleStageS": 3.6,
+    "D19Target60S": "Unmet and unwaived; measured, never asserted."
+  },
+  "preExisting": {
+    "observation": "Existing capture mode fixture executes an initial unbound type placeholder. Source-only fixture-quality observation, no production failure established.",
+    "requiredRepair": "hv-umm2.784",
+    "gate": "hv-umm2.46",
+    "parentDisposition": "Confirmed; bounded test-cut deletes redundant invalid control after this bead lands."
+  },
+  "parentWorkflowObservation": {
+    "source": "Parent session message2026-10-17, parent-cadence-catchup.json/logs",
+    "observation": "Parent reports late friction:triggers catch-up actual0,13/25since770, all triggers dispositioned; missed recent parent dispatch checks recorded. This was a late parent observation, without predispatched credit."
+  }
+}

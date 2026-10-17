@@ -17,6 +17,8 @@ export interface TriggerBody {
   readonly effect: ResolvingEffect;
   readonly root: EffectNode;
   readonly condition: Condition | null;
+  /** Local callback replacements and canonical identities, rebuilt from the scalar binding. */
+  readonly originals?: ReadonlyMap<object, object>;
 }
 
 /**
@@ -33,7 +35,7 @@ export function triggerBody(
 ): TriggerBody {
   const definition = originAbilities(catalog, origin)[ability];
   const original = definition === undefined ? null : abilityEffect(definition);
-  const root = original === null || chosenSubtype === undefined ? original : withChosenSubtype(original, chosenSubtype);
+  const root = original;
   if (definition === undefined || root === null) throw new Error(`Ability ${String(ability)} of its origin has no effect`);
   if (node === null) {
     if (definition.kind !== "triggered") throw new Error(`Ability ${String(ability)} is not a triggered ability`);
@@ -41,8 +43,9 @@ export function triggerBody(
   }
   const found = everyNode(root)[node];
   if (found?.op !== "floatingTrigger") throw new Error(`Node ${String(node)} of ability ${String(ability)} is not a floating trigger`);
-  const floating = found as FloatingTriggerNode;
-  return { trigger: floating.trigger, effect: floating.effect, root, condition: null };
+  const originals = new Map<object, object>();
+  const floating = (chosenSubtype === undefined ? found : withChosenSubtype(found, chosenSubtype, originals)) as FloatingTriggerNode;
+  return { trigger: floating.trigger, effect: floating.effect, root, condition: null, originals };
 }
 
 /** Whether this resolving body reads its causing occurrence; a floating body belongs to its future occasion. */

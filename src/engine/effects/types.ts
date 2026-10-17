@@ -92,8 +92,10 @@ export interface ResolutionChoiceScope {
 export interface EffectEnv {
   /** Lexical chosen type retained by a later floating instruction. */
   readonly chosenSubtype?: import("../../types/card-identity").CardSubtype;
-  /** Original instruction in root for a substituted resolution node. Transient, rebuilt on replay. */
-  originalOf?(node: EffectNode): EffectNode;
+  /** Public installation binding, independent of any later inner type choice. Transient. */
+  readonly retainedSubtype?: { readonly node: number; readonly subtype: import("../../types/card-identity").CardSubtype };
+  /** Canonical instruction or target identity. Transient, rebuilt on replay. */
+  originalOf?<T extends object>(value: T): T;
   readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
   readonly handCopy?: import("../state/types").HandCopyContext;

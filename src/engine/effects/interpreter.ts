@@ -856,6 +856,9 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 }
 
 export interface ResolveOptions {
+  /** Local substituted callback identities; transient, rebuilt from catalog and answers. */
+  readonly originals?: ReadonlyMap<object, object>;
+  readonly retainedSubtype?: EffectEnv["retainedSubtype"];
   /** Chosen type of the floating installation whose body resolves. */
   readonly chosenSubtype?: import("../../types/card-identity").CardSubtype;
   readonly paymentSourceCounters?: number;
@@ -978,9 +981,9 @@ function deckRemovalWindows(ctx: StepContext, node: EffectNode, env: EffectEnv):
 /**
  * The declared effect `viewer` can attribute to the ability `env` resolves:
  * `viewer` identifies its source, which still has the origin the ability
- * resolves from, and that origin's declaration at `env.ability`, either plain
- * or specialized by its retained public type choice, is the tree resolving.
- * The whole declaration supplies proof across every branch. `null` when
+ * resolves from, and its declaration is the canonical root of this resolution.
+ * A retained callback's indexed lexical scope is specialized separately from
+ * later inner choices. The whole declaration supplies proof across every branch. `null` when
  * nothing public proves it, as for an opaque synthetic
  * resolver; callers then infer nothing from the ability's text.
  */
@@ -991,11 +994,11 @@ export function publicAbilityEffect(ctx: StepContext, env: EffectEnv, viewer: Si
   if (origin.kind === "card" && ctx.catalog.card(origin.cardId).synthetic?.resolve !== undefined) return null;
   const ability = originAbilities(ctx.catalog, origin)[env.ability];
   if (ability === undefined || !("effect" in ability)) return null;
-  const root = JSON.stringify(env.root);
-  if (JSON.stringify(ability.effect) === root) return ability.effect;
-  if (env.chosenSubtype === undefined) return null;
-  const specialized = withChosenSubtype(ability.effect, env.chosenSubtype);
-  return JSON.stringify(specialized) === root ? specialized : null;
+  if (JSON.stringify(ability.effect) !== JSON.stringify(env.root)) return null;
+  if (env.retainedSubtype === undefined) return ability.effect;
+  const scope = everyNode(ability.effect)[env.retainedSubtype.node];
+  if (scope?.op !== "floatingTrigger") return null;
+  return withChosenSubtype(ability.effect, env.retainedSubtype.subtype, undefined, scope);
 }
 
 /** Public deck-materialization windows, independent of the selected hidden branch. */
@@ -1083,10 +1086,14 @@ function picksAtRandomFromDeck(node: EffectNode): boolean {
 /** Resolves an effect tree with plain synchronous rules code, under the modes chosen at play time. */
 export function resolveEffect(ctx: StepContext, effect: EffectNode, options: ResolveOptions): void {
   const deferred = options.resolutionChoices === true;
-  const chosen = chosenModes(effect, options.choices.modes, deferred);
-  const specs = collectTargets(effect, chosen, deferred);
+  const canonical = <T extends object>(value: T): T => (options.originals?.get(value) ?? value) as T;
+  const modes = chosenModes(effect, options.choices.modes, deferred);
+  const chosen = new Map([...modes].map(([node, mode]) => [canonical(node), mode]));
+  const specs = collectTargets(effect, modes, deferred);
+  const targets = new Map(specs.map((spec, index) => [canonical(spec), options.choices.targets[index]]));
   const scope: ResolutionChoiceScope | undefined = deferred ? { modes: new Map(), targets: new Map() } : undefined;
-  const env: EffectEnv = {
+  let env: EffectEnv = {
+    ...(options.retainedSubtype === undefined ? {} : { retainedSubtype: options.retainedSubtype }),
     ...(options.chosenSubtype === undefined ? {} : { chosenSubtype: options.chosenSubtype }),
     ...(options.abandonedNamed === undefined ? {} : { abandonedNamed: options.abandonedNamed }),
     ...(options.triggeringAbility === undefined ? {} : { triggeringAbility: options.triggeringAbility }),
@@ -1115,11 +1122,10 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     moved: movedCardRecord(ctx, options.root ?? effect),
     captured: options.captured ?? null,
     modeOf(node) {
-      return chosen.get(node) ?? scope?.modes.get(node) ?? null;
+      return chosen.get(canonical(node)) ?? scope?.modes.get(canonical(node)) ?? null;
     },
     targetsOf(spec) {
-      const index = specs.indexOf(spec);
-      return (index < 0 ? null : options.choices.targets[index]) ?? scope?.targets.get(spec) ?? null;
+      return targets.get(canonical(spec)) ?? scope?.targets.get(canonical(spec)) ?? null;
     },
     run(node) {
       resolveNode(ctx, node, env);
@@ -1128,7 +1134,26 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
       return purposeOf(options.source, options.origin, options.ability, role);
     },
   };
+  env = canonicalBindings(env, options.originals);
   env.run(effect);
+}
+
+/** Bridges local replacements to the same authored instruction and target objects. */
+function canonicalBindings(env: EffectEnv, originals?: ReadonlyMap<object, object>): EffectEnv {
+  if (originals === undefined || originals.size === 0) return env;
+  const isNode = (value: object): value is EffectNode => "op" in value && typeof value.op === "string";
+  for (const [replacement, original] of originals) {
+    if (isNode(replacement) && isNode(original)) env.moved.bind(original, replacement);
+  }
+  return {
+    ...env,
+    originalOf: <T extends object>(value: T): T => {
+      const original = (originals.get(value) ?? value) as T;
+      return env.originalOf?.(original) ?? original;
+    },
+    modeOf: node => env.modeOf((originals.get(node) ?? node) as EffectNode),
+    targetsOf: spec => env.targetsOf((originals.get(spec) ?? spec) as PlayTimeTarget),
+  };
 }
 
 /**
@@ -1139,43 +1164,28 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * those enclosing choices and to the resolution's original moved-card captures.
  */
 export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false, originals?: ReadonlyMap<object, object>): void {
-  if (originals !== undefined) {
-    const isNode = (value: object): value is EffectNode => "op" in value && typeof value.op === "string";
-    for (const [replacement, original] of originals) {
-      if (isNode(replacement) && isNode(original)) {
-        env.moved.bind(original, replacement);
-      }
-    }
-    const outer = env;
-    env = {
-      ...outer,
-      originalOf: node => {
-        const original = (originals.get(node) ?? node) as EffectNode;
-        return outer.originalOf?.(original) ?? original;
-      },
-      modeOf: node => outer.modeOf((originals.get(node) ?? node) as EffectNode),
-      targetsOf: spec => outer.targetsOf((originals.get(spec) ?? spec) as PlayTimeTarget),
-    };
-  }
+  env = canonicalBindings(env, originals);
+  const canonical = <T extends object>(value: T): T => env.originalOf?.(value) ?? value;
   const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost, { optionalPaid: env.optionalPaid }, resolvingSourceCounters(ctx, env));
   if (choices === null) return;
-  const chosen = chosenModes(effect, choices.modes, true);
-  const specs = collectTargets(effect, chosen, true);
+  const modes = chosenModes(effect, choices.modes, true);
+  const chosen = new Map([...modes].map(([node, mode]) => [canonical(node), mode]));
+  const specs = collectTargets(effect, modes, true);
+  const targets = new Map(specs.map((spec, index) => [canonical(spec), choices.targets[index]]));
   const scope = retainConditionalBindings && env.resolutionChoiceScope !== undefined
     ? env.resolutionChoiceScope : { modes: new Map<EffectNode, number>(), targets: new Map<PlayTimeTarget, readonly InstanceId[]>() };
   if (retainConditionalBindings) {
     for (const [node, mode] of chosen) if (env.modeOf(node) === null) scope.modes.set(node, mode);
-    for (const [index, spec] of specs.entries()) if (env.targetsOf(spec) === null) scope.targets.set(spec, [...(choices.targets[index] ?? [])]);
+    for (const [index, spec] of specs.entries()) if (env.targetsOf(spec) === null) scope.targets.set(canonical(spec), [...(choices.targets[index] ?? [])]);
   }
   const inner: EffectEnv = {
     ...env,
     resolutionChoiceScope: scope,
     modeOf(node) {
-      return chosen.get(node) ?? scope.modes.get(node) ?? env.modeOf(node);
+      return chosen.get(canonical(node)) ?? scope.modes.get(canonical(node)) ?? env.modeOf(node);
     },
     targetsOf(spec) {
-      const index = specs.indexOf(spec);
-      return (index < 0 ? null : choices.targets[index]) ?? scope.targets.get(spec) ?? env.targetsOf(spec);
+      return targets.get(canonical(spec)) ?? scope.targets.get(canonical(spec)) ?? env.targetsOf(spec);
     },
     run(node) {
       resolveNode(ctx, node, inner);

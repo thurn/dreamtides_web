@@ -1113,15 +1113,18 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   An installation inside `chooseSubtype` retains its concrete type as
   `EffectRef.chosenSubtype`. Replacement instructions use the transient
   `EffectEnv.originalOf` bridge to index the original graph. `triggerBody`
-  reconstructs a specialized tree from that catalog definition, preserving
-  node order and graph aliases; matching and later resolution therefore use
-  the installation's own type even after its source departs. The queued
+  specializes only the indexed callback's lexical scope and returns its
+  transient replacement-to-original map beside the canonical catalog root.
+  Matching and later resolution use the installation's own type even after
+  its source departs. Nested type choices bind their own following instructions;
+  outer siblings retain the enclosing type. The queued
   occurrence carries `chosenSubtype` into its resolving environment, including
   any further floating installations. Saves, views, reconstruction and trigger
   logs carry this plain scalar binding; legacy records may omit it.
-  Public deck-knowledge proofs compare the complete resolving root with its
-  identified source's current declaration, or that declaration specialized by
-  the retained type choice. The matching complete declaration supplies bounds
+  Public deck-knowledge proofs compare the canonical resolving root with its
+  identified source's current declaration. A transient retained callback index
+  and type reconstruct that callback's scope inside the complete declaration,
+  independently of later inner choices. The complete declaration supplies bounds
   across all hidden branches and matching-draw filters. Attribution requires
   the same current origin and variant and excludes opaque synthetic resolvers.
 - **`triggerAbility`** enqueues a named trigger outside its occasion
@@ -2077,8 +2080,10 @@ replacing the node's previous record. A created card that ceased to exist so
 keeps its cost. The record lives only as long as the resolution, so a step's
 replay rebuilds it from the step's answers. Chosen-subtype replacement nodes
 bind to the original instruction's capture in that same record, including
-nested substitutions and reads in enclosing instructions. Static abilities
-read no moved card. The content gate requires the named node to resolve
+nested substitutions and reads in enclosing instructions. Transient mode and
+shared-target bindings use those same canonical authored object identities:
+lexical type scopes preserve aliases, distinct equal-looking references and
+an enclosing mode zero. Static abilities read no moved card. The content gate requires the named node to resolve
 earlier in the same resolution than the value that reads it (see Content gates).
 
 `countDiscardedBy(discardNode, "event" | "character")` uses the same typed

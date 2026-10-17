@@ -76,14 +76,17 @@ export function mentionsChosenSubtype(node: EffectNode): boolean {
 }
 
 /**
- * `node` with each `subtype` or `notSubtype` field naming `CHOSEN_SUBTYPE`
- * naming `subtype` instead; graph aliases persist and every part that names no such field is
- * shared. `originals` binds replacement objects to their enclosing identities.
+ * The placeholders in one lexical scope name `subtype`; a nested type choice
+ * owns its following instruction. Graph aliases persist within that scope.
+ * `originals` binds replacements to their enclosing identities. `scope` can
+ * reconstruct a public whole declaration around one retained callback; other
+ * branches remain present and keep their own unbound placeholders.
  */
-export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSubtype, originals?: Map<object, object>): N {
+export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSubtype, originals?: Map<object, object>, scope: EffectNode = node): N {
   const memo = new WeakMap<object, object>();
   const replace = (value: unknown): unknown => {
     if (typeof value !== "object" || value === null) return value;
+    if ("op" in value && value.op === "chooseSubtype") return value;
     const previous = memo.get(value);
     if (previous !== undefined) return previous;
     if (!mentionsChosenSubtype(value as EffectNode)) return value;
@@ -96,7 +99,22 @@ export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSu
     }
     return output;
   };
-  return replace(node) as N;
+  const specialized = replace(scope);
+  if (scope === node) return specialized as N;
+  // Only public proof needs the enclosing declaration. Runtime instructions
+  // retain the canonical root and bridge their local replacements separately.
+  const enclosing = new WeakMap<object, object>();
+  const retain = (value: unknown): unknown => {
+    if (value === scope) return specialized;
+    if (typeof value !== "object" || value === null) return value;
+    const previous = enclosing.get(value);
+    if (previous !== undefined) return previous;
+    const output: Record<string, unknown> | unknown[] = Array.isArray(value) ? [] : {};
+    enclosing.set(value, output);
+    for (const [key, field] of Object.entries(value)) Object.assign(output, { [key]: retain(field) });
+    return output;
+  };
+  return retain(node) as N;
 }
 
 /**
