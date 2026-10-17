@@ -118,7 +118,7 @@ describe("startup and local clear boundaries", () => {
   });
 });
 describe("actual owned signal cleanup", () => {
-  it.each(/** @type {Array<[NodeJS.Signals, string]>} */ ([["SIGINT", "initial"], ["SIGTERM", "initial"], ["SIGINT", "interruption"], ["SIGTERM", "interruption"], ["SIGINT", "concurrent"], ["SIGTERM", "concurrent"]]))(
+  it.each(/** @type {Array<[NodeJS.Signals, string]>} */ ([["SIGINT", "initial"], ["SIGTERM", "interruption"], ["SIGINT", "concurrent"], ["SIGTERM", "concurrent"]]))(
     "settles owned resources after %s/%s before exit", async (signal, mode) => {
       const { root } = sessionFixture();
       const actual = /** @type {typeof import("node:child_process")} */ (await vi.importActual("node:child_process"));

@@ -1,0 +1,752 @@
+{
+  "bead": "hv-umm2.801",
+  "phase": 5,
+  "base": "e784c4511e6702be3b9a72b8df7c695b0ebdd115",
+  "status": "ACCEPTED_BOUNDED_PROTOTYPE",
+  "codeRollback": false,
+  "measurementBoundary": {
+    "at": "2026-10-17T12:38:20.447471+00:00",
+    "sha256": "27ce018c8a0d411d4549b137785301224df28424992c1f12a08e8fb056b73dcc",
+    "beforeAnyEditOrBaseline": true,
+    "chosenMetric": "COMPLETE scripts/qa/run-scenario-boundaries.test.mjs scripts/review.mjs TEST STAGE wall INCLUDING collection/setup/environment; unchanged2workers",
+    "threshold": "observed>=10percent and all exact retained public/native contracts or exact code rollback; no timing CI/causal forecast"
+  },
+  "stageSeconds": {
+    "baseline": 5.2,
+    "prototype": 3.9
+  },
+  "observedImprovementPercent": 25.000000000000007,
+  "qualification": "Single ordered baseline then prototype at unchanged2workers. Complete review test stage includes collection/setup/environment. Rounded stage values, cache warming, order and recorded host load qualify the observed comparison; wrapper preparation/restoration is excluded. No causal, cumulative or full-suite savings forecast and no timing assertion in CI. Current phase fullsuite89.38s Vitest/90.4s review stage fails D19<=60 unwaived. No aggregate, QA, sweep, soak, final Sage or phase acceptance credit.",
+  "hostLoadSamples": {
+    "baseline": {
+      "start": [
+        5.4599609375,
+        6.3291015625,
+        6.15185546875
+      ],
+      "end": [
+        5.60986328125,
+        6.3134765625,
+        6.14892578125
+      ]
+    },
+    "prototype": {
+      "start": [
+        5.6953125,
+        6.2978515625,
+        6.14599609375
+      ],
+      "end": [
+        6.2763671875,
+        6.40234375,
+        6.1845703125
+      ]
+    },
+    "preservation": {
+      "start": [
+        5.7841796875,
+        6.27490234375,
+        6.1455078125
+      ],
+      "end": [
+        5.7841796875,
+        6.27490234375,
+        6.1455078125
+      ]
+    },
+    "review": {
+      "start": [
+        5.619140625,
+        6.17626953125,
+        6.11962890625
+      ],
+      "end": [
+        6.15185546875,
+        6.26171875,
+        6.15087890625
+      ]
+    },
+    "knip": {
+      "start": [
+        6.26220703125,
+        6.29931640625,
+        6.1689453125
+      ],
+      "end": [
+        6.23388671875,
+        6.28955078125,
+        6.16650390625
+      ]
+    },
+    "final-preservation": {
+      "start": [
+        5.576171875,
+        6.12744140625,
+        6.1123046875
+      ],
+      "end": [
+        5.576171875,
+        6.12744140625,
+        6.1123046875
+      ]
+    }
+  },
+  "externalWallCPU": {
+    "baseline": {
+      "wallS": 10.971018166979775,
+      "childCpuS": 9.812778999999999,
+      "qualification": "Whole command wrapper; not chosen timing boundary."
+    },
+    "prototype": {
+      "wallS": 7.461486625019461,
+      "childCpuS": 7.59802,
+      "qualification": "Whole command wrapper; not chosen timing boundary."
+    },
+    "preservation": {
+      "wallS": 0.2086218330077827,
+      "childCpuS": 0.20360399999999995,
+      "qualification": "Whole command wrapper; not chosen timing boundary."
+    },
+    "review": {
+      "wallS": 19.24958741699811,
+      "childCpuS": 50.91461100000001,
+      "qualification": "Whole command wrapper; not chosen timing boundary."
+    },
+    "knip": {
+      "wallS": 7.2779240410309285,
+      "childCpuS": 6.547187000000001,
+      "qualification": "Whole command wrapper; not chosen timing boundary."
+    },
+    "final-preservation": {
+      "wallS": 0.24929454101948068,
+      "childCpuS": 0.242036,
+      "qualification": "Whole command wrapper; not chosen timing boundary."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review runner launch before required review"
+      },
+      "implementWindow": {
+        "qualification": "Starts at native claim; ends at actual evidence cutoff before commit. External commit.end and implementation-final-proof supply the actual commit completion/tail, which committed evidence cannot observe."
+      }
+    }
+  },
+  "testDelta": {
+    "cases": -2,
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "assertionExpressions": 0
+  },
+  "caseParity": {
+    "baseline": [
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (true/false/false)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/false)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (false/false/true)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (true/true/true)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/true)",
+        "passed"
+      ],
+      [
+        "startup and local clear boundaries preserves startup and failed local clear causes despite throwing coercion",
+        "passed"
+      ],
+      [
+        "startup and local clear boundaries keeps a post-unlink flush cause and outcome without republishing",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGINT/initial before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGTERM/initial before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGINT/interruption before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGTERM/interruption before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGINT/concurrent before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGTERM/concurrent before exit",
+        "passed"
+      ]
+    ],
+    "prototype": [
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (true/false/false)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/false)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (false/false/true)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (true/true/true)",
+        "passed"
+      ],
+      [
+        "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/true)",
+        "passed"
+      ],
+      [
+        "startup and local clear boundaries preserves startup and failed local clear causes despite throwing coercion",
+        "passed"
+      ],
+      [
+        "startup and local clear boundaries keeps a post-unlink flush cause and outcome without republishing",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGINT/initial before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGTERM/interruption before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGINT/concurrent before exit",
+        "passed"
+      ],
+      [
+        "actual owned signal cleanup settles owned resources after SIGTERM/concurrent before exit",
+        "passed"
+      ]
+    ],
+    "exactRemovedNames": [
+      "actual owned signal cleanup settles owned resources after SIGTERM/initial before exit",
+      "actual owned signal cleanup settles owned resources after SIGINT/interruption before exit"
+    ]
+  },
+  "deletedObservationMap": [
+    {
+      "deleted": "SIGTERM/initial",
+      "retained": [
+        "SIGINT/initial",
+        "SIGTERM/concurrent"
+      ],
+      "observables": "Initial diagnostic rejection still proves abort/cleanup despite stderr throw. Genuine SIGTERM handler registration, exit143/null, callback/transport order, resource release and descendant absence remain native in SIGTERM/concurrent. No unique production mode-by-signal branch is deleted."
+    },
+    {
+      "deleted": "SIGINT/interruption",
+      "retained": [
+        "SIGTERM/interruption",
+        "SIGINT/concurrent"
+      ],
+      "observables": "Interruption mode still proves exact interruption+diagnostic causes without other causes and actual resources settled. Genuine SIGINT registration, exit130/null, cached-close idempotence, callback/transport order and native resource release remain in SIGINT/concurrent."
+    }
+  ],
+  "retainedUniqueContracts": [
+    "Actual SIGINT and SIGTERM each target an exact owned child and exit130/143 with null terminal signal.",
+    "All three diagnostic/lifecycle states remain: initial diagnostic throw; server interruption plus diagnostic throw; already-running public close with blocked browser RPC.",
+    "Both native signals still join an already-started close; report-before-fallback proves browser-close then transport-close before exit, cached close identity, no uncaught failure, no other causes.",
+    "Each retained row proves owner/server records absent, lease and evidence kernel locks free, and every recorded own child lifetime absent; both startup/local clear error cases and all five direct SDK cleanup cause combinations remain unchanged."
+  ],
+  "preservation": {
+    "status": "EXACT_SCOPE_PRESERVED",
+    "at": "2026-10-17T12:44:38.921964+00:00",
+    "baselineRegularInputs": 6168,
+    "prototypeRegularInputs": 6168,
+    "onlyBaselinePrototypeInputDelta": [
+      "scripts/qa/run-scenario-boundaries.test.mjs"
+    ],
+    "unrelatedFinalRegularInputsByteEqual": 6167,
+    "otherCodeFilesByteEqual": 2752,
+    "wholeFileExactAuthorizedSubstitutionOnly": true,
+    "assertionExpressionsCommentsHelpersImportsBodiesByteIdentical": true,
+    "onlyDeletedTableTuples": [
+      "SIGTERM/initial",
+      "SIGINT/interruption"
+    ],
+    "retainedTableTuples": [
+      "SIGINT/initial",
+      "SIGTERM/interruption",
+      "SIGINT/concurrent",
+      "SIGTERM/concurrent"
+    ],
+    "beforeLines": 152,
+    "afterLines": 152,
+    "beforeCases": 13,
+    "afterCases": 11,
+    "caseNamesStatuses": {
+      "baseline": [
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (true/false/false)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/false)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (false/false/true)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (true/true/true)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/true)",
+          "passed"
+        ],
+        [
+          "startup and local clear boundaries preserves startup and failed local clear causes despite throwing coercion",
+          "passed"
+        ],
+        [
+          "startup and local clear boundaries keeps a post-unlink flush cause and outcome without republishing",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGINT/initial before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGTERM/initial before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGINT/interruption before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGTERM/interruption before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGINT/concurrent before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGTERM/concurrent before exit",
+          "passed"
+        ]
+      ],
+      "prototype": [
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (true/false/false)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/false)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (false/false/true)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (true/true/true)",
+          "passed"
+        ],
+        [
+          "MCP cleanup boundaries retains actual browser/callback/transport causes (false/true/true)",
+          "passed"
+        ],
+        [
+          "startup and local clear boundaries preserves startup and failed local clear causes despite throwing coercion",
+          "passed"
+        ],
+        [
+          "startup and local clear boundaries keeps a post-unlink flush cause and outcome without republishing",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGINT/initial before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGTERM/interruption before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGINT/concurrent before exit",
+          "passed"
+        ],
+        [
+          "actual owned signal cleanup settles owned resources after SIGTERM/concurrent before exit",
+          "passed"
+        ]
+      ],
+      "exactRemovedNames": [
+        "actual owned signal cleanup settles owned resources after SIGTERM/initial before exit",
+        "actual owned signal cleanup settles owned resources after SIGINT/interruption before exit"
+      ]
+    },
+    "sourceSHA256": "ece77d2d1cd79bcba7b6aeec8f9dcccbbd081fa0e06193abb961797353cdc6a0",
+    "diffSHA256": "62518c615412b81095c38a717e36b7257c5f23d786acedda13439021f12e3d44"
+  },
+  "externalFullPreservation": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/preservation-proof.json",
+    "SHA256": "47c96d407899771a72e8127a28b6caec5e2509fe6dc6f7e8772ff7f70f09acdb",
+    "unrelatedInputCount": 6167,
+    "scope": "Full external hash map is mechanically verified; no semantic body-read credit from hash census."
+  },
+  "sourceCensus": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/source-census.json",
+    "SHA256": "62fe7eee4a85740c22bb0bd1a13a0d18407224d7b4c08943fe70cfb6c3e9cded"
+  },
+  "sourceApplicability": {
+    "auditSource": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+    "currentBase": "e784c4511e6702be3b9a72b8df7c695b0ebdd115",
+    "actualGitDelta": [
+      "docs/dreamtides-97/README.md",
+      "docs/dreamtides-97/appendix-a-economy.md",
+      "docs/dreamtides-97/appendix-c-bosses-and-keys.md",
+      "docs/dreamtides-97/appendix-d-content-reuse.md",
+      "docs/plan/evidence/friction/hv-umm2.800.json",
+      "docs/plan/evidence/introspection.jsonl",
+      "docs/plan/evidence/measurements/hv-umm2.800.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.800.md",
+      "docs/plan/evidence/reviews/hv-umm2.800.md",
+      "scripts/tournament/contracts.test.ts"
+    ],
+    "wholeTargetAndAllProductionFixtureConfigBytesEqual": true,
+    "noRuntimeCredit": true
+  },
+  "sharedSage267": {
+    "owner": "hv-umm2.800",
+    "durableSource": {
+      "repoPath": "docs/plan/evidence/measurements/hv-umm2.800.json",
+      "source": "e784c4511e6702be3b9a72b8df7c695b0ebdd115",
+      "sha256": "72aa9169a2baf8e494ba74fe8fe862ca77abbe20fca66d770fe3ce62423bf58e",
+      "jsonPath": "sage267.proposals.proposals[0]",
+      "gitBlob": "bb4fb5d928c470b71b33dada22fc256dfdc6a32c"
+    },
+    "parentQualification": {
+      "status": "PARENT_ACCEPTED_READ_ONLY_SAGE267",
+      "at": "2026-10-17T12:16:42.313555+00:00",
+      "source": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+      "packetSHA256": "0b6522a445e6c28854e3bd8d85a3b13999a6def8591d91c7106ac772a6eefdbc",
+      "artifacts": {
+        "scope-coverage.json": "f7b408c75bd505aeb54e3c5a5673dfa37c1112bc68701ab2aac464c1eb60ac29",
+        "report.json": "69a5352d3d1534dc06f36eef018a343f80cc81568f2f6a1077493acc4f8f1cc7",
+        "proposals.json": "666ad5d625a18269f98db2d27e8a1741a9e7df6f00e7345de8eb9258729216ac"
+      },
+      "requiredInputs": 38,
+      "requiredExistingSemanticLines": 10851,
+      "absentRequestedTails": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/phase-5-content.md",
+          "range": [
+            647,
+            655
+          ]
+        }
+      ],
+      "additionalInputsHashesAndClaimedChunksVerified": 25,
+      "rawBindingsVerified": 27,
+      "lexicalCensusBindingsVerified": 280,
+      "rawCaseOccurrenceMatches": 282,
+      "nativeHistory21ProjectionFieldsVerified": true,
+      "truncationRecoveries": [
+        {
+          "read": "run-scenario-slots plus boundaries combined",
+          "actualTruncation": true,
+          "affected": "slots around340-365",
+          "recovered": "slots330-397 separately; boundaries full visible"
+        },
+        {
+          "read": "committed-purge plus first250 deck-entry",
+          "actualTruncation": true,
+          "affected": "purge230-255; deck-entry beginning1-46",
+          "recovered": "purge225-255; deck-entry1-49; deck-entry251-491 separately"
+        },
+        {
+          "read": "native history first7beads",
+          "actualTruncation": true,
+          "affected": "middle of796description/tail and792/768",
+          "recovered": "whole792/768 separately;796last11000chars overlapping first read plus acceptance/close"
+        },
+        {
+          "read": "unfinished16-22",
+          "actualTruncation": true,
+          "affected": "17acceptance and16body/header",
+          "recovered": "17acceptance/16description+acceptance;16metadata separately"
+        },
+        {
+          "read": "additional source replay/provider/registry/index/fixtures/development",
+          "actualTruncation": true,
+          "affected": "modifier-registry100-217",
+          "recovered": "100-220 separately"
+        },
+        {
+          "read": "broad regex engine namespace search",
+          "actualTruncation": true,
+          "affected": "unrelated primitive namespace matches",
+          "recovered": "exact resolved engine-index import-target census; omitted unrelated hits not treated as semantic reads"
+        },
+        {
+          "read": "supplemental parent-profile-proof full pretty JSON",
+          "actualTruncation": true,
+          "affected": "large repeated profile arrays and stacks",
+          "recovered": "all topSelf/topInclusive/topFiles from profile-summary and all topStacks compact tuples; duplicate frame sampleWeightedMs zero fields structurally checked only"
+        },
+        {
+          "read": "prior-cut raw preservation arrays",
+          "actualTruncation": true,
+          "affected": "797/798full preservation census arrays",
+          "recovered": "decision/metric/freeze and parent status qualification fields reread; omitted prior preservation path arrays receive no semantic credit"
+        }
+      ],
+      "qualification": "Required ranges and explicit recovered reads only; eight recovery histories retained, including two semantic limitations for unrelated broad search and prior preservation arrays. No whole semantic credit for omitted ancestor notes,6164sourcefile bodies or280lexical-censusmodule bodies. Parent-requested phase range604-655 extends9lines past actualEOF646; clamped, no credit for absent lines. Original artifacts unchanged.",
+      "proposalKeys": [
+        "D19-NATIVE-SIGNAL-MATRIX",
+        "D19-TOURNAMENT-WORKER-REFERENCE"
+      ],
+      "runtime": 0,
+      "finalPhaseRetrospective": false,
+      "phaseAcceptance": false
+    },
+    "sourceProof": [
+      {
+        "path": "scripts/qa/run-scenario.mjs",
+        "ranges": [
+          [
+            637,
+            663
+          ]
+        ],
+        "fact": "One generated handler body is installed for both names. Name only labels diagnostics and selects130/143; the abort/interruption/close/finally path is shared. Production has no initial/interruption/concurrent mode."
+      },
+      {
+        "path": "scripts/qa/qa-signal-fixture.mjs",
+        "ranges": [
+          [
+            33,
+            44
+          ],
+          [
+            55,
+            61
+          ],
+          [
+            65,
+            102
+          ]
+        ],
+        "fact": "Fixture modes select initial diagnostic rejection, interruption+diagnostic rejection, or a pending public-close browser RPC. Both native signal names still run concurrent close. IPC reporter snapshots resources BEFORE fallback close, so fallback cannot certify production cleanup."
+      },
+      {
+        "path": "scripts/qa/run-scenario-boundaries.test.mjs",
+        "ranges": [
+          [
+            120,
+            152
+          ]
+        ],
+        "fact": "All six rows share identical assertions; only signal-dependent exit code and interruption-dependent cause inclusion vary."
+      }
+    ],
+    "projectionAndReadingLimits": {
+      "preparation": "Initial oversized combined reads recovered by scoped source/proposal/D19/workflow reads. Full projected scope is retained for provenance, not an implementation claim to have semantically reread every Sage input. Two missing guessed scratch paths caused read-only failures before corrected discovery; no runtime/source/native effect.",
+      "originalParentQualified": "The parent qualification is embedded at sage267.parentQualification and originalArtifacts, not a scratch-local parent-qualified.json.",
+      "lexical": "The280 import edge records are intentionally omitted from committed projection. Their original full scope hash/count and explicit non-semantic limitations remain."
+    },
+    "qualification": "Full shared Sage report, proposals and scope projection remain in the committed800 artifact; this bead binds its exact SHA/Gitblob and selected proposal without duplicating that audit or appending another introspection line. Parent qualification is source/runtime0 and interim, with explicit omitted lexical/prior-history semantic credit and absent tail limits. Implementer reads only this target/fixture/handler closure, not all Sage source bodies."
+  },
+  "rawCommands": {
+    "baseline": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/baseline-results.json"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:40:34.863097+00:00",
+      "end": "2026-10-17T12:40:45.834425+00:00",
+      "pid": 60340,
+      "pgid": 60340,
+      "receiptSHA256": "cfa8af6422741f5d453437e67308f9998c340f356d19fc10b64b02fe74259df9",
+      "logSHA256": "15ce9f6f769fee8cd8d545daed16104aff0934c7286694cf87d6796affc95fdb",
+      "inputsSHA256": "21c9d479e3c761876bd3060a618a941d8224dce802b8c4f523f61f3540dbce3c"
+    },
+    "prototype": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/prototype-results.json"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:41:03.967973+00:00",
+      "end": "2026-10-17T12:41:11.429730+00:00",
+      "pid": 66143,
+      "pgid": 66143,
+      "receiptSHA256": "19134c954869a22c13e0571ab9093389647e382239793b3856ece0c54bd7166b",
+      "logSHA256": "58c895503f27f174ca7ccdb9a18a1231b0d8077426d62a7f95380844102ce8b1",
+      "inputsSHA256": "4a527e4b335c7e45a3504b50f902ca41c33318bc813810ac4c7a90fe2b5441e4"
+    },
+    "preservation": {
+      "command": [
+        "python3",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/preservation.py"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:41:49.741575+00:00",
+      "end": "2026-10-17T12:41:49.950447+00:00",
+      "pid": 72233,
+      "pgid": 72233,
+      "receiptSHA256": "b69b5119916ebc44d50773ef589f59b1ed6f85e8a66e78b19ea8046d52a6140d",
+      "logSHA256": "e4c0475063a51e6e4fb39c0a03040b21655736bc180fd39f1967b181091eb9fa",
+      "inputsSHA256": "4a527e4b335c7e45a3504b50f902ca41c33318bc813810ac4c7a90fe2b5441e4"
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:42:54.493140+00:00",
+      "end": "2026-10-17T12:43:13.743361+00:00",
+      "pid": 76703,
+      "pgid": 76703,
+      "receiptSHA256": "5e8054df476db96292faf92bbcdb5901ca3277b23b0b27f4a702f5442fbe4111",
+      "logSHA256": "abfcaceb82a6de881269be75785faa450f314f641d82969646382e0cf09d9b9e",
+      "inputsSHA256": "fc74809b35c2029ef9019a826096e95a14a3771decf9c97dfaab7635cb0fb209"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:43:53.857035+00:00",
+      "end": "2026-10-17T12:44:01.135322+00:00",
+      "pid": 83771,
+      "pgid": 83771,
+      "receiptSHA256": "ebb438ed61bc0abd3e47e77af6759874c4d697c16ac34b7500f61c832a44eac8",
+      "logSHA256": "311063950d313d0ddd4f84cd52725366db7bb257b4279eb81ab0693e59c1a604",
+      "inputsSHA256": "fc74809b35c2029ef9019a826096e95a14a3771decf9c97dfaab7635cb0fb209"
+    },
+    "final-preservation": {
+      "command": [
+        "python3",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-signal801/preservation.py"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:44:38.680118+00:00",
+      "end": "2026-10-17T12:44:38.929821+00:00",
+      "pid": 87022,
+      "pgid": 87022,
+      "receiptSHA256": "d5eedd69aed67e94accd358ba19d3af64e8b47d9289b4dedfb2e06f3e7cecc48",
+      "logSHA256": "56168670ae10622873f6caf726d7e7c256937ab7df99d76bddb848fcb95ec2ff",
+      "inputsSHA256": "fc74809b35c2029ef9019a826096e95a14a3771decf9c97dfaab7635cb0fb209"
+    }
+  },
+  "actualToolTerminals": {
+    "baseline": {
+      "original": 1404,
+      "launch": "4c83d9",
+      "collectedTerminal": "ac4d1a",
+      "actualExit": 0
+    },
+    "prototype": {
+      "original": 27636,
+      "launch": "97ff16",
+      "collectedTerminal": "bc710e",
+      "actualExit": 0
+    },
+    "npm-install": {
+      "original": 1298,
+      "collectedTerminal": "1d88be",
+      "actualExit": 0,
+      "authority": "parent setup handoff"
+    },
+    "pre-dispatch-friction": {
+      "original": "716ed4",
+      "collectedTerminal": "716ed4",
+      "actualExit": 0,
+      "authority": "parent setup handoff"
+    },
+    "preservation": {
+      "original": "105418",
+      "collectedTerminal": "105418",
+      "actualExit": 0
+    },
+    "review": {
+      "original": 92551,
+      "launch": "f66fba",
+      "collectedTerminal": "15397e",
+      "actualExit": 0
+    },
+    "knip": {
+      "original": 20348,
+      "launch": "019726",
+      "collectedTerminal": "a88c2e",
+      "actualExit": 0
+    },
+    "commit-driver-compile": {
+      "original": "da232f",
+      "collectedTerminal": "da232f",
+      "actualExit": 1,
+      "qualification": "External driver compile-check caught unclosed list before invocation; no Git/index/source effect. Original commit.compile-failed-original.py retained; corrected both drivers compile actual0 8b7771."
+    },
+    "final-preservation": {
+      "original": "b99ff4",
+      "collectedTerminal": "b99ff4",
+      "actualExit": 0
+    }
+  },
+  "evidenceCutoff": {
+    "cutoff": "2026-10-17T12:44:47.313823+00:00",
+    "qualification": "Actual pre-commit evidence cutoff. Exact successful Git subprocess completion and elapsed tail are external, not inferred from author date."
+  },
+  "implementationStart": {
+    "implementationStartUtc": "2026-10-17T12:40:04.988800+00:00",
+    "role": "implementation",
+    "bead": "hv-umm2.801"
+  },
+  "preparationFailure": {
+    "at": "2026-10-17T12:44:13.115457+00:00",
+    "firstTool": "da232f",
+    "actualExit": 1,
+    "cause": "Unclosed outer list in external commit.py; compile-check caught before invocation. No Git/index/commit/source effects.",
+    "original": "commit.compile-failed-original.py",
+    "corrected": "commit.py",
+    "bothCurrentDriversCompile": true
+  },
+  "readingLimits": {
+    "source": "Entire152-line boundary module and native fixture102lines/shared handler637-663 read. Initial combined source output truncated fixture33-44; recovered standalone33-48. Workflow excerpts709-792,835-910,1091-1138,1300-1374,1743-1775 read; oversized initial policy/WT output gets no whole semantic credit. D19/WT1-240 recovered separately.",
+    "rawLogs": "Tool stdout tails were output-truncated by asset warnings. Original complete log/results/receipts retained; actual status/case names/whole stage summaries read separately, so no unseen raw-log line semantic credit.",
+    "validation": "Whole module actual run assertions prove native child/signal/resource observations. Hash parity proves source preservation, not extra runtime execution."
+  }
+}
