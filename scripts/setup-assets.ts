@@ -84,6 +84,14 @@ export interface ArtPaths {
   readonly tutorialDialogueFrameArtPath: string;
   /** The D97 LPC art library (P23), one directory per source. */
   readonly d97ArtLibraryDir: string;
+  /**
+   * Generated D97 output under `public/d97/` that other workspace generators
+   * own: compiled maps (`scripts/d97/compile-maps.ts`) and the character
+   * manifest with its linked sheets (`scripts/d97/link-characters.ts`). The
+   * art pass shares `public/d97/` with them and never prunes these.
+   */
+  readonly d97MapsDir: string;
+  readonly d97CharactersDir: string;
 }
 
 /**
@@ -155,6 +163,8 @@ export function defaultArtPaths(root: string, home: string): ArtPaths {
       "Round_frame.png",
     ),
     d97ArtLibraryDir: join(documents, "lpc"),
+    d97MapsDir: join(root, "public", "d97", "maps"),
+    d97CharactersDir: join(root, "public", "d97", "characters"),
   };
 }
 
@@ -544,6 +554,8 @@ function linkD97Art(
 ): void {
   const d97Dir = join(paths.publicDir, "d97");
   prepareDir(refresh, d97Dir);
+  // Other generators' output: recorded as current so pruning leaves it alone.
+  for (const generated of [paths.d97MapsDir, paths.d97CharactersDir]) refresh.entries.add(generated);
   const linked: string[] = [];
   if (existsSync(paths.d97ArtLibraryDir)) {
     for (const source of catalog.d97ArtSources) {

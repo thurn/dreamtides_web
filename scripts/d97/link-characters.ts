@@ -78,8 +78,9 @@ function generatorLibrary(generator: string): LpcLibrary {
 function main(): void {
   const root = resolve(import.meta.dirname, "../..");
   const home = resolve(process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir());
-  const generator = join(defaultArtPaths(root, home).d97ArtLibraryDir, "ulpc-generator");
-  const outDir = join(root, "public", "d97", "characters");
+  const paths = defaultArtPaths(root, home);
+  const generator = join(paths.d97ArtLibraryDir, "ulpc-generator");
+  const outDir = paths.d97CharactersDir;
   const sheetsDir = join(outDir, "sheets");
   rmSync(sheetsDir, { recursive: true, force: true });
   mkdirSync(sheetsDir, { recursive: true });

@@ -476,6 +476,26 @@ describe("art linker", () => {
     });
   });
 
+  it("leaves the compiled maps and character sheets other generators wrote", () => {
+    const root = fixtureRoot();
+    const paths = defaultArtPaths(join(root, "repo"), join(root, "home"));
+    const map = join(paths.d97MapsDir, "fixture-map.json");
+    const manifest = join(paths.d97CharactersDir, "manifest.json");
+    const sheetSource = join(root, "home", "generator", "walk.png");
+    const sheet = join(paths.d97CharactersDir, "sheets", "body", "walk.png");
+    touch(map);
+    touch(manifest);
+    touch(sheetSource);
+    mkdirSync(join(sheet, ".."), { recursive: true });
+    symlinkSync(sheetSource, sheet);
+
+    linkArt(CATALOG, paths);
+
+    expect(readFileSync(map, "utf8")).toBe("art");
+    expect(readFileSync(manifest, "utf8")).toBe("art");
+    expect(readlinkSync(sheet)).toBe(sheetSource);
+  });
+
   it("records no D97 sources when the library is absent", () => {
     const root = fixtureRoot();
     const paths = defaultArtPaths(join(root, "repo"), join(root, "home"));

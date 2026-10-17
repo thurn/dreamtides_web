@@ -7,13 +7,15 @@
 // failure. Compiled files of maps no longer in the catalog are removed.
 
 import { mkdirSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { join } from "node:path";
 import { D97_DREAM_MAPS } from "../../src/content/d97/maps/index.ts";
+import { defaultArtPaths } from "../setup-assets.ts";
 import { compileFromLibrary, describeCompileError, REPO_ROOT } from "./map-library.ts";
 
 function main(): number {
   const strict = process.argv.includes("--strict");
-  const outDir = join(REPO_ROOT, "public", "d97", "maps");
+  const outDir = defaultArtPaths(REPO_ROOT, homedir()).d97MapsDir;
   mkdirSync(outDir, { recursive: true });
 
   const written = new Set<string>();
