@@ -6,6 +6,7 @@
 import { Rectangle, Texture } from "pixi.js";
 import { logEvent } from "../../../logging";
 import { assetUrl } from "../../../runtime/asset-url";
+import { loadSheetImage, recolorSheet } from "../../../cumulus/primitives/lpc-character";
 import type { D97CharacterId } from "../../../types/identifiers";
 import { ANIMATION_COLUMNS, CHARACTER_FRAME_SIZE } from "./animation";
 import type { CharacterManifest, ManifestLayer } from "./manifest";
@@ -46,41 +47,6 @@ async function loadManifest(): Promise<CharacterManifest | null> {
   }
 }
 
-async function loadImage(url: string): Promise<HTMLImageElement> {
-  const image = new Image();
-  image.src = assetUrl(url);
-  await image.decode();
-  return image;
-}
-
-function hexColor(hex: string): number {
-  return Number.parseInt(hex.slice(1, 7), 16);
-}
-
-/** The sheet with every base color swapped for its target. */
-function recolor(image: HTMLImageElement, swaps: readonly (readonly [string, string])[]): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  canvas.width = image.naturalWidth;
-  canvas.height = image.naturalHeight;
-  const context = canvas.getContext("2d", { willReadFrequently: swaps.length > 0 });
-  if (context === null) throw new Error("no 2D canvas context");
-  context.drawImage(image, 0, 0);
-  if (swaps.length === 0) return canvas;
-  const table = new Map(swaps.map(([from, to]) => [hexColor(from), hexColor(to)]));
-  const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
-  const data = pixels.data;
-  for (let i = 0; i < data.length; i += 4) {
-    if (data[i + 3] === 0) continue;
-    const target = table.get((data[i] << 16) | (data[i + 1] << 8) | data[i + 2]);
-    if (target === undefined) continue;
-    data[i] = (target >> 16) & 0xff;
-    data[i + 1] = (target >> 8) & 0xff;
-    data[i + 2] = target & 0xff;
-  }
-  context.putImageData(pixels, 0, 0);
-  return canvas;
-}
-
 function frames(source: Texture, animation: CharacterAnimation): Texture[][] {
   const rows: Texture[][] = [];
   for (let row = 0; row < 4; row += 1) {
@@ -106,8 +72,8 @@ export async function loadCharacterLooks(ids: Iterable<D97CharacterId>): Promise
     const key = `${url}|${swaps.map((pair) => pair.join(">")).join(",")}`;
     let texture = sheets.get(key);
     if (texture === undefined) {
-      texture = loadImage(url).then((image) => {
-        const loaded = Texture.from(recolor(image, swaps));
+      texture = loadSheetImage(url).then((image) => {
+        const loaded = Texture.from(recolorSheet(image, swaps));
         loaded.source.scaleMode = "nearest";
         return loaded;
       });

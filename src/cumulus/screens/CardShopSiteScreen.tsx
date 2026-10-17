@@ -80,8 +80,6 @@ export interface CardShopSiteScreenProps {
   onClose: () => void;
   /** A shop that buys cards offers this action below its wares. */
   sellAction?: CardShopSellActionView;
-  /** An intro line under the shop's title, such as how to read a ware. */
-  hint?: string;
 }
 
 /** The action that opens a shop's selling surface. */
@@ -97,7 +95,6 @@ export function CardShopSiteScreen({
   onRestock,
   onClose,
   sellAction,
-  hint,
 }: CardShopSiteScreenProps) {
   const layout = useIsDesktop() ? "desktop" : "mobile";
   return (
@@ -119,7 +116,6 @@ export function CardShopSiteScreen({
           onRestock={onRestock}
           onClose={onClose}
           sellAction={sellAction}
-          hint={hint}
         />
       </SiteLayout>
     </div>
@@ -136,7 +132,6 @@ function CardShopGallery({
   onRestock,
   onClose,
   sellAction,
-  hint,
 }: {
   readonly layout: "mobile" | "desktop";
   readonly presentation: CardShopSiteView["presentation"];
@@ -147,7 +142,6 @@ function CardShopGallery({
   readonly onRestock: () => void;
   readonly onClose: () => void;
   readonly sellAction: CardShopSellActionView | undefined;
-  readonly hint: string | undefined;
 }) {
   const desktop = layout === "desktop";
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
@@ -249,7 +243,6 @@ function CardShopGallery({
       <ShopFreePurchaseStatus status={freePurchaseStatus} />
       <CardPickerPanel
         title={presentation.title}
-        {...(hint === undefined ? {} : { subtitle: hint })}
         rightAccessory={{
           kind: "iconButton",
           button: {

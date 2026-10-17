@@ -1,4 +1,5 @@
-// D97ShopSellPanel — selling owned copies to a Dreamtides 97 shop: one
+// D97ShopSellPanel — selling owned copies to a Dreamtides 97 shop: the
+// shop's frame (its keeper and the player's Essence) above one
 // CardBrowserPanel over the collection, switching between the reserve and the
 // active deck, each copy captioned with what the shop pays for it. Pressing a
 // copy sells it. At the collection floor every copy is disabled, and while
@@ -13,11 +14,16 @@ import type { CardGalleryCardView } from "../../components/card/card-gallery-sur
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
 import type { D97OwnedCopyId } from "../../../types/identifiers";
+import { D97ShopFrame, type D97ShopKeeperView } from "./D97ShopPanel";
 
 /** One owned copy with its sale quote as its caption. */
 export type D97ShopSellCardView = CardGalleryCardView<D97OwnedCopyId>;
 
 export interface D97ShopSellView {
+  /** The shop's keeper, or null for a shop nobody keeps. */
+  readonly keeper: D97ShopKeeperView | null;
+  /** The player's Essence. */
+  readonly essence: number;
   /** Reserve copies in acquisition order. */
   readonly reserve: readonly D97ShopSellCardView[];
   /** Active-deck copies in acquisition order. */
@@ -42,9 +48,6 @@ type D97SellZone = "reserve" | "deck";
 
 /** How a touch player reads a card before selling it. */
 const READ_HINT = "Press and hold a card to read it.";
-
-/** The panel's widest desktop measure. */
-const SELL_MAX_WIDTH_PX = 1180;
 
 function isZone(value: string): value is D97SellZone {
   return value === "reserve" || value === "deck";
@@ -86,16 +89,7 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
         padding: isDesktop ? token("--space-2xl") : 0,
       }}
     >
-      <div
-        style={{
-          width: isDesktop ? `min(100%, ${String(SELL_MAX_WIDTH_PX)}px)` : "100%",
-          height: isDesktop ? undefined : "100%",
-          maxHeight: isDesktop ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})` : undefined,
-          minHeight: 0,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <D97ShopFrame keeper={view.keeper} essence={view.essence}>
         <CardBrowserPanel<D97OwnedCopyId>
           title="Sell Cards"
           subtitle={`${
@@ -128,7 +122,7 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
           onCardPress={onSell}
           testId="d97-shop-sell-panel"
         />
-      </div>
+      </D97ShopFrame>
     </div>
   );
 }

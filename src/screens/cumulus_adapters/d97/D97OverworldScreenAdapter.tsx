@@ -35,7 +35,7 @@ import { registeredDialogueCatalog } from "../../../d97/dialogue/catalog";
 import { createInteractionRegistry, type OverworldInteraction } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
 import { d97RunAct, type D97Run } from "../../../rules/d97/d97-state";
-import { useActions, useGameState } from "../../../session/hooks";
+import { useActions } from "../../../session/hooks";
 import type { D97OwnedCopyId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
 import { buildD97OverworldHudView } from "./d97-overworld-view-model";
@@ -155,7 +155,6 @@ function D97DreamOverworld({
     setPanel(null);
   }, [run.runId]);
   const closePanel = useCallback(() => setPanel(null), []);
-  const gameSeed = useGameState().journey.seed;
   const openShop = useCallback(
     (anchorId: DreamAnchorId) => {
       void actions.d97OpenShop(anchorId).catch(reportFailure);
@@ -253,9 +252,9 @@ function D97DreamOverworld({
             <D97ShopAdapter
               run={run}
               anchorId={panel.shop}
-              journeyContent={journeyContent}
+              keeper={occupants.get(panel.shop)}
+              dialogues={catalog.dialogues}
               cards={cards}
-              gameSeed={gameSeed}
               onClose={closePanel}
             />
           )}

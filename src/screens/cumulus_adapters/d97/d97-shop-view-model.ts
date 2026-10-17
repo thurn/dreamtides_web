@@ -1,40 +1,67 @@
-// The pure view-model builders for a Dreamtides 97 shop: its stock as the
-// shared card-shop view (each slot's fixed quote, bought slots empty, slots
-// the player cannot afford disabled, and this visit's one restock), and the
-// sell panel (every owned copy captioned with what the shop pays for it,
-// under the resale guard; deck copies unsellable while the deck is at its
-// minimum size). Card UUIDs resolve to cards only here.
+// The pure view-model builders for a Dreamtides 97 shop: its keeper, the
+// player's Essence and its stock (each slot's fixed quote, bought slots
+// empty, slots the player cannot afford disabled, and this visit's one
+// restock), and the sell panel (every owned copy captioned with what the
+// shop pays for it, under the resale guard; deck copies unsellable while the
+// deck is at its minimum size). Card UUIDs resolve to cards only here.
 
+import type { D97DialogueModule } from "../../../content/d97/dialogue/schema";
 import type { D97ShopTuning } from "../../../content/d97/shop";
-import type { CardShopSiteView } from "../../../cumulus/screens/CardShopSiteScreen";
-import type { SiteLayoutGuideView } from "../../../cumulus/components/layout/SiteLayout";
+import type { D97ShopKeeperView, D97ShopView } from "../../../cumulus/screens/d97/D97ShopPanel";
 import type { D97ShopSellCardView, D97ShopSellView } from "../../../cumulus/screens/d97/D97ShopSellPanel";
 import { canUnequip, copiesInZone } from "../../../d97/collection/collection";
 import type { D97CopyZone } from "../../../d97/collection/types";
+import type { OverworldOccupant } from "../../../d97/overworld/occupants";
 import { cardBaseValue, cardPriceFactsOf, restockPrice, saleQuote } from "../../../d97/shop/pricing";
 import type { D97Run, D97Shop } from "../../../rules/d97/d97-state";
 import type { CardId } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
-import { parseDeckEntryId, parseSiteId, type DreamAnchorId } from "../../../types/identifiers";
+import { parseDeckEntryId, type D97CharacterId, type D97DialogueId, type DreamAnchorId } from "../../../types/identifiers";
 import { SHOP_FLOW_PRESENTATION } from "../shop-flow-presentation-view-model";
 
-/** The shared card-shop view of a D97 shop. Slots of unknown cards are hidden. */
+/** The keeper resolved for display: who stands at the shop's anchor and the name their dialogue gives them. */
+export interface D97ShopKeeper {
+  readonly characterId: D97CharacterId;
+  readonly name: string | null;
+}
+
+/** The keeper of the shop `occupant` stands at, named by their dialogue's speaker; null when nobody does. */
+export function resolveD97ShopKeeper(
+  occupant: Pick<OverworldOccupant, "character" | "dialogue"> | undefined,
+  dialogues: ReadonlyMap<D97DialogueId, D97DialogueModule>,
+): D97ShopKeeper | null {
+  if (occupant === undefined) return null;
+  const name = occupant.dialogue === null ? null : (dialogues.get(occupant.dialogue)?.speaker.name ?? null);
+  return { characterId: occupant.character, name };
+}
+
+function keeperView(keeper: D97ShopKeeper | null): D97ShopKeeperView | null {
+  if (keeper === null) return null;
+  return {
+    characterId: keeper.characterId,
+    name: keeper.name,
+    portraitAlt: keeper.name === null ? "The shopkeeper" : `${keeper.name}, the shopkeeper`,
+  };
+}
+
+/**
+ * The view of a D97 shop kept by `keeper` (null for a shop nobody keeps).
+ * Slots of unknown cards are hidden.
+ */
 export function buildD97ShopView(input: {
   readonly anchorId: DreamAnchorId;
   readonly shop: D97Shop;
+  readonly keeper: D97ShopKeeper | null;
   readonly essence: number;
   readonly cards: ReadonlyMap<CardId, CardData>;
-  readonly title: string;
-  readonly guide: SiteLayoutGuideView;
   readonly tuning: D97ShopTuning;
-}): CardShopSiteView {
-  const { anchorId, shop, essence, cards, tuning } = input;
+}): D97ShopView {
+  const { anchorId, shop, keeper, essence, cards, tuning } = input;
   const restock = restockPrice(tuning.priceBand, tuning);
   return {
-    presentation: { kind: "shop", title: input.title, ...SHOP_FLOW_PRESENTATION },
-    siteId: parseSiteId(`d97-shop-${anchorId}`),
-    scene: null,
-    guide: input.guide,
+    anchorId,
+    keeper: keeperView(keeper),
+    essence,
     offers: shop.slots.flatMap((slot, slotIndex) => {
       const card = cards.get(slot.cardId);
       if (card === undefined) return [];
@@ -53,13 +80,22 @@ export function buildD97ShopView(input: {
       price: restock,
       state: shop.restockedThisVisit ? "used" : restock <= essence ? "available" : "unaffordable",
     },
-    freePurchaseStatus: { freeNextShopSource: null, freePurchasesRemaining: 0 },
+    labels: {
+      title: "Wares",
+      restockAction: SHOP_FLOW_PRESENTATION.restockAction,
+      restocked: SHOP_FLOW_PRESENTATION.restocked,
+      freePrice: SHOP_FLOW_PRESENTATION.freePrice,
+      sell: "Sell Cards",
+      leave: "Leave the shop",
+      readHint: "Press and hold a card to read it.",
+    },
   };
 }
 
-/** The sell panel view of `run`'s collection. Copies of unknown cards are hidden. */
+/** The sell panel view of `run`'s collection, at `keeper`'s shop. Copies of unknown cards are hidden. */
 export function buildD97ShopSellView(input: {
   readonly run: D97Run;
+  readonly keeper: D97ShopKeeper | null;
   readonly cards: ReadonlyMap<CardId, CardData>;
   readonly collectionFloor: number;
   readonly minimumDeckSize: number;
@@ -81,6 +117,8 @@ export function buildD97ShopSellView(input: {
       ];
     });
   return {
+    keeper: keeperView(input.keeper),
+    essence: run.essence,
     reserve: zone("reserve"),
     deck: zone("deck"),
     collectionFloor: input.collectionFloor,

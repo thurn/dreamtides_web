@@ -50,7 +50,7 @@ function entry(index: number): D97ShopSellCardView {
   };
 }
 
-const VIEW: D97ShopSellView = { reserve: [entry(1)], deck: [entry(2), entry(3)], collectionFloor: 25, atFloor: false, minimumDeckSize: 25, deckAtMinimum: false };
+const VIEW: D97ShopSellView = { keeper: null, essence: 40, reserve: [entry(1)], deck: [entry(2), entry(3)], collectionFloor: 25, atFloor: false, minimumDeckSize: 25, deckAtMinimum: false };
 
 beforeEach(() => {
   stubMatchMedia(() => false);
@@ -75,6 +75,12 @@ describe("D97ShopSellPanel", () => {
     expect(target).not.toBeNull();
     act(() => target!.click());
     expect(onSell).toHaveBeenCalledWith(copyId(1));
+  });
+
+  it("shows the player's Essence while selling", () => {
+    const { container } = renderInCumulus(<D97ShopSellPanel view={VIEW} onSell={() => undefined} onClose={() => undefined} />);
+    expect(container.querySelector("[data-d97-shop-strip]")?.getAttribute("data-d97-shop-essence")).toBe("40");
+    expect(container.querySelector("[data-d97-shop-essence-readout] [data-essence-value]")).not.toBeNull();
   });
 
   it("disables every copy at the collection floor", () => {
