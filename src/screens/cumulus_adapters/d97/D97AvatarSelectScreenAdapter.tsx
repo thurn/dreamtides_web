@@ -1,6 +1,7 @@
-// Adapter for D97 Avatar select over the shared Cumulus `JourneyStartScreen`.
-// Wiring only: it pages the full roster (presentation state), builds the
-// shared offer views, and records the pick as `D97_START_RUN`.
+// Adapter for D97 Avatar select over the shared Cumulus `JourneyStartScreen`,
+// with D97's type floor and touch-sized carousel controls. Wiring only: it
+// pages the full roster (presentation state), builds the shared offer views,
+// and records the pick as `D97_START_RUN`.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { JourneyStartScreen } from "../../../cumulus/screens/JourneyStartScreen";
@@ -58,12 +59,16 @@ export function D97AvatarSelectScreenAdapter({
     setPage((current) => current + 1);
   }, []);
 
+  // D97 chrome carries the type floor and touch-sized carousel controls.
   return (
-    <JourneyStartScreen
-      key={pageIndex}
-      avatars={avatars}
-      onPick={handlePick}
-      onReroll={pageCount > 1 ? handleNextPage : undefined}
-    />
+    <div data-cumulus-type-floor="">
+      <JourneyStartScreen
+        key={pageIndex}
+        avatars={avatars}
+        onPick={handlePick}
+        onReroll={pageCount > 1 ? handleNextPage : undefined}
+        controlScale="touch"
+      />
+    </div>
   );
 }

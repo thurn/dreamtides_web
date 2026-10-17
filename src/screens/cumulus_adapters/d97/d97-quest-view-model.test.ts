@@ -1,7 +1,8 @@
 // D97 quest view models: quest marks hide object anchors outside their
-// quest; the dialogue view clamps its line, shows only holding choices and
-// prices an Essence offer from the tunables; the quest log shows the held
-// quest's status and items; the reward view keeps one slot per offered copy.
+// quest; the dialogue view clamps its line, shows only holding choices,
+// prices an Essence offer from the tunables and carries the speaker's
+// character; the quest log shows the held quest's status, items, giver and
+// reward; the reward view keeps one slot per offered copy.
 
 import { describe, expect, it } from "vitest";
 import { D97_QUESTS } from "../../../content/d97/quests";
@@ -22,6 +23,7 @@ import { emptyCollection } from "../../../d97/collection/collection";
 import type { CompiledAnchor } from "../../../d97/map/compiled";
 import { acceptQuest, emptyQuestState, questEssence } from "../../../d97/quests/quests";
 import type { D97QuestState } from "../../../d97/quests/types";
+import { parseD97CharacterId, type DreamAnchorId } from "../../../types/identifiers";
 import { testCardId } from "../../../types/test-identities";
 import {
   buildD97DialogueView,
@@ -68,24 +70,38 @@ describe("buildD97DialogueView", () => {
   if (offer === undefined) throw new Error("no offer node");
 
   it("shows the holding choices and prices an Essence offer", () => {
-    const hidden = buildD97DialogueView({ module: GIVER_DIALOGUE, node: offer, lineIndex: 9, context: context([]), avatars: [], tuning: D97_QUESTS });
+    const hidden = buildD97DialogueView({ module: GIVER_DIALOGUE, node: offer, lineIndex: 9, context: context([]), avatars: [], tuning: D97_QUESTS, characterId: null });
     expect(hidden.lineIndex).toBe(0);
     expect(hidden.portrait).toBeNull();
     expect(hidden.choices.map((choice) => choice.index)).toEqual([1]);
-    const shown = buildD97DialogueView({ module: GIVER_DIALOGUE, node: offer, lineIndex: 0, context: context([FLAG]), avatars: [], tuning: D97_QUESTS });
-    expect(shown.choices[0]).toMatchObject({ index: 0, essenceValue: questEssence(D97_QUESTS.essenceReward.delivery, 1) });
-    expect(shown.rewardNote).toBeNull();
+    expect(hidden.reward).toBeNull();
+    const speaker = parseD97CharacterId("00000009-0000-4000-8000-000000000001");
+    const shown = buildD97DialogueView({ module: GIVER_DIALOGUE, node: offer, lineIndex: 0, context: context([FLAG]), avatars: [], tuning: D97_QUESTS, characterId: speaker });
+    expect(shown.choices[0]).toMatchObject({ index: 0 });
+    expect(shown.reward).toEqual({ kind: "essence", amount: questEssence(D97_QUESTS.essenceReward.delivery, 1) });
+    expect(shown.characterId).toBe(speaker);
   });
 });
 
 describe("buildD97QuestLogView", () => {
+  const nobody = () => null;
   it("shows no quest, then the held quest with its carried items", () => {
-    expect(buildD97QuestLogView(emptyQuestState(), CATALOG, () => null).quest).toBeNull();
-    const view = buildD97QuestLogView(holding(DELIVERY_QUEST), CATALOG, () => null);
+    expect(buildD97QuestLogView(emptyQuestState(), CATALOG, nobody, D97_QUESTS, 1).quest).toBeNull();
+    const view = buildD97QuestLogView(holding(DELIVERY_QUEST), CATALOG, nobody, D97_QUESTS, 1);
     expect(view.quest).toMatchObject({ questId: DELIVERY_QUEST.id, status: "active" });
     expect(view.quest?.items).toHaveLength(1);
     const ready: D97QuestState = { ...holding(DELIVERY_QUEST), active: { questId: DELIVERY_QUEST.id, completedStepIds: [STEPS.deliver] }, items: [] };
-    expect(buildD97QuestLogView(ready, CATALOG, () => null).quest?.status).toBe("ready");
+    expect(buildD97QuestLogView(ready, CATALOG, nobody, D97_QUESTS, 1).quest?.status).toBe("ready");
+  });
+
+  it("names the quest's giver when they have a name, and shows what it pays in the act", () => {
+    const named = (anchorId: DreamAnchorId) => (anchorId === DELIVERY_QUEST.giverAnchorId ? "Giver" : null);
+    expect(buildD97QuestLogView(holding(DELIVERY_QUEST), CATALOG, nobody, D97_QUESTS, 1).quest?.giverLine).toBeNull();
+    const act2 = buildD97QuestLogView(holding(DELIVERY_QUEST), CATALOG, named, D97_QUESTS, 2).quest;
+    expect(act2?.giverLine).not.toBeNull();
+    expect(act2?.reward).toEqual({ kind: "essence", amount: questEssence(D97_QUESTS.essenceReward.delivery, 2) });
+    const cards = buildD97QuestLogView(holding(LOST_OBJECT_QUEST), CATALOG, nobody, D97_QUESTS, 1).quest?.reward;
+    expect(cards?.kind).toBe(LOST_OBJECT_QUEST.reward.kind === "essence" ? "essence" : "cards");
   });
 });
 

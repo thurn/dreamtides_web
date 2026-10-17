@@ -1,7 +1,8 @@
 // Head-icon badges (the visual guide): a speech bubble over a character's
 // head whose color and icon sort them at a glance. Drawn with Pixi Graphics
 // at 19×22 pixels at 1×. When two badges overlap, the one nearer the player
-// draws on top and the other fades.
+// draws on top and the other fades; a badge that would cover the player's
+// own body (the player standing just north of its character) hides.
 
 import { Graphics } from "pixi.js";
 
@@ -52,7 +53,26 @@ export function drawBadge(graphics: Graphics, kind: BadgeKind): Graphics {
   const cy = body / 2;
   switch (kind) {
     case "challenger":
-      graphics.moveTo(cx - 5, cy - 5).lineTo(cx + 5, cy + 5).moveTo(cx + 5, cy - 5).lineTo(cx - 5, cy + 5).stroke({ color: ICON, width: 2 });
+      // Crossed swords: white blades from gold hilts at the lower corners to
+      // points at the upper corners, each with a gold crossguard and pommel.
+      graphics
+        .moveTo(cx - 3.5, cy + 3.5)
+        .lineTo(cx + 5, cy - 5)
+        .moveTo(cx + 3.5, cy + 3.5)
+        .lineTo(cx - 5, cy - 5)
+        .stroke({ color: ICON, width: 1.5 })
+        .moveTo(cx - 6, cy + 1)
+        .lineTo(cx - 1, cy + 6)
+        .moveTo(cx + 6, cy + 1)
+        .lineTo(cx + 1, cy + 6)
+        .moveTo(cx - 3.5, cy + 3.5)
+        .lineTo(cx - 5.5, cy + 5.5)
+        .moveTo(cx + 3.5, cy + 3.5)
+        .lineTo(cx + 5.5, cy + 5.5)
+        .stroke({ color: SPARKLE, width: 1.5 })
+        .circle(cx - 6, cy + 6, 1)
+        .circle(cx + 6, cy + 6, 1)
+        .fill(SPARKLE);
       break;
     case "boss":
       graphics.poly([cx - 6, cy + 4, cx - 6, cy - 3, cx - 3, cy, cx, cy - 5, cx + 3, cy, cx + 6, cy - 3, cx + 6, cy + 4]).fill(ICON);
@@ -115,13 +135,27 @@ export interface BadgeOrder {
   readonly zIndex: number;
   /** Faded when a nearer badge overlaps it. */
   readonly faded: boolean;
+  /** Hidden while it would cover the player's body. */
+  readonly hidden: boolean;
 }
 
-/** Stack and fade badges: nearer the player on top; overlapped ones fade. */
+/** A world-pixel rectangle. */
+export interface BadgeRect {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+/**
+ * Stack and fade badges: nearer the player on top; overlapped ones fade; any
+ * that would cover `player` (the player's body) hide.
+ */
 export function orderBadges(
   badges: readonly BadgePlacement[],
   width: number,
   height: number,
+  player: BadgeRect | null = null,
 ): BadgeOrder[] {
   const byNearness = badges
     .map((badge, index) => ({ badge, index }))
@@ -132,7 +166,13 @@ export function orderBadges(
       ({ badge: nearer }) =>
         Math.abs(nearer.x - badge.x) < width && Math.abs(nearer.y - badge.y) < height,
     );
-    out[index] = { zIndex: badges.length - rank, faded };
+    const hidden =
+      player !== null &&
+      badge.x < player.x + player.width &&
+      player.x < badge.x + width &&
+      badge.y < player.y + player.height &&
+      player.y < badge.y + height;
+    out[index] = { zIndex: badges.length - rank, faded, hidden };
   });
   return out;
 }

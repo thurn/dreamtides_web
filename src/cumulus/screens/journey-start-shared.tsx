@@ -202,6 +202,12 @@ export interface JourneyStartScreenProps {
   onGuideDialogueShown?: () => void;
   /** Requests a shared debug reroll. Omitted for a fixed tutorial offer. */
   onReroll?: () => void;
+  /**
+   * Mobile carousel control sizing. `compact` (the default) keeps the
+   * carousel's compact edge chevrons; `touch` gives them the touch minimum and
+   * starts the hero title below the reroll control.
+   */
+  controlScale?: "compact" | "touch";
 }
 
 /** Responsive placement for the tutorial's canonical portrait-and-bubble pair. */

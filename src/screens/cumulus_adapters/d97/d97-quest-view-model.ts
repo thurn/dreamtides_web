@@ -9,6 +9,7 @@ import type { CharacterDialoguePortraitArt } from "../../../cumulus/components/o
 import type { D97DialogueChoiceView, D97DialogueView } from "../../../cumulus/screens/d97/D97DialoguePanel";
 import type { D97QuestLogView } from "../../../cumulus/screens/d97/D97QuestLogPanel";
 import type { D97QuestRewardView } from "../../../cumulus/screens/d97/D97QuestRewardPanel";
+import type { D97RewardView } from "../../../cumulus/screens/d97/D97RewardLine";
 import type {
   D97DialogueModule,
   D97DialogueNode,
@@ -33,7 +34,7 @@ import { d97BeatenAnchorIds, type D97Run } from "../../../rules/d97/d97-state";
 import type { CardId } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import type { AvatarContent } from "../../../types/content";
-import type { DreamAnchorId } from "../../../types/identifiers";
+import type { D97CharacterId, DreamAnchorId } from "../../../types/identifiers";
 
 /** The condition context of `run` in `act`. */
 export function buildD97DialogueContext(
@@ -61,6 +62,16 @@ function portraitOf(
   return avatar === undefined ? null : { kind: "avatar", imageNumber: avatar.imageNumber };
 }
 
+/** What `quest` pays at turn-in in `act`. */
+function questReward(quest: D97QuestDefinition, tuning: D97QuestTuning, act: number): D97RewardView {
+  return quest.reward.kind === "essence"
+    ? { kind: "essence", amount: questEssence(tuning.essenceReward[quest.kind], act) }
+    : { kind: "cards", line: `Choose one of ${String(tuning.cardChoiceSize)} cards.` };
+}
+
+/** The label every quest reward line carries. */
+const REWARD_LABEL = "Reward:";
+
 /** The dialogue panel showing `node`'s line `lineIndex`. */
 export function buildD97DialogueView(input: {
   readonly module: D97DialogueModule;
@@ -69,20 +80,17 @@ export function buildD97DialogueView(input: {
   readonly context: D97DialogueContext;
   readonly avatars: readonly AvatarContent[];
   readonly tuning: D97QuestTuning;
+  /** The character speaking, for their bust; null shows none. */
+  readonly characterId: D97CharacterId | null;
 }): D97DialogueView {
   const { module, node, context } = input;
   const lineIndex = Math.max(0, Math.min(input.lineIndex, node.lines.length - 1));
-  let rewardNote: string | null = null;
+  let reward: D97RewardView | null = null;
   const choices: D97DialogueChoiceView[] = visibleChoices(node, context).map(({ index, choice }) => {
     const effect = choice.effect;
     const quest = effect?.kind === "offerQuest" ? context.questCatalog.get(effect.questId) : undefined;
-    let essenceValue: number | null = null;
-    if (quest !== undefined && quest.reward.kind === "essence") {
-      essenceValue = questEssence(input.tuning.essenceReward[quest.kind], context.act);
-    } else if (quest !== undefined) {
-      rewardNote = `Reward: choose one of ${String(input.tuning.cardChoiceSize)} cards.`;
-    }
-    return { index, label: choice.label, essenceValue };
+    if (quest !== undefined) reward = questReward(quest, input.tuning, context.act);
+    return { index, label: choice.label };
   });
   const portrait = portraitOf(module, input.avatars);
   return {
@@ -90,12 +98,14 @@ export function buildD97DialogueView(input: {
     nodeId: node.id,
     speakerName: module.speaker.name,
     portrait,
+    characterId: input.characterId,
     portraitAlt: `${module.speaker.name}'s portrait`,
     line: node.lines[lineIndex] ?? "",
     lineIndex,
     lineCount: Math.max(1, node.lines.length),
     choices,
-    rewardNote,
+    reward,
+    rewardLabel: REWARD_LABEL,
     continueLabel: "Continue",
     closeLabel: "Farewell",
   };
@@ -106,11 +116,16 @@ function turnInLine(quest: D97QuestDefinition, speakerAt: (anchorId: DreamAnchor
   return name === null ? "Return to collect your reward." : `Return to ${name} to collect your reward.`;
 }
 
-/** The quest log of `state`. `speakerAt` names the character at an anchor. */
+/**
+ * The quest log of `state` in `act`. `speakerAt` names the character at an
+ * anchor.
+ */
 export function buildD97QuestLogView(
   state: D97QuestState,
   catalog: D97DialogueCatalog,
   speakerAt: (anchorId: DreamAnchorId) => string | null,
+  tuning: D97QuestTuning,
+  act: number,
 ): D97QuestLogView {
   const active = state.active;
   const quest = active === null ? undefined : catalog.quests.get(active.questId);
@@ -118,22 +133,26 @@ export function buildD97QuestLogView(
     title: "Quests",
     emptyLine: "You hold no quest. Speak with the dream's residents to find one.",
     itemsLabel: "Carrying:",
+    rewardLabel: REWARD_LABEL,
     abandonLabel: "Abandon",
   };
   if (quest === undefined) return { ...base, quest: null };
   const step = currentStep(state, quest);
   const status = questStatus(state, quest) === "ready" ? "ready" : "active";
+  const giver = speakerAt(quest.giverAnchorId);
   return {
     ...base,
     quest: {
       questId: quest.id,
       title: quest.title,
       status,
+      giverLine: giver === null ? null : `Given by ${giver}`,
       stepLine: step === null ? turnInLine(quest, speakerAt) : step.description,
       items: state.items.flatMap((itemId) => {
         const item = catalog.items.get(itemId);
         return item === undefined ? [] : [item.name];
       }),
+      reward: questReward(quest, tuning, act),
     },
   };
 }

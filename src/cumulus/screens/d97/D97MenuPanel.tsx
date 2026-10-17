@@ -4,8 +4,8 @@
 
 import type { ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
-import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { useEscapeToClose } from "../../primitives/use-escape-to-close";
+import { D97Panel } from "./D97Panel";
 
 export interface D97MenuPanelProps {
   readonly onClose: () => void;
@@ -14,10 +14,10 @@ export interface D97MenuPanelProps {
 export function D97MenuPanel({ onClose }: D97MenuPanelProps): ReactElement {
   useEscapeToClose(onClose);
   return (
-    <GlassDialog title={"Menu"} presentation="popup" onClose={onClose}>
-      <div data-d97-menu="">
-        <GlassButton label={"Resume"} testId="d97-menu-resume" onPress={onClose} />
+    <D97Panel kind="menu" title={"Menu"} onClose={onClose}>
+      <div data-d97-menu="" style={{ display: "flex", justifyContent: "center" }}>
+        <GlassButton label={"Resume"} placement="onGlass" testId="d97-menu-resume" onPress={onClose} />
       </div>
-    </GlassDialog>
+    </D97Panel>
   );
 }

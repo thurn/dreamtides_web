@@ -1,10 +1,14 @@
 // D97OverworldScreen — the Dreamtides 97 overworld's React layer: the world
 // canvas slot filling the screen, the HUD shell over it (an act and tier
 // chip, the Essence readout, and a control bar of Deck, Quests and Menu), and
-// the open panel slot. The HUD lets clicks through to the world except on its
-// controls, and hides while a panel occupies the screen so no HUD text shows
-// through it (overlays carry no scrim). It reports how much of the screen's
-// bottom the control bar covers, so the camera keeps the player above it.
+// the open panel slot. Every HUD element is one glass pill: the chips are
+// liquid-glass panels at the control radius and the GlassButton height, with
+// the button voice, so they read as the control bar's siblings. The HUD lets
+// clicks through to the world except on its controls, and hides while a
+// panel occupies the screen so no HUD text shows through it (overlays carry
+// no scrim). It reports how much of the screen's bottom the control bar
+// covers, so the camera keeps the player above it. The screen carries the
+// Cumulus type floor: no D97 chrome text renders under 12px.
 // PURE: it renders from a view model and reports control presses; the adapter
 // owns the canvas, the panels and the input-focus rule.
 
@@ -46,6 +50,36 @@ export interface D97OverworldScreenProps {
   readonly onHudInset: (bottom: number) => void;
 }
 
+/**
+ * A HUD chip's inner height: the standard GlassButton's 42px outer height
+ * less the glass panel's 1px rim above and below, so chips and controls match.
+ */
+const HUD_PILL_HEIGHT_PX = 40;
+
+/** A static HUD chip: the control bar's glass material and height, holding one line in the button voice. */
+function HudPill({ children }: { readonly children: ReactNode }): ReactElement {
+  return (
+    <GlassPanel radius="control">
+      <div
+        data-d97-hud-pill=""
+        style={{
+          boxSizing: "border-box",
+          height: HUD_PILL_HEIGHT_PX,
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-s"),
+          padding: `0 ${token("--space-l")}`,
+          font: token("--t-button"),
+          color: token("--text-on-glass"),
+          whiteSpace: "nowrap",
+        }}
+      >
+        {children}
+      </div>
+    </GlassPanel>
+  );
+}
+
 /** The overworld screen: world canvas, HUD shell and panel layer. */
 export function D97OverworldScreen({
   view,
@@ -81,6 +115,7 @@ export function D97OverworldScreen({
       ref={screenRef}
       className="cumulus"
       data-d97-screen="overworld"
+      data-cumulus-type-floor=""
       style={{
         position: "fixed",
         inset: 0,
@@ -99,29 +134,23 @@ export function D97OverworldScreen({
           data-d97-hud-chip=""
           style={{ position: "absolute", top, left: side, pointerEvents: "auto" }}
         >
-          <GlassPanel
-            eyebrow={view.actLabel}
-            title={view.tierLabel}
-            radius="control"
-            headerSpacing="compact"
-            headerDivider={false}
-          >
-            {null}
-          </GlassPanel>
+          <HudPill>
+            <span>{view.actLabel}</span>
+            {view.tierLabel !== "" && (
+              <>
+                <span aria-hidden="true" style={{ color: token("--text-on-glass-muted") }}>
+                  {"·"}
+                </span>
+                <span>{view.tierLabel}</span>
+              </>
+            )}
+          </HudPill>
         </div>
         {view.essence !== null && (
-          <div
-            data-d97-hud-essence=""
-            style={{
-              position: "absolute",
-              top,
-              right: end,
-              pointerEvents: "auto",
-              font: token("--t-title"),
-              textShadow: token("--text-outline-media"),
-            }}
-          >
-            <EssenceValue amount={view.essence} />
+          <div data-d97-hud-essence="" style={{ position: "absolute", top, right: end, pointerEvents: "auto" }}>
+            <HudPill>
+              <EssenceValue amount={view.essence} tone="mark" />
+            </HudPill>
           </div>
         )}
         <nav

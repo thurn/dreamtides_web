@@ -100,7 +100,7 @@ React 19.
 ```text
 <D97OverworldScreen>                 React, Cumulus screen
   <PixiApplication>                  @pixi/react canvas, fills the screen
-    <Camera>                         follows the player, integer zoom only
+    <Camera>                         follows the player, pixel-crisp zoom
       <GroundLayer/>                 the compiled map's Tiled tile layers
       <SortedLayer/>                 props, characters, door frames: y-sorted
       <AbovePlayerLayer/>            layers the map module marks: treetops, roofs
@@ -111,9 +111,13 @@ React 19.
 </D97OverworldScreen>
 ```
 
-- **Pixel-perfect scaling.** Textures use nearest-neighbor sampling and the
-  camera zooms by whole numbers: 2× on desktop, 1× or 2× on phones, chosen so
-  at least 11 tiles fit across. Positions round to whole screen pixels.
+- **Pixel-perfect scaling.** Textures use nearest-neighbor sampling and every
+  map pixel draws as a whole number of device pixels. Desktop zooms 2×.
+  Phones zoom at least 1.5×, so a standing character is about 48 CSS pixels
+  tall and a comfortable tap target, rounded up to whole device pixels per
+  map pixel: 1.5× at a device pixel ratio of 2, 5/3× at 3. A phone too
+  narrow for 7 tiles across at that zoom steps down one device pixel at a
+  time. Positions round to whole screen pixels.
 - **Y-sorting.** Props, door frames and characters sort by the bottom edge of
   their footprint, so the player walks behind a tree trunk and in front of its
   roots. Pixi's `sortableChildren` with `zIndex = footY` does this.
@@ -320,7 +324,9 @@ purple for Dream Guides, yellow for quests and blue for sages.
 - **Beaten challengers** lose their badge and stay as ordinary characters,
   slightly desaturated. A spent Dream Guide appearance loses its badge too.
 - **Overlap.** When two badges would overlap, the one nearer the player is
-  drawn on top and the other fades to half opacity.
+  drawn on top and the other fades to half opacity. A badge that would cover
+  the player's own body, as when the player stands just north of its
+  character, fades out until the player steps away.
 - **Townsfolk** never carry a badge.
 
 ### Other markers

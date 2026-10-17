@@ -1,6 +1,8 @@
-// Camera contract: whole-number zoom (desktop fixed, phones keep at least the
-// minimum tiles across), a view that follows the focus and clamps to the
-// map, a medium map never fitting in common viewports, and culling ranges.
+// Camera contract: a fixed desktop zoom; a phone zoom at or above the phone
+// minimum that is a whole number of device pixels per map pixel and keeps
+// at least the minimum tiles across; a view that follows the focus and
+// clamps to the map, a medium map never fitting in common viewports, and
+// culling ranges.
 
 import { describe, expect, it } from "vitest";
 import type { D97OverworldTunables } from "../../content/d97/tunables";
@@ -9,26 +11,36 @@ import { chooseZoom, followCamera, visibleTiles } from "./camera";
 const TUNABLES: D97OverworldTunables = {
   walkTilesPerSecond: 4,
   desktopZoom: 2,
-  phoneZooms: [2, 1],
-  phoneMinTilesAcross: 11,
+  phoneMinZoom: 1.5,
+  phoneMinTilesAcross: 7,
   hudClearancePx: 12,
 };
 const MEDIUM = { width: 110, height: 110, tileWidth: 32, tileHeight: 32 };
 
 describe("chooseZoom", () => {
   it("uses the desktop zoom on desktop", () => {
-    expect(chooseZoom({ width: 1440, height: 900 }, 32, true, TUNABLES)).toBe(2);
+    expect(chooseZoom({ width: 1440, height: 900 }, 32, true, TUNABLES, 2)).toBe(2);
   });
 
-  it("keeps at least the minimum tiles across on a phone", () => {
-    expect(chooseZoom({ width: 390, height: 844 }, 32, false, TUNABLES)).toBe(1);
-    expect(chooseZoom({ width: 800, height: 600 }, 32, false, TUNABLES)).toBe(2);
-    expect(chooseZoom({ width: 200, height: 400 }, 32, false, TUNABLES)).toBe(1);
-    for (const width of [320, 360, 390, 430, 700]) {
-      const zoom = chooseZoom({ width, height: 800 }, 32, false, TUNABLES);
-      expect(Number.isInteger(zoom)).toBe(true);
-      expect(width / (32 * zoom)).toBeGreaterThanOrEqual(10);
+  it("draws each map pixel as whole device pixels at or above the phone minimum", () => {
+    expect(chooseZoom({ width: 390, height: 844 }, 32, false, TUNABLES, 2)).toBe(1.5);
+    expect(chooseZoom({ width: 390, height: 844 }, 32, false, TUNABLES, 3)).toBeCloseTo(5 / 3);
+    for (const ratio of [1, 2, 2.625, 3]) {
+      for (const width of [320, 360, 390, 430, 700]) {
+        const zoom = chooseZoom({ width, height: 800 }, 32, false, TUNABLES, ratio);
+        const devicePixels = zoom * ratio;
+        expect(Math.abs(devicePixels - Math.round(devicePixels))).toBeLessThan(1e-9);
+        expect(devicePixels).toBeGreaterThanOrEqual(1);
+        if (zoom * ratio > 1) expect(width / (32 * zoom)).toBeGreaterThanOrEqual(TUNABLES.phoneMinTilesAcross);
+      }
     }
+  });
+
+  it("steps down a device pixel at a time to keep the minimum tiles across", () => {
+    // 360 px at 3x: 5/3 shows 6.75 tiles, so 4/3 (8.4 tiles) wins.
+    expect(chooseZoom({ width: 360, height: 800 }, 32, false, TUNABLES, 3)).toBeCloseTo(4 / 3);
+    // Nothing fits: one device pixel per map pixel is the floor.
+    expect(chooseZoom({ width: 100, height: 400 }, 32, false, TUNABLES, 2)).toBe(0.5);
   });
 });
 
@@ -80,7 +92,7 @@ describe("followCamera", () => {
       [390, 844, false],
       [768, 1024, false],
     ] as const) {
-      const zoom = chooseZoom({ width, height }, 32, desktop, TUNABLES);
+      const zoom = chooseZoom({ width, height }, 32, desktop, TUNABLES, 2);
       const tilesAcross = width / (32 * zoom);
       const tilesDown = height / (32 * zoom);
       expect(tilesAcross < MEDIUM.width || tilesDown < MEDIUM.height).toBe(true);

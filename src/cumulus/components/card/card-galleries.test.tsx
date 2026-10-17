@@ -146,6 +146,43 @@ describe("CardBrowserPanel", () => {
     expect(activate).toHaveBeenCalledWith("physical-card");
   });
 
+  it("sizes a segmented browser for its largest segment", () => {
+    const browser = (itemCounts?: readonly number[]) => (
+      <CardBrowserPanel
+        title={"Your Deck"}
+        cards={[{ entryId: parseDeckEntryId("only-card"), model: model("Only") }]}
+        toolbar={{
+          segmented: {
+            options: [
+              { value: "small", label: "Small" },
+              { value: "large", label: "Large" },
+            ],
+            value: "small",
+            onChange: vi.fn(),
+            ...(itemCounts === undefined ? {} : { itemCounts }),
+          },
+        }}
+      />
+    );
+    const rows = (container: HTMLElement) =>
+      container.querySelector("[data-gallery-role=browser]")?.getAttribute("data-gallery-visible-rows");
+    const hugging = renderInCumulus(browser());
+    const ownRows = rows(hugging.container);
+    hugging.unmount();
+    const stable = renderInCumulus(browser([1, 40]));
+    expect(rows(stable.container)).not.toBe(ownRows);
+    const larger = renderInCumulus(
+      <CardBrowserPanel
+        title={"Your Deck"}
+        cards={Array.from({ length: 40 }, (_, index) => ({
+          entryId: parseDeckEntryId(`card-${String(index)}`),
+          model: model("Many"),
+        }))}
+      />,
+    );
+    expect(rows(stable.container)).toBe(rows(larger.container));
+  });
+
   it("routes toolbar tabs and physical card gestures by entry id", () => {
     const dragStart = vi.fn();
     const contextMenu = vi.fn();

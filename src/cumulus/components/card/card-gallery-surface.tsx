@@ -26,6 +26,7 @@ import {
 } from "../controls/GlassButton";
 import {
   SegmentedControl,
+  type SegmentedControlSize,
   type SegmentedOption,
 } from "../controls/SegmentedControl";
 import { Select, type SelectOption } from "../controls/Select";
@@ -104,6 +105,14 @@ export interface CardBrowserSegmentedControl {
   value: string;
   /** Reports segment changes. */
   onChange: (value: string) => void;
+  /**
+   * The number of cards each segment shows. When given, the gallery sizes
+   * itself for the largest segment, so switching segments never resizes the
+   * panel.
+   */
+  itemCounts?: readonly number[];
+  /** The switch's height: `md` by default, `lg` for a touch-sized row. */
+  size?: SegmentedControlSize;
 }
 
 /** Structured mode, search, sort, and filter controls for browser galleries. */
@@ -602,7 +611,11 @@ function CardGallerySurface<EntryId extends string>({
     frame === "fullBleed" ? "onMedia" : "onGlass";
   const columnCount = renderedColumnCount(columns);
   const itemCount = cards.length + (endAction === undefined ? 0 : 1);
-  const rowCount = rowCountFor(itemCount, columnCount);
+  const plannedItemCount = Math.max(
+    itemCount,
+    ...(toolbar?.segmented?.itemCounts ?? []),
+  );
+  const rowCount = rowCountFor(plannedItemCount, columnCount);
   const fallbackVisibleRows = plannedVisibleRows(rowCount);
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
   const hasCaptions =
@@ -700,6 +713,7 @@ function CardGallerySurface<EntryId extends string>({
               options={[...toolbar.segmented.options]}
               value={toolbar.segmented.value}
               onChange={toolbar.segmented.onChange}
+              size={toolbar.segmented.size ?? "md"}
               full
             />
           </div>
@@ -717,6 +731,7 @@ function CardGallerySurface<EntryId extends string>({
             />
           </div>
         )}
+        {toolbar.sort === undefined && toolbar.filter === undefined ? null : (
         <div
           style={{
             display: "flex",
@@ -749,6 +764,7 @@ function CardGallerySurface<EntryId extends string>({
             />
           )}
         </div>
+        )}
       </div>
     );
 

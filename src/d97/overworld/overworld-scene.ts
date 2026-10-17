@@ -130,6 +130,8 @@ export interface OverworldSceneHandle {
   readonly drawnAnchorIds: () => readonly DreamAnchorId[];
   /** The player's on-screen box in CSS pixels, for QA. */
   readonly playerScreenRect: () => { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
+  /** The player's body (a tile wide, feet to head) on screen, in CSS pixels. */
+  readonly playerBodyScreenRect: () => { readonly x: number; readonly y: number; readonly width: number; readonly height: number } | null;
 }
 
 export interface OverworldMarkersState {
@@ -143,7 +145,13 @@ export interface OverworldCharactersState {
     readonly anchorId: CompiledAnchor["id"];
     readonly facing: Facing;
     readonly layered: boolean;
-    readonly badge: { readonly kind: BadgeKind; readonly alpha: number; readonly zIndex: number } | null;
+    readonly badge: {
+      readonly kind: BadgeKind;
+      readonly alpha: number;
+      readonly zIndex: number;
+      /** The badge's box on screen, in CSS pixels. */
+      readonly screenRect: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
+    } | null;
   }[];
 }
 
@@ -367,7 +375,19 @@ export class OverworldScene implements OverworldSceneHandle {
       facing: view.currentFacing,
       layered: view.layered,
       badge:
-        badge === null || badgeKind === null ? null : { kind: badgeKind, alpha: badge.alpha, zIndex: badge.zIndex },
+        badge === null || badgeKind === null
+          ? null
+          : {
+              kind: badgeKind,
+              alpha: badge.alpha,
+              zIndex: badge.zIndex,
+              screenRect: {
+                x: (badge.x - this.view.x) * this.view.zoom,
+                y: (badge.y - this.view.y) * this.view.zoom,
+                width: BADGE_WIDTH * this.view.zoom,
+                height: BADGE_HEIGHT * this.view.zoom,
+              },
+            },
     })),
   });
 
@@ -532,12 +552,16 @@ export class OverworldScene implements OverworldSceneHandle {
     for (const view of this.veilViews.values()) view.advance(seconds);
     for (const view of this.waypointViews.values()) view.advance(seconds);
     this.placePlayer();
-    this.animateCharacters(this.inputEnabled ? seconds : 0);
+    this.animateCharacters(this.inputEnabled ? seconds : 0, seconds);
     this.layout();
   };
 
-  /** Pose and animate every character, then stack and fade their badges. */
-  private animateCharacters(seconds: number): void {
+  /**
+   * Pose and animate every character by `seconds`, then stack and fade their
+   * badges over `fadeSeconds` of real time; a badge that would cover the
+   * player's body fades out until the player steps away.
+   */
+  private animateCharacters(seconds: number, fadeSeconds: number): void {
     const tunables = this.characterTunables;
     const moving = this.state.step !== null;
     this.playerView?.setPose(this.state.facing, moving);
@@ -558,13 +582,35 @@ export class OverworldScene implements OverworldSceneHandle {
       placements.push({ x, y, distance: Math.hypot(anchor.at[0] - player.x, anchor.at[1] - player.y) });
       badged.push(badge);
     }
-    orderBadges(placements, BADGE_WIDTH, BADGE_HEIGHT).forEach((order, index) => {
+    const step = tunables.badgeFadeSeconds <= 0 ? 1 : fadeSeconds / tunables.badgeFadeSeconds;
+    orderBadges(placements, BADGE_WIDTH, BADGE_HEIGHT, this.playerBody()).forEach((order, index) => {
       const badge = badged[index];
       if (badge === undefined) return;
       badge.zIndex = order.zIndex;
-      badge.alpha = order.faded ? tunables.badgeOverlapAlpha : 1;
+      const target = order.hidden ? 0 : order.faded ? tunables.badgeOverlapAlpha : 1;
+      badge.alpha = target > badge.alpha ? Math.min(target, badge.alpha + step) : Math.max(target, badge.alpha - step);
     });
   }
+
+  /** The player's body in world pixels: a tile wide, from the feet to the top of the head. */
+  private playerBody(): { x: number; y: number; width: number; height: number } | null {
+    const view = this.playerView;
+    if (view === null) return null;
+    const { x, y } = this.player.position;
+    return { x, y: y - view.headHeight, width: this.map.tileWidth, height: view.headHeight };
+  }
+
+  playerBodyScreenRect = () => {
+    const body = this.playerBody();
+    if (body === null) return null;
+    const zoom = this.view.zoom;
+    return {
+      x: (body.x - this.view.x) * zoom,
+      y: (body.y - this.view.y) * zoom,
+      width: body.width * zoom,
+      height: body.height * zoom,
+    };
+  };
 
   private arriveIfIdle(): void {
     const anchor = this.pendingAnchor;
@@ -598,7 +644,7 @@ export class OverworldScene implements OverworldSceneHandle {
 
   private layout(): void {
     const viewport = this.viewport();
-    const zoom = chooseZoom(viewport, this.map.tileWidth, this.desktop(), this.tunables);
+    const zoom = chooseZoom(viewport, this.map.tileWidth, this.desktop(), this.tunables, this.app.renderer.resolution);
     const position = walkerPosition(this.state);
     this.view = followCamera(
       { x: (position.x + 0.5) * this.map.tileWidth, y: (position.y + 0.5) * this.map.tileHeight },

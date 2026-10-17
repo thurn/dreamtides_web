@@ -12,6 +12,7 @@ import "./index.css";
 // entity-reveal coordinator resolve the same semantic surface vocabulary.
 import "./cumulus/primitives/cumulus-tokens.css";
 import "./cumulus/primitives/legibility.css";
+import "./cumulus/primitives/type-floor.css";
 import { applyDeviceFrameFromSearch } from "./runtime/device-frame";
 import { renderRootRoute } from "./root-router";
 

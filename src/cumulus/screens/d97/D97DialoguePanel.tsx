@@ -1,7 +1,8 @@
 // D97DialoguePanel — a conversation with an overworld character: the
 // speaker's current line in a CharacterDialogue (an Avatar character, with a
-// portrait) or a SpeechBubble (everyone else), then the player's choices as
-// glass buttons. Barks are conversations with no choices. It floats above
+// portrait) or a SpeechBubble whose tail points at the speaker's pixel bust
+// (everyone else), then what an offered quest pays and the player's choices
+// as glass buttons. Barks are conversations with no choices. It floats above
 // the control bar over the world, which ignores input while it is open.
 // PURE: it renders from a view model and reports Continue, the chosen
 // choice's index, and Close; the adapter owns the conversation's position.
@@ -16,14 +17,14 @@ import { SpeechBubble } from "../../components/overlay/SpeechBubble";
 import { safeAreaInsetAtLeast } from "../../primitives/safe-area";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
-import type { D97DialogueId, D97DialogueNodeId } from "../../../types/identifiers";
+import type { D97CharacterId, D97DialogueId, D97DialogueNodeId } from "../../../types/identifiers";
+import { D97CharacterPortrait } from "./D97CharacterPortrait";
+import { D97RewardLine, type D97RewardView } from "./D97RewardLine";
 
 export interface D97DialogueChoiceView {
   /** The choice's index in its node. */
   readonly index: number;
   readonly label: string;
-  /** The Essence a quest this choice accepts pays, shown on the button. */
-  readonly essenceValue: number | null;
 }
 
 export interface D97DialogueView {
@@ -32,6 +33,8 @@ export interface D97DialogueView {
   readonly speakerName: string;
   /** An Avatar character's portrait; null shows a bare speech bubble. */
   readonly portrait: CharacterDialoguePortraitArt | null;
+  /** The speaking character, whose bust the speech bubble points at; null shows none. */
+  readonly characterId: D97CharacterId | null;
   readonly portraitAlt: string;
   /** The line showing. */
   readonly line: string;
@@ -39,8 +42,9 @@ export interface D97DialogueView {
   readonly lineCount: number;
   /** The choices, shown after the last line. */
   readonly choices: readonly D97DialogueChoiceView[];
-  /** A quest offer's reward, shown with the choices when it is not Essence. */
-  readonly rewardNote: string | null;
+  /** What a quest this node offers pays, shown with the choices. */
+  readonly reward: D97RewardView | null;
+  readonly rewardLabel: string;
   readonly continueLabel: string;
   readonly closeLabel: string;
 }
@@ -92,7 +96,12 @@ export function D97DialoguePanel({ view, onContinue, onChoose, onClose }: D97Dia
       }}
     >
       {view.portrait === null ? (
-        <SpeechBubble speakerName={view.speakerName} text={view.line} />
+        <div data-d97-dialogue-speaker="" style={{ display: "flex", alignItems: "flex-end", gap: token("--space-s"), width: "100%" }}>
+          {view.characterId !== null && <D97CharacterPortrait characterId={view.characterId} alt={view.portraitAlt} />}
+          <div style={{ flex: "1 1 auto", minWidth: 0, display: "flex" }}>
+            <SpeechBubble speakerName={view.speakerName} text={view.line} />
+          </div>
+        </div>
       ) : (
         <CharacterDialogue
           dialogue={{
@@ -105,18 +114,10 @@ export function D97DialoguePanel({ view, onContinue, onChoose, onClose }: D97Dia
           size={isDesktop ? "wide" : "compact"}
         />
       )}
-      {lastLine && view.rewardNote !== null && (
-        <p
-          data-d97-dialogue-reward-note=""
-          style={{
-            margin: 0,
-            font: token("--t-body"),
-            color: token("--text-primary"),
-            textShadow: token("--text-outline-media"),
-          }}
-        >
-          {view.rewardNote}
-        </p>
+      {lastLine && view.reward !== null && (
+        <div data-d97-dialogue-reward="" style={{ alignSelf: "flex-end" }}>
+          <D97RewardLine label={view.rewardLabel} reward={view.reward} surface="media" />
+        </div>
       )}
       <div
         data-d97-dialogue-choices=""
@@ -130,7 +131,6 @@ export function D97DialoguePanel({ view, onContinue, onChoose, onClose }: D97Dia
             <GlassButton
               key={choice.index}
               label={choice.label}
-              essenceValue={choice.essenceValue}
               testId={`d97-dialogue-choice-${String(choice.index)}`}
               onPress={() => onChoose(choice.index)}
             />

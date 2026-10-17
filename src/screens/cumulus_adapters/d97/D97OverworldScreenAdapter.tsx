@@ -133,6 +133,7 @@ function D97DreamOverworld({
     avatars: journeyContent.avatars,
     cardsById: cards,
     occupants,
+    dialogues: catalog.dialogues,
     converse,
     openDeckEditor,
   });

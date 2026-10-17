@@ -175,6 +175,26 @@ describe("JourneyStartScreen", () => {
     expect(onReroll).toHaveBeenCalledOnce();
   });
 
+  it("gives touch-scaled carousel chevrons the touch minimum and keeps the compact default", () => {
+    const disc = (controlScale?: "compact" | "touch") => {
+      const { container, unmount } = renderInCumulus(
+        <JourneyStartScreen
+          avatars={OFFERED}
+          onPick={() => undefined}
+          onReroll={() => undefined}
+          {...(controlScale === undefined ? {} : { controlScale })}
+        />,
+      );
+      const next = container.querySelector<HTMLElement>('[data-avatar-edge-chevron="right"] button');
+      const width = next === null ? Number.NaN : Number.parseFloat(next.style.width);
+      unmount();
+      return width;
+    };
+    const touchMinimum = 44;
+    expect(disc("touch")).toBeGreaterThanOrEqual(touchMinimum);
+    expect(disc()).toBeLessThan(touchMinimum);
+  });
+
   it("shows a single tutorial Avatar with guidance and no reroll control", () => {
     const { container } = renderInCumulus(
       <JourneyStartScreen

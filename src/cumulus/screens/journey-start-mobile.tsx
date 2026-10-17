@@ -25,6 +25,9 @@ import {
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
 
+/** The reroll control's disc: the md IconButton. */
+const REROLL_DISC_PX = 48;
+
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
  * is unchanged. A spacing step, so the token is right. */
@@ -85,10 +88,17 @@ function AvatarConsole({
  * earns legibility from the on-media outline dilation rather than a plate. */
 function AvatarTitle({
   avatar,
+  clearReroll,
 }: {
   avatar: AvatarOfferView;
+  /** Start the title below the reroll control, so the title never runs under it. */
+  clearReroll: boolean;
 }) {
-  
+  // The reroll disc sits a --space-m step below the safe top; the title
+  // starts a --space-s step below the disc.
+  const top = clearReroll
+    ? `calc(${token("--space-m")} + ${String(REROLL_DISC_PX)}px + ${token("--space-s")})`
+    : token("--space-4xl");
   return (
     <div
       style={{
@@ -96,7 +106,7 @@ function AvatarTitle({
         top: token("--safe-top"),
         left: 0,
         right: 0,
-        padding: `${token("--space-4xl")} ${token("--gutter")} 0`,
+        padding: `${top} ${token("--gutter")} 0`,
         zIndex: 4,
         textAlign: "center",
       }}
@@ -152,13 +162,17 @@ function ScreenHeader({ title }: { readonly title: string }) {
 /** A circular edge chevron that pages the carousel without swiping. */
 function EdgeChevron({
   dir,
+  touch,
   onClick,
 }: {
   dir: "left" | "right";
+  /** Give the chevron the touch-minimum disc. */
+  touch: boolean;
   onClick: () => void;
 }) {
   return (
     <div
+      data-avatar-edge-chevron={dir}
       onPointerDown={(event: React.PointerEvent) => {
         event.stopPropagation();
       }}
@@ -170,7 +184,7 @@ function EdgeChevron({
       }}
     >
       <IconButton
-        size="sm"
+        size={touch ? "md" : "sm"}
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
         label={
           dir === "left"
@@ -190,10 +204,12 @@ function AvatarPage({
   avatar,
   active,
   count,
+  clearReroll,
 }: {
   avatar: AvatarOfferView;
   active: boolean;
   count: number;
+  clearReroll: boolean;
 }) {
   return (
     <div
@@ -208,7 +224,7 @@ function AvatarPage({
       <AvatarStage avatar={avatar} variant="fullBleed" />
       <Motes on={active} tint="warm" zIndex={1} />
 
-      <AvatarTitle avatar={avatar} />
+      <AvatarTitle avatar={avatar} clearReroll={clearReroll} />
     </div>
   );
 }
@@ -221,7 +237,9 @@ export function CarouselSelect({
   onPick,
   onReroll,
   onGuideDialogueShown,
+  controlScale = "compact",
 }: JourneyStartScreenProps) {
+  const touch = controlScale === "touch";
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
   const drag = useRef<{ active: boolean; x0: number }>({
@@ -304,6 +322,7 @@ export function CarouselSelect({
             avatar={avatar}
             active={i === index}
             count={count}
+            clearReroll={touch && onReroll !== undefined}
           />
         ))}
       </div>
@@ -334,10 +353,10 @@ export function CarouselSelect({
       )}
 
       {index > 0 && (
-        <EdgeChevron dir="left" onClick={() => setIndex(clamp(index - 1))} />
+        <EdgeChevron dir="left" touch={touch} onClick={() => setIndex(clamp(index - 1))} />
       )}
       {index < count - 1 && (
-        <EdgeChevron dir="right" onClick={() => setIndex(clamp(index + 1))} />
+        <EdgeChevron dir="right" touch={touch} onClick={() => setIndex(clamp(index + 1))} />
       )}
     </div>
   );

@@ -6,9 +6,9 @@
 import type { ReactElement } from "react";
 import { CardChoiceGrid, type CardChoiceGridColumns } from "../../components/card/CardChoiceGrid";
 import type { GameCardModel } from "../../components/card/CardView";
-import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
 import type { D97QuestId } from "../../../types/identifiers";
+import { D97Panel } from "./D97Panel";
 
 /** One offer slot; an offer may show a card more than once. */
 export type D97QuestRewardSlot = `slot-${number}`;
@@ -40,7 +40,7 @@ function columnsFor(count: number, desktop: boolean): CardChoiceGridColumns {
 export function D97QuestRewardPanel({ view, onChoose }: D97QuestRewardPanelProps): ReactElement {
   const isDesktop = useIsDesktop();
   return (
-    <GlassDialog title={view.title} subtitle={view.subtitle} presentation="popup">
+    <D97Panel kind="quest-reward" title={view.title} subtitle={view.subtitle}>
       <div data-d97-quest-reward={view.questId} data-d97-quest-reward-count={String(view.cards.length)}>
         <CardChoiceGrid<D97QuestRewardSlot>
           cards={view.cards.map((card) => ({
@@ -53,6 +53,6 @@ export function D97QuestRewardPanel({ view, onChoose }: D97QuestRewardPanelProps
           onCardPress={onChoose}
         />
       </div>
-    </GlassDialog>
+    </D97Panel>
   );
 }

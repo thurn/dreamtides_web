@@ -22,6 +22,8 @@ import type { CardData } from "../../../types/cards";
 import type { AvatarContent } from "../../../types/content";
 import type { DreamAnchorId } from "../../../types/identifiers";
 import { buildD97EncounterPreviewView } from "./d97-encounter-preview-view-model";
+import type { D97DialogueModule } from "../../../content/d97/dialogue/schema";
+import type { D97DialogueId } from "../../../types/identifiers";
 
 function reportFailure(error: unknown): void {
   console.error("D97 encounter intent failed", error);
@@ -35,6 +37,8 @@ export function useD97Encounter(args: {
   readonly cardsById: ReadonlyMap<CardId, CardData>;
   /** Who stands at each anchor, with the dialogue they speak. */
   readonly occupants: OverworldOccupants;
+  /** The dialogue catalog, which names the residents who speak. */
+  readonly dialogues: ReadonlyMap<D97DialogueId, D97DialogueModule>;
   /** Opens the conversation with the resident at an anchor. */
   readonly converse: (anchorId: DreamAnchorId) => void;
   /** Opens the deck editor when Fight finds the deck too small. */
@@ -48,7 +52,7 @@ export function useD97Encounter(args: {
   /** Open `anchorId`'s preview, as interacting with it would (a dialogue's challenge). */
   readonly challenge: (anchorId: DreamAnchorId) => void;
 } {
-  const { run, registry, actions, avatars, cardsById, occupants, converse, openDeckEditor } = args;
+  const { run, registry, actions, avatars, cardsById, occupants, dialogues, converse, openDeckEditor } = args;
   const [anchorId, setAnchorId] = useState<DreamAnchorId | null>(null);
   const runRef = useRef(run);
   runRef.current = run;
@@ -79,9 +83,11 @@ export function useD97Encounter(args: {
   }, [challenge, converse, occupants, registry]);
 
   const encounter = anchorId === null ? undefined : run.encounters[anchorId];
+  const dialogueId = anchorId === null ? null : (occupants.get(anchorId)?.dialogue ?? null);
+  const speakerName = dialogueId === null ? null : (dialogues.get(dialogueId)?.speaker.name ?? null);
   const preview = useMemo(
-    () => (encounter === undefined ? null : buildD97EncounterPreviewView(run, encounter, avatars, cardsById)),
-    [avatars, cardsById, encounter, run],
+    () => (encounter === undefined ? null : buildD97EncounterPreviewView(run.collection, encounter, avatars, cardsById, speakerName)),
+    [avatars, cardsById, encounter, run.collection, speakerName],
   );
 
   const fight = useCallback(() => {

@@ -1,0 +1,21 @@
+/* Cumulus type floor — a 12px minimum for a whole product surface.
+   ================================================================
+   A subtree marked `data-cumulus-type-floor` renders the Cumulus type scale
+   with no voice under 12px: the two sub-12px voices, the mono eyebrow and the
+   popover meta line, take 12px there and keep their face, weight, tracking
+   and leading. Every other voice is already 12px or larger. Components keep
+   choosing their voice by role; only the scale they resolve changes, so a
+   shared component reads the same everywhere except at the floor.
+
+   Dreamtides 97's overworld chrome and its Avatar select carry the floor.
+   Components re-establish the token scope with their own `.cumulus` class, so
+   the floor re-declares the two voices on every `.cumulus` element inside the
+   marked subtree as well as on a marked `.cumulus` root. Kept out of
+   cumulus-tokens.css, which declares each token once for the generated
+   token index. */
+
+.cumulus[data-cumulus-type-floor],
+[data-cumulus-type-floor] .cumulus {
+  --t-popover-meta: 700 12px/1 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --t-eyebrow: 700 12px/1.2 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}

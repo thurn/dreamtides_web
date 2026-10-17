@@ -4,6 +4,7 @@
 // abandon and pick is recorded as an intent. Wiring only.
 
 import { useCallback, useMemo } from "react";
+import { D97_QUESTS } from "../../../content/d97/quests";
 import { D97QuestLogPanel } from "../../../cumulus/screens/d97/D97QuestLogPanel";
 import { D97QuestRewardPanel, type D97QuestRewardSlot } from "../../../cumulus/screens/d97/D97QuestRewardPanel";
 import type { D97DialogueCatalog } from "../../../d97/dialogue/catalog";
@@ -64,7 +65,11 @@ export function D97QuestSurfacesAdapter({
     },
     [catalog.dialogues, occupants],
   );
-  const logView = useMemo(() => buildD97QuestLogView(run.quests, catalog, speakerAt), [catalog, run.quests, speakerAt]);
+  const act = d97RunAct(run);
+  const logView = useMemo(
+    () => buildD97QuestLogView(run.quests, catalog, speakerAt, D97_QUESTS, act),
+    [act, catalog, run.quests, speakerAt],
+  );
   const rewardView = useMemo(() => buildD97QuestRewardView(run.quests, catalog, cards), [cards, catalog, run.quests]);
   const abandon = useCallback(
     (questId: D97QuestId) => void actions.d97AbandonQuest(questId).catch(reportFailure),
@@ -89,6 +94,7 @@ export function D97QuestSurfacesAdapter({
           key={conversationAnchorId}
           module={module}
           anchorId={conversationAnchorId}
+          characterId={occupants.get(conversationAnchorId)?.character ?? null}
           context={context}
           avatars={avatars}
           onChallenge={onChallenge}

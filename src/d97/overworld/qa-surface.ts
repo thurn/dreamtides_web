@@ -8,7 +8,7 @@ import { isWalkable, type CompiledDreamMap } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
 import { movementGrid } from "./interactions";
 import type { OverworldSceneHandle } from "./overworld-scene";
-import { FACING_STEPS, facedTile, walkerPosition } from "./walker";
+import { FACING_STEPS, facedTile, walkerPosition, type Facing } from "./walker";
 
 export interface D97QaSurface {
   /** A JSON-safe dump of the overworld's state. */
@@ -22,8 +22,12 @@ export interface D97QaSurface {
   readonly walkToTile: (tile: TilePoint) => boolean;
   /** Interact with the faced anchor, as the interact key would. */
   readonly interact: () => boolean;
-  /** Stand beside an anchor at once, facing it. Writes no event. */
-  readonly teleport: (anchorId: DreamAnchorId) => boolean;
+  /**
+   * Stand beside an anchor at once, facing it: on its `side` when given
+   * ("up" is the tile north of it), else on the first walkable side. Writes
+   * no event.
+   */
+  readonly teleport: (anchorId: DreamAnchorId, side?: Facing) => boolean;
 }
 
 declare global {
@@ -61,6 +65,7 @@ export function installD97QaSurface(
         anchors: scene.anchors().map(({ id, kind, at }) => ({ id, kind, at })),
         drawnAnchorIds: scene.drawnAnchorIds(),
         playerScreenRect: scene.playerScreenRect(),
+        playerBodyScreenRect: scene.playerBodyScreenRect(),
         hiddenAnchorIds: scene.hiddenAnchorIds(),
       };
     },
@@ -72,10 +77,11 @@ export function installD97QaSurface(
     },
     walkToTile: (tile) => scene.walkToTile(tile),
     interact: () => scene.interact(),
-    teleport: (id) => {
+    teleport: (id, side) => {
       const target = anchor(id);
       if (target === undefined) return false;
-      const beside = Object.values(FACING_STEPS)
+      const steps = side === undefined ? Object.values(FACING_STEPS) : [FACING_STEPS[side]];
+      const beside = steps
         .map(([dx, dy]): TilePoint => [target.at[0] + dx, target.at[1] + dy])
         .find((tile) => isWalkable(grid, tile));
       return beside !== undefined && scene.teleport(beside, target.at);

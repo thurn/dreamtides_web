@@ -6,9 +6,12 @@ export interface D97OverworldTunables {
   readonly walkTilesPerSecond: number;
   /** Camera zoom on desktop viewports. Whole numbers only. */
   readonly desktopZoom: number;
-  /** Phone zooms, preferred first; the first showing enough tiles wins. */
-  readonly phoneZooms: readonly number[];
-  /** Fewest tiles a phone camera shows across. */
+  /**
+   * The smallest CSS zoom a phone camera aims for. The camera rounds it up to
+   * a whole number of device pixels per map pixel, so the art stays crisp.
+   */
+  readonly phoneMinZoom: number;
+  /** Fewest tiles a phone camera shows across; the zoom steps down to keep them. */
   readonly phoneMinTilesAcross: number;
   /** Screen pixels the camera keeps between the HUD control bar and the world it frames. */
   readonly hudClearancePx: number;
@@ -17,8 +20,10 @@ export interface D97OverworldTunables {
 export const D97_OVERWORLD_TUNABLES: D97OverworldTunables = {
   walkTilesPerSecond: 4,
   desktopZoom: 2,
-  phoneZooms: [2, 1],
-  phoneMinTilesAcross: 11,
+  // 1.5× draws a standing character about 48 CSS pixels tall on a phone,
+  // over the 44-pixel touch minimum; 1× drew it about 32.
+  phoneMinZoom: 1.5,
+  phoneMinTilesAcross: 7,
   hudClearancePx: 12,
 };
 
@@ -39,6 +44,8 @@ export interface D97CharacterTunables {
   readonly badgeBobSeconds: number;
   /** Opacity of a badge overlapped by one nearer the player. */
   readonly badgeOverlapAlpha: number;
+  /** Seconds a badge takes to fade fully in or out (over the player's body, or from an overlap). */
+  readonly badgeFadeSeconds: number;
 }
 
 export const D97_CHARACTER_TUNABLES: D97CharacterTunables = {
@@ -49,4 +56,5 @@ export const D97_CHARACTER_TUNABLES: D97CharacterTunables = {
   badgeBobPixels: 2,
   badgeBobSeconds: 1.2,
   badgeOverlapAlpha: 0.5,
+  badgeFadeSeconds: 0.15,
 };

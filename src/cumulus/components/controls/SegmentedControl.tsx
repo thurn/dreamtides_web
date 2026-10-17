@@ -25,8 +25,8 @@ import {
   controlChrome,
 } from "../../internal/control-treatment";
 
-/** Height/scale variants. */
-type SegmentedControlSize = "sm" | "md";
+/** Height/scale variants. `lg` gives each segment the minimum touch height. */
+export type SegmentedControlSize = "sm" | "md" | "lg";
 
 /** One segment with a player-facing text label. */
 export interface SegmentedOption {
@@ -65,6 +65,9 @@ interface SizeSpec {
 const SIZES: Record<SegmentedControlSize, SizeSpec> = {
   sm: { height: 34, font: 13 },
   md: { height: 42, font: 14 },
+  // Track padding (2 × --space-xs) and its 1px rim (2 × 1px) around a
+  // --touch-min (44px) segment.
+  lg: { height: 54, font: 16 },
 };
 
 interface SegmentProps {

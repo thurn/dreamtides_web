@@ -2,7 +2,7 @@
 
 // The D97 deck editor's interaction contract: a deck card press unequips that
 // copy, a reserve card press equips it, deck cards take no press at the
-// minimum, and Escape closes the editor.
+// minimum, every opening starts on the deck, and Escape closes the editor.
 
 import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -84,10 +84,10 @@ afterEach(() => {
 
 function mount(props: Partial<Parameters<typeof D97DeckEditorScreen>[0]> = {}) {
   const handlers = { onEquip: vi.fn(), onUnequip: vi.fn(), onClose: vi.fn() };
-  const { container } = renderInCumulus(
+  const { container, rerender } = renderInCumulus(
     <D97DeckEditorScreen isOpen view={view()} {...handlers} {...props} />,
   );
-  return { container, ...handlers, ...props };
+  return { container, rerender, handlers };
 }
 
 function press(container: HTMLElement, index: number): void {
@@ -101,9 +101,10 @@ function press(container: HTMLElement, index: number): void {
 
 describe("D97DeckEditorScreen", () => {
   it("unequips a pressed deck copy by its owned-copy id", () => {
-    const { container, onUnequip, onEquip } = mount();
+    const { container, handlers } = mount();
+    const { onUnequip, onEquip } = handlers;
     expect(
-      container.querySelector("[data-d97-deck-editor]")?.getAttribute("data-d97-deck-zone"),
+      container.querySelector("[data-d97-deck-zone]")?.getAttribute("data-d97-deck-zone"),
     ).toBe("deck");
     press(container, 2);
     expect(onUnequip).toHaveBeenCalledWith(copyId(2));
@@ -111,15 +112,31 @@ describe("D97DeckEditorScreen", () => {
   });
 
   it("equips a pressed reserve copy after switching to the reserve", () => {
-    const { container, onEquip } = mount();
+    const { container, handlers } = mount();
+    const { onEquip } = handlers;
     act(() => {
       container.querySelectorAll<HTMLElement>('[role="tab"]')[1]?.click();
     });
     expect(
-      container.querySelector("[data-d97-deck-editor]")?.getAttribute("data-d97-deck-zone"),
+      container.querySelector("[data-d97-deck-zone]")?.getAttribute("data-d97-deck-zone"),
     ).toBe("reserve");
     press(container, 3);
     expect(onEquip).toHaveBeenCalledWith(copyId(3));
+  });
+
+  it("opens on the deck again after closing on the reserve", async () => {
+    const { container, rerender, handlers } = mount();
+    const zone = () => container.querySelector("[data-d97-deck-zone]")?.getAttribute("data-d97-deck-zone") ?? null;
+    act(() => {
+      container.querySelectorAll<HTMLElement>('[role="tab"]')[1]?.click();
+    });
+    expect(zone()).toBe("reserve");
+    rerender(<D97DeckEditorScreen isOpen={false} view={view()} {...handlers} />);
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    });
+    rerender(<D97DeckEditorScreen isOpen view={view()} {...handlers} />);
+    expect(zone()).toBe("deck");
   });
 
   it("takes no unequip press at the minimum deck size", () => {

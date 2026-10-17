@@ -1,4 +1,4 @@
-// The overworld camera: whole-number zoom chosen per viewport, a view that
+// The overworld camera: a pixel-crisp zoom chosen per viewport, a view that
 // follows the player and clamps to the map, and the tile range on screen for
 // culling. Pure; all lengths are CSS pixels unless named in tiles.
 
@@ -19,22 +19,31 @@ export interface MapMetrics {
 }
 
 /**
- * The camera zoom: the desktop zoom on a desktop viewport; on a phone, the
- * first preferred zoom that keeps at least the minimum tiles across, else the
- * smallest.
+ * The camera zoom, in CSS pixels per map pixel. On desktop it is the desktop
+ * zoom. On a phone it is the smallest zoom at or above the phone minimum that
+ * draws each map pixel as a whole number of device pixels (so pixel art stays
+ * crisp at a fractional CSS zoom: 1.5 at a device pixel ratio of 2, 5/3 at
+ * 3), stepped down a device pixel at a time while it shows fewer than the
+ * minimum tiles across, and never under one device pixel per map pixel.
  */
 export function chooseZoom(
   viewport: Viewport,
   tileWidth: number,
   desktop: boolean,
   tunables: D97OverworldTunables,
+  devicePixelRatio: number,
 ): number {
   if (desktop) return tunables.desktopZoom;
-  const fitting = tunables.phoneZooms.find(
-    (zoom) => viewport.width / (tileWidth * zoom) >= tunables.phoneMinTilesAcross,
-  );
-  return fitting ?? Math.min(...tunables.phoneZooms);
+  const ratio = devicePixelRatio > 0 ? devicePixelRatio : 1;
+  let devicePixels = Math.max(1, Math.ceil(tunables.phoneMinZoom * ratio - ZOOM_EPSILON));
+  while (devicePixels > 1 && viewport.width / (tileWidth * (devicePixels / ratio)) < tunables.phoneMinTilesAcross) {
+    devicePixels -= 1;
+  }
+  return devicePixels / ratio;
 }
+
+/** Float slack when the minimum zoom is already a whole number of device pixels. */
+const ZOOM_EPSILON = 1e-9;
 
 export interface CameraView {
   /** World pixel at the viewport's top-left. */

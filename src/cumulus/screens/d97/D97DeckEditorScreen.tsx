@@ -4,10 +4,12 @@
 // reserve card equips it. At the minimum deck size the deck's cards are
 // disabled, so the deck can never drop below it. On phones the cards sit in
 // two readable columns, and a press and hold reveals a card's full text
-// without moving it.
+// without moving it. It opens on the deck every time, and sizes itself for
+// the larger of the deck and the reserve so switching between them never
+// resizes it; on phones the switch is touch-sized.
 // PURE: it renders from a view model and reports each move by owned-copy id;
 // the adapter records the move as an intent. Which half is shown is local
-// view state.
+// view state of one opening.
 
 import { useEffect, useState, type ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -68,7 +70,6 @@ export function D97DeckEditorScreen({
   onClose,
 }: D97DeckEditorScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
-  const [zone, setZone] = useState<D97DeckEditorZone>("deck");
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -81,20 +82,6 @@ export function D97DeckEditorScreen({
     };
   }, [isOpen, onClose]);
 
-  const cards = zone === "deck" ? view.deck : view.reserve;
-  const shown =
-    zone === "deck" && !view.canUnequip
-      ? cards.map((card) => ({ ...card, disabled: true }))
-      : cards;
-  const subtitle =
-    zone === "deck"
-      ? view.canUnequip
-        ? `Tap a card to move it to your reserve. Your deck needs at least ${String(view.minimumDeckSize)} cards.`
-        : `Your deck is at its minimum of ${String(view.minimumDeckSize)} cards.`
-      : "Tap a card to add it to your deck.";
-  // Touch screens have no hover: tell the player how to read a card first.
-  const subtitleWithHint = isDesktop ? subtitle : `${subtitle} ${READ_HINT}`;
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -105,7 +92,6 @@ export function D97DeckEditorScreen({
           aria-label="Edit Deck"
           className="cumulus"
           data-d97-deck-editor=""
-          data-d97-deck-zone={zone}
           data-d97-deck-count={view.deckCount}
           data-d97-reserve-count={view.reserveCount}
           data-d97-deck-minimum={view.minimumDeckSize}
@@ -126,61 +112,91 @@ export function D97DeckEditorScreen({
             padding: isDesktop ? token("--space-2xl") : 0,
           }}
         >
-          <div
-            style={{
-              position: "relative",
-              zIndex: 1,
-              width: isDesktop ? `min(100%, ${String(EDITOR_MAX_WIDTH_PX)}px)` : "100%",
-              height: isDesktop ? undefined : "100%",
-              maxHeight: isDesktop
-                ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
-                : undefined,
-              minHeight: 0,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <CardBrowserPanel<D97OwnedCopyId>
-              title="Edit Deck"
-              subtitle={subtitleWithHint}
-              rightAccessory={{
-                kind: "glassButton",
-                button: {
-                  label: "Done",
-                  variant: "accent",
-                  onPress: onClose,
-                  testId: "d97-deck-editor-done",
-                },
-              }}
-              toolbar={{
-                segmented: {
-                  options: [
-                    { value: "deck", label: `Deck (${String(view.deckCount)})` },
-                    {
-                      value: "reserve",
-                      label: `Reserve (${String(view.reserveCount)})`,
-                    },
-                  ],
-                  value: zone,
-                  onChange: (value) => {
-                    if (isZone(value)) setZone(value);
-                  },
-                },
-              }}
-              cards={shown}
-              emptyLabel={
-                zone === "deck"
-                  ? "Your deck is empty."
-                  : "Your reserve is empty. New cards arrive here."
-              }
-              presentation="overlay"
-              density="readable"
-              onCardPress={zone === "deck" ? onUnequip : onEquip}
-              testId="d97-deck-editor-panel"
-            />
-          </div>
+          <DeckEditorBody view={view} onEquip={onEquip} onUnequip={onUnequip} onClose={onClose} />
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+/** One opening of the editor: it starts on the deck. */
+function DeckEditorBody({
+  view,
+  onEquip,
+  onUnequip,
+  onClose,
+}: Omit<D97DeckEditorScreenProps, "isOpen">): ReactElement {
+  const isDesktop = useIsDesktop();
+  const [zone, setZone] = useState<D97DeckEditorZone>("deck");
+  const cards = zone === "deck" ? view.deck : view.reserve;
+  const shown =
+    zone === "deck" && !view.canUnequip
+      ? cards.map((card) => ({ ...card, disabled: true }))
+      : cards;
+  // One line for both halves, so switching between them never moves the
+  // switch or the cards.
+  const subtitle = view.canUnequip
+    ? `Tap a card to move it across. Your deck needs at least ${String(view.minimumDeckSize)} cards.`
+    : `Your deck is at its minimum of ${String(view.minimumDeckSize)} cards.`;
+  // Touch screens have no hover: tell the player how to read a card first.
+  const subtitleWithHint = isDesktop ? subtitle : `${subtitle} ${READ_HINT}`;
+
+  return (
+    <div
+      data-d97-deck-zone={zone}
+      style={{
+        position: "relative",
+        zIndex: 1,
+        width: isDesktop ? `min(100%, ${String(EDITOR_MAX_WIDTH_PX)}px)` : "100%",
+        height: isDesktop ? undefined : "100%",
+        maxHeight: isDesktop
+          ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
+          : undefined,
+        minHeight: 0,
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <CardBrowserPanel<D97OwnedCopyId>
+        title="Edit Deck"
+        subtitle={subtitleWithHint}
+        rightAccessory={{
+          kind: "glassButton",
+          button: {
+            label: "Done",
+            variant: "accent",
+            onPress: onClose,
+            testId: "d97-deck-editor-done",
+          },
+        }}
+        toolbar={{
+          segmented: {
+            options: [
+              { value: "deck", label: `Deck (${String(view.deckCount)})` },
+              {
+                value: "reserve",
+                label: `Reserve (${String(view.reserveCount)})`,
+              },
+            ],
+            value: zone,
+            onChange: (value) => {
+              if (isZone(value)) setZone(value);
+            },
+            itemCounts: [view.deck.length, view.reserve.length],
+            size: isDesktop ? "md" : "lg",
+          },
+        }}
+        cards={shown}
+        emptyLabel={
+          zone === "deck"
+            ? "Your deck is empty."
+            : "Your reserve is empty. New cards arrive here."
+        }
+        presentation="overlay"
+        density="readable"
+        onCardPress={zone === "deck" ? onUnequip : onEquip}
+        testId="d97-deck-editor-panel"
+      />
+    </div>
   );
 }

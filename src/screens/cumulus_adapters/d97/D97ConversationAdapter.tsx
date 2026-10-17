@@ -15,7 +15,7 @@ import { logEvent } from "../../../logging";
 import type { GameActions } from "../../../session/actions";
 import { useActions } from "../../../session/hooks";
 import type { AvatarContent } from "../../../types/content";
-import type { D97DialogueNodeId, DreamAnchorId } from "../../../types/identifiers";
+import type { D97CharacterId, D97DialogueNodeId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DialogueView } from "./d97-quest-view-model";
 
 /** Record `intent` through its action creator. */
@@ -49,6 +49,7 @@ function reportFailure(error: unknown): void {
 export function D97ConversationAdapter({
   module,
   anchorId,
+  characterId,
   context,
   avatars,
   onChallenge,
@@ -57,6 +58,8 @@ export function D97ConversationAdapter({
 }: {
   readonly module: D97DialogueModule;
   readonly anchorId: DreamAnchorId;
+  /** The character speaking, for their bust. */
+  readonly characterId: D97CharacterId | null;
   readonly context: D97DialogueContext;
   readonly avatars: readonly AvatarContent[];
   /** Hands the conversation to the speaker's encounter preview. */
@@ -75,8 +78,8 @@ export function D97ConversationAdapter({
     () =>
       node === null
         ? null
-        : buildD97DialogueView({ module, node, lineIndex: position.line, context, avatars, tuning: D97_QUESTS }),
-    [avatars, context, module, node, position.line],
+        : buildD97DialogueView({ module, node, lineIndex: position.line, context, avatars, tuning: D97_QUESTS, characterId }),
+    [avatars, characterId, context, module, node, position.line],
   );
   const loggedNodes = useRef(new Set<string>());
 

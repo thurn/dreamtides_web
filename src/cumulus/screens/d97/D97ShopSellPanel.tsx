@@ -113,6 +113,8 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
               onChange: (value) => {
                 if (isZone(value)) setZone(value);
               },
+              itemCounts: [view.reserve.length, view.deck.length],
+              size: isDesktop ? "md" : "lg",
             },
           }}
           cards={shown}
