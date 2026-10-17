@@ -5,7 +5,8 @@
 // world, door veils and lit waypoints, the arrival beside the last battle's
 // anchor or at the last door or waypoint used, and the input-focus rule
 // (the canvas ignores input while a panel, a preview or a pending reward is
-// open). Talking to a friendly or townsperson opens their dialogue;
+// open). Talking to a friendly or townsperson opens their dialogue, as does
+// talking to a challenger or guardian that has one (./use-d97-encounter.ts);
 // interacting with a quest object picks it up. Which panel is open is view
 // state; every equip, unequip and pick-up is recorded as an intent. Wiring
 // only.
@@ -120,8 +121,24 @@ function D97DreamOverworld({
     logEvent("d97_deck_editor_opened", { runId: run.runId });
     setPanel("deck");
   }, [run.runId]);
+  const converse = useCallback(
+    (anchorId: DreamAnchorId) => {
+      logEvent("d97_dialogue_opened", { runId: run.runId, anchorId });
+      setPanel({ conversation: anchorId });
+    },
+    [run.runId],
+  );
   const travel = useD97Travel({ run, dream: dream.topology, registry, actions });
-  const encounter = useD97Encounter({ run, registry, actions, avatars: journeyContent.avatars, cardsById: cards, openDeckEditor });
+  const encounter = useD97Encounter({
+    run,
+    registry,
+    actions,
+    avatars: journeyContent.avatars,
+    cardsById: cards,
+    occupants,
+    converse,
+    openDeckEditor,
+  });
   const deckView = useMemo(
     () => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize),
     [run.collection, cards],
@@ -153,9 +170,7 @@ function D97DreamOverworld({
 
   useEffect(() => {
     const talk: OverworldInteraction = (anchor) => {
-      if (occupants.get(anchor.id)?.dialogue == null) return;
-      logEvent("d97_dialogue_opened", { runId: run.runId, anchorId: anchor.id });
-      setPanel({ conversation: anchor.id });
+      if (occupants.get(anchor.id)?.dialogue != null) converse(anchor.id);
     };
     const pickUp: OverworldInteraction = (anchor) => {
       void actions.d97PickUpObject(anchor.id).catch(reportFailure);
@@ -173,7 +188,7 @@ function D97DreamOverworld({
       registry.register("shop", shopkeeper),
     ];
     return () => removals.forEach((remove) => remove());
-  }, [actions, occupants, openShop, registry, run.runId]);
+  }, [actions, converse, occupants, openShop, registry]);
   const equip = useCallback(
     (copyId: D97OwnedCopyId) => {
       void actions.d97EquipCopy(copyId).catch(reportFailure);
