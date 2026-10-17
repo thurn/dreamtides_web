@@ -1,0 +1,634 @@
+{
+  "bead": "hv-umm2.793",
+  "base": "f546d358226f0a485bcfe7b0f0b3cf191f12531d",
+  "ownStart": "2026-10-17T09:17:09.257101+00:00",
+  "evidenceCutoff": "2026-10-17T09:21:22.277900+00:00",
+  "frozenRunner": {
+    "ownStart": "2026-10-17T09:17:09.257101Z",
+    "freeze": "2026-10-17T09:17:34.724538+00:00",
+    "sha256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+    "metric": "review test stage wall seconds reported by scripts/review.mjs",
+    "targetImprovement": 0.1,
+    "base": "f546d358226f0a485bcfe7b0f0b3cf191f12531d",
+    "baselineBeforeRepositoryWrite": true
+  },
+  "changedTest": {
+    "path": "src/engine/policy/productive-activation.contracts.ts",
+    "sha256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+    "baseLines": 335,
+    "currentLines": 367,
+    "casesDelta": 0
+  },
+  "scopeProof": {
+    "normalization": "replace only complete fixture(side...) definition and renewable pump it.each body with fixed markers",
+    "baseNormalizedSHA256": "95ba23cb8546a982a7390294a48eab5e42ecdd05d265bce99b81fe9760fa9a06",
+    "currentNormalizedSHA256": "95ba23cb8546a982a7390294a48eab5e42ecdd05d265bce99b81fe9760fa9a06",
+    "allOtherBytesEqual": true,
+    "fallout": []
+  },
+  "coverageMap": [
+    {
+      "actor": "player",
+      "adverse": false,
+      "energy": false,
+      "retained": "synthetic last-productive to saturated public exit boundary",
+      "testName": "productive activation selection leaves player's renewable pump (adverse: false, energy: false)"
+    },
+    {
+      "actor": "player",
+      "adverse": true,
+      "energy": false,
+      "retained": "synthetic last-productive to saturated public exit boundary",
+      "testName": "productive activation selection leaves player's renewable pump (adverse: true, energy: false)"
+    },
+    {
+      "actor": "player",
+      "adverse": false,
+      "energy": true,
+      "retained": "synthetic last-productive to saturated public exit boundary",
+      "testName": "productive activation selection leaves player's renewable pump (adverse: false, energy: true)"
+    },
+    {
+      "actor": "player",
+      "adverse": true,
+      "energy": true,
+      "retained": "unsaturated zero-to-termination walk",
+      "testName": "productive activation selection leaves player's renewable pump (adverse: true, energy: true)"
+    },
+    {
+      "actor": "enemy",
+      "adverse": false,
+      "energy": false,
+      "retained": "synthetic last-productive to saturated public exit boundary",
+      "testName": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: false)"
+    },
+    {
+      "actor": "enemy",
+      "adverse": true,
+      "energy": false,
+      "retained": "synthetic last-productive to saturated public exit boundary",
+      "testName": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: false)"
+    },
+    {
+      "actor": "enemy",
+      "adverse": false,
+      "energy": true,
+      "retained": "synthetic last-productive to saturated public exit boundary",
+      "testName": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: true)"
+    },
+    {
+      "actor": "enemy",
+      "adverse": true,
+      "energy": true,
+      "retained": "unsaturated zero-to-termination walk",
+      "testName": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: true)"
+    }
+  ],
+  "retainedPublicContracts": [
+    "both actors start real unsaturated adverse spark+energy pumps at zero and terminate with normal 256/64 budgets",
+    "six synthetic fixtures print spark at catalog cap minus actual gain and initialize equal current/max energy below catalog cap where applicable; engine/view and full invariants validate each",
+    "actual legal activation replaces physical figments, gains spark/energy, and settles real responses",
+    "first saturated state leaves pumping; legal pump remains available before actual chosen exit action advances the window",
+    "same-request fresh-engine determinism at initial/exit, all intermediate policy requests immutable/legal/within budget, prompt requests immutable/within budget",
+    "actual adverse pass outcome and complete recorded-answer replay including chosen exit action",
+    "every unrelated finite/progress/Phasing/error/nonsettling/response/window test and deterministic helper byte-identical"
+  ],
+  "originalTools": {
+    "baseline": {
+      "session": 91713,
+      "terminalChunk": "cab83b",
+      "actualExit": 0
+    },
+    "after": {
+      "session": 19551,
+      "terminalChunk": "d445fc",
+      "actualExit": 0
+    },
+    "after-final": {
+      "session": 51730,
+      "terminalChunk": "2a1ebe",
+      "actualExit": 0
+    },
+    "focused-final": {
+      "session": 85598,
+      "terminalChunk": "b117e0",
+      "actualExit": 0
+    },
+    "policy": {
+      "session": 13568,
+      "terminalChunk": "488e3d",
+      "actualExit": 0
+    },
+    "review": {
+      "session": 90970,
+      "terminalChunk": "e02d60",
+      "actualExit": 0
+    },
+    "knip": {
+      "session": 73845,
+      "terminalChunk": "e15d4e",
+      "actualExit": 0
+    }
+  },
+  "validation": [
+    {
+      "name": "baseline",
+      "receipt": {
+        "name": "baseline",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "renewable pump",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/baseline.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "d90b6699127fbf7a72c57a2734a85601f82869f5a6b799af9ecf34dc5e5e5fe1",
+        "time": "2026-10-17T09:17:35.025103+00:00",
+        "load": [
+          5.29638671875,
+          6.7685546875,
+          6.05810546875
+        ],
+        "workers": "2",
+        "pid": 69329,
+        "pgid": 69329,
+        "actualExit": 0,
+        "end": "2026-10-17T09:17:50.490701+00:00",
+        "wallS": 15.465099834022112,
+        "childCpuS": 19.339339,
+        "loadEnd": [
+          5.4638671875,
+          6.73046875,
+          6.056640625
+        ],
+        "logSHA256": "307929dbac8d398f3ca289fab777e58464d6d95d01bb7ecfdfa5228d03cebc98",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "dc1943e332160ac70376c74c4fd0676ff78447b094d45164f47f458b68a9411f",
+      "inputManifestSHA256": "d90b6699127fbf7a72c57a2734a85601f82869f5a6b799af9ecf34dc5e5e5fe1",
+      "allInputFiles": 6135,
+      "changedTestSHA256": "21adab827e063616c05c0853263d4ceb6ec34b1d3ed9e1259f3092e78693eddb",
+      "reviewTestStageWallS": 9.6
+    },
+    {
+      "name": "after",
+      "receipt": {
+        "name": "after",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "renewable pump",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/after.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "9276874b9c787757101fc923d66b26a28346a6c02183b810b8120a4e89423476",
+        "time": "2026-10-17T09:18:26.425451+00:00",
+        "load": [
+          5.0615234375,
+          6.47705078125,
+          5.98974609375
+        ],
+        "workers": "2",
+        "pid": 73064,
+        "pgid": 73064,
+        "actualExit": 0,
+        "end": "2026-10-17T09:18:38.363632+00:00",
+        "wallS": 11.937611332978122,
+        "childCpuS": 11.996069999999998,
+        "loadEnd": [
+          5.32373046875,
+          6.46826171875,
+          5.9951171875
+        ],
+        "logSHA256": "97a76af2a1f1c2193b43e192d4b07bacbadd2dd60c8ae7d5ac6ebf75999f8c7f",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "4d5f6fba037d389fcd292240503756aafede3e1ceda87b056d81a8d4a59e146f",
+      "inputManifestSHA256": "9276874b9c787757101fc923d66b26a28346a6c02183b810b8120a4e89423476",
+      "allInputFiles": 6135,
+      "changedTestSHA256": "64776d1e10bc3562f619c1a12dd29450e56655af9cda18acc125626440aa8a6f",
+      "reviewTestStageWallS": 5.4
+    },
+    {
+      "name": "after-final",
+      "receipt": {
+        "name": "after-final",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "renewable pump",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/after-final.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "5a02cd46c551f83058c1a83982dabe6dcfd24c06ce2ce8027e04df4df61587f5",
+        "time": "2026-10-17T09:18:47.291631+00:00",
+        "load": [
+          5.13720703125,
+          6.41064453125,
+          5.9775390625
+        ],
+        "workers": "2",
+        "pid": 74535,
+        "pgid": 74535,
+        "actualExit": 0,
+        "end": "2026-10-17T09:18:55.320140+00:00",
+        "wallS": 8.0278382920078,
+        "childCpuS": 10.958235,
+        "loadEnd": [
+          5.34326171875,
+          6.4130859375,
+          5.9833984375
+        ],
+        "logSHA256": "2023fd7b07da1a8d54343cc666099851542f4ab962d8daee6d94dce31072da4d",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "52af0c8b246880d7fa9c81f2034d49d79dca887cbcb674af9792a4d1a370e24b",
+      "inputManifestSHA256": "5a02cd46c551f83058c1a83982dabe6dcfd24c06ce2ce8027e04df4df61587f5",
+      "allInputFiles": 6135,
+      "changedTestSHA256": "b8c963d21d64a585c3fcbe8c9354aba8d26d9c963d9e332bd823a5e3be69e85f",
+      "reviewTestStageWallS": 4.7
+    },
+    {
+      "name": "focused-final",
+      "receipt": {
+        "name": "focused-final",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "renewable pump",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/focused-final.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "f2450621b1c745b0c203f1e5cf0429b105aec4ebd2ba01b76fcf9f22d0fd8fe3",
+        "time": "2026-10-17T09:19:17.911636+00:00",
+        "load": [
+          5.3125,
+          6.33642578125,
+          5.9658203125
+        ],
+        "workers": "2",
+        "pid": 76759,
+        "pgid": 76759,
+        "actualExit": 0,
+        "end": "2026-10-17T09:19:26.217562+00:00",
+        "wallS": 8.305460250005126,
+        "childCpuS": 11.219784,
+        "loadEnd": [
+          5.6513671875,
+          6.37451171875,
+          5.9833984375
+        ],
+        "logSHA256": "0489296a6e0fdd79408b2120e80a75febfb6927a4063d0db4ff891e678cea907",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "d198c15ba24f5f237697a6f4ef7475888349a3d91c2e1884cd9661450b8289b3",
+      "inputManifestSHA256": "f2450621b1c745b0c203f1e5cf0429b105aec4ebd2ba01b76fcf9f22d0fd8fe3",
+      "allInputFiles": 6135,
+      "changedTestSHA256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+      "reviewTestStageWallS": 4.8
+    },
+    {
+      "name": "policy",
+      "receipt": {
+        "name": "policy",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "6634e164fc936188b98f9289717a9ed33e04d69dadc791df584e7e073ec4d2c9",
+        "time": "2026-10-17T09:20:07.726763+00:00",
+        "load": [
+          5.2001953125,
+          6.1806640625,
+          5.9306640625
+        ],
+        "workers": "2",
+        "pid": 80278,
+        "pgid": 80278,
+        "actualExit": 0,
+        "end": "2026-10-17T09:20:17.029621+00:00",
+        "wallS": 9.302412042045034,
+        "childCpuS": 12.877897,
+        "loadEnd": [
+          5.64306640625,
+          6.240234375,
+          5.9541015625
+        ],
+        "logSHA256": "51485699e98e7c4681726e34f7c2f36f1f29408415397e5e7c50bfa06b988c3d",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "bcf312a3532fa7c0362e788ab6bc6280a10c06e95f8ca77767dfb88dccb11581",
+      "inputManifestSHA256": "6634e164fc936188b98f9289717a9ed33e04d69dadc791df584e7e073ec4d2c9",
+      "allInputFiles": 6139,
+      "changedTestSHA256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+      "reviewTestStageWallS": 5.8
+    },
+    {
+      "name": "review",
+      "receipt": {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "6634e164fc936188b98f9289717a9ed33e04d69dadc791df584e7e073ec4d2c9",
+        "time": "2026-10-17T09:20:24.624462+00:00",
+        "load": [
+          5.5439453125,
+          6.19873046875,
+          5.9423828125
+        ],
+        "workers": "2",
+        "pid": 81606,
+        "pgid": 81606,
+        "actualExit": 0,
+        "end": "2026-10-17T09:20:41.815065+00:00",
+        "wallS": 17.190009083016776,
+        "childCpuS": 57.372837000000004,
+        "loadEnd": [
+          6.85693359375,
+          6.4638671875,
+          6.041015625
+        ],
+        "logSHA256": "0866d0a9668a3e979b99534dc7f911ddd3b05bb465355e9ea7b0ac62464e077b",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "80eb7671b17d436a911c06ec60e9729fd7b79f05f3c9088ee46681a8217f4e37",
+      "inputManifestSHA256": "6634e164fc936188b98f9289717a9ed33e04d69dadc791df584e7e073ec4d2c9",
+      "allInputFiles": 6139,
+      "changedTestSHA256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+      "reviewTestStageWallS": null
+    },
+    {
+      "name": "knip",
+      "receipt": {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-pump793",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-pump793/validation.runner.py",
+        "runnerSHA256": "3d89e0e47fa61a8527487dff62b5e23c3d595a7c5212bd8b7c3e28472a43e9a6",
+        "inputsSHA256": "6634e164fc936188b98f9289717a9ed33e04d69dadc791df584e7e073ec4d2c9",
+        "time": "2026-10-17T09:20:51.003962+00:00",
+        "load": [
+          6.71826171875,
+          6.44775390625,
+          6.0400390625
+        ],
+        "workers": "2",
+        "pid": 83520,
+        "pgid": 83520,
+        "actualExit": 0,
+        "end": "2026-10-17T09:20:56.699374+00:00",
+        "wallS": 5.694974957965314,
+        "childCpuS": 6.695634,
+        "loadEnd": [
+          6.74072265625,
+          6.45654296875,
+          6.04541015625
+        ],
+        "logSHA256": "ffd652fefb5ec47ee9888882487e078995825935554a83652245f1fbcd1d96c5",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "053a5dcea17ab021f8a7e3486e19631569e9bff338c35e67652ee74a16297100",
+      "inputManifestSHA256": "6634e164fc936188b98f9289717a9ed33e04d69dadc791df584e7e073ec4d2c9",
+      "allInputFiles": 6139,
+      "changedTestSHA256": "cf9e8411dc55d1ab06dac7d5379390a2c0baa1ca4fdd88958b3cb00444143db6",
+      "reviewTestStageWallS": null
+    }
+  ],
+  "focusedProfiles": [
+    {
+      "name": "baseline",
+      "sha256": "e015a63a780ae5d65f45971b77f4f0bffef3060efe769dc346be112ebce6e057",
+      "passed": 8,
+      "skipped": 86,
+      "files": 1,
+      "assertions": [
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: false)",
+          "durationMs": 601.6382079999998
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: false)",
+          "durationMs": 612.7912089999995
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: true)",
+          "durationMs": 1017.6857920000002
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: true)",
+          "durationMs": 1154.1500000000005
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: false)",
+          "durationMs": 453.9667500000005
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: false)",
+          "durationMs": 564.0911669999996
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: true)",
+          "durationMs": 898.3590840000006
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: true)",
+          "durationMs": 1102.4267500000005
+        }
+      ]
+    },
+    {
+      "name": "after",
+      "sha256": "154fa1f4f5325e08ba7068a6b7c9e2db2b877cc6daf708e155e8f16232d5af86",
+      "passed": 8,
+      "skipped": 86,
+      "files": 1,
+      "assertions": [
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: false)",
+          "durationMs": 130.32333299999982
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: false)",
+          "durationMs": 99.20170800000005
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: true)",
+          "durationMs": 67.21204200000011
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: true)",
+          "durationMs": 738.5275000000001
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: false)",
+          "durationMs": 69.36737500000072
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: false)",
+          "durationMs": 82.34720800000014
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: true)",
+          "durationMs": 58.86741700000039
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: true)",
+          "durationMs": 655.5154999999995
+        }
+      ]
+    },
+    {
+      "name": "after-final",
+      "sha256": "b57b29fb595528bd9523807bc471f8560582f839e50afc5a390f8f76e33d45e6",
+      "passed": 8,
+      "skipped": 86,
+      "files": 1,
+      "assertions": [
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: false)",
+          "durationMs": 140.93241599999965
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: false)",
+          "durationMs": 100.15512500000023
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: true)",
+          "durationMs": 64.16800000000012
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: true)",
+          "durationMs": 709.0142089999999
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: false)",
+          "durationMs": 61.82074999999986
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: false)",
+          "durationMs": 73.26483400000006
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: true)",
+          "durationMs": 59.57625000000007
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: true)",
+          "durationMs": 659.1018749999998
+        }
+      ]
+    },
+    {
+      "name": "focused-final",
+      "sha256": "427896ab36e577e72b7be6690fcb3cca01781cb8f48f64194d3deac759db7928",
+      "passed": 8,
+      "skipped": 86,
+      "files": 1,
+      "assertions": [
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: false)",
+          "durationMs": 132.3628749999998
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: false)",
+          "durationMs": 97.49841600000036
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: false, energy: true)",
+          "durationMs": 65.63466699999981
+        },
+        {
+          "name": "productive activation selection leaves player's renewable pump (adverse: true, energy: true)",
+          "durationMs": 747.1077089999999
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: false)",
+          "durationMs": 63.70875000000024
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: false)",
+          "durationMs": 75.1446249999999
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: false, energy: true)",
+          "durationMs": 60.033957999999984
+        },
+        {
+          "name": "productive activation selection leaves enemy's renewable pump (adverse: true, energy: true)",
+          "durationMs": 655.2178750000003
+        }
+      ]
+    }
+  ],
+  "targetMetric": {
+    "name": "review test-stage wall seconds",
+    "chosenBeforeEdit": true,
+    "baseline": 9.6,
+    "final": 4.8,
+    "observedImprovementFraction": 0.5,
+    "requiredFraction": 0.1,
+    "qualification": "Single ordered exact-base/final observation at two workers. Fresh-cache/order effects remain; comparable observed host load does not prove controlled causal A/B or future savings. Assertion timings include retained work. No CI timing threshold; no production engine performance claim."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "external npm run review command launch; os.getloadavg 1-minute load"
+      },
+      "implementWindow.end": {
+        "meaning": "evidence cutoff immediately before final schema/commit; actual commit-end tail retained externally by parent"
+      }
+    }
+  },
+  "failurePaths": {
+    "error": "Existing error/non-settling response and boundary continuation tests unchanged; this test-only cut adds no production transition",
+    "reloadRestart": "All pump records replay into cloned initial state through fresh ScriptedSource and match full state hash; fresh-engine initial/exit determinism retained",
+    "partialWrite": "No production writes added; requests remain immutable at every policy invocation; retained unrelated fault tests unchanged",
+    "invalidStaleInput": "Public legal-action checks and complete fixture/post-settlement invariants; unrelated rejection contracts byte-identical",
+    "concurrentActors": "All eight actor/adverse/energy cells retained for player and enemy, real response actors recorded/replayed"
+  },
+  "lateOwnEvidenceQualification": "Runtime and review/Knip inputs contain the same final test source; only own four evidence files are completed after those checks. A final records schema check and commit command capture all final tracked and nonignored untracked inputs. Parent verifies actual final schema/commit receipts and exact commit-end tail externally.",
+  "remainingAcceptance": "Fresh parent-owned exact-source cold review, native certification/promotion/cleanup, final full-suite <=60s and all phase5 runtime/QA/10000games/retrospective/release convergence remain required; no final acceptance or full-suite savings claimed."
+}
