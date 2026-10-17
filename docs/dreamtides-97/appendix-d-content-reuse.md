@@ -13,7 +13,7 @@ names here are for reading.
 | Content | D97 home |
 | --- | --- |
 | Tides (64) | Signature and facet tides form the Avatars' authored tide sets, which define reward bags and opponents' candidates; never shown to the player |
-| Supply cards (509) | Reward bags, opponent antes, guardian picks, shops, curiosities, resonance cores and key prizes |
+| Supply cards (509) | Reward bags, opponent antes, guardian picks, shops, curiosities, resonance cores and Perfected key prizes |
 | Legendary cards (8) | Key prizes only |
 | Starter cards (10) | Starting-collection dilution and low-tier opponent dilution |
 | Special and Tutorial cards | Not used |
@@ -21,7 +21,7 @@ names here are for reading.
 | Avatars (32) | Player choice; Avatar characters as guardians, quest givers, challengers and key-dream challengers; deck sources for generic characters; key prizes |
 | Resonance | Colored pills on the Avatar select screen; the five amulets and resonance cores |
 | Rarity | Visible supply tier and economy costs |
-| Transfigurations (9) | The Transfiguration site, other site outcomes, Dreamsign effects, opponent knobs |
+| Transfigurations (9) | The Transfiguration site, other site outcomes, Dreamsign effects, opponent knobs, Perfected key prizes |
 | Dreamsigns (153) | Battle and journey effects through slots; ten promoted to Legendary as key prizes (D6) |
 | Dream Guides (10) | Wandering site hosts with home tilesets (D2) |
 | Dreamscapes (10) | Tilesets: the guides' home tilesets |
@@ -65,14 +65,15 @@ Affiliations remain flavor: affiliation weights are not applied.
 | Purge | Not used | — |
 | Augury | Aldric's guide site | Filtered archetypes (D5) |
 | Random Site | Maddox's guide site | Conceals one enhanced site: Curiosities, Transfiguration, Duplication, Dreamsign Bazaar, Dreamsign Revelation, Augury, Gamble, Exploration, Essence or Draft |
-| Gamble | Gravok's guide site | Unchanged games and payouts, except Four-Suit Reprise (below) |
+| Gamble | Gravok's guide site | Unchanged games and payouts; Four-Suit Reprise respects the collection floor (below) |
 | Exploration | Layaway's guide site | Filtered and adapted actions (D4) |
 
 Every card a site grants comes from the bag, except Tobias's curiosities.
 
-**Four-Suit Reprise.** Its Clubs result (purge the targeted card) is replaced
-by a free redraw. Spades (free transfiguration), Diamonds (+100 Essence) and
-Hearts (duplicate the card) are unchanged.
+**Four-Suit Reprise.** All four suits keep their results: Clubs purges the
+targeted card, Spades grants a free transfiguration, Diamonds pays 100 Essence
+and Hearts duplicates the card. The Clubs purge is the game's risk. When the
+collection is at the floor, Clubs is a free redraw instead.
 
 ## D4. Exploration
 

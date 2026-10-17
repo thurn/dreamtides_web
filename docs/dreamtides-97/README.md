@@ -18,9 +18,9 @@ A run has two parts:
   act. In Limbo the five other incarnations wait, and then Apollyon.
 - **The endgame.** From Act 4 the player finds **keys**. Each key opens a
   one-time **key dream** of 4–7 challengers, and clearing one pays the prize
-  the key shows: a Legendary card, a Legendary Dreamsign or an Avatar. Key dreams pay
-  more keys, so a run can continue indefinitely after Apollyon falls, until
-  the player owns every card, Dreamsign and Avatar.
+  the key shows: a Legendary card, a Legendary Dreamsign, an Avatar or a
+  Perfected card. Key dreams pay more keys, so a run can continue
+  indefinitely after Apollyon falls.
 
 D97 combines three references:
 
@@ -119,7 +119,8 @@ Research inputs, outside this repository:
 6. **Finale.** In Limbo, defeat the five remaining incarnations in any order,
    then Apollyon. His defeat records the campaign victory and its score.
 7. **Endgame.** Use keys to open key dreams one at a time, clear them for
-   Legendary cards, Legendary Dreamsigns and Avatars, and collect more keys.
+   Legendary cards, Legendary Dreamsigns, Avatars and Perfected cards, and
+   collect more keys.
 
 **Target shape.** Only bosses block progress, so a campaign has three
 reference lengths from run start to Apollyon's defeat:
@@ -143,7 +144,7 @@ Refills make the battle count unbounded above. The endgame has no fixed length.
 | **Act dream** | A dream placed in an act. Act dreams can be revisited for the rest of the run. |
 | **Key** | An item that opens one key dream, showing only its prize. |
 | **Key dream** | A one-time dream opened by a key. It closes once every challenger in it has been fought. |
-| **Prize** | A key dream's reward for beating all its challengers: a Legendary card, a Legendary Dreamsign or an Avatar. |
+| **Prize** | A key dream's reward for beating all its challengers: a Legendary card, a Legendary Dreamsign, an Avatar or a Perfected card. |
 | **Map** | A dream's authored layout, with anchors for characters, doors, a waypoint, a shop and chests. |
 | **Tileset** | A dream's art set, such as a dwarven dungeon or a space colony, grouped into categories. Tilesets have no mechanical effect. |
 | **Door** | A diegetic passage between dreams. Doors are two-way and blind. |
@@ -253,8 +254,9 @@ every battle at 0⍟. See
   picks, purchases and Duplication can exceed that.
 - **The collection floor.** The collection never drops below 25 owned copies.
   A player at the floor antes nothing, and selling, delivering and purge costs
-  are refused when they would cross it. So the player can always field a legal
-  deck.
+  are refused when they would cross it; at the floor, Four-Suit Reprise's
+  Clubs result is a free redraw instead of a purge. So the player can always
+  field a legal deck.
 
 ## Card supply
 
@@ -268,7 +270,7 @@ every battle at 0⍟. See
 | Guardian picks | The guardian's own deck | High: exact picks |
 | Tobias's curiosities | Supply cards outside the Avatar's tide set | Medium: known stock |
 | Amulet merchants | A resonance core | High: exact cards for amulets |
-| Key prizes | Legendary cards | High: each key shows its prize |
+| Key prizes | Legendary cards and Perfected supply cards | High: each key shows its prize |
 
 **The reward bag.** Each Avatar has an authored **tide set**: its signature
 tide and three facets, chosen by hand so the 32 Avatars together cover the
@@ -434,10 +436,11 @@ Details: [Appendix C](appendix-c-bosses-and-keys.md).
 - **Finding keys.** From Act 4, a key joins Essence and amulets as a possible
   challenger extra, and the Act 4 and Act 5 incarnations each pay one. Every
   finished key dream pays at least one new key, so the endgame never runs dry.
-- **What a key shows.** Only its prize. A prize is something the player doesn't own yet: one of the 8 Legendary cards,
-  one of the 10 Legendary Dreamsigns, or a locked Avatar. Once the player owns
-  them all, prizes become further copies of Legendary cards, up to four of
-  each.
+- **What a key shows.** Only its prize: a copy of one of the 8 Legendary
+  cards, one of the 10 Legendary Dreamsigns the player doesn't own, a locked
+  Avatar, or a Perfected copy of a supply card from the Avatar's tide set.
+  Legendary cards can repeat before the player owns one of each, up to four
+  copies. Perfected cards keep the prize pool from running dry.
 - **Using a key.** At any activated waypoint, outside battle, when no other
   key dream is open. The key dream opens with its own waypoint, and the player
   can leave and return until it is finished. Only one key dream is open at a
@@ -524,7 +527,8 @@ Details: [Appendix B §B13–B15](appendix-b-dreams.md#b13-dream-guides).
     Shop's stock and pricing for shops and Tobias's curiosities;
   - card-choice offers from Exploration, Augury and Random Site's Draft, as
     occasional rewards;
-  - purge as a cost: giving up an owned copy for a reward.
+  - purge as a cost: giving up an owned copy for a reward;
+  - purge as a risk: Four-Suit Reprise's Clubs result.
 - **Not included:**
   - the journey's layered map, dreamscape site lists, Firstlight Meadow and
     recurring Draft sites;
@@ -601,7 +605,7 @@ or changes.
 | S8 | Key timing | Keys appear from Act 4; Apollyon's defeat records the campaign and opens the endgame | R30 |
 | S9 | Key sources | A key is a possible challenger extra from Act 4; Act 4 and 5 incarnations pay one; every finished key dream pays at least one | R30 |
 | S10 | Key dreams | 4–7 challengers, one attempt each; any loss forfeits the prize; the dream closes once finished; a key shows only its prize; one key dream open at a time | R30 |
-| S11 | Key prizes | An unowned Legendary card, Legendary Dreamsign or Avatar; then extra Legendary copies, up to four | R30 |
+| S11 | Key prizes | A Legendary card copy (up to four, repeats allowed before the set is complete), an unowned Legendary Dreamsign, a locked Avatar, or a Perfected tide-set supply card | R30 |
 | S12 | Legendary Dreamsigns | The ten strongest Dreamsigns are promoted to Legendary | — |
 | S13 | Key modifiers | None yet | — |
 | S14 | Key naming | "Keys" open "key dreams" | — |

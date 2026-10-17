@@ -455,21 +455,27 @@ color-filtered catalog. D97 picks from the guardian's own deck.
 dream, tier, challenger count and prize are rolled then and shown on the key
 (Appendix C §C5).
 
-**The prize set** holds everything the player doesn't own yet:
+**The prize pool** has four kinds:
 
-- each of the 8 Legendary cards;
-- each of the 10 Legendary Dreamsigns;
-- each locked Avatar.
+- **Legendary card:** a copy of each of the 8 Legendary cards the player owns
+  fewer than four copies of, owned or not;
+- **Legendary Dreamsign:** each of the 10 Legendary Dreamsigns the player
+  doesn't own;
+- **Avatar:** each locked Avatar;
+- **Perfected card:** a Perfected copy of each supply card in the current
+  Avatar's tide set that is eligible for Perfected and that the player owns
+  fewer than four copies of, in any form.
 
-A new key's prize is a uniform draw from the prize set, excluding prizes
-already shown on another held or open key. When the set is empty, the prize is
-one more copy of a uniformly drawn Legendary card that the player owns fewer
-than four copies of. When every Legendary card is at four copies, keys carry
-no prize.
+Prizes shown on held or open keys count as owned. A new key's prize draws a
+kind among the non-empty kinds by the catalog's prize-kind weights, then a
+uniform prize within it. The weights are tunables in the D97 catalog and start
+equal. Perfected cards keep the pool from emptying in practice; if it does
+empty, keys carry no prize.
 
 **Paying a prize.** A Legendary card arrives as a plain copy in reserve. A
-Legendary Dreamsign joins the Dreamsign collection. An Avatar joins the roster
-(Appendix B §B16).
+Perfected card arrives in reserve with the Perfected transfiguration applied.
+A Legendary Dreamsign joins the Dreamsign collection. An Avatar joins the
+roster (Appendix B §B16).
 
 Key prizes are the only source of Legendary cards and Legendary Dreamsigns.
 Legendary cards can appear in opponents' decks from tier 13, but they are never

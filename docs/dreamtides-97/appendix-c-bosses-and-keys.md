@@ -191,9 +191,11 @@ A key's prize is fixed when the key is created (Appendix A §A16):
   Dreamsign collection.
 - **Avatar:** the Avatar joins the roster. Its key dream places that Avatar
   among the challengers, fighting with its Avatar ability.
-- **Further Legendary copies,** once the player owns every Legendary card,
-  Legendary Dreamsign and Avatar, up to four copies of each Legendary card.
+- **Perfected card:** a Perfected copy of a tide-set supply card, into
+  reserve.
 
-Key prizes are the only source of Legendary cards, Legendary Dreamsigns and,
-beyond the two campaign Avatar quests, Avatars. A complete collection takes
-about 47 prizes: 8 Legendary cards, 10 Legendary Dreamsigns and 29 Avatars.
+Legendary card copies can repeat before the player owns all eight, up to four
+copies of each. Key prizes are the only source of Legendary cards, Legendary
+Dreamsigns and, beyond the two campaign Avatar quests, Avatars. Owning every
+Legendary Dreamsign and Avatar takes 39 prizes; Perfected cards keep later keys
+worth opening.
