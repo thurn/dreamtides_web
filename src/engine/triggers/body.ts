@@ -1,4 +1,6 @@
 /** Reading a queued or floating trigger's definition from the catalog. */
+import type { CardSubtype } from "../../types/card-identity";
+import { withChosenSubtype } from "../effects/primitives/choose-subtype";
 import type { EngineCatalog } from "../catalog";
 import { abilityEffect } from "../dsl/abilities";
 import type { Condition, NamedTrigger, Trigger } from "../dsl/types";
@@ -27,9 +29,11 @@ export function triggerBody(
   origin: AbilityOrigin,
   ability: number,
   node: number | null,
+  chosenSubtype?: CardSubtype,
 ): TriggerBody {
   const definition = originAbilities(catalog, origin)[ability];
-  const root = definition === undefined ? null : abilityEffect(definition);
+  const original = definition === undefined ? null : abilityEffect(definition);
+  const root = original === null || chosenSubtype === undefined ? original : withChosenSubtype(original, chosenSubtype);
   if (definition === undefined || root === null) throw new Error(`Ability ${String(ability)} of its origin has no effect`);
   if (node === null) {
     if (definition.kind !== "triggered") throw new Error(`Ability ${String(ability)} is not a triggered ability`);

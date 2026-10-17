@@ -72,7 +72,7 @@ export function observeFirstOccurrences(
     const viewers = SIDES.filter(viewer => originObserved(ctx.state, entry, viewer));
     const instructions = SIDES.filter(viewer => entry.repeated?.visibleTo.includes(viewer) === true);
     if (viewers.length === 0 && instructions.length === 0) continue;
-    const { trigger } = triggerBody(ctx.catalog, entry.origin, entry.ability, entry.node);
+    const { trigger } = triggerBody(ctx.catalog, entry.origin, entry.ability, entry.node, entry.chosenSubtype);
     for (const named of categories(trigger)) learn(ctx.state, entry.controller, named, viewers);
     if (entry.repeated !== undefined) learn(ctx.state, entry.controller, entry.repeated.named, instructions);
     if (trigger.on === "namedAbilityTriggered") {

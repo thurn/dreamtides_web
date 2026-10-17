@@ -204,7 +204,7 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
   const readers = queuedOccurrencePairs(state, view).flatMap(pair => {
     if (pair.shown.subjectCostHidden !== true || pair.shown.origin === null) return [];
     const restored = pair.get();
-    return [{ ...pair, domains: domains(triggerBody(catalog, restored.origin, restored.ability, restored.node).trigger, pair.shown.controller) }];
+    return [{ ...pair, domains: domains(triggerBody(catalog, restored.origin, restored.ability, restored.node, restored.chosenSubtype).trigger, pair.shown.controller) }];
   });
   // Every unambiguous reader constrains the same physical draw, regardless of queue order.
   // Multiple branches of one reader are alternatives; separate readers are joint observations.
@@ -740,7 +740,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       if (ability === undefined || (shown.node === null && ability.kind !== "triggered")) return;
       if (shown.node === null && ability.kind === "triggered" && zone !== undefined && !worksInZone(ability.zone, zone)) return;
       try {
-        const body = triggerBody(catalog, origin, shown.ability, shown.node);
+        const body = triggerBody(catalog, origin, shown.ability, shown.node, shown.chosenSubtype);
         if (shown.repeated !== undefined && !hasImmutableRepeatAllowance(catalog, origin, shown.ability, shown.node, body)) return;
         if (named === undefined || hasNamedTrigger(body.trigger, named)) candidates.push({ source, origin });
       }
@@ -774,7 +774,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   // Withheld bindings are sampled from direct named occasions. Such a cause
   // has no invented predecessor, even when its body also watches admissions.
   const sampledBinding = (shown: QueuedTriggerView, origin: QueuedTrigger["origin"]): QueuedTrigger["triggeringAbility"] => {
-    const body = triggerBody(catalog, origin, shown.ability, shown.node);
+    const body = triggerBody(catalog, origin, shown.ability, shown.node, shown.chosenSubtype);
     const branches = (trigger: Trigger): Extract<Trigger, { on: "namedAbilityTriggered" }>[] => trigger.on === "either"
       ? trigger.triggers.flatMap(branches) : trigger.on === "namedAbilityTriggered" ? [trigger] : [];
     const observers = readsImmediateRepeat(body.effect) ? branches(body.trigger) : [];
@@ -797,14 +797,15 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           const occurrence: QueuedTrigger = { source, origin: copy(candidateOrigin), controller, ability: index, node,
             subject: selfSubject && typeof source === "string" ? source : null,
             ...(selfSubject ? { subjectHiddenFrom: [...SIDES] } : {}), historyHiddenFrom: [...SIDES] };
-          const cohorts = node === null ? [] : view.floating.flatMap((effect) => {
+          const bindings = node === null ? [] : view.floating.flatMap((effect) => {
             const change = effect.change;
-            if (effect.controller !== controller || effect.source === null || change.kind !== "trigger" || change.captured === undefined ||
+            if (effect.controller !== controller || effect.source === null || change.kind !== "trigger" || (change.captured === undefined && change.ref.chosenSubtype === undefined) ||
               canonicalHash(effect.source) !== canonicalHash(source) || canonicalHash(change.ref.origin) !== canonicalHash(candidateOrigin) ||
               change.ref.ability !== index || change.ref.node !== node) return [];
-            return [captured(change.captured)];
+            return [{ ...(change.captured === undefined ? {} : { captured: captured(change.captured) }),
+              ...(change.ref.chosenSubtype === undefined ? {} : { chosenSubtype: change.ref.chosenSubtype }) }];
           });
-          if (cohorts.length > 0) for (const cohort of cohorts) candidates.push({ ...occurrence, captured: cohort });
+          if (bindings.length > 0) for (const binding of bindings) candidates.push({ ...occurrence, ...binding });
           else {
             const floating = node === null ? undefined : tree[node];
             // The nearest lexical effect binding may historically have entered no cards.
@@ -840,7 +841,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       if (shown.abandonedNamed !== undefined) throw new Error("Abandoned binding requires a triggered reader");
       return undefined;
     }
-    const requested = requestedAbandonedNames(triggerBody(catalog, origin, shown.ability, shown.node).effect);
+    const requested = requestedAbandonedNames(triggerBody(catalog, origin, shown.ability, shown.node, shown.chosenSubtype).effect);
     if (requested.length === 0) {
       if (shown.abandonedNamed !== undefined) throw new Error("Abandoned binding belongs to an immediate reader");
       return undefined;
@@ -871,7 +872,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     }
     // Omitted blind-reader metadata carries no new-op classification. Only the actually sampled body asks for it.
     const branches = (trigger: Trigger): Extract<Trigger, { on: "abandon" }>[] => trigger.on === "either" ? trigger.triggers.flatMap(branches) : trigger.on === "abandon" ? [trigger] : [];
-    const occasions = branches(triggerBody(catalog, origin, shown.ability, shown.node).trigger);
+    const occasions = branches(triggerBody(catalog, origin, shown.ability, shown.node, shown.chosenSubtype).trigger);
     if (occasions.length === 0) return undefined;
     // Unobserved departure changes are sampled from compatible copiable tuples; an observed physical subject stays fixed.
     const candidates = occasions.flatMap(occasion => Object.values(instances).flatMap(instance => {
@@ -924,10 +925,10 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       ? { source: copy(shown.source), origin: copy(shown.origin) }
       : named === undefined && !retainsQueued(shown) ? null : hiddenCause(shown, named);
     if (identity !== null && named !== undefined && (shown.kind !== undefined ||
-      !hasNamedTrigger(triggerBody(catalog, identity.origin, shown.ability, shown.node).trigger, named))) throw new Error("Cannot determinize invalid named cause");
+      !hasNamedTrigger(triggerBody(catalog, identity.origin, shown.ability, shown.node, shown.chosenSubtype).trigger, named))) throw new Error("Cannot determinize invalid named cause");
     if (identity === null) return null;
     if (shown.repeated !== undefined) {
-      const body = triggerBody(catalog, identity.origin, shown.ability, shown.node);
+      const body = triggerBody(catalog, identity.origin, shown.ability, shown.node, shown.chosenSubtype);
       if (!hasImmutableRepeatAllowance(catalog, identity.origin, shown.ability, shown.node, body)) throw new Error("Cannot determinize an impossible repeated allowance");
     }
     if (shown.kind === "ruleReaction") return { kind: "ruleReaction", ...identity, controller: shown.controller,
@@ -942,6 +943,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       ...(shown.kind === "dreamwellBonus" ? { kind: shown.kind } : {}),
       ...(shown.linkedSource === undefined ? {} : { linkedSource: copy(shown.linkedSource) }),
       controller: shown.controller, ability: shown.ability, node: shown.node,
+      ...(shown.chosenSubtype === undefined ? {} : { chosenSubtype: shown.chosenSubtype }),
       subject: shown.subject ?? abandonedNamed?.source ?? (shown.handCopy !== undefined || shown.handCopyHidden === true || shown.abandonedCopy !== undefined ? `i${next++}` : null),
       ...(shown.subject === null && (shown.handCopy !== undefined || shown.handCopyHidden === true || shown.abandonedCopy !== undefined) ? { subjectHiddenFrom: [view.viewer] } : {}),
       ...(shown.handCopy === undefined ? {} : { handCopy: copy(shown.handCopy) }),
@@ -1127,7 +1129,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       continue;
     }
     if (shown.handCopyHidden !== true || shown.handCopy !== undefined || restored.kind === "dreamwellBonus") throw new Error("Cannot determinize invalid hidden hand-copy context");
-    const body = triggerBody(catalog, restored.origin, restored.ability, restored.node);
+    const body = triggerBody(catalog, restored.origin, restored.ability, restored.node, restored.chosenSubtype);
     const branches = (trigger: Trigger): Extract<Trigger, { on: "copy" }>[] => trigger.on === "either" ? trigger.triggers.flatMap(branches) : trigger.on === "copy" ? [trigger] : [];
     const copier = opponent(view.viewer);
     const filters = branches(body.trigger).filter(trigger => resolvePlayer(restored.controller, trigger.player) === copier).map(trigger => trigger.filter);

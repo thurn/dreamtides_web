@@ -8,6 +8,8 @@ import type { EventDefinition } from "../types";
  * "if" no longer holds, so it does nothing.
  */
 export interface TriggerResolvedEvent {
+  /** Public chosen-type specialization of this floating installation. */
+  readonly chosenSubtype?: import("../../../types/card-identity").CardSubtype;
   readonly linkedSource?: LinkedSourceContext;
   readonly kind: "triggerResolved";
   /** The engine names it; it is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */

@@ -24,7 +24,7 @@ export const floatingTriggerPrimitive: ResolvingPrimitiveDefinition<FloatingTrig
   op: "floatingTrigger",
   deferred: (node) => [node.effect],
   resolve(ctx, node, env) {
-    const index = everyNode(env.root).indexOf(node);
+    const index = everyNode(env.root).indexOf(env.originalOf?.(node) ?? node);
     if (index < 0) throw new Error("A floating trigger is not part of its ability's effect");
     const expiry = startDuration(ctx, node.duration, env.controller, env.source, []);
     if (expiry === null) return;
@@ -37,7 +37,8 @@ export const floatingTriggerPrimitive: ResolvingPrimitiveDefinition<FloatingTrig
       expiry,
       change: {
         kind: "trigger",
-        ref: { origin: env.origin, ability: env.ability, node: index },
+        ref: { origin: env.origin, ability: env.ability, node: index,
+          ...(env.chosenSubtype === undefined ? {} : { chosenSubtype: env.chosenSubtype }) },
         once: node.once,
         ...(lastKnownSourceSpark === null ? {} : { lastKnownSourceSpark }),
         ...(env.captured === null ? {} : { captured: [...env.captured] }),

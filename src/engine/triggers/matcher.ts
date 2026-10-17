@@ -614,7 +614,7 @@ function readsSubjectValue(value: unknown, kind: "subjectCost" | "subjectSpark",
 function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger): NamedAdmission {
   const self = sourceInstance(matched.source);
   const lastKnownSourceSpark = self === null ? matched.lastKnownSourceSpark : (ctx.departedSourceSpark.get(self) ?? matched.lastKnownSourceSpark);
-  const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
+  const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node, matched.chosenSubtype).effect;
   const linkedSource = matched.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish")
     ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null);
   const { lastKnownSubjectCost: armedCost, lastKnownSubjectSpark: armedSpark, handCopy, abandonedCopy, triggeringAbility, abandonedNamed, ...record } = matched;
@@ -657,6 +657,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger, descriptor: Trigger):
     controller: trigger.controller,
     ability: trigger.ability,
     node: trigger.node,
+    ...(trigger.chosenSubtype === undefined ? {} : { chosenSubtype: trigger.chosenSubtype }),
     subject: trigger.subject,
     ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),
     ...(trigger.abandonedCopy === undefined ? {} : { abandonedCopy: trigger.abandonedCopy }),
@@ -713,7 +714,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
 function floatingListener(ctx: StepContext, effect: FloatingEffect): { trigger: Trigger; listener: Listener } | null {
   if (effect.change.kind !== "trigger") return null;
   const { ref } = effect.change;
-  const { trigger } = triggerBody(ctx.catalog, ref.origin, ref.ability, ref.node);
+  const { trigger } = triggerBody(ctx.catalog, ref.origin, ref.ability, ref.node, ref.chosenSubtype);
   return { trigger, listener: { source: effect.source, controller: effect.controller, origin: ref.origin, zone: "play", emblem: true } };
 }
 
@@ -751,6 +752,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       origin: ref.origin,
       ability: ref.ability,
       node: ref.node,
+      ...(ref.chosenSubtype === undefined ? {} : { chosenSubtype: ref.chosenSubtype }),
       ...match,
       ...(event.kind !== "abandoned" || match.subject !== event.instance || armed.abandonedNamed === undefined ? {} : { abandonedNamed: armed.abandonedNamed }),
       ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
@@ -844,7 +846,7 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
       if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) {
         entry.floating.push(effect);
         if (entry.kind === "abandoned" && effect.change.kind === "trigger" &&
-            readsAbandonedSubjectCopy(triggerBody(catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node).effect)) entry.copySubject = true;
+            readsAbandonedSubjectCopy(triggerBody(catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node, effect.change.ref.chosenSubtype).effect)) entry.copySubject = true;
       }
     }
   }
@@ -972,7 +974,7 @@ function captureAbandonedNamed(ctx: StepContext, event: LeftPlayEvent, origin: i
       return requestedAbandonedNames(triggerBody(ctx.catalog, value.listener.origin, index, null).effect);
     }),
     ...entry.floating.flatMap(effect => effect.change.kind === "trigger"
-      ? requestedAbandonedNames(triggerBody(ctx.catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node).effect) : []),
+      ? requestedAbandonedNames(triggerBody(ctx.catalog, effect.change.ref.origin, effect.change.ref.ability, effect.change.ref.node, effect.change.ref.chosenSubtype).effect) : []),
   ]);
   if (requests.length === 0) return undefined;
   const entries = originAbilities(ctx.catalog, origin).flatMap((ability, index): AbandonedNamedEntry[] => {
@@ -1086,7 +1088,7 @@ export function triggerNamed(ctx: StepContext, id: InstanceId, named: NamedTrigg
 export function repeatCapturedTrigger(ctx: StepContext, binding: NonNullable<QueuedTrigger["triggeringAbility"]>): void {
   const original = binding.occurrence;
   if (original.kind !== undefined) throw new Error("A repeated cause must be a triggered ability");
-  const body = triggerBody(ctx.catalog, original.origin, original.ability, original.node);
+  const body = triggerBody(ctx.catalog, original.origin, original.ability, original.node, original.chosenSubtype);
   if (!hasNamedTrigger(body.trigger, binding.named)) throw new Error("A repeated cause has no matching named trigger");
   if (original.node === null) {
     const ability = originAbilities(ctx.catalog, original.origin)[original.ability];

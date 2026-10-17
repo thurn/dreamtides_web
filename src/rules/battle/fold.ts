@@ -1,3 +1,5 @@
+import { BATTLE } from "../../content/battle";
+import { CHOSEN_SUBTYPE } from "../../engine/effects/primitives/choose-subtype";
 import { decodeBattleSetup, isVictorySides } from "../../engine/state/declared-input";
 import { hasInvalidTransfigurationApplications } from "./transfiguration-state";
 import { isTransfigurationApplications } from "../../engine/transfiguration-application-data";
@@ -1056,12 +1058,18 @@ function isExpiry(value: unknown): boolean {
   }
 }
 
+/** A concrete chosen type, never an unresolved instruction placeholder. */
+function isChosenSubtype(value: unknown): boolean {
+  return typeof value === "string" && value.length > 0 && value !== CHOSEN_SUBTYPE && !(BATTLE.untypedSubtypes as readonly string[]).includes(value);
+}
+
 function isEffectRef(value: unknown): boolean {
   return (
     isPlainRecord(value) &&
     isAbilityOrigin(value.origin) &&
     isIndex(value.ability) &&
-    isIndex(value.node)
+    isIndex(value.node) &&
+    optional(isChosenSubtype)(value.chosenSubtype)
   );
 }
 
@@ -1250,6 +1258,7 @@ function isAbandonedNamed(value: unknown): boolean {
 
 function isQueuedTriggerRecord(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
+  if (value.chosenSubtype !== undefined && (!isChosenSubtype(value.chosenSubtype) || value.node === null || value.kind !== undefined)) return false;
   if (value.kind !== undefined && value.kind !== "dreamwellBonus" && value.kind !== "ruleReaction") return false;
   if (value.abandonedNamed !== undefined && (value.kind !== undefined || !isAbandonedNamed(value.abandonedNamed) ||
       !isPlainRecord(value.abandonedNamed) || value.subject !== value.abandonedNamed.source)) return false;

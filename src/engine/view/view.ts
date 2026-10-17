@@ -222,6 +222,8 @@ export type AbandonedNamedView = ({ readonly hidden: true } | {
 }) & { readonly reader?: { readonly ceased: number } };
 
 export interface QueuedTriggerView {
+  /** The identifiable floating installation's public chosen type. */
+  readonly chosenSubtype?: import("../../types/card-identity").CardSubtype;
   readonly abandonedNamed?: AbandonedNamedView;
   readonly repeated?: import("../dsl/types").NamedTrigger;
   /** Nested observed cause only: immutable ownership/member, or known cessation; no hidden current definition. */
@@ -646,6 +648,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
           : { member: memberFor(trigger.source), owner: state.instances[trigger.source].owner } }),
       ability: trigger.ability,
       node: trigger.node,
+      ...(trigger.chosenSubtype === undefined || !originSeen ? {} : { chosenSubtype: trigger.chosenSubtype }),
       subject: seesSubject(state, trigger, viewer) || seesHandCopySubject(state, trigger, viewer) ? trigger.subject : null,
       ...(trigger.handCopy === undefined || !causeKnown ? {} : trigger.handCopy.copier === viewer
         ? { handCopy: copy(trigger.handCopy) }

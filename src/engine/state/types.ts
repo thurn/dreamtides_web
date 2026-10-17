@@ -419,6 +419,8 @@ export type Expiry =
  * read from the catalog, never stored in the state.
  */
 export interface EffectRef {
+  /** The type selected by the enclosing instruction at this installation. */
+  readonly chosenSubtype?: CardSubtype;
   readonly origin: AbilityOrigin;
   readonly ability: number;
   readonly node: number;
@@ -652,6 +654,8 @@ export interface AbandonedNamedBinding {
 }
 
 interface QueuedAbility {
+  /** The floating installation's chosen type, independent of its source's present type. */
+  readonly chosenSubtype?: CardSubtype;
   readonly abandonedNamed?: AbandonedNamedBinding;
   /** Sampled historical context withheld by the input view, independent of current source visibility. */
   readonly historyHiddenFrom?: readonly Side[];

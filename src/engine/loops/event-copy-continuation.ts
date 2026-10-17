@@ -76,7 +76,7 @@ function passiveFloating(state: BattleState, catalog: EngineCatalog): boolean {
         // A dormant callback is inert under this exact emitted-event alphabet.
         // Intersecting callbacks need their own lifetime/body proof.
         const { ref } = change;
-        const body = triggerBody(catalog, ref.origin, ref.ability, ref.node);
+        const body = triggerBody(catalog, ref.origin, ref.ability, ref.node, ref.chosenSubtype);
         return !triggerEventKinds(body.trigger).some(kind => EMITTED.includes(kind));
       }
       case "temporary": {

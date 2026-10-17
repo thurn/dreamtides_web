@@ -1,0 +1,613 @@
+{
+  "bead": "hv-umm2.781",
+  "base": "c61f8874c53fa15598bdc863d4cbe0c8d6556583",
+  "rawDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781",
+  "implementWindow": {
+    "start": "2026-10-17T04:43:07.987725+00:00",
+    "end": "2026-10-17T04:55:06.400881+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper start; aggregate failed only for new assertion lint typing"
+      },
+      "localValidationS.focused": {
+        "measuredFor": "sum of five iterative focused contract runs, includes diagnosed setup failures"
+      },
+      "localValidationS.review": {
+        "measuredFor": "original quick aggregate exit1; full final aggregate is the successful superset"
+      }
+    }
+  },
+  "validation": [
+    {
+      "name": "beforefix",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "floating chosen subtype"
+      ],
+      "pid": 65698,
+      "pgid": 65698,
+      "exit": 1,
+      "wallS": 11.21912407875061,
+      "descendantCpuS": 11.778589,
+      "loadStart": [
+        4.33447265625,
+        5.66162109375,
+        6.52734375
+      ],
+      "loadEnd": [
+        4.79541015625,
+        5.6943359375,
+        6.52294921875
+      ],
+      "logSHA256": "6e677af4ef25058af8a02d75b346d6962b58bd97e36a10c7caf99bb7555e8839",
+      "end": "2026-10-17T04:44:28.202351+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/beforefix.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/beforefix.receipt.json",
+      "receiptSHA256": "e7727d7f49d4972f9ae374478c84a98196f9260aae30d21217a48c861f8291c7",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/beforefix.inputs.json",
+      "inputManifestSHA256": "609882210cf4569c05061ce8c6b3a124e454eadd1c238ce0f384386ff8637432",
+      "inputCount": 2728
+    },
+    {
+      "name": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 97608,
+      "pgid": 97608,
+      "exit": 0,
+      "wallS": 0.07738590240478516,
+      "descendantCpuS": 0.082649,
+      "loadStart": [
+        11.66259765625,
+        10.20166015625,
+        8.2373046875
+      ],
+      "loadEnd": [
+        11.66259765625,
+        10.20166015625,
+        8.2373046875
+      ],
+      "logSHA256": "a63a63fed0edb9c0455a6e5dc62d7faa52074003dae69c3cbd71d056294ff0fc",
+      "end": "2026-10-17T04:54:40.670036+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/evidence-schema.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/evidence-schema.receipt.json",
+      "receiptSHA256": "da644d5eb4bf9eb460e83cc0003db50e5c4803974ee98481709bc6e5493e2a96",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/evidence-schema.inputs.json",
+      "inputManifestSHA256": "13bfd8f7362ab754cd8ea55bf24a761f8844e7b23a74e1bb0d7e85def5eb6d23",
+      "inputCount": 2728
+    },
+    {
+      "name": "focused-behavior",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "floating chosen subtype"
+      ],
+      "pid": 74369,
+      "pgid": 74369,
+      "exit": 1,
+      "wallS": 8.175209045410156,
+      "descendantCpuS": 10.681509,
+      "loadStart": [
+        5.65087890625,
+        5.60009765625,
+        6.3779296875
+      ],
+      "loadEnd": [
+        5.76513671875,
+        5.62841796875,
+        6.37890625
+      ],
+      "logSHA256": "09fb42e92b439bf5d1f13adec4773447d6db8f5ee5d38791aca0d96774d0ee3a",
+      "end": "2026-10-17T04:46:23.467713+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-behavior.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-behavior.receipt.json",
+      "receiptSHA256": "a939846e6130daeac2763e3a42cd367c52564bce99a63500e9f409f091338023",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-behavior.inputs.json",
+      "inputManifestSHA256": "8edce80883b2e119a82ce43fc85c2c78c38a6f79edcb0ab8e7800b9f0ee2e4f7",
+      "inputCount": 2728
+    },
+    {
+      "name": "focused-captures",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "floating chosen subtype"
+      ],
+      "pid": 80140,
+      "pgid": 80140,
+      "exit": 0,
+      "wallS": 8.283223867416382,
+      "descendantCpuS": 10.901923,
+      "loadStart": [
+        5.49169921875,
+        5.568359375,
+        6.29443359375
+      ],
+      "loadEnd": [
+        5.3720703125,
+        5.5419921875,
+        6.28076171875
+      ],
+      "logSHA256": "094aaf047036d9fdfe713048f440d17ffe48b4e8b5184d274e60de87c43ea597",
+      "end": "2026-10-17T04:47:41.471937+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-captures.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-captures.receipt.json",
+      "receiptSHA256": "aee795b8bd3dcbdc51e36373b8f193fed4141fca3ba22fabf9c96c1feefc531f",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-captures.inputs.json",
+      "inputManifestSHA256": "8c10401d89f82910371593be654b01e760a2a86be1a8ae48d6bd34b5a4cc869d",
+      "inputCount": 2728
+    },
+    {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "floating chosen subtype"
+      ],
+      "pid": 87269,
+      "pgid": 87269,
+      "exit": 0,
+      "wallS": 9.918374300003052,
+      "descendantCpuS": 12.129634,
+      "loadStart": [
+        5.90380859375,
+        5.685546875,
+        6.2587890625
+      ],
+      "loadEnd": [
+        7.19921875,
+        5.9609375,
+        6.3486328125
+      ],
+      "logSHA256": "8ef671bfa779a1ddc86c175dc1c38d949aa50d56e456c49d885c9c0cb102ffc5",
+      "end": "2026-10-17T04:49:19.161495+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-final.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-final.receipt.json",
+      "receiptSHA256": "3b15b57bd86837db967fcf46bf7d8e01a7b0621465efe5de27e54f2cf3587db8",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-final.inputs.json",
+      "inputManifestSHA256": "1a4680f3e6b5cc0817a51328059ea77467374b52062d41efc337eb8ce03a65cd",
+      "inputCount": 2728
+    },
+    {
+      "name": "focused-install",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "floating chosen subtype"
+      ],
+      "pid": 68751,
+      "pgid": 68751,
+      "exit": 0,
+      "wallS": 8.57959508895874,
+      "descendantCpuS": 11.147011,
+      "loadStart": [
+        4.5361328125,
+        5.546875,
+        6.439453125
+      ],
+      "loadEnd": [
+        4.66796875,
+        5.54443359375,
+        6.427734375
+      ],
+      "logSHA256": "1c711ca1d700ccac655ebede92b295af045b5b1c73f3fcda08836967607bf1ae",
+      "end": "2026-10-17T04:45:08.835198+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-install.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-install.receipt.json",
+      "receiptSHA256": "de0fbfad103a8bc82d0d9faa68834813b1e0f39c3b38db9fc38115635d765c77",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-install.inputs.json",
+      "inputManifestSHA256": "088e0627f47daa7dba0e7698dc3c21cc0021d3b241772544598b66dbd69c69fe",
+      "inputCount": 2728
+    },
+    {
+      "name": "focused-refined",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "floating chosen subtype"
+      ],
+      "pid": 76720,
+      "pgid": 76720,
+      "exit": 1,
+      "wallS": 8.000695943832397,
+      "descendantCpuS": 10.545577999999999,
+      "loadStart": [
+        5.44091796875,
+        5.560546875,
+        6.33154296875
+      ],
+      "loadEnd": [
+        5.8056640625,
+        5.6337890625,
+        6.35302734375
+      ],
+      "logSHA256": "eb2ceea0e2e17129b486e5953e44a71dc249bcbfc51c13caa53b21c3ab806320",
+      "end": "2026-10-17T04:46:55.650310+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-refined.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-refined.receipt.json",
+      "receiptSHA256": "a7c167a8f283c0e6868d4f18c8dd523f2946e0aad4be36379133ed0655dc777d",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/focused-refined.inputs.json",
+      "inputManifestSHA256": "33355932707b191504760e2a087dcbcc68a0c82b270dfb3542c0ed146b1de700",
+      "inputCount": 2728
+    },
+    {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 2771,
+      "pgid": 2771,
+      "exit": 0,
+      "wallS": 152.45115303993225,
+      "descendantCpuS": 373.74886200000003,
+      "loadStart": [
+        6.8828125,
+        7.341796875,
+        6.93408203125
+      ],
+      "loadEnd": [
+        12.4169921875,
+        10.3232421875,
+        8.2685546875
+      ],
+      "logSHA256": "d35050278f68b9a7c83b83e1c3ff5146add6d586e109eced0fc745bb5cf9b457",
+      "end": "2026-10-17T04:54:34.256635+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/full.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/full.receipt.json",
+      "receiptSHA256": "d741ffa698358fce69e6886c6774cc41cf5db55f4979e8bc2b74bb9e93427b08",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/full.inputs.json",
+      "inputManifestSHA256": "13bfd8f7362ab754cd8ea55bf24a761f8844e7b23a74e1bb0d7e85def5eb6d23",
+      "inputCount": 2728
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 1016,
+      "pgid": 1016,
+      "exit": 0,
+      "wallS": 5.459917783737183,
+      "descendantCpuS": 6.293877,
+      "loadStart": [
+        7.85205078125,
+        7.54052734375,
+        6.99267578125
+      ],
+      "loadEnd": [
+        7.78369140625,
+        7.53125,
+        6.99267578125
+      ],
+      "logSHA256": "451a5f0fc369060d32dd535616e0dabd11317d2164507f1630b24033bfb5b10f",
+      "end": "2026-10-17T04:51:43.416034+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/knip.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/knip.receipt.json",
+      "receiptSHA256": "1a59c0a02e76de7d55d6469036c821e7943158605b376e7007b2c90f38eb3bd5",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/knip.inputs.json",
+      "inputManifestSHA256": "13bfd8f7362ab754cd8ea55bf24a761f8844e7b23a74e1bb0d7e85def5eb6d23",
+      "inputCount": 2728
+    },
+    {
+      "name": "lint-repair",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/engine/effects/primitives/contracts/floating-subtype.contracts.ts"
+      ],
+      "pid": 1015,
+      "pgid": 1015,
+      "exit": 0,
+      "wallS": 2.9072930812835693,
+      "descendantCpuS": 5.0337629999999995,
+      "loadStart": [
+        7.85205078125,
+        7.54052734375,
+        6.99267578125
+      ],
+      "loadEnd": [
+        7.85205078125,
+        7.54052734375,
+        6.99267578125
+      ],
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "end": "2026-10-17T04:51:40.863367+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/lint-repair.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/lint-repair.receipt.json",
+      "receiptSHA256": "2e2ccf9dd44b1d85e5eaf4a88f8c7e6152afb5fc93e99bc97aa122f6ae5b88a3",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/lint-repair.inputs.json",
+      "inputManifestSHA256": "13bfd8f7362ab754cd8ea55bf24a761f8844e7b23a74e1bb0d7e85def5eb6d23",
+      "inputCount": 2728
+    },
+    {
+      "name": "preexisting-nested",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/nested-choice.mts"
+      ],
+      "pid": 85657,
+      "pgid": 85657,
+      "exit": 0,
+      "wallS": 2.7194597721099854,
+      "descendantCpuS": 1.578574,
+      "loadStart": [
+        5.76220703125,
+        5.646484375,
+        6.26025390625
+      ],
+      "loadEnd": [
+        5.76220703125,
+        5.646484375,
+        6.26025390625
+      ],
+      "logSHA256": "add7dfe8f4b8aebfd2d9759ccde520a74d7dc91dac6d176bcca40da898d8fe2a",
+      "end": "2026-10-17T04:48:51.425136+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/preexisting-nested.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/preexisting-nested.receipt.json",
+      "receiptSHA256": "f6ef632defda4097d66eb5dab8d4dba287ac0cb26da6432bbaf0daeb22059b14",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/preexisting-nested.inputs.json",
+      "inputManifestSHA256": "ed0d7a4303f3417fc51e3907f92d217270afb2fcaaff6d7cdfe34210d90458b5",
+      "inputCount": 2728
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 93079,
+      "pgid": 93079,
+      "exit": 1,
+      "wallS": 87.29183602333069,
+      "descendantCpuS": 239.302667,
+      "loadStart": [
+        12.78662109375,
+        7.6123046875,
+        6.93701171875
+      ],
+      "loadEnd": [
+        8.67236328125,
+        7.67236328125,
+        7.029296875
+      ],
+      "logSHA256": "f26d4333ffe21a22c3de6cc944c72a1c8af9d288aacf18d981a65f7d5f10ad8a",
+      "end": "2026-10-17T04:51:27.177468+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/review.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/review.receipt.json",
+      "receiptSHA256": "694bfec3c1f62eca59f6f63109056de529aaeac53a1cd4ff25dbba83f7b05f5e",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/review.inputs.json",
+      "inputManifestSHA256": "1a4680f3e6b5cc0817a51328059ea77467374b52062d41efc337eb8ce03a65cd",
+      "inputCount": 2728
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 82005,
+      "pgid": 82005,
+      "exit": 2,
+      "wallS": 20.462903022766113,
+      "descendantCpuS": 36.10278,
+      "loadStart": [
+        4.9814453125,
+        5.44140625,
+        6.2265625
+      ],
+      "loadEnd": [
+        6.1865234375,
+        5.69970703125,
+        6.30126953125
+      ],
+      "logSHA256": "8245a2439960fd5d11e65db2daff948e883f578cdbfd81697da49b8d2a7b6e7f",
+      "end": "2026-10-17T04:48:20.395156+00:00",
+      "raw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/typecheck.log",
+      "receipt": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/typecheck.receipt.json",
+      "receiptSHA256": "196d05b1e1c5e1a15c2b46acc2a9764019db299d3a8fc13a71df6d6a361cb5b5",
+      "inputManifest": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/typecheck.inputs.json",
+      "inputManifestSHA256": "93de3c26a8b0394e633620f3589b86c9626ec28308421a97640cc4fd35088591",
+      "inputCount": 2728
+    }
+  ],
+  "finalCodeAndTestSHA256": {
+    "src/engine/effects/interpreter.ts": "af0231c6436a787cb1aa3bee8f9fefad25519e157c2aa36ca48d0535dd6316f6",
+    "src/engine/effects/primitives/choose-subtype.ts": "11d84ec6d9b446adc05be81bd69333521f77c424a4d61607b1ea3719023605e7",
+    "src/engine/effects/primitives/floating-trigger.ts": "2539fc8eac449385c3c606fe21e4ebe04aed2310c5a6892b532c52ff31e10791",
+    "src/engine/effects/types.ts": "b5389bf721d3104006d09085a72d778bb7d9978a085046a008064b0773f6e273",
+    "src/engine/events/kinds/trigger-queued.ts": "af53dc8c7afb610f8cc82a4c5b95878a7411e36af86cfc28b9494eced066ffe8",
+    "src/engine/events/kinds/trigger-resolved.ts": "2bc7b22158453c4c1517558e78377bf8055e590e2ae413736878faad3725b29a",
+    "src/engine/loops/event-copy-continuation.ts": "c69947f28269277d719e34c3a959036dfed3f72a94bfd9941469ac717ca3d5cb",
+    "src/engine/state/types.ts": "481352d4ec327c920ab8740399611b1175198a04da881c8e5d7a018c101b7f65",
+    "src/engine/triggers/body.ts": "a2a32eab9eead35e95c306b9d1c3267f67e53ed894184165addaf6051dade89d",
+    "src/engine/triggers/first-time-each-turn.ts": "70a14b46cc500542181ed1a31265d21466d1766021f4d1edb926c24788ab8da0",
+    "src/engine/triggers/matcher.ts": "e80fdd8ae33197628ee853ba99b9b495dd6a0dbb27d37577c90f51cb6e2bae3f",
+    "src/engine/triggers/resolve.ts": "192c383e5cdeb4f25e9329e0a2b98db5b65685075acfd120bf08e0dbb7fa10d8",
+    "src/engine/view/determinize.ts": "f539aaa23d4a20aa8769aacffa18f2ee28e89310b520b79bac794a4e7ca985d9",
+    "src/engine/view/view.ts": "94ed92ce8e57840f2f1d2c3941f64740c27d3e7c6323b972864737f2f6ff6da6",
+    "src/rules/battle/fold.ts": "8abee5f3e69aa702bc1646490ad4be0ab9ba0b1bb6a565ebd9e7b6fae60ddeb6",
+    "src/engine/effects/primitives/contracts/floating-subtype.contracts.ts": "ac46d5d26305b293edb0fa825c4f5cb489b35d3de1388f571c48198e885e5126"
+  },
+  "beforeFix": {
+    "originalRegression": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/beforefix.original.contracts.ts",
+    "sha256": "91847375a59514918a76dcb69614d05e998bbe67947875ef2791138c23cd4af6",
+    "publicFailures": 4,
+    "publicOutcome": "engine_error in resolveTop for both controllers, filter and deferred-effect cases",
+    "sourceAudit": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/beforefix-source-audit.json",
+    "sourceAuditSHA256": "c3cdd01451b64a90ffd27edb8f86ca67e60eda7f6d979c9f71009b23dd7607e0",
+    "positiveSameOriginalRegression": "focused-install uses the original regression bytes and passes all four"
+  },
+  "diagnoses": {
+    "focused-behavior": "Two fixture assumptions: a single legal target auto-answers, and advance is not a public action. Added a second matching character and used pass from Night. Production unchanged.",
+    "focused-refined": "Targeting uses chooseTargets; corrected new assertion kind. Production unchanged.",
+    "typecheck": "New test needed explicit play-trigger narrowing before reading filter.",
+    "review": "All356 related files and11328 tests passed. Six new assertion-typing lint errors were repaired with partial-object assertions, explicit target narrowing, and removing a redundant assertion. Focused lint and final full cover those edits; no second quick aggregate."
+  },
+  "failurePaths": {
+    "midStepError": "rolls back a partial installation and recovers identically after restart (both controllers)",
+    "restart": "two independent installations and future nested queued target tests reload committed and in-flight slices",
+    "partialWrite": "first installed trigger exists only in suspended display; committed floating remains empty; synthetic later failure publishes no further events",
+    "invalidStaleInput": "future nested queued choice rejects wrong side, illegal type target, stale prompt, and repeated completion; public parser rejects malformed scalar binding records",
+    "concurrentActors": "stepInFlight rejects a competing battleAction while the queued trigger awaits a target",
+    "cancellation": "resolution choice is non-cancellable; explicit cancel returns notCancellable",
+    "expiry": "Night pass expires bound repeating trigger; ordinary permanent control remains",
+    "oneShot": "same-node delayed installations each fire once for their own selected type",
+    "recovery": "fresh and existing adapters produce equal recovered outcomes after the synthetic failure",
+    "capturesAndLastKnown": "captured materialized card and source departure spark survive chosen installation and source dissolution",
+    "replay": "complete successful intent sequence and every published event compare equal under checkEventPrefix",
+    "immutability": "input state, graph snapshot and frozen trigger/filter/instruction remain intact",
+    "sourceIdentity": "amplified origin, node index, source instance and synthetic catalog UUID persist across choices and future events"
+  },
+  "writerPartition": {
+    "functions": [
+      "mentionsChosenSubtype",
+      "withChosenSubtype"
+    ],
+    "unchangedSHA256": "b7cda6259ab67358ea068ba84fe6aa86191d8cd264e8029def84e167a066a613"
+  },
+  "mechanicalFallout": [
+    "first-time-each-turn.observeFirstOccurrences forwards optional subtype",
+    "event-copy-continuation.passiveFloating forwards optional subtype",
+    "existing matcher descriptor readers forward optional subtype"
+  ],
+  "boundedArchitecture": [
+    "original instruction provenance is transient EffectEnv.originalOf",
+    "scalar subtype binding is retained on EffectRef and QueuedTrigger",
+    "triggerBody rebuilds specialized catalog graph with preserved alias/index order",
+    "view and existing reconstruction retain visible scalar binding alongside captures",
+    "triggerQueued and triggerResolved logs include scalar binding",
+    "saved parser validates concrete optional subtype and rejects non-floating queued binding"
+  ],
+  "preExisting": {
+    "bead": "hv-umm2.782",
+    "evidence": "docs/plan/evidence/pre-existing/hv-umm2.781.md",
+    "cause": "outer substitution eagerly crosses nested chooseSubtype lexical boundary; excluded helper bytes unchanged"
+  },
+  "qa": {
+    "appWorkflow": "internal rules/state/replay contracts; no screen or player interaction flow changed",
+    "browserQA": "not applicable",
+    "existingFullSuiteHarness": "temporary synthetic server groups in full.log; included in cleanup audit"
+  },
+  "cleanup": {
+    "at": "2026-10-17T04:55:06.393943+00:00",
+    "verifiedProcessGroups": [
+      1015,
+      1016,
+      2771,
+      5883,
+      6159,
+      6540,
+      6587,
+      7084,
+      7343,
+      7758,
+      8093,
+      8235,
+      8367,
+      9037,
+      9052,
+      9741,
+      10156,
+      10402,
+      10611,
+      10812,
+      11391,
+      11533,
+      12296,
+      12614,
+      13106,
+      13810,
+      14949,
+      15557,
+      15820,
+      16250,
+      16439,
+      17174,
+      17352,
+      17754,
+      17818,
+      18364,
+      18578,
+      18997,
+      19735,
+      19747,
+      20161,
+      20223,
+      20800,
+      20918,
+      22070,
+      22572,
+      23088,
+      23596,
+      23811,
+      24246,
+      24428,
+      25158,
+      25434,
+      26190,
+      30149,
+      30569,
+      31949,
+      32800,
+      33242,
+      33767,
+      34164,
+      65698,
+      68751,
+      74369,
+      76720,
+      80140,
+      82005,
+      85657,
+      87269,
+      93079,
+      97608
+    ],
+    "remainingProcesses": [],
+    "taskBrowsers": [],
+    "taskServers": [],
+    "note": "Full suite temporary synthetic QA servers are included by their logged process groups; no browser provider tool was used."
+  },
+  "cleanupRaw": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/floating-subtype781/cleanup.json",
+  "cleanupSHA256": "a165368652aa6e1632c7a7087538661fef9eae8eb288227662c8b0865779f6e8",
+  "coreReview": {
+    "owner": "parent executor",
+    "status": "fresh read-only Codex review of exact commit pending parent dispatch"
+  }
+}

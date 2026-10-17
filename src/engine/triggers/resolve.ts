@@ -22,11 +22,11 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const { source, controller, origin, ability, node, subject, gain, scored, discardedCount, captured, lastKnownSourceSpark, lastKnownSubjectCost, lastKnownSubjectSpark, linkedSource } = trigger;
   const body = trigger.kind === "dreamwellBonus"
     ? dreamwellBody(ctx, trigger)
-    : trigger.kind === "ruleReaction" ? ruleReactionBody(ctx.catalog, origin, ability) : triggerBody(ctx.catalog, origin, ability, node);
+    : trigger.kind === "ruleReaction" ? ruleReactionBody(ctx.catalog, origin, ability) : triggerBody(ctx.catalog, origin, ability, node, trigger.chosenSubtype);
   if (trigger.repeated !== undefined) {
     if (trigger.kind !== undefined) throw new Error("A repeated occurrence must be a triggered ability");
     const named = trigger.repeated.named;
-    const repeatedBody = triggerBody(ctx.catalog, origin, ability, node);
+    const repeatedBody = triggerBody(ctx.catalog, origin, ability, node, trigger.chosenSubtype);
     if (!hasNamedTrigger(repeatedBody.trigger, named)) throw new Error("A repeated occurrence has no matching named trigger");
     if (!hasImmutableRepeatAllowance(ctx.catalog, origin, ability, node, repeatedBody)) throw new Error("A repeated occurrence has spent its immutable allowance");
   }
@@ -34,12 +34,13 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   const applied =
     body.condition === null ||
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });
-  ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied, ...(linkedSource === undefined ? {} : { linkedSource }) });
+  ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied, ...(trigger.chosenSubtype === undefined ? {} : { chosenSubtype: trigger.chosenSubtype }), ...(linkedSource === undefined ? {} : { linkedSource }) });
   if (!applied) return;
   const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role), lastKnownSourceSpark, undefined, undefined, lastKnownSubjectCost ?? null);
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
+    ...(trigger.chosenSubtype === undefined ? {} : { chosenSubtype: trigger.chosenSubtype }),
     ...(trigger.abandonedNamed === undefined ? {} : { abandonedNamed: trigger.abandonedNamed }),
     ...(trigger.triggeringAbility === undefined ? {} : { triggeringAbility: trigger.triggeringAbility }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),

@@ -90,6 +90,10 @@ export interface ResolutionChoiceScope {
 
 /** What a primitive sees while it resolves. */
 export interface EffectEnv {
+  /** Lexical chosen type retained by a later floating instruction. */
+  readonly chosenSubtype?: import("../../types/card-identity").CardSubtype;
+  /** Original instruction in root for a substituted resolution node. Transient, rebuilt on replay. */
+  originalOf?(node: EffectNode): EffectNode;
   readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
   readonly handCopy?: import("../state/types").HandCopyContext;

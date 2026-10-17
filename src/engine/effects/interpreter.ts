@@ -855,6 +855,8 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 }
 
 export interface ResolveOptions {
+  /** Chosen type of the floating installation whose body resolves. */
+  readonly chosenSubtype?: import("../../types/card-identity").CardSubtype;
   readonly paymentSourceCounters?: number;
   readonly triggeringAbility?: import("../state/types").QueuedTrigger["triggeringAbility"];
   readonly abandonedNamed?: import("../state/types").AbandonedNamedBinding;
@@ -1078,6 +1080,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
   const specs = collectTargets(effect, chosen, deferred);
   const scope: ResolutionChoiceScope | undefined = deferred ? { modes: new Map(), targets: new Map() } : undefined;
   const env: EffectEnv = {
+    ...(options.chosenSubtype === undefined ? {} : { chosenSubtype: options.chosenSubtype }),
     ...(options.abandonedNamed === undefined ? {} : { abandonedNamed: options.abandonedNamed }),
     ...(options.triggeringAbility === undefined ? {} : { triggeringAbility: options.triggeringAbility }),
     ...(scope === undefined ? {} : { resolutionChoiceScope: scope }),
@@ -1139,6 +1142,10 @@ export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: E
     const outer = env;
     env = {
       ...outer,
+      originalOf: node => {
+        const original = (originals.get(node) ?? node) as EffectNode;
+        return outer.originalOf?.(original) ?? original;
+      },
       modeOf: node => outer.modeOf((originals.get(node) ?? node) as EffectNode),
       targetsOf: spec => outer.targetsOf((originals.get(spec) ?? spec) as PlayTimeTarget),
     };

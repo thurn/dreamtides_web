@@ -1110,6 +1110,15 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   `everyNode`) into the catalog definition, so state stays plain data. One
   created inside a `withMaterialized` binding also stores the binding's
   cards (`captured`), which its queued trigger carries to its resolution.
+  An installation inside `chooseSubtype` retains its concrete type as
+  `EffectRef.chosenSubtype`. Replacement instructions use the transient
+  `EffectEnv.originalOf` bridge to index the original graph. `triggerBody`
+  reconstructs a specialized tree from that catalog definition, preserving
+  node order and graph aliases; matching and later resolution therefore use
+  the installation's own type even after its source departs. The queued
+  occurrence carries `chosenSubtype` into its resolving environment, including
+  any further floating installations. Saves, views, reconstruction and trigger
+  logs carry this plain scalar binding; legacy records may omit it.
 - **`triggerAbility`** enqueues a named trigger outside its occasion
   (`triggerNamed`).
 - **Disabled triggers** (`disableTriggers`, optionally while a condition

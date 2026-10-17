@@ -7,6 +7,8 @@ import type { EventDefinition } from "../types";
 
 /** A triggered ability or drawn Dreamwell event bonus joined the resolution FIFO (D14). */
 export interface TriggerQueuedEvent {
+  /** Public chosen-type specialization of this floating installation. */
+  readonly chosenSubtype?: import("../../../types/card-identity").CardSubtype;
   readonly abandonedNamed?: import("../../state/types").AbandonedNamedBinding;
   /** Authoritative causal data for the production log; public events omit it. */
   readonly triggeringAbility?: import("../../state/types").QueuedTrigger["triggeringAbility"];

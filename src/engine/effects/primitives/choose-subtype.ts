@@ -58,7 +58,7 @@ export const chooseSubtypePrimitive: ResolvingPrimitiveDefinition<ChooseSubtypeN
     if (own !== null) startContinuous(ctx, env, "whileSourceInPlay", [own], [{ kind: "subtype", instance: own, subtype }]);
     if (node.then !== null) {
       const originals = new Map<object, object>();
-      resolveChosenEffect(ctx, withChosenSubtype(node.then, subtype, originals), env, false, originals);
+      resolveChosenEffect(ctx, withChosenSubtype(node.then, subtype, originals), { ...env, chosenSubtype: subtype }, false, originals);
     }
   },
 });
