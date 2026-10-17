@@ -204,6 +204,7 @@ export const WATER_TERRAIN: DreamTerrain = {
   tileset: WATER_TILESET,
   corners: lpcTerrainCorners([0, 0], 3),
   blocksMovement: true,
+  layer: "Water",
 };
 
 export const HUT = parseD97StampId("hut");

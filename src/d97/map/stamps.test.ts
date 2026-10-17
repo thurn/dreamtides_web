@@ -35,7 +35,7 @@ const town = compile(
 );
 
 describe("extractStamp", () => {
-  const { stamp } = extractStamp(town, { from: [0, 2], to: [1, 3] }, { id: EXTRACTED, name: "hut", origin: "town" });
+  const { stamp } = extractStamp(town, { from: [0, 2], to: [1, 3] }, { id: EXTRACTED, name: "hut", theme: "building", origin: "town" });
 
   it("keeps the requested footprint, identity and origin", () => {
     expect(stamp).toMatchObject({ id: EXTRACTED, name: "hut", width: 2, height: 2 });
@@ -74,7 +74,7 @@ describe("extractStamp", () => {
   });
 
   it("rejects a rectangle leaving the map", () => {
-    expect(() => extractStamp(town, { from: [6, 4], to: [8, 5] }, { id: EXTRACTED, name: "edge", origin: "town" })).toThrow(RangeError);
+    expect(() => extractStamp(town, { from: [6, 4], to: [8, 5] }, { id: EXTRACTED, name: "edge", theme: "building", origin: "town" })).toThrow(RangeError);
   });
 
   it("writes a module that names the stamp's id", () => {

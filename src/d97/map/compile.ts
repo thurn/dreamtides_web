@@ -9,6 +9,10 @@
 // lifting and erasing act on every layer of that name, while stamps and
 // terrain paint the topmost one.
 //
+// Recipe operations live one per module under `./ops/` and are applied
+// through its registry. The compiled map lists only the tilesets its drawn
+// layers and tile objects use.
+//
 // Walkability: a cell blocks when a blocking (collision) tile layer has a
 // tile there, a blocking object layer's shape covers it, or a drawn tile or
 // tile object there blocks by its tile properties, collision shapes or
@@ -19,13 +23,9 @@
 import { sha256 } from "js-sha256";
 import {
   parseDreamMapSourceHash,
-  type D97StampId,
-  type D97TerrainId,
   type DreamAnchorId,
   type DreamMapSourceHash,
 } from "../../types/identifiers";
-import type { DreamStamp, DreamTerrain } from "./assets";
-import { TERRAIN_FULL } from "./assets";
 import {
   COMPILED_DREAM_MAP_FORMAT,
   type CompiledAnchor,
@@ -38,15 +38,21 @@ import type {
   DreamAnchorDefinition,
   DreamAnchorPlacement,
   DreamMapDefinition,
-  DreamMapRecipeOp,
-  TerrainShape,
   TilePoint,
-  TileRect,
 } from "./definition";
+import { applyRecipeOp } from "./ops";
+import {
+  findLayer,
+  inBounds,
+  objectCell,
+  RecipeError,
+  type RecipeAssets,
+  type WorkingMap,
+  type WorkingObject,
+} from "./ops/working-map";
 import {
   gidWithoutFlags,
   readTiledMap,
-  TILED_FLIP_BITS,
   tilesetForGid,
   type TiledCompression,
   type TiledObject,
@@ -76,15 +82,18 @@ export interface DreamMapSourceInput {
   readonly decompress?: (bytes: Uint8Array, compression: TiledCompression) => Uint8Array;
 }
 
-export interface DreamMapCompileInput {
+export interface DreamMapCompileInput extends RecipeAssets {
   /** The Tiled source; null for a blank-canvas map. */
   readonly source: DreamMapSourceInput | null;
-  readonly stamps: ReadonlyMap<D97StampId, DreamStamp>;
-  readonly terrains: ReadonlyMap<D97TerrainId, DreamTerrain>;
 }
 
 export type DreamMapCompileResult =
-  | { readonly ok: true; readonly map: CompiledDreamMap }
+  | {
+      readonly ok: true;
+      readonly map: CompiledDreamMap;
+      /** Tilesets the source or recipe brought in that no drawn tile uses, left out of the map. */
+      readonly droppedTilesets: readonly { readonly name: string; readonly image: string | null }[];
+    }
   | { readonly ok: false; readonly errors: readonly DreamMapCompileError[] };
 
 /** SHA-256 of a source file's text, as map modules pin it. */
@@ -93,397 +102,6 @@ export function dreamMapSourceHash(text: string): DreamMapSourceHash {
 }
 
 const DEFAULT_BLOCKING_PROPERTIES = ["collides", "collision", "blocked"];
-
-interface WorkingLayer {
-  readonly name: string;
-  gids: number[];
-  readonly visible: boolean;
-  readonly opacity: number;
-  readonly offset: { readonly x: number; readonly y: number };
-  /** Per cell: 1 when that cell is lifted above the player. */
-  lifted: Uint8Array;
-  aboveAll: boolean;
-}
-
-interface WorkingObject {
-  readonly gid: number;
-  x: number;
-  y: number;
-  readonly width: number;
-  readonly height: number;
-  readonly layer: string;
-  above: boolean;
-}
-
-interface WorkingMap {
-  width: number;
-  height: number;
-  readonly tileWidth: number;
-  readonly tileHeight: number;
-  readonly tilesets: TiledTileset[];
-  layers: WorkingLayer[];
-  objects: WorkingObject[];
-  readonly objectLayers: Set<string>;
-  /** Object layers hidden in the source. */
-  readonly invisibleObjectLayers: Set<string>;
-  /** Per object layer, cells its shapes (non-tile objects) cover. */
-  readonly objectShapes: Map<string, Uint8Array>;
-  readonly hidden: Set<string>;
-  /** Per cell: -1 derived, 0 forced open, 1 forced blocked. */
-  override: Int8Array;
-  /** Gids (without flags) that block because a blocking terrain placed them. */
-  readonly blockingGids: Set<number>;
-}
-
-class RecipeError extends Error {}
-
-function rectCells({ from, to }: TileRect): { x0: number; y0: number; x1: number; y1: number } {
-  return {
-    x0: Math.min(from[0], to[0]),
-    y0: Math.min(from[1], to[1]),
-    x1: Math.max(from[0], to[0]),
-    y1: Math.max(from[1], to[1]),
-  };
-}
-
-function inBounds(map: { width: number; height: number }, [x, y]: TilePoint): boolean {
-  return Number.isInteger(x) && Number.isInteger(y) && x >= 0 && y >= 0 && x < map.width && y < map.height;
-}
-
-function requireRect(map: WorkingMap, rect: TileRect) {
-  if (!inBounds(map, rect.from) || !inBounds(map, rect.to)) {
-    throw new RecipeError(
-      `rectangle ${JSON.stringify(rect.from)}–${JSON.stringify(rect.to)} leaves the ${String(map.width)}×${String(map.height)} map`,
-    );
-  }
-  return rectCells(rect);
-}
-
-/** The topmost tile layer named `name`. */
-function findLayer(map: WorkingMap, name: string): WorkingLayer | undefined {
-  for (let index = map.layers.length - 1; index >= 0; index -= 1) {
-    if (map.layers[index].name === name) return map.layers[index];
-  }
-  return undefined;
-}
-
-/** Whether the map has a tile or object layer named `name`. */
-function hasLayer(map: WorkingMap, name: string): boolean {
-  return findLayer(map, name) !== undefined || map.objectLayers.has(name);
-}
-
-function layerOrCreate(map: WorkingMap, name: string): WorkingLayer {
-  const existing = findLayer(map, name);
-  if (existing !== undefined) return existing;
-  const created: WorkingLayer = {
-    name,
-    gids: new Array<number>(map.width * map.height).fill(0),
-    visible: true,
-    opacity: 1,
-    offset: { x: 0, y: 0 },
-    lifted: new Uint8Array(map.width * map.height),
-    aboveAll: false,
-  };
-  map.layers.push(created);
-  return created;
-}
-
-function tilesetSpan(tileset: TiledTileset): number {
-  const highestTile = tileset.tiles.reduce((max, tile) => Math.max(max, tile.id + 1), 0);
-  return Math.max(tileset.tileCount, highestTile, 1);
-}
-
-function sameTileset(a: TiledTileset, b: TiledTileset): boolean {
-  if (a.image === null || b.image === null) return a.name === b.name && a.image === b.image;
-  return a.image.path === b.image.path && a.tileWidth === b.tileWidth && a.tileHeight === b.tileHeight;
-}
-
-/** Add `tileset` to the map unless an identical one is there; returns its first gid. */
-function mergeTileset(map: WorkingMap, tileset: TiledTileset): number {
-  const existing = map.tilesets.find((candidate) => sameTileset(candidate, tileset));
-  if (existing !== undefined) return existing.firstGid;
-  const firstGid = map.tilesets.reduce(
-    (next, candidate) => Math.max(next, candidate.firstGid + tilesetSpan(candidate)),
-    1,
-  );
-  map.tilesets.push({ ...tileset, firstGid });
-  return firstGid;
-}
-
-/** Map a gid from an asset's own tileset numbering into the map's. */
-function remapper(map: WorkingMap, tilesets: readonly TiledTileset[]): (gid: number) => number {
-  const bases = tilesets.map((tileset) => ({ tileset, mapFirstGid: mergeTileset(map, tileset) }));
-  return (gid) => {
-    const id = gidWithoutFlags(gid);
-    if (id === 0) return 0;
-    const owner = tilesetForGid(tilesets, id);
-    const base = bases.find((entry) => entry.tileset === owner);
-    if (owner === null || base === undefined) {
-      throw new RecipeError(`gid ${String(id)} has no tileset`);
-    }
-    return ((gid & TILED_FLIP_BITS) | (id - owner.firstGid + base.mapFirstGid)) >>> 0;
-  };
-}
-
-function cropOp(map: WorkingMap, rect: TileRect): void {
-  const { x0, y0, x1, y1 } = requireRect(map, rect);
-  const width = x1 - x0 + 1;
-  const height = y1 - y0 + 1;
-  const crop = <T extends number[] | Uint8Array | Int8Array>(cells: T, make: (n: number) => T): T => {
-    const out = make(width * height);
-    for (let y = 0; y < height; y += 1) {
-      for (let x = 0; x < width; x += 1) {
-        out[y * width + x] = cells[(y + y0) * map.width + x + x0];
-      }
-    }
-    return out;
-  };
-  for (const layer of map.layers) {
-    layer.gids = crop(layer.gids, (n) => new Array<number>(n).fill(0));
-    layer.lifted = crop(layer.lifted, (n) => new Uint8Array(n));
-  }
-  map.override = crop(map.override, (n) => new Int8Array(n).fill(-1));
-  for (const [name, cells] of map.objectShapes) {
-    map.objectShapes.set(name, crop(cells, (n) => new Uint8Array(n)));
-  }
-  map.objects = map.objects
-    .map((object) => ({ ...object, x: object.x - x0 * map.tileWidth, y: object.y - y0 * map.tileHeight }))
-    .filter(
-      (object) =>
-        object.x >= 0 &&
-        object.y > 0 &&
-        object.x < width * map.tileWidth &&
-        object.y <= height * map.tileHeight,
-    );
-  map.width = width;
-  map.height = height;
-}
-
-/** The base cell of a tile object: the cell holding its bottom-left tile. */
-function objectCell(map: WorkingMap, object: WorkingObject): TilePoint {
-  return [Math.floor(object.x / map.tileWidth), Math.floor((object.y - 1) / map.tileHeight)];
-}
-
-function eraseOp(map: WorkingMap, op: Extract<DreamMapRecipeOp, { op: "erase" }>): void {
-  const { x0, y0, x1, y1 } = requireRect(map, op);
-  const names = op.layers ?? [...map.layers.map((layer) => layer.name), ...map.objectLayers];
-  for (const name of names) {
-    if (!hasLayer(map, name)) throw new RecipeError(`unknown layer ${name}`);
-  }
-  for (const layer of map.layers) {
-    if (!names.includes(layer.name)) continue;
-    for (let y = y0; y <= y1; y += 1) {
-      for (let x = x0; x <= x1; x += 1) {
-        layer.gids[y * map.width + x] = 0;
-        layer.lifted[y * map.width + x] = 0;
-      }
-    }
-  }
-  for (const [name, shapes] of map.objectShapes) {
-    if (!names.includes(name)) continue;
-    for (let y = y0; y <= y1; y += 1) {
-      for (let x = x0; x <= x1; x += 1) shapes[y * map.width + x] = 0;
-    }
-  }
-  map.objects = map.objects.filter((object) => {
-    if (!names.includes(object.layer)) return true;
-    const [x, y] = objectCell(map, object);
-    return x < x0 || x > x1 || y < y0 || y > y1;
-  });
-  for (let y = y0; y <= y1; y += 1) {
-    for (let x = x0; x <= x1; x += 1) map.override[y * map.width + x] = -1;
-  }
-}
-
-function stampOp(map: WorkingMap, stamp: DreamStamp, at: TilePoint): void {
-  const corner: TilePoint = [at[0] + stamp.width - 1, at[1] + stamp.height - 1];
-  if (!inBounds(map, at) || !inBounds(map, corner)) {
-    throw new RecipeError(`stamp ${stamp.id} at ${JSON.stringify(at)} leaves the map`);
-  }
-  const remap = remapper(map, stamp.tilesets);
-  for (const stampLayer of stamp.layers) {
-    if (stampLayer.gids.length !== stamp.width * stamp.height) {
-      throw new RecipeError(`stamp ${stamp.id} layer ${stampLayer.layer} has the wrong cell count`);
-    }
-    const layer = layerOrCreate(map, stampLayer.layer);
-    for (let y = 0; y < stamp.height; y += 1) {
-      for (let x = 0; x < stamp.width; x += 1) {
-        const gid = stampLayer.gids[y * stamp.width + x];
-        if (gidWithoutFlags(gid) === 0) continue;
-        const cell = (at[1] + y) * map.width + at[0] + x;
-        layer.gids[cell] = remap(gid);
-        if (stampLayer.above === true) layer.lifted[cell] = 1;
-      }
-    }
-  }
-  const mask = stamp.walkability;
-  if (mask === undefined) return;
-  if (mask.length !== stamp.width * stamp.height) {
-    throw new RecipeError(`stamp ${stamp.id} walkability mask has the wrong cell count`);
-  }
-  for (let y = 0; y < stamp.height; y += 1) {
-    for (let x = 0; x < stamp.width; x += 1) {
-      const flag = mask[y * stamp.width + x];
-      if (flag !== "0" && flag !== "1") continue;
-      map.override[(at[1] + y) * map.width + at[0] + x] = flag === "1" ? 1 : 0;
-    }
-  }
-}
-
-function shapeCells(map: WorkingMap, shape: TerrainShape): TilePoint[] {
-  const cells: TilePoint[] = [];
-  if (shape.kind === "rect") {
-    const { x0, y0, x1, y1 } = requireRect(map, shape);
-    for (let y = y0; y <= y1; y += 1) for (let x = x0; x <= x1; x += 1) cells.push([x, y]);
-    return cells;
-  }
-  if (shape.kind === "cells") {
-    for (const cell of shape.cells) {
-      if (!inBounds(map, cell)) throw new RecipeError(`cell ${JSON.stringify(cell)} leaves the map`);
-      cells.push(cell);
-    }
-    return cells;
-  }
-  const width = shape.width ?? 1;
-  if (!Number.isInteger(width) || width < 1) throw new RecipeError("path width must be a positive integer");
-  if (shape.points.length === 0) throw new RecipeError("path has no points");
-  const low = -Math.floor((width - 1) / 2);
-  const high = low + width - 1;
-  const segments = shape.points.length === 1 ? [[shape.points[0], shape.points[0]]] : shape.points.slice(1).map((point, index) => [shape.points[index], point]);
-  for (const [from, to] of segments) {
-    if (from[0] !== to[0] && from[1] !== to[1]) {
-      throw new RecipeError(`path segment ${JSON.stringify(from)}–${JSON.stringify(to)} is not straight`);
-    }
-    const { x0, y0, x1, y1 } = rectCells({ from, to });
-    for (let y = y0 + low; y <= y1 + high; y += 1) {
-      for (let x = x0 + low; x <= x1 + high; x += 1) {
-        if (!inBounds(map, [x, y])) throw new RecipeError(`path cell ${JSON.stringify([x, y])} leaves the map`);
-        cells.push([x, y]);
-      }
-    }
-  }
-  return cells;
-}
-
-/** A deterministic variant choice for a cell. */
-function variantIndex(x: number, y: number, count: number): number {
-  return (((x * 73856093) ^ (y * 19349663)) >>> 0) % count;
-}
-
-function paintTerrainOp(
-  map: WorkingMap,
-  terrain: DreamTerrain,
-  layerName: string,
-  shape: TerrainShape,
-): void {
-  const cells = shapeCells(map, shape);
-  const firstGid = mergeTileset(map, terrain.tileset);
-  const full = terrain.corners[TERRAIN_FULL];
-  if (full === undefined || full.length === 0) {
-    throw new RecipeError(`terrain ${terrain.id} has no full piece`);
-  }
-  const maskOfLocal = new Map<number, number>();
-  for (const [mask, ids] of Object.entries(terrain.corners)) {
-    for (const id of ids ?? []) if (!maskOfLocal.has(id)) maskOfLocal.set(id, Number(mask));
-  }
-  const layer = layerOrCreate(map, layerName);
-  const vertexWidth = map.width + 1;
-  const vertices = new Uint8Array(vertexWidth * (map.height + 1));
-  const mark = (x: number, y: number, mask: number) => {
-    if (mask & 1) vertices[y * vertexWidth + x] = 1;
-    if (mask & 2) vertices[y * vertexWidth + x + 1] = 1;
-    if (mask & 4) vertices[(y + 1) * vertexWidth + x] = 1;
-    if (mask & 8) vertices[(y + 1) * vertexWidth + x + 1] = 1;
-  };
-  const localOf = (gid: number): number | null => {
-    const id = gidWithoutFlags(gid);
-    const local = id - firstGid;
-    return id !== 0 && local >= 0 && maskOfLocal.has(local) ? local : null;
-  };
-  for (let y = 0; y < map.height; y += 1) {
-    for (let x = 0; x < map.width; x += 1) {
-      const local = localOf(layer.gids[y * map.width + x]);
-      if (local !== null) mark(x, y, maskOfLocal.get(local)!);
-    }
-  }
-  for (const [x, y] of cells) mark(x, y, TERRAIN_FULL);
-  for (let y = 0; y < map.height; y += 1) {
-    for (let x = 0; x < map.width; x += 1) {
-      const mask =
-        vertices[y * vertexWidth + x] |
-        (vertices[y * vertexWidth + x + 1] << 1) |
-        (vertices[(y + 1) * vertexWidth + x] << 2) |
-        (vertices[(y + 1) * vertexWidth + x + 1] << 3);
-      const cell = y * map.width + x;
-      if (mask === 0) {
-        if (localOf(layer.gids[cell]) !== null) layer.gids[cell] = 0;
-        continue;
-      }
-      const choices = terrain.corners[mask] ?? full;
-      const pick = choices.length === 0 ? full : choices;
-      layer.gids[cell] = firstGid + pick[variantIndex(x, y, pick.length)];
-    }
-  }
-  if (terrain.blocksMovement) {
-    for (const local of full) map.blockingGids.add(firstGid + local);
-  }
-}
-
-function applyOp(map: WorkingMap, op: DreamMapRecipeOp, input: DreamMapCompileInput): void {
-  switch (op.op) {
-    case "crop":
-      cropOp(map, op);
-      return;
-    case "erase":
-      eraseOp(map, op);
-      return;
-    case "stamp": {
-      const stamp = input.stamps.get(op.stamp);
-      if (stamp === undefined) throw new RecipeError(`unknown stamp ${op.stamp}`);
-      stampOp(map, stamp, op.at);
-      return;
-    }
-    case "paintTerrain": {
-      const terrain = input.terrains.get(op.terrain);
-      if (terrain === undefined) throw new RecipeError(`unknown terrain ${op.terrain}`);
-      paintTerrainOp(map, terrain, op.layer, op.shape);
-      return;
-    }
-    case "hideLayer":
-      if (!hasLayer(map, op.layer)) throw new RecipeError(`unknown layer ${op.layer}`);
-      map.hidden.add(op.layer);
-      return;
-    case "abovePlayer": {
-      if (!hasLayer(map, op.layer)) throw new RecipeError(`unknown layer ${op.layer}`);
-      const named = map.layers.filter((layer) => layer.name === op.layer);
-      if (op.from === undefined || op.to === undefined) {
-        if (op.from !== op.to) throw new RecipeError("abovePlayer needs both corners or neither");
-        for (const layer of named) layer.aboveAll = true;
-        for (const object of map.objects) if (object.layer === op.layer) object.above = true;
-        return;
-      }
-      const { x0, y0, x1, y1 } = requireRect(map, { from: op.from, to: op.to });
-      for (const layer of named) {
-        for (let y = y0; y <= y1; y += 1) {
-          for (let x = x0; x <= x1; x += 1) layer.lifted[y * map.width + x] = 1;
-        }
-      }
-      for (const object of map.objects) {
-        const [x, y] = objectCell(map, object);
-        if (object.layer === op.layer && x >= x0 && x <= x1 && y >= y0 && y <= y1) object.above = true;
-      }
-      return;
-    }
-    case "block":
-    case "open": {
-      const { x0, y0, x1, y1 } = requireRect(map, op);
-      for (let y = y0; y <= y1; y += 1) {
-        for (let x = x0; x <= x1; x += 1) map.override[y * map.width + x] = op.op === "block" ? 1 : 0;
-      }
-      return;
-    }
-  }
-}
 
 function loadWorkingMap(
   definition: DreamMapDefinition,
@@ -789,6 +407,31 @@ function deriveWalkability(map: WorkingMap, definition: DreamMapDefinition): str
   return walkable;
 }
 
+/**
+ * The tilesets a drawn layer or tile object uses, in map order. Tilesets no
+ * drawn tile references (automapping rule sheets, collision sheets, art an
+ * erase or crop removed) are dropped, so the compiled map names only art the
+ * renderer draws; gids keep their numbering.
+ */
+function drawnTilesets(
+  tilesets: readonly TiledTileset[],
+  layers: readonly CompiledTileLayer[],
+  objects: readonly CompiledTileObject[],
+): TiledTileset[] {
+  const used = new Set<TiledTileset>();
+  const seen = new Set<number>();
+  const use = (gid: number) => {
+    const id = gidWithoutFlags(gid);
+    if (id === 0 || seen.has(id)) return;
+    seen.add(id);
+    const owner = tilesetForGid(tilesets, id);
+    if (owner !== null) used.add(owner);
+  };
+  for (const layer of layers) for (const gid of layer.gids) use(gid);
+  for (const object of objects) use(object.gid);
+  return tilesets.filter((tileset) => used.has(tileset));
+}
+
 /** Compile a dream map module against its source and the asset catalogs. */
 export function compileDreamMap(
   definition: DreamMapDefinition,
@@ -800,7 +443,7 @@ export function compileDreamMap(
   const errors: DreamMapCompileError[] = [];
   for (const [index, op] of definition.recipe.entries()) {
     try {
-      applyOp(map, op, input);
+      applyRecipeOp(map, op, input);
     } catch (error) {
       if (!(error instanceof RecipeError)) throw error;
       errors.push({ kind: "recipe", index, message: `${op.op}: ${error.message}` });
@@ -870,8 +513,12 @@ export function compileDreamMap(
       above: object.above,
     }));
 
+  const drawn = drawnTilesets(map.tilesets, layers, objects);
   return {
     ok: true,
+    droppedTilesets: map.tilesets
+      .filter((tileset) => !drawn.includes(tileset))
+      .map((tileset) => ({ name: tileset.name, image: tileset.image?.path ?? null })),
     map: {
       format: COMPILED_DREAM_MAP_FORMAT,
       id: definition.id,
@@ -880,7 +527,7 @@ export function compileDreamMap(
       height: map.height,
       tileWidth: map.tileWidth,
       tileHeight: map.tileHeight,
-      tilesets: map.tilesets.map(compiledTileset),
+      tilesets: drawn.map(compiledTileset),
       layers,
       objects,
       walkable: deriveWalkability(map, definition),

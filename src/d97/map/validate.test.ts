@@ -13,6 +13,7 @@ import {
   validateDreamMap,
   validateGuardedAnchors,
   validateMainRouteCrossing,
+  validateTilesetsServed,
 } from "./validate";
 
 const TUNING: D97MapTuning = {
@@ -160,5 +161,41 @@ describe("validateDreamMap", () => {
     const map = compiledFromRows(GUARDED_ROWS, GUARDED_ANCHORS);
     const rules = validateDreamMap(map, { ...TUNING, doorMinSpacingTiles: 20 }).map((finding) => finding.rule);
     expect(rules).toEqual(["door-spacing"]);
+  });
+});
+
+describe("validateTilesetsServed", () => {
+  const tileset = (name: string, image: string | null, tileImages: readonly string[] = []) => ({
+    firstGid: 1,
+    name,
+    image,
+    imageWidth: 32,
+    imageHeight: 32,
+    tileWidth: 32,
+    tileHeight: 32,
+    columns: 1,
+    tileCount: 1,
+    spacing: 0,
+    margin: 0,
+    tileOffset: { x: 0, y: 0 },
+    tileImages: tileImages.map((path, id) => ({ id, image: path, width: 32, height: 32 })),
+  });
+
+  it("reports each drawn image outside the served subtrees", () => {
+    const map = {
+      ...compiledFromRows(["...."]),
+      tilesets: [
+        tileset("ground", "pack/tiles/ground.png"),
+        tileset("rules", "pack/automapping/rules.png"),
+        tileset("props", null, ["pack/tiles/a.png", "pack/sprites/b.png"]),
+      ],
+    };
+    expect(validateTilesetsServed(map, ["pack/tiles"])).toEqual([
+      { rule: "tileset-unserved", severity: "error", tileset: "rules", image: "pack/automapping/rules.png" },
+      { rule: "tileset-unserved", severity: "error", tileset: "props", image: "pack/sprites/b.png" },
+    ]);
+    expect(validateTilesetsServed(map, ["pack/tiles/", "pack/automapping", "pack/sprites"])).toEqual([]);
+    // Without the served subtrees, validateDreamMap skips the rule.
+    expect(validateDreamMap(map, TUNING).some((finding) => finding.rule === "tileset-unserved")).toBe(false);
   });
 });

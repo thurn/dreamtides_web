@@ -89,6 +89,7 @@ describe("writeStampSheet", () => {
     const { stamp } = extractStamp(MAP, { from: [5, 0], to: [7, 1] }, {
       id: parseD97StampId("3f9b2c4e-1a2b-4c3d-8e4f-5a6b7c8d9e0f"),
       name: "wall",
+      theme: "building",
       origin: "rows",
     });
     const sheet = writeStampSheet(stamp, join(tempDir(), "wall.png"), null);

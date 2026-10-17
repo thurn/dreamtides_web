@@ -18,6 +18,9 @@ import type {
 
 export type TilePoint = readonly [x: number, y: number];
 
+/** A season of the LPC Revised sheets. */
+export type D97Season = "spring" | "summer" | "autumn" | "winter";
+
 /** A rectangle of tiles, both corners included. */
 export interface TileRect {
   readonly from: TilePoint;
@@ -65,6 +68,8 @@ export interface DreamMapWalkability {
 /** The cells a terrain paint covers. */
 export type TerrainShape =
   | ({ readonly kind: "rect" } & TileRect)
+  /** The cells whose centers lie in the ellipse inscribed in the rectangle: ponds, clearings. */
+  | ({ readonly kind: "ellipse" } & TileRect)
   | {
       readonly kind: "path";
       /** Polyline corners; consecutive points must share a row or column. */
@@ -90,6 +95,27 @@ export type DreamMapRecipeOp =
       readonly layer: string;
       readonly shape: TerrainShape;
     }
+  | {
+      /**
+       * Paint (or with `erase`, remove) an auto-tiled terrain over a shape,
+       * re-tiling edges and corners against the terrain already on its layer.
+       */
+      readonly op: "brush";
+      readonly terrain: D97TerrainId;
+      readonly shape: TerrainShape;
+      /** The tile layer painted; defaults to the terrain's catalog layer. */
+      readonly layer?: string;
+      /** Remove the terrain from the shape instead of painting it. */
+      readonly erase?: boolean;
+    }
+  | ({
+      /**
+       * Redraw LPC Revised seasonal sheets (terrain, cliffs, plants, trees,
+       * wildflowers) in another season, over the area or the whole map.
+       */
+      readonly op: "reseason";
+      readonly season: D97Season;
+    } & Partial<TileRect>)
   | { readonly op: "hideLayer"; readonly layer: string }
   | ({
       readonly op: "abovePlayer";

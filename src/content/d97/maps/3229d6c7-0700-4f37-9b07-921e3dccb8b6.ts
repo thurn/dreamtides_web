@@ -95,6 +95,9 @@ export default defineDreamMap({
   },
   recipe: [
     { op: "crop", from: [48, 51], to: [157, 160] },
+    // A stray automapping rule marker from Source of Tales' unserved
+    // `ruleset` sheet; erasing it lets the compiled map drop that tileset.
+    { op: "erase", from: [109, 81], to: [109, 81], layers: ["MountainOver2"] },
     // The exit door: the ember arch in the well square, below the hall steps.
     { op: "stamp", stamp: EMBER_ARCH, at: [57, 24] },
     // A dirt ledge the source walls off: opens the pine meadow and the dry

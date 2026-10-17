@@ -1,9 +1,16 @@
 // Plain-text reports of the D97 map inspector: `inspect` summaries and
 // `validate` findings, written to be read by a model as well as a person.
-// Coordinates print as `x,y` tiles; rectangles as `x0,y0–x1,y1`.
+// Coordinates print as `x,y` tiles; rectangles as `x0,y0–x1,y1`. `inspect`
+// also lists the recipe's stamp placements and terrain edits, the tilesets
+// the compiled map draws (with whether each image is served) and the unused
+// tilesets the compiler dropped.
 
-import type { CompiledDreamMap } from "../../src/d97/map/compiled.ts";
-import type { TilePoint } from "../../src/d97/map/definition.ts";
+import type { CompiledDreamMap, CompiledTileset } from "../../src/d97/map/compiled.ts";
+import type { TilePoint, TileRect } from "../../src/d97/map/definition.ts";
+import { recipePlacements } from "../../src/d97/map/recipe-summary.ts";
+import { compiledTilesetForGid, type D97CatalogStamp } from "../../src/d97/map/stamps.ts";
+import { gidWithoutFlags } from "../../src/d97/map/tiled.ts";
+import type { D97StampId, D97TerrainId } from "../../src/types/identifiers.ts";
 import { ANCHOR_LETTERS } from "../../src/d97/map/preview.ts";
 import {
   anchorStandTile,
@@ -31,8 +38,101 @@ function table(rows: readonly (readonly string[])[]): string[] {
   return rows.map((row) => `  ${row.map((cell, index) => cell.padEnd(widths[index])).join("  ")}`.trimEnd());
 }
 
+/** The catalogs and serving rules the `inspect` report names things by. */
+export interface InspectContext {
+  readonly stamps: ReadonlyMap<D97StampId, D97CatalogStamp>;
+  readonly terrains: ReadonlyMap<D97TerrainId, { readonly name: string; readonly layer: string }>;
+  /** Library-relative subtrees workspace preparation serves. */
+  readonly served: readonly string[];
+}
+
+/** Drawn cells per compiled tileset (tile layers and tile objects). */
+function tilesetUse(map: CompiledDreamMap): Map<CompiledTileset, number> {
+  const use = new Map<CompiledTileset, number>(map.tilesets.map((tileset) => [tileset, 0]));
+  const count = (gid: number) => {
+    const id = gidWithoutFlags(gid);
+    if (id === 0) return;
+    const owner = compiledTilesetForGid(map.tilesets, id);
+    if (owner !== null) use.set(owner, (use.get(owner) ?? 0) + 1);
+  };
+  for (const layer of map.layers) for (const gid of layer.gids) count(gid);
+  for (const object of map.objects) count(object.gid);
+  return use;
+}
+
+function recipeLines(loaded: LoadedMap, context: InspectContext): string[] {
+  const placements = recipePlacements(loaded.definition, context.stamps);
+  const rect = (r: TileRect | null) => (r === null ? "whole map" : `${at(r.from)}–${at(r.to)}`);
+  const lines: string[] = [];
+  const stamps = placements.filter((entry) => entry.kind === "stamp");
+  lines.push(`Stamp placements (${String(stamps.length)})`);
+  if (stamps.length === 0) lines.push("  none");
+  else {
+    const rows = [["#", "op", "stamp", "theme", "footprint", "points"]];
+    stamps.forEach((entry, number) => {
+      const stamp = context.stamps.get(entry.stamp);
+      rows.push([
+        String(number + 1),
+        String(entry.index),
+        stamp === undefined ? `unknown ${entry.stamp}` : `${stamp.name} ${entry.stamp}`,
+        stamp?.theme ?? "-",
+        rect(entry.rect),
+        entry.points.map((point) => `${point.name}@${at(point.at)}`).join(" ") || "-",
+      ]);
+    });
+    lines.push(...table(rows));
+  }
+  lines.push("");
+  const terrains = placements.filter((entry) => entry.kind === "terrain" || entry.kind === "reseason");
+  lines.push(`Terrain and season edits (${String(terrains.length)})`);
+  if (terrains.length === 0) lines.push("  none");
+  else {
+    const rows = [["op", "edit", "terrain", "layer", "area", "cells"]];
+    for (const entry of terrains) {
+      if (entry.kind === "reseason") {
+        rows.push([String(entry.index), `reseason ${entry.season}`, "-", "-", rect(entry.rect), "-"]);
+        continue;
+      }
+      if (entry.kind !== "terrain") continue;
+      const terrain = context.terrains.get(entry.terrain);
+      rows.push([
+        String(entry.index),
+        entry.erase ? "brush erase" : "brush",
+        terrain === undefined ? `unknown ${entry.terrain}` : terrain.name,
+        entry.layer ?? terrain?.layer ?? "-",
+        rect(entry.rect),
+        String(entry.cells),
+      ]);
+    }
+    lines.push(...table(rows));
+  }
+  lines.push("");
+  const prefixes = context.served.map((prefix) => `${prefix}/`);
+  const use = tilesetUse(loaded.map);
+  lines.push(`Tilesets drawn (${String(loaded.map.tilesets.length)})`);
+  const rows = [["firstGid", "name", "image", "served", "cells"]];
+  for (const tileset of loaded.map.tilesets) {
+    const images = tileset.image === null ? tileset.tileImages.map((tile) => tile.image) : [tileset.image];
+    const served = images.every((image) => prefixes.some((prefix) => image.startsWith(prefix)));
+    rows.push([
+      String(tileset.firstGid),
+      tileset.name,
+      tileset.image ?? `${String(images.length)} tile images`,
+      served ? "yes" : "NO",
+      String(use.get(tileset) ?? 0),
+    ]);
+  }
+  lines.push(...(rows.length === 1 ? ["  none"] : table(rows)));
+  lines.push(
+    `Unused tilesets dropped (${String(loaded.droppedTilesets.length)}): ` +
+      (loaded.droppedTilesets.map((tileset) => `${tileset.name} (${tileset.image ?? "image collection"})`).join(", ") || "none"),
+  );
+  lines.push("");
+  return lines;
+}
+
 /** The `inspect` report of a compiled map. */
-export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning): string {
+export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning, context: InspectContext): string {
   const map: CompiledDreamMap = loaded.map;
   const speed = tuning.walkingSpeedTilesPerSecond;
   const sizeClass = mapSizeClass(tuning, map);
@@ -62,6 +162,8 @@ export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning): string {
     `Walkable areas ${String(components.length)}: largest ${components.slice(0, 5).map(String).join(", ") || "none"}`,
     "",
   ];
+
+  lines.push(...recipeLines(loaded, context));
 
   lines.push(`Regions (${String(map.regions.length)})`);
   if (map.regions.length === 0) lines.push("  none");
@@ -167,6 +269,8 @@ export function formatFinding(finding: DreamMapFinding): string {
         `${head} at ${at(finding.at)}: doors ${finding.doors[0]} and ${finding.doors[1]} (${at(finding.otherAt)}) ` +
         `are ${finding.distance.toFixed(1)} tiles apart, under ${String(finding.minimum)}`
       );
+    case "tileset-unserved":
+      return `${head}: tileset ${finding.tileset} draws ${finding.image}, which workspace preparation does not serve`;
     case "main-route-missing":
       return `${head}: the ${finding.size} map has fewer than two connected doors`;
     case "main-route-crossing":

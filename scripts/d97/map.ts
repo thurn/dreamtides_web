@@ -1,30 +1,58 @@
 // The D97 map inspector (decision P12): `npm run d97:map -- <command>`.
 //
-//   inspect <map>                        region walkability and reachability,
-//                                        landmarks, anchors, crossing times
+//   inspect <map>                        stamp placements, terrain edits and
+//                                        tilesets, region walkability and
+//                                        reachability, landmarks, anchors,
+//                                        crossing times
 //   preview <map> [--region <name>] [--rect x,y,w,h] [--scale <factor>] [--out <dir>]
 //                                        PNG previews and a legend
 //   validate <map> | --all               validator findings; exits 1 on errors
-//   stamps list                          the stamp catalog
-//   stamps extract --from <map> --rect x,y,w,h --name <name> [--out <dir>]
-//                                        a new stamp module and its preview sheet
+//   stamps list [--theme <t>]            the stamp catalog
+//   stamps sheet [--theme <t>]           one preview sheet per theme
+//   stamps extract --from <map> --rect x,y,w,h --name <name> --theme <t>
+//         [--layers a,b] [--above a,b] [--out <dir>]
+//                                        a stamp module cut from a map
+//   stamps cut --sheet <image> --rect x,y,w,h --name <name> --theme <t>
+//         [--layer <name>] [--above <rows>] [--tile <px>] [--no-trim] [--out <dir>]
+//                                        a stamp module cut from a library sheet
+//   sheet <image> [--rect x,y,w,h] [--scale <factor>] [--tile <px>] [--out <file>]
+//                                        a library sheet on its tile grid
+//   terrains                             the terrain catalog
+//   compose --out <file> --size <w>x<h> --theme <t>
+//                                        a blank-canvas map module scaffold
 //
 // `<map>` is a catalog map id, a map module path or a Tiled map path (see
 // map-load.ts). Previews go to the gitignored `artifacts/d97/previews/`.
 
-import { join, relative } from "node:path";
+import { randomUUID } from "node:crypto";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join, relative, resolve, sep } from "node:path";
+import { parseDreamAnchorId, parseDreamMapId } from "../../src/types/identifiers.ts";
+import { composeMapSource } from "./map-compose.ts";
+import { sheetTileset } from "../../src/d97/map/sheets.ts";
 import { D97_MAP_TUNING } from "../../src/content/d97/map-tuning.ts";
-import { D97_DREAM_MAPS } from "../../src/content/d97/maps/index.ts";
+import { D97_DREAM_MAPS, D97_EXAMPLE_MAPS } from "../../src/content/d97/maps/index.ts";
+import { D97_TERRAINS } from "../../src/content/d97/terrains/index.ts";
+import { D97_MAP_THEMES } from "../../src/content/d97/terrains/themes.ts";
+import { recipePlacements } from "../../src/d97/map/recipe-summary.ts";
 import { D97_STAMPS } from "../../src/content/d97/stamps/index.ts";
 import type { TileRect } from "../../src/d97/map/definition.ts";
+import { D97_STAMP_THEMES, isD97StampTheme, type D97StampTheme } from "../../src/d97/map/stamps.ts";
 import { mainRoute } from "../../src/d97/map/routes.ts";
 import { validateDreamMap } from "../../src/d97/map/validate.ts";
-import { REPO_ROOT } from "./map-library.ts";
+import { d97LibraryDir, REPO_ROOT, servedArtPrefixes } from "./map-library.ts";
 import { loadMap, type LoadedMap } from "./map-load.ts";
-import { writeMapPreviews } from "./map-preview.ts";
+import { writeMapPreviews, writeSheetGrid } from "./map-preview.ts";
 import { formatFinding, inspectReport } from "./map-report.ts";
-import { catalogImportLine, extractStampFiles, stampListReport } from "./map-stamps.ts";
-import { libraryImageLoader } from "./png.ts";
+import {
+  catalogImportLine,
+  cutStampFiles,
+  extractStampFiles,
+  stampListReport,
+  writeThemeSheets,
+  type StampWriteResult,
+} from "./map-stamps.ts";
+import { libraryImageLoader, readPng } from "./png.ts";
 
 const PREVIEW_ROOT = join(REPO_ROOT, "artifacts", "d97", "previews");
 const STAMP_DIR = join(REPO_ROOT, "src", "content", "d97", "stamps");
@@ -33,8 +61,14 @@ const USAGE = `Usage: npm run d97:map -- <command>
   inspect <map>
   preview <map> [--region <name>] [--rect x,y,w,h] [--scale <factor>] [--out <dir>]
   validate <map> | --all
-  stamps list
-  stamps extract --from <map> --rect x,y,w,h --name <name> [--out <dir>]
+  stamps list [--theme <theme>]
+  stamps sheet [--theme <theme>]
+  stamps extract --from <map> --rect x,y,w,h --name <name> --theme <theme> [--layers a,b] [--above a,b] [--out <dir>]
+  stamps cut --sheet <image> --rect x,y,w,h --name <name> --theme <theme> [--layer <name>] [--above <rows>] [--tile <px>] [--no-trim] [--out <dir>]
+  sheet <image> [--rect x,y,w,h] [--scale <factor>] [--tile <px>] [--out <file>]
+  terrains
+  compose --out <file> --size <w>x<h> --theme <theme>
+Themes: ${D97_STAMP_THEMES.join(", ")}.
 <map> is a catalog map id, a map module path (.ts) or a Tiled map path (.tmx/.tmj,
 relative to the LPC library or absolute).`;
 
@@ -95,7 +129,13 @@ const display = (path: string) => relative(process.cwd(), path) || path;
 async function inspect(parsed: Parsed): Promise<number> {
   const loaded = await load(parsed.positional[1]);
   if (loaded === null) return 1;
-  process.stdout.write(inspectReport(loaded, D97_MAP_TUNING));
+  process.stdout.write(
+    inspectReport(loaded, D97_MAP_TUNING, {
+      stamps: new Map(D97_STAMPS.map((stamp) => [stamp.id, stamp])),
+      terrains: new Map(D97_TERRAINS.map((terrain) => [terrain.id, terrain])),
+      served: servedArtPrefixes(),
+    }),
+  );
   return 0;
 }
 
@@ -110,7 +150,12 @@ async function preview(parsed: Parsed): Promise<number> {
   const outDir = option(parsed, "out") ?? join(PREVIEW_ROOT, loaded.slug);
   const route = mainRoute(loaded.map, D97_MAP_TUNING.walkingSpeedTilesPerSecond);
   const images = libraryImageLoader(loaded.library);
+  const catalog = new Map(D97_STAMPS.map((stamp) => [stamp.id, stamp]));
+  const outlines = recipePlacements(loaded.definition, catalog)
+    .flatMap((entry) => (entry.kind === "stamp" && entry.rect !== null ? [{ entry, rect: entry.rect }] : []))
+    .map(({ entry, rect }, number) => ({ rect, label: String(number + 1), note: catalog.get(entry.stamp)?.name ?? entry.stamp }));
   const written = writeMapPreviews(loaded.map, {
+    outlines,
     outDir,
     images,
     ...(region === undefined ? {} : { region }),
@@ -129,7 +174,9 @@ async function preview(parsed: Parsed): Promise<number> {
 }
 
 async function validate(parsed: Parsed): Promise<number> {
-  const targets = parsed.options.has("all") ? D97_DREAM_MAPS.map((definition) => definition.id) : [parsed.positional[1]];
+  const targets = parsed.options.has("all")
+    ? [...D97_DREAM_MAPS, ...D97_EXAMPLE_MAPS].map((definition) => definition.id)
+    : [parsed.positional[1]];
   if (targets.length === 0) {
     console.log("The map catalog (src/content/d97/maps/) is empty.");
     return 0;
@@ -141,7 +188,7 @@ async function validate(parsed: Parsed): Promise<number> {
       errors += 1;
       continue;
     }
-    const findings = validateDreamMap(loaded.map, D97_MAP_TUNING);
+    const findings = validateDreamMap(loaded.map, D97_MAP_TUNING, servedArtPrefixes());
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
     errors += errorCount;
     console.log(
@@ -152,40 +199,180 @@ async function validate(parsed: Parsed): Promise<number> {
   return errors > 0 ? 1 : 0;
 }
 
-async function stamps(parsed: Parsed): Promise<number> {
-  const action = parsed.positional[1];
-  if (action === "list") {
-    process.stdout.write(stampListReport(D97_STAMPS));
-    return 0;
+function themeOption(parsed: Parsed, required: boolean): D97StampTheme | undefined {
+  const theme = option(parsed, "theme");
+  if (theme === undefined) {
+    if (required) throw new UsageError(`--theme is required: one of ${D97_STAMP_THEMES.join(", ")}`);
+    return undefined;
   }
-  if (action !== "extract") throw new UsageError("stamps wants list or extract");
-  const from = option(parsed, "from");
-  const rectText = option(parsed, "rect");
-  const name = option(parsed, "name");
-  if (from === undefined || rectText === undefined || name === undefined) {
-    throw new UsageError("stamps extract needs --from, --rect and --name");
-  }
-  const loaded = await load(from);
-  if (loaded === null) return 1;
-  const moduleDir = option(parsed, "out") ?? STAMP_DIR;
-  const result = extractStampFiles({
-    loaded,
-    rect: parseRect(rectText),
-    name,
-    moduleDir,
-    previewDir: join(PREVIEW_ROOT, "stamps"),
-  });
-  console.log(`Stamp ${result.stamp.id} (${result.stamp.name}), ${String(result.stamp.width)}×${String(result.stamp.height)} tiles`);
+  if (!isD97StampTheme(theme)) throw new UsageError(`--theme wants one of ${D97_STAMP_THEMES.join(", ")}, not ${theme}`);
+  return theme;
+}
+
+function integerOption(parsed: Parsed, name: string, fallback: number, minimum: number): number {
+  const text = option(parsed, name);
+  if (text === undefined) return fallback;
+  const value = Number(text);
+  if (!Number.isInteger(value) || value < minimum) throw new UsageError(`--${name} wants a whole number of at least ${String(minimum)}, not ${text}`);
+  return value;
+}
+
+function reportWrittenStamp(result: StampWriteResult, moduleDir: string): void {
+  const { stamp } = result;
+  console.log(`Stamp ${stamp.id} (${stamp.name}, ${stamp.theme}), ${String(stamp.width)}×${String(stamp.height)} tiles`);
   console.log(`${display(result.modulePath)}  module`);
   console.log(`${display(result.sheet.path)}  ${String(result.sheet.width)}×${String(result.sheet.height)} px  (${result.sheet.mode})`);
-  if (result.omittedObjects > 0) {
-    console.log(`Omitted ${String(result.omittedObjects)} tile objects inside the rectangle (stamps carry tile layers only).`);
-  }
   if (moduleDir === STAMP_DIR) {
     console.log(`Add it to src/content/d97/stamps/index.ts:\n  ${catalogImportLine(result.modulePath, STAMP_DIR)}`);
   } else {
     console.log("Move it into src/content/d97/stamps/ and list it in that directory's index.ts to add it to the catalog.");
   }
+}
+
+async function stamps(parsed: Parsed): Promise<number> {
+  const action = parsed.positional[1];
+  const previewDir = join(PREVIEW_ROOT, "stamps");
+  if (action === "list") {
+    process.stdout.write(stampListReport(D97_STAMPS, themeOption(parsed, false)));
+    return 0;
+  }
+  if (action === "sheet") {
+    const written = writeThemeSheets(D97_STAMPS, previewDir, d97LibraryDir(), themeOption(parsed, false));
+    if (written.length === 0) console.log("No stamps to draw.");
+    for (const sheet of written) {
+      console.log(`${display(sheet.path)}  ${String(sheet.width)}×${String(sheet.height)} px  (${sheet.mode})`);
+      if (sheet.missingImages.length > 0) console.log(`  Missing tileset images: ${sheet.missingImages.join(", ")}`);
+    }
+    return 0;
+  }
+  if (action === "cut") {
+    const image = option(parsed, "sheet");
+    const rectText = option(parsed, "rect");
+    const name = option(parsed, "name");
+    if (image === undefined || rectText === undefined || name === undefined) {
+      throw new UsageError("stamps cut needs --sheet, --rect, --name and --theme");
+    }
+    const moduleDir = option(parsed, "out") ?? STAMP_DIR;
+    reportWrittenStamp(
+      cutStampFiles({
+        library: d97LibraryDir(),
+        image,
+        tileSize: integerOption(parsed, "tile", 32, 1),
+        rect: parseRect(rectText),
+        name,
+        theme: themeOption(parsed, true)!,
+        layer: option(parsed, "layer") ?? "Objects",
+        aboveRows: integerOption(parsed, "above", 0, 0),
+        trim: !parsed.options.has("no-trim"),
+        moduleDir,
+        previewDir,
+      }),
+      moduleDir,
+    );
+    return 0;
+  }
+  if (action !== "extract") throw new UsageError("stamps wants list, sheet, extract or cut");
+  const from = option(parsed, "from");
+  const rectText = option(parsed, "rect");
+  const name = option(parsed, "name");
+  if (from === undefined || rectText === undefined || name === undefined) {
+    throw new UsageError("stamps extract needs --from, --rect, --name and --theme");
+  }
+  const theme = themeOption(parsed, true)!;
+  const loaded = await load(from);
+  if (loaded === null) return 1;
+  const moduleDir = option(parsed, "out") ?? STAMP_DIR;
+  const list = (name: string) => option(parsed, name)?.split(",").map((entry) => entry.trim()).filter((entry) => entry !== "");
+  const layers = list("layers");
+  const above = list("above");
+  const result = extractStampFiles({
+    loaded,
+    rect: parseRect(rectText),
+    name,
+    theme,
+    moduleDir,
+    previewDir,
+    ...(layers === undefined ? {} : { layers }),
+    ...(above === undefined ? {} : { above }),
+  });
+  reportWrittenStamp(result, moduleDir);
+  if (result.omittedObjects > 0) {
+    console.log(`Omitted ${String(result.omittedObjects)} tile objects inside the rectangle (stamps carry tile layers only).`);
+  }
+  return 0;
+}
+
+function sheet(parsed: Parsed): number {
+  const image = parsed.positional[1];
+  if (image === undefined) throw new UsageError("sheet needs a library image path");
+  const library = d97LibraryDir();
+  const file = join(library, image);
+  if (!existsSync(file)) {
+    console.error(`no image at ${file}`);
+    return 1;
+  }
+  const png = readPng(file);
+  const tileText = option(parsed, "tile");
+  const tileSize = tileText === undefined ? 32 : Number(tileText);
+  if (!Number.isInteger(tileSize) || tileSize < 1) throw new UsageError(`--tile wants a whole tile size, not ${String(tileText)}`);
+  const scaleText = option(parsed, "scale");
+  const scale = scaleText === undefined ? undefined : Number(scaleText);
+  if (scale !== undefined && !(scale > 0)) throw new UsageError(`--scale wants a positive factor, not ${String(scaleText)}`);
+  const rectText = option(parsed, "rect");
+  const tileset = sheetTileset({ path: image, width: png.width, height: png.height }, tileSize);
+  const out = option(parsed, "out") ?? join(PREVIEW_ROOT, "sheets", `${image.replace(/[^A-Za-z0-9]+/gu, "-").replace(/^-+|-+$/gu, "")}.png`);
+  const written = writeSheetGrid(tileset, out, libraryImageLoader(library), {
+    ...(rectText === undefined ? {} : { rect: parseRect(rectText) }),
+    ...(scale === undefined ? {} : { scale }),
+  });
+  console.log(`${image}: ${String(tileset.columns)}×${String(tileset.tileCount / tileset.columns)} tiles of ${String(tileSize)} px`);
+  console.log(`${display(written.path)}  ${String(written.width)}×${String(written.height)} px`);
+  return 0;
+}
+
+function terrains(): number {
+  const rows = D97_TERRAINS.map((terrain) =>
+    [terrain.id, terrain.name, terrain.family, terrain.layer, terrain.blocksMovement ? "blocks" : "open", terrain.tileset.image?.path ?? "-"].join("  "),
+  );
+  console.log(`Terrains (${String(D97_TERRAINS.length)}): id, name, family, default layer, walkability, sheet`);
+  for (const row of rows) console.log(`  ${row}`);
+  return 0;
+}
+
+function compose(parsed: Parsed): number {
+  const out = option(parsed, "out");
+  const size = option(parsed, "size");
+  if (out === undefined || size === undefined) throw new UsageError("compose needs --out, --size and --theme");
+  const match = /^(\d+)x(\d+)$/u.exec(size);
+  if (match === null) throw new UsageError(`--size wants <width>x<height>, not ${size}`);
+  const themeName = themeOption(parsed, true)!;
+  const theme = D97_MAP_THEMES.find((entry) => entry.theme === themeName);
+  if (theme === undefined) throw new UsageError(`no map theme for ${themeName}`);
+  const path = resolve(process.cwd(), out);
+  if (existsSync(path)) throw new Error(`${path} already exists`);
+  const specifier = (target: string) => {
+    const text = relative(dirname(path), join(REPO_ROOT, target)).split(sep).join("/");
+    return text.startsWith(".") ? text : `./${text}`;
+  };
+  const terrainNames = new Map(D97_TERRAINS.map((terrain) => [terrain.id, terrain.name]));
+  const source = composeMapSource({
+    id: parseDreamMapId(randomUUID()),
+    anchors: {
+      westDoor: parseDreamAnchorId(randomUUID()),
+      eastDoor: parseDreamAnchorId(randomUUID()),
+      waypoint: parseDreamAnchorId(randomUUID()),
+    },
+    width: Number(match[1]),
+    height: Number(match[2]),
+    theme,
+    stamps: D97_STAMPS.filter((stamp) => stamp.theme === themeName),
+    terrainName: (id) => terrainNames.get(id) ?? id,
+    imports: { definition: specifier("src/d97/map/definition"), identifiers: specifier("src/types/identifiers") },
+  });
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, source);
+  console.log(`${display(path)}  ${themeName} scaffold, ${size} tiles`);
+  console.log(`Next: npm run d97:map -- validate ${display(path)} (and inspect, preview).`);
   return 0;
 }
 
@@ -201,6 +388,12 @@ async function main(argv: readonly string[]): Promise<number> {
         return await validate(parsed);
       case "stamps":
         return await stamps(parsed);
+      case "sheet":
+        return sheet(parsed);
+      case "terrains":
+        return terrains();
+      case "compose":
+        return compose(parsed);
       default:
         console.log(USAGE);
         return parsed.positional[0] === undefined || parsed.positional[0] === "help" ? 0 : 2;

@@ -14,8 +14,8 @@ import type { CompiledDreamMap, CompiledTileset } from "./compiled";
 import type { TilePoint, TileRect } from "./definition";
 import { gidWithoutFlags, TILED_FLIP_BITS, type TiledTileset } from "./tiled";
 
-/** Where a catalog stamp was extracted from. */
-export interface D97StampOrigin {
+/** A stamp cut out of a compiled map. */
+export interface D97StampMapOrigin {
   /** The map as the extractor named it: a catalog map id, a module path or a library Tiled path. */
   readonly map: string;
   /** The extracted rectangle in the compiled map's coordinates. */
@@ -24,9 +24,43 @@ export interface D97StampOrigin {
   readonly sourceSha256: DreamMapSourceHash | null;
 }
 
+/** A stamp cut straight out of a library sheet image (`./sheets`). */
+export interface D97StampSheetOrigin {
+  /** The library-relative sheet image. */
+  readonly sheet: string;
+  /** The cut rectangle in sheet tile coordinates. */
+  readonly rect: TileRect;
+}
+
+/** Where a catalog stamp was extracted from. */
+export type D97StampOrigin = D97StampMapOrigin | D97StampSheetOrigin;
+
+/**
+ * The art family a stamp belongs to, for the catalog listing, the per-theme
+ * preview sheets and `compose` scaffolds.
+ */
+export const D97_STAMP_THEMES = [
+  "building",
+  "nature",
+  "dungeon",
+  "desert",
+  "winter",
+  "japanese",
+  "scifi",
+  "graveyard",
+  "street",
+] as const;
+
+export type D97StampTheme = (typeof D97_STAMP_THEMES)[number];
+
+export function isD97StampTheme(value: string): value is D97StampTheme {
+  return (D97_STAMP_THEMES as readonly string[]).includes(value);
+}
+
 export interface D97CatalogStamp extends DreamStamp {
   /** Display name for authoring and briefs; the id is the identity. */
   readonly name: string;
+  readonly theme: D97StampTheme;
   readonly extractedFrom: D97StampOrigin;
 }
 
@@ -170,11 +204,21 @@ export interface StampExtraction {
  * in its walkability mask, and names a point for every landmark, anchor and
  * door entry inside the rectangle (`<kind>-<n>` for anchors). Per-tile
  * properties are not carried: the walkability mask holds their effect.
+ *
+ * `options.layers` keeps only the named layers (leaving out a source's base
+ * ground or automapping layers), and `options.above` marks named layers as
+ * above-player layers (a raw Tiled map marks none).
  */
 export function extractStamp(
   map: CompiledDreamMap,
   rect: TileRect,
-  identity: { readonly id: D97StampId; readonly name: string; readonly origin: string },
+  identity: {
+    readonly id: D97StampId;
+    readonly name: string;
+    readonly theme: D97StampTheme;
+    readonly origin: string;
+  },
+  options: { readonly layers?: readonly string[]; readonly above?: readonly string[] } = {},
 ): StampExtraction {
   const x0 = Math.min(rect.from[0], rect.to[0]);
   const y0 = Math.min(rect.from[1], rect.to[1]);
@@ -187,7 +231,9 @@ export function extractStamp(
   const height = y1 - y0 + 1;
   const inside = ([x, y]: TilePoint) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
 
-  const cut = map.layers.map((layer) => {
+  const baseName = (name: string) => (name.endsWith(ABOVE_SUFFIX) ? name.slice(0, -ABOVE_SUFFIX.length) : name);
+  const kept = map.layers.filter((layer) => options.layers === undefined || options.layers.includes(baseName(layer.name)));
+  const cut = kept.map((layer) => {
     const gids: number[] = [];
     for (let y = y0; y <= y1; y += 1) {
       for (let x = x0; x <= x1; x += 1) gids.push(layer.gids[y * map.width + x]);
@@ -221,9 +267,9 @@ export function extractStamp(
   const layers: DreamStampLayer[] = cut
     .filter(({ gids }) => gids.some((gid) => gidWithoutFlags(gid) !== 0))
     .map(({ layer, gids }) => ({
-      layer: layer.name.endsWith(ABOVE_SUFFIX) ? layer.name.slice(0, -ABOVE_SUFFIX.length) : layer.name,
+      layer: baseName(layer.name),
       gids: gids.map(remap),
-      ...(layer.above ? { above: true } : {}),
+      ...(layer.above || options.above?.includes(baseName(layer.name)) === true ? { above: true } : {}),
     }));
 
   let walkability = "";
@@ -253,6 +299,7 @@ export function extractStamp(
     stamp: defineD97Stamp({
       id: identity.id,
       name: identity.name,
+      theme: identity.theme,
       width,
       height,
       tilesets,
@@ -311,15 +358,19 @@ export function stampModuleSource(stamp: D97CatalogStamp): string {
     .split("\n")
     .slice(1, -1)
     .join("\n");
-  const hash =
-    extractedFrom.sourceSha256 === null
-      ? "null"
-      : `parseDreamMapSourceHash(${JSON.stringify(extractedFrom.sourceSha256)})`;
   const rect = `{ from: ${JSON.stringify(extractedFrom.rect.from)}, to: ${JSON.stringify(extractedFrom.rect.to)} }`;
-  const identifiers =
-    extractedFrom.sourceSha256 === null ? "parseD97StampId" : "parseD97StampId, parseDreamMapSourceHash";
+  const hash =
+    "sheet" in extractedFrom || extractedFrom.sourceSha256 === null
+      ? null
+      : `parseDreamMapSourceHash(${JSON.stringify(extractedFrom.sourceSha256)})`;
+  const origin =
+    "sheet" in extractedFrom
+      ? [`    sheet: ${JSON.stringify(extractedFrom.sheet)},`, `    rect: ${rect},`]
+      : [`    map: ${JSON.stringify(extractedFrom.map)},`, `    rect: ${rect},`, `    sourceSha256: ${hash ?? "null"},`];
+  const identifiers = hash === null ? "parseD97StampId" : "parseD97StampId, parseDreamMapSourceHash";
+  const how = "sheet" in extractedFrom ? "stamps cut" : "stamps extract";
   return [
-    `// ${stamp.name}: a D97 map stamp extracted by \`npm run d97:map -- stamps extract\`.`,
+    `// ${stamp.name}: a D97 map stamp extracted by \`npm run d97:map -- ${how}\`.`,
     "",
     `import { defineD97Stamp } from "../../../d97/map/stamps";`,
     `import { ${identifiers} } from "../../../types/identifiers";`,
@@ -328,9 +379,7 @@ export function stampModuleSource(stamp: D97CatalogStamp): string {
     `  id: parseD97StampId(${JSON.stringify(id)}),`,
     body,
     "  extractedFrom: {",
-    `    map: ${JSON.stringify(extractedFrom.map)},`,
-    `    rect: ${rect},`,
-    `    sourceSha256: ${hash},`,
+    ...origin,
     "  },",
     "});",
     "",

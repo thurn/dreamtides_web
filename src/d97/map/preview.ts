@@ -7,7 +7,10 @@
 // anchors with their letter (`ANCHOR_LETTERS`) and door entries with a dot,
 // and may trace a route. A grid view adds a tile grid (stronger every ten
 // tiles), tints blocked cells red, and labels tile coordinates in a margin
-// `PREVIEW_GRID_MARGIN` pixels wide along its top and left edges.
+// `PREVIEW_GRID_MARGIN` pixels wide along its top and left edges. Views may
+// also outline numbered footprints (stamp placements) and mark named points
+// (a stamp's door step). Every label draws on a dark outline, and letters
+// never shrink below `MIN_MARK_SCALE`, so they stay legible at small scales.
 
 import type { CompiledDreamMap, CompiledTileset } from "./compiled";
 import type { DreamAnchorKind, TilePoint, TileRect } from "./definition";
@@ -53,6 +56,10 @@ export interface MapPreviewOptions {
   readonly images: PreviewImageLoader | null;
   /** Tiles to trace, such as the main route. */
   readonly route?: readonly TilePoint[];
+  /** Footprints to outline with a numbered label, such as stamp placements. */
+  readonly outlines?: readonly { readonly rect: TileRect; readonly label: string }[];
+  /** Points to mark with a letter, such as a stamp's named points. */
+  readonly marks?: readonly { readonly at: TilePoint; readonly letter: string }[];
 }
 
 export interface MapPreview {
@@ -110,7 +117,12 @@ const GRID_LINE: Rgb = [0, 0, 0];
 const LABEL: Rgb = [230, 230, 230];
 const ROUTE: Rgb = [255, 240, 60];
 const LETTER: Rgb = [255, 255, 255];
+const OUTLINE: Rgb = [245, 245, 245];
+const MARK: Rgb = [20, 120, 200];
+const SHADOW: Rgb = [0, 0, 0];
 const LABEL_SCALE = 2;
+/** The smallest scale anchor letters, region numbers and marks draw at. */
+const MIN_MARK_SCALE = 2;
 
 /** A 3×5 bitmap font: rows top to bottom, `1` lit. */
 const FONT: Readonly<Record<string, readonly string[]>> = {
@@ -187,6 +199,14 @@ class Canvas {
     this.fill(x, y + height - thickness, width, thickness, color);
     this.fill(x, y, thickness, height, color);
     this.fill(x + width - thickness, y, thickness, height, color);
+  }
+
+  /** Text on a one-unit dark outline, legible over any tiles. */
+  outlinedText(text: string, x: number, y: number, scale: number, color: Rgb): void {
+    for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, 1], [-1, 1], [1, -1]] as const) {
+      this.text(text, x + dx * Math.max(1, scale / 2), y + dy * Math.max(1, scale / 2), scale, SHADOW);
+    }
+    this.text(text, x, y, scale, color);
   }
 
   text(text: string, x: number, y: number, scale: number, color: Rgb): void {
@@ -439,13 +459,13 @@ export function renderMapPreview(map: PreviewableMap, options: MapPreviewOptions
       if (x % step !== 0) continue;
       const label = String(x);
       const left = cellX(x) + Math.floor((tilePixels - textWidth(label, LABEL_SCALE)) / 2);
-      canvas.text(label, Math.max(0, left), 8, LABEL_SCALE, LABEL);
+      canvas.outlinedText(label, Math.max(0, left), 8, LABEL_SCALE, LABEL);
     }
     for (let y = y0; y <= y1; y += 1) {
       if (y % step !== 0) continue;
       const label = String(y);
       const top = cellY(y) + Math.floor((tilePixels - 5 * LABEL_SCALE) / 2);
-      canvas.text(label, margin - 4 - textWidth(label, LABEL_SCALE), Math.max(0, top), LABEL_SCALE, LABEL);
+      canvas.outlinedText(label, margin - 4 - textWidth(label, LABEL_SCALE), Math.max(0, top), LABEL_SCALE, LABEL);
     }
   }
 
@@ -460,9 +480,21 @@ export function renderMapPreview(map: PreviewableMap, options: MapPreviewOptions
     const color = REGION_COLORS[index % REGION_COLORS.length].rgb;
     const thickness = tilePixels >= 8 ? 2 : 1;
     canvas.stroke(cellX(left), cellY(top), (right - left + 1) * tilePixels, (bottom - top + 1) * tilePixels, color, thickness);
-    const scale = tilePixels >= 16 ? 2 : 1;
-    canvas.text(String(index + 1), cellX(left) + thickness + 1, cellY(top) + thickness + 1, scale, color);
+    const scale = Math.max(MIN_MARK_SCALE, Math.floor(tilePixels / 16));
+    canvas.outlinedText(String(index + 1), cellX(left) + thickness + 2, cellY(top) + thickness + 2, scale, color);
   });
+
+  // Footprint outlines, labelled at their top-left.
+  for (const outline of options.outlines ?? []) {
+    const r = normalizedRect(outline.rect);
+    const left = Math.max(r.x0, x0);
+    const top = Math.max(r.y0, y0);
+    const right = Math.min(r.x1, x1);
+    const bottom = Math.min(r.y1, y1);
+    if (left > right || top > bottom) continue;
+    canvas.stroke(cellX(left), cellY(top), (right - left + 1) * tilePixels, (bottom - top + 1) * tilePixels, OUTLINE, 1);
+    canvas.outlinedText(outline.label, cellX(left) + 2, cellY(top) + 2, MIN_MARK_SCALE, OUTLINE);
+  }
 
   // The route.
   const inView = ([x, y]: TilePoint) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
@@ -473,20 +505,14 @@ export function renderMapPreview(map: PreviewableMap, options: MapPreviewOptions
     canvas.fill(cellX(tile[0]) + offset, cellY(tile[1]) + offset, dot, dot, ROUTE, 0.85);
   }
 
-  // Anchors: a lettered box on the anchor, a dot on a door's entry.
-  const letterScale = Math.max(1, Math.floor(tilePixels / 10));
+  // Anchors and marks: a lettered box on the tile, a dot on a door's entry.
+  const letterScale = Math.max(MIN_MARK_SCALE, Math.floor(tilePixels / 10));
   const box = Math.max(tilePixels, 5 * letterScale + 4);
-  for (const anchor of map.anchors) {
-    const color = ANCHOR_COLORS[anchor.kind];
-    if (anchor.entry !== undefined && inView(anchor.entry)) {
-      const offset = Math.floor((tilePixels - dot) / 2);
-      canvas.fill(cellX(anchor.entry[0]) + offset, cellY(anchor.entry[1]) + offset, dot, dot, color);
-    }
-    if (!inView(anchor.at)) continue;
-    const left = cellX(anchor.at[0]) + Math.floor((tilePixels - box) / 2);
-    const top = cellY(anchor.at[1]) + Math.floor((tilePixels - box) / 2);
-    canvas.fill(left, top, box, box, color, 0.9);
-    const letter = ANCHOR_LETTERS[anchor.kind];
+  const letterBox = (at: TilePoint, letter: string, color: Rgb) => {
+    const left = cellX(at[0]) + Math.floor((tilePixels - box) / 2);
+    const top = cellY(at[1]) + Math.floor((tilePixels - box) / 2);
+    canvas.fill(left - 1, top - 1, box + 2, box + 2, SHADOW, 0.8);
+    canvas.fill(left, top, box, box, color, 0.95);
     canvas.text(
       letter,
       left + Math.floor((box - textWidth(letter, letterScale)) / 2),
@@ -494,6 +520,18 @@ export function renderMapPreview(map: PreviewableMap, options: MapPreviewOptions
       letterScale,
       LETTER,
     );
+  };
+  for (const anchor of map.anchors) {
+    const color = ANCHOR_COLORS[anchor.kind];
+    if (anchor.entry !== undefined && inView(anchor.entry)) {
+      const offset = Math.floor((tilePixels - dot) / 2);
+      canvas.fill(cellX(anchor.entry[0]) + offset - 1, cellY(anchor.entry[1]) + offset - 1, dot + 2, dot + 2, SHADOW, 0.8);
+      canvas.fill(cellX(anchor.entry[0]) + offset, cellY(anchor.entry[1]) + offset, dot, dot, color);
+    }
+    if (inView(anchor.at)) letterBox(anchor.at, ANCHOR_LETTERS[anchor.kind], color);
+  }
+  for (const mark of options.marks ?? []) {
+    if (inView(mark.at)) letterBox(mark.at, mark.letter, MARK);
   }
 
   return {
@@ -515,6 +553,35 @@ export function composeSideBySide(images: readonly RgbaImage[], gap: number): Rg
       canvas.data.set(row, (y * width + left) * 4);
     }
     left += image.width + gap;
+  }
+  return { width, height, data: canvas.data };
+}
+
+/** Pixel height of the caption strip above each panel of `composeCaptioned`. */
+const CAPTION_HEIGHT = 18;
+
+/**
+ * Panels stacked top to bottom on the preview background, `gap` pixels
+ * apart, each under a caption strip with its label in the bitmap font
+ * (letters, digits and `-`; other characters leave a space).
+ */
+export function composeCaptioned(
+  panels: readonly { readonly caption: string; readonly image: RgbaImage }[],
+  gap: number,
+): RgbaImage {
+  const width = Math.max(0, ...panels.map((panel) => Math.max(panel.image.width, textWidth(panel.caption, LABEL_SCALE) + 8)));
+  const height =
+    panels.reduce((sum, panel) => sum + CAPTION_HEIGHT + panel.image.height, 0) + gap * Math.max(0, panels.length - 1);
+  const canvas = new Canvas(width, height, BACKGROUND);
+  let top = 0;
+  for (const panel of panels) {
+    canvas.text(panel.caption, 4, top + Math.floor((CAPTION_HEIGHT - 5 * LABEL_SCALE) / 2), LABEL_SCALE, LABEL);
+    top += CAPTION_HEIGHT;
+    const { image } = panel;
+    for (let y = 0; y < image.height; y += 1) {
+      canvas.data.set(image.data.subarray(y * image.width * 4, (y + 1) * image.width * 4), ((top + y) * width) * 4);
+    }
+    top += image.height + gap;
   }
   return { width, height, data: canvas.data };
 }

@@ -127,42 +127,88 @@ kinds, therefore read each entry through a getter.
 ## D97 tooling
 
 `npm run d97:map -- <command>` inspects, previews and validates D97 dream maps
-and manages the stamp catalog (decision P12). `<map>` is a catalog map id, a
-map module path (`.ts`), or a Tiled map path (`.tmx`/`.tmj`, relative to the
-LPC library or absolute), which compiles with no recipe, regions or anchors.
+and manages the stamp and terrain catalogs (decisions P11 and P12). `<map>` is
+a catalog map id (a dream map or an example map), a map module path (`.ts`),
+or a Tiled map path (`.tmx`/`.tmj`, relative to the LPC library or absolute),
+which compiles with no recipe, regions or anchors.
 
 ```bash
 npm run d97:map -- inspect <map>
 npm run d97:map -- preview <map> [--region <name>] [--rect x,y,w,h] [--scale <factor>] [--out <dir>]
-npm run d97:map -- validate <map>          # or --all for the whole catalog
-npm run d97:map -- stamps list
-npm run d97:map -- stamps extract --from <map> --rect x,y,w,h --name <name> [--out <dir>]
+npm run d97:map -- validate <map>          # or --all for every dream and example map
+npm run d97:map -- stamps list [--theme <theme>]
+npm run d97:map -- stamps sheet [--theme <theme>]
+npm run d97:map -- stamps extract --from <map> --rect x,y,w,h --name <name> --theme <theme> [--layers a,b] [--above a,b] [--out <dir>]
+npm run d97:map -- stamps cut --sheet <image> --rect x,y,w,h --name <name> --theme <theme> [--layer <name>] [--above <rows>] [--tile <px>] [--no-trim] [--out <dir>]
+npm run d97:map -- sheet <image> [--rect x,y,w,h] [--scale <factor>] [--tile <px>] [--out <file>]
+npm run d97:map -- terrains
+npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
 ```
 
-- **inspect** prints the size class, entries, walkable areas, per-region
-  walkability and reachability, landmark and anchor tables, the main route
-  and region-to-region crossing times at walking speed.
+- **inspect** prints the size class, entries, walkable areas, the recipe's
+  stamp placements (footprint and named points in compiled coordinates) and
+  terrain and season edits, the tilesets the compiled map draws (each with
+  whether workspace preparation serves its image, and its drawn cells), the
+  unused tilesets the compiler dropped, per-region walkability and
+  reachability, landmark and anchor tables, the main route and
+  region-to-region crossing times at walking speed.
 - **preview** writes PNGs and a `legend.txt` to the gitignored
   `artifacts/d97/previews/<map>/`: `map.png` (the whole map, downscaled, with
-  region outlines, anchor letters and the main route) and one zoom per region
-  (or the `--region`, plus any `--rect`) with a labelled coordinate grid and
-  blocked cells tinted red. `--scale` multiplies the 32-pixel tile size. It
-  prints each path with its pixel size. Without the LPC library it draws
-  walkability colours instead of tiles.
+  region outlines, anchor letters, numbered stamp outlines and the main
+  route) and one zoom per region (or the `--region`, plus any `--rect`) with a
+  labelled coordinate grid and blocked cells tinted red. `--scale` multiplies
+  the 32-pixel tile size. Labels and anchor letters draw on a dark outline and
+  never shrink below a legible size. It prints each path with its pixel size.
+  Without the LPC library it draws walkability colours instead of tiles.
 - **validate** prints findings by coordinate and exits 1 on errors: anchors
   on blocked cells, anchors no entry reaches, guarded doors (and chests
   behind guardians) reachable while their guardian stands, doors closer than
-  the minimum spacing, and a main route outside its size class's crossing
-  target.
-- **stamps extract** cuts a rectangle of a compiled map into a new stamp
-  module in `src/content/d97/stamps/` (list it in that directory's
-  `index.ts`) and writes its preview sheet to
-  `artifacts/d97/previews/stamps/`.
+  the minimum spacing, a main route outside its size class's crossing target,
+  and tilesets whose images workspace preparation does not serve (the art
+  manifest's `served` subtrees).
+- **stamps** manages the stamp catalog (`src/content/d97/stamps/`), one
+  module per stamp with a UUID, name, theme (building, nature, dungeon,
+  desert, winter, japanese, scifi, graveyard, street), footprint, walkability
+  mask, above-player layers and named points such as a door. `list` groups
+  it by theme; `sheet` writes `artifacts/d97/previews/stamps/<theme>.png`
+  (each stamp's tiles beside its walkability and above-player masks, points
+  lettered) and a `<theme>.txt` legend. `extract` cuts a rectangle of a
+  compiled map (`--layers` keeps only the named layers, `--above` marks
+  layers above the player); `cut` cuts a rectangle of a library sheet, trimmed
+  to its drawn tiles, with the top `--above` rows drawn above the player and
+  walkable and the rest blocked. Both write a module and its preview sheet;
+  list the module in the directory's `index.ts`, then read the sheet back and
+  correct the mask and points.
+- **sheet** draws a library image on its tile grid to
+  `artifacts/d97/previews/sheets/`, for reading `stamps cut` rectangles.
+- **terrains** lists the terrain catalog (`src/content/d97/terrains/`).
+- **compose** scaffolds a blank-canvas map module for a theme no source map
+  covers: the theme's base fill and cover (`themes.ts`), a winding path
+  between two doors, a pond, up to three of the theme's stamps and a
+  reseason. It compiles and validates as written; edit it from there.
+
+Recipe operations (`src/d97/map/definition.ts`, one handler module each under
+`src/d97/map/ops/`) are `crop`, `erase`, `stamp`, `brush`, `paintTerrain`,
+`reseason`, `hideLayer`, `abovePlayer`, `block` and `open`:
+
+- **brush** paints an auto-tiled terrain over a `rect`, `ellipse`, `path` or
+  `cells` shape on the terrain's catalog layer (or `layer`), re-tiling edges
+  and inner corners against the terrain already there; `erase: true` removes
+  it. Edgeless terrains (bare dirt, sand) are base fills that draw only fully
+  covered cells. `paintTerrain` is the same paint with an explicit layer.
+- **reseason** moves LPC Revised tiles (terrain, cliffs, plants, trees,
+  wildflowers) to the same tile of another season's sheet, over the map or a
+  rectangle (`src/content/d97/terrains/seasons.ts`).
+
+The compiler drops tilesets no drawn layer or tile object uses, so a
+compiled map names only art the renderer draws.
 
 Entries are door entry tiles and waypoints; the main route is the longest
 shortest walk between two doors' entry tiles (`src/d97/map/routes.ts`). Walking
 speed, size classes, crossing targets and door spacing are tunables in
-`src/content/d97/map-tuning.ts`.
+`src/content/d97/map-tuning.ts`. The example map
+`9ad96a1d-4542-4228-a20f-1e4f6e274058` is composed only from brushes and
+stamps; no dream plays it.
 
 ## Policy tournaments
 

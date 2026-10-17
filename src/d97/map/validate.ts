@@ -56,6 +56,13 @@ export type DreamMapFinding =
       readonly severity: DreamMapFindingSeverity;
       readonly size: D97MapSize;
     }
+  /** A tileset the map draws names an image workspace preparation does not serve. */
+  | {
+      readonly rule: "tileset-unserved";
+      readonly severity: "error";
+      readonly tileset: string;
+      readonly image: string;
+    }
   /** The main route's crossing time strays from the size class target. */
   | {
       readonly rule: "main-route-crossing";
@@ -188,13 +195,40 @@ export function validateMainRouteCrossing(map: CompiledDreamMap, tuning: D97MapT
   ];
 }
 
-/** Every validator rule, in a stable order. */
-export function validateDreamMap(map: CompiledDreamMap, tuning: D97MapTuning): DreamMapFinding[] {
+/**
+ * Every image a compiled tileset names (its sheet, or an image collection's
+ * tile images) lies under a served library subtree, so the browser can load
+ * it. `served` lists library-relative directory prefixes such as
+ * `source-of-tales/tiles` (the art manifest's `directory/served` pairs).
+ */
+export function validateTilesetsServed(map: CompiledDreamMap, served: readonly string[]): DreamMapFinding[] {
+  const prefixes = served.map((prefix) => (prefix.endsWith("/") ? prefix : `${prefix}/`));
+  const isServed = (image: string) => prefixes.some((prefix) => image.startsWith(prefix));
+  const findings: DreamMapFinding[] = [];
+  for (const tileset of map.tilesets) {
+    const images = tileset.image === null ? tileset.tileImages.map((tile) => tile.image) : [tileset.image];
+    for (const image of new Set(images)) {
+      if (!isServed(image)) findings.push({ rule: "tileset-unserved", severity: "error", tileset: tileset.name, image });
+    }
+  }
+  return findings;
+}
+
+/**
+ * Every validator rule, in a stable order. `served` (the served library
+ * subtrees) enables the tileset check.
+ */
+export function validateDreamMap(
+  map: CompiledDreamMap,
+  tuning: D97MapTuning,
+  served?: readonly string[],
+): DreamMapFinding[] {
   return [
     ...validateAnchorsWalkable(map),
     ...validateAnchorsReachable(map),
     ...validateGuardedAnchors(map),
     ...validateDoorSpacing(map, tuning),
     ...validateMainRouteCrossing(map, tuning),
+    ...(served === undefined ? [] : validateTilesetsServed(map, served)),
   ];
 }

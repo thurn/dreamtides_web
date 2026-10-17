@@ -1,6 +1,7 @@
 // Resolves the `<map>` argument of `npm run d97:map` and compiles it:
 //
-// - a catalog map id (a UUID from `src/content/d97/maps/`);
+// - a catalog map id (a UUID from `src/content/d97/maps/`: a dream map or an
+//   example map);
 // - a map module path (`.ts`/`.mts`/`.js`/`.mjs`), whose default export, or
 //   else first export shaped like a map definition, is compiled;
 // - a Tiled map path (`.tmx`/`.tmj`), relative to the LPC library or
@@ -10,7 +11,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, extname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { D97_DREAM_MAPS } from "../../src/content/d97/maps/index.ts";
+import { D97_DREAM_MAPS, D97_EXAMPLE_MAPS } from "../../src/content/d97/maps/index.ts";
 import type { CompiledDreamMap } from "../../src/d97/map/compiled.ts";
 import { dreamMapSourceHash } from "../../src/d97/map/compile.ts";
 import { defineDreamMap, type DreamMapDefinition } from "../../src/d97/map/definition.ts";
@@ -29,6 +30,8 @@ export interface LoadedMap {
   readonly library: string;
   readonly definition: DreamMapDefinition;
   readonly map: CompiledDreamMap;
+  /** Tilesets the compiler left out because no drawn tile uses them. */
+  readonly droppedTilesets: readonly { readonly name: string; readonly image: string | null }[];
 }
 
 export type MapLoadResult =
@@ -97,7 +100,7 @@ export async function loadMap(argument: string, cwd: string = process.cwd()): Pr
     } catch {
       return { ok: false, errors: [`${argument} is neither a catalog map id nor a map module or Tiled path`] };
     }
-    definition = D97_DREAM_MAPS.find((candidate) => candidate.id === id) ?? null;
+    definition = [...D97_DREAM_MAPS, ...D97_EXAMPLE_MAPS].find((candidate) => candidate.id === id) ?? null;
     if (definition === null) return { ok: false, errors: [`no catalog map ${id}`] };
     slug = id;
   }
@@ -112,5 +115,8 @@ export async function loadMap(argument: string, cwd: string = process.cwd()): Pr
           : result.errors.map(describeCompileError),
     };
   }
-  return { ok: true, loaded: { argument, slug, library, definition, map: result.map } };
+  return {
+    ok: true,
+    loaded: { argument, slug, library, definition, map: result.map, droppedTilesets: result.droppedTilesets },
+  };
 }

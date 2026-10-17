@@ -10,6 +10,7 @@ import { parseD97StampId, parseDreamMapSourceHash } from "../../../types/identif
 export default defineD97Stamp({
   id: parseD97StampId("684f3b39-baac-49fd-9031-5c874c76d5ee"),
   name: "ember arch",
+  theme: "building",
   width: 8,
   height: 7,
   tilesets: [

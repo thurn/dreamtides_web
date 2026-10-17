@@ -10,6 +10,7 @@
 // - `legend.txt`: the letters, region numbers and colours, and anchors.
 //
 // `--scale` multiplies the native tile size (32 px for LPC) in every view.
+// Stamp placements are outlined and numbered in every view.
 
 import { join } from "node:path";
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -17,13 +18,16 @@ import type { CompiledDreamMap } from "../../src/d97/map/compiled.ts";
 import type { TilePoint, TileRect } from "../../src/d97/map/definition.ts";
 import {
   ANCHOR_LETTERS,
+  composeCaptioned,
   composeSideBySide,
   REGION_COLORS,
   renderMapPreview,
   type MapPreview,
   type PreviewImageLoader,
 } from "../../src/d97/map/preview.ts";
+import { sheetPreviewMap } from "../../src/d97/map/sheets.ts";
 import { stampPreviewMap, type D97CatalogStamp } from "../../src/d97/map/stamps.ts";
+import type { TiledTileset } from "../../src/d97/map/tiled.ts";
 import { writePng } from "./png.ts";
 
 const WHOLE_MAP_MAX_PIXELS = 1600;
@@ -50,6 +54,8 @@ export interface MapPreviewRequest {
   readonly scale?: number;
   /** Traced on the whole-map view. */
   readonly route?: readonly TilePoint[];
+  /** Numbered footprints outlined in every view, such as stamp placements; listed in the legend. */
+  readonly outlines?: readonly { readonly rect: TileRect; readonly label: string; readonly note: string }[];
 }
 
 function slugify(text: string): string {
@@ -73,7 +79,7 @@ function write(path: string, preview: MapPreview): WrittenPreview {
   };
 }
 
-function legendText(map: CompiledDreamMap): string {
+function legendText(map: CompiledDreamMap, outlines: MapPreviewRequest["outlines"] = []): string {
   const lines = [
     `Map ${map.id}: ${String(map.width)}×${String(map.height)} tiles`,
     "",
@@ -88,6 +94,13 @@ function legendText(map: CompiledDreamMap): string {
       return `  ${String(index + 1)} ${region.name}: ${region.from.join(",")}–${region.to.join(",")} (${color})`;
     }),
     "",
+    ...(outlines.length === 0
+      ? []
+      : [
+          "Stamp placements (white outline, number at the top-left corner):",
+          ...outlines.map((outline) => `  ${outline.label} ${outline.note}: ${outline.rect.from.join(",")}–${outline.rect.to.join(",")}`),
+          "",
+        ]),
     "Anchors:",
     ...map.anchors.map(
       (anchor) =>
@@ -116,6 +129,7 @@ export function writeMapPreviews(
         grid: false,
         images: request.images,
         ...(request.route === undefined ? {} : { route: request.route }),
+        ...(request.outlines === undefined ? {} : { outlines: request.outlines }),
       }),
     ),
   );
@@ -144,12 +158,13 @@ export function writeMapPreviews(
           grid: true,
           images: request.images,
           ...(request.route === undefined ? {} : { route: request.route }),
+          ...(request.outlines === undefined ? {} : { outlines: request.outlines }),
         }),
       ),
     );
   }
   const legend = join(request.outDir, "legend.txt");
-  writeFileSync(legend, legendText(map));
+  writeFileSync(legend, legendText(map, request.outlines));
   return { images, legend };
 }
 
@@ -162,12 +177,82 @@ export function writeStampSheet(
   path: string,
   images: PreviewImageLoader | null,
 ): WrittenPreview {
+  const panel = stampPanel(stamp, images);
+  writePng(path, panel.image);
+  return { path, width: panel.image.width, height: panel.image.height, mode: panel.mode, missingImages: panel.missingImages };
+}
+
+/** The letter a stamp point is marked with: its name's first letter. */
+function pointLetter(name: string): string {
+  return (name.match(/[a-z0-9]/iu)?.[0] ?? "P").toUpperCase();
+}
+
+function stampPanel(stamp: D97CatalogStamp, images: PreviewImageLoader | null): MapPreview {
   const shaped = stampPreviewMap(stamp);
   const rect: TileRect = { from: [0, 0], to: [stamp.width - 1, stamp.height - 1] };
   const tilePixels = Math.max(8, shaped.tileWidth);
-  const tiles = renderMapPreview(shaped, { rect, tilePixels, grid: true, images });
-  const masks = renderMapPreview(shaped, { rect, tilePixels, grid: true, images: null });
-  const sheet = composeSideBySide([tiles.image, masks.image], STAMP_SHEET_GAP);
+  const marks = Object.entries(stamp.points ?? {}).map(([name, at]) => ({ at, letter: pointLetter(name) }));
+  const tiles = renderMapPreview(shaped, { rect, tilePixels, grid: true, images, marks });
+  const masks = renderMapPreview(shaped, { rect, tilePixels, grid: true, images: null, marks });
+  return { ...tiles, image: composeSideBySide([tiles.image, masks.image], STAMP_SHEET_GAP) };
+}
+
+/**
+ * Write one theme's stamps as a preview sheet (each stamp's tiles beside its
+ * walkability and above-player masks, under a caption with its number, name
+ * and footprint) and a text legend naming each stamp's id and points.
+ */
+export function writeThemeSheet(
+  stamps: readonly D97CatalogStamp[],
+  path: string,
+  legendPath: string,
+  images: PreviewImageLoader | null,
+): WrittenPreview {
+  const panels = stamps.map((stamp) => stampPanel(stamp, images));
+  const sheet = composeCaptioned(
+    stamps.map((stamp, index) => ({
+      caption: `${String(index + 1)} ${stamp.name} ${String(stamp.width)}x${String(stamp.height)}`,
+      image: panels[index].image,
+    })),
+    STAMP_SHEET_GAP,
+  );
   writePng(path, sheet);
-  return { path, width: sheet.width, height: sheet.height, mode: tiles.mode, missingImages: tiles.missingImages };
+  const legend = [
+    "Left: tiles over the grid, blocked cells tinted red. Right: walkability (green open, brown blocked,",
+    "blue above the player). Blue lettered boxes mark named points.",
+    "",
+    ...stamps.map((stamp, index) => {
+      const points = Object.entries(stamp.points ?? {})
+        .map(([name, [x, y]]) => `${pointLetter(name)} ${name} ${String(x)},${String(y)}`)
+        .join("; ");
+      return `${String(index + 1)} ${stamp.name} ${stamp.id} ${String(stamp.width)}×${String(stamp.height)}${points === "" ? "" : `: ${points}`}`;
+    }),
+    "",
+  ];
+  writeFileSync(legendPath, legend.join("\n"));
+  const missing = [...new Set(panels.flatMap((panel) => panel.missingImages))].sort();
+  return {
+    path,
+    width: sheet.width,
+    height: sheet.height,
+    mode: panels.some((panel) => panel.mode === "tiles") ? "tiles" : "walkability",
+    missingImages: missing,
+  };
+}
+
+/**
+ * Write a library sheet on its tile grid (`sheet <image>`), so stamp
+ * rectangles for `stamps cut` can be read off it. `rect` limits the view.
+ */
+export function writeSheetGrid(
+  tileset: TiledTileset,
+  path: string,
+  images: PreviewImageLoader | null,
+  options: { readonly rect?: TileRect; readonly scale?: number } = {},
+): WrittenPreview {
+  const map = sheetPreviewMap(tileset);
+  const rect = options.rect ?? { from: [0, 0], to: [map.width - 1, map.height - 1] };
+  const tilePixels = Math.max(8, Math.round(tileset.tileWidth * (options.scale ?? 1)));
+  const preview = renderMapPreview(map, { rect, tilePixels, grid: true, images });
+  return write(path, preview);
 }

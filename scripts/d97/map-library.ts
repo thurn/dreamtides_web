@@ -14,7 +14,8 @@ import {
 } from "../../src/d97/map/compile.ts";
 import type { DreamMapDefinition } from "../../src/d97/map/definition.ts";
 import type { TiledCompression } from "../../src/d97/map/tiled.ts";
-import { D97_MAP_STAMPS, D97_MAP_TERRAINS } from "../../src/content/d97/maps/index.ts";
+import { D97_ART_SOURCES } from "../../src/content/d97/art-sources.ts";
+import { D97_MAP_SEASONS, D97_MAP_STAMPS, D97_MAP_TERRAINS } from "../../src/content/d97/maps/index.ts";
 import { defaultArtPaths } from "../setup-assets.ts";
 
 /** The repository checkout these scripts run from. */
@@ -69,5 +70,15 @@ export function compileFromLibrary(
       decompress: decompressTiled,
     };
   }
-  return compileDreamMap(definition, { source, stamps: D97_MAP_STAMPS, terrains: D97_MAP_TERRAINS });
+  return compileDreamMap(definition, {
+    source,
+    stamps: D97_MAP_STAMPS,
+    terrains: D97_MAP_TERRAINS,
+    seasons: D97_MAP_SEASONS,
+  });
+}
+
+/** Library-relative subtrees workspace preparation serves (`scripts/setup-assets.ts`). */
+export function servedArtPrefixes(): string[] {
+  return D97_ART_SOURCES.flatMap((source) => source.served.map((subtree) => `${source.directory}/${subtree}`));
 }
