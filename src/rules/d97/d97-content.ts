@@ -7,9 +7,10 @@ import type { D97StartingCollectionContent } from "../../d97/collection/starting
 import type { D97TierKnob } from "../../content/d97/encounters";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { CardId } from "../../types/card-identity";
-import type { AvatarId, BattleId, DreamsignId, TideId } from "../../types/identifiers";
+import type { AvatarId, BattleId, D97ItemId, DreamsignId, TideId } from "../../types/identifiers";
 import type { D97BattleInit } from "../battle/fold";
 import type { D97Encounter, D97Run } from "./d97-state";
+import type { D97QuestCatalog } from "../../d97/quests/quests";
 
 /** One Avatar's dealt tides4 pool. */
 export interface D97PoolDeal {
@@ -65,6 +66,10 @@ export interface D97ContentProvider extends D97StartingCollectionContent {
     readonly init: D97BattleInit;
     readonly engineInit: EngineBattleInit;
   } | null;
+  /** Every registered quest, by UUID. */
+  readonly quests: D97QuestCatalog;
+  /** Every registered quest item. */
+  readonly itemIds: ReadonlySet<D97ItemId>;
 }
 
 let provider: D97ContentProvider | null = null;

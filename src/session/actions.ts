@@ -30,7 +30,16 @@ import type {
 import { SELECTION_RULES_VERSION } from "../reward-selection";
 import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
-import type { AvatarId, D97OwnedCopyId, DreamAnchorId } from "../types/identifiers";
+import type {
+  AvatarId,
+  D97FlagId,
+  D97ItemId,
+  D97OwnedCopyId,
+  D97QuestId,
+  D97QuestStepId,
+  DreamAnchorId,
+} from "../types/identifiers";
+import type { D97ServiceKind } from "../content/d97/dialogue/schema";
 import type { SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { CardId, CardSubtype } from "../types/card-identity";
@@ -411,6 +420,30 @@ export interface GameActions {
   d97BeginBattle: (anchorId: DreamAnchorId) => Promise<number>;
   /** Settle the finished D97 battle and return to the overworld. */
   d97EndBattle: () => Promise<number>;
+  // Quests and dialogue effects. Unkeyed: each case refuses a repeat that no
+  // longer applies (a held quest, a done step, a held item).
+  /** Accept the quest the character at `anchorId` offers. */
+  d97AcceptQuest: (questId: D97QuestId, anchorId: DreamAnchorId) => Promise<number>;
+  /** Do the held quest's visit or deliver step at `anchorId`. */
+  d97AdvanceQuest: (questId: D97QuestId, stepId: D97QuestStepId, anchorId: DreamAnchorId) => Promise<number>;
+  /** Turn the held, ready quest in at `anchorId`. */
+  d97CompleteQuest: (questId: D97QuestId, anchorId: DreamAnchorId) => Promise<number>;
+  /** Take one card of a quest's card-choice reward. */
+  d97ChooseQuestReward: (questId: D97QuestId, cardId: CardId) => Promise<number>;
+  /** Abandon the held quest, for free. */
+  d97AbandonQuest: (questId: D97QuestId) => Promise<number>;
+  /** Pick up the held quest's lost object at `anchorId`. */
+  d97PickUpObject: (anchorId: DreamAnchorId) => Promise<number>;
+  /** The character at `anchorId` hands the player an item. */
+  d97GiveItem: (itemId: D97ItemId, anchorId: DreamAnchorId) => Promise<number>;
+  /** The character at `anchorId` takes a carried item. */
+  d97TakeItem: (itemId: D97ItemId, anchorId: DreamAnchorId) => Promise<number>;
+  /** Set or clear a story flag in conversation at `anchorId`. */
+  d97SetFlag: (flagId: D97FlagId, value: boolean, anchorId: DreamAnchorId) => Promise<number>;
+  /** Hand a conversation off to the shop at `anchorId`. */
+  d97OpenShop: (anchorId: DreamAnchorId) => Promise<number>;
+  /** Hand a conversation off to a friendly character's service. */
+  d97OpenService: (anchorId: DreamAnchorId, service: D97ServiceKind) => Promise<number>;
 }
 
 /**
@@ -860,5 +893,17 @@ export function makeActions(append: AppendFn): GameActions {
     d97DeclineEncounter: (anchorId) => emit("D97_DECLINE_ENCOUNTER", { anchorId }),
     d97BeginBattle: (anchorId) => emit("D97_BEGIN_BATTLE", { anchorId }),
     d97EndBattle: () => emit("D97_END_BATTLE", {}),
+    d97AcceptQuest: (questId, anchorId) => emit("D97_ACCEPT_QUEST", { questId, anchorId }),
+    d97AdvanceQuest: (questId, stepId, anchorId) =>
+      emit("D97_ADVANCE_QUEST", { questId, stepId, anchorId }),
+    d97CompleteQuest: (questId, anchorId) => emit("D97_COMPLETE_QUEST", { questId, anchorId }),
+    d97ChooseQuestReward: (questId, cardId) => emit("D97_CHOOSE_QUEST_REWARD", { questId, cardId }),
+    d97AbandonQuest: (questId) => emit("D97_ABANDON_QUEST", { questId }),
+    d97PickUpObject: (anchorId) => emit("D97_PICK_UP_OBJECT", { anchorId }),
+    d97GiveItem: (itemId, anchorId) => emit("D97_GIVE_ITEM", { itemId, anchorId }),
+    d97TakeItem: (itemId, anchorId) => emit("D97_TAKE_ITEM", { itemId, anchorId }),
+    d97SetFlag: (flagId, value, anchorId) => emit("D97_SET_FLAG", { flagId, value, anchorId }),
+    d97OpenShop: (anchorId) => emit("D97_OPEN_SHOP", { anchorId }),
+    d97OpenService: (anchorId, service) => emit("D97_OPEN_SERVICE", { anchorId, service }),
   };
 }

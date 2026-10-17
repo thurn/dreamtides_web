@@ -33,6 +33,7 @@ import { engineBattleResult, startEngineBattleWithCommits } from "../battle/engi
 import { d97BattleOf } from "../battle/fold";
 import { getBattleInitProvider } from "../battle/journey-battle";
 import type { FoldState } from "../fold-state";
+import { advanceDefeatQuest } from "./d97-quests";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97ContentProvider } from "./d97-content";
 import type { D97Encounter, D97Run, D97State } from "./d97-state";
@@ -361,8 +362,10 @@ export function endEncounterBattle(
     encounters: { ...run.encounters, [anchorId]: settled },
     returnAnchorId: anchorId,
   };
+  // A win does the held quest's defeat step on this opponent.
+  const defeat = won ? advanceDefeatQuest(nextRun, anchorId) : null;
   return {
-    state: { ...state, battle: null, d97: { ...d97, run: nextRun } },
+    state: { ...state, battle: null, d97: { ...d97, run: defeat?.run ?? nextRun } },
     logRecords: [
       ...records,
       {
@@ -385,6 +388,7 @@ export function endEncounterBattle(
           collectionSize: collection.copies.length,
         },
       },
+      ...(defeat?.logRecords ?? []),
     ],
   };
 }

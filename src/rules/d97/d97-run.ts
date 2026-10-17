@@ -20,6 +20,7 @@ import {
   chooseStartingCollection,
   startingEssence,
 } from "../../d97/collection/starting-collection";
+import { emptyQuestState } from "../../d97/quests/quests";
 import type { D97RunId } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import type { D97Run, D97State } from "./d97-state";
@@ -132,6 +133,8 @@ export function startRun(
     bag,
     encounters: {},
     returnAnchorId: null,
+    quests: emptyQuestState(),
+    flags: [],
   };
   return {
     d97: { screen: { type: "overworld" }, run },

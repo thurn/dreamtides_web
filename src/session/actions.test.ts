@@ -40,9 +40,15 @@ import { parseJourneyId } from "../types/identifiers";
 import { parseTutorialRunId } from "../types/identifiers";
 import { parseCardTutorialScreenKey } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
-import { parseD97OwnedCopyId } from "../types/identifiers";
+import {
+  parseD97FlagId,
+  parseD97ItemId,
+  parseD97OwnedCopyId,
+  parseD97QuestId,
+  parseD97QuestStepId,
+  parseDreamAnchorId,
+} from "../types/identifiers";
 import { parseFrontDoorActionId } from "../types/identifiers";
-import { parseDreamAnchorId } from "../types/identifiers";
 import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
 import { AUGURY_DECLINE } from "./actions.fixtures";
@@ -278,6 +284,20 @@ function captureAllDrafts(): EventDraft[] {
   void actions.d97EndBattle();
   void actions.d97EquipCopy(parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
   void actions.d97UnequipCopy(parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
+  const questId = parseD97QuestId("00000000-0000-4000-8000-000000000971");
+  const anchorId = parseDreamAnchorId("00000000-0000-4000-8000-000000000972");
+  const itemId = parseD97ItemId("00000000-0000-4000-8000-000000000973");
+  void actions.d97AcceptQuest(questId, anchorId);
+  void actions.d97AdvanceQuest(questId, parseD97QuestStepId("00000000-0000-4000-8000-000000000974"), anchorId);
+  void actions.d97CompleteQuest(questId, anchorId);
+  void actions.d97ChooseQuestReward(questId, testCardId("d97-quest-reward"));
+  void actions.d97AbandonQuest(questId);
+  void actions.d97PickUpObject(anchorId);
+  void actions.d97GiveItem(itemId, anchorId);
+  void actions.d97TakeItem(itemId, anchorId);
+  void actions.d97SetFlag(parseD97FlagId("00000000-0000-4000-8000-000000000975"), true, anchorId);
+  void actions.d97OpenShop(anchorId);
+  void actions.d97OpenService(anchorId, "sage");
 
   return drafts;
 }

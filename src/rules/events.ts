@@ -8,6 +8,10 @@ import type {
   DeckEntryId,
   AvatarId,
   D97OwnedCopyId,
+  D97FlagId,
+  D97ItemId,
+  D97QuestId,
+  D97QuestStepId,
   DreamAnchorId,
   DreamsignId,
   ExplorationActionId,
@@ -34,6 +38,7 @@ import type {
 import type { BattleSide } from "../battle/types";
 import type { SelectionRulesVersion } from "../reward-selection/types";
 import type { EventType } from "../eventlog/types";
+import type { D97ServiceKind } from "../content/d97/dialogue/schema";
 
 // The reducer-internal typed view of every event that folds over `FoldState`.
 //
@@ -329,6 +334,19 @@ export interface EventPayloads {
   D97_DECLINE_ENCOUNTER: { anchorId: DreamAnchorId };
   D97_BEGIN_BATTLE: { anchorId: DreamAnchorId };
   D97_END_BATTLE: Record<string, never>;
+  // Quests and dialogue effects (cases in ./d97/d97-quests.ts). Each names
+  // the anchor whose character the player is dealing with.
+  D97_ACCEPT_QUEST: { questId: D97QuestId; anchorId: DreamAnchorId };
+  D97_ADVANCE_QUEST: { questId: D97QuestId; stepId: D97QuestStepId; anchorId: DreamAnchorId };
+  D97_COMPLETE_QUEST: { questId: D97QuestId; anchorId: DreamAnchorId };
+  D97_CHOOSE_QUEST_REWARD: { questId: D97QuestId; cardId: CardId };
+  D97_ABANDON_QUEST: { questId: D97QuestId };
+  D97_PICK_UP_OBJECT: { anchorId: DreamAnchorId };
+  D97_GIVE_ITEM: { itemId: D97ItemId; anchorId: DreamAnchorId };
+  D97_TAKE_ITEM: { itemId: D97ItemId; anchorId: DreamAnchorId };
+  D97_SET_FLAG: { flagId: D97FlagId; value: boolean; anchorId: DreamAnchorId };
+  D97_OPEN_SHOP: { anchorId: DreamAnchorId };
+  D97_OPEN_SERVICE: { anchorId: DreamAnchorId; service: D97ServiceKind };
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -505,6 +523,17 @@ const EVENT_INTENT_CLASSES = {
   D97_DECLINE_ENCOUNTER: "gameplay",
   D97_BEGIN_BATTLE: "gameplay",
   D97_END_BATTLE: "gameplay",
+  D97_ACCEPT_QUEST: "gameplay",
+  D97_ADVANCE_QUEST: "gameplay",
+  D97_COMPLETE_QUEST: "gameplay",
+  D97_CHOOSE_QUEST_REWARD: "gameplay",
+  D97_ABANDON_QUEST: "gameplay",
+  D97_PICK_UP_OBJECT: "gameplay",
+  D97_GIVE_ITEM: "gameplay",
+  D97_TAKE_ITEM: "gameplay",
+  D97_SET_FLAG: "gameplay",
+  D97_OPEN_SHOP: "gameplay",
+  D97_OPEN_SERVICE: "gameplay",
 } as const satisfies Record<GameEventType, EventIntentClass>;
 
 /** Event types for which journey modifiers never run. */
@@ -653,6 +682,17 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   D97_DECLINE_ENCOUNTER: true,
   D97_BEGIN_BATTLE: true,
   D97_END_BATTLE: true,
+  D97_ACCEPT_QUEST: true,
+  D97_ADVANCE_QUEST: true,
+  D97_COMPLETE_QUEST: true,
+  D97_CHOOSE_QUEST_REWARD: true,
+  D97_ABANDON_QUEST: true,
+  D97_PICK_UP_OBJECT: true,
+  D97_GIVE_ITEM: true,
+  D97_TAKE_ITEM: true,
+  D97_SET_FLAG: true,
+  D97_OPEN_SHOP: true,
+  D97_OPEN_SERVICE: true,
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.

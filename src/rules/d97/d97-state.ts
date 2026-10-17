@@ -10,10 +10,12 @@ import type {
   D97Collection,
   D97RewardBag,
 } from "../../d97/collection/types";
+import type { D97QuestState } from "../../d97/quests/types";
 import type { CardId } from "../../types/card-identity";
 import type {
   AvatarId,
   D97CharacterId,
+  D97FlagId,
   D97OwnedCopyId,
   D97RunId,
   D97RunSeed,
@@ -85,6 +87,23 @@ export interface D97Run {
   readonly encounters: Readonly<Partial<Record<DreamAnchorId, D97Encounter>>>;
   /** The anchor the player returns beside after its battle, if any. */
   readonly returnAnchorId: DreamAnchorId | null;
+  /** The held quest, finished quests, a pending reward and quest items. */
+  readonly quests: D97QuestState;
+  /** Story flags dialogue has set, in the order they were set. */
+  readonly flags: readonly D97FlagId[];
+}
+
+/**
+ * The act every run is in: M1 runs play the first act, and act progression
+ * arrives with act assembly.
+ */
+export const D97_CURRENT_ACT = 1;
+
+/** The challenger and guardian anchors `run` has beaten (its encounters). */
+export function d97BeatenAnchorIds(run: D97Run): DreamAnchorId[] {
+  return Object.values(run.encounters).flatMap((encounter) =>
+    encounter?.beaten === true ? [encounter.anchorId] : [],
+  );
 }
 
 /** Everything a D97 game folds beyond the shared fold-state fields. */

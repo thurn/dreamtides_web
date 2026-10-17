@@ -6,6 +6,7 @@ import { Application, useApplication } from "@pixi/react";
 import { useEffect, useRef, useState } from "react";
 import type { D97CharacterTunables, D97OverworldTunables } from "../../content/d97/tunables";
 import type { D97CharacterId, DreamAnchorId } from "../../types/identifiers";
+import type { BadgeKind } from "./characters/badges";
 import { loadCharacterLooks, type CharacterLooks } from "./characters/character-looks";
 import type { OverworldOccupants } from "./occupants";
 import { DESKTOP_MIN_WIDTH } from "../../cumulus/primitives/use-is-desktop";
@@ -30,6 +31,10 @@ export interface OverworldCanvasProps {
   readonly returnAnchorId: DreamAnchorId | null;
   /** False while a React panel is open: the canvas ignores input. */
   readonly inputEnabled: boolean;
+  /** Head icons shown in place of occupants' role badges (quest icons). */
+  readonly badges: ReadonlyMap<DreamAnchorId, BadgeKind>;
+  /** Anchors neither drawn nor interactive (quest objects out of their quest). */
+  readonly hiddenAnchorIds: ReadonlySet<DreamAnchorId>;
 }
 
 /** Everything a scene draws that loads asynchronously. */
@@ -47,10 +52,13 @@ function SceneMount({
   playerCharacter,
   returnAnchorId,
   inputEnabled,
+  badges,
+  hiddenAnchorIds,
   assets,
 }: OverworldCanvasProps & { readonly assets: SceneAssets }) {
   const { app, isInitialised } = useApplication();
   const sceneRef = useRef<OverworldScene | null>(null);
+  const [scene, setScene] = useState<OverworldScene | null>(null);
 
   useEffect(() => {
     if (!isInitialised) return;
@@ -68,10 +76,12 @@ function SceneMount({
       desktop: () => window.innerWidth >= DESKTOP_MIN_WIDTH,
     });
     sceneRef.current = scene;
+    setScene(scene);
     const uninstall = import.meta.env.DEV ? installD97QaSurface(map, scene) : () => undefined;
     return () => {
       uninstall();
       sceneRef.current = null;
+      setScene(null);
       scene.destroy();
     };
   }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, returnAnchorId, tunables]);
@@ -79,6 +89,11 @@ function SceneMount({
   useEffect(() => {
     sceneRef.current?.setInputEnabled(inputEnabled);
   }, [inputEnabled, isInitialised]);
+
+  useEffect(() => {
+    scene?.setHiddenAnchors(hiddenAnchorIds);
+    scene?.setBadges(badges);
+  }, [badges, hiddenAnchorIds, scene]);
 
   return null;
 }

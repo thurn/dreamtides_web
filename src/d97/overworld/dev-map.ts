@@ -20,7 +20,8 @@ import {
 
 const SIZE = 110;
 
-function anchorId(index: number): DreamAnchorId {
+/** The development dream's anchor number `index` (its fixtures name them). */
+export function devAnchorId(index: number): DreamAnchorId {
   return parseDreamAnchorId(`d9700000-0000-4000-8000-${index.toString(16).padStart(12, "0")}`);
 }
 
@@ -49,30 +50,30 @@ const RECIPE: readonly DreamMapRecipeOp[] = [
   open([92, 52], [93, 52]),
 ];
 
-const DOOR_WEST = anchorId(1);
-const DOOR_EAST = anchorId(2);
-const GUARDIAN = anchorId(4);
+const DOOR_WEST = devAnchorId(1);
+const DOOR_EAST = devAnchorId(2);
+const GUARDIAN = devAnchorId(4);
 
 const ANCHORS: readonly DreamAnchorDefinition[] = [
   { id: DOOR_WEST, kind: "door", at: [6, 54], entry: [7, 54] },
   { id: DOOR_EAST, kind: "door", at: [104, 52], entry: [103, 52] },
-  { id: anchorId(3), kind: "waypoint", at: [22, 52] },
+  { id: devAnchorId(3), kind: "waypoint", at: [22, 52] },
   { id: GUARDIAN, kind: "guardian", at: [94, 52], blocksDoor: DOOR_EAST },
-  { id: anchorId(5), kind: "shop", at: [21, 45] },
-  { id: anchorId(6), kind: "challenger", at: [55, 40] },
-  { id: anchorId(7), kind: "challenger", at: [52, 80] },
-  { id: anchorId(8), kind: "challenger", at: [80, 50] },
-  { id: anchorId(9), kind: "challenger", at: [30, 90] },
-  { id: anchorId(10), kind: "friendly", at: [18, 50], cluster: "plaza" },
-  { id: anchorId(11), kind: "friendly", at: [26, 50], cluster: "plaza" },
-  { id: anchorId(12), kind: "friendly", at: [22, 58], cluster: "plaza" },
-  { id: anchorId(13), kind: "chest", at: [100, 30], behindGuardian: GUARDIAN },
-  { id: anchorId(14), kind: "object", at: [72, 40] },
-  { id: anchorId(15), kind: "townsfolk", at: [20, 60] },
-  { id: anchorId(16), kind: "townsfolk", at: [60, 60] },
+  { id: devAnchorId(5), kind: "shop", at: [21, 45] },
+  { id: devAnchorId(6), kind: "challenger", at: [55, 40] },
+  { id: devAnchorId(7), kind: "challenger", at: [52, 80] },
+  { id: devAnchorId(8), kind: "challenger", at: [80, 50] },
+  { id: devAnchorId(9), kind: "challenger", at: [30, 90] },
+  { id: devAnchorId(10), kind: "friendly", at: [18, 50], cluster: "plaza" },
+  { id: devAnchorId(11), kind: "friendly", at: [26, 50], cluster: "plaza" },
+  { id: devAnchorId(12), kind: "friendly", at: [22, 58], cluster: "plaza" },
+  { id: devAnchorId(13), kind: "chest", at: [100, 30], behindGuardian: GUARDIAN },
+  { id: devAnchorId(14), kind: "object", at: [72, 40] },
+  { id: devAnchorId(15), kind: "townsfolk", at: [20, 60] },
+  { id: devAnchorId(16), kind: "townsfolk", at: [60, 60] },
 ];
 
-const DEV_MAP_DEFINITION = defineDreamMap({
+export const DEV_MAP_DEFINITION = defineDreamMap({
   id: parseDreamMapId("d9700000-0000-4000-8000-000000000000"),
   source: { kind: "blank", width: SIZE, height: SIZE, tileWidth: 32, tileHeight: 32 },
   recipe: RECIPE,

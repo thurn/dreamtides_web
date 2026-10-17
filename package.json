@@ -22,6 +22,7 @@
     "prepare-workspace": "node scripts/prepare-workspace.mjs",
     "d97:maps": "tsx scripts/d97/compile-maps.ts",
     "d97:map": "tsx scripts/d97/map.ts",
+    "d97:dialogue": "tsx scripts/d97/dialogue.ts",
     "d97:characters": "tsx scripts/d97/link-characters.ts",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",
     "bead:entities": "tsx scripts/bead-entities.ts",

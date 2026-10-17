@@ -3,7 +3,8 @@
 
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
-import type { AvatarId, TideId } from "../../types/identifiers";
+import type { D97QuestDefinition } from "../../content/d97/dialogue/schema";
+import type { AvatarId, D97ItemId, TideId } from "../../types/identifiers";
 import {
   testAvatarId,
   testCardId,
@@ -39,6 +40,8 @@ export function syntheticD97Content(
   options: {
     avatarIds?: readonly AvatarId[];
     poolSize?: number;
+    quests?: readonly D97QuestDefinition[];
+    itemIds?: readonly D97ItemId[];
   } = {},
 ): D97ContentProvider {
   const avatarIds = options.avatarIds ?? [testAvatarId("d97-roster-avatar")];
@@ -60,6 +63,8 @@ export function syntheticD97Content(
     tideAffinityIndex: { cardVectors, knownTideIds: new Set(SYNTHETIC_TIDES) },
     cardRarity: (cardId) => rarityById.get(cardId) ?? null,
     starterCardIds: SYNTHETIC_STARTERS,
+    quests: new Map((options.quests ?? []).map((quest) => [quest.id, quest])),
+    itemIds: new Set(options.itemIds ?? []),
     dealRewardPool: () => ({
       joinedTideIds: SYNTHETIC_TIDES.slice(0, 2),
       cards: poolCards.map((cardId, index) => ({

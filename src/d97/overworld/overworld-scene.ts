@@ -30,7 +30,7 @@ import {
   type InteractionRegistry,
 } from "./interactions";
 import { idleFacing } from "./characters/animation";
-import { BADGE_HEIGHT, BADGE_WIDTH, drawBadge, orderBadges } from "./characters/badges";
+import { BADGE_HEIGHT, BADGE_WIDTH, drawBadge, orderBadges, type BadgeKind } from "./characters/badges";
 import type { CharacterLooks } from "./characters/character-looks";
 import { CharacterView } from "./characters/character-view";
 import type { OverworldOccupants } from "./occupants";
@@ -114,6 +114,8 @@ export interface OverworldSceneHandle {
   readonly teleport: (tile: TilePoint, face?: TilePoint) => boolean;
   /** The characters at anchors and the player's look, for QA. */
   readonly characters: () => OverworldCharactersState;
+  /** Anchors drawn and interactive neither (quest objects out of their quest). */
+  readonly hiddenAnchorIds: () => readonly DreamAnchorId[];
 }
 
 export interface OverworldCharactersState {
@@ -122,7 +124,7 @@ export interface OverworldCharactersState {
     readonly anchorId: CompiledAnchor["id"];
     readonly facing: Facing;
     readonly layered: boolean;
-    readonly badge: { readonly alpha: number; readonly zIndex: number } | null;
+    readonly badge: { readonly kind: BadgeKind; readonly alpha: number; readonly zIndex: number } | null;
   }[];
 }
 
@@ -159,8 +161,14 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly residents: {
     readonly anchor: CompiledAnchor;
     readonly view: CharacterView;
-    readonly badge: Graphics | null;
+    /** The occupant's role badge, shown unless an override replaces it. */
+    readonly roleBadge: BadgeKind | null;
+    badgeKind: BadgeKind | null;
+    badge: Graphics | null;
   }[] = [];
+  /** The drawn marker or character of each anchor. */
+  private readonly anchorViews = new Map<DreamAnchorId, Container>();
+  private hidden: ReadonlySet<DreamAnchorId> = new Set();
   private clock = 0;
 
   private state: WalkerState;
@@ -200,6 +208,7 @@ export class OverworldScene implements OverworldSceneHandle {
 
     this.buildObjects();
     this.buildAnchors();
+    this.setBadges(new Map());
     this.buildPlayer();
     window.addEventListener("keydown", this.onKeyDown);
     window.addEventListener("keyup", this.onKeyUp);
@@ -220,6 +229,37 @@ export class OverworldScene implements OverworldSceneHandle {
     if (!this.world.destroyed) this.world.destroy({ children: true });
   }
 
+  /**
+   * Show `overrides` (quest icons) over the characters at their anchors in
+   * place of their role badges; every other character shows its role badge.
+   */
+  setBadges(overrides: ReadonlyMap<DreamAnchorId, BadgeKind>): void {
+    for (const resident of this.residents) {
+      const kind = overrides.get(resident.anchor.id) ?? resident.roleBadge;
+      if (kind === resident.badgeKind) continue;
+      resident.badge?.destroy();
+      resident.badge = null;
+      resident.badgeKind = kind;
+      if (kind !== null) {
+        const badge = drawBadge(new Graphics(), kind);
+        badge.label = `badge:${resident.anchor.id}`;
+        badge.visible = !this.hidden.has(resident.anchor.id);
+        this.badges.addChild(badge);
+        resident.badge = badge;
+      }
+    }
+  }
+
+  /** Hide `anchorIds`: they are neither drawn nor interactive. */
+  setHiddenAnchors(anchorIds: ReadonlySet<DreamAnchorId>): void {
+    this.hidden = anchorIds;
+    for (const [id, view] of this.anchorViews) view.visible = !anchorIds.has(id);
+    for (const { anchor, badge } of this.residents) {
+      if (badge !== null) badge.visible = !anchorIds.has(anchor.id);
+    }
+    if (this.pendingAnchor !== null && anchorIds.has(this.pendingAnchor.id)) this.pendingAnchor = null;
+  }
+
   /** While a React panel is open the canvas ignores input and the walk pauses. */
   setInputEnabled(enabled: boolean): void {
     this.inputEnabled = enabled;
@@ -233,7 +273,7 @@ export class OverworldScene implements OverworldSceneHandle {
   viewport = (): Viewport => ({ width: this.app.screen.width, height: this.app.screen.height });
 
   walkToTile = (tile: TilePoint): boolean => {
-    const anchor = anchorAt(this.byTile, tile);
+    const anchor = this.shownAnchorAt(tile);
     if (anchor !== undefined) return this.walkToAnchor(anchor);
     const path = findPath(this.grid, this.origin(), tile);
     if (path === null) return false;
@@ -243,6 +283,7 @@ export class OverworldScene implements OverworldSceneHandle {
   };
 
   walkToAnchor = (anchor: CompiledAnchor): boolean => {
+    if (this.hidden.has(anchor.id)) return false;
     const path = pathBeside(this.grid, this.origin(), anchor.at);
     if (path === null) return false;
     this.pendingAnchor = anchor;
@@ -252,7 +293,7 @@ export class OverworldScene implements OverworldSceneHandle {
   };
 
   interact = (): boolean => {
-    const anchor = anchorAt(this.byTile, facedTile(this.state));
+    const anchor = this.shownAnchorAt(facedTile(this.state));
     if (anchor === undefined) return false;
     return this.interactWith(anchor);
   };
@@ -268,17 +309,26 @@ export class OverworldScene implements OverworldSceneHandle {
 
   characters = (): OverworldCharactersState => ({
     playerLayered: this.playerView?.layered ?? false,
-    residents: this.residents.map(({ anchor, view, badge }) => ({
+    residents: this.residents.map(({ anchor, view, badge, badgeKind }) => ({
       anchorId: anchor.id,
       facing: view.currentFacing,
       layered: view.layered,
-      badge: badge === null ? null : { alpha: badge.alpha, zIndex: badge.zIndex },
+      badge:
+        badge === null || badgeKind === null ? null : { kind: badgeKind, alpha: badge.alpha, zIndex: badge.zIndex },
     })),
   });
+
+  hiddenAnchorIds = (): readonly DreamAnchorId[] => [...this.hidden];
 
   // --- building ---------------------------------------------------------------
 
   private readonly canEnter = (tile: TilePoint): boolean => isWalkable(this.grid, tile);
+
+  /** The anchor on `tile` unless it is hidden. */
+  private shownAnchorAt(tile: TilePoint): CompiledAnchor | undefined {
+    const anchor = anchorAt(this.byTile, tile);
+    return anchor === undefined || this.hidden.has(anchor.id) ? undefined : anchor;
+  }
 
   private origin(): TilePoint {
     return this.state.step?.to ?? this.state.tile;
@@ -325,6 +375,7 @@ export class OverworldScene implements OverworldSceneHandle {
       marker.zIndex = (y + 1) * h;
       marker.label = `anchor:${anchor.id}`;
       this.sorted.addChild(marker);
+      this.anchorViews.set(anchor.id, marker);
     }
   }
 
@@ -343,13 +394,8 @@ export class OverworldScene implements OverworldSceneHandle {
     view.label = `character:${anchor.id}`;
     if (occupant.beaten === true) view.tint = BEATEN_TINT;
     this.sorted.addChild(view);
-    let badge: Graphics | null = null;
-    if (occupant.badge !== null) {
-      badge = drawBadge(new Graphics(), occupant.badge);
-      badge.label = `badge:${anchor.id}`;
-      this.badges.addChild(badge);
-    }
-    this.residents.push({ anchor, view, badge });
+    this.anchorViews.set(anchor.id, view);
+    this.residents.push({ anchor, view, roleBadge: occupant.badge, badgeKind: null, badge: null });
   }
 
   private buildPlayer(): void {
@@ -401,7 +447,7 @@ export class OverworldScene implements OverworldSceneHandle {
     for (const { anchor, view, badge } of this.residents) {
       view.setPose(idleFacing(anchor.at, player, tunables.faceRangeTiles), false);
       view.advance(seconds, tunables);
-      if (badge === null) continue;
+      if (badge === null || !badge.visible) continue;
       const x = Math.round(view.x - BADGE_WIDTH / 2);
       const y = Math.round(view.y - view.headHeight - BADGE_HEIGHT - 2 - bob);
       badge.position.set(x, y);

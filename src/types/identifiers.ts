@@ -123,6 +123,18 @@ export type D97RunId = DomainIdentity<"D97RunId">;
 export type D97RunSeed = DomainIdentity<"D97RunSeed">;
 /** One owned copy of a card in a Dreamtides 97 collection (a UUID). */
 export type D97OwnedCopyId = DomainIdentity<"D97OwnedCopyId">;
+/** One D97 character's dialogue module (a UUID). */
+export type D97DialogueId = DomainIdentity<"D97DialogueId">;
+/** One node of a D97 dialogue graph (a UUID). */
+export type D97DialogueNodeId = DomainIdentity<"D97DialogueNodeId">;
+/** One authored D97 quest (a UUID). */
+export type D97QuestId = DomainIdentity<"D97QuestId">;
+/** One step of a D97 quest (a UUID). */
+export type D97QuestStepId = DomainIdentity<"D97QuestStepId">;
+/** One D97 quest item the player can carry (a UUID). */
+export type D97ItemId = DomainIdentity<"D97ItemId">;
+/** One D97 story flag dialogue sets and tests (a UUID). */
+export type D97FlagId = DomainIdentity<"D97FlagId">;
 /** A pending battle prompt: `<committed version>:<answers recorded>`. */
 export type PromptId = DomainIdentity<"PromptId">;
 export type ExplorationActionId = DomainIdentity<"ExplorationActionId">;
@@ -196,6 +208,12 @@ const brandD97TerrainId = identityConstructor<D97TerrainId>();
 const brandD97RunId = identityConstructor<D97RunId>();
 const brandD97RunSeed = identityConstructor<D97RunSeed>();
 const brandD97OwnedCopyId = identityConstructor<D97OwnedCopyId>();
+const brandD97DialogueId = identityConstructor<D97DialogueId>();
+const brandD97DialogueNodeId = identityConstructor<D97DialogueNodeId>();
+const brandD97QuestId = identityConstructor<D97QuestId>();
+const brandD97QuestStepId = identityConstructor<D97QuestStepId>();
+const brandD97ItemId = identityConstructor<D97ItemId>();
+const brandD97FlagId = identityConstructor<D97FlagId>();
 const brandPromptId = identityConstructor<PromptId>();
 const brandExplorationActionId = identityConstructor<ExplorationActionId>();
 const brandFrontDoorActionId = identityConstructor<FrontDoorActionId>();
@@ -430,6 +448,42 @@ export const parseD97OwnedCopyId = identityParser(
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );
+export const parseD97DialogueId = identityParser(
+  "D97 dialogue id",
+  brandD97DialogueId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97DialogueNodeId = identityParser(
+  "D97 dialogue node id",
+  brandD97DialogueNodeId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97QuestId = identityParser(
+  "D97 quest id",
+  brandD97QuestId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97QuestStepId = identityParser(
+  "D97 quest step id",
+  brandD97QuestStepId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97ItemId = identityParser(
+  "D97 item id",
+  brandD97ItemId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97FlagId = identityParser(
+  "D97 flag id",
+  brandD97FlagId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
 export const parseIntentKey = identityParser("Intent key", brandIntentKey);
 export const parseAuguryCategoryId = identityParser(
   "Augury category id",
@@ -519,6 +573,10 @@ export const auguryArchetypeIdFromUnknown = identityDecoder(
 export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const d97OwnedCopyIdFromUnknown = identityDecoder(parseD97OwnedCopyId);
 export const dreamAnchorIdFromUnknown = identityDecoder(parseDreamAnchorId);
+export const d97QuestIdFromUnknown = identityDecoder(parseD97QuestId);
+export const d97QuestStepIdFromUnknown = identityDecoder(parseD97QuestStepId);
+export const d97ItemIdFromUnknown = identityDecoder(parseD97ItemId);
+export const d97FlagIdFromUnknown = identityDecoder(parseD97FlagId);
 export const battleCardIdFromUnknown = identityDecoder(parseBattleCardId);
 export const clientIdFromUnknown = identityDecoder(parseClientId);
 export const cardTypeChangePredicateIdFromUnknown = identityDecoder(

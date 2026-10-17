@@ -44,6 +44,7 @@ import {
 } from "./events";
 import * as d97Run from "./d97/d97-run";
 import * as d97Deck from "./d97/d97-deck";
+import * as d97Quests from "./d97/d97-quests";
 import type { D97Transition } from "./d97/d97-run";
 import * as d97Encounters from "./d97/d97-encounters";
 
@@ -817,6 +818,28 @@ export function routeDomain(
       return d97FoldCase(state, d97Encounters.beginEncounterBattle(state, payload, ctx));
     case "D97_END_BATTLE":
       return d97FoldCase(state, d97Encounters.endEncounterBattle(state, ctx));
+    case "D97_ACCEPT_QUEST":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.acceptQuest(state.d97, payload));
+    case "D97_ADVANCE_QUEST":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.advanceQuest(state.d97, payload));
+    case "D97_COMPLETE_QUEST":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.completeQuest(state.d97, payload, ctx));
+    case "D97_CHOOSE_QUEST_REWARD":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.chooseQuestReward(state.d97, payload));
+    case "D97_ABANDON_QUEST":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.abandonQuest(state.d97, payload));
+    case "D97_PICK_UP_OBJECT":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.pickUpObject(state.d97, payload));
+    case "D97_GIVE_ITEM":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.giveItem(state.d97, payload));
+    case "D97_TAKE_ITEM":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.takeItem(state.d97, payload));
+    case "D97_SET_FLAG":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.setFlag(state.d97, payload));
+    case "D97_OPEN_SHOP":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload, "shop"));
+    case "D97_OPEN_SERVICE":
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload, "service"));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":

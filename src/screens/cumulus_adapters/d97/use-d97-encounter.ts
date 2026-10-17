@@ -37,23 +37,30 @@ export function useD97Encounter(args: {
   readonly open: boolean;
   readonly fight: () => void;
   readonly notNow: () => void;
+  /** Open `anchorId`'s preview, as interacting with it would (a dialogue's challenge). */
+  readonly challenge: (anchorId: DreamAnchorId) => void;
 } {
   const { run, registry, actions, avatars, cardsById, openDeckEditor } = args;
   const [anchorId, setAnchorId] = useState<DreamAnchorId | null>(null);
   const runRef = useRef(run);
   runRef.current = run;
 
-  useEffect(() => {
-    const open = (anchor: CompiledAnchor) => {
-      const encounter = runRef.current.encounters[anchor.id];
+  const challenge = useCallback(
+    (id: DreamAnchorId) => {
+      const encounter = runRef.current.encounters[id];
       if (encounter?.beaten === true) return;
-      logEvent("d97_encounter_opened", { runId: runRef.current.runId, anchorId: anchor.id, firstPreview: encounter === undefined });
-      if (encounter === undefined) void actions.d97PreviewEncounter(anchor.id).catch(reportFailure);
-      setAnchorId(anchor.id);
-    };
+      logEvent("d97_encounter_opened", { runId: runRef.current.runId, anchorId: id, firstPreview: encounter === undefined });
+      if (encounter === undefined) void actions.d97PreviewEncounter(id).catch(reportFailure);
+      setAnchorId(id);
+    },
+    [actions],
+  );
+
+  useEffect(() => {
+    const open = (anchor: CompiledAnchor) => challenge(anchor.id);
     const removals = [registry.register("challenger", open), registry.register("guardian", open)];
     return () => removals.forEach((remove) => remove());
-  }, [actions, registry]);
+  }, [challenge, registry]);
 
   const encounter = anchorId === null ? undefined : run.encounters[anchorId];
   const preview = useMemo(
@@ -78,5 +85,5 @@ export function useD97Encounter(args: {
     void actions.d97DeclineEncounter(anchorId).catch(reportFailure);
   }, [actions, anchorId]);
 
-  return { preview, open: anchorId !== null, fight, notNow };
+  return { preview, open: anchorId !== null, fight, notNow, challenge };
 }
