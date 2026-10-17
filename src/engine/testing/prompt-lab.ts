@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { additionalCost, revealSourceCost, abandonSparkCapture, choiceCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
+import { alternativeCost, discardCost, giveOpponentPointsCost, additionalCost, revealSourceCost, abandonSparkCapture, choiceCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
 import { onDusk, triggered, whenDraw } from "../dsl/triggers";
 import { keyword } from "../dsl/builders";
 import { playedAnotherEventThisTurn, conditionalAlternativeCost, controls } from "../dsl/builders";
@@ -76,6 +76,17 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** Offering competes for the only discard card; the two replacement bases remain payable. */
+  routeMetadata: {
+    ...SYNTHETIC.interruptEvent, id: syntheticId(0x77500), costs: [energy(3)], status: "authored",
+    abilities: () => [keyword("offering"), alternativeCost(energy(0), giveOpponentPointsCost(5)),
+      additionalCost(discardCost(1)), event(p.gainPoints(1))],
+  },
+  /** Supplies an independent event replacement base, preserving original route indices. */
+  routeMetadataProvider: {
+    ...SYNTHETIC.vanilla1, id: syntheticId(0x77501), status: "authored",
+    abilities: () => [staticAbility(p.ruleModifier({ rule: "eventAlternative", energy: 1 }))],
+  },
   /** Conditional payment and entry-only readiness, through an exact physical self permission. */
   conditionalAlternative: {
     ...SYNTHETIC.vanilla2, id: syntheticId(0x69800), costs: [energy(4)], subtype: "Survivor", status: "authored",
@@ -350,6 +361,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
   ...OFFERING_DISCARD_CARD_TEXT,
+  [LAB.routeMetadata.id]: { name: "Lab Forked Payment", text: "Interrupt. Offering. You may play this for 0● and give your opponent 5⍟. To play this, discard a card. Gain 1⍟." },
+  [LAB.routeMetadataProvider.id]: { name: "Lab Event Guide", text: "You may play events for an alternative base cost of 1●." },
   [LAB.conditionalAlternative.id]: { name: "Lab Kindred Arrival", text: "If you control a survivor, you may play this card from your hand or void for 1●. If played this way, it materializes with awakened." },
   [LAB.alternativeSurvivor.id]: { name: "Lab Survivor", text: "0●: Return this character to hand." },
   [LAB.materializeChosen.id]: { name: "Lab Hand Arrival", text: "Materialize a ≤2● cost character from your hand." },
@@ -549,6 +562,14 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "route-metadata",
+    description: "Two distinct replacement payments survive an infeasible Offering payment",
+    setup: { active: "player", phase: "day",
+      player: { hand: [LAB.routeMetadata.id, SYNTHETIC.vanilla0.id], back: [LAB.routeMetadataProvider.id], energy: 2, deck: deck(8) },
+      enemy: { deck: deck(8) } },
+    script: [], presents: [playHand(0)],
+  },
   ...(["hand", "void"] as const).map((zone): PromptLabFixture => ({
     name: `conditional-alternative-${zone}`, description: "A Survivor qualifies one exact source’s replacement payment and entry readiness",
     setup: { active: "player", phase: "day", player: {

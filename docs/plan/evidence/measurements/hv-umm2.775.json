@@ -1,0 +1,570 @@
+{
+  "bead": "hv-umm2.775",
+  "phase": 5,
+  "source": {
+    "base": "988537405a7fa8b50df0d4b841d94c1b0306be6a",
+    "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+    "windowQualification": "Claim-inclusive start is the native claim at 2026-10-17T01:39:11Z; exact helper dispatch was not recorded. The window includes parent bootstrap and mirror diagnosis. End is recorded immediately before the local commit.",
+    "writerSHA256": {
+      "src/engine/prompts/narrow.ts": "86f5df7a0870e8e717e076afe37abe0dc7a0939e39d8abb775440e2c3ce52a5d",
+      "src/engine/prompts/answers.test.ts": "2681f264bbae58f34ca6f090775a0186a76269cd9fb9e4217a0c4dd16fefc384",
+      "src/engine/effects/primitives/contracts/alternative-cost.contracts.ts": "367e469ea4ba8a2906b11474bdd8828dcd9f5388dbb174e35dec1e2a8ffe53e1",
+      "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts": "9da0eae692e4d7ec4dc6c5c3b67f11589f7085e098d70e50402fdeb4d222e8a1",
+      "src/engine/testing/prompt-lab.ts": "ea57e06eea11127dc121b33094b3192613d92aa539dfbfd0906e460cd4507c9a",
+      "scripts/qa/scenarios/route-metadata.mjs": "4bd5daca61354ba579fca9e7cc82885ed9e80edd8877d71cd721cd5fdabcea88"
+    },
+    "areasAmendment": "Native ACK01a14788-c6f0-74be-a3a5-eaa6c72df605 replaced absent prompt-host-view-model.test.ts with existing engine-battle-view-model-prompts.test.ts before edit. All other writers are in original Areas; evidence is bead-specific.",
+    "implementationEnd": "2026-10-17T01:52:18.263907+00:00"
+  },
+  "contract": {
+    "boundary": "Narrowing retains each typed ModeOption and changes only its legal flag. Original mode alignment, strict metadata validation, cost and legality algorithms, saved state formats and fingerprint construction remain unchanged.",
+    "fixture": "Four original modes: normal0 initially illegal with energy2 vs printed3; Offering1 initially possible with one hand card but refuted when Offering and mandatory discard compete for it; eventAlternative2 and alternativeCost3 survive. The card-defined base has authored zero energy plus an opponent five-point grant.",
+    "coverage": "Synthetic direct narrowing; public fold on both actors, original mode answers, exact discard/play/grant events, energy and UUID state, hidden/public/private projections and cold JSON replay; adapter labels react to descriptors without UI-string assertions.",
+    "acceptanceCredit": "Own bounded synthetic checks and public browser scenario only. Gate46 historical games/stock QA remain exact-source historical evidence; parent owns later source requalification. No historical malformed narrowed save compatibility waiver is claimed."
+  },
+  "validation": {
+    "review-first": {
+      "label": "review-first",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+      "started": "2026-10-17T01:47:53.928380+00:00",
+      "ended": "2026-10-17T01:49:11.284479+00:00",
+      "exitCode": 1,
+      "wallS": 77.3421927500167,
+      "cpuS": 233.786769,
+      "sysctlLoadStart": "{ 3.32 3.21 4.30 }",
+      "pid": 73529,
+      "pgid": 73529,
+      "survivors": [],
+      "timeoutS": 600,
+      "log": "review-first.log"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+      "started": "2026-10-17T01:48:31.922371+00:00",
+      "ended": "2026-10-17T01:48:39.527237+00:00",
+      "exitCode": 0,
+      "wallS": 7.604919416015036,
+      "cpuS": 6.547962999999999,
+      "sysctlLoadStart": "{ 5.36 3.73 4.44 }",
+      "pid": 74513,
+      "pgid": 74513,
+      "survivors": [],
+      "timeoutS": 600,
+      "log": "knip.log"
+    },
+    "fixture-focused": {
+      "label": "fixture-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+      "started": "2026-10-17T01:49:24.698578+00:00",
+      "ended": "2026-10-17T01:49:30.240237+00:00",
+      "exitCode": 1,
+      "wallS": 5.540512082981877,
+      "cpuS": 8.325442999999998,
+      "sysctlLoadStart": "{ 5.01 3.90 4.47 }",
+      "pid": 75847,
+      "pgid": 75847,
+      "survivors": [],
+      "timeoutS": 600,
+      "log": "fixture-focused.log"
+    },
+    "fixture-final": {
+      "label": "fixture-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+      "started": "2026-10-17T01:49:49.495722+00:00",
+      "ended": "2026-10-17T01:49:55.250159+00:00",
+      "exitCode": 0,
+      "wallS": 5.754182125034276,
+      "cpuS": 8.788024,
+      "sysctlLoadStart": "{ 5.04 4.01 4.49 }",
+      "pid": 76385,
+      "pgid": 76385,
+      "survivors": [],
+      "timeoutS": 600,
+      "log": "fixture-final.log"
+    },
+    "baselineDirect": {
+      "exitCode": 1,
+      "files": 1,
+      "failed": 1,
+      "passed": 15,
+      "raw": "baseline-mixed.log",
+      "meaning": "Original narrowing discarded routes and authored costs; original stdout/stderr and terminal nonzero are preserved.",
+      "earlierAttempt": "baseline-answers.log is also preserved; final direct regression uses feasible legal answers0/3 only."
+    },
+    "baselinePublicMixed": {
+      "exitCode": 1,
+      "files": 1,
+      "failed": 2,
+      "skipped": 5784,
+      "raw": "baseline-public-mixed.log",
+      "meaning": "Both public actors produced the same missing route/cost data with modes0/1 illegal and2/3 legal."
+    },
+    "focused": {
+      "exitCode": 0,
+      "files": 3,
+      "passed": 5823,
+      "runnerTestS": 19.2,
+      "raw": "focused-first.log",
+      "qualification": "Full primitive contracts plus answers and prompt adapter. Runner-reported test step only, not whole shell wall; original launch/terminal are retained in session."
+    },
+    "review-final": {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+      "started": "2026-10-17T01:50:51.652873+00:00",
+      "ended": "2026-10-17T01:52:04.412918+00:00",
+      "exitCode": 0,
+      "wallS": 72.7594432499609,
+      "cpuS": 211.077708,
+      "sysctlLoadStart": "{ 5.01 4.19 4.52 }",
+      "pid": 77850,
+      "pgid": 77850,
+      "survivors": [],
+      "timeoutS": 600,
+      "log": "review-final.log",
+      "scope": "Typecheck, Node typecheck, lint, import cycles, friction record schema and related tests;355files/11228tests passed."
+    },
+    "knip-final": {
+      "label": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-775-route-metadata",
+      "started": "2026-10-17T01:51:37.601953+00:00",
+      "ended": "2026-10-17T01:51:42.310551+00:00",
+      "exitCode": 0,
+      "wallS": 4.708605082996655,
+      "cpuS": 5.692708,
+      "sysctlLoadStart": "{ 5.79 4.59 4.65 }",
+      "pid": 78932,
+      "pgid": 78932,
+      "survivors": [],
+      "timeoutS": 600,
+      "log": "knip-final.log"
+    },
+    "reviewFull": "Not required: one existing prompt narrowing field-preservation fix plus bounded synthetic contracts/scene/scenario. No test infrastructure, repository configuration or cross-cutting architecture changes."
+  },
+  "browser": {
+    "scenario": "route-metadata",
+    "sourceQualification": "Final runtime and fixture files; own dev server5274 via supported public MCP scenario runner. It taps the physical hand card before answering the resulting route control.",
+    "invocation": "run-Xcs7KK",
+    "rawReport": "route-metadata.result.json",
+    "rawReportSHA256": "87201d6a1c611ebfc8ccb23cb65db870f5663aa07062fb93b41d54aecd8a103b",
+    "originalCLI": "browser-source-final.log",
+    "ok": true,
+    "port": 5274,
+    "slot": 1,
+    "serverProcessGroup": 76699,
+    "hostLoad": 4.58056640625,
+    "wallMs": {
+      "browserLeaseWait": 4,
+      "serve": 1959,
+      "scenario": 41166,
+      "total": 43182
+    },
+    "caps": [],
+    "captures": [
+      {
+        "filename": "route-metadata-choices-desktop.png",
+        "cssViewport": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "filename": "route-metadata-paid-desktop.png",
+        "cssViewport": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "filename": "route-metadata-choices-mobile.png",
+        "cssViewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "filename": "route-metadata-paid-mobile.png",
+        "cssViewport": {
+          "width": 390,
+          "height": 844
+        }
+      }
+    ],
+    "results": {
+      "desktop": {
+        "viewport": "desktop",
+        "offered": [
+          {
+            "label": "Use Alternative Cost",
+            "width": 194.9375,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          },
+          {
+            "label": "Alternative Base: 0 energy and give your opponent 5 points",
+            "width": 496.390625,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          }
+        ],
+        "payments": [
+          {
+            "mode": 2,
+            "route": "eventAlternative",
+            "source": "i2",
+            "sourcePrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000077500"
+            },
+            "discard": "i3",
+            "discardPrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000001"
+            },
+            "energy": 1,
+            "scores": [
+              1,
+              0
+            ],
+            "played": [
+              {
+                "seq": 3,
+                "index": 6,
+                "kind": "cardPlayed",
+                "instance": "i2",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i2"
+                },
+                "cards": {
+                  "i2": "5e5e5e5e-0000-4000-8000-000000077500"
+                }
+              }
+            ],
+            "discarded": [
+              {
+                "seq": 3,
+                "index": 3,
+                "kind": "discarded",
+                "instance": "i3",
+                "event": {
+                  "kind": "discarded",
+                  "side": "player",
+                  "instance": "i3"
+                },
+                "cards": {
+                  "i3": "5e5e5e5e-0000-4000-8000-000000000001"
+                }
+              }
+            ],
+            "granted": []
+          },
+          {
+            "mode": 3,
+            "route": "alternativeCost",
+            "source": "i2",
+            "sourcePrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000077500"
+            },
+            "discard": "i3",
+            "discardPrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000001"
+            },
+            "energy": 2,
+            "scores": [
+              1,
+              5
+            ],
+            "played": [
+              {
+                "seq": 3,
+                "index": 6,
+                "kind": "cardPlayed",
+                "instance": "i2",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i2"
+                },
+                "cards": {
+                  "i2": "5e5e5e5e-0000-4000-8000-000000077500"
+                }
+              }
+            ],
+            "discarded": [
+              {
+                "seq": 3,
+                "index": 3,
+                "kind": "discarded",
+                "instance": "i3",
+                "event": {
+                  "kind": "discarded",
+                  "side": "player",
+                  "instance": "i3"
+                },
+                "cards": {
+                  "i3": "5e5e5e5e-0000-4000-8000-000000000001"
+                }
+              }
+            ],
+            "granted": [
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "pointsScored",
+                "instance": null,
+                "event": {
+                  "kind": "pointsScored",
+                  "side": "enemy",
+                  "amount": 5,
+                  "cause": "effect"
+                },
+                "cards": {}
+              }
+            ]
+          }
+        ]
+      },
+      "mobile": {
+        "viewport": "mobile",
+        "offered": [
+          {
+            "label": "Use Alternative Cost",
+            "width": 194.9375,
+            "height": 42,
+            "inViewport": true,
+            "hit": true
+          },
+          {
+            "label": "Alternative Base: 0 energy and give your opponent 5 points",
+            "width": 312,
+            "height": 50,
+            "inViewport": true,
+            "hit": true
+          }
+        ],
+        "payments": [
+          {
+            "mode": 2,
+            "route": "eventAlternative",
+            "source": "i2",
+            "sourcePrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000077500"
+            },
+            "discard": "i3",
+            "discardPrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000001"
+            },
+            "energy": 1,
+            "scores": [
+              1,
+              0
+            ],
+            "played": [
+              {
+                "seq": 3,
+                "index": 6,
+                "kind": "cardPlayed",
+                "instance": "i2",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i2"
+                },
+                "cards": {
+                  "i2": "5e5e5e5e-0000-4000-8000-000000077500"
+                }
+              }
+            ],
+            "discarded": [
+              {
+                "seq": 3,
+                "index": 3,
+                "kind": "discarded",
+                "instance": "i3",
+                "event": {
+                  "kind": "discarded",
+                  "side": "player",
+                  "instance": "i3"
+                },
+                "cards": {
+                  "i3": "5e5e5e5e-0000-4000-8000-000000000001"
+                }
+              }
+            ],
+            "granted": []
+          },
+          {
+            "mode": 3,
+            "route": "alternativeCost",
+            "source": "i2",
+            "sourcePrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000077500"
+            },
+            "discard": "i3",
+            "discardPrinting": {
+              "kind": "card",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000001"
+            },
+            "energy": 2,
+            "scores": [
+              1,
+              5
+            ],
+            "played": [
+              {
+                "seq": 3,
+                "index": 6,
+                "kind": "cardPlayed",
+                "instance": "i2",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i2"
+                },
+                "cards": {
+                  "i2": "5e5e5e5e-0000-4000-8000-000000077500"
+                }
+              }
+            ],
+            "discarded": [
+              {
+                "seq": 3,
+                "index": 3,
+                "kind": "discarded",
+                "instance": "i3",
+                "event": {
+                  "kind": "discarded",
+                  "side": "player",
+                  "instance": "i3"
+                },
+                "cards": {
+                  "i3": "5e5e5e5e-0000-4000-8000-000000000001"
+                }
+              }
+            ],
+            "granted": [
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "pointsScored",
+                "instance": null,
+                "event": {
+                  "kind": "pointsScored",
+                  "side": "enemy",
+                  "amount": 5,
+                  "cause": "effect"
+                },
+                "cards": {}
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "visualInspection": "Viewed final desktop/mobile choices and mobile paid state. Semantic options fit inside each viewport and have nonzero boxes and reachable centers; final settled UI shows actor1 and opponent5 points for card alternative. PNG file inspection: desktop2880x1800/mobile780x1688 for CSS1440x900/390x844 at2x. Synthetic art placeholders are intentional.",
+    "cleanup": "Runner exit0. Original CLI records own server group76699 port5274 cleanup and free port. Own active provider/server records cleared by runner; shared MCP service left running.",
+    "earlierRuns": [
+      {
+        "invocation": "run-LAge5T",
+        "raw": "browser-first.log",
+        "ok": true,
+        "qualification": "Initial fixture without display metadata; paid screenshot captured before presentation finished. Preserved, no final source credit."
+      },
+      {
+        "invocation": "run-7IOZ7Z",
+        "raw": "browser-final.log",
+        "ok": true,
+        "qualification": "Added final presentation wait, before fixture-start/display integration correction. Preserved, no final source credit."
+      }
+    ],
+    "cleanupReceipt": {
+      "at": "2026-10-17T01:52:05.167871+00:00",
+      "serverGroups": {
+        "72828": [],
+        "74094": [],
+        "76699": []
+      },
+      "port5274": {
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "activeProviderRecordExists": false,
+      "activeServerRecordExists": false,
+      "sharedMCPService": "Left running; no service command executed."
+    },
+    "imageDimensionsRaw": "image-dimensions.txt"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final starting sysctl vm.loadavg one-minute observation, 2026-10-17T01:50:51.652873+00:00"
+      }
+    }
+  },
+  "validationFallout": {
+    "firstReview": "2 failed/11226 passed in355files: the new lab definitions needed display data; the new scene initially suspended at an uncommitted route, outside generic scene-start contract. Fixed within prompt-lab and retained generic checks.",
+    "fixtureFocused": "First focused after labels:1failed/65passed. Scene moved to normal main window with presents step; adapter opens public fold action; final focused3files66tests passed.",
+    "commandSelection": "Initial mixed command selected answers.test.ts only because .contracts.ts is imported by contracts.test.ts. A mistaken alternative-cost.test.ts command found no test files and exited1. Original logs retained; no success credit assigned."
+  },
+  "review": "Parent requests fresh read-only fork:none Codex review after exact local commit; implementer performs no independent review.",
+  "performance": "No algorithm, test-speed, CPU reduction or game-throughput claim. Recorded wall/child CPU scopes are descriptive; overlapping command costs are not added.",
+  "rawEvidence": {
+    "directory": "route-metadata775/implementation",
+    "preservation": "Every original attempt log is separate; finalization appends metadata without overwriting original failures or browser reports.",
+    "sourceFindingProofSHA256": "d6c15547045396e2507cc9c3ad5cb9b72c547b388910eceafae87dccfca43daf",
+    "ownershipLimits": "Validation subprocess groups600s with TERM/10s/KILL watchdog; browser runner360s with its own provider/server cleanup. No broad process kills.",
+    "preExisting": "pre-existing/hv-umm2.775.md",
+    "coreReview": "Pending parent fresh fork:none exact base/head after local commit.",
+    "index": {
+      "filename": "raw-evidence-index.json",
+      "files": 23,
+      "sha256": "fbfd5776e78bc160b285c3f08d8217e44872552388e301681c6b2c90ef9b6c82"
+    }
+  }
+}

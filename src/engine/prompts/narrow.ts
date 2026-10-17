@@ -40,7 +40,7 @@ export function narrowPrompt(prompt: Prompt, feasible: readonly Answer[]): Promp
     case "chooseMode":
       return {
         ...prompt,
-        options: prompt.options.map((option) => ({ mode: option.mode, legal: option.legal && keys.has(canonicalAnswer(prompt, option.mode)) })),
+        options: prompt.options.map((option) => ({ ...option, legal: option.legal && keys.has(canonicalAnswer(prompt, option.mode)) })),
       };
     case "chooseSlot":
       return { ...prompt, allowed: feasible as readonly number[] };

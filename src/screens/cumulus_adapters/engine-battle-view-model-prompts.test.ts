@@ -304,6 +304,35 @@ function costLabels(fixture: ReturnType<typeof costChoices>, prompt: PendingEngi
   return surfaceOf(screenOf(fixture.state, prompt, fixture.display, true, fixture.on), "choice").options.map((option) => option.label);
 }
 
+describe("narrowed route presentation", () => {
+  it("renders surviving semantic payments with their original answers and exact authored descriptors", () => {
+    const start = labSlice("route-metadata");
+    const opened = adapter.reduce(start, { kind: "battleAction", side: "player",
+      action: { kind: "play", card: start.committed.sides.player.hand[0], from: "hand" } });
+    if (opened.kind !== "applied" || opened.error !== null) throw new Error("Mixed route play failed");
+    const slice = opened.slice;
+    const pending = adapter.pending(slice);
+    if (pending?.prompt.kind !== "chooseMode") throw new Error("Missing mixed route prompt");
+    const prompt = pending.prompt;
+    const model = screenOf(slice.committed, prompt, pending.display);
+    const choices = surfaceOf(model, "choice");
+    expect(choiceAnswers(model)).toEqual([2, 3]);
+    expect(new Set(choices.options.map(option => option.label)).size).toBe(2);
+    // A semantic route differs from the historical index fallback, without fixing product copy.
+    const legacy = { ...prompt, options: prompt.options.map(({ route: _route, costs: _costs, ...option }) => option) };
+    expect(choices.options.map(option => option.label)).not.toEqual(surfaceOf(screenOf(slice.committed, legacy, pending.display), "choice").options.map(option => option.label));
+    const changed = { ...prompt, options: prompt.options.map(option => option.route === "alternativeCost"
+      ? { ...option, costs: [energy(0), pointsCost(2)] } : option) };
+    const changedChoices = surfaceOf(screenOf(slice.committed, changed, pending.display), "choice");
+    expect(changedChoices.options[0].label).toBe(choices.options[0].label);
+    expect(changedChoices.options[1].label).not.toBe(choices.options[1].label);
+    expect(choiceAnswers(screenOf(slice.committed, changed, pending.display))).toEqual([2, 3]);
+    const replayed = JSON.parse(JSON.stringify(slice)) as BattleSlice;
+    expect(adapter.pending(replayed)).toEqual(pending);
+    expect(choiceAnswers(screenOf(replayed.committed, adapter.pending(replayed)!.prompt, pending.display))).toEqual([2, 3]);
+  });
+});
+
 describe("cost-choice prompt data", () => {
   it("names the actual sequential alternatives and preserves mode answers through persisted-slice replay", () => {
     const first = [[energy(1)], [pointsCost(2)]];

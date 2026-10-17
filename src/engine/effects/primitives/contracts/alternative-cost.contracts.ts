@@ -1,6 +1,11 @@
 /** Card-defined replacement costs, through the real public engine on both actors. */
 import { describe, expect, it } from "vitest";
-import { additionalCost, alternativeCost, choiceCost, discardCostFilter, energy, energyX, event, giveOpponentPointsCost, keyword, optionalCost, playCondition, pointsCost, reclaim, stackItem, characterYouControl, target, x, staticAbility } from "../../../dsl/builders";
+import { additionalCost, alternativeCost, choiceCost, discardCost, discardCostFilter, energy, energyX, event, giveOpponentPointsCost, keyword, optionalCost, playCondition, pointsCost, reclaim, stackItem, characterYouControl, target, x, staticAbility } from "../../../dsl/builders";
+import { createEngine } from "../../../engine";
+import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
+import { promptFingerprint } from "../../../prompts/fingerprint";
+import { isWellFormedPrompt } from "../../../prompts/structure";
+import { promptView } from "../../../view/view";
 import type { Cost } from "../../../dsl/types";
 import { playRoutes } from "../../../rules/timing";
 import { opponent, SIDES } from "../../../state/ids";
@@ -17,11 +22,66 @@ import { returnToHand } from "../return-to-hand";
 import { prevent } from "../prevent";
 import { copyCard } from "../copy-card";
 import { ruleModifier } from "../rule-modifier";
-import { alternativeAnswers, alternativeCard, alternativeFixture, offeredAlternative } from "./alternative-cost-support";
+import { alternativeApplied, alternativeAnswers, alternativeCard, alternativeFixture, alternativeSlice, offeredAlternative } from "./alternative-cost-support";
 
 const quiet = event(gainPoints(0));
 describe.each(SIDES)("alternativeCost by %s", side => {
   const other = opponent(side);
+  it("preserves narrowed mixed-route payments across public planning, concealment and cold replay", () => {
+    const card = alternativeCard(27, [keyword("offering"), alternativeCost(energy(0), giveOpponentPointsCost(5)), additionalCost(discardCost(1)), quiet]);
+    const provider = alternativeCard(28, [staticAbility(ruleModifier({ rule: "eventAlternative", energy: 1 }))], { cardType: "character", spark: 1 });
+    const f = alternativeFixture(side, card, { hand: [card.id, v.event0.id], back: [provider.id], energy: 2 }, {}, [provider]);
+    const fold = createFoldAdapter(f.engine, { checkEventPrefix: true });
+    const opened = alternativeApplied(fold.reduce(alternativeSlice(f.state), { kind: "battleAction", side, action: f.action })).slice;
+    const pending = fold.pending(opened)!;
+    const prompt = pending.prompt;
+    if (prompt.kind !== "chooseMode") throw new Error("Expected mixed route choice");
+    expect(prompt.options).toEqual([
+      { mode: 0, route: "normal", legal: false }, { mode: 1, route: "offering", legal: false },
+      { mode: 2, route: "eventAlternative", legal: true },
+      { mode: 3, route: "alternativeCost", costs: [energy(0), giveOpponentPointsCost(5)], legal: true },
+    ]);
+    expect(isWellFormedPrompt(prompt)).toBe(true);
+    const hidden = promptView(prompt, other, pending.display);
+    expect(hidden.purpose.source).toBeNull();
+    expect(hidden).toMatchObject({ options: prompt.options.map(option => ({ mode: option.mode, legal: option.legal })) });
+    if (hidden.kind !== "chooseMode") throw new Error("Expected concealed route projection");
+    expect(hidden.options.every(option => option.route === undefined && option.costs === undefined)).toBe(true);
+    expect(promptView(prompt, side, pending.display)).toEqual(prompt);
+    const known = JSON.parse(JSON.stringify(pending.display)) as typeof pending.display;
+    revealToBoth(known, [f.id]);
+    expect(promptView(prompt, other, known)).toEqual(prompt);
+    const privateView = promptView({ ...prompt, privateTo: side }, other, known);
+    if (privateView.kind !== "chooseMode") throw new Error("Expected private route projection");
+    expect(privateView.options.map(option => option.route)).toEqual(prompt.options.map(option => option.route));
+    expect(privateView.options.every(option => option.costs === undefined)).toBe(true);
+    const fingerprint = promptFingerprint(prompt);
+    expect(promptFingerprint({ ...prompt, options: prompt.options.map(option => option.mode === 3 ? { ...option, costs: [energy(0), giveOpponentPointsCost(6)] } : option) })).not.toBe(fingerprint);
+    for (const mode of [2, 3]) {
+      const cold = createFoldAdapter(createEngine(f.engine.catalog), { checkEventPrefix: true });
+      const restored = JSON.parse(JSON.stringify(opened)) as BattleSlice;
+      expect(cold.pending(restored)).toEqual(pending);
+      expect(promptFingerprint(cold.pending(restored)!.prompt)).toBe(fingerprint);
+      expect(cold.reduce(restored, { kind: "answer", side, promptId: prompt.id, value: 1 })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+      const selected = alternativeApplied(cold.reduce(restored, { kind: "answer", side, promptId: prompt.id, value: mode }));
+      const payment = cold.pending(selected.slice)!;
+      expect(payment.prompt).toMatchObject({ kind: "chooseCards", purpose: { role: "discardCost" }, candidates: [f.ids[side].hand[1]], min: 1, max: 1 });
+      const paid = alternativeApplied(cold.reduce(JSON.parse(JSON.stringify(selected.slice)) as BattleSlice,
+        { kind: "answer", side, promptId: payment.prompt.id, value: [f.ids[side].hand[1]] }));
+      expect(paid.slice.inFlight).toBeNull();
+      expect(paid.slice.committed.sides[side].currentEnergy).toBe(mode === 2 ? 1 : 2);
+      expect(paid.slice.committed.sides[side].score).toBe(0);
+      expect(paid.slice.committed.sides[other].score).toBe(mode === 2 ? 0 : 5);
+      expect(paid.slice.committed.instances[f.ids[side].hand[1]].zone).toBe("void");
+      expect(paid.slice.committed.stack).toMatchObject([{ kind: "card", instance: f.id, controller: side }]);
+      const events = [...selected.published, ...paid.published];
+      expect(events.filter(event => event.kind === "discarded")).toMatchObject([{ instance: f.ids[side].hand[1] }]);
+      expect(events.filter(event => event.kind === "cardPlayed")).toMatchObject([{ instance: f.id }]);
+      expect(events.filter(event => event.kind === "pointsScored")).toEqual(mode === 2 ? [] : [{ kind: "pointsScored", side: other, amount: 5, cause: "effect" }]);
+      expect(cold.reduce(paid.slice, { kind: "answer", side, promptId: payment.prompt.id, value: [f.ids[side].hand[1]] })).toEqual({ kind: "bounced", reason: "noPendingPrompt" });
+    }
+  });
+
   it("pays the selected route only, before the card is played and before its target dissolves", () => {
     for (const route of ["normal", "alternativeCost"] as const) {
       const f = alternativeFixture(side);

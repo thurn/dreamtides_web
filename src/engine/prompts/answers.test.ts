@@ -5,6 +5,7 @@
  * answers.
  */
 import { describe, expect, it } from "vitest";
+import { energy, giveOpponentPointsCost } from "../dsl/builders";
 import type { InstanceId } from "../state/ids";
 import { canonicalAnswer, firstLegalAnswer, forcedAnswer, hasLegalAnswer, isLegalAnswer, legalAnswers, randomLegalAnswer } from "./answers";
 import { promptFingerprint } from "./fingerprint";
@@ -222,6 +223,25 @@ describe("answer enumeration and narrowing", () => {
 
   it("leaves a prompt unchanged when every answer is feasible", () => {
     for (const prompt of prompts) expect(narrowPrompt(prompt, [...legalAnswers(prompt)])).toBe(prompt);
+  });
+
+  it("retains semantic payment descriptors and original modes when feasibility removes an intermediate route", () => {
+    const modes: Prompt = { ...base, purpose: { ...purpose, role: "playRoute" }, kind: "chooseMode", options: [
+      { mode: 0, route: "normal", legal: true },
+      { mode: 1, route: "offering", legal: true },
+      { mode: 2, route: "eventAlternative", legal: true },
+      { mode: 3, route: "alternativeCost", costs: [energy(0), giveOpponentPointsCost(5)], legal: true },
+      { mode: 4, route: "reclaim", legal: false },
+    ] };
+    const narrowed = narrowPrompt(modes, [0, 3]);
+    expect(narrowed).toEqual({ ...modes, options: [
+      modes.options[0], { ...modes.options[1], legal: false }, { ...modes.options[2], legal: false }, modes.options[3], modes.options[4],
+    ] });
+    expect([...legalAnswers(narrowed)]).toEqual([0, 3]);
+    expect(isWellFormedPrompt(narrowed)).toBe(true);
+    expect(promptFingerprint(narrowed)).not.toBe(promptFingerprint(modes));
+    expect(narrowPrompt(narrowed, [0, 3])).toBe(narrowed);
+    expect(modes.options.map(option => option.legal)).toEqual([true, true, true, true, false]);
   });
 
   it("narrows candidates, bounds, and modes where they state the feasible answers exactly", () => {
