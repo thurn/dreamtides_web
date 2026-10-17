@@ -2,8 +2,8 @@ import { NTH_COST_ROWS, observeNthCostRow } from "./cost-modifier-nth-support";
 import { SETTER_COST_ROWS, observeSetterCostRow } from "./cost-setter-composition-support";
 /**
  * The cost-composition table: every layer-6 cost change mode × every play
- * route × every additional energy shape, on synthetic cards. Expected
- * payments come from the settled rulings (rules.md § Costs, Requirements,
+ * route, plus every route × extra under baseline, stacked and floored
+ * modifiers, on synthetic cards. Expected payments come from the settled rulings (rules.md § Costs, Requirements,
  * and X; § Reclaim; § Offering; RD-hv-umm2.101-1, RD-hv-umm2.419-1,
  * RD-hv-umm2.422-1), never from engine output:
  *
@@ -372,23 +372,25 @@ function offered(route: RouteVariant, extra: Extra, steps: readonly Step[], avai
 
 const ROUTE_ROWS = (Object.entries(ROUTES) as [PlayRoute, readonly RouteVariant[]][]).flatMap(([name, variants]) => variants.map((route) => ({ name, route })));
 const ROWS = (Object.entries(MODES) as [Mode, readonly ModeCase[]][]).flatMap(([mode, cases]) =>
-  cases.flatMap((modeCase) => ROUTE_ROWS.map(({ name, route }) => ({ label: `${mode}: ${modeCase.name} by ${route.name}`, steps: modeCase.steps, name, route }))),
+  cases.flatMap((modeCase) => ROUTE_ROWS.map(({ name, route }) => ({ label: `${mode}: ${modeCase.name} by ${route.name}`, steps: modeCase.steps, name, route, extras: modeCase === FULL_STACK ? EXTRA_NAMES : ["none"] as readonly Extra[] }))),
 );
-const BASELINE = ROUTE_ROWS.map(({ name, route }) => ({ label: `no cost change by ${route.name}`, steps: [] as readonly Step[], name, route }));
+const BASELINE = ROUTE_ROWS.map(({ name, route }) => ({ label: `no cost change by ${route.name}`, steps: [] as readonly Step[], name, route, extras: EXTRA_NAMES }));
+// Exercise extra energy before the one floor, and consume next reductions even at zero.
+const FLOORED = ROUTE_ROWS.map(({ name, route }) => ({ label: `floored extras by ${route.name}`, steps: [step("cardCost.reduce", 9), step("cost.increase", 1), step("cost.nextReduction", 2)], name, route, extras: EXTRA_NAMES }));
 
 describe("cost composition table", () => {
-  it.each([...BASELINE, ...ROWS])("$label pays the ruled energy and ⍟ for every extra", ({ steps, name, route }) => {
-    const extras = EXTRA_NAMES.filter((extra) => extra !== "discardMin" || route.x);
+  it.each([...BASELINE, ...ROWS, ...FLOORED])("$label pays the ruled energy and ⍟ for its extras", ({ steps, name, route, extras: shapes }) => {
+    const extras = shapes.filter((extra) => extra !== "discardMin" || route.x);
     const actual = extras.map((extra) => observed(route, extra, steps));
     expect(actual).toEqual(extras.map((extra) => ruled(route, extra, steps, name)));
   });
 
-  it.each([...BASELINE, ...ROWS].filter(({ route }) => route.choose === null))("$label is offered from its least ruled energy", ({ steps, route }) => {
-    const affordable = EXTRA_NAMES.map((extra) => {
+  it.each([...BASELINE, ...ROWS, ...FLOORED].filter(({ route }) => route.choose === null))("$label is offered from its least ruled energy", ({ steps, route, extras }) => {
+    const affordable = extras.map((extra) => {
       const least = ruledEnergy(steps, route, EXTRAS[extra].least, extra === "discardMin" ? X : 0);
       return { extra, atLeast: offered(route, extra, steps, least), belowLeast: least > 0 && offered(route, extra, steps, least - 1) };
     });
-    expect(affordable).toEqual(EXTRA_NAMES.map((extra) => ({ extra, atLeast: true, belowLeast: false })));
+    expect(affordable).toEqual(extras.map((extra) => ({ extra, atLeast: true, belowLeast: false })));
   });
   it.each([...BASELINE, ...ROWS].filter(({ name }) => name === "offering"))("$label withholds Offering X=0 but permits normal discard-min play", ({ steps, route }) => {
     const { state, id } = arranged(route, "discardMin", steps);

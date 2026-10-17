@@ -1,0 +1,407 @@
+{
+  "bead": "hv-umm2.794",
+  "base": "e53835ddbf08e1a8058deb419cc25aee3ccae3c2",
+  "ownStart": "2026-10-17T09:28:40.935408+00:00",
+  "evidenceCutoff": "2026-10-17T09:33:01.776114+00:00",
+  "frozenRunner": {
+    "time": "2026-10-17T09:29:05.621327+00:00",
+    "sha256": "66c8058398581a5637eb6be99105ab47e5eab86fee4f5730fba96c3f72a05d4c",
+    "bytes": 2364
+  },
+  "changedTest": {
+    "path": "src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+    "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+    "baseLines": 479,
+    "currentLines": 481,
+    "casesDelta": 18
+  },
+  "scopeProof": {
+    "time": "2026-10-17T09:30:50.340408+00:00",
+    "prefixReadOnlyRegion": {
+      "from": "import { revealToBoth }",
+      "through": "entire ROUTE_ROWS declaration",
+      "sha256": "3b859a71ae37e1afbb6e9e12af583d04ab7e905ef06b4732fe9ca1c951323d2c",
+      "byteEqual": true
+    },
+    "suffixReadOnlyRegion": {
+      "from": "  it.each([...BASELINE, ...ROWS].filter(({ name }) => name === \"offering\"))",
+      "through": "EOF",
+      "sha256": "c11e094cd695b0043153513a2c8241762c7a1a07cf212bd13de498af81e47a38",
+      "byteEqual": true
+    },
+    "testSHA256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+    "lines": 481,
+    "changedRegions": [
+      "opening explanatory comment",
+      "ROWS extras projection, BASELINE extras, FLOORED route rows",
+      "first payment and affordability test invocation and selected extras iteration only"
+    ]
+  },
+  "sourceAuditBeforeEdit": {
+    "time": "2026-10-17T09:30:24.534074+00:00",
+    "head": "e53835ddbf08e1a8058deb419cc25aee3ccae3c2",
+    "repoEditsYet": false,
+    "sourceHashes": {
+      "src/engine/continuous/costs.ts": "ac869d8a04ca562195967d42243e702dd37cf4291657888ff8726e221eae8dda",
+      "src/engine/rules/costs.ts": "d799f3c2f8250898e33eb08f88b3c9494a1dc2c7056bbbbd854b881e6caf4cec",
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "11d8402405065419f61da3051298eb99d320f57bb18d8944594a1e8e3df679c3",
+      "src/engine/effects/primitives/contracts/abandon-x-preparation-targets.contracts.ts": "9b24ff3c2518a759b068c39e5d3a08244f805f87a402853f14c99bc39e9ada3b",
+      "src/engine/effects/primitives/contracts/abandon-spark-cost.contracts.ts": "6bcc4620c0ab6928c85e66ee660dc0b869ddc702b1caa1b41009482a9c460ece",
+      "src/engine/effects/primitives/contracts/alternative-cost.contracts.ts": "367e469ea4ba8a2906b11474bdd8828dcd9f5388dbb174e35dec1e2a8ffe53e1",
+      "src/engine/effects/primitives/contracts/optional-cost-targets.contracts.ts": "9283e9c5a8fe145c977590f522f7838287c985a7edf735420a2b8c029cd78d38",
+      "src/engine/effects/primitives/contracts/offering-discard-payment.contracts.ts": "babc15681dcfc366726bfb3850ceea64b27c807066b767b2c424076f5afe6881",
+      "src/engine/effects/primitives/contracts/selected-cost-order.contracts.ts": "bcd8e97ec0a47fa4cd7f3020ba1d092f6d68c75c74ce55a51db5b1019c39229d"
+    },
+    "assignment": [
+      {
+        "old": "Every BASELINE route x extra payment and choose-null affordability",
+        "retained": "Same baseline row and exact callback outcomes, all10extras; discardMin still skipped where !route.x."
+      },
+      {
+        "old": "Every named MODES case x every ROUTES variant x none payment and choose-null least/below affordability",
+        "retained": "Exact original ROWS labels/steps/routes and public expected outcome/point/status/next consumption; extra none remains all rows."
+      },
+      {
+        "old": "Every mode x route x extra != none scalar interaction",
+        "retained": "Each original mode x route with none identifies controller/named-player applicability, setters/latest timestamp/replacement base and next consumption. Every route x all10extras with no changes and FULL_STACK retains extra inclusion/optional branches/choice/payment metadata under base and composed modifiers. Added per-route all10extra floor row uses card reduction9, tax1 and next reduction2; total once floors, including exact affordability boundaries and next consumption at zero."
+      },
+      {
+        "old": "All Offering discardMin refusal rows across BASELINE and MODES",
+        "retained": "Entire original dedicated it.each callback and selection unchanged, including normal fallback, route legality, selected route, shared X, actual discard/draw and invariant checks."
+      },
+      {
+        "old": "abandonCount pre-target X, figment selectors, ordered prompts and actual abandonment",
+        "retained": "Unchanged observed helper runs every route under baseline/FULL_STACK/floor; dedicated abandon-x-preparation-targets lines71-175 independently covers both actors, prospective selectors/stored X/Offering energyX0/reload/cancel/stale/competing/partial rollback."
+      },
+      {
+        "old": "abandonSpark capture/shared X and departure",
+        "retained": "Unchanged observed helper every route under three regimes; abandon-spark-cost both-actor effective layers, chosen energy agreement, ordered capture/target, figment, optional/alternative, replay/error rollback; optional-cost-targets222-231 shared captured spark+numeric X+optional target."
+      },
+      {
+        "old": "discardMin energyX minimum, physical discarded IDs/drawX and route-X0 rejection",
+        "retained": "Unchanged RowAnswers and observed/ruled; every compatible route under baseline/FULL_STACK/floor plus ALL original Offering rejection rows. selected-cost-order126-138 independent chosen energyX/count binding; alternative-cost142-151 positive-min rejection."
+      },
+      {
+        "old": "alternative route metadata/shared-X/selected extra branches/grant vs own points",
+        "retained": "Exact ROUTES/SHAPE_ABILITIES and helpers; every variant all10extras in three regimes, every mode none. Dedicated alternative-cost30-83 narrowed mixed route metadata/concealment/fingerprint/cold replay and173-208 alternative energyX/fixed printedX/optional+choice/grants/additional count. No such independent original branch deleted."
+      },
+      {
+        "old": "Numeric ruling anchors/live physical reduction/NTH/SETTER/RECLAIM",
+        "retained": "Entire suffix starting describe cost composition anchors byteequal, all9 ruling anchors and separate producer tables."
+      }
+    ],
+    "uniqueUnassignedRows": [],
+    "basis": "costModifier has no extra shape parameter. planCosts lines369-570 aggregates top-level/selected optional/choice energy and independently computes modifier once with adjustedEnergy for affordability/completed payment. Extra/card selector ordering branches do not inspect modifier mode/controller; fixture helper bodies unchanged. No production helper is used for expected values."
+  },
+  "validation": [
+    {
+      "name": "baseline",
+      "receipt": {
+        "name": "baseline",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "cost composition table",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/baseline.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-cost794",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/validation.runner.py",
+        "runnerSHA256": "66c8058398581a5637eb6be99105ab47e5eab86fee4f5730fba96c3f72a05d4c",
+        "inputsSHA256": "1db7878ea6168dcf6c143caa0e8d5211e962b0f85eb729f5e2d813c936c22c2a",
+        "time": "2026-10-17T09:29:06.427426+00:00",
+        "load": [
+          12.38330078125,
+          9.01708984375,
+          7.556640625
+        ],
+        "workers": "2",
+        "pid": 44110,
+        "pgid": 44110,
+        "actualExit": 0,
+        "end": "2026-10-17T09:29:23.897411+00:00",
+        "wallS": 17.46947754098801,
+        "childCpuS": 18.962787000000002,
+        "loadEnd": [
+          11.07666015625,
+          8.93505859375,
+          7.560546875
+        ],
+        "logSHA256": "b9fec9bacdff55edb76996faf20edaee597fe6bc2b9db054fc09a8f74e2cc8f8",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "4a16c29f2a2e9e30feb5bee47a085170d51e3452bcff09c2b6028e85470de79d",
+      "inputManifestSHA256": "1db7878ea6168dcf6c143caa0e8d5211e962b0f85eb729f5e2d813c936c22c2a",
+      "allInputFiles": 6139
+    },
+    {
+      "name": "focused",
+      "receipt": {
+        "name": "focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "cost composition table",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/focused.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-cost794",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/validation.runner.py",
+        "runnerSHA256": "66c8058398581a5637eb6be99105ab47e5eab86fee4f5730fba96c3f72a05d4c",
+        "inputsSHA256": "960df57e0e8d24ca3e9b1e25454924f525180da9c5f2aa55bcdb2f16a473f0a0",
+        "time": "2026-10-17T09:30:35.255140+00:00",
+        "load": [
+          8.091796875,
+          8.4921875,
+          7.50146484375
+        ],
+        "workers": "2",
+        "pid": 73737,
+        "pgid": 73737,
+        "actualExit": 0,
+        "end": "2026-10-17T09:30:45.495851+00:00",
+        "wallS": 10.240198499988765,
+        "childCpuS": 13.123268999999999,
+        "loadEnd": [
+          7.76953125,
+          8.40966796875,
+          7.4833984375
+        ],
+        "logSHA256": "1a81c78ac773fbd83074d7178584ebef5d6e68d07d53333dc86db614bf3a9dfc",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "c156528af60d2ad8b8ba57c9ace5ac4c1bf93481fdba0c80bb4ec6af12ec999d",
+      "inputManifestSHA256": "960df57e0e8d24ca3e9b1e25454924f525180da9c5f2aa55bcdb2f16a473f0a0",
+      "allInputFiles": 6139
+    },
+    {
+      "name": "affected",
+      "receipt": {
+        "name": "affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/affected.vitest.json"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-cost794",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/validation.runner.py",
+        "runnerSHA256": "66c8058398581a5637eb6be99105ab47e5eab86fee4f5730fba96c3f72a05d4c",
+        "inputsSHA256": "960df57e0e8d24ca3e9b1e25454924f525180da9c5f2aa55bcdb2f16a473f0a0",
+        "time": "2026-10-17T09:31:00.752808+00:00",
+        "load": [
+          7.2470703125,
+          8.25927734375,
+          7.4453125
+        ],
+        "workers": "2",
+        "pid": 75556,
+        "pgid": 75556,
+        "actualExit": 0,
+        "end": "2026-10-17T09:31:27.410037+00:00",
+        "wallS": 26.65650891698897,
+        "childCpuS": 35.53505199999999,
+        "loadEnd": [
+          6.9443359375,
+          8.12109375,
+          7.4189453125
+        ],
+        "logSHA256": "4e18d4339d8b2f75d5781fc6268736cd540e861d31dff85d90e8f0837d905c2b",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "5f1390635debd8622db29fbc64295468db42ea129597ff1d9f4a15ac0c08dc9e",
+      "inputManifestSHA256": "960df57e0e8d24ca3e9b1e25454924f525180da9c5f2aa55bcdb2f16a473f0a0",
+      "allInputFiles": 6139
+    },
+    {
+      "name": "review",
+      "receipt": {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-cost794",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/validation.runner.py",
+        "runnerSHA256": "66c8058398581a5637eb6be99105ab47e5eab86fee4f5730fba96c3f72a05d4c",
+        "inputsSHA256": "78b0f3adf1e146fea5ddd0717c368282f82f26ecbe1f81aa536e0081f346ae76",
+        "time": "2026-10-17T09:31:49.808419+00:00",
+        "load": [
+          6.28076171875,
+          7.869140625,
+          7.34765625
+        ],
+        "workers": "2",
+        "pid": 79094,
+        "pgid": 79094,
+        "actualExit": 0,
+        "end": "2026-10-17T09:32:21.696583+00:00",
+        "wallS": 31.887396583973896,
+        "childCpuS": 75.45506499999999,
+        "loadEnd": [
+          7.2998046875,
+          7.99853515625,
+          7.41259765625
+        ],
+        "logSHA256": "df4a7c8e78d1741d19b7f0b74485a474e8301248fb8c67ee6a545e788aa48166",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "6cc0f97f91dd0c7e3c51f9323baad2b900b6594cfb6d596d7e755c517e6073f8",
+      "inputManifestSHA256": "78b0f3adf1e146fea5ddd0717c368282f82f26ecbe1f81aa536e0081f346ae76",
+      "allInputFiles": 6143
+    },
+    {
+      "name": "knip",
+      "receipt": {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-cost794",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-cost794/validation.runner.py",
+        "runnerSHA256": "66c8058398581a5637eb6be99105ab47e5eab86fee4f5730fba96c3f72a05d4c",
+        "inputsSHA256": "78b0f3adf1e146fea5ddd0717c368282f82f26ecbe1f81aa536e0081f346ae76",
+        "time": "2026-10-17T09:32:25.890141+00:00",
+        "load": [
+          7.515625,
+          8.03173828125,
+          7.427734375
+        ],
+        "workers": "2",
+        "pid": 81735,
+        "pgid": 81735,
+        "actualExit": 0,
+        "end": "2026-10-17T09:32:31.758160+00:00",
+        "wallS": 5.867614582995884,
+        "childCpuS": 6.708454,
+        "loadEnd": [
+          7.55419921875,
+          8.03076171875,
+          7.4306640625
+        ],
+        "logSHA256": "3e159b76c89bc42b8fbc51786a512482b4633962b9827238f803bd6f1ea68a04",
+        "runnerBytesUnchanged": true
+      },
+      "receiptSHA256": "6ee6784a0232aed340526ba1fa115a8ae8ba01d1eb5673e248b6575a63f0f77f",
+      "inputManifestSHA256": "78b0f3adf1e146fea5ddd0717c368282f82f26ecbe1f81aa536e0081f346ae76",
+      "allInputFiles": 6143
+    }
+  ],
+  "originalTools": {
+    "baseline": {
+      "session": 89303,
+      "terminalChunk": "1e0ff1",
+      "actualExit": 0
+    },
+    "focused": {
+      "session": 52965,
+      "terminalChunk": "3fa3a5",
+      "actualExit": 0
+    },
+    "affected": {
+      "session": 34773,
+      "terminalChunk": "31e1a6",
+      "actualExit": 0
+    },
+    "review": {
+      "session": 5523,
+      "terminalChunk": "8d8a35",
+      "actualExit": 0
+    },
+    "knip": {
+      "session": 73826,
+      "terminalChunk": "569db3",
+      "actualExit": 0
+    }
+  },
+  "targetMetric": {
+    "name": "scripts/review.mjs test-stage wall seconds",
+    "chosenBeforeEdit": true,
+    "baseline": 10.2,
+    "final": 6.5,
+    "observedImprovementFraction": 0.3627450980392156,
+    "requiredFraction": 0.1,
+    "qualification": "One ordered exact-base/final observation at two workers. Baseline test-stage load12.0322 differs from final8.0918; cold/cache order and load changes preclude controlled causal attribution or future savings. Host18logicalCPU64GiB,70%free at adjacent observation, no memory-pressure signal or invented hardload target. No engine speed or aggregate60s claim; cumulative assertion times contain retained work."
+  },
+  "coverageCounts": {
+    "oldModes": 27,
+    "routes": 12,
+    "allExtras": 10,
+    "oldPaymentCases": 336,
+    "oldAffordabilityCases": 168,
+    "oldDedicatedOfferingRefusalCases": 28,
+    "newPaymentCases": 348,
+    "newAffordabilityCases": 174,
+    "newDedicatedOfferingRefusalCases": 28,
+    "oldPaymentApplyCalls": 3276,
+    "newPaymentApplyCalls": 663,
+    "oldAffordabilityLegalCalls": 3360,
+    "newAffordabilityLegalCalls": 672,
+    "qualification": "Calls describe explicit fixture loops; engine internal feasibility work is uncounted. Zero-cost below-minimum is short-circuited in both sources, so affordability figures are upper bounds, not actual calls."
+  },
+  "failurePaths": {
+    "error": "All existing dedicated paying-step fault contracts byteequal; no production transition changes.",
+    "reloadRestart": "Dedicated abandonment, alternative-route, optional-cost and choice-save replay contracts untouched.",
+    "partialWrite": "Existing partial-payment rollback contracts untouched.",
+    "invalidStaleInput": "Existing invalid/foreign/stale choice and cancellation contracts untouched.",
+    "concurrentActors": "Existing both-actor stepInFlight/competing-intent contracts untouched; row helpers and player/opponent applicability cases exact."
+  },
+  "lateOwnEvidenceQualification": "Only own four evidence files are completed after source checks. Final records schema and commit capture final files; parent qualifies actual commit-end tail externally.",
+  "remainingAcceptance": "Parent exact fresh core cold review and native delivery; phase5 fullsuite<=60s/currentQA/sweeps/10000games/finalSage/release convergence remain required.",
+  "exhaustiveRowMap": {
+    "filename": "exhaustive-old-row-map.json",
+    "sha256": "8e2f3d67c85dcea74f2ae55d8a018e7f3cb1ea792ba60b0ce54ba50c16055143",
+    "method": "Static AST fixture-literal evaluation, not engine execution; assigns each of3276 old nested payment rows and1680 old min-affordability rows to its retained exact mode/route-none row and same-route/nochange/FULL_STACK/floor extra witnesses;28 Offering-refusal rows retain exact bodies. Quantified assignment and unique branch witnesses are preserved above.",
+    "uniqueUnassigned": []
+  },
+  "profiles": [
+    {
+      "name": "baseline",
+      "rawReportSHA256": "7c8cd4b1432e93f9dcdf2e72dd8deffa5e6a898f384579efb27f5e5e355281c9",
+      "passed": 564,
+      "skipped": 5347,
+      "selectedNamesSHA256": "294ec4accbae08f34fbfe15926ed4f92f45fd904b48c7bf98d9213184c196893",
+      "assertionCumulativeMs": 2964.7927399999817
+    },
+    {
+      "name": "focused",
+      "rawReportSHA256": "2fce22b45724f85cc8898193e422878b5409df8360c61c452b049f559e300ce9",
+      "passed": 582,
+      "skipped": 5347,
+      "selectedNamesSHA256": "80a8b8af63e2d10ed9d85e36cdeb2031931704e773b6001c2801e98c1aa5a7aa",
+      "assertionCumulativeMs": 704.2404100000094
+    },
+    {
+      "name": "affected",
+      "rawReportSHA256": "5737933c4aef24f643f88e658f0f36398c5ad9b4420884177db0f46c0935fb09",
+      "passed": 5929,
+      "skipped": 0,
+      "selectedNamesSHA256": "1a7234ba6844d336e4221eaf72ac5fb3242948f21a03d89327bbd21fbe039dcd",
+      "assertionCumulativeMs": 17581.49269699997
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "external npm run review launch, os.getloadavg one-minute sample (same host load value source as sysctl vm.loadavg)"
+      },
+      "implementWindow.end": {
+        "meaning": "evidence cutoff before finalschema and Git commit; exact actual commit-end tail retained externally"
+      }
+    }
+  }
+}
