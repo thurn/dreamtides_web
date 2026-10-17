@@ -1,0 +1,600 @@
+{
+  "bead": "hv-umm2.804",
+  "phase": 5,
+  "stream": "main/default",
+  "base": "d638de1288c78743ee40f44f2dac96c55d56e5b0",
+  "proposalKey": "D19-CLONE-HASH-EXPLICIT-STATE",
+  "durableSource": {
+    "source": "78b8e25dbad438bb989306f58ad36586f7aea915",
+    "repoPath": "docs/plan/evidence/measurements/hv-umm2.802.json",
+    "gitBlob": "4667bb6f9180d4d6b57728e8484403c2f392d7c5",
+    "sha256": "28991fe81b27eb9ff969ff76701803059c0acc08d830646d2ff5da8fe7bdbded"
+  },
+  "scope": {
+    "productionEdits": 0,
+    "testFiles": 1,
+    "fileLines": 400,
+    "fixturePlacement": "Private local functions; all final data fits in one file. Temporary precut sibling is retained only in the external precut-source.tar proof.",
+    "functions": [
+      "minimalState",
+      "populatedState",
+      "instanceBranches",
+      "stateBranches"
+    ],
+    "semanticReadLimit": "Own clone/hash/types/identifier/DSL/loop/initialState/boardState reads; no independent full Sage inventory inspection is claimed."
+  },
+  "chronology": {
+    "claimStartUtc": "2026-10-17T14:03:39Z",
+    "firstImplementationActionUtc": "2026-10-17T14:05:32.019519Z",
+    "observedImplementerDispatchBoundaryUtc": "2026-10-17T14:05:32.019519Z",
+    "dispatchBoundaryQualification": "First helper action is the observed post-claim dispatch/start boundary; any small dispatch-to-first-action interval is unobserved.",
+    "evidenceCutoffUtc": "2026-10-17T14:16:43.576713+00:00",
+    "claimToCutoffMin": 13.076278550000001,
+    "implementerBoundaryToCutoffMin": 11.1926199,
+    "tail": "Schema, diff qualification and actual commit completion occur after this cutoff; final external proof records their real command ends and inclusive claim-to-commit elapsed time. Git authoredDate is not the completion clock."
+  },
+  "experimentContract": {
+    "sha256": "e7f3a928c18242e2a08cc0b4bbd9017f504ba5524f7809fcfc0093db76bee0a8",
+    "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1",
+    "metric": "complete scripts/review.mjs test stage wall seconds from its started/finished records; includes collection/setup/environment/all cases, excludes prepare and wrapper",
+    "thresholdImprovementPercent": 10,
+    "baselineCommand": [
+      "npm",
+      "test",
+      "--",
+      "src/engine/state/clone.test.ts",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/baseline-results.json"
+    ],
+    "prototypeCommand": [
+      "npm",
+      "test",
+      "--",
+      "src/engine/state/clone.test.ts",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/prototype-results.json"
+    ]
+  },
+  "measurement": {
+    "baselineCompleteTestStageS": 4.1,
+    "prototypeCompleteTestStageS": 0.7,
+    "observedImprovementPercent": 82.92682926829268,
+    "accepted": true,
+    "baselineCases": 10,
+    "prototypeCases": 8,
+    "witnesses": 25,
+    "instanceBranches": 16,
+    "stateBranches": 7,
+    "qualification": "Exactly one baseline then precut typecheck/selected preservation then one complete prototype. Rounded stage durations, high/nonidentical load and warmed transform/module/OS caches apply. No causal attribution, selected-case/summed-body metric, aggregate forecast, timing assertion or success sampling."
+  },
+  "precutControl": {
+    "typecheckExit": 0,
+    "selectedStructuralCasesPassed": 5,
+    "existingCasesSkipped": 10,
+    "totalDiscovered": 15,
+    "qualification": "Selected preservation control, not a 15-case full-module pass. Both game traces still existed. All typed witnesses and structural assertions passed before cutting the trace input. Raw source archive SHA256 6cc84b3cc2dd75e4f963e7101cc9525b3bc1f7781b0c80981579748ea191dee1"
+  },
+  "topLevelInventory": {
+    "requiredFields": [
+      "version",
+      "seed",
+      "rng",
+      "nextInstance",
+      "clock",
+      "config",
+      "turn",
+      "sides",
+      "instances",
+      "knownTo",
+      "stack",
+      "priority",
+      "payable",
+      "triggerQueue",
+      "floating",
+      "turnLog",
+      "nextEffect",
+      "oncePerTurn",
+      "dreamwell",
+      "challenge",
+      "automaticSteps",
+      "automaticChoices",
+      "loops",
+      "result"
+    ],
+    "optionalFields": [
+      "draftPools",
+      "rememberedCards",
+      "linkedBanished",
+      "firstEventHistory",
+      "characterScoring"
+    ],
+    "coverage": "All required fields occur in typed minimal/populated constructors. Each optional has isolated absence/presence comparison plus nonempty populated coverage where applicable."
+  },
+  "branchInventory": [
+    "Printing: card; figment with numeric spark; figmentCopy with null and numeric spark. i1 and i2 carry the same card UUID with different physical identities, owners/controllers.",
+    "Variant: ordinary/amplified; absent/empty/nonempty transfigurations and transfigurationApplications (including Perfected constituents); deckMods with null/non-null typeChange/reclaim and nested typeRemap.",
+    "Status: all required fields; gainedAbilities absent/empty/nonempty card+figment entries; lostAbilities absent/zero/nonzero; playedViaAlternativeCost absent/false/true. Instance journeyDeck absent/false/true; poolCandidates absent/empty/nonempty repeated UUID copies.",
+    "Both sides: deck/hand/void/banished/ranks, null and non-null Avatar, Dreamsigns. Turn side counts/extra turns/challengeLane/endingCleanup; Dreamwell deck/catalog; priority null/non-null; challenge null/non-null with blockers/scoring; victory and draw result/null.",
+    "Nested generic containers: card+ability stack modes/targets/optional costs/slots; trigger queue card origin/gain/captured; floating ability/source/expiry; payable affects; turnLog played/derived/copiable, drawn/discarded/departures/materialized/firstOccurrences/dawnProgress; remembered effects, linked banished, first-event and scorer histories; loop scope/checkpoints/resource maps/actions/candidate/run/cycle."
+  ],
+  "contractMapping": [
+    {
+      "baselineCase": "cloneState / equals the JSON round trip of every committed state",
+      "currentCase": "clones every distinct shape with JSON equality and no shared container",
+      "observation": "JSON strict equality for each of 25 bounded witnesses"
+    },
+    {
+      "baselineCase": "cloneState / shares no object or array with the source",
+      "currentCase": "clones every distinct shape with JSON equality and no shared container",
+      "observation": "Every reachable clone container checked against all source containers for every witness"
+    },
+    {
+      "baselineCase": "cloneState / leaves the hashes of a state unchanged",
+      "currentCase": "clones every distinct shape with JSON equality and no shared container",
+      "observation": "Cloned-state hash equality for every witness"
+    },
+    {
+      "baselineCase": "copyJson / copies with JSON semantics",
+      "currentCase": "same case, byte-identical body",
+      "observation": "Undefined/function object omission, undefined/nonfinite array null, negative zero, nested alias freedom"
+    },
+    {
+      "baselineCase": "stateHash / round-trips every committed state through serialization with an identical hash",
+      "currentCase": "preserves data and hashes through serialization and reversed object keys",
+      "observation": "Strict equality and stateHash equality after serializeState/deserializeState for every witness"
+    },
+    {
+      "baselineCase": "stateHash / hashes committed states equally whatever their key order",
+      "currentCase": "preserves data and hashes through serialization and reversed object keys",
+      "observation": "Recursive reverse key insertion; root order and multi-instance order actually checked"
+    },
+    {
+      "baselineCase": "stateHash / changes when any leaf of a state changes",
+      "currentCase": "changes for every leaf of the populated snapshot and each instance branch",
+      "observation": "Exhaustive leaves of bounded populated state plus every instance branch; generic mutations intentionally need not describe a valid game"
+    },
+    {
+      "baselineCase": "stateHash / gives distinct committed states distinct hashes",
+      "currentCase": "distinguishes the explicit printing and optional-presence witnesses",
+      "observation": "Finite distinct-data checks on 16 isolated instance branches and 8 absent/present top-level/turn/result states; no statistical collision-freedom claim"
+    },
+    {
+      "baselineCase": "canonicalHash / hashes values equal as data equally, with JSON semantics",
+      "currentCase": "same case, byte-identical body",
+      "observation": "Key order, undefined/function omission, undefined/nonfinite arrays, negative zero and floating point"
+    },
+    {
+      "baselineCase": "canonicalHash / tells apart values that differ as data",
+      "currentCase": "same case, byte-identical body",
+      "observation": "Scalar types, array order, empty array/object, key/value distinctions, nested containers"
+    }
+  ],
+  "additionalObservation": "Actual nested clone mutations change sideTurns, rank array, and instance status when present; original serialized data stays byte-equal for every witness.",
+  "genericContractBytes": {
+    "roundTripReverseContainersLeafMutationHelpers": "byte-identical",
+    "copyJsonDescribe": "byte-identical",
+    "canonicalHashDescribe": "byte-identical"
+  },
+  "scopeProof": {
+    "baselineRegularInputs": 6185,
+    "otherBaselineInputsByteIdentical": 6184,
+    "mismatches": [],
+    "finalSourceSHA256": "c9942ccdce8d34ef39f510fcb5a47a6f4ae3557aa5b11bc58150cab7789bebec",
+    "productionCloneHashTypesFuzzConfigSetup": "byte-identical to baseline"
+  },
+  "validation": {
+    "baseline": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/state/clone.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/baseline-results.json"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:06:28.767917+00:00",
+      "end": "2026-10-17T14:06:38.091999+00:00",
+      "wallS": 9.32352604198968,
+      "childCpuS": 11.259386,
+      "load": [
+        10.32568359375,
+        6.9736328125,
+        6.6728515625
+      ],
+      "loadEnd": [
+        11.42041015625,
+        7.255859375,
+        6.77392578125
+      ],
+      "pid": 31658,
+      "pgid": 31658,
+      "inputsSHA256": "4902c5b66f9a34ab369a07c5a6c40a057e53bc958cd98ee4f99be70e460ce423",
+      "logSHA256": "7a1f600c4bd912367fb0ca0732e2d903a51bc643457fd986abf0b4c3957daafb",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "precut-typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:09:10.432859+00:00",
+      "end": "2026-10-17T14:09:29.605439+00:00",
+      "wallS": 19.172077334020287,
+      "childCpuS": 36.300625000000004,
+      "load": [
+        9.990234375,
+        8.9833984375,
+        7.61376953125
+      ],
+      "loadEnd": [
+        12.0322265625,
+        9.52978515625,
+        7.841796875
+      ],
+      "pid": 86638,
+      "pgid": 86638,
+      "inputsSHA256": "c8ec6f65597e668681ef8f1b40895df5f795b947a6615dcd90d9b4f637870151",
+      "logSHA256": "161ee18f45a632733920309e48d6e57233c0006d17f3ae1cf66931f1f201cd4b",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "precut-preservation": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/state/clone.test.ts",
+        "--testNamePattern=structural clone and hash contracts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/precut-results.json"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:09:47.736073+00:00",
+      "end": "2026-10-17T14:09:53.178818+00:00",
+      "wallS": 5.442251041007694,
+      "childCpuS": 6.560715999999999,
+      "load": [
+        12.291015625,
+        9.7138671875,
+        7.9365234375
+      ],
+      "loadEnd": [
+        12.107421875,
+        9.71826171875,
+        7.9482421875
+      ],
+      "pid": 89874,
+      "pgid": 89874,
+      "inputsSHA256": "c8ec6f65597e668681ef8f1b40895df5f795b947a6615dcd90d9b4f637870151",
+      "logSHA256": "f6a3caae19c9f125bd1bb0556b55d224e0473ac386c27ecc47f39e6d8d42c465",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "precut-source-preservation": {
+      "command": [
+        "tar",
+        "-cf",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/precut-source.tar",
+        "src/engine/state/clone.test.ts",
+        "src/engine/state/clone.fixtures.ts"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:10:31.770511+00:00",
+      "end": "2026-10-17T14:10:31.778947+00:00",
+      "wallS": 0.008177583978977054,
+      "childCpuS": 0.0047729999999999995,
+      "load": [
+        10.17919921875,
+        9.47900390625,
+        7.9384765625
+      ],
+      "loadEnd": [
+        10.17919921875,
+        9.47900390625,
+        7.9384765625
+      ],
+      "pid": 93120,
+      "pgid": 93120,
+      "inputsSHA256": "c8ec6f65597e668681ef8f1b40895df5f795b947a6615dcd90d9b4f637870151",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "prototype": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/state/clone.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/prototype-results.json"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:10:36.382653+00:00",
+      "end": "2026-10-17T14:10:40.372669+00:00",
+      "wallS": 3.9897187919705175,
+      "childCpuS": 4.755436,
+      "load": [
+        10.00439453125,
+        9.4541015625,
+        7.9384765625
+      ],
+      "loadEnd": [
+        9.923828125,
+        9.4462890625,
+        7.9443359375
+      ],
+      "pid": 93449,
+      "pgid": 93449,
+      "inputsSHA256": "671a7b95842bc9f4fd0384ef43fd0b71c81a4ada25eaf2f0499a2751c050424b",
+      "logSHA256": "1be4f759775eb669b8f123e9ba04fdad98b4b932156f45f7672591d688451a9c",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "public-consumers": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-clone804/public-consumers-results.json"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:11:13.549067+00:00",
+      "end": "2026-10-17T14:11:18.511188+00:00",
+      "wallS": 4.961771875037812,
+      "childCpuS": 6.735888,
+      "load": [
+        9.4580078125,
+        9.3720703125,
+        7.9677734375
+      ],
+      "loadEnd": [
+        9.4208984375,
+        9.36572265625,
+        7.9736328125
+      ],
+      "pid": 96396,
+      "pgid": 96396,
+      "inputsSHA256": "671a7b95842bc9f4fd0384ef43fd0b71c81a4ada25eaf2f0499a2751c050424b",
+      "logSHA256": "ef03baa678b70ab0fc107425667d0a4682828ed8a34c9c81986bd8c561181150",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:11:55.218981+00:00",
+      "end": "2026-10-17T14:12:07.945950+00:00",
+      "wallS": 12.726538291957695,
+      "childCpuS": 40.424108,
+      "load": [
+        7.51953125,
+        8.89208984375,
+        7.86376953125
+      ],
+      "loadEnd": [
+        8.52490234375,
+        9.0732421875,
+        7.9404296875
+      ],
+      "pid": 99407,
+      "pgid": 99407,
+      "inputsSHA256": "671a7b95842bc9f4fd0384ef43fd0b71c81a4ada25eaf2f0499a2751c050424b",
+      "logSHA256": "1fb4579a98c2250ed5e71029990764c6ed90024f37b951ce43cd14273f4fe1f4",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "actualExit": 0,
+      "time": "2026-10-17T14:13:55.560134+00:00",
+      "end": "2026-10-17T14:14:02.056211+00:00",
+      "wallS": 6.495683041983284,
+      "childCpuS": 7.157361999999999,
+      "load": [
+        8.87060546875,
+        9.05126953125,
+        8.064453125
+      ],
+      "loadEnd": [
+        8.9609375,
+        9.06689453125,
+        8.07568359375
+      ],
+      "pid": 8664,
+      "pgid": 8664,
+      "inputsSHA256": "671a7b95842bc9f4fd0384ef43fd0b71c81a4ada25eaf2f0499a2751c050424b",
+      "logSHA256": "060ccdbe81d2c14cba3456e2ead554064e1eac53235770bdb72d7d9bfb3f2f88",
+      "runnerSHA256": "9366f17c4fc655c94893687a360264ec79e60dc32446d97dc99057d8d32341c1"
+    }
+  },
+  "originalToolReferences": {
+    "implementation-start": {
+      "terminal": "c3fd19"
+    },
+    "baseline": {
+      "launch": "06a3ac",
+      "session": 53003,
+      "terminal": "93e753"
+    },
+    "precut-typecheck": {
+      "launch": "db0361",
+      "session": 85327,
+      "terminal": "b01d94"
+    },
+    "precut-preservation": {
+      "launch": "b728b7",
+      "session": 93476,
+      "terminal": "4bae41"
+    },
+    "precut-source-preservation": {
+      "terminal": "75b396"
+    },
+    "prototype": {
+      "launch": "3dbe12",
+      "session": 92210,
+      "terminal": "3bdece"
+    },
+    "public-consumers": {
+      "launch": "405ba1",
+      "session": 95277,
+      "terminal": "f7cd6e"
+    },
+    "review": {
+      "launch": "4c0681",
+      "session": 70472,
+      "terminal": "e696ab"
+    }
+  },
+  "actualFailures": [
+    {
+      "kind": "evidence helper runtime",
+      "originalToolChunk": "2ec17d",
+      "receiptName": "final-evidence",
+      "actualExit": 1,
+      "reason": "Claim JSON is an array; object indexing raised TypeError before repository evidence writes. Corrected to the known array schema, compiled again, and invoked under a distinct recovery name. Failed helper source is preserved in failed-evidence-driver-source.tar.",
+      "sourceArchiveSHA256": "e6ff2a7dfd9e00be190329b325cc7f11c10f38aaed2333349e0dd8d91ffc8e83",
+      "failedLogSHA256": "045a5158777aaf9fe8956b8542b180784c11a414e8a2eb5c71e2baeb941fe994"
+    },
+    {
+      "kind": "discovery command",
+      "originalToolChunk": "a68819",
+      "actualExit": 2,
+      "reason": "Incorrect guessed step paths src/engine/steps/kinds/pass.ts and src/engine/steps/kinds.ts; rg --files resolved advance-phase.ts and kinds/index.ts. No source effect."
+    },
+    {
+      "kind": "discovery command",
+      "originalToolChunk": "11d882",
+      "actualExit": 1,
+      "reason": "zsh unmatched src/engine/rng/*.test.ts glob; corrected to rg -g *.test.ts over actual state/loops directories."
+    }
+  ],
+  "functionalOrCompileFailures": [],
+  "validationPolicy": "AGENTS Verification and workflow validation ladder: npm run review plus Knip plus final friction schema. Private test-only data edit needs no local review:full or browser QA; shared test infrastructure/config and production behavior are unchanged. Parent qualification supersedes the Sage blanket fixture=>review:full classification; native release validation remains.",
+  "timingQualification": "Workflow friction window uses observed post-claim implementer boundary14:05:32.019519Z, separately from native claim14:03:39Z; committed evidence ends at actual cutoff and final external proof covers the commit tail.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review runner launch; one-minute os.getloadavg observation, detailed per-command samples below"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "baseline": {
+      "start": [
+        10.32568359375,
+        6.9736328125,
+        6.6728515625
+      ],
+      "end": [
+        11.42041015625,
+        7.255859375,
+        6.77392578125
+      ]
+    },
+    "precut-typecheck": {
+      "start": [
+        9.990234375,
+        8.9833984375,
+        7.61376953125
+      ],
+      "end": [
+        12.0322265625,
+        9.52978515625,
+        7.841796875
+      ]
+    },
+    "precut-preservation": {
+      "start": [
+        12.291015625,
+        9.7138671875,
+        7.9365234375
+      ],
+      "end": [
+        12.107421875,
+        9.71826171875,
+        7.9482421875
+      ]
+    },
+    "precut-source-preservation": {
+      "start": [
+        10.17919921875,
+        9.47900390625,
+        7.9384765625
+      ],
+      "end": [
+        10.17919921875,
+        9.47900390625,
+        7.9384765625
+      ]
+    },
+    "prototype": {
+      "start": [
+        10.00439453125,
+        9.4541015625,
+        7.9384765625
+      ],
+      "end": [
+        9.923828125,
+        9.4462890625,
+        7.9443359375
+      ]
+    },
+    "public-consumers": {
+      "start": [
+        9.4580078125,
+        9.3720703125,
+        7.9677734375
+      ],
+      "end": [
+        9.4208984375,
+        9.36572265625,
+        7.9736328125
+      ]
+    },
+    "review": {
+      "start": [
+        7.51953125,
+        8.89208984375,
+        7.86376953125
+      ],
+      "end": [
+        8.52490234375,
+        9.0732421875,
+        7.9404296875
+      ]
+    },
+    "knip": {
+      "start": [
+        8.87060546875,
+        9.05126953125,
+        8.064453125
+      ],
+      "end": [
+        8.9609375,
+        9.06689453125,
+        8.07568359375
+      ]
+    }
+  },
+  "unwaivedAcceptance": [
+    "D19 full-suite <=60s at two workers/low host load remains unwaived; retained observation268 has 440 files/12450 tests, 82.48s Vitest/83.6s test stage.",
+    "Sibling803 precedes the next justified aggregate after accepted source changes; this bead runs no aggregate.",
+    "Phase5 stock2088, transfiguration1024, modification480, full-pool10k Random+Greedy256/64, interactive>=10percent, journey workflows, minified build, cold visual review, final Sage and release obligations remain unwaived.",
+    "Parent owns fresh context-free Codex cold review, native scope qualification, candidate certification/promotion/cleanup and close."
+  ]
+}
