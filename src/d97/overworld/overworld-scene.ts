@@ -22,13 +22,7 @@ import {
   type TileRange,
   type Viewport,
 } from "./camera";
-import {
-  anchorAt,
-  anchorsByTile,
-  movementGrid,
-  pathBeside,
-  type InteractionRegistry,
-} from "./interactions";
+import { anchorAt, pathBeside, shownMovement, type AnchorMovement, type InteractionRegistry } from "./interactions";
 import { blockingGuardian, standingAnchors } from "./chokepoint";
 import { DreamVeil, WaypointObelisk, type VeilVariant } from "./dream-veil";
 import { idleFacing } from "./characters/animation";
@@ -123,6 +117,8 @@ export interface OverworldSceneHandle {
   readonly characters: () => OverworldCharactersState;
   /** Anchors drawn and interactive neither (quest objects out of their quest). */
   readonly hiddenAnchorIds: () => readonly DreamAnchorId[];
+  /** The grid the player walks on now: shown anchors block their tiles, hidden ones do not. */
+  readonly grid: () => WalkabilityGrid;
   /** The anchors where they stand (beaten guardians moved aside). */
   readonly anchors: () => readonly CompiledAnchor[];
   /** The door veils and waypoint states drawn, for QA. */
@@ -177,8 +173,8 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly anchorsStanding: readonly CompiledAnchor[];
   /** Unbeaten guardians, which close their chokepoints. */
   private readonly standingGuardians: readonly CompiledAnchor[];
-  private readonly grid: WalkabilityGrid;
-  private readonly byTile: ReadonlyMap<string, CompiledAnchor>;
+  /** Walking and interaction among the shown anchors; rebuilt when visibility changes. */
+  private movement: AnchorMovement;
   private readonly veils: ReadonlyMap<DreamAnchorId, VeilVariant>;
   private readonly veilViews = new Map<DreamAnchorId, DreamVeil>();
   private readonly waypointViews = new Map<DreamAnchorId, WaypointObelisk>();
@@ -232,9 +228,8 @@ export class OverworldScene implements OverworldSceneHandle {
     // through and never interacted with.
     this.anchorsStanding = standingAnchors({ ...this.map, anchors: presentAnchors(this.map.anchors, this.occupants) }, beaten);
     this.standingGuardians = this.anchorsStanding.filter((anchor) => anchor.kind === "guardian" && !beaten.has(anchor.id));
-    this.grid = movementGrid(this.map, this.anchorsStanding);
-    this.byTile = anchorsByTile(this.anchorsStanding);
-    const arrival = arrivalPlacement(this.map, this.anchorsStanding, this.grid, options.arrival);
+    this.movement = shownMovement(this.map, this.anchorsStanding, this.hidden);
+    const arrival = arrivalPlacement(this.map, this.anchorsStanding, this.movement.grid, options.arrival);
     this.state = initialWalker(arrival.tile);
     if (arrival.face !== null) this.state = faceTile(this.state, arrival.face);
 
@@ -291,9 +286,14 @@ export class OverworldScene implements OverworldSceneHandle {
     }
   }
 
-  /** Hide `anchorIds`: they are neither drawn nor interactive. */
+  /**
+   * Hide `anchorIds`: they are neither drawn nor interactive, and the player
+   * walks through their tiles. A shown anchor blocks its tile again; a walk
+   * whose path crosses it stops before stepping in.
+   */
   setHiddenAnchors(anchorIds: ReadonlySet<DreamAnchorId>): void {
     this.hidden = anchorIds;
+    this.movement = shownMovement(this.map, this.anchorsStanding, anchorIds);
     for (const [id, view] of this.anchorViews) view.visible = !anchorIds.has(id);
     for (const { anchor, badge } of this.residents) {
       if (badge !== null) badge.visible = !anchorIds.has(anchor.id);
@@ -337,7 +337,7 @@ export class OverworldScene implements OverworldSceneHandle {
   walkToTile = (tile: TilePoint): boolean => {
     const anchor = this.shownAnchorAt(tile);
     if (anchor !== undefined) return this.walkToAnchor(anchor);
-    const path = findPath(this.grid, this.origin(), tile);
+    const path = findPath(this.movement.grid, this.origin(), tile);
     if (path === null) return this.walkToBlockingGuardian(tile, false);
     this.pendingAnchor = null;
     this.state = followPath(this.state, path, this.canEnter);
@@ -346,7 +346,7 @@ export class OverworldScene implements OverworldSceneHandle {
 
   walkToAnchor = (anchor: CompiledAnchor): boolean => {
     if (this.hidden.has(anchor.id)) return false;
-    const path = pathBeside(this.grid, this.origin(), anchor.at);
+    const path = pathBeside(this.movement.grid, this.origin(), anchor.at);
     if (path === null) return this.walkToBlockingGuardian(anchor.at, true);
     this.pendingAnchor = anchor;
     this.state = followPath(this.state, path, this.canEnter);
@@ -361,7 +361,7 @@ export class OverworldScene implements OverworldSceneHandle {
   };
 
   teleport = (tile: TilePoint, face?: TilePoint): boolean => {
-    if (!isWalkable(this.grid, tile)) return false;
+    if (!isWalkable(this.movement.grid, tile)) return false;
     this.pendingAnchor = null;
     this.state = placeWalker(this.state, tile);
     if (face !== undefined) this.state = faceTile(this.state, face);
@@ -394,6 +394,8 @@ export class OverworldScene implements OverworldSceneHandle {
 
   hiddenAnchorIds = (): readonly DreamAnchorId[] => [...this.hidden];
 
+  grid = (): WalkabilityGrid => this.movement.grid;
+
   anchors = (): readonly CompiledAnchor[] => this.anchorsStanding;
 
   markers = (): OverworldMarkersState => ({
@@ -403,12 +405,11 @@ export class OverworldScene implements OverworldSceneHandle {
 
   // --- building ---------------------------------------------------------------
 
-  private readonly canEnter = (tile: TilePoint): boolean => isWalkable(this.grid, tile);
+  private readonly canEnter = (tile: TilePoint): boolean => isWalkable(this.movement.grid, tile);
 
-  /** The anchor on `tile` unless it is hidden. */
+  /** The shown anchor on `tile`, if any. */
   private shownAnchorAt(tile: TilePoint): CompiledAnchor | undefined {
-    const anchor = anchorAt(this.byTile, tile);
-    return anchor === undefined || this.hidden.has(anchor.id) ? undefined : anchor;
+    return anchorAt(this.movement.byTile, tile);
   }
 
   private origin(): TilePoint {
@@ -420,7 +421,7 @@ export class OverworldScene implements OverworldSceneHandle {
    * walks to the guardian instead, which opens its preview (Appendix B §B5).
    */
   private walkToBlockingGuardian(tile: TilePoint, beside: boolean): boolean {
-    const found = blockingGuardian(this.grid, this.standingGuardians, this.origin(), { tile, beside });
+    const found = blockingGuardian(this.movement.grid, this.standingGuardians, this.origin(), { tile, beside });
     if (found === null) return false;
     logEvent("d97_chokepoint_blocked", { mapId: this.map.id, guardianAnchorId: found.guardian.id, target: tile });
     this.pendingAnchor = found.guardian;

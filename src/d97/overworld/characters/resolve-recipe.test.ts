@@ -1,8 +1,10 @@
 // Recipe resolution over a synthetic generator library: layers stack by the
 // generator's z-order (a back hair layer under the body), sheets resolve per
 // body type and animation, palette swaps map base ramps to targets (skin
-// slots follow the recipe's skin), variants pick variant files, and missing
-// sheets, layers, palettes and variants are reported.
+// slots follow the recipe's skin), variants pick variant files, a layer
+// without an idle sheet keeps its walk sheet (its idle pose is the walk
+// sheet's standing frame), and missing sheets, layers, palettes and variants
+// are reported.
 
 import { describe, expect, it } from "vitest";
 import { characterSprite } from "../../../content/d97/characters/schema";
@@ -32,6 +34,8 @@ const DEFINITIONS: Record<string, unknown> = {
   },
   skirt: { layer_1: { zPos: 20, female: "skirt/" }, recolors: { material: "cloth", palettes: ["ulpc"] } },
   ghost: { layer_1: { zPos: 30, male: "ghost/" } },
+  prop: { layer_1: { zPos: 140, male: "prop/" }, variants: ["oak"] },
+  shade: { layer_1: { zPos: 50, male: "shade/" } },
 };
 
 const PALETTES: Record<string, Record<string, string[]>> = {
@@ -52,7 +56,7 @@ const MATERIALS: Record<string, { default: string; base: string }> = {
 const FILES = new Set(
   [
     "body/male/", "body/female/", "hair/long/fg/", "hair/long/bg/", "head/male/", "head/female/", "skirt/",
-  ].flatMap((path) => [`${path}walk.png`, `${path}idle.png`]).concat(["mask/walk/black.png", "mask/idle/black.png", "ghost/walk.png"]),
+  ].flatMap((path) => [`${path}walk.png`, `${path}idle.png`]).concat(["mask/walk/black.png", "mask/idle/black.png", "ghost/walk.png", "prop/walk/oak.png", "shade/idle.png"]),
 );
 
 const LIBRARY: LpcLibrary = {
@@ -112,6 +116,28 @@ describe("resolveCharacterSprite", () => {
     expect(resolved.layers.find((layer) => layer.zPos === 10)?.recolor).toEqual([]);
   });
 
+  it("keeps a layer without an idle sheet, its idle drawn from the walk sheet", () => {
+    const resolved = resolveCharacterSprite(
+      characterSprite({ id: ID, body: "male", skin: "light", parts: [{ sheet: sheet("ghost") }, { sheet: sheet("prop") }] }),
+      LIBRARY,
+    );
+    expect(resolved.missing).toEqual([]);
+    expect(resolved.layers.map((layer) => [layer.zPos, layer.sheets.walk, layer.sheets.idle])).toEqual([
+      [10, "body/male/walk.png", "body/male/idle.png"],
+      [30, "ghost/walk.png", null],
+      [140, "prop/walk/oak.png", null],
+    ]);
+  });
+
+  it("reports a layer without a walk sheet", () => {
+    const resolved = resolveCharacterSprite(
+      characterSprite({ id: ID, body: "male", skin: "light", parts: [{ sheet: sheet("shade") }] }),
+      LIBRARY,
+    );
+    expect(resolved.missing).toHaveLength(1);
+    expect(resolved.layers.map((layer) => layer.zPos)).toEqual([10]);
+  });
+
   it("reports unknown sheets, missing body layers, sheets, palettes and variants", () => {
     const resolved = resolveCharacterSprite(
       characterSprite({
@@ -121,7 +147,7 @@ describe("resolveCharacterSprite", () => {
         parts: [
           { sheet: sheet("nonexistent") },
           { sheet: sheet("skirt") },
-          { sheet: sheet("ghost") },
+          { sheet: sheet("shade") },
           { sheet: sheet("hair_long"), colors: ["plaid"] },
           { sheet: sheet("mask"), colors: ["red"] },
         ],

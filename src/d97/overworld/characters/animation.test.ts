@@ -1,10 +1,11 @@
 // Animation and facing: walking cycles the walk sheet's eight moving frames,
-// idling cycles its two frames, and idle characters face the player within
+// idling cycles its two frames (a layer without an idle sheet holds its walk
+// sheet's standing frame), and idle characters face the player within
 // range (on the dominant axis) and otherwise face down.
 
 import { describe, expect, it } from "vitest";
 import { D97_CHARACTER_TUNABLES } from "../../../content/d97/tunables";
-import { animationColumn, idleFacing } from "./animation";
+import { ANIMATION_COLUMNS, animationColumn, idleFacing, standingIdleFrames } from "./animation";
 
 const TUNABLES = { ...D97_CHARACTER_TUNABLES, walkFramesPerSecond: 10, idleFramesPerSecond: 2 };
 
@@ -14,6 +15,17 @@ describe("animationColumn", () => {
     expect(walk).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 1, 2]);
     const idle = Array.from({ length: 4 }, (_, frame) => animationColumn("idle", frame / 2, TUNABLES));
     expect(idle).toEqual([0, 1, 0, 1]);
+  });
+});
+
+describe("standingIdleFrames", () => {
+  it("holds each facing row's standing walk frame for every idle column", () => {
+    const walk = ["up", "left", "down", "right"].map((row) =>
+      Array.from({ length: ANIMATION_COLUMNS.walk }, (_, column) => `${row}${String(column)}`),
+    );
+    const idle = standingIdleFrames(walk);
+    expect(idle).toEqual([["up0", "up0"], ["left0", "left0"], ["down0", "down0"], ["right0", "right0"]]);
+    for (const row of idle) expect(row).toHaveLength(ANIMATION_COLUMNS.idle);
   });
 });
 

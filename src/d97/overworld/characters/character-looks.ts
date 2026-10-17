@@ -1,5 +1,6 @@
 // Loads characters' looks from the character manifest: each layer's walk and
-// idle sheets, recolored by its palette swaps and cut into 64×64 frames. A
+// idle sheets, recolored by its palette swaps and cut into 64×64 frames; a
+// layer without an idle sheet idles on its walk sheet's standing frame. A
 // character the manifest lacks, or whose recipe names missing sheets, has no
 // look; the overworld draws it as a capsule and logs a warning.
 
@@ -8,8 +9,8 @@ import { logEvent } from "../../../logging";
 import { assetUrl } from "../../../runtime/asset-url";
 import { loadSheetImage, recolorSheet } from "../../../cumulus/primitives/lpc-character";
 import type { D97CharacterId } from "../../../types/identifiers";
-import { ANIMATION_COLUMNS, CHARACTER_FRAME_SIZE } from "./animation";
-import type { CharacterManifest, ManifestLayer } from "./manifest";
+import { ANIMATION_COLUMNS, CHARACTER_FRAME_SIZE, standingIdleFrames } from "./animation";
+import { parseCharacterManifest, type CharacterManifest, type ManifestLayer } from "./manifest";
 import type { CharacterAnimation } from "./resolve-recipe";
 
 export interface CharacterLookLayer {
@@ -41,7 +42,7 @@ export function manifestEntry(
 async function loadManifest(): Promise<CharacterManifest | null> {
   try {
     const response = await fetch(assetUrl("/d97/characters/manifest.json"));
-    return response.ok ? ((await response.json()) as CharacterManifest) : null;
+    return response.ok ? parseCharacterManifest(await response.json()) : null;
   } catch {
     return null;
   }
@@ -93,11 +94,14 @@ export async function loadCharacterLooks(ids: Iterable<D97CharacterId>): Promise
       try {
         const layers = await Promise.all(
           entry.layers.map(async (layer): Promise<CharacterLookLayer> => {
+            const idleSheet = layer.sheets.idle;
             const [walk, idle] = await Promise.all([
               sheet(layer.sheets.walk, layer.recolor),
-              sheet(layer.sheets.idle, layer.recolor),
+              idleSheet === null ? null : sheet(idleSheet, layer.recolor),
             ]);
-            return { zPos: layer.zPos, frames: { walk: frames(walk, "walk"), idle: frames(idle, "idle") } };
+            const walkFrames = frames(walk, "walk");
+            const idleFrames = idle === null ? standingIdleFrames(walkFrames) : frames(idle, "idle");
+            return { zPos: layer.zPos, frames: { walk: walkFrames, idle: idleFrames } };
           }),
         );
         looks.set(id, { layers });

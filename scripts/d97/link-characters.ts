@@ -18,11 +18,7 @@ import {
   type CharacterManifest,
   type ManifestCharacter,
 } from "../../src/d97/overworld/characters/manifest.ts";
-import {
-  CHARACTER_ANIMATIONS,
-  resolveCharacterSprite,
-  type LpcLibrary,
-} from "../../src/d97/overworld/characters/resolve-recipe.ts";
+import { resolveCharacterSprite, type LpcLibrary } from "../../src/d97/overworld/characters/resolve-recipe.ts";
 import type { D97CharacterId, LpcSheetKey } from "../../src/types/identifiers.ts";
 import { defaultArtPaths } from "../setup-assets.ts";
 
@@ -97,6 +93,16 @@ function main(): void {
   }
   const library = available ? generatorLibrary(generator) : null;
   let linked = 0;
+  /** Link `sheet` (spritesheets-relative) and return its served URL. */
+  const link = (sheet: string): string => {
+    const target = join(sheetsDir, sheet);
+    if (!existsSync(target)) {
+      mkdirSync(dirname(target), { recursive: true });
+      symlinkSync(join(generator, "spritesheets", sheet), target);
+      linked += 1;
+    }
+    return `${CHARACTER_SHEETS_PATH}${relative(sheetsDir, target).split("\\").join("/")}`;
+  };
   for (const recipe of RECIPES) {
     if (library === null) {
       characters[recipe.id] = { layers: [], missing: ["no character generator library"] };
@@ -109,18 +115,7 @@ function main(): void {
       layers: resolved.layers.map((layer) => ({
         zPos: layer.zPos,
         recolor: layer.recolor,
-        sheets: Object.fromEntries(
-          CHARACTER_ANIMATIONS.map((animation) => {
-            const sheet = layer.sheets[animation];
-            const target = join(sheetsDir, sheet);
-            if (!existsSync(target)) {
-              mkdirSync(dirname(target), { recursive: true });
-              symlinkSync(join(generator, "spritesheets", sheet), target);
-              linked += 1;
-            }
-            return [animation, `${CHARACTER_SHEETS_PATH}${relative(sheetsDir, target).split("\\").join("/")}`];
-          }),
-        ) as ManifestCharacter["layers"][number]["sheets"],
+        sheets: { walk: link(layer.sheets.walk), idle: layer.sheets.idle === null ? null : link(layer.sheets.idle) },
       })),
     };
   }

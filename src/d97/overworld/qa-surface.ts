@@ -6,7 +6,6 @@
 import type { DreamAnchorId, DreamMapId } from "../../types/identifiers";
 import { isWalkable, type CompiledDreamMap } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
-import { movementGrid } from "./interactions";
 import type { OverworldSceneHandle } from "./overworld-scene";
 import { FACING_STEPS, facedTile, walkerPosition, type Facing } from "./walker";
 
@@ -43,7 +42,6 @@ export function installD97QaSurface(
 ): () => void {
   // Anchors where they stand: a beaten guardian has stepped aside.
   const anchor = (id: DreamAnchorId) => scene.anchors().find((candidate) => candidate.id === id);
-  const grid = movementGrid(map, scene.anchors());
   const surface: D97QaSurface = {
     state: () => {
       const walker = scene.walker();
@@ -83,7 +81,7 @@ export function installD97QaSurface(
       const steps = side === undefined ? Object.values(FACING_STEPS) : [FACING_STEPS[side]];
       const beside = steps
         .map(([dx, dy]): TilePoint => [target.at[0] + dx, target.at[1] + dy])
-        .find((tile) => isWalkable(grid, tile));
+        .find((tile) => isWalkable(scene.grid(), tile));
       return beside !== undefined && scene.teleport(beside, target.at);
     },
   };

@@ -13,7 +13,7 @@ import type { D97CharacterId } from "../../types/identifiers";
 /** LPC frames are square, this many pixels on a side. */
 export const LPC_FRAME_SIZE = 64;
 
-/** The idle sheet's row of front-facing frames (rows run up, left, down, right). */
+/** The sheets' row of front-facing frames (rows run up, left, down, right). */
 const FRONT_ROW = 2;
 
 /** One `[base, target]` color swap, lowercase `#rrggbb`. */
@@ -22,7 +22,8 @@ export type LpcColorSwap = readonly [string, string];
 /** The part of a manifest layer a standing frame reads. */
 interface ManifestFrameLayer {
   readonly zPos: number;
-  readonly sheets: { readonly idle: string };
+  /** A layer without an idle sheet stands on its walk sheet's first frame. */
+  readonly sheets: { readonly walk: string; readonly idle: string | null };
   readonly recolor: readonly LpcColorSwap[];
 }
 
@@ -88,7 +89,7 @@ async function composeFrame(id: D97CharacterId): Promise<string | null> {
   const sheets = await Promise.all(
     [...entry.layers]
       .sort((a, b) => a.zPos - b.zPos)
-      .map(async (layer) => recolorSheet(await loadSheetImage(layer.sheets.idle), layer.recolor)),
+      .map(async (layer) => recolorSheet(await loadSheetImage(layer.sheets.idle ?? layer.sheets.walk), layer.recolor)),
   );
   const canvas = document.createElement("canvas");
   canvas.width = LPC_FRAME_SIZE;

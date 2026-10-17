@@ -1,9 +1,11 @@
 // What the player can interact with on the overworld: anchors stand on their
 // tiles (which the player cannot enter), the player interacts with the anchor
-// it faces, and a click on an anchor walks to the nearest tile beside it.
+// it faces, and a click on an anchor walks to the nearest tile beside it. A
+// hidden anchor is neither: its tile is open ground.
 // Handlers live in an interaction registry keyed by anchor kind, which later
 // beads fill (challengers, shops, residents, doors…).
 
+import type { DreamAnchorId } from "../../types/identifiers";
 import { findPath } from "../map/pathfinding";
 import { isWalkable, type CompiledAnchor, type WalkabilityGrid } from "../map/compiled";
 import type { DreamAnchorKind, TilePoint } from "../map/definition";
@@ -42,7 +44,7 @@ function key([x, y]: TilePoint): string {
 }
 
 /** The anchor standing on each occupied tile. */
-export function anchorsByTile(
+function anchorsByTile(
   anchors: readonly CompiledAnchor[],
 ): ReadonlyMap<string, CompiledAnchor> {
   return new Map(anchors.map((anchor) => [key(anchor.at), anchor]));
@@ -69,6 +71,25 @@ export function movementGrid(
     if (isWalkable(grid, at)) cells[at[1] * grid.width + at[0]] = "0";
   }
   return { width: grid.width, height: grid.height, walkable: cells.join("") };
+}
+
+/** What the player walks around and interacts with among the shown anchors. */
+export interface AnchorMovement {
+  readonly grid: WalkabilityGrid;
+  readonly byTile: ReadonlyMap<string, CompiledAnchor>;
+}
+
+/**
+ * Movement among `anchors` with the `hidden` ones left out: a hidden anchor
+ * blocks no tile and stands on none.
+ */
+export function shownMovement(
+  grid: WalkabilityGrid,
+  anchors: readonly CompiledAnchor[],
+  hidden: ReadonlySet<DreamAnchorId>,
+): AnchorMovement {
+  const shown = anchors.filter((anchor) => !hidden.has(anchor.id));
+  return { grid: movementGrid(grid, shown), byTile: anchorsByTile(shown) };
 }
 
 /**

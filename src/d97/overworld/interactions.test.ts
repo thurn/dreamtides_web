@@ -1,4 +1,5 @@
-// Interaction contract: anchors block their tiles for movement; a click on
+// Interaction contract: anchors block their tiles for movement unless hidden
+// (a hidden anchor's tile is walkable and nothing to interact with); a click on
 // an anchor walks to the nearest tile beside it; the registry runs the
 // handler registered for an anchor's kind and reports kinds without one.
 
@@ -6,7 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import { parseDreamAnchorId } from "../../types/identifiers";
 import type { CompiledAnchor, WalkabilityGrid } from "../map/compiled";
 import { isWalkable } from "../map/compiled";
-import { createInteractionRegistry, movementGrid, pathBeside } from "./interactions";
+import { anchorAt, createInteractionRegistry, movementGrid, pathBeside, shownMovement } from "./interactions";
 
 const SHOP: CompiledAnchor = {
   id: parseDreamAnchorId("d9700000-0000-4000-8000-0000000000a1"),
@@ -20,6 +21,26 @@ describe("movementGrid", () => {
     const grid = movementGrid(GRID, [SHOP]);
     expect(isWalkable(grid, [3, 1])).toBe(false);
     expect(isWalkable(grid, [2, 1])).toBe(true);
+  });
+});
+
+describe("shownMovement", () => {
+  const OBJECT: CompiledAnchor = {
+    id: parseDreamAnchorId("d9700000-0000-4000-8000-0000000000a2"),
+    kind: "object",
+    at: [1, 1],
+  };
+
+  it("opens a hidden anchor's tile and blocks it again once shown", () => {
+    const hidden = shownMovement(GRID, [SHOP, OBJECT], new Set([OBJECT.id]));
+    expect(isWalkable(hidden.grid, OBJECT.at)).toBe(true);
+    expect(isWalkable(hidden.grid, SHOP.at)).toBe(false);
+    expect(anchorAt(hidden.byTile, OBJECT.at)).toBeUndefined();
+    expect(pathBeside(hidden.grid, [0, 1], SHOP.at)).toEqual([[0, 1], [1, 1], [2, 1]]);
+
+    const shown = shownMovement(GRID, [SHOP, OBJECT], new Set());
+    expect(isWalkable(shown.grid, OBJECT.at)).toBe(false);
+    expect(anchorAt(shown.byTile, OBJECT.at)).toBe(OBJECT);
   });
 });
 

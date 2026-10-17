@@ -1,15 +1,14 @@
 // Resolves a character sprite recipe against the Universal LPC generator's
 // sheet definitions and palettes: the layers to stack (each with its z-order,
-// its walk and idle sheets, and the color swaps that recolor it) and anything
-// the recipe names that the library lacks. Pure; workspace preparation
+// its walk sheet, its idle sheet when the library has one, and the color swaps
+// that recolor it) and anything the recipe names that the library lacks. Pure; workspace preparation
 // supplies the library reads (scripts/d97/link-characters.ts).
 
 import type { CharacterSprite, CharacterSpritePart } from "../../../content/d97/characters/schema";
 import { parseLpcSheetKey, type D97CharacterId, type LpcSheetKey } from "../../../types/identifiers";
 
 /** The animations the overworld draws. */
-export const CHARACTER_ANIMATIONS = ["walk", "idle"] as const;
-export type CharacterAnimation = (typeof CHARACTER_ANIMATIONS)[number];
+export type CharacterAnimation = "walk" | "idle";
 
 /** What the resolver reads from the generator's checkout. */
 export interface LpcLibrary {
@@ -23,11 +22,20 @@ export interface LpcLibrary {
   readonly sheetExists: (path: string) => boolean;
 }
 
+/**
+ * A layer's sheets. Many props, tools, weapons and child-body parts have no
+ * idle sheet (null); their idle pose is the walk sheet's standing frame.
+ */
+export interface LayerSheets {
+  readonly walk: string;
+  readonly idle: string | null;
+}
+
 export interface ResolvedLayer {
   /** The generator's z-order; lower draws first. */
   readonly zPos: number;
-  /** Spritesheets-relative paths per animation. */
-  readonly sheets: Readonly<Record<CharacterAnimation, string>>;
+  /** Spritesheets-relative paths. */
+  readonly sheets: LayerSheets;
   /** Color swaps, `[base, target]` lowercase `#rrggbb`. */
   readonly recolor: readonly (readonly [string, string])[];
 }
@@ -153,17 +161,15 @@ function resolvePart(
       missing.push(`${part.sheet} has no ${recipe.body} body layer`);
       continue;
     }
-    const sheets = Object.fromEntries(
-      CHARACTER_ANIMATIONS.map((animation) => [
-        animation,
-        variant === null ? `${path}${animation}.png` : `${path}${animation}/${variant}.png`,
-      ]),
-    ) as Record<CharacterAnimation, string>;
-    const absent = CHARACTER_ANIMATIONS.filter((animation) => !library.sheetExists(sheets[animation]));
-    if (absent.length > 0) {
-      missing.push(`${part.sheet} lacks ${absent.join(", ")} sheets at ${path}`);
+    const sheet = (animation: CharacterAnimation) =>
+      variant === null ? `${path}${animation}.png` : `${path}${animation}/${variant}.png`;
+    const walk = sheet("walk");
+    if (!library.sheetExists(walk)) {
+      missing.push(`${part.sheet} lacks walk sheets at ${path}`);
       continue;
     }
+    const idle = sheet("idle");
+    const sheets: LayerSheets = { walk, idle: library.sheetExists(idle) ? idle : null };
     layers.push({ zPos: typeof layer.zPos === "number" ? layer.zPos : 0, sheets, recolor });
   }
   return layers;

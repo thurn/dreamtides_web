@@ -1,6 +1,7 @@
 // Character animation and facing as pure functions: which frame of the walk
-// or idle sheet to show, which sheet row a facing uses, and which way an idle
-// character faces given where the player stands.
+// or idle sheet to show, which sheet row a facing uses, the idle frames of a
+// layer without an idle sheet, and which way an idle character faces given
+// where the player stands.
 
 import type { D97CharacterTunables } from "../../../content/d97/tunables";
 import type { TilePoint } from "../../map/definition";
@@ -15,6 +16,17 @@ export const ANIMATION_COLUMNS: Readonly<Record<CharacterAnimation, number>> = {
 
 /** LPC frames are 64×64 pixels. */
 export const CHARACTER_FRAME_SIZE = 64;
+
+/**
+ * Idle frames for a layer without an idle sheet: in every facing row, its
+ * walk sheet's standing frame (column 0) held for each idle column.
+ */
+export function standingIdleFrames<Frame>(walk: readonly (readonly Frame[])[]): Frame[][] {
+  return walk.map((row) => {
+    const standing = row[0];
+    return standing === undefined ? [] : Array.from({ length: ANIMATION_COLUMNS.idle }, () => standing);
+  });
+}
 
 /** The sheet column to show `seconds` into an animation. */
 export function animationColumn(
