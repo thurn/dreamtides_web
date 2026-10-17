@@ -448,7 +448,7 @@ manifests on the dais when the fifth falls
 ([Appendix C](appendix-c-bosses-and-keys.md)). The whole scene renders through
 a desaturating violet color matrix.
 
-![Limbo: five incarnations in an arc on a floating stone court, one beaten and without an icon, Apollyon in gold on the dais above them, the player approaching from below and a waypoint at the left, all washed in violet.](visual-guide/scene-limbo.png)
+![Limbo: five incarnations in an arc on a floating stone court, one beaten and without an icon, Apollyon in gold on the dais above them, the player (as their Avatar, on a gold ring) approaching from below and a waypoint at the left, all washed in violet.](visual-guide/scene-limbo.png)
 
 - **Ground:** void, cream and blue stone.
 - **Structures:** spires, vine pillars, the dais.
@@ -509,15 +509,27 @@ across the map. Apollyon renders at 2× in gold.
 
 ![Ten incarnations, each tinted and haloed in its own color, and Apollyon, winged and crowned in gold.](visual-guide/characters-incarnations.png)
 
-### The player, friendly NPCs and generic personas
+### The player
 
-The player is **the Dreamer**, a neutral traveler in a cardigan and scarf.
-The player's sprite does not change with the chosen Avatar, so the Avatar
-stays a battle identity. Friendly NPC roles each have one recognizable
-outfit, and every tileset has generic challenger personas suited to it
+The player has no sprite of their own: they walk the overworld as their
+current Avatar, using that Avatar's character sprite. Switching Avatars at a
+waypoint ([§B16](appendix-b-dreams.md#b16-avatar-characters-and-switching)) swaps the sprite
+on the spot, with a short puff of dream smoke. The scenes on this page show a
+player whose Avatar is Ossian.
+
+- **Telling the player apart.** The player's Avatar always stands on a gold
+  rune ring, and never carries a head icon.
+- **The same Avatar elsewhere.** An Avatar the player is using can still
+  appear as another character, such as a key-dream challenger. That
+  character keeps its head icon and has no ring, so the two never read alike.
+
+### Friendly NPCs and generic personas
+
+Friendly NPC roles each have one recognizable outfit, and every tileset has
+generic challenger personas suited to it
 ([§B2](appendix-b-dreams.md#b2-dream-catalog)).
 
-![The Dreamer; six friendly NPC roles (shopkeeper, amulet merchant, amulet changer, sage, quest giver, prize duelist); and ten generic personas, one per tileset, from a hedge-hare to a Grid City runner.](visual-guide/characters-npcs.png)
+![Six friendly NPC roles (shopkeeper, amulet merchant, amulet changer, sage, quest giver, prize duelist) and ten generic personas, one per tileset, from a hedge-hare to a Grid City runner.](visual-guide/characters-npcs.png)
 
 - **Facing.** Idle characters face down, or toward the player while the player
   is within two tiles. Challengers never walk; friendly characters may idle
