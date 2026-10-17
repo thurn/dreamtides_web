@@ -8,7 +8,7 @@ import { logEvent } from "../logging";
 import { findD97QaScene } from "../runtime/qa-scene-entry";
 import { useActions, useConfirmedHead, useGameState } from "../session/hooks";
 import { D97AvatarSelectScreenAdapter } from "../screens/cumulus_adapters/d97/D97AvatarSelectScreenAdapter";
-import { D97OverworldPlaceholderScreenAdapter } from "../screens/cumulus_adapters/d97/D97OverworldPlaceholderScreenAdapter";
+import { D97OverworldScreenAdapter } from "../screens/cumulus_adapters/d97/D97OverworldScreenAdapter";
 import type { QaSceneId } from "../types/identifiers";
 import { ErrorBoundary } from "./ErrorBoundary";
 
@@ -62,7 +62,7 @@ export function D97ScreenRouter({
   if (d97 === undefined) return null;
   const content =
     d97.screen.type === "overworld" && d97.run !== null ? (
-      <D97OverworldPlaceholderScreenAdapter
+      <D97OverworldScreenAdapter
         run={d97.run}
         journeyContent={journeyContent}
         initialDeckEditorOpen={opensDeckEditor}

@@ -258,7 +258,13 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       : String(measuredFeedback.hoverScale);
     const resetFeedback = snapFeedbackExit && feedbackReset;
 
-    const Element = as;
+    // `@pixi/react` adds its `pixi*` elements to React's intrinsic elements;
+    // they would collapse the polymorphic element's props to `never`.
+    // Pressable passes the same HTML attributes and element ref whatever `as`
+    // renders, so it types the element by exactly those props.
+    const Element = as as React.ComponentType<
+      React.HTMLAttributes<HTMLElement> & React.RefAttributes<HTMLElement> & Record<string, unknown>
+    >;
     const typeProp = as === "button" ? { type: "button" } : {};
     if (ariaLabelMessage !== undefined && typeof as !== "string") {
       throw new Error(

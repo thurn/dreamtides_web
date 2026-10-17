@@ -1,16 +1,13 @@
 // D97 view-model rules: Avatar select pages the whole roster three at a time
-// in roster order and wraps; the placeholder overworld resolves the run's
-// Avatar by UUID and tolerates one missing from the catalog.
+// in roster order and wraps; the overworld HUD shows the act and its tier,
+// Essence when the run has some, and the control bar with only built
+// surfaces enabled.
 
-import { emptyCollection } from "../../../d97/collection/collection";
-import { createRewardBag } from "../../../d97/collection/reward-bag";
 import { describe, expect, it } from "vitest";
-import type { D97Run } from "../../../rules/d97/d97-state";
 import type { AvatarContent } from "../../../types/content";
-import { parseD97RunId, parseD97RunSeed } from "../../../types/identifiers";
 import { testAvatarId } from "../../../types/test-identities";
 import { d97AvatarPage, d97AvatarPageCount } from "./d97-avatar-select-view-model";
-import { buildD97OverworldPlaceholderView } from "./d97-overworld-view-model";
+import { buildD97OverworldHudView } from "./d97-overworld-view-model";
 
 function avatar(seed: string): AvatarContent {
   return {
@@ -44,37 +41,20 @@ describe("d97AvatarPage", () => {
   });
 });
 
-describe("buildD97OverworldPlaceholderView", () => {
-  const run: D97Run = {
-    runId: parseD97RunId("event:1"),
-    runSeed: parseD97RunSeed("seed"),
-    avatarId: ROSTER[2].id,
-    startedAt: "1970-01-01T00:00:00.000Z",
-    essence: 200,
-    battlesFought: 0,
-    collection: emptyCollection(),
-    bag: createRewardBag({
-      avatarId: ROSTER[2].id,
-      dealSeed: 0,
-      joinedTideIds: [],
-      dealt: [],
-    }),
-  };
-
-  it("resolves the run's Avatar by UUID", () => {
-    const view = buildD97OverworldPlaceholderView(run, ROSTER);
-    expect(view.runId).toBe(run.runId);
-    expect(view.avatar?.id).toBe(ROSTER[2].id);
-    expect(view.avatar?.imageNumber).toBe(ROSTER[2].imageNumber);
-    expect(view.deckCount).toBe(0);
+describe("buildD97OverworldHudView", () => {
+  it("lists every control once, enabling only built surfaces", () => {
+    const view = buildD97OverworldHudView({ act: 2, actTiers: [4, 7], essence: 30, enabled: new Set(["menu"]) });
+    expect(view.controls.map((control) => [control.id, control.enabled])).toEqual([
+      ["deck", false],
+      ["quests", false],
+      ["menu", true],
+    ]);
+    expect(view.essence).toBe(30);
+    expect(view.actLabel).toContain("2");
+    expect(view.tierLabel).toContain("7");
   });
 
-  it("shows no Avatar when the catalog lacks it", () => {
-    expect(
-      buildD97OverworldPlaceholderView(
-        { ...run, avatarId: testAvatarId("missing") },
-        ROSTER,
-      ).avatar,
-    ).toBeNull();
+  it("passes through a missing Essence", () => {
+    expect(buildD97OverworldHudView({ act: 1, actTiers: [4], essence: null, enabled: new Set() }).essence).toBeNull();
   });
 });

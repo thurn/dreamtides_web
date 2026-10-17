@@ -1,31 +1,36 @@
-// The pure view-model builder for the D97 placeholder overworld: resolves the
-// run's Avatar UUID against the roster at the render boundary and counts the
-// active deck.
+// The pure view-model builder for the D97 overworld HUD.
 
-import type { D97OverworldPlaceholderView } from "../../../cumulus/screens/d97/D97OverworldPlaceholderScreen";
-import { deckSize } from "../../../d97/collection/collection";
-import type { D97Run } from "../../../rules/d97/d97-state";
-import type { AvatarContent } from "../../../types/content";
+import type {
+  D97OverworldControlId,
+  D97OverworldHudView,
+} from "../../../cumulus/screens/d97/D97OverworldScreen";
 
-/** The placeholder overworld view of `run`, given the Avatar roster. */
-export function buildD97OverworldPlaceholderView(
-  run: D97Run,
-  avatars: readonly AvatarContent[],
-): D97OverworldPlaceholderView {
-  const avatar = avatars.find((candidate) => candidate.id === run.avatarId);
+export interface D97OverworldHudInput {
+  /** The act the run is in, from 1. */
+  readonly act: number;
+  /** Challenger tier by act, act 1 first (the tunables catalog). */
+  readonly actTiers: readonly number[];
+  readonly essence: number | null;
+  /** Controls whose surfaces exist. */
+  readonly enabled: ReadonlySet<D97OverworldControlId>;
+}
+
+const CONTROLS: readonly { readonly id: D97OverworldControlId; readonly label: string }[] = [
+  { id: "deck", label: "Deck" },
+  { id: "quests", label: "Quests" },
+  { id: "menu", label: "Menu" },
+];
+
+/** The HUD view: the act and its tier, Essence, and the control bar. */
+export function buildD97OverworldHudView(input: D97OverworldHudInput): D97OverworldHudView {
+  const tier = input.actTiers[Math.min(input.act, input.actTiers.length) - 1];
   return {
-    runId: run.runId,
-    deckCount: deckSize(run.collection),
-    avatar:
-      avatar === undefined
-        ? null
-        : {
-            id: avatar.id,
-            name: avatar.name,
-            title: avatar.title,
-            imageNumber: avatar.imageNumber,
-            portraitFocus: avatar.portraitFocus,
-            ability: avatar.renderedText,
-          },
+    actLabel: `Act ${String(input.act)}`,
+    tierLabel: tier === undefined ? "" : `Tier ${String(tier)}`,
+    essence: input.essence,
+    controls: CONTROLS.map((control) => ({
+      ...control,
+      enabled: input.enabled.has(control.id),
+    })),
   };
 }
