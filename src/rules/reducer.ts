@@ -48,6 +48,7 @@ import * as d97Quests from "./d97/d97-quests";
 import type { D97Transition } from "./d97/d97-run";
 import * as d97Encounters from "./d97/d97-encounters";
 import * as d97Travel from "./d97/d97-travel";
+import * as d97Shop from "./d97/d97-shop";
 
 /** Engine intents a D97 game folds while its D97 battle is running. */
 const D97_BATTLE_INTENTS: ReadonlySet<EventType> = new Set(["BATTLE_ACTION", "BATTLE_ANSWER", "BATTLE_CANCEL", "BATTLE_DEBUG"]);
@@ -838,9 +839,15 @@ export function routeDomain(
     case "D97_SET_FLAG":
       return d97Case(state, state.d97 === undefined ? null : d97Quests.setFlag(state.d97, payload));
     case "D97_OPEN_SHOP":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload, "shop"));
+      return d97Case(state, state.d97 === undefined ? null : d97Shop.openShop(state.d97, payload, ctx));
     case "D97_OPEN_SERVICE":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload, "service"));
+      return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload));
+    case "D97_BUY_SHOP_CARD":
+      return d97Case(state, state.d97 === undefined ? null : d97Shop.buyShopCard(state.d97, payload));
+    case "D97_SELL_COPY":
+      return d97Case(state, state.d97 === undefined ? null : d97Shop.sellCopy(state.d97, payload));
+    case "D97_RESTOCK_SHOP":
+      return d97Case(state, state.d97 === undefined ? null : d97Shop.restockShop(state.d97, payload, ctx));
     case "D97_ACTIVATE_WAYPOINT":
       return d97Case(state, state.d97 === undefined ? null : d97Travel.activateWaypoint(state.d97, payload));
     case "D97_STEP_THROUGH_DOOR":

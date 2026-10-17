@@ -11,6 +11,7 @@ import { registeredDialogueCatalog } from "../../d97/dialogue/catalog";
 import { D97_COLLECTION } from "../../content/d97/collection";
 import type { JourneyContent } from "../../data/journey-content";
 import type { D97DealtCard } from "../../d97/collection/reward-bag";
+import { cardPriceFactsOf, type D97CardPriceFacts } from "../../d97/shop/pricing";
 import { generatePoolFromData } from "../../draft/pool/generate";
 import type { D97ContentProvider } from "../../rules/d97/d97-content";
 import { buildTideAffinityIndex } from "../../selection/tide-affinity";
@@ -30,9 +31,11 @@ export function createD97ContentProvider(
   const pool = content.poolContext;
   const tides4Decks = pool.poolData.tides4Decks;
   const rarityById = new Map<CardId, Rarity | null>();
+  const priceFactsById = new Map<CardId, D97CardPriceFacts>();
   const starterCardIds: CardId[] = [];
   for (const card of content.cardDatabase.values()) {
     rarityById.set(card.id, card.rarity ?? null);
+    priceFactsById.set(card.id, cardPriceFactsOf(card));
     if (card.isStarter || card.rarity === "Starter") starterCardIds.push(card.id);
   }
   const starterNumbers = new Set(pool.starterCardNumbers);
@@ -59,6 +62,7 @@ export function createD97ContentProvider(
         ? { cardVectors: new Map(), knownTideIds: new Set() }
         : buildTideAffinityIndex(tides4Decks),
     cardRarity: (cardId) => rarityById.get(cardId) ?? null,
+    cardPriceFacts: (cardId) => priceFactsById.get(cardId) ?? null,
     starterCardIds: [...new Set(starterCardIds)].sort(codeUnits),
     dealRewardPool: (avatarId, seed) => {
       const generated = generatePoolFromData(

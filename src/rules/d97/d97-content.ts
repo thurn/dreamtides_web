@@ -3,6 +3,7 @@
 // cases stay pure and every fold of a log on one build sees the same content.
 
 import type { D97DealtCard } from "../../d97/collection/reward-bag";
+import type { D97CardPriceFacts } from "../../d97/shop/pricing";
 import type { D97StartingCollectionContent } from "../../d97/collection/starting-collection";
 import type { D97TierKnob } from "../../content/d97/encounters";
 import type { BattleInit as EngineBattleInit } from "../../engine";
@@ -58,6 +59,8 @@ export interface D97ContentProvider extends D97StartingCollectionContent {
     readonly deckSize: number;
     readonly signatureCount: number;
   }) => D97OpponentBuild | null;
+  /** A card's printed price facts (Appendix A §A4), or null for an unknown card. */
+  readonly cardPriceFacts: (cardId: CardId) => D97CardPriceFacts | null;
   /**
    * The display init and engine init of an encounter's battle.
    * Deterministic in its input; null when content is missing.

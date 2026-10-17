@@ -448,6 +448,12 @@ export interface GameActions {
   d97ActivateWaypoint: (anchorId: DreamAnchorId) => Promise<number>;
   /** Step through a door; the beaten guardian's exit door ends the slice. */
   d97StepThroughDoor: (anchorId: DreamAnchorId) => Promise<number>;
+  /** Buy the shop slot at `slotIndex`. Unkeyed: a bought slot refuses a repeat. */
+  d97BuyShopCard: (anchorId: DreamAnchorId, slotIndex: number) => Promise<number>;
+  /** Sell an owned copy to the shop at `anchorId`. */
+  d97SellCopy: (anchorId: DreamAnchorId, copyId: D97OwnedCopyId) => Promise<number>;
+  /** Pay for this visit's one restock of the shop at `anchorId`. */
+  d97RestockShop: (anchorId: DreamAnchorId) => Promise<number>;
 }
 
 /**
@@ -911,5 +917,8 @@ export function makeActions(append: AppendFn): GameActions {
     d97OpenService: (anchorId, service) => emit("D97_OPEN_SERVICE", { anchorId, service }),
     d97ActivateWaypoint: (anchorId) => emit("D97_ACTIVATE_WAYPOINT", { anchorId }),
     d97StepThroughDoor: (anchorId) => emit("D97_STEP_THROUGH_DOOR", { anchorId }),
+    d97BuyShopCard: (anchorId, slotIndex) => emit("D97_BUY_SHOP_CARD", { anchorId, slotIndex }),
+    d97SellCopy: (anchorId, copyId) => emit("D97_SELL_COPY", { anchorId, copyId }),
+    d97RestockShop: (anchorId) => emit("D97_RESTOCK_SHOP", { anchorId }),
   };
 }

@@ -163,3 +163,22 @@ export function sampleBagOffer(
   }
   return offer;
 }
+
+/**
+ * One offered card that passes `eligible` and is not in `exclude`, sampled
+ * without removing any copy: proportional to `w(c)`, or, when the bag holds no
+ * such card, uniform over the tide set's eligible cards (Appendix A §A2).
+ * Null when no card is eligible at all.
+ */
+export function sampleFilteredOffer(
+  bag: D97RewardBag,
+  eligible: (cardId: CardId) => boolean,
+  exclude: ReadonlySet<CardId>,
+  random: () => number,
+): CardId | null {
+  const candidates = bag.entries.filter((entry) => eligible(entry.cardId) && !exclude.has(entry.cardId));
+  const weighted = weightedIndex(candidates.map(entryWeight), random);
+  if (weighted !== null) return candidates[weighted]?.cardId ?? null;
+  if (candidates.length === 0) return null;
+  return candidates[Math.floor(random() * candidates.length)]?.cardId ?? null;
+}

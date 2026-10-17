@@ -289,16 +289,11 @@ describe("items, flags and hand-offs", () => {
     expect(runOf(cleared).flags).toEqual([]);
   });
 
-  it("logs shop and service hand-offs without changing the run", () => {
+  it("logs service hand-offs without changing the run", () => {
     const state = started();
-    for (const [type, payload] of [
-      ["D97_OPEN_SHOP", { anchorId: ANCHORS.shop }],
-      ["D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "sage" }],
-    ] as const) {
-      const result = logged(state, type, payload);
-      expect(runOf(result.state)).toEqual(runOf(state));
-      expect(result.records[0]?.event).toBe("d97_dialogue_hand_off");
-    }
+    const result = logged(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "sage" });
+    expect(runOf(result.state)).toEqual(runOf(state));
+    expect(result.records[0]?.event).toBe("d97_dialogue_hand_off");
     bounces(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "tailor" });
   });
 });

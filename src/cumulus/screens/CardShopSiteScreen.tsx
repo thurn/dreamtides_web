@@ -19,6 +19,7 @@ import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
+import type { DomTestId } from "../types/dom";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
@@ -77,6 +78,15 @@ export interface CardShopSiteScreenProps {
   onRestock: () => void;
   /** Leave the shop. */
   onClose: () => void;
+  /** A shop that buys cards offers this action below its wares. */
+  sellAction?: CardShopSellActionView;
+}
+
+/** The action that opens a shop's selling surface. */
+export interface CardShopSellActionView {
+  readonly label: string;
+  readonly onPress: () => void;
+  readonly testId: DomTestId;
 }
 
 export function CardShopSiteScreen({
@@ -84,6 +94,7 @@ export function CardShopSiteScreen({
   onBuy,
   onRestock,
   onClose,
+  sellAction,
 }: CardShopSiteScreenProps) {
   const layout = useIsDesktop() ? "desktop" : "mobile";
   return (
@@ -104,6 +115,7 @@ export function CardShopSiteScreen({
           onBuy={onBuy}
           onRestock={onRestock}
           onClose={onClose}
+          sellAction={sellAction}
         />
       </SiteLayout>
     </div>
@@ -119,6 +131,7 @@ function CardShopGallery({
   onBuy,
   onRestock,
   onClose,
+  sellAction,
 }: {
   readonly layout: "mobile" | "desktop";
   readonly presentation: CardShopSiteView["presentation"];
@@ -128,6 +141,7 @@ function CardShopGallery({
   readonly onBuy: (slotIndex: number) => void;
   readonly onRestock: () => void;
   readonly onClose: () => void;
+  readonly sellAction: CardShopSellActionView | undefined;
 }) {
   const desktop = layout === "desktop";
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
@@ -249,6 +263,7 @@ function CardShopGallery({
             locallyPurchasedEntryIds.has(offer.entryId),
         }))}
         testId="cumulus-card-shop-gallery"
+        footerActions={sellAction === undefined ? undefined : [sellAction]}
         onCardPress={(entryId) => {
           const offer = offers.find(
             (candidate) => candidate.entryId === entryId,

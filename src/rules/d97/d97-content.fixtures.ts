@@ -62,6 +62,18 @@ export function syntheticD97Content(
     avatarIds: new Set(avatarIds),
     tideAffinityIndex: { cardVectors, knownTideIds: new Set(SYNTHETIC_TIDES) },
     cardRarity: (cardId) => rarityById.get(cardId) ?? null,
+    cardPriceFacts: (cardId) => {
+      const rarity = rarityById.get(cardId);
+      const index = poolCards.indexOf(cardId);
+      if (rarity === undefined) return null;
+      return {
+        energyCost: index < 0 ? 0 : index % 5,
+        spark: index < 0 ? null : index % 4,
+        character: index % 2 === 0,
+        fast: index >= 0 && index % 7 === 0,
+        rarity,
+      };
+    },
     starterCardIds: SYNTHETIC_STARTERS,
     quests: new Map((options.quests ?? []).map((quest) => [quest.id, quest])),
     itemIds: new Set(options.itemIds ?? []),

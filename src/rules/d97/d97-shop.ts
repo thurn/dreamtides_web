@@ -1,0 +1,185 @@
+// The D97 shop cases (Appendix A §A4–A6): the dream's shop rolls its stock
+// from the reward bag when first opened and on each restock, fixing each
+// slot's quote; the player buys any affordable slot once, sells owned copies
+// under the resale guard and the collection floor, and restocks once per
+// visit for Essence. Every stock roll and transaction is logged with UUIDs.
+//
+// This module obeys the src/rules/ lint rails: no React, no live clock or rng.
+
+import { D97_COLLECTION } from "../../content/d97/collection";
+import { D97_SLICE_DREAM } from "../../content/d97/dreams";
+import { D97_ENCOUNTERS } from "../../content/d97/encounters";
+import { D97_SHOP } from "../../content/d97/shop";
+import { acquireCopy, findCopy, removeCopies } from "../../d97/collection/collection";
+import { recordAcquisition, sampleFilteredOffer } from "../../d97/collection/reward-bag";
+import {
+  buyQuote,
+  cardBaseValue,
+  restockPrice,
+  saleQuote,
+  shopSlotCount,
+  slotCeiling,
+} from "../../d97/shop/pricing";
+import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
+import type { CardId } from "../../types/card-identity";
+import { d97OwnedCopyIdFromUnknown, dreamAnchorIdFromUnknown, type DreamAnchorId } from "../../types/identifiers";
+import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
+import type { D97Transition } from "./d97-run";
+import type { D97Run, D97Shop, D97ShopSlot, D97State } from "./d97-state";
+
+/** The run and shop anchor a shop case acts on, or null to bounce. */
+function shopContext(d97: D97State, payload: Record<string, unknown>): { run: D97Run; anchorId: DreamAnchorId } | null {
+  const run = d97.run;
+  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
+  if (run === null || d97.screen.type !== "overworld" || anchorId !== D97_SLICE_DREAM.shopAnchorId) return null;
+  return { run, anchorId };
+}
+
+function withShop(d97: D97State, run: D97Run, anchorId: DreamAnchorId, shop: D97Shop, changes: Partial<D97Run>, logRecords: readonly ReducerLogRecord[]): D97Transition {
+  return { d97: { ...d97, run: { ...run, ...changes, shops: { ...run.shops, [anchorId]: shop } } }, logRecords };
+}
+
+/** A card's buy quote at the shop's band, or null when the card has no price facts. */
+function quoteOf(content: D97ContentProvider, cardId: CardId): number | null {
+  const facts = content.cardPriceFacts(cardId);
+  return facts === null ? null : buyQuote(cardBaseValue(facts, D97_SHOP), D97_SHOP.priceBand, D97_SHOP);
+}
+
+/**
+ * Roll every slot: slot `i` offers a distinct card of rarity cost at most its
+ * ceiling, sampled from the bag without removing a copy, its quote fixed now.
+ */
+function rollStock(run: D97Run, content: D97ContentProvider, ctx: EventContext): D97ShopSlot[] {
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+  const slots: D97ShopSlot[] = [];
+  const shown = new Set<CardId>();
+  const count = shopSlotCount(D97_SHOP.priceBand, D97_SHOP);
+  for (let index = 0; index < count; index += 1) {
+    const ceiling = slotCeiling(index, D97_SHOP);
+    const eligible = (cardId: CardId) => {
+      const facts = content.cardPriceFacts(cardId);
+      return facts !== null && D97_ENCOUNTERS.rarityCost[facts.rarity] <= ceiling;
+    };
+    const cardId = sampleFilteredOffer(run.bag, eligible, shown, random);
+    const price = cardId === null ? null : quoteOf(content, cardId);
+    if (cardId === null || price === null) continue;
+    shown.add(cardId);
+    slots.push({ cardId, price, purchased: false });
+  }
+  return slots;
+}
+
+function stockFields(shop: D97Shop) {
+  return { rolls: shop.rolls, slots: shop.slots.map(({ cardId, price, purchased }) => ({ cardId, price, purchased })) };
+}
+
+/**
+ * `D97_OPEN_SHOP { anchorId }`: open the dream's shop, from its shopkeeper
+ * or a conversation's hand-off. The first open rolls the stock.
+ */
+export function openShop(d97: D97State, payload: Record<string, unknown>, ctx: EventContext): D97Transition | null {
+  const context = shopContext(d97, payload);
+  const content = d97ContentProvider();
+  if (context === null || content === null) return null;
+  const { run, anchorId } = context;
+  const existing = run.shops[anchorId];
+  const shop = existing ?? { slots: rollStock(run, content, ctx), restockedThisVisit: false, rolls: 1 };
+  return withShop(d97, run, anchorId, shop, {}, [
+    {
+      event: "d97_shop_opened",
+      fields: { runId: run.runId, anchorId, firstOpen: existing === undefined, priceBand: D97_SHOP.priceBand, ...stockFields(shop) },
+    },
+  ]);
+}
+
+/**
+ * `D97_BUY_SHOP_CARD { anchorId, slotIndex }`: buy one unbought, affordable
+ * slot. The copy enters the reserve with its price recorded, and acquiring it
+ * removes one copy from the bag if the bag still holds one.
+ */
+export function buyShopCard(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
+  const context = shopContext(d97, payload);
+  const slotIndex = payload.slotIndex;
+  if (context === null || typeof slotIndex !== "number" || !Number.isInteger(slotIndex)) return null;
+  const { run, anchorId } = context;
+  const shop = run.shops[anchorId];
+  const slot = shop?.slots[slotIndex];
+  if (shop === undefined || slot === undefined || slot.purchased || slot.price > run.essence) return null;
+  const { collection, copy } = acquireCopy(run.collection, {
+    runSeed: run.runSeed,
+    cardId: slot.cardId,
+    provenance: { channel: "shop", battleCount: run.battlesFought, price: slot.price },
+    zone: "reserve",
+  });
+  const slots = shop.slots.map((candidate, index) => (index === slotIndex ? { ...candidate, purchased: true } : candidate));
+  const essence = run.essence - slot.price;
+  return withShop(d97, run, anchorId, { ...shop, slots }, { collection, essence, bag: recordAcquisition(run.bag, slot.cardId) }, [
+    {
+      event: "d97_shop_card_bought",
+      fields: { runId: run.runId, anchorId, slotIndex, cardId: slot.cardId, copyId: copy.copyId, price: slot.price, essence },
+    },
+  ]);
+}
+
+/** What the dream's shop pays for `copyId` now, or null for an unknown copy or card. */
+export function shopSaleQuote(run: D97Run, copyId: ReturnType<typeof d97OwnedCopyIdFromUnknown>, content: D97ContentProvider): number | null {
+  const copy = copyId === null ? null : findCopy(run.collection, copyId);
+  const facts = copy === null ? null : content.cardPriceFacts(copy.cardId);
+  if (copy === null || facts === null) return null;
+  return saleQuote(copy, cardBaseValue(facts, D97_SHOP), D97_SHOP.priceBand, D97_SHOP);
+}
+
+/**
+ * `D97_SELL_COPY { anchorId, copyId }`: sell an owned copy for its sale quote
+ * under the resale guard. Refused when it would cross the collection floor.
+ */
+export function sellCopy(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
+  const context = shopContext(d97, payload);
+  const copyId = d97OwnedCopyIdFromUnknown(payload.copyId);
+  const content = d97ContentProvider();
+  if (context === null || copyId === null || content === null) return null;
+  const { run, anchorId } = context;
+  const shop = run.shops[anchorId];
+  const copy = findCopy(run.collection, copyId);
+  const price = shopSaleQuote(run, copyId, content);
+  if (shop === undefined || copy === null || price === null) return null;
+  const collection = removeCopies(run.collection, [copyId], D97_COLLECTION.collectionFloor);
+  if (collection === null) return null;
+  const essence = run.essence + price;
+  return withShop(d97, run, anchorId, shop, { collection, essence }, [
+    {
+      event: "d97_shop_copy_sold",
+      fields: {
+        runId: run.runId,
+        anchorId,
+        copyId,
+        cardId: copy.cardId,
+        zone: copy.zone,
+        channel: copy.provenance.channel,
+        price,
+        essence,
+        collectionSize: collection.copies.length,
+      },
+    },
+  ]);
+}
+
+/**
+ * `D97_RESTOCK_SHOP { anchorId }`: pay to re-roll every slot, including bought
+ * ones. Once per visit.
+ */
+export function restockShop(d97: D97State, payload: Record<string, unknown>, ctx: EventContext): D97Transition | null {
+  const context = shopContext(d97, payload);
+  const content = d97ContentProvider();
+  if (context === null || content === null) return null;
+  const { run, anchorId } = context;
+  const shop = run.shops[anchorId];
+  const price = restockPrice(D97_SHOP.priceBand, D97_SHOP);
+  if (shop === undefined || shop.restockedThisVisit || price > run.essence) return null;
+  const restocked: D97Shop = { slots: rollStock(run, content, ctx), restockedThisVisit: true, rolls: shop.rolls + 1 };
+  const essence = run.essence - price;
+  return withShop(d97, run, anchorId, restocked, { essence }, [
+    { event: "d97_shop_restocked", fields: { runId: run.runId, anchorId, price, essence, ...stockFields(restocked) } },
+  ]);
+}

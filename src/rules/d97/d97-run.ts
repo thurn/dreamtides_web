@@ -137,6 +137,7 @@ export function startRun(
     flags: [],
     activeWaypointIds: [],
     lastPlace: null,
+    shops: {},
   };
   return {
     d97: { screen: { type: "overworld" }, run },

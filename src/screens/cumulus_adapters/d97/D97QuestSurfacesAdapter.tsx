@@ -35,6 +35,7 @@ export function D97QuestSurfacesAdapter({
   conversationAnchorId,
   questLogOpen,
   onChallenge,
+  onOpenShop,
   onClose,
 }: {
   readonly run: D97Run;
@@ -47,6 +48,8 @@ export function D97QuestSurfacesAdapter({
   readonly questLogOpen: boolean;
   /** Opens the encounter preview of the speaker at an anchor. */
   readonly onChallenge: (anchorId: DreamAnchorId) => void;
+  /** Opens the shop of the speaker at an anchor. */
+  readonly onOpenShop: (anchorId: DreamAnchorId) => void;
   readonly onClose: () => void;
 }) {
   const actions = useActions();
@@ -89,6 +92,7 @@ export function D97QuestSurfacesAdapter({
           context={context}
           avatars={avatars}
           onChallenge={onChallenge}
+          onOpenShop={onOpenShop}
           onClose={onClose}
         />
       )}

@@ -109,6 +109,25 @@ export interface D97Run {
   readonly activeWaypointIds: readonly DreamAnchorId[];
   /** Where a reload places the player; null before any door or waypoint use. */
   readonly lastPlace: D97Place | null;
+  /** Every shop opened so far, by its shop anchor. */
+  readonly shops: Readonly<Partial<Record<DreamAnchorId, D97Shop>>>;
+}
+
+/** One shop slot: its card and the quote fixed when it was rolled (Appendix A §A6). */
+export interface D97ShopSlot {
+  readonly cardId: CardId;
+  readonly price: number;
+  /** Bought: the slot stays empty until the next restock. */
+  readonly purchased: boolean;
+}
+
+/** A dream's shop, rolled when it is first opened and on each restock. */
+export interface D97Shop {
+  readonly slots: readonly D97ShopSlot[];
+  /** Whether this visit's one restock is spent; a visit ends when the player leaves the dream. */
+  readonly restockedThisVisit: boolean;
+  /** Stock rolls so far: the first open, then each restock. */
+  readonly rolls: number;
 }
 
 /**

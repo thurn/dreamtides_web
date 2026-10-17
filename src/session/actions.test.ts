@@ -284,6 +284,9 @@ function captureAllDrafts(): EventDraft[] {
   void actions.d97EndBattle();
   void actions.d97ActivateWaypoint(parseDreamAnchorId("d9700000-0000-4000-8000-000000000003"));
   void actions.d97StepThroughDoor(parseDreamAnchorId("d9700000-0000-4000-8000-000000000002"));
+  void actions.d97BuyShopCard(parseDreamAnchorId("d9700000-0000-4000-8000-000000000005"), 0);
+  void actions.d97SellCopy(parseDreamAnchorId("d9700000-0000-4000-8000-000000000005"), parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
+  void actions.d97RestockShop(parseDreamAnchorId("d9700000-0000-4000-8000-000000000005"));
   void actions.d97EquipCopy(parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
   void actions.d97UnequipCopy(parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
   const questId = parseD97QuestId("00000000-0000-4000-8000-000000000971");

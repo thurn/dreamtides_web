@@ -10,10 +10,10 @@ import type {
 
 /**
  * How an owned copy entered the collection: the starting package, a bag
- * draw, a won ante, or a victory bundle's bag draw. Later channels join this
- * union.
+ * draw, a won ante, a victory bundle's bag draw, or a shop purchase. Later
+ * channels join this union.
  */
-export type D97AcquisitionChannel = "starting" | "bag" | "ante" | "bundle";
+export type D97AcquisitionChannel = "starting" | "bag" | "ante" | "bundle" | "shop";
 
 /** Where an owned copy and its acquisition came from. */
 export interface D97CopyProvenance {

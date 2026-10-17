@@ -52,6 +52,7 @@ export function D97ConversationAdapter({
   context,
   avatars,
   onChallenge,
+  onOpenShop,
   onClose,
 }: {
   readonly module: D97DialogueModule;
@@ -60,6 +61,8 @@ export function D97ConversationAdapter({
   readonly avatars: readonly AvatarContent[];
   /** Hands the conversation to the speaker's encounter preview. */
   readonly onChallenge: (anchorId: DreamAnchorId) => void;
+  /** Hands the conversation to the speaker's shop, which records its own open intent. */
+  readonly onOpenShop: (anchorId: DreamAnchorId) => void;
   readonly onClose: () => void;
 }) {
   const actions = useActions();
@@ -110,11 +113,16 @@ export function D97ConversationAdapter({
         onChallenge(anchorId);
         return;
       }
+      if (choice.effect?.kind === "openShop") {
+        onClose();
+        onOpenShop(anchorId);
+        return;
+      }
       if (choice.effect !== undefined) void recordIntent(actions, effectIntent(choice.effect, anchorId)).catch(reportFailure);
       if (choice.next === null) onClose();
       else setPosition({ nodeId: choice.next, line: 0 });
     },
-    [actions, anchorId, module.id, node, onChallenge, onClose],
+    [actions, anchorId, module.id, node, onChallenge, onClose, onOpenShop],
   );
 
   if (view === null) return null;

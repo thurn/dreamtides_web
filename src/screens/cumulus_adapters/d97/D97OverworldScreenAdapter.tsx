@@ -36,7 +36,7 @@ import { registeredDialogueCatalog } from "../../../d97/dialogue/catalog";
 import { createInteractionRegistry, type OverworldInteraction } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
 import { D97_CURRENT_ACT, type D97Run } from "../../../rules/d97/d97-state";
-import { useActions } from "../../../session/hooks";
+import { useActions, useGameState } from "../../../session/hooks";
 import type { D97OwnedCopyId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
 import { buildD97OverworldHudView } from "./d97-overworld-view-model";
@@ -44,6 +44,7 @@ import { useD97Encounter } from "./use-d97-encounter";
 import { buildD97QuestMarks } from "./d97-quest-view-model";
 import { D97QuestSurfacesAdapter } from "./D97QuestSurfacesAdapter";
 import { useD97Travel } from "./use-d97-travel";
+import { D97ShopAdapter } from "./D97ShopAdapter";
 
 const OverworldCanvas = lazy(() =>
   import("../../../d97/overworld/OverworldCanvas").then((module) => ({
@@ -53,7 +54,7 @@ const OverworldCanvas = lazy(() =>
 
 const ENABLED_CONTROLS: ReadonlySet<D97OverworldControlId> = new Set(["deck", "quests", "menu"]);
 
-type Panel = "deck" | "menu" | "quests" | { readonly conversation: DreamAnchorId };
+type Panel = "deck" | "menu" | "quests" | { readonly conversation: DreamAnchorId } | { readonly shop: DreamAnchorId };
 
 let devDream: { map: ReturnType<typeof compileDevMap>; occupants: ReturnType<typeof devOccupants> } | null = null;
 function currentDream() {
@@ -139,6 +140,14 @@ export function D97OverworldScreenAdapter({
     setPanel(null);
   }, [run.runId]);
   const closePanel = useCallback(() => setPanel(null), []);
+  const gameSeed = useGameState().journey.seed;
+  const openShop = useCallback(
+    (anchorId: DreamAnchorId) => {
+      void actions.d97OpenShop(anchorId).catch(reportFailure);
+      setPanel({ shop: anchorId });
+    },
+    [actions],
+  );
   const marks = useMemo(() => buildD97QuestMarks(run.quests, catalog.quests, map.anchors), [catalog.quests, map.anchors, run.quests]);
 
   useEffect(() => {
@@ -150,9 +159,20 @@ export function D97OverworldScreenAdapter({
     const pickUp: OverworldInteraction = (anchor) => {
       void actions.d97PickUpObject(anchor.id).catch(reportFailure);
     };
-    const removals = [registry.register("friendly", talk), registry.register("townsfolk", talk), registry.register("object", pickUp)];
+    // A shopkeeper with a dialogue talks first (its Shop choice opens the
+    // shop); one without opens the shop at once.
+    const shopkeeper: OverworldInteraction = (anchor) => {
+      if (occupants.get(anchor.id)?.dialogue == null) openShop(anchor.id);
+      else talk(anchor);
+    };
+    const removals = [
+      registry.register("friendly", talk),
+      registry.register("townsfolk", talk),
+      registry.register("object", pickUp),
+      registry.register("shop", shopkeeper),
+    ];
     return () => removals.forEach((remove) => remove());
-  }, [actions, occupants, registry, run.runId]);
+  }, [actions, occupants, openShop, registry, run.runId]);
   const equip = useCallback(
     (copyId: D97OwnedCopyId) => {
       void actions.d97EquipCopy(copyId).catch(reportFailure);
@@ -206,11 +226,22 @@ export function D97OverworldScreenAdapter({
             occupants={occupants}
             cards={cards}
             avatars={journeyContent.avatars}
-            conversationAnchorId={typeof panel === "object" && panel !== null ? panel.conversation : null}
+            conversationAnchorId={typeof panel === "object" && panel !== null && "conversation" in panel ? panel.conversation : null}
             questLogOpen={panel === "quests"}
             onChallenge={encounter.challenge}
+            onOpenShop={openShop}
             onClose={closePanel}
           />
+          {typeof panel === "object" && panel !== null && "shop" in panel && (
+            <D97ShopAdapter
+              run={run}
+              anchorId={panel.shop}
+              journeyContent={journeyContent}
+              cards={cards}
+              gameSeed={gameSeed}
+              onClose={closePanel}
+            />
+          )}
           {panel === "menu" && (
             <GlassDialog title={"Menu"} presentation="popup" onClose={closePanel}>
               <GlassButton label={"Resume"} testId="d97-menu-resume" onPress={closePanel} />

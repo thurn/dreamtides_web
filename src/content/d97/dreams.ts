@@ -1,6 +1,6 @@
 // Dreamtides 97 dream topology the rules read (Appendix B §B5, §B6): each
-// dream's waypoint, the door the player arrives through, and its exit door
-// with the guardian anchor blocking it. Keyed by anchor UUID; dream authoring
+// dream's waypoint, the door the player arrives through, its exit door with
+// the guardian anchor blocking it, and its shop. Keyed by anchor UUID; dream authoring
 // beads add their dreams.
 
 import { parseDreamAnchorId, parseDreamMapId, type DreamAnchorId, type DreamMapId } from "../../types/identifiers";
@@ -15,6 +15,8 @@ export interface D97DreamTopology {
   readonly exitDoorAnchorId: DreamAnchorId;
   /** The guardian anchor standing at the exit door's chokepoint. */
   readonly exitGuardianAnchorId: DreamAnchorId;
+  /** The dream's one shop. */
+  readonly shopAnchorId: DreamAnchorId;
 }
 
 const anchor = parseDreamAnchorId;
@@ -26,6 +28,7 @@ const DEVELOPMENT_DREAM: D97DreamTopology = {
   arrivalDoorAnchorId: anchor("d9700000-0000-4000-8000-000000000001"),
   exitDoorAnchorId: anchor("d9700000-0000-4000-8000-000000000002"),
   exitGuardianAnchorId: anchor("d9700000-0000-4000-8000-000000000004"),
+  shopAnchorId: anchor("d9700000-0000-4000-8000-000000000005"),
 };
 
 /** The M1 slice's one dream. */

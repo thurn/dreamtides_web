@@ -254,25 +254,17 @@ export function setFlag(d97: D97State, payload: Record<string, unknown>): D97Tra
 const SERVICES: ReadonlySet<string> = new Set<D97ServiceKind>(["dreamGuide", "sage", "amuletMerchant", "amuletChanger"]);
 
 /**
- * `D97_OPEN_SHOP` and `D97_OPEN_SERVICE`: a conversation hands the player
- * to the speaker's shop or service.
- * The hand-off is logged; the surface it opens owns its own state.
+ * `D97_OPEN_SERVICE`: a conversation hands the player to the speaker's
+ * service. The hand-off is logged; the surface it opens owns its own state.
+ * (`D97_OPEN_SHOP` is the shop's own case, in ./d97-shop.ts.)
  */
-export function handOff(
-  d97: D97State,
-  payload: Record<string, unknown>,
-  surface: "shop" | "service",
-): D97Transition | null {
+export function handOff(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
   const run = d97.run;
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || anchorId === null) return null;
   const service = payload.service;
-  if (surface === "service" && (typeof service !== "string" || !SERVICES.has(service))) return null;
+  if (run === null || anchorId === null || typeof service !== "string" || !SERVICES.has(service)) return null;
   return withRun(d97, run, [
-    {
-      event: "d97_dialogue_hand_off",
-      fields: { runId: run.runId, anchorId, surface, ...(surface === "service" ? { service } : {}) },
-    },
+    { event: "d97_dialogue_hand_off", fields: { runId: run.runId, anchorId, surface: "service", service } },
   ]);
 }
 
