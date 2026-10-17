@@ -564,7 +564,20 @@
     "firstHelperActionUtc": "2026-10-17T13:41:00.905937+00:00",
     "evidenceCutoffUtc": "2026-10-17T13:46:56.572371+00:00",
     "claimToCutoffS": 542.572371,
-    "committedWindowQualification": "Conservative claim-to-evidence-cutoff lower bound. Actual commit completion and cutoff tail are unknown in this committed record and captured by external commit.end.json and implementation-final-proof.json; never inferred from Git authored date."
+    "committedWindowQualification": "The original committed claim-to-evidence-cutoff observation remains historical provenance. The friction implementer window is corrected by hv-umm2.805 from observed first helper action through externally recorded actual subprocess commit completion; the dispatch-to-first-action gap is unobserved. Git authored date is not a completion clock.",
+    "windowCorrection805": {
+      "bead": "hv-umm2.805",
+      "historicalSourceHead": "78b8e25dbad438bb989306f58ad36586f7aea915",
+      "historicalMeasurementGitBlob": "4667bb6f9180d4d6b57728e8484403c2f392d7c5",
+      "historicalMeasurementSHA256": "28991fe81b27eb9ff969ff76701803059c0acc08d830646d2ff5da8fe7bdbded",
+      "proofPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/implementation-final-proof.json",
+      "proofSHA256": "da81a1651167f3f5135f969a7dac949f303471c7b9a11e5c69ba233561be7627",
+      "observedFirstHelperActionUtc": "2026-10-17T13:41:00.905937+00:00",
+      "startQualification": "Observed first helper action is the post-claim dispatch proxy; dispatch-to-first-action duration is unmeasured.",
+      "actualSubprocessCommitEndUtc": "2026-10-17T13:47:06.127875+00:00",
+      "historicalClaimCutoffQualification": "nativeClaimStartUtc, firstHelperActionUtc, evidenceCutoffUtc and claimToCutoffS retain their exact original observations.",
+      "externalCutoffTailS": 9.555504
+    }
   },
   "schemaNormalization": {
     "fields": {

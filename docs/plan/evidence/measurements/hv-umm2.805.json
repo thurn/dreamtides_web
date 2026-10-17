@@ -1,0 +1,110 @@
+{
+  "bead": "hv-umm2.805",
+  "phase": 5,
+  "sourceBase": "effede055a5aac5c6fa53179005040cb6a3572c5",
+  "stream": "default",
+  "scope": "Bounded evidence-window correction only; zero source, test, configuration, dependency, asset or D97 changes.",
+  "historicalCorrection": {
+    "historicalProofPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/implementation-final-proof.json",
+    "historicalProofSHA256": "da81a1651167f3f5135f969a7dac949f303471c7b9a11e5c69ba233561be7627",
+    "proofHeader": {
+      "base": "f4adea9e370ec379a3517321655ba1c7603072e8",
+      "head": "78b8e25dbad438bb989306f58ad36586f7aea915",
+      "oneCommit": true
+    },
+    "proofClockProjection": {
+      "evidenceCutoffUtc": "2026-10-17T13:46:56.572371+00:00",
+      "actualCommitEndUtc": "2026-10-17T13:47:06.127875+00:00",
+      "claimToActualCommitEndS": 552.127875,
+      "uncommittedEvidenceCutoffTailS": 9.555504
+    },
+    "implementationStart": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/implementation-start.json",
+      "sha256": "9404cbd0c8e413a12a6c9703f1793b9ff38e2cc508a987f5d93b6a1d62f14d63",
+      "value": {
+        "implementationStartUtc": "2026-10-17T13:41:00.905937+00:00"
+      }
+    },
+    "commitEnd": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-presentation802/commit.end.json",
+      "sha256": "cf0e8977c83462c8c7423971b034ef06be752f9e168b471f7e6bfff8012bce02",
+      "value": {
+        "actualCommitStartedUtc": "2026-10-17T13:47:06.093338+00:00",
+        "actualCommitEndUtc": "2026-10-17T13:47:06.127875+00:00",
+        "actualExit": 0,
+        "gitAuthoredDateNotUsedForTiming": true,
+        "head": "78b8e25dbad438bb989306f58ad36586f7aea915"
+      }
+    },
+    "historicalMeasurement": {
+      "sourceHead": "78b8e25dbad438bb989306f58ad36586f7aea915",
+      "gitBlob": "4667bb6f9180d4d6b57728e8484403c2f392d7c5",
+      "sha256": "28991fe81b27eb9ff969ff76701803059c0acc08d830646d2ff5da8fe7bdbded"
+    },
+    "semanticReadScope": "Clock/source fields above only. Full-file hashes bind bytes; they do not claim semantic reads of historical payloads."
+  },
+  "preservation": {
+    "allowed802FrictionKeys": [
+      "implementWindow",
+      "implementMin"
+    ],
+    "allowed802TimingKeys": [
+      "committedWindowQualification",
+      "windowCorrection805"
+    ],
+    "allOther802Values": "Exact JSON equality required; preservation driver checks against base Git objects.",
+    "unrelatedBaselineInputs": "Exact bytes and tracked modes/OIDs required; large maps remain external."
+  },
+  "timing": {
+    "nativeClaimStartUtc": "2026-10-17T14:31:30Z",
+    "firstHelperActionUtc": "2026-10-17T14:33:13.367190+00:00",
+    "evidenceCutoffUtc": "2026-10-17T14:36:53.240328+00:00",
+    "committedWindowQualification": "Observed first helper action is a post-claim dispatch proxy; dispatch-to-first-action gap is unmeasured. Committed end is the evidence cutoff before commit. External commit.end.json and implementation-final-proof.json record actual subprocess completion, inclusive claim-to-commit duration and cutoff tail; Git authored date is not used.",
+    "claimToCutoffS": 323.240328
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting one-minute host load; os.getloadavg on this macOS host corresponds to the one-minute vm.loadavg value."
+      }
+    }
+  },
+  "validation": {
+    "setup": "Parent setup actual exit 0; exact receipt bound externally. npm install reported 17 existing vulnerabilities; no dependency upgrades.",
+    "review": {
+      "actualExit": 0,
+      "wallS": 0.3022555420175195,
+      "scope": "Quick review selected friction-record schema only for five documentation/evidence paths; no test/runtime validation credit.",
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/friction-window805/review.receipt.json",
+      "receiptSHA256": "bfda40ed05f8fd983fbbf70a192291ece57e7c71b6d3a1de720a6486c5a0b04f"
+    },
+    "knip": {
+      "actualExit": 0,
+      "wallS": 7.804100124980323,
+      "receiptPath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/friction-window805/knip.receipt.json",
+      "receiptSHA256": "9fd867538567bcb9e2fffaaa06b89c9efd99a98fa8c327b116d4a43e39b72f4f"
+    },
+    "frictionSchema": "Quick review schema passed before cutoff; final standalone schema follows this checkpoint and is recorded externally.",
+    "preservation": {
+      "initialActualExit": 0,
+      "unrelatedBaselineRegularTrackedCount": 6203,
+      "exact802Projection": true,
+      "finalQualification": "Final exact scope/byte/JSON preservation runs after this checkpoint; receipt and full maps remain external."
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "notRequired": "No timing experiment, focused test, local review:full, aggregate test, browser or fuzz rerun for this documentation/data-only correction.",
+    "coldReview": "No core-review label, no code change and no phase gate in this bead. No fresh cold review performed or claimed. Phase-gate review requirements remain binding.",
+    "setupReceiptSHA256": "fc772b9cac002769f227a096022165e2c9a1be409db12e513ba61474502a84d1",
+    "preDispatchFrictionReceiptSHA256": "8fca4fcb82db560502733fe66a9f9f4619453d169ce394593d7df05840eb2d58",
+    "failureInventoryBeforeCutoff": [],
+    "knipOutputQualification": "The retained Knip log contains materialization missing-art warnings and a successful restore-local-assets step. Tool output was truncated; the full raw log is SHA-bound by the receipt, without whole-log semantic-read credit."
+  },
+  "remainingAcceptance": {
+    "D19": "Controlled <=60 seconds, two workers, low load remains unwaived; historical 268 measurements 82.48 seconds Vitest / 83.6 seconds stage fail that target. No timing or runtime acceptance credit is claimed.",
+    "phase5": "Stock 2088; transfiguration 1024; modifier 480; 10k Random plus Greedy 256/64; interactive >=10 percent; journeys; minified; cold visual; final Sage; native gate/release acceptance remain unwaived."
+  }
+}
