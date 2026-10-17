@@ -1,0 +1,3 @@
+# Review handoff
+
+Core review is required from a fresh read-only Codex subagent with no prior context. The parent owns dispatch after the exact commit. Review the complete inventory test, public resolver snapshot behavior, explicit state source hashes and all 92 case mappings in the measurement record. Verify isolated exported modules, relative aliases, genuinely absent modules, exact pending-stage and stale-alternative refusal, and all original assertion outcomes. The selected timing boundary includes collection; its single ordered observation does not establish aggregate savings or D19 compliance. No production state transition or player presentation changes. All failure/restart/partial/stale/concurrent-path dispositions are recorded in the measurement file.

@@ -65,22 +65,18 @@ describe("inventory discard cost classification", () => {
 
 /** Synthetic modules model public authoring APIs; engine/catalog exports are not test inputs. */
 const moduleName = "inventory-fixtures/forms.ts";
-const resolveForms = (source: string) => inventoryCapabilityResolver(new Map([[moduleName, source]]));
 const build = (symbol: string): InventoryCapabilityForm => ({ module: moduleName, symbol, kind: "builder" });
 const form = (symbol: string, options: Omit<InventoryCapabilityForm, "module" | "symbol" | "kind"> = {}): InventoryCapabilityForm => ({ module: moduleName, symbol, kind: "form", ...options });
 
 describe("inventory exported capabilities", () => {
   it("resolves callable exports, aliases and type-only reexports without executing modules", () => {
-    const resolver = inventoryCapabilityResolver(new Map([
-      [moduleName, 'export { create as alias } from "./implementation"; export type { Action as Reexported } from "./implementation";'],
-      ["inventory-fixtures/implementation.ts", 'export function create() { throw new Error("must not execute"); } export type Action = { representation: "return" };'],
-    ]));
+    const resolver = fixtureResolver("aliases");
     expect(resolver([build("alias")])).toBe(true);
     expect(resolver([form("Reexported", { member: "return" })])).toBe(true);
   });
 
   it("rejects missing modules/exports, private declarations and noncallable values", () => {
-    const resolver = resolveForms('function hidden() {} export const value = 4; interface Private { feature?: boolean } export type Broken = Unavailable; export type Pending = never;');
+    const resolver = fixtureResolver("invalid");
     expect(resolver([build("hidden")])).toBe(false);
     expect(resolver([build("value")])).toBe(false);
     expect(resolver([form("Private")])).toBe(false);
@@ -91,29 +87,14 @@ describe("inventory exported capabilities", () => {
 
   it("keeps every supported descriptor stable under representation-field rename and reformatting", () => {
     const descriptors = [build("pay"), form("Payment", { member: "return" }), form("Trigger", { member: "draw", option: "filter" }), form("Trigger", { member: "draw", option: "from", optionLiteral: "void" }), form("Speed", { literal: "fast" }), form("Options", { option: "once" }), form("Zone")];
-    const old = resolveForms('export function pay() {} export type Payment = { cost: "return"; count: number }; export type Trigger = { on: "draw"; filter?: object; from?: "void" }; export type Speed = "standard" | "fast"; export interface Options { once?: boolean } export type Zone = "hand" | "deck";');
-    const changed = resolveForms(`export function pay () { }
-      export type Payment = {
-        readonly paymentKind: "return";
-        readonly quantity: number;
-      };
-      export type Trigger = { readonly eventName: "draw"; readonly filter?: object; readonly from?: "void" };
-      export type Speed =
-        | "standard"
-        | "fast";
-      export interface Options { readonly once?: boolean; }
-      export type Zone = "hand" | "deck";
-    `);
+    const old = fixtureResolver("representationOld");
+    const changed = fixtureResolver("representationChanged");
     expect(descriptors.map(descriptor => old([descriptor]))).toEqual([true, true, true, true, true, true, true]);
     expect(descriptors.map(descriptor => changed([descriptor]))).toEqual([true, true, true, true, true, true, true]);
   });
 
   it("requires the semantic option on the matching registered variant, not merely its generic builder", () => {
-    const resolver = resolveForms(`export function generic() {}
-      export type Trigger = { event: "play"; filter?: object; ordinal?: number; from?: "hand" }
-        | { event: "draw"; filter?: never };
-      export interface Selector { controller: "any"; }
-    `);
+    const resolver = fixtureResolver("semanticOption");
     expect(resolver([build("generic")])).toBe(true);
     expect(resolver([form("Trigger", { member: "play", option: "filter" })])).toBe(true);
     expect(resolver([form("Trigger", { member: "draw", option: "filter" })])).toBe(false);
@@ -125,14 +106,14 @@ describe("inventory exported capabilities", () => {
   });
 
   it("resolves inherited option forms and aliases with one shared module model", () => {
-    const resolver = resolveForms('export interface Base { limited?: boolean } export interface Extended extends Base { unrelated?: string } export type Alias = Extended;');
+    const resolver = fixtureResolver("inherited");
     expect(resolver([form("Extended", { option: "limited" })])).toBe(true);
     expect(resolver([form("Alias", { option: "limited" })])).toBe(true);
     expect(resolver([form("Extended", { option: "missing" })])).toBe(false);
   });
 
   it("keeps alternative forms independent and recognizes actual absence", () => {
-    const resolver = resolveForms('export type Actual = { renamedTag: "present" };');
+    const resolver = fixtureResolver("alternatives");
     expect(resolver([])).toBe(false);
     expect(resolver([form("Missing"), form("Actual", { member: "present" })])).toBe(true);
     expect(resolver([form("Missing"), form("Actual", { member: "absent" })])).toBe(false);
@@ -287,6 +268,52 @@ minimalSources.set(scopedModule("historyRefs", typesModule), 'export type Charac
 minimalSources.set(scopedModule("historyRefs", buildersModule), "export function lastPlayed() {} export function lastMaterialized() {}");
 const minimalResolver = inventoryCapabilityResolver(minimalSources);
 
+// Every immutable source state has its own virtual module namespace. Relative
+// implementation/reexport paths stay together; missing modules have no entry.
+const contractSources = {
+  aliases: new Map([[moduleName, 'export { create as alias } from "./implementation"; export type { Action as Reexported } from "./implementation";'], ["inventory-fixtures/implementation.ts", 'export function create() { throw new Error("must not execute"); } export type Action = { representation: "return" };']]),
+  invalid: new Map([[moduleName, 'function hidden() {} export const value = 4; interface Private { feature?: boolean } export type Broken = Unavailable; export type Pending = never;']]),
+  representationOld: new Map([[moduleName, 'export function pay() {} export type Payment = { cost: "return"; count: number }; export type Trigger = { on: "draw"; filter?: object; from?: "void" }; export type Speed = "standard" | "fast"; export interface Options { once?: boolean } export type Zone = "hand" | "deck";']]),
+  representationChanged: new Map([[moduleName, `export function pay () { }
+      export type Payment = {
+        readonly paymentKind: "return";
+        readonly quantity: number;
+      };
+      export type Trigger = { readonly eventName: "draw"; readonly filter?: object; readonly from?: "void" };
+      export type Speed =
+        | "standard"
+        | "fast";
+      export interface Options { readonly once?: boolean; }
+      export type Zone = "hand" | "deck";
+    `]]),
+  semanticOption: new Map([[moduleName, `export function generic() {}
+      export type Trigger = { event: "play"; filter?: object; ordinal?: number; from?: "hand" }
+        | { event: "draw"; filter?: never };
+      export interface Selector { controller: "any"; }
+    `]]),
+  inherited: new Map([[moduleName, 'export interface Base { limited?: boolean } export interface Extended extends Base { unrelated?: string } export type Alias = Extended;']]),
+  alternatives: new Map([[moduleName, 'export type Actual = { renamedTag: "present" };']]),
+  pending: new Map([[moduleName, 'export type Action = { tag: "present" }; export type Pending = never; export interface Present { from: "hand"; unusable?: never; unknown?: unknown; untyped?: any }']]),
+  firstOccasion: new Map([...completeAuthoringFixtures, [typesModule, 'export interface TriggeredAbility { oncePerTurn?: boolean }']]),
+  renamedRepresentation: new Map([...completeAuthoringFixtures].map(([module, source]) => [module, source.replaceAll("tag:", "representation:")])),
+  voidAbsent: new Map([["src/engine/effects/primitives/cost-modifier.ts", 'export interface CostModifierNthNode { nth: number }']]),
+  voidWrong: new Map([["src/engine/effects/primitives/cost-modifier.ts", 'export interface CostModifierNthNode { from?: "hand" }']]),
+  voidExact: new Map([["src/engine/effects/primitives/cost-modifier.ts", 'export interface CostModifierNthNode { from?: "void" }']]),
+  subtypeAbsent: new Map([...completeAuthoringFixtures, [typesModule, 'export interface DeckMods { typeChange?: { subtype: string } } export interface Variant { amplified: boolean }']]),
+  subtypePresent: new Map([...completeAuthoringFixtures, [typesModule, 'export interface Variant { amplified: boolean; typeRemap?: string }']]),
+  semanticRename: new Map([[moduleName, 'export interface Selector { renamedBound?: number }']]),
+  retiredHistory: new Map([...completeAuthoringFixtures, [typesModule, (completeAuthoringFixtures.get(typesModule) ?? "").replace('tag: "playedThisTurn"', 'tag: "playedThisTrun"')]]),
+};
+const contractModule = (state: string, module: string) => `inventory-contracts/${state}/${module}`;
+const contractResolver = inventoryCapabilityResolver(new Map(Object.entries(contractSources).flatMap(([state, sources]) =>
+  [...sources].map(([module, source]) => [contractModule(state, module), source]))));
+const fixtureResolver = (state: keyof typeof contractSources) => {
+  const scoped = (forms: readonly InventoryCapabilityForm[]) => forms.map(form => ({ ...form, module: contractModule(state, form.module) }));
+  return Object.assign((forms: readonly InventoryCapabilityForm[]) => contractResolver(scoped(forms)), {
+    validate: (forms: readonly InventoryCapabilityForm[]) => contractResolver.validate(scoped(forms)),
+  });
+};
+
 const intendedResolver = inventoryCapabilityResolver(completeAuthoringFixtures);
 
 // Intended API target contracts are independent of lifecycle declarations.
@@ -297,11 +324,9 @@ const intendedBinding = (form: InventoryCapabilityForm): InventoryCapabilityForm
 
 describe("inventory descriptor contracts", () => {
   it("requires actual first-occasion descriptors beyond source-local oncePerTurn", () => {
-    const sources = new Map(completeAuthoringFixtures);
-    sources.set(typesModule, 'export interface TriggeredAbility { oncePerTurn?: boolean }');
     const first = inventoryDslCapabilities.find(entry => entry.name === "firstTimeEachTurn");
     expect(first).toBeDefined();
-    expect(inventoryCapabilityResolver(sources)(first?.forms.filter(form => form.module === typesModule) ?? [])).toBe(false);
+    expect(fixtureResolver("firstOccasion")(first?.forms.filter(form => form.module === typesModule) ?? [])).toBe(false);
   });
 
   it("covers every actual descriptor with an independent intended authoring fixture", () => {
@@ -317,33 +342,31 @@ describe("inventory descriptor contracts", () => {
   });
 
   it("keeps every binding valid when representation discriminator fields are renamed", () => {
-    const resolver = inventoryCapabilityResolver(new Map([...completeAuthoringFixtures].map(([module, source]) => [module, source.replaceAll("tag:", "representation:")] )));
+    const resolver = fixtureResolver("renamedRepresentation");
     expect(inventoryDslCapabilities.map(entry => resolver.validate(entry.forms.map(intendedBinding)))).toEqual(expectedCapabilityNames.map(() => true));
   });
 
   it("requires the actual void option and tracks its pending stage precisely", () => {
     const capability = inventoryDslCapabilities.find(entry => entry.name === "costModifierNthOrigin")!;
     const form = capability.forms[0];
-    const resolve = (source: string) => inventoryCapabilityResolver(new Map([[form.module, source]]));
-    const absent = 'export interface CostModifierNthNode { nth: number }';
-    expect(resolve(absent).validate([{ ...form, pending: "option" }])).toBe(false);
-    expect(() => resolve(absent).validate([intendedBinding(form)])).toThrow();
-    const wrong = 'export interface CostModifierNthNode { from?: "hand" }';
-    expect(resolve(wrong)([intendedBinding(form)])).toBe(false);
-    const exact = 'export interface CostModifierNthNode { from?: "void" }';
-    expect(resolve(exact).validate([intendedBinding(form)])).toBe(true);
-    expect(() => resolve(exact).validate([{ ...form, pending: "option" }])).toThrow();
+    const absent = fixtureResolver("voidAbsent");
+    expect(absent.validate([{ ...form, pending: "option" }])).toBe(false);
+    expect(() => absent.validate([intendedBinding(form)])).toThrow();
+    const wrong = fixtureResolver("voidWrong");
+    expect(wrong([intendedBinding(form)])).toBe(false);
+    const exact = fixtureResolver("voidExact");
+    expect(exact.validate([intendedBinding(form)])).toBe(true);
+    expect(() => exact.validate([{ ...form, pending: "option" }])).toThrow();
   });
 
   it("distinguishes own-card subtype overrides from selector/conditional-figment remaps", () => {
-    const sources = new Map(completeAuthoringFixtures);
-    sources.set("src/engine/dsl/types.ts", 'export interface DeckMods { typeChange?: { subtype: string } } export interface Variant { amplified: boolean }');
+    const absent = fixtureResolver("subtypeAbsent");
     const c12 = inventoryDslCapabilities.find(entry => entry.name === "typeRemap");
     expect(c12).toBeDefined();
-    expect(inventoryCapabilityResolver(sources)(c12?.forms ?? [])).toBe(false);
-    expect(() => inventoryCapabilityResolver(sources).validate(c12?.forms ?? [])).toThrow();
-    sources.set(typesModule, 'export interface Variant { amplified: boolean; typeRemap?: string }');
-    expect(inventoryCapabilityResolver(sources).validate(c12?.forms ?? [])).toBe(true);
+    expect(absent(c12?.forms ?? [])).toBe(false);
+    expect(() => absent.validate(c12?.forms ?? [])).toThrow();
+    const present = fixtureResolver("subtypePresent");
+    expect(present.validate(c12?.forms ?? [])).toBe(true);
   });
 
   it("diagnoses missing modules and stale exported names instead of projecting missing capabilities", () => {
@@ -354,13 +377,13 @@ describe("inventory descriptor contracts", () => {
   });
 
   it("diagnoses semantic API renames while accepting explicit rebound metadata", () => {
-    const renamed = inventoryCapabilityResolver(new Map([[moduleName, 'export interface Selector { renamedBound?: number }']]));
+    const renamed = fixtureResolver("semanticRename");
     expect(() => renamed.validate([form("Selector", { option: "bound" })])).toThrow();
     expect(renamed.validate([form("Selector", { option: "renamedBound" })])).toBe(true);
   });
 
   it("permits only the declared missing stage for intentional pending features", () => {
-    const resolver = resolveForms('export type Action = { tag: "present" }; export type Pending = never; export interface Present { from: "hand"; unusable?: never; unknown?: unknown; untyped?: any }');
+    const resolver = fixtureResolver("pending");
     expect(resolver.validate([{ ...form("Action", { member: "future" }), pending: "member" }])).toBe(false);
     expect(resolver.validate([{ ...form("Action", { option: "future" }), pending: "option" }])).toBe(false);
     expect(resolver.validate([{ ...build("future"), pending: "export" }])).toBe(false);
@@ -427,10 +450,7 @@ describe("declared capability lifecycle", () => {
     expect(history).toBeDefined();
     const retired = history?.forms.map(intendedBinding) ?? [];
     expect(intendedResolver.validate(retired)).toBe(true);
-    const renamed = new Map(completeAuthoringFixtures);
-    const module = "src/engine/dsl/types.ts";
-    renamed.set(module, (renamed.get(module) ?? "").replace('tag: "playedThisTurn"', 'tag: "playedThisTrun"'));
-    const resolver = inventoryCapabilityResolver(renamed);
+    const resolver = fixtureResolver("retiredHistory");
     const workingSibling = retired.find(form => form.symbol === "Condition");
     expect(workingSibling).toBeDefined();
     expect(resolver.validate(workingSibling === undefined ? [] : [workingSibling])).toBe(true);
