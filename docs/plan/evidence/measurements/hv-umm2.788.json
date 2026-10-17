@@ -1,0 +1,171 @@
+{
+  "bead": "hv-umm2.788",
+  "base": "16b282f49ca2997c03f0d085beb4a0a2dacea677",
+  "kind": "Existing synthetic random-selection determinism contract; stable actual physical replay with two identical applications.",
+  "sourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/fixture-source-proof.json",
+  "runnerFreeze": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/validation.runner.frozen.json",
+  "measurementScope": {
+    "start": "Actual own timestamp before first brief read; exact dispatch instant remains unknown.",
+    "end": "Actual pre-schema/Git evidence cutoff; schema and commit tail measured externally, no exact commit-end timestamp invented."
+  },
+  "validation": {
+    "commands": {
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "randomSelection|random battlefield character|random subjects|random gain"
+        ],
+        "originalToolId": 50520,
+        "originalTerminal": "actual0 collected",
+        "wallS": 8.424749041965697,
+        "childCpuS": 11.575315,
+        "loadStart": [
+          4.76025390625,
+          7.00244140625,
+          6.80712890625
+        ],
+        "loadEnd": [
+          4.87060546875,
+          6.9521484375,
+          6.79150390625
+        ],
+        "pid": 1268,
+        "pgid": 1268,
+        "inputFiles": 6115,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/focused.log": "8c45f2e7a53e2721a8d633333d17479255d4fa4f34d828486dbef4c0865d4110",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/focused.inputs.json": "741ac210e6e3e41d343007b1706b52e8736a6988898dff111a49445aeb5bce7f",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/focused.launch.json": "21ce9a7bba11b32dd240147e3f754964bdbc681efdb8f5aafa907814a3d39acf",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/focused.started.json": "ae624ce4a5166d1f37d146d368ed91d156879d5bb81e1cf4640cb316f7c5b9c9",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/focused.receipt.json": "be5f674268e28f8aca5c2abb0a267c558dcc9e4b817464c2bde2bf99affd11de"
+        }
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "originalToolId": 81440,
+        "originalTerminal": "actual0 collected",
+        "wallS": 30.743319290981162,
+        "childCpuS": 71.948865,
+        "loadStart": [
+          4.5791015625,
+          6.78955078125,
+          6.73583984375
+        ],
+        "loadEnd": [
+          5.28271484375,
+          6.72998046875,
+          6.716796875
+        ],
+        "pid": 3217,
+        "pgid": 3217,
+        "inputFiles": 6118,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/review.log": "cd6bdb1c842f01567b3c229680dd1841774c14ac2e0d35410c174bf0aa57982d",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/review.inputs.json": "96a2d16db51c8451f92929eff576706816bcfe683e6abeb18f5b8d961bb7e2a7",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/review.launch.json": "d66827ba87e22a428a9eba90cca7e8edaefedf4b1f161ccf432d27fb06ced8d5",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/review.started.json": "d0b2d668f4f30d14ff0a57b6cd6aa3d44ffcea8dba8c27febbcaa2f9ded4101d",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/review.receipt.json": "51743f4996e279eeb10a7c77e32280fa2f382ac8d5226a639445adda6d75cdd8"
+        }
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "originalToolId": 55235,
+        "originalTerminal": "actual0 collected",
+        "wallS": 5.2644194579916075,
+        "childCpuS": 6.049551999999999,
+        "loadStart": [
+          5.28271484375,
+          6.72998046875,
+          6.716796875
+        ],
+        "loadEnd": [
+          5.259765625,
+          6.701171875,
+          6.70654296875
+        ],
+        "pid": 5750,
+        "pgid": 5750,
+        "inputFiles": 6118,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/knip.log": "db4068328942ce4f660c914783dae5e27c14652f45485ae41ade430d2eef86ae",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/knip.inputs.json": "96a2d16db51c8451f92929eff576706816bcfe683e6abeb18f5b8d961bb7e2a7",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/knip.launch.json": "ebc70839f1394a65e218bff37fad708e2098fb3ceea84fd69140a7e26e3d83cf",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/knip.started.json": "61f62064e0b70f2b40221b9714e09e7dcc77d35b0f6f5a15f8d42b638f0c36a3",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/knip.receipt.json": "e2d22b5c6ff3de21fb145edb685160c68c3cab0887bbafc3b1f007776926d375"
+        }
+      }
+    },
+    "counts": {
+      "focusedEntireRandomSelectionFamilies": 19,
+      "focusedEntirePublicRandomCharacterReference": 16,
+      "focusedPassed": 35,
+      "focusedUnrelatedSkipped": 5876,
+      "reviewRelatedUnfilteredPassed": 5911,
+      "reviewFiles": 1
+    },
+    "failures": [],
+    "preparationCorrection": "Initial prefix-only comparison incorrectly compared punctuation around replaced imports; initial preparation tool exited 1 after scoped source write. This full-byte restoration verifies every unchanged byte; no validation ran before correction.",
+    "sourceInputAudit": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/source-input-audit.json",
+    "finalSchema": "Runs after this exact friction/evidence freeze; original terminal and immutable inputs/runner/receipts retained externally as schema.*."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": -1,
+    "jsdomFiles": 0,
+    "expandedCases": 0,
+    "determinismCaseEngineApplications": {
+      "before": 24,
+      "current": 2
+    }
+  },
+  "failurePaths": {
+    "newTransitions": [],
+    "errorMidStepAndPartialWrite": "Existing randomSelection replay and recovery rollback case preserves zones, ranks, RNG, knowledge and publication on synthetic failure. Random character real-error contract independently covers fold rollback. No storage writer or new persistent boundary is introduced.",
+    "reloadRestart": "Existing replay/recovery cases reconstruct the random-pick prompt and serialized paid-abandon stack item, preserving actual physical results; current determinism case compares all result events/state and source immutability.",
+    "invalidStaleConcurrent": "Existing replay-and-recovery rejects stale and duplicate answers; unchanged public random-character reload contract rejects foreign, invalid, competing and stale intents. No new input protocol is introduced.",
+    "interruptResponse": "Existing response empties matching deck before resolution and therefore selects nothing.",
+    "privacy": "Both-controller membership/stream/order contract and unchanged deck-knowledge/presentation cases preserve hidden remaining cards and transient observations.",
+    "payment": "Existing paid-abandon cost and Reclaim contracts preserve captured cost and route-specific payment."
+  },
+  "runtime": {
+    "workers": 2,
+    "groupProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/process-groups-precommit.json",
+    "groupsAbsent": [
+      1268,
+      3217,
+      5750
+    ],
+    "ports": [],
+    "heavy": false,
+    "browser": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review wrapper start",
+        "source": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/random-selection788/review.receipt.json"
+      },
+      "implementWindow": {
+        "startScope": "Actual own start before brief read",
+        "endScope": "Actual pre-schema/Git evidence cutoff; later tail externally measured"
+      }
+    }
+  },
+  "D19": "Full-suite <=60s remains unmet/unwaived. No full, soak, fuzz, browser, performance or Phase 5 acceptance credit.",
+  "parentDuties": [
+    "Fresh read-only fork:none exact-source whole-scope core review and independent finding disposition",
+    "Exact candidate certification, promotion, cleanup and native completion"
+  ]
+}

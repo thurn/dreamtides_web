@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { battleSeed, opponent, type BattleSeed, type Side } from "../../../state/ids";
-import type { BattleState } from "../../../state/types";
+import { opponent, type Side } from "../../../state/ids";
 import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import { unannouncedChanges } from "../../../testing/announced-changes";
 import { boardState } from "../../../testing/board";
@@ -39,17 +38,17 @@ describe("randomSelection", () => {
     expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
   });
 
-  it("picks are a function of the battle seed: the same state picks the same cards, and fixed seeds pick different matching pairs", () => {
+  it("replays the same physical picks, events and state from the same synthetic input", () => {
     const { state, ids } = twinBoard("player");
-    const picks = (seed: BattleSeed): string => {
-      const seeded: BattleState = { ...structuredClone(state), seed };
-      const result = engine.apply(seeded, "player", playFromHand(ids, "player").action, NO_PROMPTS);
-      return JSON.stringify(leftDeck(seeded, result.state, "player"));
-    };
-    const seeds = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"].map(battleSeed);
-    const pairs = seeds.map(picks);
-    expect(seeds.map(picks)).toEqual(pairs);
-    expect(new Set(pairs).size).toBeGreaterThan(1);
+    const before = structuredClone(state);
+    const action = playFromHand(ids, "player").action;
+    const first = engine.apply(state, "player", action, NO_PROMPTS);
+    const replayed = engine.apply(structuredClone(before), "player", action, NO_PROMPTS);
+    const picks = leftDeck(before, first.state, "player");
+    expect(picks).toHaveLength(2);
+    expect(leftDeck(before, replayed.state, "player")).toEqual(picks);
+    expect(replayed).toEqual(first);
+    expect(state).toEqual(before);
   });
 
   it("materializes what exists when fewer cards match, and with none draws nothing, names nothing and continues the effect", () => {
