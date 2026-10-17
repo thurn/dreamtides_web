@@ -7,7 +7,6 @@
 // This module obeys the src/rules/ lint rails: no React, no live clock or rng.
 
 import { D97_COLLECTION } from "../../content/d97/collection";
-import { d97DreamByAnchor } from "../../content/d97/dreams";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
 import { acquireCopy, canUnequip, findCopy, removeCopies } from "../../d97/collection/collection";
@@ -25,17 +24,23 @@ import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
 import { d97OwnedCopyIdFromUnknown, dreamAnchorIdFromUnknown, type DreamAnchorId } from "../../types/identifiers";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
+import { runDreamAnchor } from "./d97-dreams";
 import type { D97Transition } from "./d97-run";
 import type { D97Run, D97Shop, D97ShopSlot, D97State } from "./d97-state";
 
-/** The run and shop anchor a shop case acts on, or null to bounce. */
-function shopContext(d97: D97State, payload: Record<string, unknown>): { run: D97Run; anchorId: DreamAnchorId } | null {
+/** The run, shop anchor and content a shop case acts on, or null to bounce. */
+function shopContext(
+  d97: D97State,
+  payload: Record<string, unknown>,
+): { run: D97Run; anchorId: DreamAnchorId; content: D97ContentProvider } | null {
   const run = d97.run;
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  // The shop of whichever dream module's topology names the anchor.
-  const dream = anchorId === null ? null : d97DreamByAnchor(anchorId);
-  if (run === null || d97.screen.type !== "overworld" || dream === null || anchorId !== dream.topology.shopAnchorId) return null;
-  return { run, anchorId };
+  const content = d97ContentProvider();
+  if (run === null || content === null || d97.screen.type !== "overworld") return null;
+  // Only the shop of the run's own dream.
+  const dream = runDreamAnchor(run, content, anchorId);
+  if (dream === null || anchorId === null || anchorId !== dream.definition.topology.shopAnchorId) return null;
+  return { run, anchorId, content };
 }
 
 function withShop(d97: D97State, run: D97Run, anchorId: DreamAnchorId, shop: D97Shop, changes: Partial<D97Run>, logRecords: readonly ReducerLogRecord[]): D97Transition {
@@ -83,9 +88,8 @@ function stockFields(shop: D97Shop) {
  */
 export function openShop(d97: D97State, payload: Record<string, unknown>, ctx: EventContext): D97Transition | null {
   const context = shopContext(d97, payload);
-  const content = d97ContentProvider();
-  if (context === null || content === null) return null;
-  const { run, anchorId } = context;
+  if (context === null) return null;
+  const { run, anchorId, content } = context;
   const existing = run.shops[anchorId];
   const shop = existing ?? { slots: rollStock(run, content, ctx), restockedThisVisit: false, rolls: 1 };
   return withShop(d97, run, anchorId, shop, {}, [
@@ -150,9 +154,8 @@ function copySellable(run: D97Run, copy: { readonly zone: D97CopyZone }): boolea
 export function sellCopy(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
   const context = shopContext(d97, payload);
   const copyId = d97OwnedCopyIdFromUnknown(payload.copyId);
-  const content = d97ContentProvider();
-  if (context === null || copyId === null || content === null) return null;
-  const { run, anchorId } = context;
+  if (context === null || copyId === null) return null;
+  const { run, anchorId, content } = context;
   const shop = run.shops[anchorId];
   const copy = findCopy(run.collection, copyId);
   const price = shopSaleQuote(run, copyId, content);
@@ -184,9 +187,8 @@ export function sellCopy(d97: D97State, payload: Record<string, unknown>): D97Tr
  */
 export function restockShop(d97: D97State, payload: Record<string, unknown>, ctx: EventContext): D97Transition | null {
   const context = shopContext(d97, payload);
-  const content = d97ContentProvider();
-  if (context === null || content === null) return null;
-  const { run, anchorId } = context;
+  if (context === null) return null;
+  const { run, anchorId, content } = context;
   const shop = run.shops[anchorId];
   const price = restockPrice(D97_SHOP.priceBand, D97_SHOP);
   if (shop === undefined || shop.restockedThisVisit || price > run.essence) return null;

@@ -13,8 +13,9 @@
 //
 // A dream module also declares its topology (Appendix B §B5, §B6): its
 // waypoint, the door a new run arrives through, its exit door with the
-// guardian blocking it, and its shop. The travel and shop rules find a dream
-// by these anchors (`d97DreamByAnchor` in `./index.ts`).
+// guardian blocking it, and its shop. The travel and shop rules resolve these
+// anchors in the run's own dream only (`runDreamAnchor` in
+// src/rules/d97/d97-dreams.ts).
 
 import type { BadgeKind } from "../../../d97/overworld/characters/badges";
 import type { OccupantScale } from "../../../d97/overworld/occupants";

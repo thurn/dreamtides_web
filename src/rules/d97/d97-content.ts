@@ -9,10 +9,22 @@ import type { D97TierKnob } from "../../content/d97/encounters";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { CardId } from "../../types/card-identity";
 import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
-import type { AvatarId, BattleId, D97ItemId, DreamAnchorId, DreamsignId, TideId } from "../../types/identifiers";
+import type { D97ChallengerDefinition } from "../../content/d97/challengers";
+import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
+import type { DreamAnchorKind } from "../../d97/map/definition";
+import type {
+  AvatarId,
+  BattleId,
+  D97DreamId,
+  D97ItemId,
+  DreamAnchorId,
+  DreamsignId,
+  TideId,
+} from "../../types/identifiers";
 import type { D97BattleInit } from "../battle/fold";
 import type { D97Encounter, D97Run } from "./d97-state";
 import type { D97QuestCatalog } from "../../d97/quests/quests";
+import type { D97DialogueCatalog } from "../../d97/dialogue/catalog";
 
 /** One Avatar's dealt tides4 pool. */
 export interface D97PoolDeal {
@@ -38,6 +50,29 @@ export interface D97BattleStartInput {
   /** The battle's engine seed. */
   readonly seed: number;
   readonly playerAnteCopyId: D97BattleInit["playerAnteCopyId"];
+}
+
+/** One anchor of a registered dream's map. */
+export interface D97RegisteredAnchor {
+  readonly id: DreamAnchorId;
+  readonly kind: DreamAnchorKind;
+}
+
+/**
+ * A dream registered with the content (`./d97-dreams.ts`): its module, its
+ * map's anchors, and the challengers and speakers standing at its anchors.
+ * The rules read a run's dream only through `runDreamAnchor`.
+ */
+export interface D97RegisteredDream {
+  readonly definition: D97DreamDefinition;
+  /** Its map's declared anchors (empty for a synthetic dream without a map). */
+  readonly anchors: readonly D97RegisteredAnchor[];
+  /** Every anchor the dream declares: its map's, its topology's and its residents'. */
+  readonly anchorIds: ReadonlySet<DreamAnchorId>;
+  /** The challenger or guardian at each battle anchor. */
+  readonly challengers: ReadonlyMap<DreamAnchorId, D97ChallengerDefinition>;
+  /** The registered dialogue each speaking resident speaks, by its anchor. */
+  readonly speakerDialogues: ReadonlyMap<DreamAnchorId, D97DialogueModule>;
 }
 
 /** Fold-relevant D97 content. */
@@ -74,12 +109,15 @@ export interface D97ContentProvider extends D97StartingCollectionContent {
   readonly quests: D97QuestCatalog;
   /** Every registered quest item. */
   readonly itemIds: ReadonlySet<D97ItemId>;
+  /** Every registered dialogue module, quest and item, by UUID, as the overworld's surfaces read them. */
+  readonly dialogue: D97DialogueCatalog;
   /**
-   * The registered dialogue each speaking resident speaks, by the anchor it
-   * stands at, across every dream module. Dialogue-effect intents are checked
-   * against it.
+   * Every dream a run may be in, in registration order: the dream catalog in
+   * every build, plus the development dream in development builds.
    */
-  readonly speakerDialogues: ReadonlyMap<DreamAnchorId, D97DialogueModule>;
+  readonly dreams: ReadonlyMap<D97DreamId, D97RegisteredDream>;
+  /** The dream a run starts in when its start names none; null for no catalog dream. */
+  readonly defaultDreamId: D97DreamId | null;
 }
 
 let provider: D97ContentProvider | null = null;

@@ -1,5 +1,6 @@
 // Adapter for the D97 overworld: the run's dream (./use-d97-dream.ts) on the
-// Pixi canvas, a loading screen while its map arrives,
+// Pixi canvas, a loading screen while its map arrives, an unavailable screen
+// with a way back to the main menu when it cannot be played,
 // the HUD view, the encounter preview, deck editor, quest log, conversation
 // and Menu panels, beaten opponents without badges, the quest marks over the
 // world, door veils and lit waypoints, the arrival beside the last battle's
@@ -16,7 +17,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { D97_COLLECTION } from "../../../content/d97/collection";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
-import { DEV_KNIGHT } from "../../../content/d97/characters/development";
 import {
   D97_ACT_CHALLENGER_TIERS,
   D97_CHARACTER_TUNABLES,
@@ -24,6 +24,7 @@ import {
 } from "../../../content/d97/tunables";
 import { D97MenuPanel } from "../../../cumulus/screens/d97/D97MenuPanel";
 import { D97DreamLoadingScreen } from "../../../cumulus/screens/d97/D97DreamLoadingScreen";
+import { D97DreamUnavailableScreen } from "../../../cumulus/screens/d97/D97DreamUnavailableScreen";
 import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
 import { D97EncounterPreview } from "../../../cumulus/screens/d97/D97EncounterPreview";
 import {
@@ -31,10 +32,12 @@ import {
   type D97OverworldControlId,
 } from "../../../cumulus/screens/d97/D97OverworldScreen";
 import type { JourneyContent } from "../../../data/journey-content";
-import { registeredDialogueCatalog } from "../../../d97/dialogue/catalog";
+import { buildDialogueCatalog } from "../../../d97/dialogue/catalog";
 import { createInteractionRegistry, type OverworldInteraction } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
+import { d97ContentProvider } from "../../../rules/d97/d97-content";
 import { d97RunAct, type D97Run } from "../../../rules/d97/d97-state";
+import { useGameSwitch } from "../../../session/game-switch";
 import { useActions } from "../../../session/hooks";
 import type { D97OwnedCopyId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
@@ -51,6 +54,8 @@ const OverworldCanvas = lazy(() =>
     default: module.OverworldCanvas,
   })),
 );
+
+const NO_DIALOGUE = buildDialogueCatalog([]);
 
 const ENABLED_CONTROLS: ReadonlySet<D97OverworldControlId> = new Set(["deck", "quests", "menu"]);
 
@@ -71,7 +76,16 @@ interface D97OverworldProps {
 /** Live overworld of a started run, in the dream the run is in. */
 export function D97OverworldScreenAdapter(props: D97OverworldProps) {
   const dream = useD97Dream(props.run);
-  return dream === null ? <D97DreamLoadingScreen /> : <D97DreamOverworld {...props} dream={dream} />;
+  if (dream.kind === "loading") return <D97DreamLoadingScreen />;
+  if (dream.kind === "unavailable") return <D97DreamUnavailable />;
+  return <D97DreamOverworld {...props} dream={dream.played} />;
+}
+
+/** The run's dream cannot be played (logged by `useD97Dream`): offer the main menu. */
+function D97DreamUnavailable() {
+  const gameSwitch = useGameSwitch();
+  const mainMenu = useCallback(() => gameSwitch?.openMainMenu({ source: "d97_dream_unavailable" }), [gameSwitch]);
+  return <D97DreamUnavailableScreen onMainMenu={gameSwitch === null ? null : mainMenu} />;
 }
 
 function D97DreamOverworld({
@@ -81,17 +95,17 @@ function D97DreamOverworld({
   returningFromBattle = false,
   dream: { dream, map, occupants: placed },
 }: D97OverworldProps & { readonly dream: D97PlayedDream }) {
-  const catalog = registeredDialogueCatalog();
+  const catalog = d97ContentProvider()?.dialogue ?? NO_DIALOGUE;
   // Beaten opponents stay as ordinary characters: no badge, desaturated.
   const beatenKey = Object.values(run.encounters).filter((encounter) => encounter?.beaten === true).map((encounter) => encounter?.anchorId).join(",");
   const occupants = useMemo(() => {
     const beaten = new Set(beatenKey.split(","));
     return new Map([...placed].map(([anchorId, occupant]) => [anchorId, beaten.has(anchorId) ? { ...occupant, badge: null, beaten: true as const } : occupant]));
   }, [beatenKey, placed]);
-  // The player walks as their Avatar's recipe, or the development knight
-  // while the Avatar has none.
+  // The player walks as their Avatar's recipe (every Avatar has one), or as a
+  // capsule for an Avatar without one.
   const playerCharacter = useMemo(
-    () => (D97_CHARACTER_SPRITES.find((recipe) => recipe.avatarId === run.avatarId) ?? DEV_KNIGHT).id,
+    () => D97_CHARACTER_SPRITES.find((recipe) => recipe.avatarId === run.avatarId)?.id ?? null,
     [run.avatarId],
   );
   const actions = useActions();

@@ -8,9 +8,9 @@
 
 import { readdirSync, readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { d97DreamById } from "../content/d97/dreams";
 import { loadJourneyContent } from "../data/journey-content";
 import type { Genesis, PinnedContentConfig } from "../eventlog/types";
+import { d97ContentProvider } from "../rules/d97/d97-content";
 import type { FoldState } from "../rules/fold-state";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import { parseClientId, parseGameId } from "../types/identifiers";
@@ -81,7 +81,7 @@ describe("D97 milestone saves", () => {
     const d97 = game!.log.state().d97;
     expect(d97?.run).not.toBeNull();
     expect(d97!.screen.type).not.toBe("avatarSelect");
-    expect(d97DreamById(d97!.run!.dreamId)).not.toBeNull();
+    expect(d97ContentProvider()?.dreams.has(d97!.run!.dreamId)).toBe(true);
     await game!.close();
   });
 });

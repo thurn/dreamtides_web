@@ -97,7 +97,8 @@ export interface OverworldSceneOptions {
   readonly looks: CharacterLooks;
   readonly occupants: OverworldOccupants;
   /** The character the player walks as. */
-  readonly playerCharacter: D97CharacterId;
+  /** The player's look; null draws the player as a capsule. */
+  readonly playerCharacter: D97CharacterId | null;
   /** Where the player starts: after a battle, or at the last door or waypoint used. */
   readonly arrival: OverworldArrival | null;
   /** Each door's veil; a door missing here shows the unexplored veil. */
@@ -171,7 +172,7 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly characterTunables: D97CharacterTunables;
   private readonly looks: CharacterLooks;
   private readonly occupants: OverworldOccupants;
-  private readonly playerCharacter: D97CharacterId;
+  private readonly playerCharacter: D97CharacterId | null;
   private readonly desktop: () => boolean;
   private readonly anchorsStanding: readonly CompiledAnchor[];
   /** Unbeaten guardians, which close their chokepoints. */
@@ -524,7 +525,7 @@ export class OverworldScene implements OverworldSceneHandle {
     // The gold rune ring marks "you"; the player never carries a badge.
     const ring = new Graphics().ellipse(w / 2, -h * 0.08, w * 0.42, h * 0.16).stroke({ color: PLACEHOLDER_PLAYER.ring, width: 3 });
     const body = new CharacterView(
-      this.looks.get(this.playerCharacter) ?? null,
+      (this.playerCharacter === null ? undefined : this.looks.get(this.playerCharacter)) ?? null,
       this.characterTunables.scales.standard,
       w,
       h,

@@ -28,7 +28,8 @@ export interface OverworldCanvasProps {
   readonly characterTunables: D97CharacterTunables;
   readonly occupants: OverworldOccupants;
   /** The character the player walks as. */
-  readonly playerCharacter: D97CharacterId;
+  /** The player's look; null draws the player as a capsule. */
+  readonly playerCharacter: D97CharacterId | null;
   /** Where the player starts: after a battle, or at the last door or waypoint used. */
   readonly arrival: OverworldArrival | null;
   /** Each door's veil; a door missing here shows the unexplored veil. */
@@ -130,7 +131,7 @@ export function OverworldCanvas(props: OverworldCanvasProps) {
 
   useEffect(() => {
     let current = true;
-    const characters = [playerCharacter, ...[...occupants.values()].map((occupant) => occupant.character)];
+    const characters = [...(playerCharacter === null ? [] : [playerCharacter]), ...[...occupants.values()].map((occupant) => occupant.character)];
     void Promise.all([loadTileTextures(map), loadCharacterLooks(characters)]).then(([textures, looks]) => {
       if (current) setAssets({ map, assets: { textures, looks } });
     });

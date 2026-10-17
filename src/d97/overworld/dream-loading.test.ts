@@ -1,10 +1,9 @@
-// Dream selection and compiled-map loading: a run plays the dream it records,
-// and the development dream when no dream module names it;
-// a compiled map passes the shape check, and a malformed, mismatched or
-// unavailable one is a failure the overworld falls back from.
+// Dream selection and compiled-map loading: a run plays the registered dream
+// it records, compiling an inline dream's map in code, and has no dream when
+// none is registered under its id; a compiled map passes the shape check, and
+// a malformed, mismatched or unavailable one is a failure.
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { defineDream } from "../../content/d97/dreams/schema";
 import { parseD97DreamId, parseDreamAnchorId, parseDreamMapId } from "../../types/identifiers";
 import { compileDevMap } from "./dev-map";
@@ -21,15 +20,18 @@ const dream = (n: number) =>
   });
 
 describe("selectRunDream", () => {
-  const modules = [dream(1), dream(2), DEVELOPMENT_DREAM];
+  const inline = { dream: dream(2), compileMap: compileDevMap };
+  const registered = [dream(1), dream(2)];
 
-  it("plays the dream the run records", () => {
-    expect(selectRunDream(modules[1].id, modules)).toEqual({ dream: modules[1], source: "catalog" });
-    expect(selectRunDream(DEVELOPMENT_DREAM.id, modules)).toEqual({ dream: DEVELOPMENT_DREAM, source: "development" });
+  it("plays the registered dream the run records", () => {
+    expect(selectRunDream(dream(1).id, registered, inline)).toEqual({ dream: dream(1), source: "catalog" });
+    expect(selectRunDream(dream(2).id, registered, inline)).toEqual({ ...inline, source: "development" });
+    expect(selectRunDream(dream(2).id, registered, null)).toEqual({ dream: dream(2), source: "catalog" });
   });
 
-  it("plays the development dream for a dream no module names", () => {
-    expect(selectRunDream(dream(3).id, modules)).toEqual({ dream: DEVELOPMENT_DREAM, source: "unknown" });
+  it("has no dream for one that is not registered", () => {
+    expect(selectRunDream(dream(3).id, registered, inline)).toEqual({ dream: null, source: "unknown" });
+    expect(selectRunDream(dream(2).id, [dream(1)], inline)).toEqual({ dream: null, source: "unknown" });
   });
 });
 

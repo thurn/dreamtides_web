@@ -1,16 +1,21 @@
 // A synthetic D97 content catalog for node tests: a roster, a small tide
-// space, a dealt pool and a handful of Starter cards. Every id is a test UUID.
+// space, a dealt pool, a handful of Starter cards and two registered
+// synthetic dreams (./d97-dreams.fixtures.ts), the first the default. Every id
+// is a test UUID.
 
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
 import type { D97DialogueModule, D97QuestDefinition } from "../../content/d97/dialogue/schema";
-import type { AvatarId, D97ItemId, DreamAnchorId, TideId } from "../../types/identifiers";
+import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
+import type { AvatarId, D97ItemId, TideId } from "../../types/identifiers";
 import {
   testAvatarId,
   testCardId,
   testTideId,
 } from "../../types/test-identities";
 import type { D97ContentProvider } from "./d97-content";
+import { registerDream } from "./d97-dreams";
+import { SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B, syntheticDreamAnchors } from "./d97-dreams.fixtures";
 
 export const SYNTHETIC_TIDES: readonly TideId[] = [
   testTideId("d97-tide-a"),
@@ -34,7 +39,9 @@ export const SYNTHETIC_STARTERS: readonly CardId[] = Array.from(
 
 /**
  * A D97 content provider over a synthetic catalog. The deal returns
- * `poolSize` cards (every third one dealt twice) whatever the seed.
+ * `poolSize` cards (every third one dealt twice) whatever the seed. It
+ * registers `dreams` (synthetic dreams A and B by default; the first is the
+ * default dream), whose residents speak among `dialogues`.
  */
 export function syntheticD97Content(
   options: {
@@ -42,7 +49,8 @@ export function syntheticD97Content(
     poolSize?: number;
     quests?: readonly D97QuestDefinition[];
     itemIds?: readonly D97ItemId[];
-    speakerDialogues?: ReadonlyMap<DreamAnchorId, D97DialogueModule>;
+    dreams?: readonly D97DreamDefinition[];
+    dialogues?: readonly D97DialogueModule[];
   } = {},
 ): D97ContentProvider {
   const avatarIds = options.avatarIds ?? [testAvatarId("d97-roster-avatar")];
@@ -59,6 +67,9 @@ export function syntheticD97Content(
     rarityById.set(cardId, RARITIES[index % RARITIES.length] ?? "Common");
   });
   for (const cardId of SYNTHETIC_STARTERS) rarityById.set(cardId, "Starter");
+  const quests = new Map((options.quests ?? []).map((quest) => [quest.id, quest]));
+  const dialogues = new Map((options.dialogues ?? []).map((module) => [module.id, module]));
+  const dreams = options.dreams ?? [SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B];
   return {
     avatarIds: new Set(avatarIds),
     tideAffinityIndex: { cardVectors, knownTideIds: new Set(SYNTHETIC_TIDES) },
@@ -76,9 +87,11 @@ export function syntheticD97Content(
       };
     },
     starterCardIds: SYNTHETIC_STARTERS,
-    quests: new Map((options.quests ?? []).map((quest) => [quest.id, quest])),
+    quests,
     itemIds: new Set(options.itemIds ?? []),
-    speakerDialogues: options.speakerDialogues ?? new Map(),
+    dialogue: { dialogues, quests, items: new Map() },
+    dreams: new Map(dreams.map((dream) => [dream.id, registerDream(dream, syntheticDreamAnchors(dream), dialogues)])),
+    defaultDreamId: dreams[0]?.id ?? null,
     dealRewardPool: () => ({
       joinedTideIds: SYNTHETIC_TIDES.slice(0, 2),
       cards: poolCards.map((cardId, index) => ({

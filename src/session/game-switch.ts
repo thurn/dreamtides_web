@@ -1,10 +1,12 @@
 // Player-invoked switches from the open local game to another one: a new
-// Dreamtides 97 run, or the most recently played stored run. The game
+// Dreamtides 97 run, the most recently played stored run, or the main menu (a
+// new journey game on its front door). The game
 // selection (`useLocalGame`) supplies them beside the game's own controls;
 // the main menu reads them with `useGameSwitch`, which is null outside a game.
 
 import { createContext, useContext } from "react";
 import { genesisMode, type GameMode } from "../eventlog/types";
+import type { FrontDoorEntry } from "./genesis";
 import { logEvent } from "../logging";
 import type { GameId } from "../types/identifiers";
 import {
@@ -14,12 +16,12 @@ import {
 
 /** A request to leave the open game for another one. */
 export type LocalGameRequest =
-  | { readonly kind: "create"; readonly mode: GameMode }
+  | { readonly kind: "create"; readonly mode: GameMode; readonly frontDoorEntry?: FrontDoorEntry }
   | { readonly kind: "open"; readonly gameId: GameId };
 
 /** Where a switch was invoked, for logs. */
 export interface GameSwitchSource {
-  readonly source: "main_menu" | "d97_slice_end";
+  readonly source: "main_menu" | "d97_slice_end" | "d97_dream_unavailable";
 }
 
 export interface GameSwitchControls {
@@ -27,6 +29,8 @@ export interface GameSwitchControls {
   startD97Run: (source: GameSwitchSource) => void;
   /** Switch this tab to the stored D97 game `gameId`. */
   continueD97Run: (source: GameSwitchSource, gameId: GameId) => void;
+  /** Create a new journey game on the main menu and switch this tab to it. */
+  openMainMenu: (source: GameSwitchSource) => void;
   /** The most recently played stored D97 game, or null when there is none. */
   findRecentD97Run: () => Promise<GameId | null>;
 }
@@ -82,6 +86,10 @@ export function createGameSwitchControls(
         runGameId,
       });
       requestGame({ kind: "open", gameId: runGameId });
+    },
+    openMainMenu(source) {
+      logEvent("main_menu_requested", { ...source, fromGameId: gameId });
+      requestGame({ kind: "create", mode: "journey", frontDoorEntry: "main" });
     },
     findRecentD97Run: () => findRecentGameOfMode(repository, "d97"),
   };

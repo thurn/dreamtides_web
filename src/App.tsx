@@ -40,7 +40,7 @@ import {
   contentConfigFromRuntime,
   type RuntimeConfig,
 } from "./runtime/runtime-config";
-import { findQaScene } from "./runtime/qa-scene-entry";
+import { d97DevelopmentContent, findQaScene } from "./runtime/qa-scene-entry";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
 
 /** Inner component that renders the gameplay router and retained app overlays. */
@@ -423,7 +423,7 @@ export default function App({
       // OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE) bounces. Registering here —
       // before `setJourneyContent` unblocks the render that opens the local
       // game — guarantees the ordering.
-      registerGameProviders(content);
+      registerGameProviders(content, d97DevelopmentContent());
       setJourneyContent(content);
       setLoadError(null);
     } catch (error) {

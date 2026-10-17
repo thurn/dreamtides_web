@@ -9,9 +9,8 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { D97_DREAMS } from "../content/d97/dreams";
-import { DEVELOPMENT_DREAM } from "../content/d97/dreams/development";
 import type { D97DreamDefinition } from "../content/d97/dreams/schema";
-import { SAVE_AVATAR, registerSaveContent } from "../d97/save/save.fixtures";
+import { SAVE_AVATAR, SAVE_DREAM, registerSaveContent } from "../d97/save/save.fixtures";
 import type { D97SaveBuild } from "../d97/save/snapshot";
 import type { Genesis, PinnedContentConfig } from "../eventlog/types";
 import { registerD97ContentProvider } from "../rules/d97/d97-content";
@@ -58,7 +57,7 @@ const OPTIONS: LocalGameOptions<FoldState> = {
   snapshots: d97SnapshotCodec(),
 };
 
-async function playedGame(repository: GameRepository, genesis: Genesis = GENESIS, dream: D97DreamDefinition = DEVELOPMENT_DREAM): Promise<FoldState> {
+async function playedGame(repository: GameRepository, genesis: Genesis = GENESIS, dream: D97DreamDefinition = SAVE_DREAM): Promise<FoldState> {
   const game = await createLocalGame<FoldState>(repository, GAME_ENGINE_CONFIG, { gameId: GAME, genesis, localPlayerId: parseClientId("p1") }, OPTIONS);
   game.log.append({ type: "D97_START_RUN", payload: { avatarId: SAVE_AVATAR, dreamId: dream.id } });
   game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: dream.topology.shopAnchorId } });
@@ -76,7 +75,7 @@ async function reopen(repository: GameRepository) {
   return game;
 }
 
-beforeEach(registerSaveContent);
+beforeEach(() => registerSaveContent());
 afterEach(() => registerD97ContentProvider(null));
 
 describe("D97 saves", () => {
@@ -111,7 +110,7 @@ describe("D97 saves", () => {
     expect(game.log.state().d97).toEqual(state.d97);
     expect(game.log.head()).toBe(4);
     // The rebased game keeps playing from its old head.
-    game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId } });
+    game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: SAVE_DREAM.topology.shopAnchorId } });
     expect(game.log.head()).toBe(5);
     await game.close();
   });
@@ -127,6 +126,7 @@ describe("D97 saves", () => {
   });
 
   describe.each(D97_DREAMS.map((dream) => [dream.id, dream] as const))("a run in catalog dream %s", (_id, dream) => {
+    beforeEach(() => registerSaveContent([dream, SAVE_DREAM]));
     const resident = dream.residents.find((candidate) => candidate.role === "challenger")!;
     const challenger = resident.anchorId;
     const encounter = (anchorId: DreamAnchorId): D97Encounter => ({

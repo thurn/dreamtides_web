@@ -9,7 +9,6 @@ import {
   parseD97RunSeed,
 } from "../../types/identifiers";
 import { D97_STARTING_PACKAGE } from "../../content/d97/collection";
-import { D97_FIRST_DREAM, d97DreamById } from "../../content/d97/dreams";
 import { acquireCopy, emptyCollection } from "../../d97/collection/collection";
 import {
   bagSize,
@@ -64,8 +63,8 @@ export function bagDrawLogRecord(
 
 /**
  * `D97_START_RUN { avatarId, dreamId? }` starts the run on the overworld with
- * any roster Avatar, in the dream module `dreamId` names (the first catalog
- * dream when omitted; an unknown dream bounces). The run's id comes from the event's seq and its seed from
+ * any roster Avatar, in the registered dream `dreamId` names (the content's
+ * default dream when omitted; a dream the content does not register bounces). The run's id comes from the event's seq and its seed from
  * the event's random stream, so both are recorded outcomes of this event.
  * The same stream deals the Avatar's reward bag and chooses the Standard
  * starting package; both are stored, never re-derived. The start dream's
@@ -82,9 +81,9 @@ export function startRun(
   if (avatarId === null || content === null || !content.avatarIds.has(avatarId)) {
     return null;
   }
-  const requested = payload.dreamId === undefined ? D97_FIRST_DREAM.id : d97DreamIdFromUnknown(payload.dreamId);
-  const dream = requested === null ? null : d97DreamById(requested);
-  if (dream === null) return null;
+  const requested = payload.dreamId === undefined ? content.defaultDreamId : d97DreamIdFromUnknown(payload.dreamId);
+  const dream = requested === null ? undefined : content.dreams.get(requested)?.definition;
+  if (dream === undefined) return null;
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
   const runId = parseD97RunId(`event:${String(ctx.seq)}`);

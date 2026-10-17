@@ -9,14 +9,13 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { D97SaveTuning } from "../../content/d97/save";
-import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { registerD97ContentProvider } from "../../rules/d97/d97-content";
 import type { D97Encounter, D97Run } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
 import { parseD97DreamId, parseD97QuestId, parseDreamAnchorId, type DreamAnchorId } from "../../types/identifiers";
 import type { DreamAnchorKind } from "../map/definition";
 import { reconcileSnapshot, type D97SaveCatalog } from "./reconcile";
-import { foldSyntheticRun, registerSaveContent } from "./save.fixtures";
+import { foldSyntheticRun, registerSaveContent, SAVE_DREAM } from "./save.fixtures";
 import { takeSnapshot, type D97SaveBuild, type D97Snapshot } from "./snapshot";
 
 const BUILD = { reducerVersion: "test", gitRevision: "unknown" } as D97SaveBuild;
@@ -31,8 +30,8 @@ const OTHER_CHALLENGER: DreamAnchorId = parseDreamAnchorId("d97b0000-0000-4000-8
 const ANCHORS: { id: DreamAnchorId; kind: DreamAnchorKind }[] = [
   { id: CHALLENGER, kind: "challenger" },
   { id: SPARE_CHALLENGER, kind: "challenger" },
-  { id: DEVELOPMENT_DREAM.topology.shopAnchorId, kind: "shop" },
-  { id: DEVELOPMENT_DREAM.topology.waypointAnchorId, kind: "waypoint" },
+  { id: SAVE_DREAM.topology.shopAnchorId, kind: "shop" },
+  { id: SAVE_DREAM.topology.waypointAnchorId, kind: "waypoint" },
 ];
 
 function snapshot(edit: (run: D97Run) => D97Run = (run) => run): D97Snapshot {
@@ -44,8 +43,8 @@ function snapshot(edit: (run: D97Run) => D97Run = (run) => run): D97Snapshot {
 function catalog(retired: ReadonlySet<CardId> = new Set(), overrides: Partial<D97SaveCatalog> = {}): D97SaveCatalog {
   return {
     hasCard: (cardId) => !retired.has(cardId),
-    dreams: [{ id: DEVELOPMENT_DREAM.id, anchors: ANCHORS }],
-    defaultDreamId: DEVELOPMENT_DREAM.id,
+    dreams: [{ id: SAVE_DREAM.id, anchors: ANCHORS }],
+    defaultDreamId: SAVE_DREAM.id,
     questIds: new Set([QUEST]),
     ...overrides,
   };
@@ -55,7 +54,7 @@ function encounter(anchorId: DreamAnchorId, cards: readonly CardId[]): D97Encoun
   return { anchorId, role: "challenger", deck: cards, draftPool: cards, signatureCardIds: cards, opponentAnteCardId: cards[0] ?? null } as D97Encounter;
 }
 
-beforeEach(registerSaveContent);
+beforeEach(() => registerSaveContent());
 afterEach(() => registerD97ContentProvider(null));
 
 describe("reconcileSnapshot", () => {
@@ -102,7 +101,7 @@ describe("reconcileSnapshot", () => {
     const moved = reconcileSnapshot(save, catalog(), TUNING);
     expect(moved.snapshot.d97.run!.encounters[SPARE_CHALLENGER]?.anchorId).toBe(SPARE_CHALLENGER);
     expect(moved.reconciliations).toEqual([{ kind: "anchorMoved", where: "encounter", anchorId: REMOVED, toAnchorId: SPARE_CHALLENGER }]);
-    const full = reconcileSnapshot(save, catalog(new Set(), { dreams: [{ id: DEVELOPMENT_DREAM.id, anchors: ANCHORS.filter((anchor) => anchor.id !== SPARE_CHALLENGER) }] }), TUNING);
+    const full = reconcileSnapshot(save, catalog(new Set(), { dreams: [{ id: SAVE_DREAM.id, anchors: ANCHORS.filter((anchor) => anchor.id !== SPARE_CHALLENGER) }] }), TUNING);
     expect(full.snapshot.d97.run!.encounters[REMOVED]).toBeUndefined();
     expect(full.reconciliations).toEqual([{ kind: "anchorDropped", where: "encounter", anchorId: REMOVED }]);
   });
@@ -110,7 +109,7 @@ describe("reconcileSnapshot", () => {
   it("keeps records on any dream's anchors, and moves a removed one into the run's dream first", () => {
     const save = snapshot((run) => ({ ...run, encounters: { [OTHER_CHALLENGER]: encounter(OTHER_CHALLENGER, []), [REMOVED]: encounter(REMOVED, []) } }));
     // The other dream is listed first, yet the run's own dream takes the moved record.
-    const dreams = [{ id: OTHER_DREAM, anchors: [{ id: OTHER_CHALLENGER, kind: "challenger" as const }, { id: parseDreamAnchorId("d97b0000-0000-4000-8000-000000000007"), kind: "challenger" as const }] }, { id: DEVELOPMENT_DREAM.id, anchors: ANCHORS }];
+    const dreams = [{ id: OTHER_DREAM, anchors: [{ id: OTHER_CHALLENGER, kind: "challenger" as const }, { id: parseDreamAnchorId("d97b0000-0000-4000-8000-000000000007"), kind: "challenger" as const }] }, { id: SAVE_DREAM.id, anchors: ANCHORS }];
     const result = reconcileSnapshot(save, catalog(new Set(), { dreams }), TUNING);
     expect(result.reconciliations).toEqual([{ kind: "anchorMoved", where: "encounter", anchorId: REMOVED, toAnchorId: CHALLENGER }]);
     expect(Object.keys(result.snapshot.d97.run!.encounters).sort()).toEqual([CHALLENGER, OTHER_CHALLENGER].sort());
@@ -121,15 +120,15 @@ describe("reconcileSnapshot", () => {
     const dreams = [{ id: OTHER_DREAM, anchors: ANCHORS }];
     const result = reconcileSnapshot(save, catalog(new Set(), { dreams, defaultDreamId: OTHER_DREAM }), TUNING);
     expect(result.snapshot.d97.run!.dreamId).toBe(OTHER_DREAM);
-    expect(result.reconciliations).toEqual([{ kind: "dreamMoved", dreamId: DEVELOPMENT_DREAM.id, toDreamId: OTHER_DREAM }]);
+    expect(result.reconciliations).toEqual([{ kind: "dreamMoved", dreamId: SAVE_DREAM.id, toDreamId: OTHER_DREAM }]);
   });
 
   it("forgets places on removed anchors", () => {
-    const save = snapshot((run) => ({ ...run, lastPlace: { kind: "door", anchorId: REMOVED }, returnAnchorId: REMOVED, activeWaypointIds: [REMOVED, DEVELOPMENT_DREAM.topology.waypointAnchorId] }));
+    const save = snapshot((run) => ({ ...run, lastPlace: { kind: "door", anchorId: REMOVED }, returnAnchorId: REMOVED, activeWaypointIds: [REMOVED, SAVE_DREAM.topology.waypointAnchorId] }));
     const next = reconcileSnapshot(save, catalog(), TUNING).snapshot.d97.run!;
     expect(next.lastPlace).toBeNull();
     expect(next.returnAnchorId).toBeNull();
-    expect(next.activeWaypointIds).toEqual([DEVELOPMENT_DREAM.topology.waypointAnchorId]);
+    expect(next.activeWaypointIds).toEqual([SAVE_DREAM.topology.waypointAnchorId]);
   });
 
   it("abandons a held quest whose definition was removed", () => {

@@ -1,7 +1,7 @@
 // The D97 run contract: a D97 genesis folds a D97 slice on Avatar select
 // while a journey genesis folds none; `D97_START_RUN` records the run (id,
-// seed, roster Avatar, and its dream: the requested dream module, or the
-// first catalog dream) once, deals its reward bag and Standard starting
+// seed, roster Avatar, and its dream: the requested registered dream, or the
+// content's default dream) once, deals its reward bag and Standard starting
 // package, moves to the overworld and logs it; equip and unequip move owned
 // copies between the deck and the reserve; and each mode bounces the other
 // mode's events.
@@ -11,8 +11,6 @@ import {
   D97_COLLECTION,
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
-import { D97_FIRST_DREAM } from "../../content/d97/dreams";
-import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { acquireCopy } from "../../d97/collection/collection";
 import { bagWeight } from "../../d97/collection/reward-bag";
 import { eventRng } from "../../eventlog/rng";
@@ -27,6 +25,7 @@ import {
   syntheticD97Content,
   syntheticPoolCardIds,
 } from "./d97-content.fixtures";
+import { SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B } from "./d97-dreams.fixtures";
 import type { D97Run } from "./d97-state";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
@@ -110,22 +109,22 @@ describe("D97_START_RUN", () => {
         runId: run?.runId,
         runSeed: run?.runSeed,
         avatarId: ROSTER_AVATAR,
-        dreamId: D97_FIRST_DREAM.id,
-        activeWaypointIds: [D97_FIRST_DREAM.topology.waypointAnchorId],
+        dreamId: SYNTHETIC_DREAM_A.id,
+        activeWaypointIds: [SYNTHETIC_DREAM_A.topology.waypointAnchorId],
       },
     });
-    expect(run?.activeWaypointIds).toEqual([D97_FIRST_DREAM.topology.waypointAnchorId]);
+    expect(run?.activeWaypointIds).toEqual([SYNTHETIC_DREAM_A.topology.waypointAnchorId]);
   });
 
-  it("records the run's dream: the first catalog dream, or the dream module requested", () => {
+  it("records the run's dream: the content's default dream, or the registered dream requested", () => {
     const genesis = genesisFoldState(D97_GENESIS);
-    expect(startRun(genesis, ROSTER_AVATAR).state.d97?.run?.dreamId).toBe(D97_FIRST_DREAM.id);
-    const development = startRun(genesis, ROSTER_AVATAR, 1, { dreamId: DEVELOPMENT_DREAM.id });
-    expect(development.state.d97?.run?.dreamId).toBe(DEVELOPMENT_DREAM.id);
-    expect(development.logRecords?.[0]?.fields).toMatchObject({ dreamId: DEVELOPMENT_DREAM.id });
+    expect(startRun(genesis, ROSTER_AVATAR).state.d97?.run?.dreamId).toBe(SYNTHETIC_DREAM_A.id);
+    const other = startRun(genesis, ROSTER_AVATAR, 1, { dreamId: SYNTHETIC_DREAM_B.id });
+    expect(other.state.d97?.run?.dreamId).toBe(SYNTHETIC_DREAM_B.id);
+    expect(other.logRecords?.[0]?.fields).toMatchObject({ dreamId: SYNTHETIC_DREAM_B.id });
   });
 
-  it("bounces a dream no dream module names", () => {
+  it("bounces a dream the content does not register", () => {
     const genesis = genesisFoldState(D97_GENESIS);
     expect(startRun(genesis, ROSTER_AVATAR, 1, { dreamId: "d9700000-0000-4000-8000-0000000000ff" }).outcome).toBe("bounced");
     expect(startRun(genesis, ROSTER_AVATAR, 1, { dreamId: "not a dream" }).outcome).toBe("bounced");

@@ -7,8 +7,9 @@
 //
 // The dialogue-effect cases (advance a quest, give or take an item, set a
 // flag, hand off to a service) bounce unless the resident standing at the
-// payload's anchor speaks a registered dialogue with a choice carrying that
-// exact effect (`speakerOffers`). They do not evaluate the choice's condition:
+// payload's anchor in the run's own dream speaks a registered dialogue with a
+// choice carrying that exact effect (`speakerOffers`). They do not evaluate
+// the choice's condition:
 // which node is showing is view state (P17), so a fold cannot tell whether
 // the choice is reachable, and each case already guards the state it changes.
 
@@ -37,12 +38,17 @@ import {
   type DreamAnchorId,
 } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
+import { runDreamAnchor } from "./d97-dreams";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97BeatenAnchorIds, d97RunAct, type D97Run, type D97State } from "./d97-state";
 
-/** Whether the resident at `anchorId` speaks a registered dialogue carrying `effect`. */
-function speakerOffers(anchorId: DreamAnchorId, effect: D97DialogueEffect): boolean {
-  const module = d97ContentProvider()?.speakerDialogues.get(anchorId);
+/**
+ * Whether the resident at `anchorId` in the run's own dream speaks a
+ * registered dialogue carrying `effect`.
+ */
+function speakerOffers(run: D97Run, anchorId: DreamAnchorId, effect: D97DialogueEffect): boolean {
+  const content = d97ContentProvider();
+  const module = content === null ? undefined : runDreamAnchor(run, content, anchorId)?.speakerDialogues.get(anchorId);
   return module !== undefined && dialogueCarriesEffect(module, effect);
 }
 
@@ -105,7 +111,7 @@ export function advanceQuest(d97: D97State, payload: Record<string, unknown>): D
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
   if (found === null || stepId === null || anchorId === null) return null;
   const { run, quest } = found;
-  if (!speakerOffers(anchorId, { kind: "advanceQuest", questId: quest.id, stepId })) return null;
+  if (!speakerOffers(run, anchorId, { kind: "advanceQuest", questId: quest.id, stepId })) return null;
   const quests = advanceInState(run.quests, quest, stepId, anchorId);
   const step = quest.steps.find((candidate) => candidate.id === stepId);
   if (quests === null || step === undefined) return null;
@@ -234,7 +240,7 @@ function itemCase(
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
   if (run === null || itemId === null || anchorId === null) return null;
   if (d97ContentProvider()?.itemIds.has(itemId) !== true) return null;
-  if (!speakerOffers(anchorId, { kind: give ? "giveItem" : "takeItem", itemId })) return null;
+  if (!speakerOffers(run, anchorId, { kind: give ? "giveItem" : "takeItem", itemId })) return null;
   const held = run.quests.items.includes(itemId);
   if (held === give) return null;
   const items = give ? [...run.quests.items, itemId] : run.quests.items.filter((item) => item !== itemId);
@@ -260,7 +266,7 @@ export function setFlag(d97: D97State, payload: Record<string, unknown>): D97Tra
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
   if (run === null || flagId === null || anchorId === null || typeof payload.value !== "boolean") return null;
   const value = payload.value;
-  if (!speakerOffers(anchorId, { kind: "setFlag", flagId, value })) return null;
+  if (!speakerOffers(run, anchorId, { kind: "setFlag", flagId, value })) return null;
   if (run.flags.includes(flagId) === value) return null;
   const flags = value ? [...run.flags, flagId] : run.flags.filter((flag) => flag !== flagId);
   return withRun(d97, { ...run, flags }, [
@@ -284,7 +290,7 @@ export function handOff(d97: D97State, payload: Record<string, unknown>): D97Tra
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
   const service = serviceFromUnknown(payload.service);
   if (run === null || anchorId === null || service === null) return null;
-  if (!speakerOffers(anchorId, { kind: "openService", service })) return null;
+  if (!speakerOffers(run, anchorId, { kind: "openService", service })) return null;
   return withRun(d97, run, [
     { event: "d97_dialogue_hand_off", fields: { runId: run.runId, anchorId, surface: "service", service } },
   ]);

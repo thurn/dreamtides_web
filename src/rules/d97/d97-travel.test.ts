@@ -2,11 +2,10 @@
 // activates it once, logs every touch and makes it the reload place; the
 // exit door bounces while its guardian is unbeaten and, once it falls, opens
 // the slice end and becomes the reload place; other anchors bounce. The
-// contract holds for every dream module's topology (the development dream and
-// each catalog dream), and each log names the touched dream's map.
+// contract holds for a run in each registered synthetic dream, and each log
+// names the run's dream's map.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { D97_DREAM_MODULES } from "../../content/d97/dreams";
 import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
 import { eventRng } from "../../eventlog/rng";
 import type { Genesis } from "../../eventlog/types";
@@ -16,6 +15,7 @@ import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
 import { registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
+import { SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B } from "./d97-dreams.fixtures";
 import type { D97Encounter, D97Run } from "./d97-state";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
@@ -31,8 +31,10 @@ function runOf(state: FoldState): D97Run {
   return run;
 }
 
+let dreamId = SYNTHETIC_DREAM_A.id;
+
 function started(): FoldState {
-  return apply(genesisFoldState(D97_GENESIS), "D97_START_RUN", { avatarId: AVATAR }, 1).state;
+  return apply(genesisFoldState(D97_GENESIS), "D97_START_RUN", { avatarId: AVATAR, dreamId }, 1).state;
 }
 
 /** `state` with `dream`'s exit guardian's encounter recorded as beaten or not. */
@@ -51,8 +53,11 @@ afterEach(() => {
   registerD97ContentProvider(null);
 });
 
-describe.each(D97_DREAM_MODULES.map((dream) => [dream.id, dream] as const))("dream %s", (_id, dream) => {
+describe.each([SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B].map((dream) => [dream.id, dream] as const))("a run in dream %s", (_id, dream) => {
   const { topology } = dream;
+  beforeEach(() => {
+    dreamId = dream.id;
+  });
 
   describe("D97_ACTIVATE_WAYPOINT", () => {
     it("activates the waypoint once and makes every touch the reload place", () => {

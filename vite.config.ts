@@ -61,8 +61,10 @@ function journeyLogPlugin(): Plugin {
 /**
  * Source modules compiled only into development builds (P7): the QA scenes,
  * the prompt-lab and card-lab, the engine's test tooling, the engine debug
- * actions, and the battle screen's debug panel. Development builds load them
- * behind `import.meta.env.DEV` (`src/runtime/qa-scene-entry.ts`,
+ * actions, the battle screen's debug panel, and the Dreamtides 97 development
+ * fixtures (the development dream, its map, dialogue and character recipes).
+ * Development builds load them behind `import.meta.env.DEV`
+ * (`src/runtime/qa-scene-entry.ts`,
  * `src/engine/development.ts`, `EngineBattleScreen`).
  */
 const DEV_ONLY_MODULES = [
@@ -72,6 +74,12 @@ const DEV_ONLY_MODULES = [
   "src/runtime/qa-journey-foundation.ts",
   "src/battle/components/EngineDebugPanel.tsx",
   "src/battle/components/engine-probe-events.ts",
+  "src/d97/qa-scenes.ts",
+  "src/d97/development-content.ts",
+  "src/d97/overworld/dev-map.ts",
+  "src/d97/overworld/dev-dialogue.ts",
+  "src/content/d97/dreams/development.ts",
+  "src/content/d97/characters/development.ts",
 ];
 
 /**

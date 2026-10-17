@@ -2,15 +2,12 @@
 // their characters, scales and dialogue and the badges their roles derive (or
 // their own); residents the validator flags are left out; the challenger
 // assembly reads battle residents; a topology's anchors must exist with their
-// kinds and its guardian must block its exit; dreams are found by their
-// topology's anchors; and the development dream occupies every character
-// anchor of its map.
+// kinds and its guardian must block its exit; and the development dream
+// occupies every character anchor of its map.
 
 import { describe, expect, it } from "vitest";
-import { D97_CHALLENGERS, dreamChallengers } from "../../content/d97/challengers";
+import { dreamChallengers } from "../../content/d97/challengers";
 import { D97_CHARACTER_SPRITES } from "../../content/d97/characters";
-import { d97DreamByAnchor } from "../../content/d97/dreams";
-import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { defineDream, type D97DreamResident, type D97DreamTopology } from "../../content/d97/dreams/schema";
 import {
   parseAvatarId,
@@ -20,7 +17,7 @@ import {
   parseDreamAnchorId,
   parseDreamMapId,
 } from "../../types/identifiers";
-import { registeredDialogueCatalog } from "../dialogue/catalog";
+import { D97_DEVELOPMENT_CONTENT } from "../development-content";
 import type { DreamAnchorKind } from "../map/definition";
 import { compileDevMap } from "./dev-map";
 import { dreamOccupants, validateDreamResidents, validateDreamTopology, type D97DreamResidentRegistry } from "./dream-occupants";
@@ -81,7 +78,7 @@ describe("dreamOccupants", () => {
   });
 
   it("assembles challengers and guardians from battle residents", () => {
-    expect(dreamChallengers([dream(RESIDENTS)])).toEqual([
+    expect([...dreamChallengers(dream(RESIDENTS)).values()]).toEqual([
       { anchorId: anchor(1), characterId: HERO, role: "challenger", deck: { kind: "generic", deckSourceAvatarId: AVATAR } },
       { anchorId: anchor(2), characterId: BRUTE, role: "challenger", deck: { kind: "generic", deckSourceAvatarId: AVATAR } },
       { anchorId: anchor(3), characterId: BRUTE, role: "guardian", deck: { kind: "avatar", avatarIds: [AVATAR] } },
@@ -135,29 +132,13 @@ describe("validateDreamTopology", () => {
   });
 });
 
-describe("d97DreamByAnchor", () => {
-  const other = defineDream({
-    id: parseD97DreamId(id(500)),
-    mapId: parseDreamMapId(id(501)),
-    topology: { waypointAnchorId: anchor(20), arrivalDoorAnchorId: anchor(21), exitDoorAnchorId: anchor(22), exitGuardianAnchorId: anchor(23), shopAnchorId: anchor(24) },
-    residents: [],
-  });
-  const dreams = [dream([]), other];
-
-  it("finds the dream whose topology names an anchor", () => {
-    expect(d97DreamByAnchor(anchor(9), dreams)?.id).toBe(dreams[0]?.id);
-    expect(d97DreamByAnchor(anchor(22), dreams)?.id).toBe(other.id);
-    expect(d97DreamByAnchor(anchor(1), dreams)).toBeNull();
-    expect(d97DreamByAnchor(DEVELOPMENT_DREAM.topology.waypointAnchorId)?.id).toBe(DEVELOPMENT_DREAM.id);
-  });
-});
-
 describe("the development dream", () => {
+  const { dream: DEVELOPMENT_DREAM, dialogue, characterSprites } = D97_DEVELOPMENT_CONTENT;
   const map = compileDevMap();
   const registry: D97DreamResidentRegistry = {
     anchors: map.anchors,
-    characterIds: new Set(D97_CHARACTER_SPRITES.map((recipe) => recipe.id)),
-    dialogueIds: new Set(registeredDialogueCatalog().dialogues.keys()),
+    characterIds: new Set([...D97_CHARACTER_SPRITES, ...characterSprites].map((recipe) => recipe.id)),
+    dialogueIds: new Set(dialogue.dialogues.map((module) => module.id)),
   };
 
   it("occupies exactly its map's character anchors, with the guardian at incarnation scale", () => {
@@ -170,9 +151,5 @@ describe("the development dream", () => {
     }
     const guardian = map.anchors.find((candidate) => candidate.kind === "guardian");
     expect(guardian === undefined ? null : occupants.get(guardian.id)).toMatchObject({ scale: "incarnation", badge: "boss" });
-  });
-
-  it("feeds the encounter rules' challengers", () => {
-    for (const challenger of dreamChallengers([DEVELOPMENT_DREAM])) expect(D97_CHALLENGERS).toContainEqual(challenger);
   });
 });

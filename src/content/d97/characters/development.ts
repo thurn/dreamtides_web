@@ -1,6 +1,6 @@
 // Three development character recipes: a knight, a villager and a wolf-headed
-// boss. The development dream's occupants use them, and the player walks as
-// the knight while their Avatar has no recipe of its own.
+// boss. The development dream's occupants use them; only development builds
+// register them (src/d97/development-content.ts).
 
 import { parseD97CharacterId, parseLpcSheetKey } from "../../../types/identifiers";
 import { characterSprite } from "./schema";

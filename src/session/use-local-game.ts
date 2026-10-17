@@ -365,6 +365,10 @@ export function useLocalGame({
     (switchRequest === null && gameId === null && !resumeRecent);
   const createMode =
     switchRequest?.kind === "create" ? switchRequest.mode : newGameMode;
+  const createFrontDoorEntry =
+    switchRequest?.kind === "create" && switchRequest.frontDoorEntry !== undefined
+      ? switchRequest.frontDoorEntry
+      : frontDoorEntry;
   const requestKey =
     switchRequest !== null
       ? `${switchRequest.kind}:${String(switchRequest.serial)}`
@@ -412,7 +416,7 @@ export function useLocalGame({
                 loaded,
                 locks(),
                 contentConfig,
-                frontDoorEntry,
+                createFrontDoorEntry,
                 gameSwitch,
                 genesisSeedOverride,
                 createMode,
@@ -498,6 +502,7 @@ export function useLocalGame({
   }, [
     contentConfig,
     create,
+    createFrontDoorEntry,
     createMode,
     createNewGame,
     frontDoorEntry,

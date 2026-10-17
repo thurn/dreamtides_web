@@ -1,32 +1,39 @@
 // Which dream the overworld plays, and loading its compiled map. A run plays
-// the dream it records (`D97Run.dreamId`): a catalog dream, or the
-// development dream. A run whose dream is in no dream module plays the
-// development dream instead. A catalog dream's map is the
-// workspace-compiled `public/d97/maps/<map-id>.json`, fetched once per map
-// and checked for its shape; when it cannot be loaded the run plays the
-// development dream instead, whose map compiles in code.
+// the registered dream it records (`D97Run.dreamId`): a catalog dream, whose
+// map is the workspace-compiled `public/d97/maps/<map-id>.json`, fetched once
+// per map and checked for its shape; or, in a development build, the
+// development dream, whose map compiles in code. A run whose dream is not
+// registered, or whose map cannot be loaded, has no dream to play: the
+// overworld shows the dream as unavailable.
 
-import { d97DreamById } from "../../content/d97/dreams";
-import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
 import { assetUrl } from "../../runtime/asset-url";
 import type { D97DreamId, DreamMapId } from "../../types/identifiers";
 import { COMPILED_DREAM_MAP_FORMAT, type CompiledDreamMap } from "../map/compiled";
 
-export interface D97DreamSelection {
+/** A dream whose map compiles in code (the development dream). */
+export interface D97InlineDream {
   readonly dream: D97DreamDefinition;
-  /**
-   * Where the dream came from: a catalog dream, the development dream the
-   * run records, or the development dream standing in for an unknown one.
-   */
-  readonly source: "catalog" | "development" | "unknown";
+  readonly compileMap: () => CompiledDreamMap;
 }
 
-/** The dream a run in `dreamId` plays, among `dreams` (every dream module). */
-export function selectRunDream(dreamId: D97DreamId, dreams?: readonly D97DreamDefinition[]): D97DreamSelection {
-  const dream = d97DreamById(dreamId, dreams);
-  if (dream === null) return { dream: DEVELOPMENT_DREAM, source: "unknown" };
-  return { dream, source: dream.id === DEVELOPMENT_DREAM.id ? "development" : "catalog" };
+export type D97DreamSelection =
+  | { readonly source: "catalog"; readonly dream: D97DreamDefinition }
+  | ({ readonly source: "development" } & D97InlineDream)
+  | { readonly source: "unknown"; readonly dream: null };
+
+/**
+ * The dream a run in `dreamId` plays among the registered `dreams`; `inline`
+ * is the dream whose map compiles in code, if any.
+ */
+export function selectRunDream(
+  dreamId: D97DreamId,
+  dreams: readonly D97DreamDefinition[],
+  inline: D97InlineDream | null,
+): D97DreamSelection {
+  const dream = dreams.find((candidate) => candidate.id === dreamId);
+  if (dream === undefined) return { source: "unknown", dream: null };
+  return inline !== null && inline.dream.id === dream.id ? { source: "development", ...inline } : { source: "catalog", dream };
 }
 
 export type D97DreamMapFailure = "unavailable" | "malformed" | "mismatched";

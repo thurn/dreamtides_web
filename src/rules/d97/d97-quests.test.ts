@@ -8,7 +8,6 @@
 // resident at its anchor speaks a dialogue carrying that exact effect.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { D97_CHALLENGERS } from "../../content/d97/challengers";
 import { D97_QUESTS } from "../../content/d97/quests";
 import { createRewardBag, bagWeight } from "../../d97/collection/reward-bag";
 import {
@@ -41,12 +40,13 @@ import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
 import { registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
+import { speakingResident, syntheticDream, syntheticDreamAnchor } from "./d97-dreams.fixtures";
 import { d97RunAct, type D97Run } from "./d97-state";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-quest-avatar");
-/** A catalog challenger: the defeat quest's target, so a real encounter can be fought. */
-const TARGET = (D97_CHALLENGERS.find((entry) => entry.role === "challenger") ?? D97_CHALLENGERS[0]).anchorId;
+/** The run's dream's first challenger: the defeat quest's target, so a real encounter can be fought. */
+const TARGET = syntheticDreamAnchor(1, 6);
 const REGISTERED_QUESTS = QUESTS.map((quest) =>
   quest.id === DEFEAT_QUEST.id
     ? { ...quest, steps: quest.steps.map((step) => (step.kind === "defeat" ? { ...step, anchorId: TARGET } : step)) }
@@ -70,7 +70,7 @@ function speaker(index: number, kind: D97SpeakerKind, effects: readonly D97Dialo
 }
 
 /** The dialogue each test anchor's resident speaks; the object anchors have none. */
-const SPEAKER_DIALOGUES = new Map<DreamAnchorId, D97DialogueModule>([
+const SPEAKER_DIALOGUES: readonly (readonly [DreamAnchorId, D97DialogueModule])[] = [
   [
     ANCHORS.giver,
     speaker(1, "friendly", [
@@ -85,7 +85,14 @@ const SPEAKER_DIALOGUES = new Map<DreamAnchorId, D97DialogueModule>([
   [ANCHORS.recipient, speaker(2, "friendly", [{ kind: "advanceQuest", questId: DELIVERY_QUEST.id, stepId: STEPS.deliver }])],
   [ANCHORS.townsperson, speaker(3, "townsfolk", [{ kind: "advanceQuest", questId: ERRAND_QUEST.id, stepId: STEPS.visit }])],
   [ANCHORS.shop, speaker(4, "shop", [{ kind: "takeItem", itemId: ITEMS.parcel }])],
-]);
+];
+/** The run's dream: a synthetic dream with each speaker standing at its anchor. */
+const DREAM = syntheticDream(
+  1,
+  SPEAKER_DIALOGUES.map(([anchorId, module]) =>
+    speakingResident(anchorId, module.id, module.speaker.kind === "shop" ? "shop" : module.speaker.kind === "townsfolk" ? "townsfolk" : "friendly"),
+  ),
+);
 let seq = 1;
 
 function apply(state: FoldState, type: Parameters<typeof event>[0], payload: Record<string, unknown>) {
@@ -135,7 +142,8 @@ beforeEach(() => {
       avatarIds: [AVATAR],
       quests: REGISTERED_QUESTS,
       itemIds: [ITEMS.relic, ITEMS.parcel],
-      speakerDialogues: SPEAKER_DIALOGUES,
+      dreams: [DREAM, syntheticDream(2)],
+      dialogues: SPEAKER_DIALOGUES.map(([, module]) => module),
     }),
   );
 });

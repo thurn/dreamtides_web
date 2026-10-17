@@ -28,7 +28,7 @@ import {
 
 const BUILD = { reducerVersion: "test", gitRevision: "unknown" } as D97SaveBuild;
 
-beforeEach(registerSaveContent);
+beforeEach(() => registerSaveContent());
 afterEach(() => registerD97ContentProvider(null));
 
 describe("D97 snapshots", () => {

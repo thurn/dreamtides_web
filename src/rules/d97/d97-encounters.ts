@@ -7,7 +7,7 @@
 // changes nothing. Every outcome is written into state when first produced.
 
 import { sha256 } from "js-sha256";
-import { D97_CHALLENGERS, type D97ChallengerDefinition } from "../../content/d97/challengers";
+import type { D97ChallengerDefinition } from "../../content/d97/challengers";
 import { D97_COLLECTION } from "../../content/d97/collection";
 import { D97_ENCOUNTERS, type D97TierKnob } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
@@ -29,7 +29,6 @@ import {
   dreamAnchorIdFromUnknown,
   parseBattleId,
   type D97OwnedCopyId,
-  type DreamAnchorId,
 } from "../../types/identifiers";
 import { engineBattleResult, startEngineBattleWithCommits } from "../battle/engine-battle";
 import { d97BattleOf } from "../battle/fold";
@@ -38,6 +37,7 @@ import type { FoldState } from "../fold-state";
 import { advanceDefeatQuest } from "./d97-quests";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
+import { runDreamAnchor } from "./d97-dreams";
 import { d97RunAct, type D97Encounter, type D97Run, type D97State } from "./d97-state";
 
 /** A D97 case over the whole fold (it starts or ends a battle). */
@@ -86,10 +86,6 @@ function pick<T>(items: readonly T[], random: () => number): T | null {
   return items.length === 0 ? null : (items[Math.floor(random() * items.length)] ?? null);
 }
 
-function challengerAt(anchorId: DreamAnchorId): D97ChallengerDefinition | null {
-  return D97_CHALLENGERS.find((challenger) => challenger.anchorId === anchorId) ?? null;
-}
-
 /** Copies the collection may lose to an ante without dropping below its floor. */
 function anteAllowance(collection: D97Collection): number {
   return collection.copies.length - D97_COLLECTION.collectionFloor;
@@ -112,8 +108,9 @@ export function previewEncounter(
   const content = d97ContentProvider();
   if (d97 === undefined || run === null || anchorId === null || content === null || state.battle !== null) return null;
   if (run.encounters[anchorId] !== undefined) return null;
-  const challenger = challengerAt(anchorId);
-  if (challenger === null) return null;
+  // Only a challenger or guardian of the run's own dream.
+  const challenger = runDreamAnchor(run, content, anchorId)?.challengers.get(anchorId);
+  if (challenger === undefined) return null;
   const tier = encounterTier(challenger.role, d97RunAct(run));
   const knob = tierKnob(tier, D97_ENCOUNTERS.tierKnobs);
   const avatarId =

@@ -2,8 +2,9 @@
 // The D97 game-switch contract: from an open journey game, starting a D97 run
 // creates and opens a D97 game; its started run survives closing and
 // reopening the game by id (a reload); the most recent D97 game is found among
-// stored games of both modes; and Continue switches an open journey game back
-// to it.
+// stored games of both modes; Continue switches an open journey game back
+// to it; and Main Menu switches a D97 game to a new journey game on the main
+// menu.
 
 import { act, StrictMode, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
@@ -64,6 +65,7 @@ async function openTab(
   repository: GameRepository,
   locks: GameLockManager,
   gameId: GameId | null,
+  frontDoorEntry: "main" | undefined = "main",
 ): Promise<{ status: () => LocalGameStatus; close: () => Promise<void> }> {
   let latest: LocalGameStatus = { kind: "opening" };
   const loadRepository = () => Promise.resolve(repository);
@@ -72,7 +74,7 @@ async function openTab(
     latest = useLocalGame({
       gameId,
       contentConfig: CONTENT,
-      frontDoorEntry: "main",
+      frontDoorEntry,
       repository: loadRepository,
       locks: lockManager,
     }).status;
@@ -186,6 +188,26 @@ describe("D97 game switching", () => {
     expect(continued.game.gameId).toBe(runGameId);
     expect(continued.game.log.state().d97).toBeDefined();
     expect(new URL(window.location.href).searchParams.get("game")).toBe(runGameId);
+    await tab.close();
+  });
+
+  it("opens the main menu from a D97 game as a new journey game", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const locks = createFakeLockManager();
+    const runGameId = parseGameId("d97unavailable");
+    await storeGame(repository, runGameId, 1_000, "d97");
+    // The tab's own entry would open a journey on its journey phase.
+    const tab = await openTab(repository, locks, runGameId, undefined);
+    const d97 = ready(tab.status());
+    expect(d97.game.genesis.mode).toBe("d97");
+
+    act(() => d97.gameSwitch.openMainMenu({ source: "d97_dream_unavailable" }));
+    await settle();
+    const menu = ready(tab.status());
+    expect(menu.game.gameId).not.toBe(runGameId);
+    expect(menu.mode).toBe("journey");
+    expect(menu.game.log.state().frontDoor?.phase).toBe("main");
+    expect(await d97.gameSwitch.findRecentD97Run()).toBe(runGameId);
     await tab.close();
   });
 });

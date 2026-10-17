@@ -1,5 +1,7 @@
-// The real D97 content provider over synthetic journey content: its reward
-// pool is the pool the journey's draft builds for the same Avatar and seed
+// The real D97 content provider over synthetic journey content: a production
+// provider registers the dream catalog and no development dream, a
+// development provider registers the development dream beside it, each with
+// its own speakers; its reward pool is the pool the journey's draft builds for the same Avatar and seed
 // (per-card caps applied, cards of rarities bags never hold left out), and a D97 run started
 // through the registered providers gets its full starting collection.
 
@@ -12,7 +14,8 @@ import {
   D97_COLLECTION,
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
-import { D97_DREAM_MODULES } from "../../content/d97/dreams";
+import { D97_DREAMS } from "../../content/d97/dreams";
+import { D97_DEVELOPMENT_CONTENT } from "../../d97/development-content";
 import { eventRng } from "../../eventlog/rng";
 import { genesisFoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
@@ -54,14 +57,36 @@ function makeRarityContent() {
 }
 
 describe("createD97ContentProvider", () => {
-  it("indexes each speaking resident's registered dialogue by its anchor", () => {
-    const provider = createD97ContentProvider(makeJourneyContent());
-    const speaking = D97_DREAM_MODULES.flatMap((dream) => dream.residents).filter(
-      (resident) => resident.dialogueId !== undefined,
-    );
-    expect(speaking.length).toBeGreaterThan(0);
-    for (const resident of speaking) {
-      expect(provider.speakerDialogues.get(resident.anchorId)?.id).toBe(resident.dialogueId);
+  it("registers the dream catalog and no development fixture in production", () => {
+    const provider = createD97ContentProvider(makeJourneyContent(), null);
+    const development = D97_DEVELOPMENT_CONTENT;
+    expect([...provider.dreams.keys()]).toEqual(D97_DREAMS.map((dream) => dream.id));
+    expect(provider.dreams.has(development.dream.id)).toBe(false);
+    expect(provider.defaultDreamId).toBe(D97_DREAMS[0]?.id ?? null);
+    for (const module of development.dialogue.dialogues) expect(provider.dialogue.dialogues.has(module.id)).toBe(false);
+    for (const quest of development.dialogue.quests) expect(provider.quests.has(quest.id)).toBe(false);
+  });
+
+  it("registers the development dream beside the catalog in development", () => {
+    const provider = createD97ContentProvider(makeJourneyContent(), D97_DEVELOPMENT_CONTENT);
+    const { dream, map } = D97_DEVELOPMENT_CONTENT;
+    expect([...provider.dreams.keys()]).toEqual([...D97_DREAMS.map((entry) => entry.id), dream.id]);
+    expect(provider.defaultDreamId).toBe(D97_DREAMS[0]?.id ?? null);
+    expect(provider.dreams.get(dream.id)?.anchors.map((anchor) => anchor.id)).toEqual(map.anchors.map((anchor) => anchor.id));
+  });
+
+  it("indexes each speaking resident's registered dialogue by its anchor, in its own dream", () => {
+    const provider = createD97ContentProvider(makeJourneyContent(), D97_DEVELOPMENT_CONTENT);
+    const dreams = [...D97_DREAMS, D97_DEVELOPMENT_CONTENT.dream];
+    expect(dreams.some((dream) => dream.residents.some((resident) => resident.dialogueId !== undefined))).toBe(true);
+    for (const dream of dreams) {
+      const registered = provider.dreams.get(dream.id);
+      for (const resident of dream.residents.filter((entry) => entry.dialogueId !== undefined)) {
+        expect(registered?.speakerDialogues.get(resident.anchorId)?.id).toBe(resident.dialogueId);
+      }
+      for (const other of dreams.filter((entry) => entry.id !== dream.id)) {
+        for (const resident of other.residents) expect(registered?.speakerDialogues.has(resident.anchorId)).toBe(false);
+      }
     }
   });
 
@@ -72,7 +97,7 @@ describe("createD97ContentProvider", () => {
     if (avatar === undefined) throw new Error("missing Avatar");
     const journeySeed = testJourneySeed("d97-deal");
     const journey = buildAvatarPackage(avatar, content.poolContext, journeySeed);
-    const deal = createD97ContentProvider(content).dealRewardPool(
+    const deal = createD97ContentProvider(content, null).dealRewardPool(
       AVATAR_ID,
       hashStringToSeed(`${journeySeed}:${AVATAR_ID}`),
     );

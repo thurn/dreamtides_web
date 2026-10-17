@@ -43,6 +43,7 @@ import {
   createTutorialBattleInitProvider,
 } from "./battle-init-provider";
 import { createD97ContentProvider } from "./d97-content-provider";
+import type { D97DevelopmentContent } from "../../d97/development-content";
 import { createDeckContentProvider } from "./deck-provider";
 import { createDraftContentProvider } from "./draft-provider";
 import { createJourneyLifecycleContentProvider } from "./lifecycle-provider";
@@ -52,9 +53,11 @@ import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guida
 /**
  * Register the real content providers on every reducer seam from the loaded
  * journey content. Idempotent; the last registration wins. Call once, before
- * folding any event.
+ * folding any event. A development build passes its D97 development fixtures
+ * (`d97DevelopmentContent()` in src/runtime/qa-scene-entry.ts); without them
+ * no development dream is registered.
  */
-export function registerGameProviders(content: JourneyContent): void {
+export function registerGameProviders(content: JourneyContent, development: D97DevelopmentContent | null = null): void {
   registerJourneyTypeRemapProvider(journeyContentEngine(content).catalog.characterTypes);
   registerTutorialFrontDoorContentProvider({
     playerCardId:
@@ -75,7 +78,7 @@ export function registerGameProviders(content: JourneyContent): void {
   registerCardTutorialGuidanceContentProvider(
     createCardTutorialGuidanceContentProvider(content),
   );
-  registerD97ContentProvider(createD97ContentProvider(content));
+  registerD97ContentProvider(createD97ContentProvider(content, development));
 }
 
 /**

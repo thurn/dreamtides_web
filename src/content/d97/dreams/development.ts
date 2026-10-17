@@ -1,9 +1,9 @@
 // The development dream: the synthetic development map
 // (src/d97/overworld/dev-map.ts) with residents drawn from the development
 // character recipes, speaking the fixture dialogue
-// (src/d97/overworld/dev-dialogue.ts). Development QA scenes play it, and a
-// run plays it when its catalog dream's compiled map cannot be loaded. It is
-// not in the dream catalog.
+// (src/d97/overworld/dev-dialogue.ts). Development QA scenes play it. It is
+// not in the dream catalog: only development builds register it
+// (src/d97/development-content.ts).
 
 import { DEV_DIALOGUES } from "../../../d97/overworld/dev-dialogue";
 import { DEV_MAP_DEFINITION, devAnchorId } from "../../../d97/overworld/dev-map";

@@ -1,4 +1,5 @@
-// Resolves every D97 character sprite recipe (src/content/d97/characters/)
+// Resolves every D97 character sprite recipe (src/content/d97/characters/,
+// the development recipes included)
 // against the local Universal LPC Spritesheet Character Generator, links
 // exactly the sheets they use into gitignored `public/d97/characters/sheets/`
 // and writes `public/d97/characters/manifest.json`, at workspace preparation
@@ -10,6 +11,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, s
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { D97_CHARACTER_SPRITES } from "../../src/content/d97/characters/index.ts";
+import { DEV_KNIGHT, DEV_VILLAGER, DEV_WOLF } from "../../src/content/d97/characters/development.ts";
 import {
   CHARACTER_MANIFEST_FORMAT,
   CHARACTER_SHEETS_PATH,
@@ -23,6 +25,9 @@ import {
 } from "../../src/d97/overworld/characters/resolve-recipe.ts";
 import type { D97CharacterId, LpcSheetKey } from "../../src/types/identifiers.ts";
 import { defaultArtPaths } from "../setup-assets.ts";
+
+/** The catalog's recipes and the development recipes development builds draw. */
+const RECIPES = [...D97_CHARACTER_SPRITES, DEV_KNIGHT, DEV_VILLAGER, DEV_WOLF];
 
 function definitionsIndex(root: string): Map<string, string> {
   const index = new Map<string, string>();
@@ -92,7 +97,7 @@ function main(): void {
   }
   const library = available ? generatorLibrary(generator) : null;
   let linked = 0;
-  for (const recipe of D97_CHARACTER_SPRITES) {
+  for (const recipe of RECIPES) {
     if (library === null) {
       characters[recipe.id] = { layers: [], missing: ["no character generator library"] };
       continue;
@@ -123,7 +128,7 @@ function main(): void {
   const temporary = join(outDir, ".manifest.json.tmp");
   writeFileSync(temporary, `${JSON.stringify(manifest)}\n`);
   renameSync(temporary, join(outDir, "manifest.json"));
-  console.log(`Resolved ${String(D97_CHARACTER_SPRITES.length)} D97 character recipes; linked ${String(linked)} sheets`);
+  console.log(`Resolved ${String(RECIPES.length)} D97 character recipes; linked ${String(linked)} sheets`);
 }
 
 main();

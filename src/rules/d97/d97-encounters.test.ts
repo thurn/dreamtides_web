@@ -7,7 +7,7 @@
 // nothing but the battle count.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { D97_CHALLENGERS } from "../../content/d97/challengers";
+import { dreamChallengers } from "../../content/d97/challengers";
 import { D97_COLLECTION } from "../../content/d97/collection";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { copiesInZone, findCopy } from "../../d97/collection/collection";
@@ -21,6 +21,7 @@ import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
 import { d97ContentProvider, registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
+import { SYNTHETIC_DREAM_A } from "./d97-dreams.fixtures";
 import {
   bundleBudget,
   encounterTier,
@@ -31,8 +32,9 @@ import type { D97Run } from "./d97-state";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-encounter-avatar");
-const CHALLENGER = D97_CHALLENGERS.find((entry) => entry.role === "challenger")!;
-const GUARDIAN = D97_CHALLENGERS.find((entry) => entry.role === "guardian")!;
+const OPPONENTS = [...dreamChallengers(SYNTHETIC_DREAM_A).values()];
+const CHALLENGER = OPPONENTS.find((entry) => entry.role === "challenger")!;
+const GUARDIAN = OPPONENTS.find((entry) => entry.role === "guardian")!;
 
 function apply(state: FoldState, type: string, payload: Record<string, unknown>, seq: number) {
   return reduceGameEvent(state, event(type as never, payload), ctx({ seq, rng: eventRng(D97_GENESIS.seed, seq) }));

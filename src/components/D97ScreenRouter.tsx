@@ -4,10 +4,9 @@
 // dream the scene requests.
 
 import { useEffect, useRef } from "react";
-import { DEVELOPMENT_DREAM } from "../content/d97/dreams/development";
 import type { JourneyContent } from "../data/journey-content";
 import { logEvent } from "../logging";
-import { findD97QaScene } from "../runtime/qa-scene-entry";
+import { d97DevelopmentContent, findD97QaScene } from "../runtime/qa-scene-entry";
 import { useActions, useHead, useGameState } from "../session/hooks";
 import { D97AvatarSelectScreenAdapter } from "../screens/cumulus_adapters/d97/D97AvatarSelectScreenAdapter";
 import { D97OverworldScreenAdapter } from "../screens/cumulus_adapters/d97/D97OverworldScreenAdapter";
@@ -56,7 +55,7 @@ export function D97ScreenRouter({
   const qaScene = gotoScene === null ? null : findD97QaScene(gotoScene);
   const startsQaRun = qaScene?.startsRun === true;
   const opensDeckEditor = qaScene?.opensDeckEditor === true;
-  const qaRunDreamId = qaScene?.startsInDevelopmentDream === true ? DEVELOPMENT_DREAM.id : undefined;
+  const qaRunDreamId = qaScene?.startsInDevelopmentDream === true ? d97DevelopmentContent()?.dream.id : undefined;
   const firstAvatarId = journeyContent.avatars[0]?.id ?? null;
   useEffect(() => {
     if (
