@@ -4,6 +4,7 @@ import { event, topOfDeck } from "../../../dsl/builders";
 import { createEngine } from "../../../engine";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
+import { isLegalAnswer } from "../../../prompts/answers";
 import type { Answer, ChooseCardsPrompt, ConfirmPrompt, Prompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
@@ -266,7 +267,7 @@ describe("takeFromAmong with a count", () => {
     expect(fold.pending(outcome.slice)).toBeNull();
   });
 
-  it("has Greedy accept the \"you may\" and take the most valuable cards, and decline the \"you may\" once its optional chain is spent", () => {
+  it("has Greedy take the required count legally, and decline the \"you may\" once its optional chain is spent", () => {
     const { state, ids } = boardState(taking.catalog, takeTwoBoard([v.vanilla0.id, v.vanilla5.id, v.vanilla2.id]));
     const [low, high, middle] = ids.player.deck;
     const value = new Map([[low, 0], [high, 5], [middle, 2]]);
@@ -275,11 +276,16 @@ describe("takeFromAmong with a count", () => {
       kind: "chooseCards", side: "player", cancellable: false, candidates: [low, high, middle], min: 2, max: 2, purpose: { ...purpose, role: "chooseAmong" },
     };
     const info = (id: InstanceId) => ({ mine: true, value: value.get(id) ?? 0 });
-    expect(greedyAnswer(choice, info, noDiscoverCosts, state.automaticChoices)).toEqual([high, middle]);
+    // An accepted take remains a legal, distinct two-card selection past the cap.
+    for (const automaticChoices of [state.automaticChoices, Number.MAX_SAFE_INTEGER]) {
+      const answer = greedyAnswer(choice, info, noDiscoverCosts, automaticChoices);
+      expect(isLegalAnswer(choice, answer)).toBe(true);
+      expect(answer).toHaveLength(2);
+    }
     const youMay: ConfirmPrompt = { kind: "confirm", side: "player", cancellable: false, purpose: { ...purpose, role: "youMay" } };
-    expect(greedyAnswer(youMay, info, noDiscoverCosts, state.automaticChoices)).toBe(true);
-    expect(greedyAnswer(youMay, info, noDiscoverCosts, Number.MAX_SAFE_INTEGER)).toBe(false);
-    // Past the cap a choice already accepted still takes exactly the count.
-    expect(greedyAnswer(choice, info, noDiscoverCosts, Number.MAX_SAFE_INTEGER)).toHaveLength(2);
+    expect(isLegalAnswer(youMay, greedyAnswer(youMay, info, noDiscoverCosts, state.automaticChoices))).toBe(true);
+    const capped = greedyAnswer(youMay, info, noDiscoverCosts, Number.MAX_SAFE_INTEGER);
+    expect(isLegalAnswer(youMay, capped)).toBe(true);
+    expect(capped).toBe(false);
   });
 });

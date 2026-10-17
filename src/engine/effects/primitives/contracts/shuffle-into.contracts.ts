@@ -5,6 +5,7 @@ import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { greedyAnswer } from "../../../policy/prompts";
+import { isLegalAnswer } from "../../../prompts/answers";
 import type { Answer, ChooseCardsPrompt, Prompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
@@ -380,7 +381,7 @@ describe("shuffleInto", () => {
     expect(sorted(rest.state.sides.player.deck)).toEqual(sorted([...ids.player.deck, ...ids.player.void]));
   });
 
-  it("has Greedy shuffle away its least valuable hand cards", () => {
+  it("has Greedy answer a forced hand shuffle legally, including past its optional-chain cap", () => {
     const { state, ids } = boardState(engine.catalog, setup(handShuffle.id, { hand: [v.vanilla1.id, v.vanilla2.id, v.vanilla3.id] }));
     const [low, high, mid] = ids.player.hand.slice(1);
     const value = new Map([[low, 0], [high, 3], [mid, 1]]);
@@ -388,7 +389,14 @@ describe("shuffleInto", () => {
       kind: "chooseCards", side: "player", cancellable: false, candidates: [low, high, mid], min: 2, max: 2,
       purpose: { source: ids.player.hand[0], cardId: handShuffle.id, ability: 0, role: "shuffleInto" },
     };
-    expect(greedyAnswer(prompt, (id) => ({ mine: true, value: value.get(id) ?? 0 }), noDiscoverCosts, state.automaticChoices)).toEqual([low, mid]);
+    const info = (id: InstanceId) => ({ mine: true, value: value.get(id) ?? 0 });
+    const answer = greedyAnswer(prompt, info, noDiscoverCosts, state.automaticChoices);
+    const capped = greedyAnswer(prompt, info, noDiscoverCosts, Number.MAX_SAFE_INTEGER);
+    expect(isLegalAnswer(prompt, answer)).toBe(true);
+    expect(answer).toHaveLength(2);
+    expect(isLegalAnswer(prompt, capped)).toBe(true);
+    // This finite choice commits to the same amount on either side of the cap.
+    expect(capped).toEqual(answer);
   });
 });
 

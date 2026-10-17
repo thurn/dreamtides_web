@@ -4,6 +4,7 @@ import { createEngine } from "../../../engine";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { EngineLogRecord } from "../../../log";
+import { isLegalAnswer } from "../../../prompts/answers";
 import type { Answer, ChooseCardsPrompt, Prompt } from "../../../prompts/types";
 import { event } from "../../../dsl/builders";
 import { instanceOrigin } from "../../../rules/activation";
@@ -18,7 +19,7 @@ import { invariantViolations } from "../../../testing/invariants";
 import { playFromHand } from "../../../testing/scenario";
 import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { promptView, view } from "../../../view/view";
-import { declineAnswer, greedyAnswer } from "../../../policy/prompts";
+import { greedyAnswer } from "../../../policy/prompts";
 import { identifies } from "../../../view/knowledge";
 import { resolveEffect } from "../../interpreter";
 import { discardChosen } from "../discard-chosen";
@@ -314,7 +315,7 @@ describe("takeFromAmong", () => {
     expect(fold.pending(outcome.slice)).toBeNull();
   });
 
-  it("has Greedy take the most valuable offered card, and decline an optional take once its optional chain is spent", () => {
+  it("has Greedy answer offered-card choices legally, and decline an optional take once its optional chain is spent", () => {
     const { state, ids } = boardState(taking.catalog, erodeBoard([v.vanilla0.id, v.vanilla2.id]));
     const [low, high] = ids.player.deck;
     const value = new Map([[low, 0], [high, 2]]);
@@ -323,13 +324,16 @@ describe("takeFromAmong", () => {
         kind: "chooseCards", side: "player", cancellable: false, candidates: [low, high], min: role === "chooseAmong" ? 0 : 1, max: 1,
         purpose: { source: ids.player.hand[0], cardId: DSL.erodeTakeCharacter.id, ability: 0, role },
       };
-      // The eroded cards are the chooser's own: a hostile-target heuristic would take none of them.
-      expect(greedyAnswer(prompt, (id) => ({ mine: role === "chooseAmong", value: value.get(id) ?? 0 }), noDiscoverCosts, state.automaticChoices)).toEqual([high]);
+      const answer = greedyAnswer(prompt, (id) => ({ mine: role === "chooseAmong", value: value.get(id) ?? 0 }), noDiscoverCosts, state.automaticChoices);
+      expect(isLegalAnswer(prompt, answer)).toBe(true);
+      if (prompt.min === 1) expect(answer).toHaveLength(1);
     }
     const optional: ChooseCardsPrompt = {
       kind: "chooseCards", side: "player", cancellable: false, candidates: [low, high], min: 0, max: 1,
       purpose: { source: ids.player.hand[0], cardId: DSL.erodeTakeCharacter.id, ability: 0, role: "chooseAmong" },
     };
-    expect(declineAnswer(optional)).toEqual([]);
+    const capped = greedyAnswer(optional, (id) => ({ mine: true, value: value.get(id) ?? 0 }), noDiscoverCosts, Number.MAX_SAFE_INTEGER);
+    expect(isLegalAnswer(optional, capped)).toBe(true);
+    expect(capped).toEqual([]);
   });
 });

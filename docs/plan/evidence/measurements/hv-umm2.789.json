@@ -1,0 +1,190 @@
+{
+  "bead": "hv-umm2.789",
+  "base": "fd1391a072d6ee8a137a22009b6117c812375cd2",
+  "kind": "Three existing synthetic primitive Greedy answer contracts",
+  "measurementScope": {
+    "start": "Actual own timestamp before first brief read; exact parent dispatch instant unknown.",
+    "end": "Actual pre-schema/Git evidence cutoff; later tail and exact commit time retained externally."
+  },
+  "sourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/fixture-source-proof.json",
+  "runnerFreeze": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/validation.runner.frozen.json",
+  "sourceInputAudit": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/source-input-audit.json",
+  "validation": {
+    "commands": {
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "shuffleInto|takeFromAmong"
+        ],
+        "actualExit": 0,
+        "time": "2026-10-17T07:44:04.950351+00:00",
+        "end": "2026-10-17T07:44:15.376703+00:00",
+        "wallS": 10.425891541992314,
+        "childCpuS": 11.860888,
+        "load": [
+          4.78515625,
+          5.4384765625,
+          6.2314453125
+        ],
+        "loadEnd": [
+          4.87890625,
+          5.439453125,
+          6.22265625
+        ],
+        "pid": 62310,
+        "pgid": 62310,
+        "runnerSHA256": "3af95eb9beaa29c3ecd466cfdef18e5d97c726ee50d0ccb2ad8c7110b94700e2",
+        "inputsSHA256": "8fdc5d641719a9774b1539a91c74644634634947aa0527a63847d81e707c4b0b",
+        "originalToolId": 70787,
+        "originalTerminalChunk": "40b712",
+        "originalTerminal": "actual0 collected; full raw log and receipt retained",
+        "inputFiles": 6118,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/focused.log": "fbeb9d212ce3f17abfea2b0e1066f7c36397d49a87ef25321bfe9084dfb4c74a",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/focused.inputs.json": "8fdc5d641719a9774b1539a91c74644634634947aa0527a63847d81e707c4b0b",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/focused.launch.json": "cf2ab5ed450ec7d4a1a4898e17a5e45d7427a30ad7ff8f5087d907e3932fce60",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/focused.started.json": "eaa04179dc97520911dbc71f9113a49ac187b4ccee6bea430f8581e8e5811a41",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/focused.receipt.json": "5cadecad8530c76b2c7a3a464c3cd2c5c523c1612d1bea4dcd5c8b77990cf9bf"
+        }
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "actualExit": 0,
+        "time": "2026-10-17T07:44:36.397834+00:00",
+        "end": "2026-10-17T07:45:07.900576+00:00",
+        "wallS": 31.50230804196326,
+        "childCpuS": 80.895819,
+        "load": [
+          4.89599609375,
+          5.40966796875,
+          6.193359375
+        ],
+        "loadEnd": [
+          5.4453125,
+          5.50830078125,
+          6.2021484375
+        ],
+        "pid": 64643,
+        "pgid": 64643,
+        "runnerSHA256": "3af95eb9beaa29c3ecd466cfdef18e5d97c726ee50d0ccb2ad8c7110b94700e2",
+        "inputsSHA256": "ae7ddf26447c8d4741e4705585c58c4905146e23e5d743b0bd8527ed110e09a5",
+        "originalToolId": 42616,
+        "originalTerminalChunk": "1a0171",
+        "originalTerminal": "actual0 collected; full raw log and receipt retained",
+        "inputFiles": 6122,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/review.log": "bac1b1b7ecedfaab4c94a4e2c3e56b9a524a422cd37886494073a0e3f81a13f8",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/review.inputs.json": "ae7ddf26447c8d4741e4705585c58c4905146e23e5d743b0bd8527ed110e09a5",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/review.launch.json": "04105dbfd49a7e2c7938c1bdabe66bb3236f8cb5f79fce6987cd7a3bc8a98d30",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/review.started.json": "4474c09bd9adf5d736b755fd5ba0b92e8f3c85e517f4e5d9ab3a3c8c769bc213",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/review.receipt.json": "fdca0f1c962d9a62c8b07ce271b0b9aafab021290ce0fcc409d5c4c4b4d0ecdc"
+        }
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "actualExit": 0,
+        "time": "2026-10-17T07:45:17.025863+00:00",
+        "end": "2026-10-17T07:45:22.251596+00:00",
+        "wallS": 5.225454583996907,
+        "childCpuS": 6.095788000000001,
+        "load": [
+          5.38916015625,
+          5.49169921875,
+          6.1875
+        ],
+        "loadEnd": [
+          5.59814453125,
+          5.533203125,
+          6.19775390625
+        ],
+        "pid": 67528,
+        "pgid": 67528,
+        "runnerSHA256": "3af95eb9beaa29c3ecd466cfdef18e5d97c726ee50d0ccb2ad8c7110b94700e2",
+        "inputsSHA256": "ae7ddf26447c8d4741e4705585c58c4905146e23e5d743b0bd8527ed110e09a5",
+        "originalToolId": 50539,
+        "originalTerminalChunk": "d43165",
+        "originalTerminal": "actual0 collected; full raw log and receipt retained",
+        "inputFiles": 6122,
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/knip.log": "c36f40d24f781f2cff5164ea394f9db9ee9c0a6d33d81e686272403b99760d28",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/knip.inputs.json": "ae7ddf26447c8d4741e4705585c58c4905146e23e5d743b0bd8527ed110e09a5",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/knip.launch.json": "9a1a3bfbc85678b119c9a7ff830b0dccdec6e625111b04d2f3f9ff8354e6bfa5",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/knip.started.json": "861a32d4b16d39e37dd802d7c20d4fe5ab6c9516bb598a13f633e90db4b69207",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/knip.receipt.json": "e4881f38b5e7f60f5e061ffebc5ce765b13ce22f050adf1c6b9fa5b99040d88a"
+        }
+      }
+    },
+    "counts": {
+      "focusedFullAffectedDescribeFamilies": 40,
+      "focusedUnrelatedSkipped": 5871,
+      "ordinaryReviewPassed": 5911,
+      "ordinaryReviewFiles": 1
+    },
+    "failures": [],
+    "finalSchema": "Runs after this final friction/evidence cutoff; original terminal and final input manifests retained externally as schema.*."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 18,
+    "jsdomFiles": 0,
+    "expandedCases": 0
+  },
+  "behavioralWitness": {
+    "finiteShuffle": "Actual legal two-card answer is unchanged across optional cap; no preferred UUID or ranking.",
+    "loopableForcedTake": "Actual uncapped and capped answers independently satisfy distinct eligible count 2. Capped chosen UUIDs may differ.",
+    "optionalTake": "Real capped greedyAnswer declines chooseAmong with empty selection.",
+    "youMay": "Actual uncapped boolean only checked legal; actual capped boolean must be false.",
+    "counterfactual": "Equal-cardinality alternate legal selections fail the original preferred-rank assertions. Source inspection only; no policy mutation or runtime-before-fix failure claimed."
+  },
+  "failurePaths": {
+    "newTransitions": [],
+    "errorMidStep": "Existing shuffle and both take modules retain synthetic failure rollback, publication and knowledge contracts.",
+    "reloadRestart": "Existing shuffle fold and both take prompt contracts retain JSON reload and deterministic resume.",
+    "partialWrite": "No new persistence writer; existing count partial-answer rejection and transactional rollback apply.",
+    "invalidStaleConcurrent": "Existing foreign, stale, competing, duplicate, ineligible and partial input rejection retained byte-for-byte.",
+    "interrupt": "Existing count real opposing Interrupt response and reduced candidate cohort retained.",
+    "cancellation": "Existing shuffle cancellation refusal retained; no changed cancellation boundary."
+  },
+  "runtime": {
+    "workers": 2,
+    "groupProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/process-groups-precommit.json",
+    "groupsAbsent": [
+      62310,
+      64643,
+      67528
+    ],
+    "ports": [],
+    "heavy": false,
+    "browser": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review wrapper start",
+        "source": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/primitive-greedy789/review.receipt.json"
+      },
+      "implementWindow": {
+        "startScope": "Actual own post-dispatch timestamp before brief read",
+        "endScope": "Actual pre-schema/Git evidence cutoff; exact commit end recorded externally"
+      }
+    }
+  },
+  "lateEvidenceQualification": "Focused ran before own four evidence files existed. Ordinary review and Knip saw the first evidence revision; source bytes match all final successful manifests. Only own friction and measurements finalize after those checks; final exact schema covers them.",
+  "D19": "Full-suite <=60s remains unmet/unwaived. No full, soak, fuzz, browser, performance or final Phase5 acceptance credit.",
+  "parentDuties": [
+    "Fresh read-only fork:none exact-source whole-scope core review and independent finding disposition",
+    "Exact candidate certification, promotion, cleanup and native completion"
+  ]
+}
