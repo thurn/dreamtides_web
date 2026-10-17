@@ -1,0 +1,142 @@
+{
+  "bead": "hv-umm2.791",
+  "base": "2bb85472197a1ef0596714d119c60877b6fba395",
+  "kind": "Existing RD464 bounded C4 outside-play spark reconciliation only",
+  "measurementScope": {
+    "start": "Actual own post-dispatch timestamp before first brief read; parent exact dispatch instant unknown.",
+    "end": "Actual evidence cutoff before final schema/Git; later tail and exact commit receipt retained externally."
+  },
+  "sourceProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/source-proof.json",
+  "runnerFreeze": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/validation.runner.frozen.json",
+  "sourceInputAudit": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/source-input-audit.json",
+  "validation": {
+    "commands": {
+      "review": {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-c4-outside-spark791",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/validation.runner.py",
+        "runnerSHA256": "2d16629a51d0349a3a9c0ed1728c4d0d43ee411b4ae99e993d57fff5a3cad314",
+        "inputsSHA256": "4ea67d3488f2e7c7f27f68b60c7ec745e3a88954333380235d3d6598f8243679",
+        "time": "2026-10-17T08:42:22.056102+00:00",
+        "load": [
+          3.28564453125,
+          3.4951171875,
+          4.30224609375
+        ],
+        "workers": "2",
+        "pid": 52572,
+        "pgid": 52572,
+        "actualExit": 0,
+        "end": "2026-10-17T08:42:22.333949+00:00",
+        "wallS": 0.27739104203647,
+        "childCpuS": 0.29908300000000004,
+        "loadEnd": [
+          3.28564453125,
+          3.4951171875,
+          4.30224609375
+        ],
+        "logSHA256": "4b4dbc7d1db49b1f71fab1a5b3d6a215308ad50c663b4464e0d4750c57c8cdad",
+        "runnerBytesUnchanged": true,
+        "originalToolId": null,
+        "originalTerminalChunk": "288ab3",
+        "actualTerminal": "actual0 collected immediate terminal",
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/review.inputs.json": "4ea67d3488f2e7c7f27f68b60c7ec745e3a88954333380235d3d6598f8243679",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/review.launch.json": "160bc1abba7ead07d7e1ec7ee440e37856bdd9c3ad93250df91376ba90c519ad",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/review.started.json": "6c4c2ff6daeaf9c7f999de1c59e6a252334f80e8fa54df067c1c97f80e5b6f86",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/review.log": "4b4dbc7d1db49b1f71fab1a5b3d6a215308ad50c663b4464e0d4750c57c8cdad",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/review.receipt.json": "321fc36684ac73aed27c001e7dafd4bcb26513ae47b8650dcb0d80ec1a214179"
+        }
+      },
+      "knip": {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-c4-outside-spark791",
+        "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/validation.runner.py",
+        "runnerSHA256": "2d16629a51d0349a3a9c0ed1728c4d0d43ee411b4ae99e993d57fff5a3cad314",
+        "inputsSHA256": "4ea67d3488f2e7c7f27f68b60c7ec745e3a88954333380235d3d6598f8243679",
+        "time": "2026-10-17T08:42:26.180391+00:00",
+        "load": [
+          3.28564453125,
+          3.4951171875,
+          4.30224609375
+        ],
+        "workers": "2",
+        "pid": 52722,
+        "pgid": 52722,
+        "actualExit": 0,
+        "end": "2026-10-17T08:42:33.427028+00:00",
+        "wallS": 7.246366791951004,
+        "childCpuS": 7.055768,
+        "loadEnd": [
+          3.09423828125,
+          3.44580078125,
+          4.27490234375
+        ],
+        "logSHA256": "36368005cd6139832244c5f4d4058113cc9394db11957c33f3e1dfde8ef98b0e",
+        "runnerBytesUnchanged": true,
+        "originalToolId": 44811,
+        "originalTerminalChunk": "4738ca",
+        "actualTerminal": "actual0 collected original retained tool",
+        "rawFiles": {
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/knip.inputs.json": "4ea67d3488f2e7c7f27f68b60c7ec745e3a88954333380235d3d6598f8243679",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/knip.launch.json": "7a3d74ca0aa42607493e913210e832dded4196601dc2679ba736abf89e2c2e96",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/knip.started.json": "5e596950941e971336a7afb4e4978a83e11e1209220971289d2d660bf8cb0a79",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/knip.log": "36368005cd6139832244c5f4d4058113cc9394db11957c33f3e1dfde8ef98b0e",
+          "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/knip.receipt.json": "15f4cbf4674ed5cca27076f868b89d8d2672331bbec8d2ca1dd28f16212a86b0"
+        }
+      }
+    },
+    "reviewScope": "Ordinary diff-aware review checked friction schema for five documentation/evidence files; no tests or application runtime executed.",
+    "finalSchema": "Runs after this final evidence cutoff using node scripts/friction-triggers.mjs --validate-records; original terminal and exact final inputs retained externally as schema.*.",
+    "failures": []
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "expandedCases": 0
+  },
+  "failurePaths": {
+    "newTransitions": [],
+    "errorInterruptReloadPartialStaleConcurrent": "Documentation only; no runtime boundary changes. Existing C4 and spark-filter contracts are not duplicated."
+  },
+  "runtime": {
+    "workers": 2,
+    "groupProof": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/process-groups-precommit.json",
+    "groupsAbsent": [
+      52572,
+      52722
+    ],
+    "ports": [],
+    "heavy": false,
+    "browser": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Successful ordinary review wrapper start; os.getloadavg one-minute value",
+        "source": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/c4-outside-spark791/review.receipt.json"
+      },
+      "implementWindow": {
+        "startScope": "Actual own timestamp before brief read",
+        "endScope": "Actual pre-schema/Git evidence cutoff; exact later commit end externally retained"
+      }
+    }
+  },
+  "lateEvidenceQualification": "Ordinary review and Knip saw the first evidence revision; every tracked byte except own four evidence files matches their successful input manifests. Only own friction and measurements finalize after those checks. Final exact schema covers final friction evidence. Knip preparation emitted temporary synthetic-art warnings and restore-local-assets succeeded; generated outputs are excluded from Git.",
+  "D19": "Full-suite <=60s and final Phase5 QA, 10k soak, Sage, release and gate acceptance remain pending and unwaived. No runtime, acceptance or performance credit arises from this documentation bead.",
+  "parentDuties": [
+    "Fresh read-only fork:none exact-source core review and independent finding disposition",
+    "Exact native candidate certification, promotion, cleanup and completion"
+  ]
+}
