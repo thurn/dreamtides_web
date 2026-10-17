@@ -26,9 +26,9 @@ D97 executors work only on D97 beads, through a new Hive feature called
 - `await` counts beads **held** by either stream, so a D97 bead blocked by a
   held main-plan bead keeps its session waiting instead of reporting
   `ExecutorQueueDrained`.
-- Hive gives the agent a stream-aware ready list (for example `hive executor
-  ready --session <id> --json`), so the executor skill's own selection matches
-  the hooks.
+- `hive executor ready --session <id> --json` gives the agent the
+  stream-aware ready list, so the executor skill's own selection matches the
+  hooks.
 
 **Why:** a second Hive project on the same repository breaks Hive's dashboard
 and Tollgate candidate tracking, and ends waits early on blockers held in the
@@ -79,6 +79,20 @@ plays the whole milestone and fixes what it finds.
 
 **Why:** the operator wants the first playable map as soon as possible, then
 a stream that keeps examining and improving itself.
+
+### P32. Reviews are beads
+
+In the D97 stream, code review happens only in review/QA beads
+([workflow § Review and QA beads](workflow.md#review-and-qa-beads)). The
+session that claims one, Claude Code or Codex, reviews the landed diff itself
+with the `warden` skill, plays the change in the browser, and fixes what it
+confirms in one commit. Its context is cold because it is a different bead
+from the work it reviews. No D97 session dispatches a separate reviewer
+subagent or reviewer CLI. This operator decision of 2026-10-17 supersedes the
+general fresh-Codex-reviewer policy for D97 beads.
+
+Before M1, the one combined bead 1.16 reviews the milestone
+([P9](#p9-process-light-until-m1)).
 
 ### P21. Any host
 
@@ -243,9 +257,12 @@ Guides, sages, Dreamsign slots, keys and difficulty levels.
 
 ### P29. M1 economy subset
 
-- **Reward bag v0** is the bag's first layer: the Avatar's signature-tide
-  cards at their authored pool counts, from the existing tide pools. The 32
-  D97 tide sets are authored in Phase 3.
+- **Reward bag v0** uses the existing card pools. It is the tides4 pool the
+  journey's draft would deal the chosen Avatar (its starter tide plus up to
+  three of its facets, with at most 2 copies of each card), dealt from the run
+  seed and stored in state at run start. Its dealt counts are the copy
+  targets. Phase 3 curates the D97 pools: for each Avatar it picks one
+  high-quality tides4 output and pins it.
 - **Tiers:** challengers fight at tier 4 and the guardian at tier 7, with the
   Appendix B §B9 knobs for those rows. Score targets follow Appendix B §B3.
 - **Antes** (Appendix A §A9), **victory bundles** (§A8, Essence purses only as
@@ -477,6 +494,11 @@ In development builds the overworld exposes `window.__d97`. It offers:
 
 Teleport is a QA convenience that never writes an event. Browser QA asserts
 state through it and through the DOM, and keeps `window.__caps` empty.
+
+### P31. One key dream at a time
+
+Only one key dream can be open at a time, as the design overview says.
+Appendix C §C6 agrees.
 
 ### P27. Design documents are the spec
 

@@ -1,11 +1,28 @@
 # Plan
 
-This repository is executing [docs/plan/README.md](docs/plan/README.md)
-unattended by one or more peer executor sessions, Claude Code or Codex. The
-decisions in [docs/plan/decisions.md](docs/plan/decisions.md) are binding, and
-[docs/plan/workflow.md](docs/plan/workflow.md) defines how work is filed,
-serialized, claimed, implemented, delivered, reviewed and QA'd. Hive project
-id: `dreamtides_web`.
+This repository runs two delivery plans side by side, each executed
+unattended by peer executor sessions, Claude Code or Codex. Both share Hive
+project `dreamtides_web`, one Tollgate queue and one `staging` branch. They
+are split into Hive streams:
+
+- **The main plan**, in the default stream:
+  [docs/plan/README.md](docs/plan/README.md). Its decisions in
+  [docs/plan/decisions.md](docs/plan/decisions.md) are binding, and
+  [docs/plan/workflow.md](docs/plan/workflow.md) defines how work is filed,
+  serialized, claimed, implemented, delivered, reviewed and QA'd. Its sessions
+  start without `--stream` and see only beads without `hive_stream`.
+- **Dreamtides 97**, in stream `d97`:
+  [docs/dreamtides-97/plan/README.md](docs/dreamtides-97/plan/README.md), with
+  its own binding decisions and workflow beside it. Its sessions start with
+  `--stream d97` and see only beads with `hive_stream=d97`.
+
+A session follows the plan of its stream and never claims the other stream's
+beads. Where this file cites a `docs/plan/` workflow section, the
+pre-existing-issues path or decision D16, a D97 session uses the D97 plan's
+workflow, `docs/dreamtides-97/plan/evidence/pre-existing/<bead-id>.md` and
+decision P22 instead. D97 code review happens only in D97's review/QA beads,
+whose session reviews with `warden` itself (D97 decision P32); the review
+bullet under Delivery applies to the main plan.
 
 Each executor session claims and lands one bead at a time. An implementation
 subagent works only in the worktree and areas its session gives it, makes one
@@ -78,8 +95,12 @@ their worktrees with `tg --no-launch update` (docs/plan/workflow.md
 - **Player-facing copy lives in UI modules.** Rules code never builds display
   strings.
 - **Pre-existing issues** you encounter go in your bead's own file,
-  `docs/plan/evidence/pre-existing/<bead-id>.md`, included in the same
-  commit.
+  `docs/plan/evidence/pre-existing/<bead-id>.md` (D97 stream:
+  `docs/dreamtides-97/plan/evidence/pre-existing/<bead-id>.md`), included in
+  the same commit.
+- **Never shell out to another agent.** No `codex exec`, `claude -p` or any
+  other agent CLI from the shell, for reviews or anything else. Use the host's
+  own subagents, or a bead.
 - **Documentation describes the current system.** Never describe what the
   system *no longer* does: phrasings like "X no longer exists", "there is no
   longer a Y", "we removed Z", or "unlike before" are not acceptable.

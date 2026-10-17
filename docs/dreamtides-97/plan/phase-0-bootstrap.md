@@ -35,7 +35,6 @@ own project under Hive's AGENTS.md. Promotion authority comes from
   `hive executor ready --session <id> --json`, returns exactly what `await`
   would wake on.
 - **Hooks.** The stop hook and `await` pass the stored stream through.
-- **Dashboard.** Show the stream of each session and bead.
 - **Skills.** The executor skill's selection step uses the new command.
   Update the shared waiting guidance if it changes.
 - **Tests** cover: default-stream exclusion of streamed beads, stream-only

@@ -13,7 +13,7 @@ The two streams share one Hive project (`dreamtides_web`), one Tollgate queue
 and one `staging` branch. Neither stream claims the other's beads.
 
 The plan runs without operator review. The operator's decisions are recorded
-in [decisions](decisions.md) (P1–P30). Where this plan and the design
+in [decisions](decisions.md) (P1–P32). Where this plan and the design
 documents differ, the decisions win, and the docs-alignment bead
 ([2.1](phase-2-consolidation.md#21-design-docs-alignment)) brings the design
 documents into line.
@@ -25,13 +25,11 @@ restart, do these steps in order:
 2. Follow [workflow → Re-entry](workflow.md#re-entry).
 3. Read only the page for the current phase.
 
-**Permanent review policy.** Every code review uses a fresh read-only Codex
-subagent with no prior context, regardless of which model implemented the
-change. Spawn each reviewer with `fork_turns: "none"`, supplying only its
-review brief and exact source inputs. Where no Codex subagent is available,
-the session records the review as pending in the bead notes for a
-Codex-capable session ([workflow § Review and QA
-beads](workflow.md#review-and-qa-beads)).
+**Reviews are beads.** Code review happens only in review/QA beads
+([P32](decisions.md#p32-reviews-are-beads)). The session that claims one, on
+either host, runs the `warden` skill over the reviewed bead's landed diff
+itself, plays the change, and fixes what it confirms. No session dispatches a
+separate reviewer.
 
 ## Outcomes
 
@@ -193,6 +191,9 @@ These carry over from [AGENTS.md](../../../AGENTS.md):
 - **Leave the primary checkout alone.** All work happens in Tollgate
   worktrees. The exception is QA captures, which go in its gitignored
   `artifacts/qa/<bead-id>/`.
+- **Never shell out to another agent.** No `codex exec`, `claude -p` or any
+  other agent CLI from the shell. Reviews are beads
+  ([P32](decisions.md#p32-reviews-are-beads)).
 - **Never deploy.** Other repositories are touched only as
   [P22](decisions.md#p22-other-repositories) allows.
 - **Never break a save.** Every change to persisted D97 state ships a

@@ -173,9 +173,10 @@ conflict.
 
 ### Selection order
 
-Claim only from the session's fresh stream-aware ready list (the command
-Phase 0 adds to Hive; [P1](decisions.md#p1-hive-streams)). Never claim by ID
-around the list: claiming by ID bypasses peer serialization edges.
+Claim only from the session's fresh stream-aware ready list,
+`/Users/dthurn/hive/bin/hive executor ready --session <its ID> --json`
+([P1](decisions.md#p1-hive-streams)). Never claim by ID around the list:
+claiming by ID bypasses peer serialization edges.
 
 Among ready beads, take them in this order:
 
@@ -265,27 +266,20 @@ enough.
 
 A review/QA bead:
 
-1. **Prepares the review inputs.** It works in a fresh worktree on `staging`,
-   and also makes a detached review snapshot at the reviewed bead's landed
-   OID. It writes an immutable scope packet to scratch: base and head OIDs,
-   the changed paths, the bead's acceptance criteria, and the decisions and
-   design sections that apply.
-2. **Runs a cold review.** This is a fresh, read-only Codex reviewer using
-   the `warden` skill, with no prior context:
-   - a Codex session spawns a subagent with `fork_turns: "none"`;
-   - a Claude Code session runs
-     `command codex exec -s read-only -C <snapshot> -o <output> "$(cat <prompt>)" < /dev/null`.
-
-   The prompt names the snapshot, the base and head OIDs, the scope packet,
-   the bead's request and acceptance, `AGENTS.md`, this plan's README and
-   decisions, and the invariants and checks. The reviewer reports its scope
-   coverage before its findings. If no Codex reviewer is available, record
-   `review-debt` with the OIDs and packet, add the label, and retry at each
-   dispatch boundary. A phase gate waits for its review debt.
+1. **Gathers the review inputs.** It works in a fresh worktree on `staging`.
+   It takes the reviewed bead's commit from its `Bead:` trailer, and records
+   its base and head OIDs, the changed paths, the bead's acceptance
+   criteria, and the decisions and design sections that apply.
+2. **Reviews the diff cold** with the `warden` skill
+   ([P32](decisions.md#p32-reviews-are-beads)). It reads the whole diff and
+   enough surrounding code to verify each claim, without the author's notes
+   beyond the bead's description and acceptance. It looks for correctness,
+   architecture, behavior, test quality and remaining risk. The session does
+   this itself; it never dispatches a separate reviewer.
 3. **Runs manual QA** of the changed player workflow in the browser
    ([Browser QA](#browser-qa)), asserting state and geometry, with
    `window.__caps` empty.
-4. **Verifies every finding** against the code at `staging`. It fixes the
+4. **Verifies every finding** against the code at `staging` and fixes the
    confirmed ones within its own Areas, which are the reviewed bead's Areas.
 5. **Commits once** (fixes plus any pre-existing-issue file), or closes with
    no commit when nothing is confirmed.

@@ -17,8 +17,9 @@ landed. It may overlap the Phase 4 content waves.
 - **Keys.** Sources (challenger extras from Act 4, the Act 4 and 5
   incarnations, finished key dreams), the rolled contents, and the key UI.
 - **Key dreams.** Instancing a catalog dream with no guardians, one attempt
-  per challenger, the open-key-dream limit (as decided in 2.1), and the
-  finish and close rules.
+  per challenger, one open key dream at a time
+  ([P31](decisions.md#p31-one-key-dream-at-a-time)), and the finish and close
+  rules.
 - **Prizes:**
   - Legendary cards;
   - Legendary Dreamsigns, after a curation bead that picks the ten (S12);

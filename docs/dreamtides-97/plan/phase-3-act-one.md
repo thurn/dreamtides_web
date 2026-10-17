@@ -39,8 +39,10 @@ in place. Content beads also wait for 2.3.
 - **Waypoints and fast travel** (§B6).
 - **The Dream Atlas.** A D97 adapter over `AtlasNode` and `AtlasEdge`, with
   unnamed thumbnail nodes ([P10](decisions.md#p10-dreams-are-unnamed)).
-- **Tide sets.** Author the 32 tide sets (Appendix A §A2, S16–S17), and move
-  the reward bag from v0 to authored tide sets.
+- **Curated pools.** For each Avatar, pick one high-quality tides4 output (its
+  starter tide, three facets and the dealt pool) and pin it as the Avatar's
+  D97 pool ([P29](decisions.md#p29-m1-economy-subset)). Then move the reward
+  bag and its layers (Appendix A §A2) onto the pinned pools.
 - **Resonance cores, amulets and amulet merchants** (§A10).
 - **Dream Guides,** in about three beads: appearances and placement (§B13);
   then the service adapters over the existing site screens (curiosities,

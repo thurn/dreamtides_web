@@ -52,11 +52,6 @@ the decisions and to what M1 built:
 - townsfolk (P20);
 - versioned saves, which replace content-hash pinning (P5).
 
-Resolve the inconsistency over how many key dreams can be open at once (the
-overview says one; Appendix C §C6 says several) by recording which the
-operator decided. If neither says, record it as an open question for the
-Phase 5 filing.
-
 **Acceptance:** the documents describe the current system, without "no
 longer" phrasing.
 
@@ -107,7 +102,7 @@ Write `docs/dreamtides-97/story-bible.md` ([P16](decisions.md#p16-narrative)):
 
 **Acceptance:**
 
-- A cold read by a fresh Codex reviewer for internal consistency.
+- Its review/QA bead does a cold read for internal consistency.
 - No contradiction with the design overview.
 
 ### 2.5 Rooms (core)
@@ -143,7 +138,7 @@ File improvement beads, which land within the phase. Write
 
 ### 2.8 Gate review
 
-A cold Codex `warden` review of the Phase 2 diff. Confirmed findings get
+A review/QA bead: a cold `warden` review of the whole Phase 2 diff. Confirmed findings get
 follow-up beads that land within the phase.
 
 ### 2.9 File Phase 3

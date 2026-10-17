@@ -36,6 +36,12 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
 - **The Hive project is `dreamtides_web`.** Track T beads are filed in it,
   even though they change `~/tollgate` ([D45](decisions.md#d45-tollgate-track)).
   Never claim, edit, or close beads of another project.
+- **This plan is the project's default stream.** Its sessions start without
+  `--stream` and select with `hive executor ready`, which shows only beads
+  without `hive_stream`. The Dreamtides 97 plan runs beside it in stream `d97`
+  ([its README](../dreamtides-97/plan/README.md)); never claim or edit a
+  `d97` bead. The streams share Tollgate, so the `ci-fix` search under
+  [Staged mode](#staged-mode) covers both streams.
 - **Continuous mode is explicitly authorized.** Each session claims the next
   ready bead as soon as its previous one lands, until the Phase 7 epic closes
   or the operator drains it ([Starting, scaling, and
@@ -1066,9 +1072,9 @@ Candidates submitted after the switch follow staged mode.
 - **At every dispatch boundary,** read `tg --no-launch release status`. If
   the latest release run failed:
   1. For each failing step, check for an unfinished `ci-fix`
-     [shared-duty bead](#shared-duty-beads) keyed `release_step=<step>`. If
-     one exists, another session owns the repair: append the run's ID to its
-     notes and continue.
+     [shared-duty bead](#shared-duty-beads) keyed `release_step=<step>`, in
+     either stream (search by project, not by stream). If one exists, another
+     session owns the repair: append the run's ID to its notes and continue.
   2. Otherwise diagnose it yourself with `tg diagnose`: the failing steps,
      the tested OID, and the range since the last green `release`.
   3. File the `ci-fix` bead with that key, and the run's ID in its

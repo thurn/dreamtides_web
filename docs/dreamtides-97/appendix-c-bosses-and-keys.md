@@ -165,9 +165,8 @@ A key dream is a one-time instance of the key's catalog dream:
 - **No guardians.** Guardian anchors stay empty and their corridors open.
 - **Settings:** score target 25⍟ and price band 3.
 - **Waypoint.** It activates on arrival. The player can leave and return
-  until the key dream is finished, and several key dreams can be open at once.
-  The Atlas lists each open key dream with its remaining challengers and
-  prize.
+  until the key dream is finished. Only one key dream is open at a time, and
+  the Atlas lists it with its remaining challengers and prize.
 - **No refills.**
 
 ## C7. One attempt each

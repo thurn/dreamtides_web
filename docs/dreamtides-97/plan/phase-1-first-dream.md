@@ -433,8 +433,9 @@ Name characters and items; never name the dream
 The combined review/QA bead for the milestone
 ([workflow § Review and QA beads](workflow.md#review-and-qa-beads)):
 
-1. **A cold Codex `warden` review** of the whole Phase 1 diff (beads 1.1–1.15
-   and their commits). It also judges the `core` seams against the later
+1. **A cold `warden` review,** run by this bead's session
+   ([P32](decisions.md#p32-reviews-are-beads)), of the whole Phase 1 diff
+   (beads 1.1–1.15 and their commits). It also judges the `core` seams against the later
    phases.
 2. **A full playthrough** on desktop, on foot: Avatar select, every resident,
    every challenger, the shop, the deck editor, both quests, the guardian, and

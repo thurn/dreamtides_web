@@ -299,6 +299,11 @@ Agent guidance is `AGENTS.md` plus at most one compact project skill,
 `docs/plan/` is run-scoped. The final bead deletes it, except for
 `docs/plan/report.md`, which the operator deletes after reading.
 
+`docs/dreamtides-97/` is outside this end state. It holds the Dreamtides 97
+design and delivery plan, which runs beside this plan in Hive stream `d97`
+and outlives it. This plan's beads neither delete it nor count it against the
+documents above.
+
 ### D35. English-only
 
 dreamtides_web has no localization. Phase 2 deletes all of the following:
