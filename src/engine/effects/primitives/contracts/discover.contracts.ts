@@ -7,6 +7,7 @@ import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../.
 import type { EngineLogRecord } from "../../../log";
 import { aiDecision, runPolicy } from "../../../policy/decide";
 import { boardInit, entries, ITERATIONS_ONLY } from "../../../policy/policy.fixtures";
+import { isLegalAnswer } from "../../../prompts/answers";
 import type { ChooseCardsPrompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
@@ -288,10 +289,17 @@ describe("a free Discover cost chosen after its source changed", () => {
     const decision = aiDecision({ engine: changing, init, slice, pending, side: "enemy", policy: "greedy", budgets: ITERATIONS_ONLY });
     if (decision?.kind !== "prompt") throw new Error("expected the enemy's cost choice");
     const { choice } = runPolicy(changing, decision.request);
-    // The vanilla 3● character is the costliest card the Discover can find.
-    expect(choice).toEqual({ kind: "answer", value: 3 });
-    const answered = changingFold.reduce(slice, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: 3 });
+    if (choice.kind !== "answer" || typeof choice.value !== "number") {
+      throw new Error("expected a numeric Discover cost answer");
+    }
+    expect(isLegalAnswer(pending.prompt, choice.value)).toBe(true);
+    // Either synthetic character matches; the 5● event cannot be discovered.
+    const matchingCards = new Map([[2, ids.enemy.deck[0]], [3, ids.enemy.deck[1]]]);
+    expect([...matchingCards.keys()]).toContain(choice.value);
+    const chosen = matchingCards.get(choice.value)!;
+    const answered = changingFold.reduce(slice, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: choice.value });
     if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
-    expect(answered.slice.committed.sides.enemy.hand).toEqual([ids.enemy.deck[1]]);
+    expect(answered.slice.committed.sides.enemy.hand).toEqual([chosen]);
+    expect(answered.slice.committed.instances[chosen]?.zone).toBe("hand");
   });
 });

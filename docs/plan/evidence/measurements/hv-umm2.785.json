@@ -1,0 +1,374 @@
+{
+  "bead": "hv-umm2.785",
+  "base": "35c2c0d2418895906f6bbf0aca6c0dfa5865507c",
+  "implementationStart": "2026-10-17T06:30:54.552258+00:00",
+  "scratch": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785",
+  "implementationWindowQualification": "Own measured start immediately after brief access and before repository source research/edit. End is final evidence preparation before schema and commit, within one minute of commit; no exact dispatch timestamp is inferred.",
+  "scope": "Only two existing parameterized free-Discover source-change Greedy integration cases plus own evidence. Real Greedy uses either eligible synthetic character cost 2 or 3; public isLegalAnswer validates the actual answer, the fold consumes it, and an explicit synthetic cost-to-physical-UUID fixture mapping checks hand and zone. Original hv-umm2.538 captured-origin regression and source-change paths retained. No production runtime-failure claim.",
+  "testDelta": {
+    "files": 0,
+    "lines": 8,
+    "jsdomFiles": 0
+  },
+  "checks": {
+    "focused": {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "discover|Discover"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-discover-choice785",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/validation.runner.py",
+      "runnerSHA256": "06c098be1934c2be04275a8d3ad4dafea8293dec0cb106ef240631aeca662d2b",
+      "inputsSHA256": "2a57f04622fc0e386def2578e006246c895e4a8e0503ad9fa8fb800e479d14ed",
+      "time": "2026-10-17T06:31:48.859456+00:00",
+      "load": [
+        4.9013671875,
+        5.82958984375,
+        6.4951171875
+      ],
+      "workers": "2",
+      "pid": 29256,
+      "pgid": 29256,
+      "actualExit": 0,
+      "end": "2026-10-17T06:31:58.687551+00:00",
+      "wallS": 9.82770383299794,
+      "childCpuS": 11.725075,
+      "loadEnd": [
+        4.916015625,
+        5.8017578125,
+        6.4775390625
+      ],
+      "logSHA256": "ed67b3cf999e3d4932c74966dfd8125a042420c0c649e530dfcc64101b64dd20",
+      "runnerBytesUnchanged": true,
+      "originalToolTerminal": {
+        "sessionId": 56833,
+        "terminalChunk": "8ce3e2",
+        "actualExit": 0,
+        "collected": true
+      },
+      "raw": {
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/focused.inputs.json",
+          "sha256": "2a57f04622fc0e386def2578e006246c895e4a8e0503ad9fa8fb800e479d14ed"
+        },
+        "launch.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/focused.launch.json",
+          "sha256": "00af0c614a6949cc05091dbd10ab1fa6de3e9f1f8e3d6961632090521c85ee13"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/focused.started.json",
+          "sha256": "fca72fd362d7ce231bbb7d35e7d08d9d21c8cea032fccb0928589a93f693dd82"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/focused.log",
+          "sha256": "ed67b3cf999e3d4932c74966dfd8125a042420c0c649e530dfcc64101b64dd20"
+        },
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/focused.receipt.json",
+          "sha256": "65d2d8e214eef7122503162b3b87ff2ea25887445e3e86e978869f2ae10e002e"
+        }
+      }
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-discover-choice785",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/validation.runner.py",
+      "runnerSHA256": "06c098be1934c2be04275a8d3ad4dafea8293dec0cb106ef240631aeca662d2b",
+      "inputsSHA256": "f6e59166f0e6cf38a323fa35f9ab0ab402bff2b261a482152aff03b69bf52e69",
+      "time": "2026-10-17T06:32:14.120097+00:00",
+      "load": [
+        4.755859375,
+        5.7275390625,
+        6.439453125
+      ],
+      "workers": "2",
+      "pid": 31153,
+      "pgid": 31153,
+      "actualExit": 0,
+      "end": "2026-10-17T06:32:45.212008+00:00",
+      "wallS": 31.091270999982953,
+      "childCpuS": 72.63619600000001,
+      "loadEnd": [
+        5.75732421875,
+        5.9169921875,
+        6.48486328125
+      ],
+      "logSHA256": "c324dc06413af6cce797bef31ade810bae18633fa068c390306b06efeaa3c68b",
+      "runnerBytesUnchanged": true,
+      "originalToolTerminal": {
+        "sessionId": 51698,
+        "terminalChunk": "f74477",
+        "actualExit": 0,
+        "collected": true
+      },
+      "raw": {
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/review.inputs.json",
+          "sha256": "f6e59166f0e6cf38a323fa35f9ab0ab402bff2b261a482152aff03b69bf52e69"
+        },
+        "launch.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/review.launch.json",
+          "sha256": "a7dd50d5a1215a26632ef2db203ea48e0a4f3be83b6924b2f5de13cabb5c6ac2"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/review.started.json",
+          "sha256": "cd6e469ebab6f05c17cb9ae63c15d95226472395731f630c6a1a58c7101b8572"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/review.log",
+          "sha256": "c324dc06413af6cce797bef31ade810bae18633fa068c390306b06efeaa3c68b"
+        },
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/review.receipt.json",
+          "sha256": "5a3856ce1dde33d056df56793f31815541bf7d91331cce119bd9a8751ed8d41f"
+        }
+      }
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-discover-choice785",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/validation.runner.py",
+      "runnerSHA256": "06c098be1934c2be04275a8d3ad4dafea8293dec0cb106ef240631aeca662d2b",
+      "inputsSHA256": "f6e59166f0e6cf38a323fa35f9ab0ab402bff2b261a482152aff03b69bf52e69",
+      "time": "2026-10-17T06:32:47.480451+00:00",
+      "load": [
+        5.6962890625,
+        5.9013671875,
+        6.47607421875
+      ],
+      "workers": "2",
+      "pid": 33532,
+      "pgid": 33532,
+      "actualExit": 0,
+      "end": "2026-10-17T06:32:52.760810+00:00",
+      "wallS": 5.2800308329751715,
+      "childCpuS": 6.115133,
+      "loadEnd": [
+        5.80029296875,
+        5.91943359375,
+        6.47900390625
+      ],
+      "logSHA256": "a7257a91c0b3671690f8df1d027241481402fa01651a12fd313ee7c2bc33cede",
+      "runnerBytesUnchanged": true,
+      "originalToolTerminal": {
+        "sessionId": 73503,
+        "terminalChunk": "39b0b7",
+        "actualExit": 0,
+        "collected": true
+      },
+      "raw": {
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/knip.inputs.json",
+          "sha256": "f6e59166f0e6cf38a323fa35f9ab0ab402bff2b261a482152aff03b69bf52e69"
+        },
+        "launch.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/knip.launch.json",
+          "sha256": "520139ac1b6b823d86e14368f62a5410a26b64401c52e9c9520b7254d317480a"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/knip.started.json",
+          "sha256": "34c63ab288a841b51fec9e584df360342e58d57462074ff5e7dc4ad0846a1b7c"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/knip.log",
+          "sha256": "a7257a91c0b3671690f8df1d027241481402fa01651a12fd313ee7c2bc33cede"
+        },
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/knip.receipt.json",
+          "sha256": "bb8191bc7e23f066d7c274d5e7a1eac1761f0103f9601b1f5e723f406cf4750c"
+        }
+      }
+    },
+    "schema": {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-discover-choice785",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/validation.runner.py",
+      "runnerSHA256": "06c098be1934c2be04275a8d3ad4dafea8293dec0cb106ef240631aeca662d2b",
+      "inputsSHA256": "1002caaedc4edd3dca987fe2fe2c49ef6218a8025c5e59038bbddbad88928de1",
+      "time": "2026-10-17T06:33:16.682098+00:00",
+      "load": [
+        5.66064453125,
+        5.87646484375,
+        6.44677734375
+      ],
+      "workers": "2",
+      "pid": 35671,
+      "pgid": 35671,
+      "actualExit": 0,
+      "end": "2026-10-17T06:33:16.763066+00:00",
+      "wallS": 0.08064424997428432,
+      "childCpuS": 0.08237199999999992,
+      "loadEnd": [
+        5.66064453125,
+        5.87646484375,
+        6.44677734375
+      ],
+      "logSHA256": "e3704057a265fe13d8e406d1301f783a2e75d5db8272290eaea168ef8558bc0e",
+      "runnerBytesUnchanged": true,
+      "originalToolTerminal": {
+        "immediateChunk": "3b5c1b",
+        "actualExit": 0,
+        "collected": true
+      },
+      "raw": {
+        "inputs.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/schema.inputs.json",
+          "sha256": "1002caaedc4edd3dca987fe2fe2c49ef6218a8025c5e59038bbddbad88928de1"
+        },
+        "launch.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/schema.launch.json",
+          "sha256": "5b4ecd9eca908d115ea68621c3180fa6f8815d68ace774136e88e07d3e969839"
+        },
+        "started.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/schema.started.json",
+          "sha256": "e279cbe6093f7403772940d4210fd1ffbc2bff0831fa90dfef902cd75ed3ee86"
+        },
+        "log": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/schema.log",
+          "sha256": "e3704057a265fe13d8e406d1301f783a2e75d5db8272290eaea168ef8558bc0e"
+        },
+        "receipt.json": {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/schema.receipt.json",
+          "sha256": "d49b33b89a9be13313f8734a92851609295054cd6f59cd555501e278681f4754"
+        }
+      }
+    }
+  },
+  "runnerFreeze": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/runner-freeze.json",
+    "sha256": "5042c220dfa32126f329eb8bb9d41054e75a166762b5b11b6a9151ee716bd4ea"
+  },
+  "sourceFixtureProof": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/fixture-source-proof.json",
+    "sha256": "42aeaab086545b15984507212f829c8c966750524ec1b5026801d4755590536e"
+  },
+  "beforeAfterDiff": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/fixture.diff",
+    "sha256": "f493814e19f921baded5f33ce7f162a6820628c62520d3933acc70883dfa4770"
+  },
+  "finalSourceInputProof": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/final-source-input-proof.json",
+    "sha256": "11d5840fd27bb1e5cd3ca009bfa2d16ed88c941ab448d2ee3418e6e71c9ffcaf"
+  },
+  "cleanupBeforeSchema": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/cleanup-before-schema.json",
+    "sha256": "94ba9f692bf451d7aa7d31e8e4ff7654ae795a850d93dfa3669acff688599264"
+  },
+  "sourceQualification": "Every command saves exact tracked-source and own-new-evidence input hashes before launching. Source acceptance applies to unchanged final source bytes. Final own evidence is qualified separately and receives final schema validation; no inferred runtime acceptance for late evidence.",
+  "hostLoadSamples": {
+    "focused": {
+      "start": [
+        4.9013671875,
+        5.82958984375,
+        6.4951171875
+      ],
+      "end": [
+        4.916015625,
+        5.8017578125,
+        6.4775390625
+      ]
+    },
+    "review": {
+      "start": [
+        4.755859375,
+        5.7275390625,
+        6.439453125
+      ],
+      "end": [
+        5.75732421875,
+        5.9169921875,
+        6.48486328125
+      ]
+    },
+    "knip": {
+      "start": [
+        5.6962890625,
+        5.9013671875,
+        6.47607421875
+      ],
+      "end": [
+        5.80029296875,
+        5.91943359375,
+        6.47900390625
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review command starting one-minute host load."
+      }
+    }
+  },
+  "validationSummary": {
+    "focusedCases": 31,
+    "focusedSelection": "Entire Discover describe names plus Discover cost/source-change names, selected by discover|Discover on the existing glob runner.",
+    "reviewRelatedFiles": 1,
+    "reviewRelatedCases": 5912,
+    "reviewSteps": [
+      "prepare",
+      "typecheck",
+      "typecheck-node",
+      "import-cycles",
+      "lint",
+      "test-related",
+      "friction-records",
+      "restore-local-assets"
+    ],
+    "failedValidationChecks": [],
+    "scopedLintTypes": "Covered by successful npm run review."
+  },
+  "failurePaths": {
+    "errorAndPartialWrite": "No new state transition. Preserved discover across suspension: keeps only private offer knowledge and publishes nothing when the step fails after answer; exact committed state and RNG rollback plus replay assertions.",
+    "reloadRestart": "Preserved commits nothing while suspended, reloads to same offer and resolves once answered; saved slice and prompt identity/offer checks. Preserved full Discover cancellation/replay contracts via entire related runner.",
+    "invalidStaleInput": "Preserved foreign/illegal answers, invalid cardinalities/unoffered IDs, duplicate/stale answers after resolution.",
+    "concurrentActors": "Preserved foreign-side answer rejection and in-flight battle-action rejection.",
+    "interrupt": "Existing real hush/snuff interrupt paths assert source loses abilities or leaves play before actual Greedy prompt answer."
+  },
+  "D19": "No added cases/files; +8 contract lines. No performance claim, full-suite budget waiver, phase runtime or final acceptance credit. Controlled full-suite 60s/2-worker/low-load proof remains gate46 acceptance.",
+  "qa": "No browser, server, port, capture, local full-suite, fuzz or heavy command applies to this fixture-only repair.",
+  "fallout": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExisting": "Only admitted default-choice fixture issue observed; no additional issue.",
+  "setupParent": {
+    "scope": "Parent setup only, not own implementation validation",
+    "installOriginalTool": 1625,
+    "actualExit": 0,
+    "pid": 21656,
+    "pgid": 21656,
+    "receipt": {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/install.receipt.json",
+      "sha256": "e46446748b0c118d9cf08162c0ff4fb5b387ce826a3bb1e7b68614fd1a069ca2"
+    }
+  },
+  "parentResponsibilities": [
+    "Fresh read-only Codex core review and verified scope/findings dispositions",
+    "Exact native candidate, certification, promotion and close"
+  ],
+  "schemaQualification": "Final friction bytes exactly match the schema launch manifest. Only this measurement receives the actual observed schema terminal/cleanup afterward; no schema/runtime acceptance is inferred for its self-referential receipt.",
+  "cleanupFinal": {
+    "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/discover-choice785/cleanup-final.json",
+    "sha256": "12171d09ce7e8e9850af2d17923545baed810fc88a8758364c57aaf3d2ce14d6"
+  }
+}
