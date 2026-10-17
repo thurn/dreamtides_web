@@ -53,6 +53,7 @@ export function installD97QaSurface(
           walking: walker.step !== null || walker.path.length > 0,
           pathRemaining: walker.path.length,
         },
+        characters: scene.characters(),
         camera: scene.camera(),
         viewport: scene.viewport(),
         anchors: map.anchors.map(({ id, kind, at }) => ({ id, kind, at })),

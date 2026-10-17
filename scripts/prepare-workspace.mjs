@@ -18,6 +18,11 @@ export const WORKSPACE_GENERATORS = [
     nodeArgs: ["--import", "tsx"],
   },
   {
+    label: "D97 characters",
+    script: "scripts/d97/link-characters.ts",
+    nodeArgs: ["--import", "tsx"],
+  },
+  {
     label: "typed Cumulus tokens",
     script: "scripts/generate-cumulus-tokens.mjs",
     nodeArgs: [],

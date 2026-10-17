@@ -6,7 +6,8 @@
 // Only animation and the walk live here; nothing it does is game state.
 
 import { Container, Graphics, Sprite, type Application, type FederatedPointerEvent } from "pixi.js";
-import type { D97OverworldTunables } from "../../content/d97/tunables";
+import type { D97CharacterTunables, D97OverworldTunables } from "../../content/d97/tunables";
+import type { D97CharacterId } from "../../types/identifiers";
 import { logEvent } from "../../logging";
 import type { CompiledAnchor, CompiledDreamMap, WalkabilityGrid } from "../map/compiled";
 import { isWalkable } from "../map/compiled";
@@ -28,7 +29,13 @@ import {
   pathBeside,
   type InteractionRegistry,
 } from "./interactions";
+import { idleFacing } from "./characters/animation";
+import { BADGE_HEIGHT, BADGE_WIDTH, drawBadge, orderBadges } from "./characters/badges";
+import type { CharacterLooks } from "./characters/character-looks";
+import { CharacterView } from "./characters/character-view";
+import type { OverworldOccupants } from "./occupants";
 import {
+  drawCapsule,
   PLACEHOLDER_ANCHORS,
   PLACEHOLDER_GROUND,
   PLACEHOLDER_OUTLINE,
@@ -81,6 +88,12 @@ export interface OverworldSceneOptions {
   readonly textures: TileTextures;
   readonly registry: InteractionRegistry;
   readonly tunables: D97OverworldTunables;
+  readonly characterTunables: D97CharacterTunables;
+  /** Loaded looks for the occupants' and the player's characters. */
+  readonly looks: CharacterLooks;
+  readonly occupants: OverworldOccupants;
+  /** The character the player walks as. */
+  readonly playerCharacter: D97CharacterId;
   /** Whether the viewport counts as desktop for zoom. */
   readonly desktop: () => boolean;
 }
@@ -95,6 +108,18 @@ export interface OverworldSceneHandle {
   readonly interact: () => boolean;
   /** Stand on `tile` at once, optionally facing `face`. */
   readonly teleport: (tile: TilePoint, face?: TilePoint) => boolean;
+  /** The characters at anchors and the player's look, for QA. */
+  readonly characters: () => OverworldCharactersState;
+}
+
+export interface OverworldCharactersState {
+  readonly playerLayered: boolean;
+  readonly residents: readonly {
+    readonly anchorId: CompiledAnchor["id"];
+    readonly facing: Facing;
+    readonly layered: boolean;
+    readonly badge: { readonly alpha: number; readonly zIndex: number } | null;
+  }[];
 }
 
 function isEditable(target: EventTarget | null): boolean {
@@ -110,6 +135,10 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly textures: TileTextures;
   private readonly registry: InteractionRegistry;
   private readonly tunables: D97OverworldTunables;
+  private readonly characterTunables: D97CharacterTunables;
+  private readonly looks: CharacterLooks;
+  private readonly occupants: OverworldOccupants;
+  private readonly playerCharacter: D97CharacterId;
   private readonly desktop: () => boolean;
   private readonly grid: WalkabilityGrid;
   private readonly byTile: ReadonlyMap<string, CompiledAnchor>;
@@ -119,7 +148,16 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly below = new Container();
   private readonly sorted = new Container();
   private readonly above = new Container();
+  private readonly badges = new Container();
   private readonly player = new Container();
+  private playerView: CharacterView | null = null;
+  /** Characters standing at anchors, with their badges. */
+  private readonly residents: {
+    readonly anchor: CompiledAnchor;
+    readonly view: CharacterView;
+    readonly badge: Graphics | null;
+  }[] = [];
+  private clock = 0;
 
   private state: WalkerState;
   private pendingAnchor: CompiledAnchor | null = null;
@@ -134,13 +172,18 @@ export class OverworldScene implements OverworldSceneHandle {
     this.textures = options.textures;
     this.registry = options.registry;
     this.tunables = options.tunables;
+    this.characterTunables = options.characterTunables;
+    this.looks = options.looks;
+    this.occupants = options.occupants;
+    this.playerCharacter = options.playerCharacter;
     this.desktop = options.desktop;
     this.grid = movementGrid(this.map, this.map.anchors);
     this.byTile = anchorsByTile(this.map.anchors);
     this.state = initialWalker(spawnTile(this.map, this.grid));
 
     this.sorted.sortableChildren = true;
-    this.world.addChild(this.ground, this.below, this.sorted, this.above);
+    this.badges.sortableChildren = true;
+    this.world.addChild(this.ground, this.below, this.sorted, this.above, this.badges);
     this.app.stage.addChild(this.world);
     this.app.stage.eventMode = "static";
     this.app.stage.hitArea = this.app.screen;
@@ -211,6 +254,16 @@ export class OverworldScene implements OverworldSceneHandle {
     return true;
   };
 
+  characters = (): OverworldCharactersState => ({
+    playerLayered: this.playerView?.layered ?? false,
+    residents: this.residents.map(({ anchor, view, badge }) => ({
+      anchorId: anchor.id,
+      facing: view.currentFacing,
+      layered: view.layered,
+      badge: badge === null ? null : { alpha: badge.alpha, zIndex: badge.zIndex },
+    })),
+  });
+
   // --- building ---------------------------------------------------------------
 
   private readonly canEnter = (tile: TilePoint): boolean => isWalkable(this.grid, tile);
@@ -249,6 +302,11 @@ export class OverworldScene implements OverworldSceneHandle {
       } else if (anchor.kind === "chest" || anchor.kind === "object") {
         marker.rect(w * 0.2, -h * 0.6, w * 0.6, h * 0.5).fill(color).stroke({ color: PLACEHOLDER_OUTLINE, width: 2 });
       } else {
+        const occupant = this.occupants.get(anchor.id);
+        if (occupant !== undefined) {
+          this.addResident(anchor, occupant);
+          continue;
+        }
         drawCapsule(marker, w, h, color);
       }
       marker.position.set(x * w, (y + 1) * h);
@@ -258,11 +316,42 @@ export class OverworldScene implements OverworldSceneHandle {
     }
   }
 
+  private addResident(anchor: CompiledAnchor, occupant: NonNullable<ReturnType<OverworldOccupants["get"]>>): void {
+    const { tileWidth: w, tileHeight: h } = this.map;
+    const view = new CharacterView(
+      this.looks.get(occupant.character) ?? null,
+      this.characterTunables.scales[occupant.scale],
+      w,
+      h,
+      PLACEHOLDER_ANCHORS[anchor.kind],
+    );
+    const [x, y] = anchor.at;
+    view.position.set(x * w + w / 2, (y + 1) * h);
+    view.zIndex = (y + 1) * h;
+    view.label = `character:${anchor.id}`;
+    this.sorted.addChild(view);
+    let badge: Graphics | null = null;
+    if (occupant.badge !== null) {
+      badge = drawBadge(new Graphics(), occupant.badge);
+      badge.label = `badge:${anchor.id}`;
+      this.badges.addChild(badge);
+    }
+    this.residents.push({ anchor, view, badge });
+  }
+
   private buildPlayer(): void {
     const { tileWidth: w, tileHeight: h } = this.map;
+    // The gold rune ring marks "you"; the player never carries a badge.
     const ring = new Graphics().ellipse(w / 2, -h * 0.08, w * 0.42, h * 0.16).stroke({ color: PLACEHOLDER_PLAYER.ring, width: 3 });
-    const body = new Graphics();
-    drawCapsule(body, w, h, PLACEHOLDER_PLAYER.body);
+    const body = new CharacterView(
+      this.looks.get(this.playerCharacter) ?? null,
+      this.characterTunables.scales.standard,
+      w,
+      h,
+      PLACEHOLDER_PLAYER.body,
+    );
+    body.position.set(w / 2, 0);
+    this.playerView = body;
     this.player.addChild(ring, body);
     this.player.label = "player";
     this.sorted.addChild(this.player);
@@ -272,15 +361,47 @@ export class OverworldScene implements OverworldSceneHandle {
   // --- frame ------------------------------------------------------------------
 
   private readonly onTick = (): void => {
+    const seconds = Math.min(this.app.ticker.elapsedMS / 1000, MAX_FRAME_SECONDS);
     if (this.inputEnabled) {
       const before = this.state;
-      const seconds = Math.min(this.app.ticker.elapsedMS / 1000, MAX_FRAME_SECONDS);
       this.state = advanceWalker(this.state, seconds, this.tunables.walkTilesPerSecond, this.canEnter);
       if (before.step !== null && this.state.step === null) this.arriveIfIdle();
     }
+    this.clock += seconds;
     this.placePlayer();
+    this.animateCharacters(this.inputEnabled ? seconds : 0);
     this.layout();
   };
+
+  /** Pose and animate every character, then stack and fade their badges. */
+  private animateCharacters(seconds: number): void {
+    const tunables = this.characterTunables;
+    const moving = this.state.step !== null;
+    this.playerView?.setPose(this.state.facing, moving);
+    this.playerView?.advance(seconds, tunables);
+    const player = walkerPosition(this.state);
+    const bob = Math.round(
+      ((1 - Math.cos((2 * Math.PI * this.clock) / tunables.badgeBobSeconds)) / 2) * tunables.badgeBobPixels,
+    );
+    const placements: { x: number; y: number; distance: number }[] = [];
+    const badged: Graphics[] = [];
+    for (const { anchor, view, badge } of this.residents) {
+      view.setPose(idleFacing(anchor.at, player, tunables.faceRangeTiles), false);
+      view.advance(seconds, tunables);
+      if (badge === null) continue;
+      const x = Math.round(view.x - BADGE_WIDTH / 2);
+      const y = Math.round(view.y - view.headHeight - BADGE_HEIGHT - 2 - bob);
+      badge.position.set(x, y);
+      placements.push({ x, y, distance: Math.hypot(anchor.at[0] - player.x, anchor.at[1] - player.y) });
+      badged.push(badge);
+    }
+    orderBadges(placements, BADGE_WIDTH, BADGE_HEIGHT).forEach((order, index) => {
+      const badge = badged[index];
+      if (badge === undefined) return;
+      badge.zIndex = order.zIndex;
+      badge.alpha = order.faded ? tunables.badgeOverlapAlpha : 1;
+    });
+  }
 
   private arriveIfIdle(): void {
     const anchor = this.pendingAnchor;
@@ -424,14 +545,4 @@ export class OverworldScene implements OverworldSceneHandle {
     this.held.length = 0;
     this.state = holdDirection(this.state, null, this.canEnter);
   };
-}
-
-/** A capsule character standing on its tile's bottom edge. */
-function drawCapsule(graphics: Graphics, w: number, h: number, color: number): void {
-  graphics
-    .ellipse(w / 2, -h * 0.06, w * 0.3, h * 0.1)
-    .fill({ color: PLACEHOLDER_OUTLINE, alpha: 0.35 })
-    .roundRect(w * 0.25, -h * 1.05, w * 0.5, h, w * 0.25)
-    .fill(color)
-    .stroke({ color: PLACEHOLDER_OUTLINE, width: 2 });
 }

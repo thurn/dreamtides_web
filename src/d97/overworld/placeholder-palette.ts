@@ -2,6 +2,7 @@
 // guide's asset pipeline): ground by walkability, and capsule characters and
 // markers by anchor kind. Canvas colors, not Cumulus tokens.
 
+import type { Graphics } from "pixi.js";
 import type { DreamAnchorKind } from "../map/definition";
 
 export const PLACEHOLDER_GROUND = {
@@ -26,3 +27,11 @@ export const PLACEHOLDER_ANCHORS: Readonly<Record<DreamAnchorKind, number>> = {
 
 /** The outline drawn around every placeholder shape. */
 export const PLACEHOLDER_OUTLINE = 0x15191d;
+
+/** A capsule character standing on the bottom edge of a tile at the origin. */
+export function drawCapsule(graphics: Graphics, w: number, h: number, color: number): void {
+  graphics
+    .roundRect(w * 0.25, -h * 1.05, w * 0.5, h, w * 0.25)
+    .fill(color)
+    .stroke({ color: PLACEHOLDER_OUTLINE, width: 2 });
+}

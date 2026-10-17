@@ -4,7 +4,10 @@
 
 import { Application, useApplication } from "@pixi/react";
 import { useEffect, useRef, useState } from "react";
-import type { D97OverworldTunables } from "../../content/d97/tunables";
+import type { D97CharacterTunables, D97OverworldTunables } from "../../content/d97/tunables";
+import type { D97CharacterId } from "../../types/identifiers";
+import { loadCharacterLooks, type CharacterLooks } from "./characters/character-looks";
+import type { OverworldOccupants } from "./occupants";
 import { DESKTOP_MIN_WIDTH } from "../../cumulus/primitives/use-is-desktop";
 import type { CompiledDreamMap } from "../map/compiled";
 import type { InteractionRegistry } from "./interactions";
@@ -19,17 +22,30 @@ export interface OverworldCanvasProps {
   readonly map: CompiledDreamMap;
   readonly registry: InteractionRegistry;
   readonly tunables: D97OverworldTunables;
+  readonly characterTunables: D97CharacterTunables;
+  readonly occupants: OverworldOccupants;
+  /** The character the player walks as. */
+  readonly playerCharacter: D97CharacterId;
   /** False while a React panel is open: the canvas ignores input. */
   readonly inputEnabled: boolean;
+}
+
+/** Everything a scene draws that loads asynchronously. */
+interface SceneAssets {
+  readonly textures: TileTextures;
+  readonly looks: CharacterLooks;
 }
 
 function SceneMount({
   map,
   registry,
   tunables,
+  characterTunables,
+  occupants,
+  playerCharacter,
   inputEnabled,
-  textures,
-}: OverworldCanvasProps & { readonly textures: TileTextures }) {
+  assets,
+}: OverworldCanvasProps & { readonly assets: SceneAssets }) {
   const { app, isInitialised } = useApplication();
   const sceneRef = useRef<OverworldScene | null>(null);
 
@@ -38,9 +54,13 @@ function SceneMount({
     const scene = new OverworldScene({
       app,
       map,
-      textures,
+      textures: assets.textures,
+      looks: assets.looks,
+      occupants,
+      playerCharacter,
       registry,
       tunables,
+      characterTunables,
       desktop: () => window.innerWidth >= DESKTOP_MIN_WIDTH,
     });
     sceneRef.current = scene;
@@ -50,7 +70,7 @@ function SceneMount({
       sceneRef.current = null;
       scene.destroy();
     };
-  }, [app, isInitialised, map, registry, textures, tunables]);
+  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, tunables]);
 
   useEffect(() => {
     sceneRef.current?.setInputEnabled(inputEnabled);
@@ -62,17 +82,19 @@ function SceneMount({
 /** The overworld canvas, sized to its parent. */
 export function OverworldCanvas(props: OverworldCanvasProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
-  const [textures, setTextures] = useState<{ map: CompiledDreamMap; textures: TileTextures } | null>(null);
+  const { map, occupants, playerCharacter } = props;
+  const [assets, setAssets] = useState<{ map: CompiledDreamMap; assets: SceneAssets } | null>(null);
 
   useEffect(() => {
     let current = true;
-    void loadTileTextures(props.map).then((loaded) => {
-      if (current) setTextures({ map: props.map, textures: loaded });
+    const characters = [playerCharacter, ...[...occupants.values()].map((occupant) => occupant.character)];
+    void Promise.all([loadTileTextures(map), loadCharacterLooks(characters)]).then(([textures, looks]) => {
+      if (current) setAssets({ map, assets: { textures, looks } });
     });
     return () => {
       current = false;
     };
-  }, [props.map]);
+  }, [map, occupants, playerCharacter]);
 
   return (
     <div
@@ -80,7 +102,7 @@ export function OverworldCanvas(props: OverworldCanvasProps) {
       data-d97-overworld-canvas=""
       style={{ position: "absolute", inset: 0, overflow: "hidden", touchAction: "none" }}
     >
-      {textures !== null && textures.map === props.map && (
+      {assets !== null && assets.map === map && (
         <Application
           resizeTo={hostRef}
           background={VOID_COLOR}
@@ -89,7 +111,7 @@ export function OverworldCanvas(props: OverworldCanvasProps) {
           resolution={window.devicePixelRatio}
           roundPixels
         >
-          <SceneMount {...props} textures={textures.textures} />
+          <SceneMount {...props} assets={assets.assets} />
         </Application>
       )}
     </div>

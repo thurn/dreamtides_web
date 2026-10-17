@@ -7,7 +7,13 @@
 
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { D97_COLLECTION } from "../../../content/d97/collection";
-import { D97_ACT_CHALLENGER_TIERS, D97_OVERWORLD_TUNABLES } from "../../../content/d97/tunables";
+import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
+import { DEV_KNIGHT } from "../../../content/d97/characters/development";
+import {
+  D97_ACT_CHALLENGER_TIERS,
+  D97_CHARACTER_TUNABLES,
+  D97_OVERWORLD_TUNABLES,
+} from "../../../content/d97/tunables";
 import { GlassButton } from "../../../cumulus/components/controls/GlassButton";
 import { GlassDialog } from "../../../cumulus/components/overlay/GlassDialog";
 import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
@@ -17,6 +23,7 @@ import {
 } from "../../../cumulus/screens/d97/D97OverworldScreen";
 import type { JourneyContent } from "../../../data/journey-content";
 import { compileDevMap } from "../../../d97/overworld/dev-map";
+import { devOccupants } from "../../../d97/overworld/dev-occupants";
 import { createInteractionRegistry } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
 import type { D97Run } from "../../../rules/d97/d97-state";
@@ -36,10 +43,13 @@ const ENABLED_CONTROLS: ReadonlySet<D97OverworldControlId> = new Set(["deck", "m
 
 type Panel = "deck" | "menu";
 
-let devMap: ReturnType<typeof compileDevMap> | null = null;
-function currentMap() {
-  devMap ??= compileDevMap();
-  return devMap;
+let devDream: { map: ReturnType<typeof compileDevMap>; occupants: ReturnType<typeof devOccupants> } | null = null;
+function currentDream() {
+  if (devDream === null) {
+    const map = compileDevMap();
+    devDream = { map, occupants: devOccupants(map) };
+  }
+  return devDream;
 }
 
 function reportFailure(error: unknown): void {
@@ -56,7 +66,13 @@ export function D97OverworldScreenAdapter({
   readonly journeyContent: JourneyContent;
   readonly initialDeckEditorOpen?: boolean;
 }) {
-  const map = currentMap();
+  const { map, occupants } = currentDream();
+  // The player walks as their Avatar's recipe, or the development knight
+  // while the Avatar has none.
+  const playerCharacter = useMemo(
+    () => (D97_CHARACTER_SPRITES.find((recipe) => recipe.avatarId === run.avatarId) ?? DEV_KNIGHT).id,
+    [run.avatarId],
+  );
   const actions = useActions();
   const registry = useRef(createInteractionRegistry()).current;
   const [panel, setPanel] = useState<Panel | null>(initialDeckEditorOpen ? "deck" : null);
@@ -120,6 +136,9 @@ export function D97OverworldScreenAdapter({
             map={map}
             registry={registry}
             tunables={D97_OVERWORLD_TUNABLES}
+            characterTunables={D97_CHARACTER_TUNABLES}
+            occupants={occupants}
+            playerCharacter={playerCharacter}
             inputEnabled={panel === null}
           />
         </Suspense>

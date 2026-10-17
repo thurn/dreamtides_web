@@ -25,7 +25,12 @@ deck at sites, and fights seven card battles, the last against Apollyon.
   (`src/content/d97/maps/`, read by `src/d97/map/`) from its Tiled source in
   the library into `public/d97/maps/<map-id>.json`; `npm run d97:maps` does
   that alone, and `--strict` fails on a missing source or a map that does not
-  compile (such as a source whose hash no longer matches its module).
+  compile (such as a source whose hash no longer matches its module). It also
+  resolves each D97 character recipe (`src/content/d97/characters/`) against
+  the library's Universal LPC character generator, links only the sheets the
+  recipes use into `public/d97/characters/sheets/`, and writes
+  `public/d97/characters/manifest.json`; `npm run d97:characters` does that
+  alone. A recipe naming a missing sheet draws as a capsule.
 
 ## Running
 
