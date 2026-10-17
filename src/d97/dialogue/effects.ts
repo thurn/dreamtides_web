@@ -7,6 +7,7 @@
 import type {
   D97DialogueEffect,
   D97DialogueEffectKind,
+  D97DialogueModule,
   D97SpeakerKind,
 } from "../../content/d97/dialogue/schema";
 import type { EventPayloads } from "../../rules/events";
@@ -77,3 +78,36 @@ export const LEGAL_EFFECTS: Readonly<Record<D97SpeakerKind, ReadonlySet<D97Dialo
   challenger: new Set(["startChallenge", "setFlag"]),
   guardian: new Set(["startChallenge", "setFlag"]),
 };
+
+/** Whether `left` and `right` are one effect: the same kind, ids and value. */
+export function sameEffect(left: D97DialogueEffect, right: D97DialogueEffect): boolean {
+  switch (left.kind) {
+    case "offerQuest":
+    case "completeQuest":
+      return right.kind === left.kind && right.questId === left.questId;
+    case "advanceQuest":
+      return right.kind === "advanceQuest" && right.questId === left.questId && right.stepId === left.stepId;
+    case "giveItem":
+    case "takeItem":
+      return right.kind === left.kind && right.itemId === left.itemId;
+    case "openService":
+      return right.kind === "openService" && right.service === left.service;
+    case "setFlag":
+      return right.kind === "setFlag" && right.flagId === left.flagId && right.value === left.value;
+    case "openShop":
+    case "startChallenge":
+      return right.kind === left.kind;
+  }
+}
+
+/**
+ * Whether some choice in `module` carries `effect`. The rules check an
+ * effect intent against its speaker's dialogue this way: the effect must be
+ * one the speaker can offer at all. Which node is showing is view state, so
+ * the check does not ask whether the choice is reachable now.
+ */
+export function dialogueCarriesEffect(module: D97DialogueModule, effect: D97DialogueEffect): boolean {
+  return module.nodes.some((node) =>
+    node.choices.some((choice) => choice.effect !== undefined && sameEffect(choice.effect, effect)),
+  );
+}

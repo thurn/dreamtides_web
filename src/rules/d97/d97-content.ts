@@ -8,7 +8,8 @@ import type { D97StartingCollectionContent } from "../../d97/collection/starting
 import type { D97TierKnob } from "../../content/d97/encounters";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { CardId } from "../../types/card-identity";
-import type { AvatarId, BattleId, D97ItemId, DreamsignId, TideId } from "../../types/identifiers";
+import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
+import type { AvatarId, BattleId, D97ItemId, DreamAnchorId, DreamsignId, TideId } from "../../types/identifiers";
 import type { D97BattleInit } from "../battle/fold";
 import type { D97Encounter, D97Run } from "./d97-state";
 import type { D97QuestCatalog } from "../../d97/quests/quests";
@@ -73,6 +74,12 @@ export interface D97ContentProvider extends D97StartingCollectionContent {
   readonly quests: D97QuestCatalog;
   /** Every registered quest item. */
   readonly itemIds: ReadonlySet<D97ItemId>;
+  /**
+   * The registered dialogue each speaking resident speaks, by the anchor it
+   * stands at, across every dream module. Dialogue-effect intents are checked
+   * against it.
+   */
+  readonly speakerDialogues: ReadonlyMap<DreamAnchorId, D97DialogueModule>;
 }
 
 let provider: D97ContentProvider | null = null;

@@ -12,6 +12,7 @@ import {
   D97_COLLECTION,
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
+import { D97_DREAM_MODULES } from "../../content/d97/dreams";
 import { eventRng } from "../../eventlog/rng";
 import { genesisFoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
@@ -53,6 +54,17 @@ function makeRarityContent() {
 }
 
 describe("createD97ContentProvider", () => {
+  it("indexes each speaking resident's registered dialogue by its anchor", () => {
+    const provider = createD97ContentProvider(makeJourneyContent());
+    const speaking = D97_DREAM_MODULES.flatMap((dream) => dream.residents).filter(
+      (resident) => resident.dialogueId !== undefined,
+    );
+    expect(speaking.length).toBeGreaterThan(0);
+    for (const resident of speaking) {
+      expect(provider.speakerDialogues.get(resident.anchorId)?.id).toBe(resident.dialogueId);
+    }
+  });
+
   it("deals the pool the journey draft deals for the same Avatar and seed", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     const content = makeRarityContent();

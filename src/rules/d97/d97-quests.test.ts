@@ -4,7 +4,8 @@
 // time and abandons for free; a card-choice reward samples the bag without
 // removal, never shows a card more than w(c) times, and acquisition on the
 // pick removes one copy; items, flags and shop and service hand-offs apply and
-// log with UUIDs.
+// log with UUIDs, and each dialogue-effect intent applies only when the
+// resident at its anchor speaks a dialogue carrying that exact effect.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { D97_CHALLENGERS } from "../../content/d97/challengers";
@@ -21,10 +22,18 @@ import {
   QUESTS,
   STEPS,
 } from "../../d97/dialogue/dialogue.fixtures";
+import type { D97DialogueEffect, D97DialogueModule, D97SpeakerKind } from "../../content/d97/dialogue/schema";
 import { questEssence } from "../../d97/quests/quests";
 import { eventRng } from "../../eventlog/rng";
 import type { Genesis } from "../../eventlog/types";
-import { parseBattleId, type DreamAnchorId } from "../../types/identifiers";
+import {
+  parseBattleId,
+  parseD97DialogueId,
+  parseD97DialogueNodeId,
+  parseD97FlagId,
+  parseD97ItemId,
+  type DreamAnchorId,
+} from "../../types/identifiers";
 import { testAvatarId, testCardId } from "../../types/test-identities";
 import type { D97BattleFoldState } from "../battle/fold";
 import { genesisFoldState, type FoldState } from "../fold-state";
@@ -43,6 +52,40 @@ const REGISTERED_QUESTS = QUESTS.map((quest) =>
     ? { ...quest, steps: quest.steps.map((step) => (step.kind === "defeat" ? { ...step, anchorId: TARGET } : step)) }
     : quest,
 );
+/** An item every dialogue offers to give but no content registers. */
+const UNREGISTERED_ITEM = parseD97ItemId("00000008-0000-4000-8000-000000000001");
+/** A flag no speaker's dialogue sets. */
+const UNSPOKEN_FLAG = parseD97FlagId("00000008-0000-4000-8000-000000000002");
+
+/** A one-node dialogue whose choices carry `effects`. */
+function speaker(index: number, kind: D97SpeakerKind, effects: readonly D97DialogueEffect[]): D97DialogueModule {
+  const suffix = index.toString(16).padStart(12, "0");
+  const node = parseD97DialogueNodeId(`00000009-0000-4000-8000-${suffix}`);
+  return {
+    id: parseD97DialogueId(`0000000a-0000-4000-8000-${suffix}`),
+    speaker: { name: "Speaker", kind },
+    entries: [{ node }],
+    nodes: [{ id: node, lines: ["Line."], choices: effects.map((effect) => ({ label: "Choice.", effect, next: null })) }],
+  };
+}
+
+/** The dialogue each test anchor's resident speaks; the object anchors have none. */
+const SPEAKER_DIALOGUES = new Map<DreamAnchorId, D97DialogueModule>([
+  [
+    ANCHORS.giver,
+    speaker(1, "friendly", [
+      { kind: "giveItem", itemId: ITEMS.relic },
+      { kind: "takeItem", itemId: ITEMS.relic },
+      { kind: "giveItem", itemId: UNREGISTERED_ITEM },
+      { kind: "setFlag", flagId: FLAG, value: true },
+      { kind: "setFlag", flagId: FLAG, value: false },
+      { kind: "openService", service: "sage" },
+    ]),
+  ],
+  [ANCHORS.recipient, speaker(2, "friendly", [{ kind: "advanceQuest", questId: DELIVERY_QUEST.id, stepId: STEPS.deliver }])],
+  [ANCHORS.townsperson, speaker(3, "townsfolk", [{ kind: "advanceQuest", questId: ERRAND_QUEST.id, stepId: STEPS.visit }])],
+  [ANCHORS.shop, speaker(4, "shop", [{ kind: "takeItem", itemId: ITEMS.parcel }])],
+]);
 let seq = 1;
 
 function apply(state: FoldState, type: Parameters<typeof event>[0], payload: Record<string, unknown>) {
@@ -88,7 +131,12 @@ const essenceFor = (kind: keyof typeof D97_QUESTS.essenceReward, run: D97Run) =>
 beforeEach(() => {
   seq = 1;
   registerD97ContentProvider(
-    syntheticD97Content({ avatarIds: [AVATAR], quests: REGISTERED_QUESTS, itemIds: [ITEMS.relic, ITEMS.parcel] }),
+    syntheticD97Content({
+      avatarIds: [AVATAR],
+      quests: REGISTERED_QUESTS,
+      itemIds: [ITEMS.relic, ITEMS.parcel],
+      speakerDialogues: SPEAKER_DIALOGUES,
+    }),
   );
 });
 
@@ -295,5 +343,47 @@ describe("items, flags and hand-offs", () => {
     expect(runOf(result.state)).toEqual(runOf(state));
     expect(result.records[0]?.event).toBe("d97_dialogue_hand_off");
     bounces(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "tailor" });
+  });
+});
+
+describe("dialogue-effect intents and the speaker's dialogue", () => {
+  it("gives and takes only the items the speaker's dialogue hands over", () => {
+    const state = started();
+    bounces(state, "D97_GIVE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.recipient });
+    bounces(state, "D97_GIVE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.object });
+    bounces(state, "D97_GIVE_ITEM", { itemId: ITEMS.parcel, anchorId: ANCHORS.giver });
+    bounces(state, "D97_GIVE_ITEM", { itemId: UNREGISTERED_ITEM, anchorId: ANCHORS.giver });
+    const given = applied(state, "D97_GIVE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.giver });
+    bounces(given, "D97_TAKE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.shop });
+    expect(runOf(applied(given, "D97_TAKE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.giver })).quests.items).toEqual([]);
+  });
+
+  it("sets only the flags and values the speaker's dialogue sets", () => {
+    const state = started();
+    bounces(state, "D97_SET_FLAG", { flagId: FLAG, value: true, anchorId: ANCHORS.townsperson });
+    bounces(state, "D97_SET_FLAG", { flagId: UNSPOKEN_FLAG, value: true, anchorId: ANCHORS.giver });
+    expect(runOf(applied(state, "D97_SET_FLAG", { flagId: FLAG, value: true, anchorId: ANCHORS.giver })).flags).toEqual([FLAG]);
+  });
+
+  it("advances a step only at a speaker whose dialogue advances it", () => {
+    const state = applied(started(), "D97_ACCEPT_QUEST", { questId: DELIVERY_QUEST.id, anchorId: ANCHORS.giver });
+    bounces(state, "D97_ADVANCE_QUEST", { questId: DELIVERY_QUEST.id, stepId: STEPS.deliver, anchorId: ANCHORS.townsperson });
+    bounces(state, "D97_ADVANCE_QUEST", { questId: DELIVERY_QUEST.id, stepId: STEPS.visit, anchorId: ANCHORS.recipient });
+    applied(state, "D97_ADVANCE_QUEST", { questId: DELIVERY_QUEST.id, stepId: STEPS.deliver, anchorId: ANCHORS.recipient });
+  });
+
+  it("hands off only to a service the speaker's dialogue opens", () => {
+    const state = started();
+    bounces(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "dreamGuide" });
+    bounces(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.recipient, service: "sage" });
+    applied(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "sage" });
+  });
+
+  it("bounces every effect intent when no dialogue is registered", () => {
+    registerD97ContentProvider(syntheticD97Content({ avatarIds: [AVATAR], itemIds: [ITEMS.relic] }));
+    const state = started();
+    bounces(state, "D97_GIVE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.giver });
+    bounces(state, "D97_SET_FLAG", { flagId: FLAG, value: true, anchorId: ANCHORS.giver });
+    bounces(state, "D97_OPEN_SERVICE", { anchorId: ANCHORS.giver, service: "sage" });
   });
 });

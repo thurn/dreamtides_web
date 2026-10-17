@@ -1,6 +1,6 @@
 // Real D97ContentProvider: the roster, the reward-bag deal, the starting
 // collection's card facts, captured from the loaded content, and the
-// registered quests and quest items. The deal is the
+// registered quests, quest items and each dream resident's dialogue. The deal is the
 // journey draft's pool construction (the tides4 deal, then the per-card pool
 // caps, then the cards of rarities bags never hold left out), keyed by card UUID and with no logging,
 // so a fold may call it any number of times.
@@ -9,6 +9,8 @@ import { buildD97OpponentDeck, startD97Battle, type D97BattleContent } from "../
 import { resolvePool } from "../../data/cards-v2-database";
 import { registeredDialogueCatalog } from "../../d97/dialogue/catalog";
 import { D97_COLLECTION } from "../../content/d97/collection";
+import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
+import { D97_DREAM_MODULES } from "../../content/d97/dreams";
 import type { JourneyContent } from "../../data/journey-content";
 import type { D97DealtCard } from "../../d97/collection/reward-bag";
 import { cardPriceFactsOf, type D97CardPriceFacts } from "../../d97/shop/pricing";
@@ -17,7 +19,7 @@ import type { D97ContentProvider } from "../../rules/d97/d97-content";
 import { buildTideAffinityIndex } from "../../selection/tide-affinity";
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
-import { identityEntries } from "../../types/identifiers";
+import { identityEntries, type DreamAnchorId } from "../../types/identifiers";
 
 function codeUnits(left: string, right: string): number {
   if (left < right) return -1;
@@ -51,11 +53,17 @@ export function createD97ContentProvider(
     tides4Tuning: pool.tides4Tuning,
   };
   const dialogue = registeredDialogueCatalog();
+  const speakerDialogues = new Map<DreamAnchorId, D97DialogueModule>();
+  for (const resident of D97_DREAM_MODULES.flatMap((dream) => dream.residents)) {
+    const module = resident.dialogueId === undefined ? undefined : dialogue.dialogues.get(resident.dialogueId);
+    if (module !== undefined) speakerDialogues.set(resident.anchorId, module);
+  }
   return {
     buildOpponentDeck: (input) => buildD97OpponentDeck(battleContent, input),
     startBattle: (input) => startD97Battle(battleContent, input),
     quests: dialogue.quests,
     itemIds: new Set(dialogue.items.keys()),
+    speakerDialogues,
     avatarIds: new Set(content.avatars.map((avatar) => avatar.id)),
     tideAffinityIndex:
       tides4Decks === undefined
