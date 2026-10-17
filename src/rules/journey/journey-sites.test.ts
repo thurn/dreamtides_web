@@ -32,7 +32,7 @@ const registry = createJourneyModifierRegistry([
   journeySites(ENHANCE, { kind: "additionalEnhancedSite", count: 1 }),
   journeySites(REROLL, { kind: "rerollExploration", rerollsPerSite: 1 }),
 ]);
-const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => { throw new Error("unexpected intent RNG read"); }, intervening: [], timestamp: "1970-01-01T00:00:00Z" };
+const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => { throw new Error("unexpected intent RNG read"); }, timestamp: "1970-01-01T00:00:00Z" };
 const sign = (id: DreamsignId) => ({ id, name: "Same synthetic name", effectDescription: "Synthetic effect" });
 const site = (idSeed: string, type: SiteType, extra: Partial<SiteState> = {}): SiteState => ({ id: parseSiteId(idSeed), type, isVisited: false, isEnhanced: false, ...extra });
 const exploration = (extra: Partial<ExplorationSiteRuntime> = {}): ExplorationSiteRuntime => ({ kind: "exploration", selectionRulesVersion: SELECTION_RULES_VERSION, encounterCardId: OLD, actionOffers: [], resolution: null, ...extra });
@@ -41,7 +41,7 @@ function state(ids: readonly DreamsignId[] = [ENHANCE], sites = [site("shop", "S
   return { ...base, journey: { ...base.journey, currentDreamscape: NODE, screen: { type: "dreamscape" }, dreamsigns: ids.map(sign), atlas: { ...base.journey.atlas, nodes: { [NODE]: makeTestAtlasNode(NODE, sites) } } } };
 }
 function event(type: GameEventType, payload: Record<string, unknown>) {
-  return { type, payload, actor: ACTOR, basedOnSeq: 0, clientTimestamp: context.timestamp };
+  return { type, payload, actor: ACTOR, clientTimestamp: context.timestamp };
 }
 function apply(before: FoldState, type: GameEventType = "ADJUST_ESSENCE", payload: Record<string, unknown> = { delta: 1 }) {
   return reduceGameEvent(before, event(type, payload), context, registry);
@@ -202,7 +202,7 @@ describe("site-local optional Exploration reroll", () => {
     } };
     expect(apply(fresh, "REROLL_EXPLORATION", { ...payload(), siteId: otherSite }).outcome).toBe("applied");
   });
-  it("reload/replay retain one atomic result and competing or repeated intents cannot consume twice", () => {
+  it("reload/replay retain one atomic result and repeated intents cannot consume twice", () => {
     const before = rerollState();
     const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => before, reducer: (s, e, ctx) => reduceGameEvent(s, e, ctx, registry) };
     const log = createLocalLog({ config, genesis: GENESIS, localActor: ACTOR, now: () => context.timestamp, devMode: true });
@@ -211,9 +211,6 @@ describe("site-local optional Exploration reroll", () => {
     const replay = foldEvents(config, GENESIS, { seq: 0, state: before }, [...log.events()], { devMode: true });
     expect(replay.state).toEqual(log.state());
     expect(explorationRerollCount(replay.state.journey.siteRuntime[SITE] as ExplorationSiteRuntime)).toBe(1);
-    const conflict = reduceGameEvent(before, event("REROLL_EXPLORATION", payload()), { ...context, intervening: [{ seq: 1, actor: testEventActor("partner"), type: "REROLL_EXPLORATION" }] }, registry);
-    expect(conflict.bounceReason).toBe("partner_conflict");
-    expect(conflict.state).toBe(before);
   });
   it("saved-state reload is exact and rejects malformed optional counter/provenance fields", () => {
     const consumed = apply(rerollState(), "REROLL_EXPLORATION", payload()).state;

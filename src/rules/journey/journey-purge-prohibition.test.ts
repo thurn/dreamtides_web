@@ -187,7 +187,7 @@ describe("registered journey purge prohibition through public folds", () => {
     expect(result.state.journey.essence).toBe(137); expect(observer).toHaveBeenCalledTimes(1);
     expect(initial.journey.deck).toHaveLength(3); expect(initial.journey.essence).toBe(100);
   });
-  it("replays denials and source-loss retry, rejects stale partner decisions, and contains a domain error before retry", () => {
+  it("replays denials and source-loss retry, and contains a domain error before retry", () => {
     const initial = state("Purge", [SHIELD, FRUIT]);
     const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial,
       reducer: (s, e, c) => reduceGameEvent(s, e, c, registry) };
@@ -204,10 +204,6 @@ describe("registered journey purge prohibition through public folds", () => {
     expect(log.state().journey.deck.map(({ entryId }) => entryId)).toEqual([BANE]);
     expect(foldEvents(config, GENESIS, { seq: 0, state: initial }, [...log.events()]).state).toEqual(log.state());
     expect(createLocalLog({ ...options, events: [...log.events()] }).state()).toEqual(log.state());
-    const conflict = apply(initial, "PURGE_DECK_CARDS", payload, ctx({ intervening: [
-      { seq: 1, actor: testEventActor("partner"), type: "REMOVE_DREAMSIGN" },
-    ] }));
-    expect(conflict.bounceReason).toBe("partner_conflict"); expect(conflict.state).toBe(initial);
     let fail = true;
     registerSiteContentProvider(testSiteContentProvider({ resolveAugury: ({ journey }) => {
       const next = { ...journey, essence: journey.essence + 30, deck: journey.deck.slice(1) };

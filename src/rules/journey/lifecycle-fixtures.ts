@@ -35,7 +35,6 @@ export function ctx(overrides: Partial<EventContext> = {}): EventContext {
     contentConfig: TEST_CONTENT_CONFIG,
     seq: 10,
     rng: () => 0,
-    intervening: [],
     timestamp: "1970-01-01T00:00:00.000Z",
     ...overrides,
   };
@@ -52,7 +51,6 @@ export function event(
     payload,
     actor: testEventActor(actor),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
-    basedOnSeq: 0,
   };
 }
 

@@ -120,13 +120,6 @@ describe("journeyTransfiguration public folded contracts", () => {
     expect(log.state().journey.deck).toHaveLength(5); expect(log.state().journey.essence).toBe(23);
     expect(foldEvents(config, GENESIS, { seq: 1, state: initial }, [...log.events()].filter(({ seq }) => seq > 1)).state).toEqual(log.state());
   });
-  it("uses CAS for concurrent and unknown windows, leaving acceptance/logs unchanged", () => {
-    const s = accepted(siteState([LEAF, TOME]), "OPEN_SITE", open);
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: event("END_BATTLE", {}, "partner").actor, type: "ADD_DREAMSIGN" as const }]]) {
-      const out = apply(s, "ACCEPT_TRANSFIGURATION_CHOICE", select("entry-1"), ctx({ intervening }));
-      expect(out.state).toBe(s); expect(out.logRecords).toBeUndefined();
-    }
-  });
   it("does not draw RNG or create a source copy when a choice is refused", () => {
     const rng = vi.fn(() => 0), s = accepted(siteState([TOME]), "OPEN_SITE", open);
     expect(apply(s, "ACCEPT_TRANSFIGURATION_CHOICE", select("missing"), ctx({ rng })).state).toBe(s); expect(rng).not.toHaveBeenCalled();

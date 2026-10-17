@@ -73,8 +73,6 @@ export interface GameEvent {
   actor: EventActor;
   /** Display data only, stamped by the appender. Not used by reducers. */
   clientTimestamp: string;
-  /** Newest committed seq folded into the state the actor saw when it built this event. */
-  basedOnSeq: number;
   /**
    * Stable identity for a logical intent that may be submitted by several
    * React mounts or reloads. The log keeps at most one applied event for a
@@ -199,8 +197,6 @@ export type EventOutcome = "applied" | "bounced";
 
 /** Why a bounced event was not applied, for diagnostics and player-facing copy. */
 export type BounceReason =
-  | "partner_conflict"
-  | "unknown_conflict"
   | "prompt_pending"
   | "invalid_action"
   | "malformed_event"
@@ -245,20 +241,6 @@ export interface EventContext {
    * assumed to have.
    */
   rng: (drawIndex: number) => number;
-  /**
-   * Events between this event's `basedOnSeq` and its `seq` that themselves
-   * applied — a bounced event changed nothing and can never invalidate a
-   * later decision, so bounced events are filtered out before this array
-   * is built.
-   *
-   * The literal string "unknown" (never an empty array) when the events in
-   * that window predate the fold's checkpoint horizon and can no longer be
-   * enumerated. Reducers must
-   * treat "unknown" and `[]` differently: an empty array is a precise
-   * claim that nothing intervened, while "unknown" means the window can't
-   * be inspected at all.
-   */
-  intervening: Array<{ seq: number; actor: EventActor; type: EventType }> | "unknown";
   timestamp: string;
 }
 

@@ -35,12 +35,11 @@ const GENESIS = {
 let seq = 0;
 
 
-function ctx(intervening: EventContext["intervening"] = []): EventContext {
+function ctx(): EventContext {
   return {
     contentConfig: TEST_CONTENT_CONFIG,
     seq,
     rng: eventRng(GENESIS.seed as never, seq),
-    intervening,
     timestamp: "1970-01-01T00:00:00.000Z",
   };
 }
@@ -50,7 +49,7 @@ function reduce(
   state: FoldState,
   type: string,
   payload: Record<string, unknown>,
-  options: { actor?: string; intervening?: EventContext["intervening"] } = {},
+  options: { actor?: string } = {},
 ): ReduceResult {
   seq += 1;
   const event: GameEvent = {
@@ -58,9 +57,8 @@ function reduce(
     payload,
     actor: testEventActor(options.actor ?? "p1"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
-    basedOnSeq: seq - 1,
   };
-  return reduceGameEvent(state, event, ctx(options.intervening));
+  return reduceGameEvent(state, event, ctx());
 }
 
 
@@ -118,7 +116,7 @@ function promptId(state: FoldState, engine: Engine = FIXTURE_ENGINE) {
 function answer(
   state: FoldState,
   value: unknown,
-  options: { side?: string; actor?: string; intervening?: EventContext["intervening"]; id?: PromptId } = {},
+  options: { side?: string; actor?: string; id?: PromptId } = {},
 ): ReduceResult {
   return reduce(
     state,
@@ -488,20 +486,13 @@ describe("observed anonymous saved-state records", () => {
   });
 });
 
-describe("concurrent actors", () => {
-  it("bounces an action based before a partner's event and applies a matching answer through it", () => {
-    const state = begun();
-    const partner = [{ seq, actor: testEventActor("ai:enemy"), type: "BATTLE_ACTION" as GameEvent["type"] }];
-    expect(
-      reduce(state, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }, { intervening: partner }),
-    ).toMatchObject({ outcome: "bounced", bounceReason: "partner_conflict" });
-    const prompted = applied(play(state));
-    const window = [{ seq, actor: testEventActor("ai:enemy"), type: "BATTLE_ACTION" as GameEvent["type"] }];
-    const answered = applied(answer(prompted, FIXTURE_POINTS_MODE, { intervening: window }));
+describe("prompt answers", () => {
+  it("applies a matching answer once and bounces a later answer to the resolved prompt", () => {
+    const prompted = applied(play(begun()));
+    const answered = applied(answer(prompted, FIXTURE_POINTS_MODE));
     expect(engineOf(answered).slice.committed.result).not.toBeNull();
-    expect(answer(prompted, FIXTURE_POINTS_MODE, { actor: "p2", intervening: window }).outcome).toBe("applied");
     expect(
-      reduce(answered, "BATTLE_ANSWER", { side: "player", promptId: promptId(prompted), value: 1 }, { actor: "p2", intervening: window }).outcome,
+      reduce(answered, "BATTLE_ANSWER", { side: "player", promptId: promptId(prompted), value: 1 }, { actor: "p2" }).outcome,
     ).toBe("bounced");
   });
 });

@@ -9,7 +9,7 @@ import { registerSiteContentProvider } from "./sites";
 import { registerJourneyTransfigurationProvider } from "./journey-transfiguration";
 import { parseCardSubtype } from "../../types/card-identity";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testCardId, testExplorationActionId, testEventActor } from "../../types/test-identities";
+import { testCardId, testExplorationActionId } from "../../types/test-identities";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import type { GameEventType } from "../events";
@@ -101,7 +101,7 @@ describe("journey acquisition public contracts", () => {
     expect(result.outcome).toBe("applied"); expect(result.state.journey.screen).toEqual(before.journey.screen);
     expect(result.logRecords?.[0].fields).toMatchObject({ dreamsignId: DOLL, heldIndex: 0, targetCount: 0, choicePrepared: false });
   });
-  it("preserves the durable copy through reload and rejects malformed/stale/concurrent intentions atomically", () => {
+  it("preserves the durable copy through reload and rejects malformed and stale intentions atomically", () => {
     const pending = apply(initial([RED]), "ADD_DREAMSIGN", { dreamsignId: DOLL }).state;
     if (pending.journey.screen.type !== "journeyDreamsign" || pending.journey.screen.choice.kind !== "copy") throw new Error("missing copy permission");
     const choice = pending.journey.screen.choice, rng = vi.fn(() => 0);
@@ -112,7 +112,6 @@ describe("journey acquisition public contracts", () => {
       const result = apply(pending, "RESOLVE_DREAMSIGN_COPY", invalid, { rng });
       expect(result.state).toBe(pending); expect(result.logRecords).toBeUndefined();
     }
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: testEventActor("partner"), type: "ADD_DREAMSIGN" as const }]]) expect(apply(pending, "RESOLVE_DREAMSIGN_COPY", payload, { intervening, rng }).state).toBe(pending);
     for (const [type, body] of [["ADD_DREAMSIGN", { dreamsignId: RAT }], ["REMOVE_DREAMSIGN", { dreamsignId: RED }], ["BATTLE_DEBUG", {}], ["ADD_CARD", { cardId: testCardId("denied-during-copy") }]] as [GameEventType, Record<string, unknown>][]) expect(apply(pending, type, body, { rng }).state).toBe(pending);
     const completed = apply(pending, "RESOLVE_DREAMSIGN_COPY", payload);
     expect(completed.outcome).toBe("applied"); expect(apply(completed.state, "RESOLVE_DREAMSIGN_COPY", payload, { rng }).state).toBe(completed.state);
@@ -139,7 +138,7 @@ describe("journey acquisition public contracts", () => {
     expect(rng).toHaveBeenCalledTimes(Math.floor(count / 2) * 2);
   });
 
-  it("suspends a real battle unchanged and resolves a restored copy with a pending prompt after CAS", () => {
+  it("suspends a real battle unchanged and resolves a restored copy with a pending prompt", () => {
     const before = beginBattle([RED]), battleSnapshot = structuredClone(before.battle);
     const acquired = apply(before, "ADD_DREAMSIGN", { dreamsignId: DOLL }); expect(acquired.outcome).toBe("applied");
     const suspended = acquired.state;
@@ -156,7 +155,6 @@ describe("journey acquisition public contracts", () => {
     expect(apply(restored.state, "BATTLE_CANCEL", { side: "player", promptId }).state).toBe(restored.state);
     const payload = { sourceDreamsignId: DOLL, heldIndex: 1, choiceIndex: 0, permissionSeq: copy.permissionSeq, targetHeldIndex: 0, expectedTargetDreamsignId: RED };
     expect(apply(restored.state, "RESOLVE_DREAMSIGN_COPY", { ...payload, targetHeldIndex: 999 }).state).toBe(restored.state);
-    expect(apply(restored.state, "RESOLVE_DREAMSIGN_COPY", payload, { intervening: "unknown" }).state).toBe(restored.state);
     const resolved = apply(restored.state, "RESOLVE_DREAMSIGN_COPY", payload); expect(resolved.outcome).toBe("applied");
     expect(resolved.state.battle).toBe(restored.state.battle); expect(resolved.state.battle).toEqual(played.state.battle);
     expect(resolved.state.journey.screen).toEqual(before.journey.screen);

@@ -139,16 +139,14 @@ describe("(a) run-field nullability", () => {
     let draftStateWrites = 0;
     for (const { events } of allSequences()) {
       // Fold step by step so every intermediate state is inspectable. This is
-      // a faithful single-actor fold: basedOnSeq = seq - 1 makes every
-      // intervening window empty, and rng is keyed by (seed, seq) exactly as
-      // `foldEvents` keys it.
+      // a faithful fold: rng is keyed by (seed, seq) exactly as `foldEvents`
+      // keys it.
       let state = genesisFoldState(GENESIS);
       for (const { seq, event } of events) {
         const ctx: EventContext = {
           contentConfig: TEST_CONTENT_CONFIG,
           seq,
           rng: eventRng(GENESIS.seed, seq),
-          intervening: [],
           timestamp: TIMESTAMP,
         };
         const before = state;

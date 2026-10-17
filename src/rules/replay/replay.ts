@@ -37,7 +37,7 @@ import { assertJourneyOpeningCheckpoint } from "../journey/journey-battle-init";
 /**
  * The canonical `EngineConfig<FoldState>` for the real Dreamtides game.
  *
- * - `reducer`   — the root fold + CAS policy (`reduceGameEvent`).
+ * - `reducer`   — the root fold and its prompt gate (`reduceGameEvent`).
  * - `genesisState` — the pre-journey fold state a fresh game shows.
  * - `encode` / `decode` — JSON round-trip of the pure-data `FoldState`, used for
  *   the compaction base snapshot. `FoldState` holds only JSON-safe data (no

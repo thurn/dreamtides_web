@@ -227,7 +227,7 @@ describe("journeyShop purchased physical cards", () => {
   });
 });
 
-describe("journeyShop fold failure, cold continuation and concurrent intents", () => {
+describe("journeyShop fold failure, cold continuation and repeated intents", () => {
   const config = (state: FoldState, use = registry) => ({ ...GAME_ENGINE_CONFIG, genesisState: () => state,
     reducer: (s: FoldState, e: GameEvent, c: EventContext) => reduceGameEvent(s, e, c, use) });
   const fold = (before: FoldState, events: { seq: number; event: GameEvent }[], use = registry) => foldEvents(config(before, use), GENESIS, { state: before, seq: 0 }, events, { devMode: false });
@@ -262,7 +262,7 @@ describe("journeyShop fold failure, cold continuation and concurrent intents", (
     const before = fixture("Shop", [ORB, COIN, SHARD]); before.journey.essence = 500;
     const intents = [event("OPEN_SITE", { siteId: SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }),
       event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0 }), event("REROLL_SHOP", { siteId: SITE_ID }), event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0 })];
-    const events = intents.map((e, i) => ({ seq: i + 1, event: { ...e, basedOnSeq: i } }));
+    const events = intents.map((e, i) => ({ seq: i + 1, event: e }));
     const all = fold(before, events);
     expect(all.outcomes.every((o) => o.outcome === "applied")).toBe(true);
     for (let prefix = 1; prefix < events.length; prefix++) {
@@ -273,19 +273,11 @@ describe("journeyShop fold failure, cold continuation and concurrent intents", (
     }
     expect(GAME_ENGINE_CONFIG.hash(fold(before, events).state)).toBe(GAME_ENGINE_CONFIG.hash(all.state));
   });
-  it.each(["BUY_SHOP_SLOT", "REROLL_SHOP"] as const)("commits only the first partner intent from a shared head for %s", (type) => {
-    const before = open(fixture("Shop", [COIN, SHARD])).state;
-    const first = event(type, { siteId: SITE_ID, slotIndex: 0 }, "alice"), second = event(type, { siteId: SITE_ID, slotIndex: 0 }, "bob");
-    const out = fold(before, [{ seq: 1, event: first }, { seq: 2, event: second }]);
-    expect(out.outcomes.map((o) => o.outcome)).toEqual(["applied", "bounced"]);
-    expect(out.outcomes[1].bounceReason).toBe("partner_conflict");
-    expect(out.state).toEqual(fold(before, [{ seq: 1, event: first }]).state);
-  });
-  it("does not generate a second stock shelf for a concurrent exempt open", () => {
+  it("does not generate a second stock shelf for a repeated open", () => {
     const provider = createSiteContentProvider(content, registry), generate = vi.fn(provider.openSite.bind(provider));
     registerSiteContentProvider({ ...provider, openSite: generate });
     const before = fixture(), a = event("OPEN_SITE", { siteId: SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION });
-    const out = fold(before, [{ seq: 1, event: a }, { seq: 2, event: { ...a, actor: event("OPEN_SITE", {}, "bob").actor } }]);
+    const out = fold(before, [{ seq: 1, event: a }, { seq: 2, event: a }]);
     expect(out.outcomes.map((o) => o.outcome)).toEqual(["applied", "bounced"]); expect(generate).toHaveBeenCalledTimes(1);
   });
 });

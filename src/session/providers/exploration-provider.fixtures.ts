@@ -172,7 +172,6 @@ function logged(seq: number, type: GameEvent["type"], payload: object) {
     payload: JSON.parse(JSON.stringify(payload)) as Record<string, unknown>,
     actor: testEventActor(seq % 2 === 0 ? "client-a" : "client-b"),
     clientTimestamp: new Date(seq * 1000).toISOString(),
-    basedOnSeq: seq - 1,
   };
   return { seq, event };
 }

@@ -77,12 +77,8 @@ describe("additional applications refuse unsupported contexts atomically", () =>
     const legacy = { ...f.state.journey.deck[0], transfiguration: "Inspired" as const };
     expect(journeyTransfigurationOccurrences({ deck: f.state.journey.deck }, { deck: [legacy, f.state.journey.deck[1]] })).toEqual([{ entry: legacy, cardId: f.base.id, cardType: "Event" }]);
   });
-  it("bounces stale/concurrent/unknown/repeated windows with zero dependent draws", () => {
+  it("bounces stale and repeated windows with zero dependent draws", () => {
     const f = additionalWindow({ cardType: "Event" });
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: event("END_BATTLE", {}, "partner").actor, type: "ADD_DREAMSIGN" as const }]]) {
-      const rng = vi.fn(() => 0), out = resolveWindow(f, f.state, [ENTRY_ID], { intervening, rng });
-      expect(out.state).toBe(f.state); expect(out.logRecords).toBeUndefined(); expect(rng).not.toHaveBeenCalled();
-    }
     const first = resolveWindow(f, f.state, [ENTRY_ID], { seq: 10 });
     const rng = vi.fn(() => 0), stale = apply(f, first.state, "RESOLVE_JOURNEY_TRANSFIGURATION", { siteId: SITE_ID, dreamsignId: "unknown-source", heldIndex: 2, choiceIndex: 0, entryIds: [ENTRY_ID] }, { seq: 11, rng });
     expect(stale.state).toBe(first.state); expect(rng).not.toHaveBeenCalled();

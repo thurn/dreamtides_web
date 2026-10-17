@@ -133,9 +133,9 @@ describe("the battle layer QA scenes", () => {
       avatarLabBattle(engine, { avatarId: avatar.id, side }, events => expected.push(...events));
       const battle = buildQaSceneBattle(scene, content, journey);
       if (battle === null) throw new Error("Synthetic avatar battle missing");
-      const load = (seq: number, value: typeof battle): CommittedEvent => ({ seq, event: { type: "LOAD_STATE", payload: { snapshot: journey, battle: value }, actor: testEventActor("avatar-observation"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: seq - 1 } });
+      const load = (seq: number, value: typeof battle): CommittedEvent => ({ seq, event: { type: "LOAD_STATE", payload: { snapshot: journey, battle: value }, actor: testEventActor("avatar-observation"), clientTimestamp: new Date(0).toISOString()} });
       const committed = load(7, battle);
-      const applied = reduceGameEvent(initialFoldState(journey.seed, TEST_CONTENT_CONFIG), committed.event, { contentConfig: TEST_CONTENT_CONFIG, seq: committed.seq, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+      const applied = reduceGameEvent(initialFoldState(journey.seed, TEST_CONTENT_CONFIG), committed.event, { contentConfig: TEST_CONTENT_CONFIG, seq: committed.seq, rng: () => 0, timestamp: new Date(0).toISOString() });
       expect(applied.outcome).toBe("applied");
       const loaded = journeyBattleOf(applied.state.battle);
       if (loaded === null) throw new Error("Synthetic avatar LOAD_STATE missing");
@@ -276,7 +276,6 @@ describe("the battle layer QA scenes", () => {
             contentConfig: TEST_CONTENT_CONFIG,
             seq: 0,
             rng: () => 0,
-            intervening: [],
             timestamp: new Date(0).toISOString(),
           },
         );
@@ -351,9 +350,8 @@ describe("the battle layer QA scenes", () => {
             payload: { op },
             actor: testEventActor("p1"),
             clientTimestamp: new Date(0).toISOString(),
-            basedOnSeq: seq,
           },
-          { contentConfig: TEST_CONTENT_CONFIG, seq: ++seq, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() },
+          { contentConfig: TEST_CONTENT_CONFIG, seq: ++seq, rng: () => 0, timestamp: new Date(0).toISOString() },
         );
       const loaded = validateLoadedState({ ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey }, { snapshot: journey, battle });
       if (loaded === null) throw new Error("LOAD_STATE refused the card-lab battle");
@@ -382,7 +380,7 @@ describe("the battle layer QA scenes", () => {
     const engine = createBattleInitProvider(content).engine;
     const payload = JSON.parse(JSON.stringify({ snapshot: journey, battle })) as Record<string, unknown>;
     const starting = initialFoldState(journey.seed, TEST_CONTENT_CONFIG);
-    const loaded = reduceGameEvent(starting, { type: "LOAD_STATE", payload, actor: testEventActor("p1"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 0 }, { contentConfig: TEST_CONTENT_CONFIG, seq: 1, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+    const loaded = reduceGameEvent(starting, { type: "LOAD_STATE", payload, actor: testEventActor("p1"), clientTimestamp: new Date(0).toISOString()}, { contentConfig: TEST_CONTENT_CONFIG, seq: 1, rng: () => 0, timestamp: new Date(0).toISOString() });
     expect(loaded.outcome).toBe("applied");
     const fold = journeyBattleOf(loaded.state.battle)?.engine;
     if (fold === undefined) throw new Error("LOAD_STATE lost declared engine data");
@@ -392,10 +390,10 @@ describe("the battle layer QA scenes", () => {
     expect(aiDecision(input)).toEqual(aiDecision(input));
     registerBattleInitProvider(createBattleInitProvider(content));
     try {
-      const moved = reduceGameEvent(loaded.state, { type: "BATTLE_ACTION", payload: { side: "enemy", action: { kind: "reposition", card: physical, to: { rank: "front", index: 2 } } }, actor: testEventActor("ai:enemy"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 1 }, { contentConfig: TEST_CONTENT_CONFIG, seq: 2, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+      const moved = reduceGameEvent(loaded.state, { type: "BATTLE_ACTION", payload: { side: "enemy", action: { kind: "reposition", card: physical, to: { rank: "front", index: 2 } } }, actor: testEventActor("ai:enemy"), clientTimestamp: new Date(0).toISOString()}, { contentConfig: TEST_CONTENT_CONFIG, seq: 2, rng: () => 0, timestamp: new Date(0).toISOString() });
       expect(moved.outcome).toBe("applied");
       const resumedPayload = JSON.parse(JSON.stringify({ snapshot: moved.state.journey, battle: moved.state.battle })) as Record<string, unknown>;
-      const reloaded = reduceGameEvent(starting, { type: "LOAD_STATE", payload: resumedPayload, actor: testEventActor("p1"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 0 }, { contentConfig: TEST_CONTENT_CONFIG, seq: 3, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+      const reloaded = reduceGameEvent(starting, { type: "LOAD_STATE", payload: resumedPayload, actor: testEventActor("p1"), clientTimestamp: new Date(0).toISOString()}, { contentConfig: TEST_CONTENT_CONFIG, seq: 3, rng: () => 0, timestamp: new Date(0).toISOString() });
       expect(reloaded.outcome).toBe("applied");
       const resumed = journeyBattleOf(reloaded.state.battle)?.engine;
       if (resumed === undefined) throw new Error("LOAD_STATE lost script progress");

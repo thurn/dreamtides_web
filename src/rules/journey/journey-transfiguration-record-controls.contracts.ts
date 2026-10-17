@@ -125,7 +125,7 @@ describe("chronological source and ingress controls", () => {
   const kindled = provider.apply!(entry([{ form: "Kindled" }], { cardNumber: twin.cardNumber }), "Kindled");
   if (!kindled.ok) throw new Error("Expected lawful twin append"); expect(resolveDeckEntryCard(data, twin, kindled.value).spark).toBe(20); expect(actualProvider().resolve(entry())?.cardId).toBe(character.id);
  });
- it("contains source exceptions and uses first-wins CAS for either actor without partial writes", () => {
+ it("contains source exceptions and applies one resolution, ignoring a repeat, without partial writes", () => {
   const initial = { ...genesis(), journey: window() }; const rng = vi.fn(() => 0), base = actualProvider();
   registerJourneyTransfigurationProvider({ ...base, apply: () => { throw new Error("owned source failure"); } });
   const failureConfig: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial, reducer: (state, intent, context) => reduceGameEvent(state, intent, { ...context, rng }, registry) };
@@ -133,17 +133,14 @@ describe("chronological source and ingress controls", () => {
   failing.append({ type: "RESOLVE_JOURNEY_TRANSFIGURATION", payload: payload([initial.journey.deck[0].entryId]) });
   expect(failing.state()).toBe(initial); expect(rng).not.toHaveBeenCalled();
   registerJourneyTransfigurationProvider(base);
-  for (const actor of ["alice", "partner"]) {
-   const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial, reducer: (state, intent, context) => reduceGameEvent(state, intent, context, registry) };
-   const log = createLocalLog({ config, genesis: GENESIS, localActor: event("END_BATTLE", {}, actor).actor, now: () => ctx().timestamp, devMode: false });
-   log.append({ type: "RESOLVE_JOURNEY_TRANSFIGURATION", payload: payload([initial.journey.deck[0].entryId]) });
-   expect(log.state().journey.deck[0].transfigurationApplications).toHaveLength(1);
-   const first = log.state(); log.append({ type: "RESOLVE_JOURNEY_TRANSFIGURATION", payload: payload([initial.journey.deck[0].entryId]) }); expect(log.state()).toBe(first);
-  }
-  const stale = reduceGameEvent(initial, event("RESOLVE_JOURNEY_TRANSFIGURATION", payload([initial.journey.deck[0].entryId])), ctx({ intervening: "unknown", rng }), registry); expect(stale.state).toBe(initial);
+  const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial, reducer: (state, intent, context) => reduceGameEvent(state, intent, context, registry) };
+  const log = createLocalLog({ config, genesis: GENESIS, localActor: event("END_BATTLE", {}).actor, now: () => ctx().timestamp, devMode: false });
+  log.append({ type: "RESOLVE_JOURNEY_TRANSFIGURATION", payload: payload([initial.journey.deck[0].entryId]) });
+  expect(log.state().journey.deck[0].transfigurationApplications).toHaveLength(1);
+  const first = log.state(); log.append({ type: "RESOLVE_JOURNEY_TRANSFIGURATION", payload: payload([initial.journey.deck[0].entryId]) }); expect(log.state()).toBe(first);
  });
 
- it.each([["alice", "Character"], ["alice", "Event"], ["partner", "Character"], ["partner", "Event"]] as const)("uses copiable ordinary forms before permanent type changes for %s/%s", (actor, inputType) => {
+ it.each(["Character", "Event"] as const)("uses copiable ordinary forms before permanent type changes for %s", (inputType) => {
   const { amplifiedText: _authored, ...eventSource } = eventCard;
   const cards = [{ ...character, energyCost: 0 }, { ...eventSource, energyCost: 0 }];
   const source = definitions.map(d => ({ ...d, costs: [b.energy(0)], transfiguration: { amplified: false, resonant: { base: null, amplified: null } }, transfigurationState: (initially: boolean, steps: Parameters<typeof transfigurationSourceState>[3]) => transfigurationSourceState("", undefined, initially, steps) }));
@@ -153,12 +150,12 @@ describe("chronological source and ingress controls", () => {
    const held: DeckEntry = { ...plain, cardNumber: card.cardNumber, transfiguration: null, sparkBonus: 2, typeChange: { predicateId: parseCardTypeChangePredicateId("record-copiable-type"), cardType: card.cardType === "Character" ? "Event" : "Character", subtype: card.cardType === "Character" ? "" : "Mage", label: "" } };
    const initial = { ...genesis(), journey: { ...window(), deck: [held] } }, rng = vi.fn(() => 0);
    const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial, reducer: (state, intent, context) => reduceGameEvent(state, intent, { ...context, rng }, registry) };
-   const log = createLocalLog({ config, genesis: GENESIS, localActor: event("END_BATTLE", {}, actor).actor, now: () => ctx().timestamp, devMode: false });
+   const log = createLocalLog({ config, genesis: GENESIS, localActor: event("END_BATTLE", {}).actor, now: () => ctx().timestamp, devMode: false });
    log.append({ type: "RESOLVE_JOURNEY_TRANSFIGURATION", payload: payload([held.entryId]) });
    expect(log.state().journey.deck[0].transfigurationApplications).toEqual([{ form: card.cardType === "Character" ? "Kindled" : "Inspired" }]);
    expect(rng).toHaveBeenCalledTimes(1);
    const projected = resolveDeckEntryCard(data, card, log.state().journey.deck[0]); expect(projected.cardType).toBe(held.typeChange!.cardType); expect(projected.spark).toBe(card.cardType === "Character" ? null : 0);
-   const observed = reduceGameEvent(initial, event("RESOLVE_JOURNEY_TRANSFIGURATION", payload([held.entryId]), actor), ctx({ rng: () => 0 }), registry);
+   const observed = reduceGameEvent(initial, event("RESOLVE_JOURNEY_TRANSFIGURATION", payload([held.entryId])), ctx({ rng: () => 0 }), registry);
    const transformations = observed.logRecords?.find(record => record.event === "journey_transfiguration_resolved")?.fields.transformations;
    expect(transformations).toEqual([{ entryId: held.entryId, cardId: card.id, type: card.cardType === "Character" ? "Kindled" : "Inspired", transfigurationApplications: [{ form: card.cardType === "Character" ? "Kindled" : "Inspired" }], applicableForms: card.cardType === "Character" ? ["Kindled"] : ["Inspired", "Enduring", "Hastened"], essenceCost: 0 }]);
   }

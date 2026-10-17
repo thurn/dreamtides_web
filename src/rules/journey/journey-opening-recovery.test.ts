@@ -147,16 +147,13 @@ describe("opening permission recovery", () => {
     expect(done.journey.dreamsigns[0].openingHandEntryId).toBe(receipt.eligibleEntries[0].entryId);
   });
 
-  it("refuses malformed bindings, cursor roles, source basis, target identities and conflicting or repeated confirmations", () => {
+  it("refuses malformed bindings, cursor roles, source basis, target identities and repeated confirmations", () => {
     const pending = openingAccepted(productionOpeningInitial({ dreamsigns: [openingSign(OTHER)] }), "ADD_DREAMSIGN", { dreamsignId: MUG });
     const payload = openingPayload(pending), screen = pending.journey.screen;
     if (screen.type !== "journeyDreamsign" || screen.choice.kind !== "openingHand") throw new Error("Expected permission");
     for (const patch of [{ permissionSeq: payload.permissionSeq + 1 }, { heldIndex: 0 }, { dreamsignId: OTHER }, { choiceIndex: 1 },
       { entryId: parseDeckEntryId("missing") }, { entryId: pending.journey.deck[2].entryId }, { entryId: null }]) {
       expect(openingApply(pending, "RESOLVE_OPENING_HAND_ENTRY", { ...payload, ...patch }).state).toBe(pending);
-    }
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: testEventActor("partner"), type: "ADD_DREAMSIGN" as const }]]) {
-      expect(openingApply(pending, "RESOLVE_OPENING_HAND_ENTRY", payload, { intervening }).state).toBe(pending);
     }
     for (const patch of [{ kind: "copy" }, { heldIds: [MUG] }, { sources: [{ dreamsignId: MUG, heldIndex: 99 }] },
       { continuation: { type: "site", siteId: "absent" } }, { suspendedBattle: { battleId: "wrong", mode: "journey" } }]) {
@@ -209,7 +206,6 @@ describe("opening permission recovery", () => {
     expect(pendingEnginePrompt(played.battle, world.engine)).not.toBeNull();
     const loaded = openingAccepted(pending, "LOAD_STATE", { snapshot: pending.journey, battle: played.battle });
     const payload = openingPayload(loaded);
-    expect(openingApply(loaded, "RESOLVE_OPENING_HAND_ENTRY", payload, { intervening: "unknown" }).state).toBe(loaded);
     expect(openingApply(loaded, "BATTLE_ACTION", { side: "player", action: { kind: "pass" } }).state).toBe(loaded);
     const resolved = openingAccepted(loaded, "RESOLVE_OPENING_HAND_ENTRY", payload);
     expect(resolved.battle).toBe(loaded.battle); expect(resolved.battle).toEqual(played.battle);

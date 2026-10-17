@@ -45,8 +45,8 @@ import type { D97ServiceKind } from "../content/d97/dialogue/schema";
 // At the engine boundary a `GameEvent.payload` is `Record<string, unknown>`
 // (see src/eventlog/types.ts): the log stores untyped JSON. This module is the
 // rules layer's *typed* view — one payload interface per event type, collected in
-// `EventPayloads` — plus the classification sets
-// (CAS-exempt, decision-neutral) the root CAS policy consults.
+// `EventPayloads` — plus the classification sets the root reducer consults
+// (the prompt-gate exemptions and the gameplay/administrative classes).
 //
 // Payloads use UUIDs, selections, and indices — never card names (AGENTS.md).
 // Derived outcomes, prices, rewards, routes, and progression stay in the
@@ -358,16 +358,16 @@ export interface EventPayloads {
 export type GameEventType = keyof EventPayloads;
 
 // ---------------------------------------------------------------------------
-// Classification sets consulted by the root CAS policy.
+// Classification sets consulted by the root reducer.
 // ---------------------------------------------------------------------------
 
 /**
- * CAS-exempt types skip CAS-policy rules 2–4 (rule 5 validation still runs).
- * Site bootstrap is serialized by an event-log intent key and may safely pass
- * a partner's CAS window. Card-source provenance and engine debug actions
- * carry no game-rules meaning a partner decides on.
+ * Types the pending-prompt gate never blocks (domain validation still runs):
+ * front-door and tutorial presentation, card-source provenance and engine
+ * debug actions carry no game-rules decision, and site bootstrap only
+ * materializes the deterministic runtime or offer of an already-selected site.
  */
-export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
+export const PROMPT_GATE_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "FRONT_DOOR_ACTION",
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
@@ -380,26 +380,6 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "OPEN_SITE",
   "ENTER_DRAFT_SITE",
 ]);
-
-/**
- * Decision-neutral types are additionally ignored by CAS rule 3. Presentation
- * state carries no game-rules meaning, and site bootstrap only materializes the
- * deterministic runtime or offer for an already-selected site.
- */
-export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<GameEventType> =
-  new Set([
-    "FRONT_DOOR_ACTION",
-    "ADVANCE_FRONT_DOOR",
-    "BEGIN_TUTORIAL",
-    "COMPLETE_TUTORIAL_ACTION",
-  "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
-      "OPEN_CARD_TUTORIAL_GUIDANCE",
-    "COMPLETE_CARD_TUTORIAL_GUIDANCE",
-      "SET_CARD_SOURCE_DEBUG",
-    "DISMISS_STARTING_DECK_POPUP",
-    "OPEN_SITE",
-    "ENTER_DRAFT_SITE",
-  ]);
 
 /**
  * Who an intent speaks for, which decides whether held Dreamsigns' journey

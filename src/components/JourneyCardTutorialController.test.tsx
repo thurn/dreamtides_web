@@ -40,7 +40,6 @@ vi.mock("../session/hooks", () => ({
     openCardTutorialGuidance: mocks.open,
     completeCardTutorialGuidance: vi.fn(() => Promise.resolve(1)),
   }),
-  useConfirmedGameState: () => mocks.state,
   useGameState: () => mocks.state,
 }));
 

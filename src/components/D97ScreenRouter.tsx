@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import type { JourneyContent } from "../data/journey-content";
 import { logEvent } from "../logging";
 import { findD97QaScene } from "../runtime/qa-scene-entry";
-import { useActions, useConfirmedHead, useGameState } from "../session/hooks";
+import { useActions, useHead, useGameState } from "../session/hooks";
 import { D97AvatarSelectScreenAdapter } from "../screens/cumulus_adapters/d97/D97AvatarSelectScreenAdapter";
 import { D97OverworldScreenAdapter } from "../screens/cumulus_adapters/d97/D97OverworldScreenAdapter";
 import { D97SliceEndScreenAdapter } from "../screens/cumulus_adapters/d97/D97SliceEndScreenAdapter";
@@ -26,7 +26,7 @@ export function D97ScreenRouter({
   readonly gotoScene?: QaSceneId | null;
 }) {
   const { d97, battle } = useGameState();
-  const confirmedHead = useConfirmedHead();
+  const head = useHead();
   const actions = useActions();
   const qaRunStartedRef = useRef(false);
   const screenType = d97?.screen.type ?? null;
@@ -50,7 +50,7 @@ export function D97ScreenRouter({
     if (
       !startsQaRun ||
       qaRunStartedRef.current ||
-      confirmedHead !== 0 ||
+      head !== 0 ||
       d97?.run !== null ||
       firstAvatarId === null
     ) {
@@ -61,7 +61,7 @@ export function D97ScreenRouter({
     void actions.d97StartRun(firstAvatarId).catch((error: unknown) => {
       console.error("D97 QA run start failed", error);
     });
-  }, [actions, confirmedHead, d97?.run, firstAvatarId, gotoScene, startsQaRun]);
+  }, [actions, head, d97?.run, firstAvatarId, gotoScene, startsQaRun]);
 
   if (d97 === undefined) return null;
   const content =

@@ -53,7 +53,7 @@ function fixture(first = 2, ids = [FIXED], patch: Partial<JourneyState> = {}): F
   });
 }
 const event = (type: GameEvent["type"], payload: Record<string, unknown>): GameEvent =>
-  ({ type, payload, actor: ACTOR, basedOnSeq: 0, clientTimestamp: ctx().timestamp });
+  ({ type, payload, actor: ACTOR, clientTimestamp: ctx().timestamp });
 const apply = (state: FoldState, type: GameEvent["type"], payload: Record<string, unknown> = {}, context = ctx()) =>
   reduceGameEvent(state, event(type, payload), context, registry);
 function pickPayload(state: FoldState) {
@@ -188,16 +188,13 @@ describe("first successful Draft Event public contracts", () => {
     expect(entered.state.journey.draftState?.currentOffer).toHaveLength(2);
   });
 
-  it("rejects invalid UUIDs, pack positions, duplicates and concurrent windows atomically", () => {
+  it("rejects invalid UUIDs, pack positions and duplicates atomically", () => {
     const before = fixture(), saved = structuredClone(before);
     for (const payload of [{ cardId: "bad", packIndex: 0 }, { cardId: cards[2].id, packIndex: 0 }, { cardId: cards[1].id, packIndex: -1 }]) {
       expect(apply(before, "PICK_DRAFT_CARD", payload).state).toBe(before);
     }
     const first = pick(before).state;
     expect(apply(first, "PICK_DRAFT_CARD", pickPayload(before)).state).toBe(first);
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: testEventActor("other"), type: "PICK_DRAFT_CARD" as const }]]) {
-      expect(pick(before, ctx({ intervening })).state).toBe(before);
-    }
     expect(before).toEqual(saved);
   });
 

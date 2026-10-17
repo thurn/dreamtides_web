@@ -10,11 +10,10 @@ import { journeyDreamsignGains } from "./journey/journey-dreamsign-gains";
 import { resolveAfterBattleDreamsign, resolveDreamsignCopy, validDreamsignCopyIntent } from "./journey/journey-on-gain";
 import { hasStarterOpeningContinuation, resolveOpeningHandEntry, validOpeningHandIntent } from "./journey/journey-battle-init";
 import { essencePurgeSource, essenceReplacementSource } from "./journey/journey-essence";
-// The root fold and CAS (compare-and-swap) policy for the event-sourcing rules
-// layer.
+// The root fold for the event-sourcing rules layer.
 //
 // `reduceGameEvent` is the single reducer the engine folds a game's log with
-// (it matches `EngineConfig.reducer`). It applies the CAS policy rules 1–6
+// (it matches `EngineConfig.reducer`). It applies the pending-prompt gate
 // documented on `reduceGameEvent`, then routes surviving events to a domain
 // case. It BOUNCES on any invalid event content — malformed, stale, or unknown
 // intents leave state untouched — but a *throw* from a domain case is a
@@ -28,18 +27,16 @@ import { essencePurgeSource, essenceReplacementSource } from "./journey/journey-
 
 import type {
   BounceReason,
-  EventActor,
   EventContext,
   EventType,
   GameEvent,
   ReducerLogRecord,
 } from "../eventlog/types";
 import {
-  CAS_EXEMPT_EVENT_TYPES,
-  DECISION_NEUTRAL_EVENT_TYPES,
   isD97EventType,
   isGameplayEventType,
   isKnownEventType,
+  PROMPT_GATE_EXEMPT_EVENT_TYPES,
   type GameEventType,
 } from "./events";
 import * as d97Run from "./d97/d97-run";
@@ -95,17 +92,15 @@ export type ReduceResult =
     };
 
 /**
- * Folds a single event over the game's state per the CAS policy.
+ * Folds a single event over the game's state.
  *
- * Rules 1–6:
- *   1. CAS-exempt types (`SET_CARD_SOURCE_DEBUG`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
- *      skip rules 2–4.
- *   2. BATTLE_ANSWER or BATTLE_CANCEL matching the engine prompt skips rules 3–4.
- *   3. An unknown intervening window, or one holding an applied partner event
- *      that is not decision-neutral, bounces.
- *   4. A pending engine prompt bounces any other intent.
- *   5. Route to the domain case; invalid-in-state or unimplemented → bounce.
- *   6. Return the new state (applied) or the untouched state (bounced).
+ * Rules:
+ *   1. Prompt-gate-exempt types (`PROMPT_GATE_EXEMPT_EVENT_TYPES`) skip rule 3.
+ *   2. A BATTLE_ANSWER or BATTLE_CANCEL matching the engine prompt skips rule 3.
+ *   3. A pending engine prompt bounces any other intent, apart from the
+ *      journey choices that resolve over it.
+ *   4. Route to the domain case; invalid-in-state or unimplemented → bounce.
+ *   5. Return the new state (applied) or the untouched state (bounced).
  *
  * Bounces on any invalid event content; a throw from a domain case is a
  * programmer error and propagates to the engine's containment.
@@ -116,18 +111,11 @@ export function reduceGameEvent(
   ctx: EventContext,
   modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): ReduceResult {
-  const exempt = isCasExempt(event.type); // rule 1
+  const exempt = isPromptGateExempt(event.type); // rule 1
   const matchingEngineAnswer = isMatchingEngineAnswer(state, event); // rule 2
 
   if (!exempt && !matchingEngineAnswer) {
-    // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
-    if (ctx.intervening === "unknown") {
-      return bounce(state, "unknown_conflict");
-    }
-    if (!isInterveningWindowClear(ctx.intervening, event.actor)) {
-      return bounce(state, "partner_conflict");
-    }
-    // rule 4 — prompt gate
+    // rule 3 — prompt gate
     if (
       pendingEnginePrompt(state.battle, battleEngine()) !== null && !(event.type === "RESOLVE_OPENING_HAND_ENTRY" && validOpeningHandIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_JOURNEY_SUBTYPE" && validJourneySubtypeIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "REMOVE_DREAMSIGN" && state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "subtype") && !(event.type === "RESOLVE_TYPE_REMAP" && validTypeRemapIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_DREAMSIGN_COPY" && validDreamsignCopyIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "RESOLVE_STARTER_PURGE" && validStarterPurgeIntent(state.journey, event.payload ?? {}, state.battle, modifiers)) && !(event.type === "REMOVE_DREAMSIGN" && state.journey.screen.type === "journeyDreamsign" && state.journey.screen.choice.kind === "typeRemap")
     ) {
@@ -268,25 +256,23 @@ function enforceInvariants(
 }
 
 /**
- * Rule 1 predicate: CAS-exempt types skip rules 2–4. Exported for direct unit
- * testing (its effect is otherwise only observable once the exempt types gain
- * domain cases).
+ * Rule 1 predicate: prompt-gate-exempt types apply while an engine prompt is
+ * open. Exported for direct unit testing.
  *
- * The invariant this exemption leans on is that no CAS-exempt type alters
- * DECISION-RELEVANT battle state a partner could have decided on, so it is
- * safe for it to apply through a partner's intervening window and even while
- * a prompt is open. Any future CAS-exempt type must uphold this invariant.
+ * The invariant this exemption leans on is that no exempt type alters
+ * decision-relevant battle state, so it is safe for it to apply while a
+ * prompt is open. Any future exempt type must uphold this invariant.
  */
-export function isCasExempt(type: EventType): boolean {
-  return isKnownEventType(type) && CAS_EXEMPT_EVENT_TYPES.has(type);
+export function isPromptGateExempt(type: EventType): boolean {
+  return isKnownEventType(type) && PROMPT_GATE_EXEMPT_EVENT_TYPES.has(type);
 }
 
 /**
  * Rule 2 for engine prompts: true when `event` is a `BATTLE_ANSWER` or
- * `BATTLE_CANCEL` naming the prompt the journey battle's in-flight engine
- * step is suspended on. A prompt id names the committed state, the attempt,
- * and the answers so far, so nothing intervening can have changed what it
- * asks. Exported for direct unit testing.
+ * `BATTLE_CANCEL` naming the prompt the battle's in-flight engine step is
+ * suspended on. A prompt id names the committed state, the attempt, and the
+ * answers so far, so it identifies exactly what the prompt asks. Exported for
+ * direct unit testing.
  */
 export function isMatchingEngineAnswer(
   state: FoldState,
@@ -302,8 +288,8 @@ export function isMatchingEngineAnswer(
 /**
  * `BATTLE_DEBUG { op }`: an engine debug action (D4) over a journey battle's
  * engine slice, in a development build; `null` bounces it, as a production
- * build always does. CAS-exempt, so an undo also applies while a prompt is
- * pending; every other action needs a decision boundary.
+ * build always does. Prompt-gate exempt, so an undo also applies while a
+ * prompt is pending; every other action needs a decision boundary.
  */
 function reduceEngineDebug(
   state: FoldState,
@@ -327,30 +313,6 @@ function battleEngine(): Engine | null {
   return journeyBattle.getBattleInitProvider()?.engine ?? null;
 }
 
-/**
- * Rule 3: the intervening window is clear when it is enumerable AND holds no
- * applied partner event of a non-decision-neutral type. `"unknown"` (the window
- * was compacted away) is never clear — it cannot be inspected, so we bounce.
- * Exported for direct unit testing.
- */
-export function isInterveningWindowClear(
-  intervening: EventContext["intervening"],
-  actor: EventActor,
-): boolean {
-  if (intervening === "unknown") {
-    return false;
-  }
-  for (const entry of intervening) {
-    if (
-      entry.actor !== actor &&
-      (!isKnownEventType(entry.type) ||
-        !DECISION_NEUTRAL_EVENT_TYPES.has(entry.type))
-    ) {
-      return false;
-    }
-  }
-  return true;
-}
 
 /**
  * Rule 5: dispatch to the domain reducer for `event.type`. An unrecognized

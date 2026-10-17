@@ -133,9 +133,9 @@ describe("purchase-bound shop vacancy replacement", () => {
 });
 
 describe("captured offer refusal and compatibility", () => {
-  it("rejects stale same-actor repeated UUID buys and source-loss absent revisions before randomness", () => {
+  it("rejects stale repeated UUID buys and source-loss absent revisions before randomness", () => {
     const initial = fixture(), first = buy(initial).state, rng = vi.fn(() => 0);
-    const stale = buy(first, { expectedOffer: rev(initial) }, registry, { rng, intervening: [{ seq: 1, actor: event("BUY_SHOP_SLOT", {}).actor, type: "BUY_SHOP_SLOT" }] });
+    const stale = buy(first, { expectedOffer: rev(initial) }, registry, { rng });
     expect(stale.state).toBe(first); expect(rng).not.toHaveBeenCalled();
     const lost = { ...first, journey: { ...first.journey, dreamsigns: [] } };
     expect(buy(lost, { expectedOffer: undefined }, registry, { rng }).state).toBe(lost);
@@ -286,7 +286,7 @@ describe("composition and atomic persisted purchase", () => {
   });
   it("round-trips each committed boundary and rejects corrupted new saved fields", () => {
     const initial = fixture(), requests = [0, 1].map((purchaseCount, index) => ({ seq: index + 1,
-      event: { ...event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0, expectedOffer: { purchaseCount, rerollCount: 0 } }), basedOnSeq: index } }));
+      event: { ...event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0, expectedOffer: { purchaseCount, rerollCount: 0 } })} }));
     const whole = fold(initial, requests), prefix = fold(initial, requests.slice(0, 1));
     const decoded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(prefix.state));
     const resumed = foldEvents(config(initial), { ...GENESIS, seed: initial.journey.seed }, { state: decoded, seq: 1 }, requests.slice(1), { devMode: false });
@@ -314,13 +314,11 @@ describe("composition and atomic persisted purchase", () => {
     expect(() => GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(malformed))).toThrow();
     expect(reduceGameEvent(initial, event("LOAD_STATE", { snapshot: malformed.journey }), ctx(), registry).state).toBe(initial);
   });
-  it("accepts one partner purchase from a shared head and refuses a same-actor stale second buy", () => {
+  it("applies one purchase and refuses a stale second buy of the same offer", () => {
     const initial = fixture(), payload = { siteId: SITE_ID, slotIndex: 0, expectedOffer: rev(initial) };
-    for (const actors of [["alice", "bob"], ["alice", "alice"]]) {
-      const out = fold(initial, actors.map((actor, i) => ({ seq: i + 1, event: event("BUY_SHOP_SLOT", payload, actor) })));
-      expect(out.outcomes.map(({ outcome }) => outcome)).toEqual(["applied", "bounced"]);
-      expect(out.outcomes[1].bounceReason).toBe(actors[0] === actors[1] ? "invalid_action" : "partner_conflict");
-      expect(runtime(out.state).purchaseHistory).toHaveLength(1); expect(out.state.journey.essence).toBe(989);
-    }
+    const out = fold(initial, [1, 2].map((seq) => ({ seq, event: event("BUY_SHOP_SLOT", payload) })));
+    expect(out.outcomes.map(({ outcome }) => outcome)).toEqual(["applied", "bounced"]);
+    expect(out.outcomes[1].bounceReason).toBe("invalid_action");
+    expect(runtime(out.state).purchaseHistory).toHaveLength(1); expect(out.state.journey.essence).toBe(989);
   });
 });

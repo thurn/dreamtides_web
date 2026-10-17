@@ -52,6 +52,11 @@ describe("stored genesis", () => {
     expect(genesisCompatibility(genesis, CONTENT)).toBe("ready");
   });
 
+  it("opens a stored genesis written under the current protocol's earlier spelling", () => {
+    const genesis = decodeGenesis(JSON.stringify({ ...JSON.parse(stored(CONTENT)) as object, reducerVersion: "dreamtides-coop-v31" }));
+    expect(genesis === null ? null : genesisCompatibility(genesis, CONTENT)).toBe("ready");
+  });
+
   it("decodes a genesis without a content configuration and gates it", () => {
     const genesis = decodeGenesis(stored());
     expect(genesis).not.toBeNull();

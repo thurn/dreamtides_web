@@ -25,7 +25,7 @@ import { registerDeckContentProvider } from "./deck";
 
 const IDS = [1, 2, 3, 4].map((n) => parseDreamsignId(`5e5e5e5e-0598-4000-8000-${String(n).padStart(12, "0")}`));
 const SITE = parseSiteId("enhanced-reward-site"), NODE = parseAtlasNodeId("enhanced-reward-node");
-const ACTOR = testEventActor("enhanced-reward-owner"), PARTNER = testEventActor("enhanced-reward-partner");
+const ACTOR = testEventActor("enhanced-reward-owner");
 const TIME = "1970-01-01T00:00:00.000Z", REGISTRY = createJourneyModifierRegistry([]);
 const templates = IDS.map((id) => makeAuguryTestDreamsignTemplate({ id, name: "Same synthetic name" }));
 const card = makeAuguryTestCard({ id: testCardId("enhanced-reward-card"), cardNumber: 31 });
@@ -34,9 +34,9 @@ const content = { ...baseContent, sitesData: { ...baseContent.sitesData, rewards
   ...baseContent.sitesData.rewards, reward: { ...baseContent.sitesData.rewards.reward, enhancedOfferCount: 3 },
 } } };
 const provider = () => createSiteContentProvider(content);
-const context: EventContext = { seq: 1, rng: () => 0.25, intervening: [], timestamp: TIME, contentConfig: TEST_CONTENT_CONFIG };
+const context: EventContext = { seq: 1, rng: () => 0.25, timestamp: TIME, contentConfig: TEST_CONTENT_CONFIG };
 const event = (type: GameEvent["type"], payload: Record<string, unknown> = {}): GameEvent =>
-  ({ type, payload: { siteId: SITE, ...payload }, actor: ACTOR, basedOnSeq: 0, clientTimestamp: TIME });
+  ({ type, payload: { siteId: SITE, ...payload }, actor: ACTOR, clientTimestamp: TIME });
 const apply = (state: FoldState, type: GameEvent["type"], payload: Record<string, unknown> = {}, ctx = context) =>
   reduceGameEvent(state, event(type, payload), ctx, REGISTRY);
 function fixture(isEnhanced = true, overrides: Partial<JourneyState> = {}): FoldState {
@@ -411,21 +411,15 @@ export function registerEnhancedRewardContracts() {
       expect(resumed.state().journey.dreamsigns[0].id).toBe(quote.offeredDreamsigns[1].id);
     });
 
-    it("permits one stale concurrent choice and preserves partner and unknown CAS bounces", () => {
+    it("applies one choice and bounces a duplicate choice of the same offer", () => {
       const state = pending(), selected = quoted(state).enhancedDreamsignOffer.offeredDreamsigns[1].id;
       const choose = event("ACCEPT_DREAMSIGN_OFFER", { dreamsignId: selected });
       const result = foldEvents(config(state), genesis(state), { seq: 0, state }, [
-        { seq: 1, event: choose }, { seq: 2, event: { ...choose, actor: PARTNER } },
+        { seq: 1, event: choose }, { seq: 2, event: choose },
       ]);
       expect(result.outcomes.map((outcome) => outcome.outcome)).toEqual(["applied", "bounced"]);
-      expect(result.outcomes[1].bounceReason).toBe("partner_conflict");
+      expect(result.outcomes[1].bounceReason).toBe("invalid_action");
       expect(result.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([selected]);
-      for (const intervening of ["unknown", [{ seq: 1, actor: PARTNER, type: "ACCEPT_DREAMSIGN_OFFER" }]] as const) {
-        const rejected = apply(state, "ACCEPT_DREAMSIGN_OFFER", { dreamsignId: selected }, { ...context,
-          intervening: intervening === "unknown" ? intervening : [...intervening] });
-        expect(rejected.state).toBe(state); expect(rejected.outcome).toBe("bounced");
-        expect(rejected.logRecords).toBeUndefined();
-      }
     });
   });
 }

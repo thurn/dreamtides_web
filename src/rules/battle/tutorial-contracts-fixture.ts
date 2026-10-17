@@ -22,7 +22,7 @@ export const engine = createEngine(createCatalog([
     {id:CARDS.blockedCost,cardType:"event",costs:[energy(0)],spark:null,subtype:testCardSubtype("fixture"),speed:"standard",status:"authored",abilities:()=>[additionalCost(returnCost()), event(p.draw(1))]},
 ], [{ id: WELL, order: 1, energyAdded: 1, status: "authored", abilities: () => [event(p.gainPoints(2))] }]));
 export const RUN = testTutorialRunId("tutorial-contract-run");
-export function context(seq = 10): EventContext { return { contentConfig: TEST_CONTENT_CONFIG, seq, rng: () => 0, intervening: [], timestamp: "1970-01-01T00:00:00.000Z" }; }
+export function context(seq = 10): EventContext { return { contentConfig: TEST_CONTENT_CONFIG, seq, rng: () => 0, timestamp: "1970-01-01T00:00:00.000Z" }; }
 export function display(triggers: readonly TutorialTriggerDefinition[] = []): TutorialBattleDisplayInit {
     return { battleId: parseBattleId("tutorial-contract-battle"), siteId: parseSiteId("tutorial-contract-site"), nodeId: null, completionLevelAtStart: 0, essenceReward: 0, opponentAbilityActive: false, avatarSummary: null, enemyDescriptor: { id: parseOpponentId("tutorial-contract-opponent"), name: "Fixture", subtitle: "", imageNumber: "1", portraitSeed: 0, abilityText: "", dreamsigns: [], signatureCards: [] }, cardDefinitions: [], dreamwellDeck: [{ id: WELL, name: testDreamwellCardName("Fixture"), renderedText: "", energyAdded: 1, order: 1, cardNumber: 1, imageNumber: 1 }], tutorialTriggers: triggers };
 }

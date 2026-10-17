@@ -34,15 +34,13 @@ describe("starter acquisition public fold", () => {
     s = accepted(s, "RESOLVE_STARTER_PURGE", purgePayload(s.journey));
     expect(s.journey.deck).toHaveLength(count); expect(s.journey.essence).toBe(100); expect(s.journey.screen.type).toBe("journeyStart");
   });
-  it("retains an earned source after loss/reload, rejects stale and foreign actors, and prevents late acquisitions", () => {
+  it("retains an earned source after loss/reload, rejects stale confirmations, and prevents late acquisitions", () => {
     let s = accepted(initial(), "ADD_DREAMSIGN", { dreamsignId: TEETH }, { seq: 21 });
     const payload = purgePayload(s.journey, ["rewards272-entry-1"]);
     for (const patch of [{ permissionSeq: 20 }, { heldIndex: 7 }, { choiceIndex: 1 }]) expect(apply(s, "RESOLVE_STARTER_PURGE", { ...payload, ...patch }).state).toBe(s);
     expect(apply(s, "ADD_DREAMSIGN", { dreamsignId: TEETH }).state).toBe(s);
     s = accepted(s, "REMOVE_DREAMSIGN", { dreamsignId: TEETH });
     s = accepted(s, "LOAD_STATE", { snapshot: JSON.parse(JSON.stringify(s.journey)) });
-    expect(apply(s, "RESOLVE_STARTER_PURGE", payload, { intervening: "unknown" }).state).toBe(s);
-    expect(apply(s, "RESOLVE_STARTER_PURGE", payload, { intervening: [{ seq: 12, type: "ADD_DREAMSIGN", actor: testEventActor("other") }] }).state).toBe(s);
     s = accepted(s, "RESOLVE_STARTER_PURGE", payload); expect(s.journey.deck).toHaveLength(5);
   });
   it("uses base starter identity despite permanent variant changes, and does not trust a loaded fabricated choice", () => {
@@ -86,7 +84,6 @@ describe("starter acquisition public fold", () => {
     let restored = accepted(suspended, "LOAD_STATE", { snapshot: structuredClone(suspended.journey), battle: structuredClone(played.battle) });
     const payload = purgePayload(restored.journey);
     expect(apply(restored, "RESOLVE_STARTER_PURGE", { ...payload, permissionSeq: -1 }).state).toBe(restored);
-    expect(apply(restored, "RESOLVE_STARTER_PURGE", payload, { intervening: "unknown" }).state).toBe(restored);
     expect(apply(restored, "BATTLE_CANCEL", { side: "player", promptId: pendingEnginePrompt(restored.battle, w.engine)!.prompt.id }).state).toBe(restored);
     restored = accepted(restored, "RESOLVE_STARTER_PURGE", payload);
     expect(restored.battle).toEqual(played.battle); expect(restored.journey.screen).toEqual(w.state.journey.screen);
@@ -137,8 +134,6 @@ it("acquires, reloads and resolves a tutorial starter permission while retaining
   log.append({ type: "LOAD_STATE", payload: { snapshot, battle } }); expect(outcomes[outcomes.length - 1]).toMatchObject({ outcome: "applied" });
   const restored = log.state(); expect(restored.journey.screen).toEqual(earned.journey.screen); expect(restored.journey.deck).toEqual(earned.journey.deck); expect(restored.battle).toEqual(earned.battle); expect(restored.frontDoor).toBe(earned.frontDoor);
   expect(apply(restored, "RESOLVE_STARTER_PURGE", { ...payload, permissionSeq: -1 }).state).toBe(restored);
-  expect(apply(restored, "RESOLVE_STARTER_PURGE", payload, { intervening: "unknown" }).state).toBe(restored);
-  expect(apply(restored, "RESOLVE_STARTER_PURGE", payload, { intervening: [{ seq: 10, type: "ADD_DREAMSIGN", actor: testEventActor("partner") }] }).state).toBe(restored);
   log.append({ type: "RESOLVE_STARTER_PURGE", payload }); expect(outcomes[outcomes.length - 1]).toMatchObject({ outcome: "applied" });
   const resolved = log.state(); expect(resolved.journey.screen).toEqual(before.journey.screen); expect(resolved.battle).toBe(restored.battle); expect(resolved.frontDoor).toBe(restored.frontDoor);
   const side = tutorialEngine.decision(resolved.battle!.engine.slice.committed)?.side; expect(side).toBeDefined();

@@ -211,7 +211,7 @@ import { RUN } from "./tutorial-contracts-fixture";
 import { testEventActor } from "../../types/test-identities";
 import type { CommittedEvent } from "../../eventlog/local-log";
 function recorded(type:CommittedEvent["event"]["type"],payload:Record<string,unknown>,seq:number):CommittedEvent {
- return {seq,event:{type,payload,actor:testEventActor("tutorial-contract-client"),basedOnSeq:seq-1,clientTimestamp:context().timestamp}};
+ return {seq,event:{type,payload,actor:testEventActor("tutorial-contract-client"),clientTimestamp:context().timestamp}};
 }
 describe("tutorial engine replay start identities",()=>{
  it("replays the actual action and answer from its tutorial run",()=>{

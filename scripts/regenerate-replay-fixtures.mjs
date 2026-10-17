@@ -60,10 +60,9 @@ const TIMESTAMP = "1970-01-01T00:00:00.000Z";
  * @param {string} type
  * @param {Payload} payload
  * @param {string} actor
- * @param {number} basedOnSeq
  * @returns {SeqEvent}
  */
-function ev(seq, type, payload, actor, basedOnSeq) {
+function ev(seq, type, payload, actor) {
   return {
     seq,
     event: {
@@ -71,13 +70,12 @@ function ev(seq, type, payload, actor, basedOnSeq) {
       payload,
       actor: parseEventActor(actor),
       clientTimestamp: TIMESTAMP,
-      basedOnSeq,
     },
   };
 }
 
 /**
- * A single-actor chain: basedOnSeq = seq - 1, so every intervening window is empty.
+ * A chain of one actor's events in seq order.
  *
  * @param {string} actor
  * @param {Array<[string, Payload]>} steps
@@ -85,7 +83,7 @@ function ev(seq, type, payload, actor, basedOnSeq) {
  */
 function chain(actor, steps) {
   return steps.map(([type, payload], index) =>
-    ev(index + 1, type, payload, actor, index),
+    ev(index + 1, type, payload, actor),
   );
 }
 
@@ -211,12 +209,12 @@ function battleFixture() {
   ]);
   const card = firstHandCard(gen, begun);
   // Play the points card, cancel at its mode prompt, then play it again.
-  const played = [...begun, ev(4, "BATTLE_ACTION", playFromHand(card), "p1", 3)];
+  const played = [...begun, ev(4, "BATTLE_ACTION", playFromHand(card), "p1")];
   const cancelled = [
     ...played,
-    ev(5, "BATTLE_CANCEL", { side: "player", promptId: pendingPromptId(gen, played) }, "p1", 4),
+    ev(5, "BATTLE_CANCEL", { side: "player", promptId: pendingPromptId(gen, played) }, "p1"),
   ];
-  const replayed = [...cancelled, ev(6, "BATTLE_ACTION", playFromHand(card), "p1", 5)];
+  const replayed = [...cancelled, ev(6, "BATTLE_ACTION", playFromHand(card), "p1")];
   const events = [
     ...replayed,
     ev(
@@ -224,9 +222,8 @@ function battleFixture() {
       "BATTLE_ANSWER",
       { side: "player", promptId: pendingPromptId(gen, replayed), value: FIXTURE_POINTS_MODE },
       "p1",
-      6,
     ),
-    ev(8, "END_BATTLE", {}, "p1", 7),
+    ev(8, "END_BATTLE", {}, "p1"),
   ];
   expectOutcomes("battle", events, gen, {
     1: "applied",
@@ -253,30 +250,28 @@ function battleFixture() {
 }
 
 // ---------------------------------------------------------------------------
-// (c) adversarial: two actors — CAS bounce, OPEN_SITE race, prompt race
+// (c) adversarial: repeated intents — a duplicate OPEN_SITE and a duplicate
+// prompt answer each bounce on the state the first one left
 // ---------------------------------------------------------------------------
 
 function adversarialFixture() {
   const gen = genesis("fixture-adversarial");
   const begun = [
-    ev(1, "START_JOURNEY", { avatarId: AVATAR_ID }, "alice", 0),
-    // bob's essence adjust applies; alice's, based on the pre-bob state, sees
-    // bob's applied non-neutral event in its window and BOUNCES (CAS rule 3).
-    ev(2, "ADJUST_ESSENCE", { delta: 10 }, "bob", 1),
-    ev(3, "ADJUST_ESSENCE", { delta: 20 }, "alice", 1),
-    ev(4, "ENTER_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 3),
-    // OPEN_SITE race — both are accepted at the log boundary; bob's reducer
-    // attempt observes the already-open runtime and bounces.
-    ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "alice", 4),
-    ev(6, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "bob", 4),
-    ev(7, "ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }, "alice", 6),
-    ev(8, "ENTER_SITE", { siteId: BATTLE_SITE_ID }, "alice", 7),
-    ev(9, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }, "alice", 8),
+    ev(1, "START_JOURNEY", { avatarId: AVATAR_ID }, "p1"),
+    ev(2, "ADJUST_ESSENCE", { delta: 10 }, "p1"),
+    ev(3, "ADJUST_ESSENCE", { delta: 20 }, "p1"),
+    ev(4, "ENTER_SITE", { siteId: ESSENCE_SITE_ID }, "p1"),
+    // A repeated OPEN_SITE observes the already-open runtime and bounces.
+    ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "p1"),
+    ev(6, "OPEN_SITE", { siteId: ESSENCE_SITE_ID, selectionRulesVersion: SELECTION_RULES_VERSION }, "p1"),
+    ev(7, "ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }, "p1"),
+    ev(8, "ENTER_SITE", { siteId: BATTLE_SITE_ID }, "p1"),
+    ev(9, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }, "p1"),
   ];
-  // Park an engine prompt: alice plays the points card.
+  // Park an engine prompt: the player plays the points card.
   const prefix = [
     ...begun,
-    ev(10, "BATTLE_ACTION", playFromHand(firstHandCard(gen, begun)), "alice", 9),
+    ev(10, "BATTLE_ACTION", playFromHand(firstHandCard(gen, begun)), "p1"),
   ];
   const answer = {
     side: "player",
@@ -285,23 +280,24 @@ function adversarialFixture() {
   };
   const events = [
     ...prefix,
-    // Prompt race — alice's matching answer applies, bob's duplicate bounces.
-    ev(11, "BATTLE_ANSWER", answer, "alice", 10),
-    ev(12, "BATTLE_ANSWER", answer, "bob", 10),
+    // The matching answer applies; the repeated answer names a prompt that is
+    // no longer pending and bounces.
+    ev(11, "BATTLE_ANSWER", answer, "p1"),
+    ev(12, "BATTLE_ANSWER", answer, "p1"),
   ];
   expectOutcomes("adversarial", events, gen, {
     1: "applied",
     2: "applied",
-    3: "bounced", // CAS intervening-window bounce
+    3: "applied",
     4: "applied",
     5: "applied",
-    6: "bounced", // OPEN_SITE race loser observes the already-open site
+    6: "bounced", // repeated OPEN_SITE observes the already-open site
     7: "applied",
     8: "applied",
     9: "applied",
     10: "applied",
-    11: "applied", // prompt race winner
-    12: "bounced", // prompt race loser
+    11: "applied", // matching answer
+    12: "bounced", // repeated answer
   });
   return finalize("adversarial", gen, events);
 }

@@ -218,11 +218,10 @@ describe("journeyDuplication physical copy contracts", () => {
     expect(s.journey.screen.type).toBe("journeyDuplication");
     expect(accepted(s, "RESOLVE_JOURNEY_DUPLICATION", payload(s)).journey.screen.type).toBe("atlas");
   });
-  it("rejects stale permissions, foreign physical IDs, navigation, forged loads and competing actors atomically", () => {
+  it("rejects stale permissions, foreign physical IDs, navigation and forged loads atomically", () => {
     const { after: s } = ended([SPIDER]), body = payload(s, s.journey.deck[0].entryId), rng = vi.fn(() => 0);
     for (const patch of [{ earnedSeq: 29 }, { heldIndex: 9 }, { choiceIndex: 1 }, { dreamsignId: OTHER }, { siteId: SITE_ID }, { entryId: "missing" }, { entryId: undefined }, { entryId: [] }]) expect(apply(s, "RESOLVE_JOURNEY_DUPLICATION", { ...body, ...patch }, { rng }).state).toBe(s);
     expect(apply(s, "COMPLETE_SITE", { siteId: body.siteId }).state).toBe(s);
-    for (const intervening of ["unknown" as const, [{ seq: 2, actor: testEventActor("partner"), type: "ADD_DREAMSIGN" as const }]]) expect(apply(s, "RESOLVE_JOURNEY_DUPLICATION", body, { intervening, rng }).state).toBe(s);
     if (s.journey.screen.type !== "journeyDuplication") throw new Error("Missing choice");
     for (const patch of [{ index: 9 }, { sources: [] }, { sources: [{ kind: "duplication", dreamsignId: OTHER, heldIndex: 0, earnedSeq: 30 }] }, { sources: [{ ...s.journey.screen.choice.sources[0], earnedSeq: -1 }] }, { returnTo: "journeyFailed" }]) expect(apply(s, "LOAD_STATE", { snapshot: { ...s.journey, screen: { ...s.journey.screen, choice: { ...s.journey.screen.choice, ...patch } } } }).state).toBe(s);
     const settled = accepted(s, "RESOLVE_JOURNEY_DUPLICATION", body); expect(settled.journey.deck).toHaveLength(s.journey.deck.length + 1);

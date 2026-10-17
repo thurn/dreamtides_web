@@ -17,7 +17,6 @@ describe("main-menu-view-model", () => {
     seq: 1,
     rng: () => 0,
     timestamp: "1970-01-01T00:00:00.000Z",
-    intervening: [],
   };
 
   describe("buildMainMenuView", () => {

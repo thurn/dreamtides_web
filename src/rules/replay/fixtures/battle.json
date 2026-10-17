@@ -19,8 +19,7 @@
           "avatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 0
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -31,8 +30,7 @@
           "siteId": "site-battle"
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 1
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -43,8 +41,7 @@
           "siteId": "site-battle"
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 2
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -60,8 +57,7 @@
           }
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 3
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -73,8 +69,7 @@
           "promptId": "4:4:0"
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 4
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -90,8 +85,7 @@
           }
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 5
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -104,8 +98,7 @@
           "value": 1
         },
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 6
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -114,8 +107,7 @@
         "type": "END_BATTLE",
         "payload": {},
         "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 7
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     }
   ],

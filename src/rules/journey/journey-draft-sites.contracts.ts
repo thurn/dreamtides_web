@@ -39,7 +39,7 @@ function fixture(type: SiteType = "Reward", ids: DreamsignId[] = [TARGET], extra
     screen: { type: "dreamscape" }, atlas: { ...base.journey.atlas, nodes: { [NODE_ID]: { ...node, sites: sites ?? [site(type)] } } }, ...extra } };
 }
 const event = (type: GameEvent["type"], payload: Record<string, unknown> = {}): GameEvent =>
-  ({ type, payload: { siteId: SITE, ...payload }, actor: ACTOR, clientTimestamp: ctx().timestamp, basedOnSeq: 0 });
+  ({ type, payload: { siteId: SITE, ...payload }, actor: ACTOR, clientTimestamp: ctx().timestamp});
 const apply = (state: FoldState, type: GameEvent["type"], payload: Record<string, unknown> = {}, use: JourneyModifierRegistry = registry) =>
   reduceGameEvent(state, event(type, payload), ctx(), use);
 const open = (state: FoldState) => apply(state, "OPEN_SITE", { selectionRulesVersion: SELECTION_RULES_VERSION });

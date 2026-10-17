@@ -154,13 +154,8 @@ export function useGameState(): FoldState {
   return useLogSnapshot((game) => game.log.state());
 }
 
-/** The fold of every committed event; identical to `useGameState`. */
-export function useConfirmedGameState(): FoldState {
-  return useGameState();
-}
-
 /** Seq of the newest committed event; 0 for a new game. */
-export function useConfirmedHead(): number | null {
+export function useHead(): number {
   return useLogSnapshot((game) => game.log.head());
 }
 

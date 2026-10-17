@@ -10,11 +10,22 @@
 import type { ReducerVersion } from "../types/reducer-version";
 
 export const CURRENT_REDUCER_VERSION =
-  "dreamtides-coop-v31" satisfies ReducerVersion;
+  "dreamtides-v31" satisfies ReducerVersion;
+
+/**
+ * Earlier spellings of the current protocol, still found in stored games'
+ * genesis records. They fold and append exactly as the current version does.
+ */
+const CURRENT_REDUCER_VERSION_ALIASES: ReadonlySet<string> = new Set([
+  "dreamtides-coop-v31",
+]);
 
 /** Whether this build may safely fold and append to a stored game. */
 export function isReducerVersionCompatible(
   gameReducerVersion: ReducerVersion,
 ): boolean {
-  return gameReducerVersion === CURRENT_REDUCER_VERSION;
+  return (
+    gameReducerVersion === CURRENT_REDUCER_VERSION ||
+    CURRENT_REDUCER_VERSION_ALIASES.has(gameReducerVersion)
+  );
 }

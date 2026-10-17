@@ -1,11 +1,12 @@
-// The stored-genesis wire contract for game modes: a D97 genesis keeps its
-// mode through encode and decode, a journey genesis stays without one, and an
-// unknown mode makes the genesis unreadable.
+// The stored wire contract: a D97 genesis keeps its mode through encode and
+// decode, a journey genesis stays without one, and an unknown mode makes the
+// genesis unreadable; a stored event written with an extra envelope field
+// (an older log's `basedOnSeq`) still decodes.
 
 import { describe, expect, it } from "vitest";
 import { testJourneySeed } from "../types/test-identities";
 import { genesisMode, type Genesis } from "./types";
-import { decodeGenesis } from "./wire";
+import { decodeEvent, decodeGenesis } from "./wire";
 
 const GENESIS: Genesis = {
   seed: testJourneySeed("wire-genesis"),
@@ -29,6 +30,14 @@ describe("decodeGenesis", () => {
   });
 
   it("rejects an unknown mode", () => {
-    expect(decodeGenesis(JSON.stringify({ ...GENESIS, mode: "coop" }))).toBeNull();
+    expect(decodeGenesis(JSON.stringify({ ...GENESIS, mode: "unknown-mode" }))).toBeNull();
+  });
+});
+
+describe("decodeEvent", () => {
+  it("decodes a stored event that carries an older envelope field", () => {
+    const event = decodeEvent(JSON.stringify({ type: "START_JOURNEY", payload: {}, actor: "p1", clientTimestamp: "t", basedOnSeq: 0 }));
+    expect(event.type).toBe("START_JOURNEY");
+    expect("basedOnSeq" in event).toBe(false);
   });
 });

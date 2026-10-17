@@ -12,7 +12,6 @@ import type { EngineCardDefinition } from "../../engine/catalog";
 import { createSiteContentProvider } from "../../session/providers/site-provider";
 import { makeAuguryTestContent } from "../../journey_v2/testing/fixtures";
 import { registerSiteContentProvider } from "./sites";
-import { testEventActor } from "../../types/test-identities";
 import type { FoldState } from "../fold-state";
 import { createLocalLog, type LocalLogRecord } from "../../eventlog/local-log";
 import { foldEvents } from "../../eventlog/fold";
@@ -137,7 +136,7 @@ it("continues an actual empty prepared catalog without Essence or a fake reward"
   const result = apply(ended, "RESOLVE_AFTER_BATTLE_DREAMSIGN", { siteId: choice.siteId, dreamsignId: RED, heldIndex: 0, choiceIndex: 0, earnedSeq: source.earnedSeq, offeredDreamsignId: null }); expect(result.outcome).toBe("applied");
   expect(result.state.journey.screen.type).toBe("atlas"); expect(result.state.journey.essence).toBe(ended.journey.essence); expect(result.state.journey.dreamsigns).toEqual(ended.journey.dreamsigns);
 });
-it("rejects a premature free decline and stale/concurrent earned choice without effects or draws", () => {
+it("rejects a premature free decline and stale earned choice without effects or draws", () => {
   const state = victory([RED], false, [SLUG]);
   if (state.journey.screen.type !== "journeyDreamsign" || state.journey.screen.choice.kind !== "afterBattle") throw new Error("missing choice");
   const choice = state.journey.screen.choice, source = choice.sources[0]; if (source.kind !== "dreamsign") throw new Error("wrong source");
@@ -145,7 +144,6 @@ it("rejects a premature free decline and stale/concurrent earned choice without 
   for (const patch of [{ offeredDreamsignId: null }, { offeredDreamsignId: DOLL }, { earnedSeq: source.earnedSeq + 1 }, { purgeIndex: 999 }, { heldIndex: 1 }]) {
     const result = apply(state, "RESOLVE_AFTER_BATTLE_DREAMSIGN", { ...payload, ...patch }, { rng }); expect(result.state).toBe(state); expect(result.logRecords).toBeUndefined();
   }
-  for (const intervening of ["unknown" as const, [{ seq: 1, actor: testEventActor("other"), type: "REMOVE_DREAMSIGN" as const }]]) expect(apply(state, "RESOLVE_AFTER_BATTLE_DREAMSIGN", payload, { intervening, rng }).state).toBe(state);
   expect(rng).not.toHaveBeenCalled();
 });
 

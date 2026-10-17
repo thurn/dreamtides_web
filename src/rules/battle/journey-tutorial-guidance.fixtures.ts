@@ -47,7 +47,7 @@ export function host(side: Side = "player", card = CARDS.strong, triggers: reado
   } };
 }
 export function apply(state: FoldState, type: GameEvent["type"], payload: Record<string, unknown>, seq = 10) {
-  return reduceGameEvent(state, { type, payload, actor: testEventActor("journey-guidance"), basedOnSeq: 0, clientTimestamp: "1970-01-01T00:00:00.000Z" }, context(seq));
+  return reduceGameEvent(state, { type, payload, actor: testEventActor("journey-guidance"), clientTimestamp: "1970-01-01T00:00:00.000Z" }, context(seq));
 }
 export function play(state: FoldState): FoldState {
   if (state.battle === null) throw Error("missing battle");

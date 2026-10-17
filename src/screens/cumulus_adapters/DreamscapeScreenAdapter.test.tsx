@@ -418,8 +418,7 @@ describe("DreamscapeScreenAdapter", () => {
       screen: { type: "site", siteId } });
     const outcomes: string[] = [];
     const mutations = { enterDraftSite: (id: typeof siteId) => {
-      const result = reduceGameEvent(state, { type: "ENTER_DRAFT_SITE", payload: { siteId: id }, actor,
-        basedOnSeq: 0, clientTimestamp: ctx().timestamp }, ctx(), registry);
+      const result = reduceGameEvent(state, { type: "ENTER_DRAFT_SITE", payload: { siteId: id }, actor, clientTimestamp: ctx().timestamp }, ctx(), registry);
       state = result.state; outcomes.push(result.outcome);
     } } as unknown as JourneyMutations;
     const content: Partial<JourneyContent> = { atlasData: MINIMAL_ATLAS_DATA, dreamscapes: MINIMAL_DREAMSCAPES, sitesData: MINIMAL_SITES_DATA,
@@ -436,14 +435,13 @@ describe("DreamscapeScreenAdapter", () => {
       const expandedCopies = Object.fromEntries(cards.map((card) => [String(card.cardNumber), 1]));
       const payload = correction === "holding" ? { dreamsignId: source } : correction === "essence" ? { value: 0 }
         : { draftState: { ...state.journey.draftState!, draftPoolCopiesByCard: expandedCopies, remainingCopiesByCard: expandedCopies } };
-      state = reduceGameEvent(state, { type, payload, actor, basedOnSeq: 0, clientTimestamp: ctx().timestamp }, ctx(), registry).state;
+      state = reduceGameEvent(state, { type, payload, actor, clientTimestamp: ctx().timestamp }, ctx(), registry).state;
       show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);
       expect(outcomes).toEqual(["bounced", "applied"]);
       const prepared = structuredClone(state.journey.draftState);
       show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);
       expect(state.journey.draftState?.currentOffer).toHaveLength(correction === "pool" ? 5 : 3);
-      state = reduceGameEvent(state, { type: "SET_ESSENCE", payload: { value: 12 }, actor,
-        basedOnSeq: 0, clientTimestamp: ctx().timestamp }, ctx(), registry).state;
+      state = reduceGameEvent(state, { type: "SET_ESSENCE", payload: { value: 12 }, actor, clientTimestamp: ctx().timestamp }, ctx(), registry).state;
       state = { ...state, journey: { ...state.journey, dreamsigns: [...state.journey.dreamsigns],
         draftState: structuredClone(state.journey.draftState) } };
       show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);

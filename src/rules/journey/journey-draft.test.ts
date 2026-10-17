@@ -41,7 +41,7 @@ function fixture(ids = [ALWAYS], essence = 0, extra: Partial<JourneyState> = {})
   });
 }
 const event = (type: GameEvent["type"], payload: Record<string, unknown>): GameEvent =>
-  ({ type, payload, actor: ACTOR, basedOnSeq: 0, clientTimestamp: ctx().timestamp });
+  ({ type, payload, actor: ACTOR, clientTimestamp: ctx().timestamp });
 const apply = (state: FoldState, type: GameEvent["type"], payload: Record<string, unknown> = {}) =>
   reduceGameEvent(state, event(type, payload), ctx(), registry);
 const enter = (state = fixture()) => apply(state, "ENTER_DRAFT_SITE", { siteId: SITE });
@@ -161,15 +161,12 @@ describe("journeyDraft public offer preparation", () => {
     expect(apply(before, "LOAD_STATE", { snapshot }).outcome).toBe("applied");
   });
 
-  it("rejects invalid/stale entry or pick and concurrent unknown windows without spending the pool", () => {
+  it("rejects invalid/stale entry or pick without spending the pool", () => {
     const before = fixture(), source = structuredClone(before);
     expect(enter({ ...before, journey: { ...before.journey, draftState: null } }).outcome).toBe("bounced");
     expect(apply(before, "ENTER_DRAFT_SITE", { siteId: "unknown" }).state).toBe(before);
     const entered = enter(before).state;
     expect(apply(entered, "PICK_DRAFT_CARD", { packIndex: 99, cardId: cards[0].id }).state).toBe(entered);
-    const pickedCard = database.get(entered.journey.draftState!.currentOffer[0])!;
-    const result = reduceGameEvent(entered, event("PICK_DRAFT_CARD", { packIndex: 0, cardId: pickedCard.id }), ctx({ intervening: "unknown" }), registry);
-    expect(result.outcome).toBe("bounced");
     expect(before).toEqual(source);
   });
 

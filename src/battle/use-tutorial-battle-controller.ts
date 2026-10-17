@@ -2,13 +2,13 @@ import { currentTutorialPresentation } from "../rules/battle/tutorial-checkpoint
 import { useCallback, useEffect, useState } from "react";
 import { BATTLE } from "../content/battle";
 import { tutorialBattleOf } from "../rules/battle/fold";
-import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
+import { useActions, useClientId, useGameState } from "../session/hooks";
 import { parseIntentKey, type PresentationId } from "../types/identifiers";
 /** Visibility timers release durable checkpoints; the engine owns every game decision. */
 export function useTutorialBattleController({ paused = false }: {
     readonly paused?: boolean;
 } = {}) {
-    const battle = tutorialBattleOf(useConfirmedGameState().battle);
+    const battle = tutorialBattleOf(useGameState().battle);
     const actions = useActions(), actor = useClientId();
     const [visible, setVisible] = useState<PresentationId | null>(null);
     const presentation = currentTutorialPresentation(battle);

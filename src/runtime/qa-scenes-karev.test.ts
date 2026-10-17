@@ -104,15 +104,14 @@ function loadOf(seq: number, journey: JourneyState, battle: JourneyBattleFoldSta
     event: {
       type: "LOAD_STATE", payload: { snapshot: journey, battle },
       actor: testEventActor("karev-scene-observation"),
-      clientTimestamp: new Date(0).toISOString(), basedOnSeq: seq - 1,
+      clientTimestamp: new Date(0).toISOString(),
     },
   };
 }
 
 function applyLoad(committed: CommittedEvent, journey: JourneyState) {
   return reduceGameEvent(initialFoldState(journey.seed, TEST_CONTENT_CONFIG), committed.event, {
-    contentConfig: TEST_CONTENT_CONFIG, seq: committed.seq, rng: () => 0,
-    intervening: [], timestamp: new Date(0).toISOString(),
+    contentConfig: TEST_CONTENT_CONFIG, seq: committed.seq, rng: () => 0, timestamp: new Date(0).toISOString(),
   });
 }
 

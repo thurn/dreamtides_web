@@ -12,7 +12,7 @@ import {
 } from "./data/journey-content";
 import { ConfigGateScreen } from "./components/ConfigGateScreen";
 import { registerGameProviders } from "./session/providers/register-game-providers";
-import { LocalGameProvider, useConfirmedHead } from "./session/hooks";
+import { LocalGameProvider, useHead } from "./session/hooks";
 import { GameSwitchContext } from "./session/game-switch";
 import type { GameMode } from "./eventlog/types";
 import { D97ScreenRouter } from "./components/D97ScreenRouter";
@@ -75,7 +75,7 @@ export function JourneyApp({
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [journeyEditorOpen, setJourneyEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
-  const confirmedHead = useConfirmedHead();
+  const head = useHead();
   const previousScreenTypeRef = useRef(state.screen.type);
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
@@ -83,7 +83,7 @@ export function JourneyApp({
 
   const gotoSceneName = runtimeConfig.gotoScene ?? null;
   const canBootstrapQaScene =
-    gotoSceneName !== null && confirmedHead === 0 && state.avatar === null;
+    gotoSceneName !== null && head === 0 && state.avatar === null;
 
   // `?goto=<scene>`: replace the freshly created game's empty journey state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA

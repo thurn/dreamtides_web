@@ -119,7 +119,7 @@ export function makeJourneyContent(): JourneyContent {
   };
 }
 
-/** A single-actor committed event: basedOnSeq = seq - 1. */
+/** A committed event at `seq`. */
 export function ev(
   seq: number,
   type: SeqEvent["event"]["type"],
@@ -132,7 +132,6 @@ export function ev(
       payload,
       actor: testEventActor("p1"),
       clientTimestamp: TIMESTAMP,
-      basedOnSeq: seq - 1,
     },
   };
 }

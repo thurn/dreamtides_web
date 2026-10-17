@@ -6,7 +6,7 @@ import {
   useState,
   type RefObject,
 } from "react";
-import { useActions, useConfirmedGameState, useGameState } from "../session/hooks";
+import { useActions, useGameState } from "../session/hooks";
 import { logEvent } from "../logging";
 import {
   cardIdsMatchCurrentDraftOffer,
@@ -64,7 +64,6 @@ export function JourneyCardTutorialController({
   readonly stageRef: RefObject<HTMLElement | null>;
 }) {
   const state = useGameState();
-  const confirmedState = useConfirmedGameState();
   const actions = useActions();
   const { journeyContent, cardDatabase } = useJourney();
   const attemptedSignatureRef = useRef<string | null>(null);
@@ -181,7 +180,7 @@ export function JourneyCardTutorialController({
 
   const complete = useCallback(
     (reason: "timer" | "manual") => {
-      const confirmed = confirmedState.cardTutorialPresentation;
+      const confirmed = state.cardTutorialPresentation;
       if (confirmed === null) return;
       logEvent("card_tutorial_guidance_advance_requested", {
         presentationId: confirmed.id,
@@ -197,11 +196,11 @@ export function JourneyCardTutorialController({
         )
         .catch(() => undefined);
     },
-    [actions, confirmedState.cardTutorialPresentation],
+    [actions, state.cardTutorialPresentation],
   );
 
   useEffect(() => {
-    const confirmed = confirmedState.cardTutorialPresentation;
+    const confirmed = state.cardTutorialPresentation;
     if (confirmed === null) return;
     logEvent("card_tutorial_guidance_presented", {
       presentationId: confirmed.id,
@@ -215,7 +214,7 @@ export function JourneyCardTutorialController({
       verticalOffset: confirmed.verticalOffset,
       bubbleWidth: confirmed.bubbleWidth,
     });
-  }, [confirmedState.cardTutorialPresentation]);
+  }, [state.cardTutorialPresentation]);
 
   return (
     <BattleTutorialGuidance

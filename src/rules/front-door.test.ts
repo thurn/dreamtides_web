@@ -33,28 +33,21 @@ const GENESIS: Genesis = {
 function event(
   type: GameEvent["type"],
   payload: Record<string, unknown>,
-  basedOnSeq = 0,
-  actor = "player-a",
 ): GameEvent {
   return {
     type,
     payload,
-    actor: testEventActor(actor),
+    actor: testEventActor("player-a"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
-    basedOnSeq,
   };
 }
 
-function context(
-  seq: number,
-  intervening: EventContext["intervening"] = [],
-): EventContext {
+function context(seq: number): EventContext {
   return {
     contentConfig: TEST_CONTENT_CONFIG,
     seq,
     rng: () => 0,
     timestamp: "1970-01-01T00:00:00.000Z",
-    intervening,
   };
 }
 
@@ -95,11 +88,7 @@ describe("front-door reducer", () => {
 
     const loading = reduceGameEvent(
       exiting.state,
-      event(
-        "ADVANCE_FRONT_DOOR",
-        { from: "mainExiting", journeyId: "event:1" },
-        1,
-      ),
+      event("ADVANCE_FRONT_DOOR", { from: "mainExiting", journeyId: "event:1" }),
       context(2),
     );
     expect(loading.outcome).toBe("applied");
@@ -107,14 +96,14 @@ describe("front-door reducer", () => {
 
     const tutorial = reduceGameEvent(
       loading.state,
-      event("ADVANCE_FRONT_DOOR", { from: "loading", journeyId: "event:1" }, 2),
+      event("ADVANCE_FRONT_DOOR", { from: "loading", journeyId: "event:1" }),
       context(3),
     );
     expect(tutorial.outcome).toBe("applied");
     expect(tutorial.state.frontDoor.phase).toBe("tutorial");
   });
 
-  it("lets the first player advance while stale duplicate transitions bounce", () => {
+  it("applies the first New Journey transition and bounces a duplicate", () => {
     const start = genesisFoldState(GENESIS);
     const first = reduceGameEvent(
       start,
@@ -130,14 +119,14 @@ describe("front-door reducer", () => {
         surface: "main",
         actionId: "new-journey",
       }),
-      context(2, [{ seq: 1, actor: testEventActor("player-a"), type: "FRONT_DOOR_ACTION" }]),
+      context(2),
     );
 
     expect(duplicate.outcome).toBe("bounced");
     expect(duplicate.state).toBe(first.state);
   });
 
-  it("accepts either player's New Journey intent across a partner's menu action", () => {
+  it("accepts New Journey after a menu action that leaves the main menu open", () => {
     const start = genesisFoldState(GENESIS);
     const social = reduceGameEvent(
       start,
@@ -146,13 +135,8 @@ describe("front-door reducer", () => {
     );
     const journey = reduceGameEvent(
       social.state,
-      event(
-        "FRONT_DOOR_ACTION",
-        { surface: "main", actionId: "new-journey" },
-        0,
-        "player-b",
-      ),
-      context(2, [{ seq: 1, actor: testEventActor("player-a"), type: "FRONT_DOOR_ACTION" }]),
+      event("FRONT_DOOR_ACTION", { surface: "main", actionId: "new-journey" }),
+      context(2),
     );
 
     expect(journey.outcome).toBe("applied");

@@ -418,11 +418,11 @@ describe("local log", () => {
     log.subscribe((record) => {
       if (record.seq === 1) log.append({ type: "ADD", payload: { add: 10 } });
     });
-    log.subscribe((record) => seen.push([record.seq, record.event.basedOnSeq]));
+    log.subscribe((record) => seen.push([record.seq, record.event.payload.add as number]));
     log.append({ type: "ADD", payload: { add: 1 } });
     expect(seen).toEqual([
-      [1, 0],
-      [2, 1],
+      [1, 1],
+      [2, 10],
     ]);
     expect(log.state()).toEqual({ total: 11 });
   });

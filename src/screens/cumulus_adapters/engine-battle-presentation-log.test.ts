@@ -307,7 +307,6 @@ describe("battle log", () => {
           payload,
           actor: testEventActor("p1"),
           clientTimestamp: "1970-01-01T00:00:00.000Z",
-          basedOnSeq: seq - 1,
         };
         events.push({ seq, event });
       };

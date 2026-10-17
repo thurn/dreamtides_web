@@ -121,9 +121,9 @@ function buildBattleStart(
 }
 
 /**
- * Settle the reconstruction log captured while folding one BEGIN_BATTLE. Every
- * client consumes its local callback, while only the appending client emits it
- * after the event is confirmed as applied.
+ * Settle the reconstruction log captured while folding one BEGIN_BATTLE: the
+ * callback is always consumed, and emitted only when the appended event
+ * applied.
  */
 export function settleDeferredOpponentLog(
   seq: number,

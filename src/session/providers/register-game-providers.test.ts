@@ -67,14 +67,12 @@ function playEveryLayer(): FoldState {
         payload,
         actor: testEventActor("p1"),
         clientTimestamp: TIMESTAMP,
-        basedOnSeq: seq - 1,
       },
       {
         contentConfig: TEST_CONTENT_CONFIG,
         seq,
         timestamp: TIMESTAMP,
         rng: eventRng(GENESIS.seed, seq),
-        intervening: [],
       },
     );
     expect(

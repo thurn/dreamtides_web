@@ -108,15 +108,13 @@ describe("first successful card purchase pricing and attribution", () => {
     const out = buy(moved, 0, {}, registry, { siteId: secondSite });
     expect(runtime(out.state, secondSite).purchaseHistory[0].pricePaid).toBe(22);
   });
-  it("leaves the ordinal and resources intact for poor, malformed, stale, cancelled and partner-conflicting attempts", () => {
+  it("leaves the ordinal and resources intact for poor, malformed, stale and cancelled attempts", () => {
     const before = fixture(), rng = vi.fn(() => 0), saved = structuredClone(before);
     for (const payload of [{ slotIndex: -1 }, { slotIndex: .5 }, { slotIndex: 99 }, { siteId: "missing" }, { purgeIndex: "bad" }]) {
       expect(buy(before, 0, { rng }, registry, payload).state).toBe(before);
     }
     const poor = fixture(); poor.journey.essence = 19;
     expect(buy(poor, 0, { rng }).state).toBe(poor);
-    const conflict = buy(before, 0, { rng, intervening: [{ seq: 1, type: "BUY_SHOP_SLOT", actor: event("BUY_SHOP_SLOT", {}, "bob").actor }] });
-    expect(conflict.state).toBe(before); expect(conflict.bounceReason).toBe("partner_conflict");
     // Cancelling before submission emits no buy event; the persisted shelf stays eligible.
     expect(shopCardPurchaseQuote(before.journey, runtime(before), makeSite("Shop"), runtime(before).slots[0], registry).firstCardPurchase).toBe(true);
     expect(rng).not.toHaveBeenCalled(); expect(before).toEqual(saved);
@@ -189,7 +187,7 @@ describe("atomic purchase fold and restart", () => {
   });
   it("replays exactly through every serialized successful receipt boundary", () => {
     const before = fixture(), events = [0, 1].map((slotIndex, i) => ({ seq: i + 1,
-      event: { ...event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex }), basedOnSeq: i } }));
+      event: { ...event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex })} }));
     const all = fold(before, events);
     expect(all.outcomes.every((o) => o.outcome === "applied")).toBe(true);
     const prefix = fold(before, events.slice(0, 1)), loaded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(prefix.state));
@@ -197,11 +195,11 @@ describe("atomic purchase fold and restart", () => {
     expect(continued.state).toEqual(all.state); expect(continued.outcomes).toEqual(all.outcomes.slice(1));
     expect(fold(before, events).state).toEqual(all.state);
   });
-  it("accepts one concurrent partner purchase from a shared head", () => {
-    const before = fixture(), out = fold(before, ["alice", "bob"].map((actor, i) => ({ seq: i + 1,
-      event: event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0 }, actor) })));
+  it("applies one purchase of a slot and bounces a repeated purchase of it", () => {
+    const before = fixture(), out = fold(before, [1, 2].map((seq) => ({ seq,
+      event: event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0 }) })));
     expect(out.outcomes.map((o) => o.outcome)).toEqual(["applied", "bounced"]);
-    expect(out.outcomes[1].bounceReason).toBe("partner_conflict"); expect(runtime(out.state).purchaseHistory).toHaveLength(1);
+    expect(out.outcomes[1].bounceReason).toBe("invalid_action"); expect(runtime(out.state).purchaseHistory).toHaveLength(1);
     expect(out.state).toEqual(fold(before, [{ seq: 1, event: event("BUY_SHOP_SLOT", { siteId: SITE_ID, slotIndex: 0 }) }]).state);
   });
 });

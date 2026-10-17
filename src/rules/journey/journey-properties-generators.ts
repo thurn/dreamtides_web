@@ -279,7 +279,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
     },
   }),
 
-  // battle bridges & CAS-exempt (no journey case → routed to a bounce; here to
+  // battle bridges & prompt-gate-exempt (no journey case → routed to a bounce; here to
   // stress total-fold safety with types outside the journey domain switch)
   () => ({ type: "END_BATTLE", payload: {} }),
   (rng) => ({
@@ -401,7 +401,6 @@ function generateSequence(
         payload: generated.payload,
         actor: ACTOR,
         clientTimestamp: TIMESTAMP,
-        basedOnSeq: seq - 1,
       },
     });
   }
@@ -416,7 +415,6 @@ export const START_JOURNEY_ENTRY: { seq: number; event: GameEvent } = {
     payload: { avatarId: testAvatarId("dc-1") },
     actor: ACTOR,
     clientTimestamp: TIMESTAMP,
-    basedOnSeq: 0,
   },
 };
 

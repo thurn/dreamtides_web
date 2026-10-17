@@ -18,9 +18,8 @@
         "payload": {
           "avatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 0
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -30,9 +29,8 @@
         "payload": {
           "delta": 10
         },
-        "actor": "bob",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 1
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -42,9 +40,8 @@
         "payload": {
           "delta": 20
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 1
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -54,9 +51,8 @@
         "payload": {
           "siteId": "site-essence"
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 3
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -67,9 +63,8 @@
           "siteId": "site-essence",
           "selectionRulesVersion": "2"
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 4
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -80,9 +75,8 @@
           "siteId": "site-essence",
           "selectionRulesVersion": "2"
         },
-        "actor": "bob",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 4
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -92,9 +86,8 @@
         "payload": {
           "siteId": "site-essence"
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 6
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -104,9 +97,8 @@
         "payload": {
           "siteId": "site-battle"
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 7
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -116,9 +108,8 @@
         "payload": {
           "siteId": "site-battle"
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 8
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -133,9 +124,8 @@
             "from": "hand"
           }
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 9
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -147,9 +137,8 @@
           "promptId": "4:4:0",
           "value": 1
         },
-        "actor": "alice",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 10
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     },
     {
@@ -161,11 +150,10 @@
           "promptId": "4:4:0",
           "value": 1
         },
-        "actor": "bob",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 10
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z"
       }
     }
   ],
-  "finalHash": "d504c6b273448caa3bc4212193b6a94b1ffd54485e27687a3ef29b9fd26c6e4e"
+  "finalHash": "fe3e14179b3404ba31a3a1a197ea42f062ee98ba3e625034857eee04e5c8202f"
 }

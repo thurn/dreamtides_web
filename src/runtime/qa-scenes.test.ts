@@ -75,7 +75,6 @@ describe("QA scenes", () => {
           contentConfig: TEST_CONTENT_CONFIG,
           seq: 1,
           rng: () => 0,
-          intervening: [],
           timestamp: new Date(0).toISOString(),
         },
       );

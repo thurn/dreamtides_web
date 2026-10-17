@@ -22,28 +22,9 @@ describe("rule 5 — routing and garbage tolerance", () => {
       payload: null as unknown as Record<string, unknown>,
       actor: testEventActor("alice"),
       clientTimestamp: "x",
-      basedOnSeq: 0,
     } as GameEvent;
     expect(() => reduceGameEvent(state, garbage, ctx())).not.toThrow();
     const result = reduceGameEvent(state, garbage, ctx());
-    expect(result.outcome).toBe("bounced");
-    expect(result.bounceReason).toBe("invalid_action");
-    expect(result.state).toBe(state);
-  });
-
-  it("bounces a TAKE_PLAYTEST_CONTROL intent from an older log without changing the fold", () => {
-    const state = foldStateWithEssence(100);
-    const result = reduceGameEvent(
-      state,
-      {
-        type: "TAKE_PLAYTEST_CONTROL",
-        payload: { previousControllerClientId: null },
-        actor: testEventActor("alice"),
-        clientTimestamp: "1970-01-01T00:00:00.000Z",
-        basedOnSeq: 0,
-      },
-      ctx(),
-    );
     expect(result.outcome).toBe("bounced");
     expect(result.bounceReason).toBe("invalid_action");
     expect(result.state).toBe(state);

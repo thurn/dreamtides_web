@@ -61,16 +61,12 @@ const GENESIS: Genesis = {
 };
 
 /** Promote a captured draft into the committed-event shape the fold expects. */
-function draftToEvent(draft: EventDraft, seq: number): GameEvent {
+function draftToEvent(draft: EventDraft): GameEvent {
   return {
     type: draft.type,
     payload: draft.payload,
     actor: draft.actor ?? testEventActor("c-test"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
-    // basedOnSeq = seq - 1 keeps the intervening window empty (clear), so a
-    // bounce can only come from an unknown type or invalid-in-state — never a
-    // spurious CAS bounce that would mask a routing regression.
-    basedOnSeq: seq - 1,
   };
 }
 
@@ -327,7 +323,7 @@ describe("game actions facade", () => {
   it("routes each creator's event without a bounce-caused-by-unknown-type", () => {
     drafts.forEach((draft, index) => {
       const seq = index + 1;
-      const event = draftToEvent(draft, seq);
+      const event = draftToEvent(draft);
       const base = {
         seq: 0,
         state: GAME_ENGINE_CONFIG.genesisState(GENESIS),

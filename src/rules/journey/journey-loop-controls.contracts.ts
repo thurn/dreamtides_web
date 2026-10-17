@@ -56,11 +56,4 @@ describe("journey loop public refusal and atomicity controls", () => {
     expect(records[0].outcome).toBe("bounced"); expect(records[0].bounceReason).toBe("fold_error");
     expect(records[0].logRecords).toBeUndefined();
   });
-  it("uses existing CAS actor rules before any application or proof", () => {
-    const f = fixture();
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: event("ADD_CARD", {}, "other").actor, type: "ADD_DREAMSIGN" as const }]]) {
-      const out = accept(f, { intervening }); expect(out.outcome).toBe("bounced"); expect(out.state).toBe(f.state); expect(out.logRecords).toBeUndefined();
-    }
-    expect(accept(f, { intervening: [{ seq: 1, actor: event("ADD_CARD", {}).actor, type: "ADD_DREAMSIGN" }] }).outcome).toBe("applied");
-  });
 });

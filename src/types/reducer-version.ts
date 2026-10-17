@@ -1,7 +1,7 @@
 declare const reducerVersionBrand: unique symbol;
 
 export type KnownReducerVersion =
-  | `dreamtides-coop-v${number}`
+  | `dreamtides-v${number}`
   | "fixture"
   | "test";
 type ParsedReducerVersion = string & {

@@ -33,7 +33,7 @@ const registry = createJourneyModifierRegistry([
   journeyEssence(PEARL, { kind: "replaceEssenceSiteReward", offerCount: 1 }),
   journeyEssence(WORM, { kind: "newDreamscapeEssence", numerator: 1, denominator: 4 }),
 ]);
-const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, intervening: [], timestamp: "1970-01-01T00:00:00Z" };
+const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, timestamp: "1970-01-01T00:00:00Z" };
 const sign = (id: DreamsignId) => ({ id, name: "Same synthetic name", effectDescription: "Synthetic effect" });
 const site = (): SiteState => ({ id: SITE, type: "Essence", isVisited: false, isEnhanced: false });
 const reward = (): RewardSiteRuntime => ({ kind: "reward", reward: { rewardType: "dreamsign", dreamsign: sign(INCOMING) }, remainingDreamsignPoolIds: [OTHER], accepted: false });
@@ -41,7 +41,7 @@ function state(ids: readonly DreamsignId[] = []): FoldState {
   const base = initialFoldState(GENESIS.seed, TEST_CONTENT_CONFIG);
   return { ...base, journey: { ...base.journey, essence: 105, currentDreamscape: NODE, screen: { type: "dreamscape" }, dreamsigns: ids.map(sign), remainingDreamsignPool: [INCOMING, OTHER], atlas: { ...base.journey.atlas, nodes: { [NODE]: makeTestAtlasNode(NODE, [site()]) } } } };
 }
-const event = (type: GameEventType, payload: Record<string, unknown>) => ({ type, payload, actor: ACTOR, basedOnSeq: 0, clientTimestamp: context.timestamp });
+const event = (type: GameEventType, payload: Record<string, unknown>) => ({ type, payload, actor: ACTOR, clientTimestamp: context.timestamp });
 const apply = (s: FoldState, type: GameEventType, payload: Record<string, unknown> = {}) => reduceGameEvent(s, event(type, payload), context, registry);
 const open = { siteId: SITE, selectionRulesVersion: SELECTION_RULES_VERSION };
 function quoted(ids: readonly DreamsignId[]) {
@@ -179,8 +179,6 @@ describe("journeyEssence public hooks", () => {
     for (const before of cases) expect(apply(before, "COMPLETE_SITE", { siteId: SITE }).state).toBe(before);
     const decline = apply(prepared, "COMPLETE_SITE", { siteId: SITE }).state;
     expect(apply(decline, "COMPLETE_SITE", { siteId: SITE }).state).toBe(decline);
-    const conflict = reduceGameEvent(prepared, event("COMPLETE_SITE", { siteId: SITE }), { ...context, intervening: [{ seq: 1, actor: testEventActor("partner"), type: "COMPLETE_SITE" }] }, registry);
-    expect(conflict.bounceReason).toBe("partner_conflict");
   });
   it("null and invalid replacement generation bounce atomically without an Essence fallback", () => {
     const before = state([PEARL]);
@@ -221,7 +219,7 @@ describe("journeyEssence public hooks", () => {
     log.append({ type: "ACCEPT_REWARD", payload: { siteId: SITE } });
     expect(log.state().journey.dreamsigns.map(({ id }) => id)).toEqual([PEARL, INCOMING]);
   });
-  it("JSON replay and competing/repeated collection intents preserve one atomic grant", () => {
+  it("JSON replay and repeated collection intents preserve one atomic grant", () => {
     const before = state([PEARL]);
     const config = engine(before);
     const log = createLocalLog({ config, genesis: GENESIS, localActor: ACTOR, now: () => context.timestamp, devMode: true });
@@ -234,10 +232,6 @@ describe("journeyEssence public hooks", () => {
     const replay = foldEvents(config, GENESIS, { seq: 0, state: before }, persisted, { devMode: true });
     expect(replay.state).toEqual(log.state());
     expect(replay.state.journey.dreamsigns.map(({ id }) => id)).toEqual([PEARL, INCOMING]);
-    const prepared = apply(before, "OPEN_SITE", open).state;
-    const conflict = reduceGameEvent(prepared, event("ACCEPT_REWARD", { siteId: SITE }), { ...context, intervening: [{ seq: 1, actor: testEventActor("partner"), type: "ACCEPT_REWARD" }] }, registry);
-    expect(conflict.bounceReason).toBe("partner_conflict");
-    expect(conflict.state).toBe(prepared);
   });
   it("applies fractional entry gains sequentially by held UUID order, with same-node/admin controls", () => {
     const before = travel([WORM, STAR, WORM]);

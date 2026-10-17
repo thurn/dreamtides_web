@@ -14,7 +14,7 @@ const first: EngineEvent = { kind: "cardPlayed", side: "enemy", instance: firstI
 const draw: EngineEvent = { kind: "cardDrawn", side: "enemy", instance: drawnId };
 const load = (seq: number, init: object): CommittedEvent => ({
   seq,
-  event: { type: "LOAD_STATE", payload: { battle: { init } }, actor: parseClientId("synthetic"), clientTimestamp: "2026-01-01T00:00:00Z", basedOnSeq: seq - 1 },
+  event: { type: "LOAD_STATE", payload: { battle: { init } }, actor: parseClientId("synthetic"), clientTimestamp: "2026-01-01T00:00:00Z"},
 });
 
 describe("development battle observations", () => {

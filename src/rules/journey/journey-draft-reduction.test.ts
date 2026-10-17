@@ -38,7 +38,7 @@ function fixture(ids: readonly DreamsignId[] = [LESS], essence = 0, extra: Parti
     screen: { type: "site", siteId: SITE }, ...extra });
 }
 function apply(state: FoldState, type: Parameters<typeof reduceGameEvent>[1]["type"], payload: Record<string, unknown> = {}, modifiers = registry(), context = ctx()) {
-  return reduceGameEvent(state, { type, payload, actor: ACTOR, basedOnSeq: 0, clientTimestamp: context.timestamp }, context, modifiers);
+  return reduceGameEvent(state, { type, payload, actor: ACTOR, clientTimestamp: context.timestamp }, context, modifiers);
 }
 function pick(state: FoldState) {
   const draft = state.journey.draftState!, card = database.get(draft.currentOffer[0])!;
@@ -128,7 +128,6 @@ describe("reduced Draft choices through public folds", () => {
     const entered = apply(fixture([LESS, LESS]), "ENTER_DRAFT_SITE", { siteId: SITE }).state;
     const stale = apply(entered, "PICK_DRAFT_CARD", { packIndex: 4, cardId: cards[0].id });
     expect(stale.state).toBe(entered); expect(stale.logRecords).toBeUndefined();
-    expect(apply(entered, "PICK_DRAFT_CARD", { packIndex: 0, cardId: database.get(entered.journey.draftState!.currentOffer[0])!.id }, registry(), ctx({ intervening: "unknown" })).outcome).toBe("bounced");
   });
 
   it("replays actual minimum offers and physical source diagnostics deterministically", () => {

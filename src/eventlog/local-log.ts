@@ -1,8 +1,8 @@
 // The local-first event log: one writer's ordered list of committed events and
 // the fold over them.
 //
-// `append` is synchronous. It stamps the envelope (`actor`, `clientTimestamp`,
-// `basedOnSeq`), assigns the next seq, folds the event through the pure
+// `append` is synchronous. It stamps the envelope (`actor`, `clientTimestamp`),
+// assigns the next seq, folds the event through the pure
 // reducer, and commits it — applied or deterministically bounced — to the
 // ordered in-memory event list before it returns. Listeners then receive one
 // record per committed event, in seq order; persistence and logging are
@@ -182,7 +182,7 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
     genesis,
     { seq: base.seq, state },
     [...replayEvents],
-    { coveredFromSeq: 0, devMode: false },
+    { devMode: false },
   );
   state = replayed.state;
   head = base.seq + replayEvents.length;
@@ -242,7 +242,6 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
       payload: draft.payload,
       actor: draft.actor ?? localActor,
       clientTimestamp: now(),
-      basedOnSeq: head,
       ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
     };
     const stateBefore = state;
@@ -251,7 +250,7 @@ export function createLocalLog<S>(options: LocalLogOptions<S>): LocalLog<S> {
       genesis,
       { seq: head, state },
       [{ seq, event }],
-      { coveredFromSeq: 0, devMode },
+      { devMode },
     );
     const outcome = folded.outcomes[0];
     if (devMode && outcome.outcome === "applied") {

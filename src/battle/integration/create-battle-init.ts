@@ -122,9 +122,9 @@ export interface CreateBattleInitInput {
    * `corpus_opponent_deck_constructed`). When omitted,
    * {@link createBattleInit} emits the events inline at construction time. The
    * battle-fold provider passes a callback that captures the emit thunk and
-   * fires it only once the deterministic init is committed to the log, so the
-   * log records exactly one opponent deck per battle rather than one per client
-   * that speculatively computed an init.
+   * fires it only once the deterministic init is committed to the log as an
+   * applied event, so the log records exactly one opponent deck per battle:
+   * none for a bounced BEGIN_BATTLE or for a fold replayed when a game opens.
    */
   deferOpponentLog?: (emit: () => void) => void;
 }
@@ -244,8 +244,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
   const poolSeed = deriveEnemyPoolSeed(seed);
 
   // Build the production opponent deck. Its reconstruction log is captured
-  // so it fires with the rest of the opponent reconstruction logs, deferred to
-  // transaction-commit in multiplayer.
+  // so it fires with the rest of the opponent reconstruction logs.
   let emitTideDeckLog: (() => void) | null = null;
   const tideBuild =
     input.tides4Decks === undefined ||
@@ -386,9 +385,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
     });
     emitTideDeckLog?.();
   };
-  // Defer the reconstruction logs to the caller when it wants to gate logging on
-  // the committed init (multiplayer ensure path); otherwise emit inline so
-  // single-call sites and tests still record the events.
+  // Defer the reconstruction logs to the caller when it gates logging on the
+  // committed init; otherwise emit inline so single-call sites and tests still
+  // record the events.
   if (input.deferOpponentLog) {
     input.deferOpponentLog(emitOpponentLogs);
   } else {

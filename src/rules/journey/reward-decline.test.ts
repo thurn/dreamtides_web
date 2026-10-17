@@ -17,10 +17,9 @@ const HELD = dreamsign("ordinary-held");
 const INCOMING = dreamsign("ordinary-incoming");
 const POOL = dreamsign("ordinary-pool").id;
 const ACTOR = testEventActor("ordinary-reward-owner");
-const PARTNER = testEventActor("ordinary-reward-partner");
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
 const registry = createJourneyModifierRegistry([]);
-const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, intervening: [], timestamp: TIMESTAMP };
+const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, timestamp: TIMESTAMP };
 const runtime = (): RewardSiteRuntime => ({ kind: "reward", accepted: false,
   reward: { rewardType: "dreamsign", dreamsign: INCOMING }, remainingDreamsignPoolIds: [POOL] });
 const pending = (): FoldState => {
@@ -30,7 +29,7 @@ const pending = (): FoldState => {
   return state;
 };
 const event = (type: GameEvent["type"] = "COMPLETE_SITE", payload: Record<string, unknown> = { siteId: SITE_ID }): GameEvent =>
-  ({ type, payload, actor: ACTOR, basedOnSeq: 0, clientTimestamp: TIMESTAMP });
+  ({ type, payload, actor: ACTOR, clientTimestamp: TIMESTAMP });
 const apply = (state: FoldState, e = event()) => reduceGameEvent(state, e, context, registry);
 const config = (state: FoldState): EngineConfig<FoldState> => ({ ...GAME_ENGINE_CONFIG,
   genesisState: () => state, reducer: (before, e, ctx) => reduceGameEvent(before, e, ctx, registry) });
@@ -154,17 +153,13 @@ describe("ordinary inline Dreamsign Reward decline", () => {
     expect(visited(before)).toBe(false);
   });
 
-  it("allows only one stale concurrent completion and preserves the foreign CAS guard", () => {
+  it("applies one completion and bounces a duplicate completion", () => {
     const before = pending(), cfg = config(before), start = genesis(before);
-    const events = [{ seq: 1, event: event() }, { seq: 2, event: { ...event(), actor: PARTNER } }];
+    const events = [{ seq: 1, event: event() }, { seq: 2, event: event() }];
     const result = foldEvents(cfg, start, { seq: 0, state: before }, events);
     expect(result.outcomes.map(outcome => outcome.outcome)).toEqual(["applied", "bounced"]);
-    expect(result.outcomes[1].bounceReason).toBe("partner_conflict");
+    expect(result.outcomes[1].bounceReason).toBe("invalid_action");
     expect(visited(result.state)).toBe(true);
     expect(holdings(result.state)).toEqual(holdings(before));
-    const conflict = reduceGameEvent(before, event(), { ...context,
-      intervening: [{ seq: 1, actor: PARTNER, type: "COMPLETE_SITE" }] }, registry);
-    expect(conflict.bounceReason).toBe("partner_conflict");
-    expect(conflict.state).toBe(before);
   });
 });

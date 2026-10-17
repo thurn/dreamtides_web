@@ -88,12 +88,12 @@ describe("compound first-card purchase, replenishment and original-application b
     expect(failed.outcomes[0]).toMatchObject({ outcome: "bounced", bounceReason: "fold_error" });
     expect(failed.outcomes[0].logRecords).toBeUndefined();
     registerSiteContentProvider(provider);
-    const retry = { ...request, basedOnSeq: 1 };
+    const retry = request;
     const accepted = fold(failed.state, 1, [{ seq: 2, event: retry }]);
     expect(accepted.outcomes[0].outcome).toBe("applied");
     const loaded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(accepted.state));
     expect(loaded).toEqual(accepted.state);
-    const follow = [{ seq: 3, event: { ...request, basedOnSeq: 2 } }, { seq: 4, event: { ...event("BUY_SHOP_SLOT", purchase(loaded)), basedOnSeq: 3 } }];
+    const follow = [{ seq: 3, event: request }, { seq: 4, event: event("BUY_SHOP_SLOT", purchase(loaded)) }];
     const resumed = fold(loaded, 2, follow);
     expect(resumed.outcomes.map(({ outcome }) => outcome)).toEqual(["bounced", "applied"]);
     expect(resumed.outcomes[0].logRecords).toBeUndefined();

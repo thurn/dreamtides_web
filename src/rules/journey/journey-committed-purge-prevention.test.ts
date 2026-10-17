@@ -142,15 +142,12 @@ describe("committed Four-Suit purge protection", () => {
       expect(chosen.outcome).toBe("applied"); expect(chosen.state.journey.deck[0].transfiguration).toBe("Empowered");
     }
   });
-  it("rejects malformed/stale/partner intents without changing the committed paid state", () => {
+  it("rejects malformed and stale intents without changing the committed paid state", () => {
     const drawn = draw();
     for (const payload of [{}, { ...settlePayload, siteId: "missing" }, { ...settlePayload, shuffleCommitment: "wrong" },
       { ...settlePayload, shuffleCommitment: null }, { ...settlePayload, siteId: 12 }]) {
       const out = apply(drawn, "SETTLE_FOUR_SUIT_REPRISE", payload);
       expect(out.state).toBe(drawn); expect(out.logRecords).toBeUndefined();
-    }
-    for (const context of [ctx({ intervening: "unknown" }), ctx({ intervening: [{ seq: 1, actor: testEventActor("partner"), type: "REMOVE_DREAMSIGN" }] })]) {
-      expect(apply(drawn, "SETTLE_FOUR_SUIT_REPRISE", settlePayload, context).state).toBe(drawn);
     }
     const done = settled(drawn);
     const retry = apply(done, "SETTLE_FOUR_SUIT_REPRISE", settlePayload);

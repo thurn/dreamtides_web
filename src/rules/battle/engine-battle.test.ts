@@ -115,12 +115,11 @@ const deckOf = (card: EngineCardDefinition, count = 10) =>
 let seq = 0;
 
 
-function ctx(intervening: EventContext["intervening"] = []): EventContext {
+function ctx(): EventContext {
   return {
     contentConfig: TEST_CONTENT_CONFIG,
     seq,
     rng: eventRng(GENESIS.seed as never, seq),
-    intervening,
     timestamp: "1970-01-01T00:00:00.000Z",
   };
 }
@@ -130,7 +129,7 @@ function reduce(
   state: FoldState,
   type: string,
   payload: Record<string, unknown>,
-  options: { actor?: string; intervening?: EventContext["intervening"] } = {},
+  options: { actor?: string } = {},
 ): ReduceResult {
   seq += 1;
   const event: GameEvent = {
@@ -138,9 +137,8 @@ function reduce(
     payload,
     actor: testEventActor(options.actor ?? "p1"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
-    basedOnSeq: seq - 1,
   };
-  return reduceGameEvent(state, event, ctx(options.intervening));
+  return reduceGameEvent(state, event, ctx());
 }
 
 
@@ -198,7 +196,7 @@ function promptId(state: FoldState, engine: Engine = FIXTURE_ENGINE) {
 function answer(
   state: FoldState,
   value: unknown,
-  options: { side?: string; actor?: string; intervening?: EventContext["intervening"]; id?: PromptId } = {},
+  options: { side?: string; actor?: string; id?: PromptId } = {},
 ): ReduceResult {
   return reduce(
     state,

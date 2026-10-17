@@ -128,11 +128,9 @@ describe("acquired Nightmare physical-entry contracts", () => {
     expect(result.logRecords?.filter((row) => row.fields.dreamsignId === HERBS)).toHaveLength(0);
   });
 
-  it("rejects stale and conflicting acquisitions and replays exact physical identities", () => {
+  it("rejects stale acquisitions and replays exact physical identities", () => {
     const before = initial(), modifiers = registry();
-    for (const [payload, context] of [[{ dreamsignId: HERBS, purgeIndex: 999 }, {}], [{ dreamsignId: HERBS }, { intervening: "unknown" }]] as const) {
-      const out = apply(before, "ADD_DREAMSIGN", payload, context); expect(out.state).toBe(before); expect(out.logRecords).toBeUndefined();
-    }
+    const out = apply(before, "ADD_DREAMSIGN", { dreamsignId: HERBS, purgeIndex: 999 }); expect(out.state).toBe(before); expect(out.logRecords).toBeUndefined();
     const engine: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => before,
       reducer: (state, event, context) => reduceGameEvent(state, event, context, modifiers) };
     const genesis = { ...GENESIS, seed: before.journey.seed };

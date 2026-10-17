@@ -153,13 +153,6 @@ describe("earned two-kind battle permissions through public engine/fold", () => 
     expect(log.state().journey.deck).toHaveLength(6); expect(log.state().journey.screen.type).toBe("atlas");
     expect(foldEvents(config, GENESIS, { seq: 1, state: initial }, [...log.events()].filter(({ seq }) => seq > 1)).state).toEqual(log.state());
   });
-  it("rejects concurrent source choices without consuming the permission", () => {
-    const s = battle([SLIME]), payload = choicePayload(s.journey, ["entry-1"]);
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: event("END_BATTLE", {}, "partner").actor, type: "ADD_DREAMSIGN" as const }]]) {
-      const out = apply(s, "RESOLVE_JOURNEY_TRANSFIGURATION", payload, ctx({ intervening }));
-      expect(out.state).toBe(s); expect(out.logRecords).toBeUndefined();
-    }
-  });
   it("rejects malformed saved two-kind purposes and live battle slices, preserving legacy Slug source syntax", () => {
     const s = battle([SLIME, SLUG]), screen = s.journey.screen;
     if (screen.type !== "journeyTransfiguration") throw new Error("missing window");
@@ -184,7 +177,7 @@ describe("earned choices suspend unrelated same-actor gameplay", () => {
     const pending = battle(held);
     const saved = JSON.parse(JSON.stringify(pending)) as FoldState;
     for (const intent of intents()) {
-      const out = apply(pending, intent.type, intent.payload, ctx({ intervening: [] }));
+      const out = apply(pending, intent.type, intent.payload, ctx());
       expect.soft(out.outcome, intent.type).toBe("bounced");
       expect.soft(out.state, intent.type).toBe(pending);
       expect.soft(out.state, intent.type).toEqual(saved);

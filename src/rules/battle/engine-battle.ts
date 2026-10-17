@@ -521,9 +521,8 @@ function foldRest<T>(
  * fold's slice: the fold is the truth, and a replay that disagrees with it
  * describes nothing.
  *
- * It folds each intent as the reducer does. The root CAS policy bounces
- * nothing here that the adapter does not, except an intent based before a
- * partner's event, which the final check catches.
+ * It folds each intent as the reducer does; the final check catches any
+ * intent the root reducer bounced that the adapter would have applied.
  */
 export function replayEngineBattle<T>(
   engine: Engine,

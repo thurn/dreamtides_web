@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { setup, apply, intent, clear, TOAD, ACORN, MASK, RAT, DOLL, sign, registry } from "./journey-subtype.fixtures";
 import { makeEntry, makeSite, SITE_ID, stateWithSites } from "./sites-fixtures";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testCardId, testEventActor, testExplorationActionId } from "../../types/test-identities";
+import { testCardId, testExplorationActionId } from "../../types/test-identities";
 import { registerSiteContentProvider } from "./sites";
 import { testSiteContentProvider } from "./test-content-providers";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
@@ -87,14 +87,13 @@ describe("journey subtype acquisition", () => {
     const copyPending = compound([1], [DOLL, TOAD]);
     expect(apply(copyPending, "REMOVE_DREAMSIGN", { dreamsignId: ACORN }).state).toBe(copyPending);
   });
-  it("rejects stale, repeated and concurrent confirmations without draws or partial writes", () => {
+  it("rejects stale and repeated confirmations without draws or partial writes", () => {
     const pending = apply(setup(), "ADD_DREAMSIGN", { dreamsignId: TOAD }).state, payload = intent(pending), rng = vi.fn(() => 0);
     for (const patch of [{ permissionSeq: 999 }, { heldIndex: 999 }, { choiceIndex: 1 }, { sourceDreamsignId: MASK }, { chosenSubtype: "unsupported" }]) expect(apply(pending, "RESOLVE_JOURNEY_SUBTYPE", { ...payload, ...patch }, { rng }).state).toBe(pending);
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: testEventActor("other"), type: "ADD_CARD" as const }]]) expect(apply(pending, "RESOLVE_JOURNEY_SUBTYPE", payload, { intervening, rng }).state).toBe(pending);
     expect(apply(pending, "ADD_CARD", { cardId: testCardId("blocked") }, { rng }).state).toBe(pending);
     const done = apply(pending, "RESOLVE_JOURNEY_SUBTYPE", payload).state; expect(apply(done, "RESOLVE_JOURNEY_SUBTYPE", payload, { rng }).state).toBe(done); expect(rng).not.toHaveBeenCalled();
   });
-  it("resolves with a genuine suspended engine prompt after safe source loss and CAS", () => {
+  it("resolves with a genuine suspended engine prompt after safe source loss", () => {
     const battle = beginBattle([]); setup();
     const reduce = (state: typeof battle, type: Parameters<typeof event>[0], payload: Record<string, unknown>) => reduceGameEvent(state, event(type, payload), ctx(), registry);
     const suspended = reduce(battle, "ADD_DREAMSIGN", { dreamsignId: TOAD }); expect(suspended.outcome).toBe("applied");

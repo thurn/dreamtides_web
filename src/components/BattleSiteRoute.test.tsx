@@ -47,7 +47,6 @@ const mockActions = { beginBattle: beginBattleSpy } as unknown as GameActions;
 
 vi.mock("../session/hooks", () => ({
   useGameState: () => mockGameState,
-  useConfirmedGameState: () => mockGameState,
   useActions: () => mockActions,
 }));
 

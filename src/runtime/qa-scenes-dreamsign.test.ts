@@ -33,8 +33,8 @@ for (const side of ["player", "enemy"] as const) it(`owns the final ${side} Drea
     expect(battle.init.avatarSummary).toBeNull(); expect(battle.init.opponentAbilityActive).toBe(false);
     expect(journey.dreamsigns.map(sign => sign.id)).toEqual(side === "player" ? [id] : []);
     expect(battle.init.enemyDescriptor.dreamsigns.map(sign => sign.id)).toEqual(side === "enemy" ? [id] : []);
-    const load: CommittedEvent = { seq: 7, event: { type: "LOAD_STATE", payload: { snapshot: journey, battle }, actor: testEventActor("dreamsign-init"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: 6 } };
-    const applied = reduceGameEvent(initialFoldState(journey.seed, TEST_CONTENT_CONFIG), load.event, { contentConfig: TEST_CONTENT_CONFIG, seq: 7, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+    const load: CommittedEvent = { seq: 7, event: { type: "LOAD_STATE", payload: { snapshot: journey, battle }, actor: testEventActor("dreamsign-init"), clientTimestamp: new Date(0).toISOString()} };
+    const applied = reduceGameEvent(initialFoldState(journey.seed, TEST_CONTENT_CONFIG), load.event, { contentConfig: TEST_CONTENT_CONFIG, seq: 7, rng: () => 0, timestamp: new Date(0).toISOString() });
     expect(applied.outcome).toBe("applied"); const loaded = journeyBattleOf(applied.state.battle);
     if (loaded === null) throw new Error("Synthetic LOAD_STATE missing"); expect(loaded.init).toBe(battle.init);
     const history = new EngineProbeHistory(loaded.init, [load]);

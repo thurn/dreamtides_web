@@ -143,18 +143,14 @@ describe("earned optional pre-init purges", () => {
     log.append({ type: "RESOLVE_JOURNEY_PURGE", payload: payload(p, [p.journey.deck[0].entryId]) });
     expect(log.state().battle).not.toBeNull(); expect(log.state().journey.essence).toBe(57);
   });
-  it("accepts both actors through clear and self-chain windows and rejects the competing resolution", () => {
+  it("applies the resolution and bounces a repeated resolution", () => {
     provider(); const p = pending();
-    for (const actor of ["alice", "bob"]) for (const intervening of [[], [{ seq: 10, actor: testEventActor(actor), type: "ADD_DREAMSIGN" as const }]]) {
-      const result = reduceGameEvent(p, event("RESOLVE_JOURNEY_PURGE", payload(p), actor), ctx({ seq: 11, intervening }), registry());
-      expect(result.outcome).toBe("applied"); expect(result.state.battle).not.toBeNull();
-      const competitor = actor === "alice" ? "bob" : "alice";
-      expect(reduceGameEvent(result.state, event("RESOLVE_JOURNEY_PURGE", payload(p), competitor), ctx({ seq: 12, intervening: [{ seq: 11, actor: testEventActor(actor), type: "RESOLVE_JOURNEY_PURGE" }] }), registry()).state).toBe(result.state);
-    }
+    const result = reduceGameEvent(p, event("RESOLVE_JOURNEY_PURGE", payload(p), "alice"), ctx({ seq: 11 }), registry());
+    expect(result.outcome).toBe("applied"); expect(result.state.battle).not.toBeNull();
+    expect(reduceGameEvent(result.state, event("RESOLVE_JOURNEY_PURGE", payload(p), "alice"), ctx({ seq: 12 }), registry()).state).toBe(result.state);
   });
-  it("preserves strict actor CAS and replay exactly once", () => {
+  it("replays exactly once", () => {
     provider(); const p = pending(), cfg = config(p, registry());
-    for (const actor of ["alice", "bob"]) for (const intervening of ["unknown" as const, [{ seq: 10, actor: testEventActor(actor === "alice" ? "bob" : "alice"), type: "ADD_DREAMSIGN" as const }]]) expect(reduceGameEvent(p, event("RESOLVE_JOURNEY_PURGE", payload(p), actor), ctx({ seq: 11, intervening }), registry()).state).toBe(p);
     const log = createLocalLog({ config: cfg, genesis: { ...GENESIS, seed: p.journey.seed }, localActor: testEventActor("alice"), base: { seq: 10, state: p, intentKeys: [] } });
     log.append({ type: "RESOLVE_JOURNEY_PURGE", payload: payload(p) }); log.append({ type: "RESOLVE_JOURNEY_PURGE", payload: payload(p) });
     const replay = foldEvents(cfg, { ...GENESIS, seed: p.journey.seed }, { seq: 10, state: p }, [...log.events()]);

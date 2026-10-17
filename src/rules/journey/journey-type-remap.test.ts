@@ -110,8 +110,6 @@ describe("earned run type remap", () => {
       const result = apply(state, "RESOLVE_TYPE_REMAP", { ...payload, ...patch }); expect(result.outcome).toBe("bounced"); expect(result.state).toBe(state);
     }
     expect(apply(state, "RESOLVE_TYPE_REMAP", {}).state).toBe(state);
-    expect(apply(state, "RESOLVE_TYPE_REMAP", payload, { intervening: "unknown" }).state).toBe(state);
-    expect(apply(state, "RESOLVE_TYPE_REMAP", payload, { intervening: [{ seq: 12, type: "ADD_CARD", actor: testEventActor("other") }] }).state).toBe(state);
     for (const [type, data] of [["ADD_CARD", { cardId: cards[0].id }], ["ADD_DREAMSIGN", { dreamsignId: MASK }], ["BEGIN_BATTLE", {}], ["BATTLE_CANCEL", { side: "player" }], ["BATTLE_DEBUG", {}]] as const) expect(apply(state, type, data).state).toBe(state);
     const done = accepted(state, "RESOLVE_TYPE_REMAP", payload);
     expect(apply(done, "RESOLVE_TYPE_REMAP", payload).state).toBe(done);
@@ -252,25 +250,16 @@ describe("earned run type remap", () => {
     expect(complete.battle).toBe(restored.battle); expect(pendingEnginePrompt(complete.battle, world.engine)).toEqual(prompt);
   });
 
-  it("retains removal validation and ordinary CAS while a C12 choice suspends an engine prompt", () => {
+  it("retains removal validation while a C12 choice suspends an engine prompt", () => {
     const { world, prompt, restored } = suspendedRemap([OTHER]);
     for (const payload of [{}, { dreamsignId: null }, { dreamsignId: 1 }, { dreamsignId: "invalid" }, { dreamsignId: DOLL }]) {
       const result = apply(restored, "REMOVE_DREAMSIGN", payload);
       expect(result.outcome).toBe("bounced"); expect(result.state).toBe(restored);
     }
-    for (const [context, reason] of [
-      [{ intervening: "unknown" }, "unknown_conflict"],
-      [{ intervening: [{ seq: 12, type: "ADD_CARD", actor: testEventActor("bob") }] }, "partner_conflict"],
-    ] satisfies [Parameters<typeof apply>[3], string][]) {
-      const result = apply(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK }, context);
-      expect(result.bounceReason).toBe(reason); expect(result.state).toBe(restored);
-    }
-    for (const [actor, type] of [["alice", "ADD_CARD"], ["bob", "SET_CARD_SOURCE_DEBUG"]] as const) {
-      const result = apply(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK }, { intervening: [{ seq: 12, type, actor: testEventActor(actor) }] });
-      expect(result.outcome).toBe("applied"); expect(result.state.journey.screen).toEqual(restored.journey.screen);
-      expect(result.state.battle).toBe(restored.battle); expect(pendingEnginePrompt(result.state.battle, world.engine)).toEqual(prompt);
-    }
-    const removed = accepted(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK });
+    const result = apply(restored, "REMOVE_DREAMSIGN", { dreamsignId: MASK });
+    expect(result.outcome).toBe("applied"); expect(result.state.journey.screen).toEqual(restored.journey.screen);
+    expect(result.state.battle).toBe(restored.battle); expect(pendingEnginePrompt(result.state.battle, world.engine)).toEqual(prompt);
+    const removed = result.state;
     const stale = apply(removed, "RESOLVE_TYPE_REMAP", { ...choicePayload(restored), permissionSeq: choicePayload(restored).permissionSeq + 1 });
     expect(stale.outcome).toBe("bounced"); expect(stale.state).toBe(removed);
     for (const [type, payload] of [["ADD_CARD", { cardId: cards[0].id }], ["BATTLE_ACTION", { side: "player", action: { kind: "pass" } }]] as const) {

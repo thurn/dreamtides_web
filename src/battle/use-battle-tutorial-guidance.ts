@@ -1,6 +1,6 @@
 import { currentTutorialPresentation } from "../rules/battle/tutorial-checkpoints";
 import { useCallback, useEffect, useMemo } from "react";
-import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
+import { useActions, useClientId, useGameState } from "../session/hooks";
 import { logEvent } from "../logging";
 import {
   isAutomaticOpponentPlayGuidance,
@@ -16,7 +16,7 @@ export interface BattleTutorialGuidanceController {
 
 /** Shared timer/manual bridge for one event-log-owned Mira battle tutorial. */
 export function useBattleTutorialGuidance(presentationVisible = true): BattleTutorialGuidanceController {
-  const state = useConfirmedGameState();
+  const state = useGameState();
   const actions = useActions();
   const clientId = useClientId();
   const battle = useMemo(() => battleGuidanceOf(state.battle), [state.battle]);

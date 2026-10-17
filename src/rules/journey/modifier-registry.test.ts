@@ -196,9 +196,8 @@ describe("journey modifier registry", () => {
       payload: { delta: 5 },
       actor: ACTOR,
       clientTimestamp: TIMESTAMP,
-      basedOnSeq: 0,
     };
-    const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, intervening: [], timestamp: TIMESTAMP };
+    const context = { seq: 1, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, timestamp: TIMESTAMP };
     const before = initial();
     const expected = reduceGameEvent(before, event, context);
     const actual = reduceGameEvent(before, event, context, registry);
@@ -227,7 +226,7 @@ describe("journey modifier registry", () => {
     expect(records[1].logRecords).toBeUndefined();
   });
 
-  it("bounces invalid and conflicting intents without applying modifiers or diagnostics", () => {
+  it("bounces invalid intents without applying modifiers or diagnostics", () => {
     const callback = vi.fn(modifier(FIRST, 3).afterJourneyEvent);
     const registry = createJourneyModifierRegistry([{ dreamsignId: FIRST, afterJourneyEvent: callback }]);
     const log = local(registry);
@@ -237,14 +236,6 @@ describe("journey modifier registry", () => {
     expect(callback).not.toHaveBeenCalled();
     expect(records[0].outcome).toBe("bounced");
     expect(records[0].logRecords).toBeUndefined();
-    const outcome = reduceGameEvent(initial(), {
-      type: "ADJUST_ESSENCE", payload: { delta: 5 }, actor: ACTOR, clientTimestamp: TIMESTAMP, basedOnSeq: 0,
-    }, {
-      seq: 2, contentConfig: TEST_CONTENT_CONFIG, rng: () => 0, timestamp: TIMESTAMP,
-      intervening: [{ seq: 1, actor: testEventActor("other-actor"), type: "ADJUST_ESSENCE" }],
-    }, registry);
-    expect(outcome.outcome).toBe("bounced");
-    expect(callback).not.toHaveBeenCalled();
   });
 
   it("contains a mid-hook error atomically and discards earlier application diagnostics", () => {

@@ -181,7 +181,6 @@ export function decodeEvent(raw: string): GameEvent {
     Array.isArray(payload) ||
     typeof event.actor !== "string" ||
     typeof event.clientTimestamp !== "string" ||
-    typeof event.basedOnSeq !== "number" ||
     (event.intentKey !== undefined && typeof event.intentKey !== "string")
   ) {
     throw new Error("event has an invalid shape");
@@ -191,7 +190,6 @@ export function decodeEvent(raw: string): GameEvent {
     payload: payload as Record<string, unknown>,
     actor: parseEventActor(event.actor),
     clientTimestamp: event.clientTimestamp,
-    basedOnSeq: event.basedOnSeq,
     ...(event.intentKey === undefined
       ? {}
       : { intentKey: parseIntentKey(event.intentKey) }),

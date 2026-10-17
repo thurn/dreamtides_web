@@ -30,7 +30,6 @@ const CTX: EventContext = {
   contentConfig: TEST_CONTENT_CONFIG,
   seq: 1,
   rng: () => 0,
-  intervening: [],
   timestamp: "1970-01-01T00:00:00.000Z",
 };
 
@@ -40,7 +39,6 @@ function event(type: GameEvent["type"]): GameEvent {
     payload: {},
     actor: testEventActor("alice"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
-    basedOnSeq: 0,
   };
 }
 

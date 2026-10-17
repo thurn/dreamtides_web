@@ -73,17 +73,16 @@ import {
  * deterministically from folded journey state: `createBattleInit` derives all of
  * its randomness from a `BattleRng` stream keyed by
  * `deriveBattleSeed(journey.seed:battleEntryKey)`. That seed comes straight
- * from the folded journey, so every client builds a byte-identical battle
- * from the same journey seed and site.
+ * from the folded journey, so every fold of the log, now or on a later open,
+ * builds a byte-identical battle from the same journey seed and site.
  * Until a provider is registered, `BEGIN_BATTLE` bounces (a recorded no-op,
  * never a throw).
  *
  * DETERMINISM INVARIANT: like `SiteContentProvider`, this provider must be
- * registered IDENTICALLY on every client before `BEGIN_BATTLE`, which the app
- * does at bootstrap via `registerGameProviders`. If one client has a provider
- * and another does not, one client APPLIES the battle while the other BOUNCES,
- * diverging their folds. Registration is a global fact of the deployed build,
- * not per-client state.
+ * registered before any `BEGIN_BATTLE` folds, which the app does at bootstrap
+ * via `registerGameProviders`. A fold without it BOUNCES the battle that a
+ * fold with it APPLIES, so replaying the same log would diverge. Registration
+ * is a global fact of the build.
  */
 export interface BattleInitProvider {
   /**

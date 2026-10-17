@@ -172,7 +172,7 @@ describe("journeyDeckEntry public gain contracts", () => {
     log.append({ type: "ADD_CARD", payload: { cardId: WARRIOR } });  expect(log.state()).toBe(before);
     fail = false; log.append({ type: "ADD_CARD", payload: { cardId: WARRIOR } }); expect(log.state().journey.deck).toHaveLength(1);
     expect(log.state().journey.deck[0].sparkBonus).toBe(1);
-    const restored = foldEvents(config, GENESIS, { seq: 1, state: before }, [...log.events()].filter(({ seq }) => seq > 1), { coveredFromSeq: 0 }); expect(restored.state).toEqual(log.state());
+    const restored = foldEvents(config, GENESIS, { seq: 1, state: before }, [...log.events()].filter(({ seq }) => seq > 1)); expect(restored.state).toEqual(log.state());
   });
 });
 

@@ -152,20 +152,14 @@ describe("journeyPurge public folded contracts", () => {
       expect(replaced.journey.screen.type).toBe("site"); expect(replaced.journey.siteRuntime[SITE_ID]).toMatchObject({ kind: "reward" });
     }
   });
-  it("rejects wrong source/slot/ordinal/site, unrelated navigation and stale partner CAS", () => {
+  it("rejects wrong source/slot/ordinal/site and unrelated navigation", () => {
     const opened = accepted(state("Essence", [SICKLE]), "OPEN_SITE", open), payload = purgePayload(opened, ["one", "two"]);
     for (const patch of [{ dreamsignId: FRUIT }, { heldIndex: 1 }, { choiceIndex: 1 }, { siteId: "wrong" }]) {
       expect(apply(opened, "RESOLVE_JOURNEY_PURGE", { ...payload, ...patch }).state).toBe(opened);
     }
     expect(apply(opened, "COMPLETE_SITE", { siteId: SITE_ID }).state).toBe(opened);
-    const conflict = reduceGameEvent(opened, event("RESOLVE_JOURNEY_PURGE", payload), ctx({ intervening: "unknown" }), registry);
-    expect(conflict.outcome).toBe("bounced"); expect(conflict.state).toBe(opened);
-    const partner = reduceGameEvent(opened, event("RESOLVE_JOURNEY_PURGE", payload), ctx({ intervening: [
-      { seq: 1, actor: testEventActor("actual-partner"), type: "ADD_DREAMSIGN" },
-    ] }), registry);
-    expect(partner.outcome).toBe("bounced"); expect(partner.state).toBe(opened);
   });
-  it("bounces CAS-exempt Sickle preparation on foreign nodes, wrong routes and a real pending battle", () => {
+  it("bounces prompt-gate-exempt Sickle preparation on foreign nodes, wrong routes and a real pending battle", () => {
     const foreign = state("Essence", [SICKLE]); foreign.journey.currentDreamscape = null; foreign.journey.screen = { type: "atlas" };
     expect(apply(foreign, "OPEN_SITE", open).state).toBe(foreign);
     const elsewhere = state("Essence", [SICKLE]);

@@ -199,11 +199,6 @@ describe("starting energy through public reward, engine and journey boundaries",
     expect(started.journey.battleModifiers).toEqual(modifiers);
     const terminal = victory(started), before = structuredClone(terminal);
     expect(terminal.journey.battleModifiers).toEqual(modifiers);
-    for (const intervening of ["unknown" as const, [{ seq: 1, actor: event("END_BATTLE", {}, "partner").actor, type: "END_BATTLE" as const }]]) {
-      const refused = apply(terminal, "END_BATTLE", {}, ctx({ intervening }));
-      expect(refused.state).toBe(terminal);
-      expect(refused.logRecords).toBeUndefined();
-    }
     registerBattleCompletionProvider({ advanceAtlas: () => null });
     expect(apply(terminal, "END_BATTLE").state).toBe(terminal);
     expect(terminal).toEqual(before);

@@ -17,7 +17,7 @@ import { CumulusRoot } from "./cumulus/CumulusRoot";
 import type { JourneyContent } from "./data/journey-content";
 import { loadJourneyContent } from "./data/journey-content";
 import { useLocalGame } from "./session/use-local-game";
-import { useConfirmedHead } from "./session/hooks";
+import { useHead } from "./session/hooks";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import type { CardData } from "./types/cards";
 import type { JourneyMutations } from "./state/journey-context";
@@ -64,7 +64,7 @@ vi.mock("./session/hooks", () => ({
   LocalGameProvider: ({ children }: { children: ReactNode }) => (
     <div data-local-game-provider>{children}</div>
   ),
-  useConfirmedHead: vi.fn(() => 0),
+  useHead: vi.fn(() => 0),
 }));
 
 vi.mock("./session/providers/register-game-providers", () => ({
@@ -294,7 +294,7 @@ async function flushAppEffects(): Promise<void> {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.mocked(useConfirmedHead).mockReturnValue(0);
+  vi.mocked(useHead).mockReturnValue(0);
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
   vi.mocked(loadJourneyContent).mockReturnValue(makeJourneyContent());
@@ -405,7 +405,7 @@ describe("JourneyApp", () => {
       container.querySelector('[data-application-state="loading"]'),
     ).not.toBeNull();
 
-    vi.mocked(useConfirmedHead).mockReturnValue(1);
+    vi.mocked(useHead).mockReturnValue(1);
     setJourneyState(
       starterCallerState({ screen: { type: "journeyFailed" } }),
       mutations,
@@ -416,7 +416,7 @@ describe("JourneyApp", () => {
     ).not.toBeNull();
 
     // The confirmed reset retains the scene query and returns to Avatar entry.
-    vi.mocked(useConfirmedHead).mockReturnValue(2);
+    vi.mocked(useHead).mockReturnValue(2);
     setJourneyState(makeState(), mutations);
     rerender();
     expect(
@@ -430,7 +430,7 @@ describe("JourneyApp", () => {
 
   it("renders a saved reset journey with the retained QA scene on a fresh mount", () => {
     const mutations = makeMutations();
-    vi.mocked(useConfirmedHead).mockReturnValue(2);
+    vi.mocked(useHead).mockReturnValue(2);
     setJourneyState(makeState(), mutations);
     const container = mountJourneyApp({
       gotoScene: parseQaSceneId("journeyfailed"),
