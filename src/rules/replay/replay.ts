@@ -4,7 +4,7 @@ import { assertJourneySubtypeCheckpoint } from "../journey/journey-subtype";
 import { assertJourneyTypeRemapCheckpoint } from "../journey/journey-type-remap";
 import { assertShopReplenishmentCheckpoint } from "../journey/journey-shop";
 import { assertCommittedPurgePreventionCheckpoint } from "../journey/journey-committed-purge-state";
-import { journeyModifierRegistry } from "../journey/modifier-registry";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../journey/modifier-registry";
 import { assertBeforeBattlePurgeCheckpoint } from "../journey/journey-before-battle-purge";
 import { assertScoreGroupCheckpoint } from "../battle/score-group-state";
 import { assertFirstEventHistoryCheckpoint } from "../battle/first-event-last-turn-state";
@@ -12,12 +12,10 @@ import { assertLastTurnScoringCheckpoint } from "../battle/last-turn-scoring-sta
 // The replay harness: the canonical game EngineConfig plus a one-call log
 // replayer used by the fixture regression net and by src/session/.
 //
-// `GAME_ENGINE_CONFIG` is THE single definition of the real game's
-// `EngineConfig<FoldState>`: the root reducer, the genesis-state builder, a
-// byte-stable JSON encode/decode for the compaction snapshot, and the canonical
-// state hash. Every consumer that needs to fold the game's event log — the
-// eventlog engine, the session layer, the replay fixtures — imports this one
-// object so there is exactly one wiring of reducer + genesis + codec + hash.
+// `createGameEngineConfig` defines the game's reducer + genesis + codec + hash
+// wiring. Each config captures one fixed journey registry for both event intake
+// and checkpoint decoding. `GAME_ENGINE_CONFIG` is the production instance;
+// the eventlog engine, session layer and replay fixtures share that instance.
 //
 // This module lives under src/rules/ and obeys its lint rails: no React,
 // no live clock/rng. It is pure — replaying the same `{ genesis, events }`
@@ -47,32 +45,41 @@ import { assertJourneyOpeningCheckpoint } from "../journey/journey-battle-init";
  *   `JSON.parse` round-trips it byte-exactly.
  * - `hash` — the canonical, key-order-independent SHA-256 digest.
  *
- * This is the ONE wiring every folder of the game log consumes
- * (`src/session/` included). Do not construct a second ad-hoc config; import
- * this.
+ * Every config binds the same fixed registry to the reducer and all checkpoint
+ * validators that consult journey modifiers. The default captures the immutable
+ * production registry; scoped callers supply their own immutable registry.
  */
-export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
-  reducer: reduceGameEvent,
-  genesisState: genesisFoldState,
-  encode: (state) => JSON.stringify(state),
-  decode: (raw) => {
-    const state: unknown = JSON.parse(raw);
-    assertJourneyTransfigurationCheckpoint(state);
-    assertJourneyLoopCheckpoint(state);
-    assertJourneySubtypeCheckpoint(state, journeyModifierRegistry);
-    assertJourneyTypeRemapCheckpoint(state, journeyModifierRegistry);
-    assertBeforeBattlePurgeCheckpoint(state);
-    assertJourneyDeckSparkCheckpoint(state);
-    assertJourneyOpeningCheckpoint(state, journeyModifierRegistry);
-    assertScoreGroupCheckpoint(state);
-    assertLastTurnScoringCheckpoint(state);
-    assertFirstEventHistoryCheckpoint(state);
-    assertShopReplenishmentCheckpoint(state);
-    assertCommittedPurgePreventionCheckpoint(state, id => journeyModifierRegistry.lookup(id));
-    return state as FoldState;
-  },
-  hash: hashState,
-};
+export function createGameEngineConfig(
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
+): EngineConfig<FoldState> {
+  return {
+    reducer: modifiers === journeyModifierRegistry
+      ? reduceGameEvent
+      : (state, event, context) => reduceGameEvent(state, event, context, modifiers),
+    genesisState: genesisFoldState,
+    encode: (state) => JSON.stringify(state),
+    decode: (raw) => {
+      const state: unknown = JSON.parse(raw);
+      assertJourneyTransfigurationCheckpoint(state);
+      assertJourneyLoopCheckpoint(state);
+      assertJourneySubtypeCheckpoint(state, modifiers);
+      assertJourneyTypeRemapCheckpoint(state, modifiers);
+      assertBeforeBattlePurgeCheckpoint(state);
+      assertJourneyDeckSparkCheckpoint(state);
+      assertJourneyOpeningCheckpoint(state, modifiers);
+      assertScoreGroupCheckpoint(state);
+      assertLastTurnScoringCheckpoint(state);
+      assertFirstEventHistoryCheckpoint(state);
+      assertShopReplenishmentCheckpoint(state);
+      assertCommittedPurgePreventionCheckpoint(state, id => modifiers.lookup(id));
+      return state as FoldState;
+    },
+    hash: hashState,
+  };
+}
+
+/** The canonical production instance shared by game-log consumers. */
+export const GAME_ENGINE_CONFIG = createGameEngineConfig();
 
 /** A committed event with its assigned seq — the shape a game log stores. */
 export interface SeqEvent {

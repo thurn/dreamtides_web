@@ -12,8 +12,8 @@ import { ctx, event, GENESIS } from "./lifecycle-fixtures";
 import { registerDeckContentProvider } from "./deck";
 import { registerSiteContentProvider } from "./sites";
 import { testSiteContentProvider } from "./test-content-providers";
-import { createJourneyModifierRegistry, journeyModifierRegistry as registry, type JourneyModifierDefinition } from "./modifier-registry";
-import { GAME_ENGINE_CONFIG } from "../replay/replay";
+import { createJourneyModifierRegistry, journeyModifierRegistry, type JourneyModifierDefinition } from "./modifier-registry";
+import { createGameEngineConfig, GAME_ENGINE_CONFIG } from "../replay/replay";
 import { createLocalLog, type LocalLogRecord } from "../../eventlog/local-log";
 import { foldEvents } from "../../eventlog/fold";
 import { createGameRepository } from "../../session/game-repository";
@@ -21,21 +21,16 @@ import { createMemoryKeyValueStore } from "../../session/key-value-store";
 import { createLocalGame, openLocalGame } from "../../session/local-game";
 import { createJourneySaveFile, serializeJourneySaveFile, parseJourneySaveFile } from "../../state/journey-save-files";
 import { journeyPurge } from "./journey-purge";
+import { journeyEssence } from "./journey-essence";
 import { gambleStateWith, SITE_ID } from "./gamble/test-fixture";
 
 const SHIELD = testDreamsignId("committed-shield"), FRUIT = testDreamsignId("committed-fruit"), OTHER = testDreamsignId("same-name-other");
-// Explicit synthetic catalog replaces only the registry export for this test module.
-// The real canonical codec body, reducer and local-game storage remain unchanged.
-vi.mock("./modifier-registry", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./modifier-registry")>();
-  const { journeyPurge } = await import("./journey-purge");
-  const { journeyEssence } = await import("./journey-essence");
-  const { testDreamsignId } = await import("../../types/test-identities");
-  return { ...actual, journeyModifierRegistry: actual.createJourneyModifierRegistry([
-    journeyPurge(testDreamsignId("committed-shield"), { kind: "preventPurge" }),
-    journeyEssence(testDreamsignId("committed-fruit"), { kind: "purgedCardEssence", amount: 7 }),
-  ]) };
-});
+// One fixed synthetic registry binds the canonical reducer and checkpoint codec.
+const registry = createJourneyModifierRegistry([
+  journeyPurge(SHIELD, { kind: "preventPurge" }),
+  journeyEssence(FRUIT, { kind: "purgedCardEssence", amount: 7 }),
+]);
+const TEST_ENGINE_CONFIG = createGameEngineConfig(registry);
 const A = parseDeckEntryId("locked-a"), B = parseDeckEntryId("same-printing-b"), C = parseDeckEntryId("different-c");
 const commitment = parseShuffleCommitment("committed-round-1");
 const sign = (id: DreamsignId) => ({ id, name: "same fixture name", effectDescription: "" });
@@ -130,7 +125,7 @@ describe("committed Four-Suit purge protection", () => {
     registerGamble("hearts");
     const protectedResult = settled(draw(fixture("hearts")));
     expect(protectedResult.journey.deck).toHaveLength(3);
-    expect(GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(protectedResult))).toEqual(protectedResult);
+    expect(TEST_ENGINE_CONFIG.decode(TEST_ENGINE_CONFIG.encode(protectedResult))).toEqual(protectedResult);
     const duplicated = settled(draw(fixture("clubs")));
     expect(duplicated.journey.deck).toHaveLength(4);
     expect(runtime(duplicated).rounds[0].purgePreventedBy).toBeUndefined();
@@ -169,11 +164,11 @@ describe("committed Four-Suit purge protection", () => {
     const save = parseJourneySaveFile(serializeJourneySaveFile(createJourneySaveFile("fixture", historical.journey)));
     const loaded = apply(done, "LOAD_STATE", { snapshot: save.journeyState });
     expect(loaded.outcome).toBe("applied"); expect(runtime(loaded.state).rounds).toEqual(runtime(done).rounds);
-    expect(GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(historical))).toEqual(historical);
+    expect(TEST_ENGINE_CONFIG.decode(TEST_ENGINE_CONFIG.encode(historical))).toEqual(historical);
     const legacy = editRound(done, { purgePreventedBy: undefined });
-    const cleanLegacy = JSON.parse(GAME_ENGINE_CONFIG.encode(legacy)) as FoldState;
+    const cleanLegacy = JSON.parse(TEST_ENGINE_CONFIG.encode(legacy)) as FoldState;
     expect(apply(done, "LOAD_STATE", { snapshot: cleanLegacy.journey }).outcome).toBe("applied");
-    expect(GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(cleanLegacy))).toEqual(cleanLegacy);
+    expect(TEST_ENGINE_CONFIG.decode(TEST_ENGINE_CONFIG.encode(cleanLegacy))).toEqual(cleanLegacy);
   });
   it.each([
     { purgePreventedBy: null }, { purgePreventedBy: [] }, { purgePreventedBy: { dreamsignId: "bad", heldIndex: 0 } },
@@ -186,7 +181,7 @@ describe("committed Four-Suit purge protection", () => {
   ])("rejects malformed historical receipt on both actual intake paths: %j", patch => {
     const done = settled(), malformed = editRound(done, patch);
     expect(apply(done, "LOAD_STATE", { snapshot: malformed.journey }).state).toBe(done);
-    expect(() => GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(malformed))).toThrow();
+    expect(() => TEST_ENGINE_CONFIG.decode(TEST_ENGINE_CONFIG.encode(malformed))).toThrow();
   });
   it("rejects malformed committed arrays carrying a present receipt at both intake paths", () => {
     const done = settled(), value = runtime(done);
@@ -194,11 +189,11 @@ describe("committed Four-Suit purge protection", () => {
       { targets: [] }, { committedCards: [{ rank: "invalid", suit: "invalid" }] }]) {
       const malformed = { ...done, journey: { ...done.journey, siteRuntime: { [SITE_ID]: { ...value, ...change } } } };
       expect(apply(done, "LOAD_STATE", { snapshot: malformed.journey }).state).toBe(done);
-      expect(() => GAME_ENGINE_CONFIG.decode(JSON.stringify(malformed))).toThrow();
+      expect(() => TEST_ENGINE_CONFIG.decode(JSON.stringify(malformed))).toThrow();
     }
   });
   it("replays and deduplicates settlement through local-log checkpoint continuation", () => {
-    const initial = fixture(), config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial };
+    const initial = fixture(), config: EngineConfig<FoldState> = { ...TEST_ENGINE_CONFIG, genesisState: () => initial };
     const options = { config, genesis: GENESIS, localActor: testEventActor("player"), now: () => ctx().timestamp, devMode: false };
     const log = createLocalLog(options), records: LocalLogRecord<FoldState>[] = [];
     log.subscribe(record => records.push(record));
@@ -208,12 +203,12 @@ describe("committed Four-Suit purge protection", () => {
     expect(log.append({ type: "SETTLE_FOUR_SUIT_REPRISE", payload: settlePayload, intentKey: key })).toBe(appliedSeq);
     expect(records.flatMap(record => record.logRecords ?? []).filter(record => record.event === "journey_purge_prevented")).toHaveLength(1);
     expect(foldEvents(config, GENESIS, { seq: 0, state: initial }, [...log.events()]).state).toEqual(log.state());
-    const reopened = createLocalLog({ ...options, base: { ...log.checkpoint(), state: GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(log.state())) }, history: [...log.events()] });
+    const reopened = createLocalLog({ ...options, base: { ...log.checkpoint(), state: TEST_ENGINE_CONFIG.decode(TEST_ENGINE_CONFIG.encode(log.state())) }, history: [...log.events()] });
     expect(reopened.append({ type: "SETTLE_FOUR_SUIT_REPRISE", payload: settlePayload, intentKey: key })).toBe(appliedSeq);
     expect(reopened.state()).toEqual(log.state());
   });
   it("reopens real persisted paid and settled states, recovering a malformed checkpoint from preserved events", async () => {
-    const initial = fixture(), config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial };
+    const initial = fixture(), config: EngineConfig<FoldState> = { ...TEST_ENGINE_CONFIG, genesisState: () => initial };
     const store = createMemoryKeyValueStore(), repository = createGameRepository(store), gameId = parseGameId("committed-purge");
     const options = { checkpointInterval: 1, now: () => 0, eventClock: () => ctx().timestamp };
     let game = await createLocalGame(repository, config, { gameId, genesis: GENESIS, localPlayerId: parseClientId("player") }, options);
@@ -239,8 +234,7 @@ describe("committed Four-Suit purge protection", () => {
     });
     const modifiers = createJourneyModifierRegistry([journeyPurge(SHIELD, { kind: "preventPurge" }), { dreamsignId: OBSERVER, afterJourneyEvent: observer }]);
     const initial = fixture("clubs", [SHIELD, OBSERVER]);
-    const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial,
-      reducer: (state, intent, context) => reduceGameEvent(state, intent, context, modifiers) };
+    const config: EngineConfig<FoldState> = { ...createGameEngineConfig(modifiers), genesisState: () => initial };
     const log = createLocalLog({ config, genesis: GENESIS, localActor: testEventActor("player"), devMode: false });
     const records: LocalLogRecord<FoldState>[] = []; log.subscribe(record => records.push(record));
     log.append({ type: "DRAW_FOUR_SUIT_REPRISE", payload: { siteId: SITE_ID, entryId: A } });
@@ -250,6 +244,35 @@ describe("committed Four-Suit purge protection", () => {
     fail = false; log.append({ type: "SETTLE_FOUR_SUIT_REPRISE", payload: settlePayload });
     expect(records[2].outcome).toBe("applied"); expect(log.state().journey.deck).toEqual(paid.journey.deck);
     expect(records[2].logRecords?.map(record => record.event)).toEqual(["journey_purge_prevented"]);
+  });
+
+  it("keeps interleaved scoped registry intake independent of the production config", () => {
+    const done = settled(), raw = TEST_ENGINE_CONFIG.encode(done);
+    const decodeDefault = () => {
+      try { return { state: GAME_ENGINE_CONFIG.decode(raw) }; }
+      catch { return { rejected: true }; }
+    };
+    const sourceBefore = journeyModifierRegistry.lookup(SHIELD);
+    const decodeBefore = decodeDefault();
+    const intent = event("LOAD_STATE", { snapshot: done.journey }), context = ctx();
+    const intakeBefore = GAME_ENGINE_CONFIG.reducer(done, intent, context);
+    const otherRegistry = createJourneyModifierRegistry([journeyPurge(OTHER, { kind: "preventPurge" })]);
+    const otherConfig = createGameEngineConfig(otherRegistry);
+    for (const config of [TEST_ENGINE_CONFIG, otherConfig, TEST_ENGINE_CONFIG, otherConfig]) {
+      const matching = config === TEST_ENGINE_CONFIG;
+      expect(config.reducer(done, intent, context).outcome).toBe(matching ? "applied" : "bounced");
+      if (matching) expect(config.decode(raw)).toEqual(done);
+      else expect(() => config.decode(raw)).toThrow();
+    }
+    const defaultConfig = createGameEngineConfig();
+    expect(defaultConfig.reducer).toBe(reduceGameEvent);
+    expect(defaultConfig.genesisState).toBe(GAME_ENGINE_CONFIG.genesisState);
+    expect(defaultConfig.hash).toBe(GAME_ENGINE_CONFIG.hash);
+    expect(defaultConfig.genesisState(GENESIS)).toEqual(GAME_ENGINE_CONFIG.genesisState(GENESIS));
+    expect(defaultConfig.encode(done)).toBe(GAME_ENGINE_CONFIG.encode(done));
+    expect(journeyModifierRegistry.lookup(SHIELD)).toBe(sourceBefore);
+    expect(decodeDefault()).toEqual(decodeBefore);
+    expect(GAME_ENGINE_CONFIG.reducer(done, intent, context)).toEqual(intakeBefore);
   });
 
 });
