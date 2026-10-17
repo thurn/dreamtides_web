@@ -2,6 +2,8 @@
 // in roster order and wraps; the placeholder overworld resolves the run's
 // Avatar by UUID and tolerates one missing from the catalog.
 
+import { emptyCollection } from "../../../d97/collection/collection";
+import { createRewardBag } from "../../../d97/collection/reward-bag";
 import { describe, expect, it } from "vitest";
 import type { D97Run } from "../../../rules/d97/d97-state";
 import type { AvatarContent } from "../../../types/content";
@@ -48,6 +50,15 @@ describe("buildD97OverworldPlaceholderView", () => {
     runSeed: parseD97RunSeed("seed"),
     avatarId: ROSTER[2].id,
     startedAt: "1970-01-01T00:00:00.000Z",
+    essence: 200,
+    battlesFought: 0,
+    collection: emptyCollection(),
+    bag: createRewardBag({
+      avatarId: ROSTER[2].id,
+      dealSeed: 0,
+      joinedTideIds: [],
+      dealt: [],
+    }),
   };
 
   it("resolves the run's Avatar by UUID", () => {
@@ -55,6 +66,7 @@ describe("buildD97OverworldPlaceholderView", () => {
     expect(view.runId).toBe(run.runId);
     expect(view.avatar?.id).toBe(ROSTER[2].id);
     expect(view.avatar?.imageNumber).toBe(ROSTER[2].imageNumber);
+    expect(view.deckCount).toBe(0);
   });
 
   it("shows no Avatar when the catalog lacks it", () => {

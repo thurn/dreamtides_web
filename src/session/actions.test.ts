@@ -40,6 +40,7 @@ import { parseJourneyId } from "../types/identifiers";
 import { parseTutorialRunId } from "../types/identifiers";
 import { parseCardTutorialScreenKey } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
+import { parseD97OwnedCopyId } from "../types/identifiers";
 import { parseFrontDoorActionId } from "../types/identifiers";
 import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
 import { TEST_CONTENT_CONFIG } from "../testing/journey-genesis";
@@ -270,6 +271,8 @@ function captureAllDrafts(): EventDraft[] {
   void actions.cancelPrompt("player", parsePromptId("1:1:0"));
   void actions.battleDebug({ kind: "mark" });
   void actions.d97StartRun(testAvatarId("dc-1"));
+  void actions.d97EquipCopy(parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
+  void actions.d97UnequipCopy(parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097"));
 
   return drafts;
 }

@@ -7,6 +7,7 @@ import type {
   ChoiceId,
   DeckEntryId,
   AvatarId,
+  D97OwnedCopyId,
   DreamsignId,
   ExplorationActionId,
   FrontDoorActionId,
@@ -321,6 +322,8 @@ export interface EventPayloads {
 
   // --- Dreamtides 97 (D97 games only; cases in ./d97/) ---
   D97_START_RUN: { avatarId: AvatarId };
+  D97_EQUIP_COPY: { copyId: D97OwnedCopyId };
+  D97_UNEQUIP_COPY: { copyId: D97OwnedCopyId };
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -491,6 +494,8 @@ const EVENT_INTENT_CLASSES = {
   BATTLE_CANCEL: "gameplay",
   BATTLE_DEBUG: "administrative", // engine debug panel
   D97_START_RUN: "gameplay",
+  D97_EQUIP_COPY: "gameplay",
+  D97_UNEQUIP_COPY: "gameplay",
 } as const satisfies Record<GameEventType, EventIntentClass>;
 
 /** Event types for which journey modifiers never run. */
@@ -633,6 +638,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_CANCEL: true,
   BATTLE_DEBUG: true,
   D97_START_RUN: true,
+  D97_EQUIP_COPY: true,
+  D97_UNEQUIP_COPY: true,
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.

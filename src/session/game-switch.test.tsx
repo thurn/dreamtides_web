@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { registerD97ContentProvider } from "../rules/d97/d97-content";
+import { syntheticD97Content } from "../rules/d97/d97-content.fixtures";
 import { parseFoldHash } from "../types/content-hash";
 import { parseClientId, parseGameId, type GameId } from "../types/identifiers";
 import { testAvatarId } from "../types/test-identities";
@@ -121,7 +122,7 @@ async function storeGame(
 beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   window.history.replaceState(null, "", "/main");
-  registerD97ContentProvider({ avatarIds: new Set([AVATAR]) });
+  registerD97ContentProvider(syntheticD97Content({ avatarIds: [AVATAR] }));
 });
 
 afterEach(() => {

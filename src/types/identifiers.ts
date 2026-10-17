@@ -117,6 +117,8 @@ export type D97TerrainId = DomainIdentity<"D97TerrainId">;
 export type D97RunId = DomainIdentity<"D97RunId">;
 /** Stable entropy a Dreamtides 97 run's generators derive from. */
 export type D97RunSeed = DomainIdentity<"D97RunSeed">;
+/** One owned copy of a card in a Dreamtides 97 collection (a UUID). */
+export type D97OwnedCopyId = DomainIdentity<"D97OwnedCopyId">;
 /** A pending battle prompt: `<committed version>:<answers recorded>`. */
 export type PromptId = DomainIdentity<"PromptId">;
 export type ExplorationActionId = DomainIdentity<"ExplorationActionId">;
@@ -187,6 +189,7 @@ const brandD97StampId = identityConstructor<D97StampId>();
 const brandD97TerrainId = identityConstructor<D97TerrainId>();
 const brandD97RunId = identityConstructor<D97RunId>();
 const brandD97RunSeed = identityConstructor<D97RunSeed>();
+const brandD97OwnedCopyId = identityConstructor<D97OwnedCopyId>();
 const brandPromptId = identityConstructor<PromptId>();
 const brandExplorationActionId = identityConstructor<ExplorationActionId>();
 const brandFrontDoorActionId = identityConstructor<FrontDoorActionId>();
@@ -404,6 +407,12 @@ export const parseD97RunSeed = identityParser(
   "D97 run seed",
   brandD97RunSeed,
 );
+export const parseD97OwnedCopyId = identityParser(
+  "D97 owned copy id",
+  brandD97OwnedCopyId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
 export const parseIntentKey = identityParser("Intent key", brandIntentKey);
 export const parseAuguryCategoryId = identityParser(
   "Augury category id",
@@ -491,6 +500,7 @@ export const auguryArchetypeIdFromUnknown = identityDecoder(
   parseAuguryArchetypeId,
 );
 export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
+export const d97OwnedCopyIdFromUnknown = identityDecoder(parseD97OwnedCopyId);
 export const battleCardIdFromUnknown = identityDecoder(parseBattleCardId);
 export const clientIdFromUnknown = identityDecoder(parseClientId);
 export const cardTypeChangePredicateIdFromUnknown = identityDecoder(

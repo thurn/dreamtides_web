@@ -2,7 +2,7 @@ import { generatePoolFromData } from "../../draft/pool/generate";
 import { makeRng } from "../../draft/pool/rng";
 import type { Tides4DecksJson } from "../../draft/pool/tides4-io";
 import type { Tides4Tuning } from "../../types/draft-data";
-import type { CardData } from "../../types/cards";
+import type { CardData, Rarity } from "../../types/cards";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -25,14 +25,10 @@ import {
 } from "../../selection/tide-affinity";
 import type { BattleEntryKey, TideId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import type { TideVector } from "../../selection/tide-affinity";
-
-interface RankedCard {
-  card: CardData;
-  rank: number[];
-  affinity: number;
-  rarity: number;
-}
+import type {
+  TideAffinityIndex,
+  TideVector,
+} from "../../selection/tide-affinity";
 
 interface RankedDreamsign {
   dreamsign: DreamsignTemplate;
@@ -92,16 +88,34 @@ function chooseDreamsign(args: {
   );
 }
 
-function iterativeDeck(args: {
-  candidates: readonly CardData[];
+/** A card the iterative affinity picker can rank: its UUID and rarity. */
+export interface AffinityPickCandidate {
+  readonly id: CardId;
+  readonly rarity?: Rarity;
+}
+
+interface RankedCandidate<Card extends AffinityPickCandidate> {
+  card: Card;
+  rank: number[];
+}
+
+/**
+ * The unified tide affinity picker: rank the remaining candidates by
+ * [cosine affinity to `context`, rarity] (ties by card UUID), draw uniformly
+ * from the top band, add the pick's tide vector to `context`, and repeat until
+ * `targetSize` cards are chosen or the candidates run out. `context` is
+ * mutated to include every pick (and every `initial` card).
+ */
+export function iterativeAffinityPicks<Card extends AffinityPickCandidate>(args: {
+  candidates: readonly Card[];
   context: Map<TideId, number>;
   targetSize: number;
   bandFraction: number;
   bandMinimum: number;
   rng: () => number;
-  index: ReturnType<typeof buildTideAffinityIndex>;
-  initial?: readonly CardData[];
-}): CardData[] {
+  index: TideAffinityIndex;
+  initial?: readonly Card[];
+}): Card[] {
   const remaining = new Map(args.candidates.map((card) => [card.id, card]));
   const selected = [...(args.initial ?? [])];
   for (const card of selected) {
@@ -109,10 +123,10 @@ function iterativeDeck(args: {
     addCardVector(args.context, card.id, args.index);
   }
   while (selected.length < args.targetSize && remaining.size > 0) {
-    const ranked: RankedCard[] = [...remaining.values()].map((card) => {
+    const ranked: RankedCandidate<Card>[] = [...remaining.values()].map((card) => {
       const affinity = cardAffinity(card.id, args.context, args.index);
       const rarity = rarityStrength(card.rarity);
-      return { card, affinity, rarity, rank: [affinity, rarity] };
+      return { card, rank: [affinity, rarity] };
     });
     ranked.sort(
       (left, right) =>
@@ -222,7 +236,7 @@ export function buildTideOpponentDeck(args: {
     }
     return [card];
   });
-  const baseCards = iterativeDeck({
+  const baseCards = iterativeAffinityPicks({
     candidates,
     context,
     targetSize: args.deckSize,

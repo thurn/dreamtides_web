@@ -1,7 +1,9 @@
 // The pure view-model builder for the D97 placeholder overworld: resolves the
-// run's Avatar UUID against the roster at the render boundary.
+// run's Avatar UUID against the roster at the render boundary and counts the
+// active deck.
 
 import type { D97OverworldPlaceholderView } from "../../../cumulus/screens/d97/D97OverworldPlaceholderScreen";
+import { deckSize } from "../../../d97/collection/collection";
 import type { D97Run } from "../../../rules/d97/d97-state";
 import type { AvatarContent } from "../../../types/content";
 
@@ -13,6 +15,7 @@ export function buildD97OverworldPlaceholderView(
   const avatar = avatars.find((candidate) => candidate.id === run.avatarId);
   return {
     runId: run.runId,
+    deckCount: deckSize(run.collection),
     avatar:
       avatar === undefined
         ? null

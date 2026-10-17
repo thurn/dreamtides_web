@@ -38,8 +38,9 @@ export function D97ScreenRouter({
     logEvent("d97_url_synced", { path: D97_PATHNAME, screen: screenType });
   }, [screenType]);
 
-  const startsQaRun =
-    gotoScene !== null && findD97QaScene(gotoScene)?.startsRun === true;
+  const qaScene = gotoScene === null ? null : findD97QaScene(gotoScene);
+  const startsQaRun = qaScene?.startsRun === true;
+  const opensDeckEditor = qaScene?.opensDeckEditor === true;
   const firstAvatarId = journeyContent.avatars[0]?.id ?? null;
   useEffect(() => {
     if (
@@ -63,7 +64,8 @@ export function D97ScreenRouter({
     d97.screen.type === "overworld" && d97.run !== null ? (
       <D97OverworldPlaceholderScreenAdapter
         run={d97.run}
-        avatars={journeyContent.avatars}
+        journeyContent={journeyContent}
+        initialDeckEditorOpen={opensDeckEditor}
       />
     ) : (
       <D97AvatarSelectScreenAdapter journeyContent={journeyContent} />

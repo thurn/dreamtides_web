@@ -2,12 +2,27 @@
 // loaded catalogs before any event folds (src/session/providers/), so the
 // cases stay pure and every fold of a log on one build sees the same content.
 
-import type { AvatarId } from "../../types/identifiers";
+import type { D97DealtCard } from "../../d97/collection/reward-bag";
+import type { D97StartingCollectionContent } from "../../d97/collection/starting-collection";
+import type { AvatarId, TideId } from "../../types/identifiers";
 
-/** Fold-relevant D97 content identities. */
-export interface D97ContentProvider {
+/** One Avatar's dealt tides4 pool. */
+export interface D97PoolDeal {
+  /** The tides the deal joined, in join order. */
+  readonly joinedTideIds: readonly TideId[];
+  /** Dealt copies per card (Starter cards excluded, per-card caps applied). */
+  readonly cards: readonly D97DealtCard[];
+}
+
+/** Fold-relevant D97 content. */
+export interface D97ContentProvider extends D97StartingCollectionContent {
   /** Every Avatar a run may start with (the full roster). */
   readonly avatarIds: ReadonlySet<AvatarId>;
+  /**
+   * Deal `avatarId`'s tides4 pool exactly as the journey's draft would, from
+   * a 32-bit seed. Deterministic in its arguments.
+   */
+  readonly dealRewardPool: (avatarId: AvatarId, seed: number) => D97PoolDeal;
 }
 
 let provider: D97ContentProvider | null = null;

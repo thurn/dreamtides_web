@@ -43,6 +43,7 @@ import {
   type GameEventType,
 } from "./events";
 import * as d97Run from "./d97/d97-run";
+import * as d97Deck from "./d97/d97-deck";
 import type { D97Transition } from "./d97/d97-run";
 import type { FoldState } from "./fold-state";
 import type { JourneyPurgeOccurrence, JourneyPurgeTransition, JourneyState } from "../types/journey";
@@ -795,6 +796,10 @@ export function routeDomain(
     // --- Dreamtides 97 ---
     case "D97_START_RUN":
       return d97Case(state, state.d97 === undefined ? null : d97Run.startRun(state.d97, payload, ctx));
+    case "D97_EQUIP_COPY":
+      return d97Case(state, state.d97 === undefined ? null : d97Deck.equipCopy(state.d97, payload));
+    case "D97_UNEQUIP_COPY":
+      return d97Case(state, state.d97 === undefined ? null : d97Deck.unequipCopy(state.d97, payload));
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":

@@ -42,6 +42,7 @@ import {
   createBattleInitProvider,
   createTutorialBattleInitProvider,
 } from "./battle-init-provider";
+import { createD97ContentProvider } from "./d97-content-provider";
 import { createDeckContentProvider } from "./deck-provider";
 import { createDraftContentProvider } from "./draft-provider";
 import { createJourneyLifecycleContentProvider } from "./lifecycle-provider";
@@ -74,9 +75,7 @@ export function registerGameProviders(content: JourneyContent): void {
   registerCardTutorialGuidanceContentProvider(
     createCardTutorialGuidanceContentProvider(content),
   );
-  registerD97ContentProvider({
-    avatarIds: new Set(content.avatars.map((avatar) => avatar.id)),
-  });
+  registerD97ContentProvider(createD97ContentProvider(content));
 }
 
 /**
