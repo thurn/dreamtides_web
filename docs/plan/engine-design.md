@@ -2112,8 +2112,13 @@ binding of the trigger's resolution, so the floating effect's controller and
 the cards stay plain data through saves. `capturedCards()` names the bound
 cards in play as it resolves, under any controller, so a member that left
 play and entered again is named (identity persists across zones), and one in
-another zone is not. Only `banishCards` accepts it, banishing through the
-ordinary zone change; resolving it outside a binding throws. A view shows
+another zone is not. `banishCards` and `abandonCards` accept it: `banishCards` banishes
+the named in-play members under any controller through ordinary zone changes;
+`abandonCards` abandons each surviving in-play member the effect's controller
+still controls, once in materialization order, through ordinary abandonment
+([RD-hv-umm2.533-1](evidence/rules-decisions/RD-hv-umm2.533-1.md)). A delayed
+ability retains its creating controller even if its source changes control.
+Resolving `capturedCards()` outside a binding throws. A view shows
 each captured card the viewer can identify by its instance ID, and any other
 one, now in a hidden hand or deck, by its owner, printing, and variant,
 which every side saw as it entered play, and a member number local to the view
