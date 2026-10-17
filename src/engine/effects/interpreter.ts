@@ -911,10 +911,16 @@ function movedCardNodes(effect: EffectNode): Set<EffectNode> {
  */
 function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
   const read = movedCardNodes(root);
+  const originals = new Map<EffectNode, EffectNode>();
+  const originalOf = (node: EffectNode): EffectNode => originals.get(node) ?? node;
   const recorded = new Map<EffectNode, readonly number[]>();
   const discarded = new Map<EffectNode, readonly { readonly instance: InstanceId; readonly cardType: "character" | "event" }[]>();
   return {
+    bind(original, replacement) {
+      originals.set(replacement, originalOf(original));
+    },
     track(node, resolve) {
+      node = originalOf(node);
       if (!read.has(node)) {
         resolve();
         return;
@@ -930,17 +936,18 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
       }).map(({ cost }) => cost));
     },
     costs(node) {
-      return recorded.get(node) ?? [];
+      return recorded.get(originalOf(node)) ?? [];
     },
     discard(node, cards, resolve) {
-      if (!read.has(node)) { resolve(); return; }
+      const original = originalOf(node);
+      if (!read.has(original)) { resolve(); return; }
       const layers = characteristics(ctx.state, ctx.catalog);
       const before = cards.map((instance) => ({ instance, cardType: layers.of(instance).cardType }));
       resolve();
-      discarded.set(node, before);
+      discarded.set(original, before);
     },
     discardedCount(node, cardType) {
-      return (discarded.get(node) ?? []).filter((card) => card.cardType === cardType).length;
+      return (discarded.get(originalOf(node)) ?? []).filter((card) => card.cardType === cardType).length;
     },
   };
 }
@@ -1118,9 +1125,24 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * Resolves a subtree chosen during resolution, reusing enclosing object
  * bindings and choosing its unbound modes and targets now. The ability's
  * context and enclosing shared duration persist; nested subtrees read their
- * nearest enclosing choices.
+ * nearest enclosing choices. `originals` connects substituted objects to
+ * those enclosing choices and to the resolution's original moved-card captures.
  */
-export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false): void {
+export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false, originals?: ReadonlyMap<object, object>): void {
+  if (originals !== undefined) {
+    const isNode = (value: object): value is EffectNode => "op" in value && typeof value.op === "string";
+    for (const [replacement, original] of originals) {
+      if (isNode(replacement) && isNode(original)) {
+        env.moved.bind(original, replacement);
+      }
+    }
+    const outer = env;
+    env = {
+      ...outer,
+      modeOf: node => outer.modeOf((originals.get(node) ?? node) as EffectNode),
+      targetsOf: spec => outer.targetsOf((originals.get(spec) ?? spec) as PlayTimeTarget),
+    };
+  }
   const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost, { optionalPaid: env.optionalPaid }, resolvingSourceCounters(ctx, env));
   if (choices === null) return;
   const chosen = chosenModes(effect, choices.modes, true);

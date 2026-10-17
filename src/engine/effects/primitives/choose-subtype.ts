@@ -56,28 +56,45 @@ export const chooseSubtypePrimitive: ResolvingPrimitiveDefinition<ChooseSubtypeN
     if (subtype === undefined) throw new Error("chooseSubtype answered with no character type");
     ctx.emit({ kind: "subtypeChosen", side: env.controller, source: env.source, subtype });
     if (own !== null) startContinuous(ctx, env, "whileSourceInPlay", [own], [{ kind: "subtype", instance: own, subtype }]);
-    if (node.then !== null) resolveChosenEffect(ctx, withChosenSubtype(node.then, subtype), env);
+    if (node.then !== null) {
+      const originals = new Map<object, object>();
+      resolveChosenEffect(ctx, withChosenSubtype(node.then, subtype, originals), env, false, originals);
+    }
   },
 });
 
 /** Whether `node` names `CHOSEN_SUBTYPE` anywhere. */
 export function mentionsChosenSubtype(node: EffectNode): boolean {
-  const visit = (value: unknown): boolean =>
-    typeof value === "object" && value !== null ? Object.values(value).some(visit) : value === CHOSEN_SUBTYPE;
+  const seen = new Set<object>();
+  const visit = (value: unknown): boolean => {
+    if (typeof value !== "object" || value === null) return value === CHOSEN_SUBTYPE;
+    if (seen.has(value)) return false;
+    seen.add(value);
+    return Object.values(value).some(visit);
+  };
   return visit(node);
 }
 
 /**
  * `node` with each `subtype` field naming `CHOSEN_SUBTYPE` naming `subtype`
- * instead; every part that names no such field is shared.
+ * instead; graph aliases persist and every part that names no such field is
+ * shared. `originals` binds replacement objects to their enclosing identities.
  */
-export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSubtype): N {
+export function withChosenSubtype<N extends EffectNode>(node: N, subtype: CardSubtype, originals?: Map<object, object>): N {
+  const memo = new WeakMap<object, object>();
   const replace = (value: unknown): unknown => {
-    if (typeof value !== "object" || value === null || !mentionsChosenSubtype(value as EffectNode)) return value;
-    if (Array.isArray(value)) return value.map(replace);
-    return Object.fromEntries(
-      Object.entries(value).map(([key, field]) => [key, key === "subtype" && field === CHOSEN_SUBTYPE ? subtype : replace(field)]),
-    );
+    if (typeof value !== "object" || value === null) return value;
+    const previous = memo.get(value);
+    if (previous !== undefined) return previous;
+    if (!mentionsChosenSubtype(value as EffectNode)) return value;
+    const output: Record<string, unknown> | unknown[] = Array.isArray(value) ? [] : {};
+    // Register before following captures back into their instruction graph.
+    memo.set(value, output);
+    originals?.set(output, value);
+    for (const [key, field] of Object.entries(value)) {
+      Object.assign(output, { [key]: key === "subtype" && field === CHOSEN_SUBTYPE ? subtype : replace(field) });
+    }
+    return output;
   };
   return replace(node) as N;
 }

@@ -65,6 +65,8 @@ export interface SharedDuration {
  * like everything else the resolution computed.
  */
 export interface MovedCards {
+  /** Associates a substituted instruction with its enclosing resolution's original capture. */
+  bind(original: EffectNode, replacement: EffectNode): void;
   /**
    * Resolves `node` through `resolve`. For a node a value reads, it first
    * reads the copiable cost of every card in the battle, and afterwards

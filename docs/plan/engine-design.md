@@ -1870,6 +1870,9 @@ instruction selects a branch, after preceding effects. Transient lexical
 maps retain conditional siblings' shared node/spec bindings, with original
 prepared bindings first; ordinary chosen subtrees get their own scope and
 read enclosing bindings. Replay rebuilds these maps from answers.
+Chosen-subtype substitution preserves graph aliases, including shared target
+specs and modal nodes, and connects each substituted object to its enclosing
+choice binding. Distinct objects retain distinct choices.
 
 **Untargetable cards** (C17) have the `cannotBeTargeted` keyword, printed
 or granted through layer 3 (`grant(…, "cannotBeTargeted", duration)`).
@@ -2058,9 +2061,11 @@ resolves it reads the copiable cost of every card in the battle, and
 afterwards keeps those that changed zones or ceased to exist meanwhile,
 replacing the node's previous record. A created card that ceased to exist so
 keeps its cost. The record lives only as long as the resolution, so a step's
-replay rebuilds it from the step's answers. Static abilities read no moved
-card. The content gate requires the named node to resolve earlier in the same
-resolution than the value that reads it (see Content gates).
+replay rebuilds it from the step's answers. Chosen-subtype replacement nodes
+bind to the original instruction's capture in that same record, including
+nested substitutions and reads in enclosing instructions. Static abilities
+read no moved card. The content gate requires the named node to resolve
+earlier in the same resolution than the value that reads it (see Content gates).
 
 `countDiscardedBy(discardNode, "event" | "character")` uses the same typed
 moved-node reference and authoring gate. The discard primitive wraps its

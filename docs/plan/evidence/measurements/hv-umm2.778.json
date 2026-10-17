@@ -1,0 +1,491 @@
+{
+  "bead": "hv-umm2.778",
+  "phase": 5,
+  "base": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+  "implementWindow": {
+    "start": "2026-10-17T04:23:28.085330+00:00",
+    "end": "2026-10-17T04:33:35.859103+00:00"
+  },
+  "rawEvidenceDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/subtype-captures778",
+  "testDelta": {
+    "files": 1,
+    "lines": 200,
+    "jsdomFiles": 0
+  },
+  "newGraphContracts": 18,
+  "validationReceipts": [
+    {
+      "name": "before-fix",
+      "at": "2026-10-17T04:25:00.157207+00:00",
+      "pid": 59983,
+      "pgid": 59983,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype graph bindings"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 1,
+      "wallS": 9.993517625029199,
+      "childCpuS": 11.136292000000001,
+      "hostLoad": 4.6298828125,
+      "groupAbsent": true
+    },
+    {
+      "name": "focused-complete",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "a82bfc1afe46212baddf103eee91ad4a7d1b48589762d06faa71bc9f43547466",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "31cc7a8a73b54a47538601062771c4f6b977794d151303607d27e5f9c4959504"
+      },
+      "at": "2026-10-17T04:30:47.651742+00:00",
+      "pid": 82660,
+      "pgid": 82660,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 6.710799666994717,
+      "childCpuS": 9.087119999999999,
+      "hostLoad": 6.1259765625,
+      "groupAbsent": true
+    },
+    {
+      "name": "focused-expanded",
+      "at": "2026-10-17T04:26:32.786933+00:00",
+      "pid": 66739,
+      "pgid": 66739,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 1,
+      "wallS": 7.90730508294655,
+      "childCpuS": 10.336691,
+      "hostLoad": 4.52392578125,
+      "groupAbsent": true
+    },
+    {
+      "name": "focused-final",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "09f2f6b2cc11c9237d94f03521628853da620e6675b5c2a125a9127aad3d524b",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "f5d7a93d1de576afd4d0966041f2d5cdb5de3323489856e1f03b59e4afbe7413"
+      },
+      "at": "2026-10-17T04:27:15.110287+00:00",
+      "pid": 69814,
+      "pgid": 69814,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 1,
+      "wallS": 7.136976665991824,
+      "childCpuS": 9.752769,
+      "hostLoad": 5.02001953125,
+      "groupAbsent": true
+    },
+    {
+      "name": "focused-first",
+      "at": "2026-10-17T04:25:39.941693+00:00",
+      "pid": 62895,
+      "pgid": 62895,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 7.168291874986608,
+      "childCpuS": 9.811219,
+      "hostLoad": 4.244140625,
+      "groupAbsent": true
+    },
+    {
+      "name": "focused-settled",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "cd2e517a1f2e67039624520a2ce32a9245ba185f2355804fa63f7bb51076d252",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "4199092138a8cad2961971aac530b7da412eab62c04ea5dc179642519c71d7fd"
+      },
+      "at": "2026-10-17T04:27:37.386398+00:00",
+      "pid": 71495,
+      "pgid": 71495,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 7.13572929095244,
+      "childCpuS": 9.758458000000001,
+      "hostLoad": 4.76318359375,
+      "groupAbsent": true
+    },
+    {
+      "name": "focused",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "09f2f6b2cc11c9237d94f03521628853da620e6675b5c2a125a9127aad3d524b",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "ae0b11e854e105b3acdbe48873f987b4a7f327e84aab3928e10efbc3d47c86d7"
+      },
+      "at": "2026-10-17T04:26:51.446691+00:00",
+      "pid": 68074,
+      "pgid": 68074,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "chooseSubtype"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 7.172865375003312,
+      "childCpuS": 9.809781,
+      "hostLoad": 5.06591796875,
+      "groupAbsent": true
+    },
+    {
+      "at": "2026-10-17T04:23:10.624131+00:00",
+      "pid": 52008,
+      "pgid": 52008,
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "branch": "codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 2.9233722499920987,
+      "childCpuS": 6.181385,
+      "groupAbsent": true
+    },
+    {
+      "name": "knip",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "cd2e517a1f2e67039624520a2ce32a9245ba185f2355804fa63f7bb51076d252",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "4199092138a8cad2961971aac530b7da412eab62c04ea5dc179642519c71d7fd"
+      },
+      "at": "2026-10-17T04:28:28.415857+00:00",
+      "pid": 75239,
+      "pgid": 75239,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 7.7495742500177585,
+      "childCpuS": 6.889305,
+      "hostLoad": 6.51123046875,
+      "groupAbsent": true
+    },
+    {
+      "name": "review-final",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "a82bfc1afe46212baddf103eee91ad4a7d1b48589762d06faa71bc9f43547466",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "f39267f4df1b2e70af84164307349964bd6f55cc61117c634a642140d0292519"
+      },
+      "at": "2026-10-17T04:29:24.436888+00:00",
+      "pid": 79283,
+      "pgid": 79283,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 74.86374870903092,
+      "childCpuS": 216.967949,
+      "hostLoad": 7.1630859375,
+      "groupAbsent": true
+    },
+    {
+      "name": "review-full",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "a82bfc1afe46212baddf103eee91ad4a7d1b48589762d06faa71bc9f43547466",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "31cc7a8a73b54a47538601062771c4f6b977794d151303607d27e5f9c4959504"
+      },
+      "at": "2026-10-17T04:30:59.437566+00:00",
+      "pid": 82937,
+      "pgid": 82937,
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 117.49975741602248,
+      "childCpuS": 306.051489,
+      "hostLoad": 5.87255859375,
+      "groupAbsent": true
+    },
+    {
+      "name": "review",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "cd2e517a1f2e67039624520a2ce32a9245ba185f2355804fa63f7bb51076d252",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "4199092138a8cad2961971aac530b7da412eab62c04ea5dc179642519c71d7fd"
+      },
+      "at": "2026-10-17T04:27:47.903808+00:00",
+      "pid": 72282,
+      "pgid": 72282,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 2,
+      "wallS": 84.52786245802417,
+      "childCpuS": 253.908406,
+      "hostLoad": 4.798828125,
+      "groupAbsent": true
+    },
+    {
+      "name": "evidence-final",
+      "inputSHA256": {
+        "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+        "src/engine/effects/interpreter.ts": "a82bfc1afe46212baddf103eee91ad4a7d1b48589762d06faa71bc9f43547466",
+        "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+        "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "31cc7a8a73b54a47538601062771c4f6b977794d151303607d27e5f9c4959504"
+      },
+      "at": "2026-10-17T04:33:35.934766+00:00",
+      "pid": 17030,
+      "pgid": 17030,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+      "source": "1b54f5e1dfd8d571a9bae49b1e01047d77237cdf",
+      "actualExit": 0,
+      "wallS": 0.12198012502631173,
+      "childCpuS": 0.08206699999999995,
+      "hostLoad": 3.90234375,
+      "groupAbsent": true
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "passing quick review-final start, 1-minute host load"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "before-fix",
+      "at": "2026-10-17T04:25:00.157207+00:00",
+      "oneMinute": 4.6298828125
+    },
+    {
+      "command": "focused-complete",
+      "at": "2026-10-17T04:30:47.651742+00:00",
+      "oneMinute": 6.1259765625
+    },
+    {
+      "command": "focused-expanded",
+      "at": "2026-10-17T04:26:32.786933+00:00",
+      "oneMinute": 4.52392578125
+    },
+    {
+      "command": "focused-final",
+      "at": "2026-10-17T04:27:15.110287+00:00",
+      "oneMinute": 5.02001953125
+    },
+    {
+      "command": "focused-first",
+      "at": "2026-10-17T04:25:39.941693+00:00",
+      "oneMinute": 4.244140625
+    },
+    {
+      "command": "focused-settled",
+      "at": "2026-10-17T04:27:37.386398+00:00",
+      "oneMinute": 4.76318359375
+    },
+    {
+      "command": "focused",
+      "at": "2026-10-17T04:26:51.446691+00:00",
+      "oneMinute": 5.06591796875
+    },
+    {
+      "command": "knip",
+      "at": "2026-10-17T04:28:28.415857+00:00",
+      "oneMinute": 6.51123046875
+    },
+    {
+      "command": "review-final",
+      "at": "2026-10-17T04:29:24.436888+00:00",
+      "oneMinute": 7.1630859375
+    },
+    {
+      "command": "review-full",
+      "at": "2026-10-17T04:30:59.437566+00:00",
+      "oneMinute": 5.87255859375
+    },
+    {
+      "command": "review",
+      "at": "2026-10-17T04:27:47.903808+00:00",
+      "oneMinute": 4.798828125
+    }
+  ],
+  "sourceBindings": {
+    "originalRegressionInput": "before-fix-contract.ts",
+    "originalRegressionInputSHA256": "eedc8eed31a4cd436c7e81e81f4e1d01cdb571cfb325f39dca710d54656b1c77",
+    "baselineProduction": "before-fix.source-status.txt binds unchanged production at exact base; only new contract was untracked",
+    "acceptanceInputSHA256": {
+      "src/engine/effects/primitives/choose-subtype.ts": "daf572a5e14ade92a1826b50b313a9538e7587459ffb849e65c738cd15078f84",
+      "src/engine/effects/interpreter.ts": "a82bfc1afe46212baddf103eee91ad4a7d1b48589762d06faa71bc9f43547466",
+      "src/engine/effects/types.ts": "38b2f33fb445a4d5b74eb01be15aa5741312e05d0f26f27491fb61a1984d08ff",
+      "src/engine/effects/primitives/contracts/choose-subtype-captures.contracts.ts": "31cc7a8a73b54a47538601062771c4f6b977794d151303607d27e5f9c4959504"
+    },
+    "quickReviewScope": "Passing review-final uses identical final production source and the graph contract before its last two enclosing-target cases. focused-complete and review-full include all final code/tests.",
+    "iterationScope": "Early receipts without inputSHA256 retain HEAD/source diff, process identity, exit and output; no exact expanded intermediate test-byte binding is claimed."
+  },
+  "outcomes": {
+    "beforeFix": "4 failures and 2 distinct-reference controls passing, both controllers",
+    "focusedComplete": "37 passing selected tests: 18 new graph contracts plus 19 existing chooseSubtype contracts",
+    "reviewFinal": "356 files / 11310 related tests; lint, both typechecks, import cycles and friction schema passed",
+    "reviewFull": "439 files / 12341 tests; full lint, both typechecks, knip, import cycles, schema and production bundle passed",
+    "knip": "standalone exit 0, and final full review knip exit 0"
+  },
+  "failureDiagnoses": {
+    "focused-expanded": "Duplicate completed answer returns noPendingPrompt rather than stalePrompt; test expectation corrected.",
+    "focused-final": "Step error recovers to committed resolving boundary after play payment rather than initial pre-play state; test expectation corrected.",
+    "review": "Explicit EffectNode type predicate required; synthetic duration fixture keyword changed to supported vengeful. Passing review-final and review-full cover corrections."
+  },
+  "scope": {
+    "mechanicalFallout": [],
+    "browserWorkflowQA": "Not applicable: internal engine composition; public scenario/fold/replay contracts exercise runtime changes.",
+    "localFuzz": "No >=200-game fuzz; fuzzer and step runner unchanged.",
+    "heavyRunCount": 1,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "rulesDecisionsCreated": [],
+    "cardIssuesCreated": [],
+    "preExistingFollowup": "hv-umm2.780"
+  },
+  "runtimeCleanup": {
+    "at": "2026-10-17T04:33:05.814280+00:00",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-subtype-captures778",
+    "fixtureRootsInspected": [
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-0gESa8",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-2lefAY",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-3NTTmr",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-3rZlGZ",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-536kYw",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-6h82VW",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-7AqAoC",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-7Uo9tG",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-AxmvtR",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-EPaRyL",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-Fof1pf",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-KFHFfm",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-LNsdZ7",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-NMbSgf",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-Ul5w3f",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-WGSOBs",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-aN3Q7b",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-clUhDP",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-gpmVRK",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-jmXYVL",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-kAJdCH",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-pvBBvB",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-rRXtuS",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-sDqm9k",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-upxn4g",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-vzc0wK",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-ynnlhx",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-lease-zcMInF",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-slots-dxQKl3",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-browser-slots-eopIxq",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-568bUk",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-8cQUPD",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-A3PHKu",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-AxXwJF",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-DJrOEJ",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-KFjh6s",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-NAN8kz",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-WdXRTo",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-b3IQUs",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-bq0jNT",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-eESCPu",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-hu1Lo6",
+      "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-ucKQGx"
+    ],
+    "ownedRemaining": [],
+    "allValidationProcessGroupsAbsent": true
+  },
+  "rawOutputSHA256": {
+    "install.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "focused-final.log": "a3850c3ad60ebd4e1cca7222bae8d47c7b531880b3663c68c0004638ea6f35a5",
+    "focused-complete.log": "7d18c14c3f1d1d3704b7b2d15cf317796e46dbf3f6f73bfd2e29f22ffe412bbc",
+    "review.log": "f1f7919ef90f22369604cff5e2b8f80fd60ece2e5ef9ba6c9659ec77b87479bc",
+    "focused-expanded.log": "68777ca95a3bd5b2fb6d5f5b1ba0ecc4423ea96aa0650c8157b9018f3c598b47",
+    "focused-first.log": "e8f60cf0031fdad432f690f8aba3f3b2c0f356997efa6eaeca6882376aba6366",
+    "review-final.log": "216a76c2f117e79921b0d2feb2c7aa40892053a65cf514f363086ffec0b142b8",
+    "install.stdout.log": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+    "review-full.log": "706bfb170f812d8fbb526f26ed177987defe0c01ac0b1c26b757d1827d4b2daf",
+    "knip.log": "c3b91bd1e88966b15d2ae1a21fc56c739bd5c71ec3c3aeaad9c0a3f9bf98321c",
+    "focused-settled.log": "747ad2731526bc05a7744c0a59f692e1a3b4490720fbbbccc41931e49e2d2dfc",
+    "before-fix.log": "eef841e41cd8ae552f1f58743310084696fa3366a8714a14fb46230dfd65797c",
+    "focused.log": "1bcf80fc80d2a6b567c6ad80d19ce38d0f4c60b0b2e1e251fd3c7d4c12ca5dab",
+    "evidence-final.log": "50e36037ca028f418326faf8e33c234ee1eb070c7fd2003a29aab23d3d014dbd"
+  }
+}
