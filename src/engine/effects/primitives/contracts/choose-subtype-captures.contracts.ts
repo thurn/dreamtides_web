@@ -13,7 +13,6 @@ import { invariantViolations } from "../../../testing/invariants";
 import { playFromHand, runScenario } from "../../../testing/scenario";
 import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import type { ResolvingEffect } from "../../registry";
-import { chooseOne } from "../choose-one";
 import { forDuration } from "../for-duration";
 import { grant } from "../grant";
 import { sparkModifier } from "../spark-modifier";
@@ -136,15 +135,6 @@ describe("chooseSubtype graph bindings", () => {
       expect(failed.slice.inFlight).toBeNull();
       expect(failed.slice.committed.sides[side]).toEqual(current.committed.sides[side]);
       expect(failed.slice.committed.instances).toEqual(current.committed.instances);
-    });
-
-    it(`reuses an enclosing mode when its chosen-type subtree is substituted for ${side}`, () => {
-      const modal = chooseOne(drawMatching({ cardType: "character", subtype: CHOSEN_SUBTYPE }), gainPoints(9));
-      const { engine, board, mode } = fixture(sequence(modal, chooseSubtype({ then: modal })), side);
-      const result = runScenario(engine, { board, steps: ids => [playFromHand(ids, side)], answers: () => [0, mode] });
-      expect(result.state.sides[side].hand).toEqual([result.ids[side].deck[1]]);
-      expect(result.state.sides[side].score).toBe(0);
-      expect(result.answers).toHaveLength(2);
     });
 
     it(`reuses an enclosing target across chosen-type replacement for ${side}`, () => {
