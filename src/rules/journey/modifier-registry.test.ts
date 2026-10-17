@@ -302,7 +302,7 @@ describe("journey modifier registry", () => {
     const game: LocalGame<FoldState> = {
       gameId: parseGameId("modifier-game"), localPlayerId: parseClientId("modifier-player"),
       genesis: GENESIS, log,
-      opened: { checkpointSeq: 0, checkpointRejected: false, replayedEvents: 0, replayFoldErrors: 0 },
+      opened: { openedFrom: "genesis", checkpointSeq: 0, checkpointRejected: false, replayedEvents: 0, replayFoldErrors: 0 },
       flush: () => Promise.resolve(), close: () => Promise.resolve(),
     };
     const detach = attachGameLog(game, { mirror: (record) => records.push(record) });

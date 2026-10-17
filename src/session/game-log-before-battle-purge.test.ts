@@ -28,7 +28,7 @@ function world() {
 function attached(state: FoldState, mods: JourneyModifierRegistry = registry()) {
   const genesis = { ...GENESIS, seed: state.journey.seed };
   const log = createLocalLog({ config: config(state, mods), genesis, localActor: testEventActor("alice"), base: { seq: 10, state, intentKeys: [] }, devMode: false });
-  const detach = attachGameLog({ gameId: parseGameId("before729-host"), localPlayerId: parseClientId("alice"), genesis, log, opened: { checkpointSeq: 10, checkpointRejected: false, replayedEvents: 0, replayFoldErrors: 0 }, flush: async () => {}, close: async () => {} }, { mirror: () => {} });
+  const detach = attachGameLog({ gameId: parseGameId("before729-host"), localPlayerId: parseClientId("alice"), genesis, log, opened: { openedFrom: "checkpoint", checkpointSeq: 10, checkpointRejected: false, replayedEvents: 0, replayFoldErrors: 0 }, flush: async () => {}, close: async () => {} }, { mirror: () => {} });
   return { log, detach };
 }
 const opponentLogs = () => getLogEntries().filter((entry) => entry.event === "opponent_signature_cards_selected");

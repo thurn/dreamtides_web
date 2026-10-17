@@ -24,6 +24,7 @@
     "d97:map": "tsx scripts/d97/map.ts",
     "d97:dialogue": "tsx scripts/d97/dialogue.ts",
     "d97:characters": "tsx scripts/d97/link-characters.ts",
+    "d97:save-fixture": "tsx scripts/d97/regenerate-save-fixture.ts",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",
     "bead:entities": "tsx scripts/bead-entities.ts",
     "lab:preflight": "tsx scripts/qa/lab-preflight.ts",

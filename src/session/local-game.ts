@@ -8,7 +8,9 @@
 // fold checkpoint, so opening a long game replays at most that many events.
 // Opening verifies the checkpoint against its stored hash and falls back to
 // replaying from genesis when it does not match; the events the checkpoint
-// covers still load into the log's event list, unfolded.
+// covers still load into the log's event list, unfolded. A game with a
+// snapshot codec also writes a durable snapshot with the batch after every
+// applied event, and opens from that snapshot in place of the checkpoint.
 
 import { GAME_EVENT_PERSISTENCE } from "../content/game-logs";
 import {
@@ -34,8 +36,21 @@ type FoldableLocalGame = Omit<StoredLocalGame, "genesis"> & { genesis: Genesis }
 /** Events between persisted fold checkpoints. */
 export const DEFAULT_CHECKPOINT_INTERVAL = 100;
 
+/**
+ * A game's durable snapshot codec. The snapshot is written with the batch
+ * after every applied event and is the base the game opens from.
+ */
+export interface LocalGameSnapshots<S> {
+  /** The snapshot of the state after the applied event at `seq`, or null to write none. */
+  readonly encode: (state: S, seq: number, intentKeys: LocalLogBase<S>["intentKeys"]) => string | null;
+  /** The log base a stored snapshot opens from, or undefined to ignore it. */
+  readonly decode: (snapshot: string, genesis: Genesis) => LocalLogBase<S> | undefined;
+}
+
 /** How a game was opened, for logs. */
 export interface LocalGameOpenReport {
+  /** What the fold resumed from. */
+  openedFrom: "snapshot" | "checkpoint" | "genesis";
   /** Seq of the checkpoint the fold resumed from; 0 when it replayed from genesis. */
   checkpointSeq: number;
   /** A stored checkpoint failed verification and was ignored. */
@@ -56,7 +71,9 @@ export interface LocalGame<S> {
   close(): Promise<void>;
 }
 
-export interface LocalGameOptions {
+export interface LocalGameOptions<S = unknown> {
+  /** A durable snapshot codec; games without one use checkpoints alone. */
+  snapshots?: LocalGameSnapshots<S>;
   /** Events between checkpoints. Defaults to `DEFAULT_CHECKPOINT_INTERVAL`. */
   checkpointInterval?: number;
   /** Epoch-millisecond clock for game summaries. */
@@ -81,7 +98,7 @@ export async function createLocalGame<S>(
   repository: GameRepository,
   config: EngineConfig<S>,
   game: NewLocalGame,
-  options: LocalGameOptions = {},
+  options: LocalGameOptions<S> = {},
 ): Promise<LocalGame<S>> {
   const now = options.now ?? Date.now;
   const createdAt = now();
@@ -96,10 +113,10 @@ export async function createLocalGame<S>(
   return attach(
     repository,
     config,
-    { summary, genesis: game.genesis, checkpoint: null },
+    { summary, genesis: game.genesis, checkpoint: null, snapshot: null },
     undefined,
     { history: [], events: [] },
-    { checkpointSeq: 0, checkpointRejected: false },
+    { openedFrom: "genesis", checkpointSeq: 0, checkpointRejected: false },
     options,
   );
 }
@@ -109,7 +126,7 @@ export async function openLocalGame<S>(
   repository: GameRepository,
   config: EngineConfig<S>,
   gameId: GameId,
-  options: LocalGameOptions = {},
+  options: LocalGameOptions<S> = {},
 ): Promise<LocalGame<S> | null> {
   const read = await repository.readGame(gameId);
   if (read === null) return null;
@@ -121,8 +138,10 @@ export async function openLocalGame<S>(
     );
   }
   const stored = { ...read, genesis };
-  const base = verifiedCheckpoint(config, stored);
-  const checkpointRejected = stored.checkpoint !== null && base === undefined;
+  const snapshotBase = snapshotLogBase(options.snapshots, stored);
+  const checkpointBase = snapshotBase === undefined ? verifiedCheckpoint(config, stored) : undefined;
+  const base = snapshotBase ?? checkpointBase;
+  const checkpointRejected = snapshotBase === undefined && stored.checkpoint !== null && base === undefined;
   const storedEvents = await repository.readEvents(gameId, 0);
   const baseSeq = base?.seq ?? 0;
   return attach(
@@ -134,9 +153,26 @@ export async function openLocalGame<S>(
       history: storedEvents.slice(0, baseSeq),
       events: storedEvents.slice(baseSeq),
     },
-    { checkpointSeq: base?.seq ?? 0, checkpointRejected },
+    {
+      openedFrom: snapshotBase !== undefined ? "snapshot" : checkpointBase !== undefined ? "checkpoint" : "genesis",
+      checkpointSeq: base?.seq ?? 0,
+      checkpointRejected,
+    },
     options,
   );
+}
+
+function snapshotLogBase<S>(
+  snapshots: LocalGameSnapshots<S> | undefined,
+  stored: FoldableLocalGame,
+): LocalLogBase<S> | undefined {
+  if (snapshots === undefined || stored.snapshot === null) return undefined;
+  try {
+    const base = snapshots.decode(stored.snapshot, stored.genesis);
+    return base === undefined || base.seq > stored.summary.head ? undefined : base;
+  } catch {
+    return undefined;
+  }
 }
 
 function verifiedCheckpoint<S>(
@@ -192,8 +228,8 @@ function attach<S>(
   stored: FoldableLocalGame,
   base: LocalLogBase<S> | undefined,
   { history, events }: StoredEvents,
-  checkpoint: Pick<LocalGameOpenReport, "checkpointSeq" | "checkpointRejected">,
-  options: LocalGameOptions,
+  checkpoint: Pick<LocalGameOpenReport, "openedFrom" | "checkpointSeq" | "checkpointRejected">,
+  options: LocalGameOptions<S>,
 ): LocalGame<S> {
   const { gameId, localPlayerId, createdAt } = stored.summary;
   const now = options.now ?? Date.now;
@@ -220,6 +256,7 @@ function attach<S>(
 
   let lastCheckpointSeq = checkpoint.checkpointSeq;
   let pendingEvents: CommittedEvent[] = [];
+  let pendingSnapshot: string | null = null;
   let scheduled = false;
   let writing: Promise<void> | null = null;
   let consecutiveFailures = 0;
@@ -229,11 +266,13 @@ function attach<S>(
   const checkpointDue = (): boolean => log.head() - lastCheckpointSeq >= interval;
 
   async function writePending(): Promise<void> {
-    while (pendingEvents.length > 0 || checkpointDue()) {
+    while (pendingEvents.length > 0 || pendingSnapshot !== null || checkpointDue()) {
       // Every committed event is pending or written, so the batch ends at the
       // log head and a checkpoint taken now matches its last event.
       const batch = pendingEvents;
+      const snapshot = pendingSnapshot;
       pendingEvents = [];
+      pendingSnapshot = null;
       const due = checkpointDue()
         ? encodeCheckpoint(config, log.checkpoint())
         : undefined;
@@ -248,11 +287,13 @@ function attach<S>(
           },
           events: batch,
           ...(due === undefined ? {} : { checkpoint: due }),
+          ...(snapshot === null ? {} : { snapshot }),
         });
         if (due !== undefined) lastCheckpointSeq = due.seq;
         consecutiveFailures = 0;
       } catch (error) {
         pendingEvents = [...batch, ...pendingEvents];
+        pendingSnapshot ??= snapshot;
         consecutiveFailures += 1;
         onPersistError(error);
         scheduleRetry();
@@ -288,8 +329,12 @@ function attach<S>(
     });
   }
 
+  const snapshots = options.snapshots;
   const unsubscribe = log.subscribe((record) => {
     pendingEvents.push({ seq: record.seq, event: record.event });
+    if (snapshots !== undefined && record.outcome === "applied") {
+      pendingSnapshot = snapshots.encode(record.stateAfter, record.seq, log.checkpoint().intentKeys) ?? pendingSnapshot;
+    }
     schedule();
   });
   if (checkpointDue()) schedule();

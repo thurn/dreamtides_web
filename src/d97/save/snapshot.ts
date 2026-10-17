@@ -1,0 +1,98 @@
+// The durable Dreamtides 97 save (decision P5): a versioned snapshot of a D97
+// game's `d97` slice and any battle in progress, with the log seq and intent
+// keys it covers and the build that wrote it. A D97 game's fold state is its
+// genesis state plus these two slices, so a snapshot restores it exactly.
+// Older schema versions migrate forward on decode.
+
+import type { Genesis } from "../../eventlog/types";
+import { d97BattleOf, type D97BattleFoldState } from "../../rules/battle/fold";
+import type { D97State } from "../../rules/d97/d97-state";
+import { genesisFoldState, type FoldState } from "../../rules/fold-state";
+import type { BuildGitRevision } from "../../types/build-identity";
+import type { IntentKey } from "../../types/identifiers";
+import { migrateSnapshot, type D97SaveMigration } from "./migrate";
+
+export const D97_SAVE_FORMAT = "dreamtides-97-save";
+
+/** The current snapshot schema version. Every change to its shape adds a migration. */
+export const D97_SAVE_SCHEMA_VERSION = 1;
+
+/** The build that wrote a snapshot: the cross-build trigger and diagnostics. */
+export interface D97SaveBuild {
+  readonly reducerVersion: Genesis["reducerVersion"];
+  readonly gitRevision: BuildGitRevision;
+}
+
+export interface D97Snapshot {
+  readonly format: typeof D97_SAVE_FORMAT;
+  readonly schemaVersion: typeof D97_SAVE_SCHEMA_VERSION;
+  readonly build: D97SaveBuild;
+  /** The log seq of the applied event the snapshot follows. */
+  readonly seq: number;
+  readonly intentKeys: readonly (readonly [IntentKey, number])[];
+  readonly d97: D97State;
+  /** The D97 battle in progress, or null. */
+  readonly battle: D97BattleFoldState | null;
+}
+
+/** The snapshot of a D97 game's state after the applied event at `seq`, or null for a journey game. */
+export function takeSnapshot(
+  state: FoldState,
+  seq: number,
+  intentKeys: readonly (readonly [IntentKey, number])[],
+  build: D97SaveBuild,
+): D97Snapshot | null {
+  if (state.d97 === undefined) return null;
+  return {
+    format: D97_SAVE_FORMAT,
+    schemaVersion: D97_SAVE_SCHEMA_VERSION,
+    build,
+    seq,
+    intentKeys: intentKeys.map(([key, at]) => [key, at] as const),
+    d97: state.d97,
+    battle: d97BattleOf(state.battle),
+  };
+}
+
+export function encodeSnapshot(snapshot: D97Snapshot): string {
+  return JSON.stringify(snapshot);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Decode a stored snapshot, migrating it to the current schema version. Null
+ * when it is not a D97 save, comes from a newer schema, or a migration fails.
+ */
+export function decodeSnapshot(
+  raw: string,
+  migrations: readonly D97SaveMigration[],
+): { readonly snapshot: D97Snapshot; readonly migratedFrom: number | null } | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  if (!isRecord(parsed) || parsed.format !== D97_SAVE_FORMAT) return null;
+  const migrated = migrateSnapshot(parsed, migrations, D97_SAVE_SCHEMA_VERSION);
+  if (migrated === null) return null;
+  const value = migrated.value;
+  if (
+    !isRecord(value.d97) ||
+    !isRecord(value.build) ||
+    typeof value.seq !== "number" ||
+    !Array.isArray(value.intentKeys) ||
+    !(value.battle === null || isRecord(value.battle))
+  ) {
+    return null;
+  }
+  return { snapshot: value as unknown as D97Snapshot, migratedFrom: migrated.from === D97_SAVE_SCHEMA_VERSION ? null : migrated.from };
+}
+
+/** The fold state a snapshot restores under `genesis`. */
+export function snapshotFoldState(genesis: Genesis, snapshot: D97Snapshot): FoldState {
+  return { ...genesisFoldState(genesis), d97: snapshot.d97, battle: snapshot.battle };
+}

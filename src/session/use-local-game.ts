@@ -24,6 +24,7 @@ import type { FoldState } from "../rules/fold-state";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { GameId } from "../types/identifiers";
 import { browserGameRepository } from "./browser-repository";
+import { d97SnapshotCodec, needsD97Rebase, rebaseD97Game } from "./d97-save";
 import {
   createLocalGameControls,
   type LocalGameControls,
@@ -126,8 +127,10 @@ interface GameSwitch {
 /** Attempts at drawing an unused game id before giving up. */
 const CREATE_GAME_MAX_ATTEMPTS = 3;
 
-function persistOptions(gameId: GameId): LocalGameOptions {
+function persistOptions(gameId: GameId, mode: GameMode): LocalGameOptions<FoldState> {
   return {
+    // D97 games write a versioned snapshot after every applied event (P5).
+    ...(mode === "d97" ? { snapshots: d97SnapshotCodec() } : {}),
     onPersistError: (error) => {
       logEvent("local_game_persist_failed", {
         gameId,
@@ -181,7 +184,9 @@ async function openGame(
   try {
     const stored = await repository.readGame(gameId);
     if (stored === null) return { kind: "notFound", gameId };
-    const compatibility = genesisCompatibility(stored.genesis, contentConfig);
+    const mode = genesisMode(stored.genesis);
+    // D97 games never meet the content gate: a changed build rebases them (P5).
+    const compatibility = mode === "d97" ? "ready" : genesisCompatibility(stored.genesis, contentConfig);
     if (compatibility === "versionGate") return { kind: "versionGate" };
     if (compatibility === "configGate") {
       return {
@@ -195,11 +200,14 @@ async function openGame(
       return { kind: "openElsewhere", gameId };
     }
     try {
+      if (mode === "d97" && needsD97Rebase(stored, contentConfig)) {
+        await rebaseD97Game(repository, stored, contentConfig);
+      }
       const game = await openLocalGame(
         repository,
         GAME_ENGINE_CONFIG,
         gameId,
-        persistOptions(gameId),
+        persistOptions(gameId, mode),
       );
       if (game !== null) {
         return opened(repository, game, lock, selection, gameSwitch);
@@ -247,7 +255,7 @@ async function createGame(
         repository,
         GAME_ENGINE_CONFIG,
         { gameId, genesis, localPlayerId: mintClientId() },
-        persistOptions(gameId),
+        persistOptions(gameId, mode),
       );
       replaceGameInUrl(gameId);
       return opened(repository, game, lock, "created", gameSwitch);

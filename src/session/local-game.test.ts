@@ -68,7 +68,7 @@ const BEGIN_BATTLE_INDEX = SCRIPT.findIndex(
   (draft) => draft.type === "BEGIN_BATTLE",
 );
 
-const OPTIONS: LocalGameOptions = {
+const OPTIONS: LocalGameOptions<FoldState> = {
   eventClock: () => "2026-01-01T00:00:00.000Z",
   now: () => 0,
 };
@@ -79,7 +79,7 @@ const hash = (game: LocalGame<FoldState>): string =>
 function newGame(
   repository: GameRepository,
   gameId: GameId,
-  options: LocalGameOptions = OPTIONS,
+  options: LocalGameOptions<FoldState> = OPTIONS,
   genesis: Genesis = GENESIS,
 ): Promise<LocalGame<FoldState>> {
   return createLocalGame<FoldState>(
@@ -97,7 +97,7 @@ function newGame(
 async function reopen(
   repository: GameRepository,
   game: LocalGame<FoldState>,
-  options: LocalGameOptions = OPTIONS,
+  options: LocalGameOptions<FoldState> = OPTIONS,
 ): Promise<LocalGame<FoldState>> {
   await game.close();
   const reopened = await openLocalGame<FoldState>(

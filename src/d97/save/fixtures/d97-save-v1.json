@@ -1,0 +1,594 @@
+{
+  "format": "dreamtides-97-save",
+  "schemaVersion": 1,
+  "build": {
+    "reducerVersion": "golden",
+    "gitRevision": "unknown"
+  },
+  "seq": 4,
+  "intentKeys": [],
+  "d97": {
+    "screen": {
+      "type": "overworld"
+    },
+    "run": {
+      "runId": "event:1",
+      "runSeed": "355479ba0883dfa8dd75be0458",
+      "avatarId": "fed2f126-83f0-478f-b8f6-e9361806eee3",
+      "startedAt": "1970-01-01T00:00:00.000Z",
+      "essence": 195,
+      "battlesFought": 0,
+      "collection": {
+        "copies": [
+          {
+            "copyId": "61ebe335-ca78-463a-8a37-4a805be966ce",
+            "cardId": "799cd1ba-c772-400c-a1cc-2aed7f575f87",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "de8eca37-72fa-4e42-b415-f7b97801778e",
+            "cardId": "64a22621-40dd-44b3-979b-d471bd868e0c",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "6b2a95e3-1d71-4860-ae7b-a5a62d257e19",
+            "cardId": "c6e8e005-189c-44c4-8792-59084a174f30",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "6a949b3e-2ab7-4449-b4a3-1a40c6f238e3",
+            "cardId": "5d0d8e86-63cf-41c9-9a64-a74945b40fca",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "22ae4158-9b70-429d-87dc-aeda31622758",
+            "cardId": "7e596aad-0081-41bb-b1cf-23b6bbb66408",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "fdfa7717-9b79-4c1b-95ef-ec143d8e848a",
+            "cardId": "d7f822ab-0451-4292-94ed-3d7cd4e73ac2",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "796c9b38-c5b8-471e-80a3-b34686fedd5e",
+            "cardId": "5867d110-64fc-4016-9364-9a1ee8e0def3",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "8411cc2e-ff85-4c03-9793-097d6ac5a8ff",
+            "cardId": "a9a5005d-6b3b-4b88-9c70-c4a4eea87b48",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "85dc4914-1f1e-4903-8d0b-e40bcbc7ac9d",
+            "cardId": "ab9441c5-8fb7-4da6-8b19-40f60af963cd",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "b429c2ab-aef1-4ad7-ad05-a31aaf7251b1",
+            "cardId": "997234ad-8d13-427f-a331-155f11e3b4ec",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "d7c01e36-e0a9-4df0-84a4-875fb10c9b9c",
+            "cardId": "4babc39b-04b8-40aa-bb39-f417d7ba4f36",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "c85688cd-1f8f-427f-8c7b-0cf7310bae2d",
+            "cardId": "0f744373-ea85-4cc1-ba00-12e40122caf4",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "d18ce5ff-3544-4454-8685-1823e505c850",
+            "cardId": "e168421f-d90c-4392-b60b-e35967ea7c87",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "ba1335c5-7bd4-45b5-b1f7-deb7ebf6f379",
+            "cardId": "2304e722-8b58-45e3-ac9f-8179fccf6cb0",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "a05e9da5-b0b8-4ae1-914d-15c7a7139f25",
+            "cardId": "588e42c0-c96a-43b9-a6f9-364139fef0a9",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "209d3bd1-b3f7-4ac4-bbd8-0e40ec3935bf",
+            "cardId": "aa8229f3-0569-449a-b2ae-5240bd675f19",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "fe0e7e7b-cc3e-4c81-a88e-7ad88db29298",
+            "cardId": "aeb34fa4-e405-4e37-95cd-99a5cc4f0a3a",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "eac7a6e1-a82c-4d73-ac76-ce0ff429babd",
+            "cardId": "6befb82f-c02d-4f57-90a7-33dbac20c3bd",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "aa14b1c5-8bcd-4095-9d0e-c98b32317f3e",
+            "cardId": "da65103e-d5d5-431c-8662-8b0d3df1fb25",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "eff13d50-c4a5-4fbc-9cc7-2620a5e8dac4",
+            "cardId": "aeec8a30-86b7-41e7-8d80-0a2ebcbc7269",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "f470068d-fdf8-49ea-b4be-ab261ed59a32",
+            "cardId": "67301554-3936-4b26-b3c3-ea2a6f907f0a",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "06218bd5-6886-4952-a620-3bc1ff5d745e",
+            "cardId": "67bdd80f-517e-4566-9ba2-1c4e4d3b2a71",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "dcc9502a-2fd8-4760-8152-89762e332887",
+            "cardId": "dbfce16d-e4ee-416e-b141-24aeff976900",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "c4f39fc8-8dc4-46c7-b35b-319349b95347",
+            "cardId": "b54417f1-c19c-4d0e-a13d-f866383bb60f",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "fb07270c-75fb-4628-978e-b3844597a0e1",
+            "cardId": "dfb29fa3-0fd9-4597-a0ae-7b955b8c2847",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "8de1dd8e-e94f-4d28-b6d1-5cb50ec57e40",
+            "cardId": "ad156e69-5d04-4ae5-b07d-cd8f0bd45c91",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "66f083ab-f7d8-40cb-b4e7-ba83026ee8d0",
+            "cardId": "44a3240f-b03f-411d-8102-623adf1adf7c",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "854d939e-3f3a-4a7b-b8ea-eab2deed18a5",
+            "cardId": "5366c600-c82f-43c1-87f9-801148a3999a",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "79843ebb-21fb-4b9c-a166-58b5c58bb13b",
+            "cardId": "56c8518c-567b-40ec-b8b4-b6ae3d4308fd",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "edfefdf6-80fc-4f46-a0d9-a35885ebd281",
+            "cardId": "6ba5f030-5140-4be1-966d-2a31f86d3958",
+            "zone": "deck",
+            "modifications": [],
+            "provenance": {
+              "channel": "starting",
+              "battleCount": 0
+            }
+          },
+          {
+            "copyId": "fd8517a0-b4ef-45b6-953b-7cfe4e03f5f4",
+            "cardId": "799cd1ba-c772-400c-a1cc-2aed7f575f87",
+            "zone": "reserve",
+            "modifications": [],
+            "provenance": {
+              "channel": "shop",
+              "battleCount": 0,
+              "price": 5
+            }
+          }
+        ],
+        "nextCopyOrdinal": 31
+      },
+      "bag": {
+        "avatarId": "fed2f126-83f0-478f-b8f6-e9361806eee3",
+        "dealSeed": 3066571001,
+        "joinedTideIds": [
+          "3667ce68-e1d2-43ab-9658-35c4add3b053",
+          "a7d970fd-ac5d-4531-9898-282511ee8ea3"
+        ],
+        "entries": [
+          {
+            "cardId": "05c65b6a-eebc-4a5e-b189-827c71773ef8",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "0f744373-ea85-4cc1-ba00-12e40122caf4",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "2304e722-8b58-45e3-ac9f-8179fccf6cb0",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "239004ae-d0a4-4043-a1f1-aa48e7b4b9ca",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "3567ad63-5319-4583-a8e6-de0a3a0f8dc4",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "4babc39b-04b8-40aa-bb39-f417d7ba4f36",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "5867d110-64fc-4016-9364-9a1ee8e0def3",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "588e42c0-c96a-43b9-a6f9-364139fef0a9",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "5d0d8e86-63cf-41c9-9a64-a74945b40fca",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "64a22621-40dd-44b3-979b-d471bd868e0c",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "67301554-3936-4b26-b3c3-ea2a6f907f0a",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "67bdd80f-517e-4566-9ba2-1c4e4d3b2a71",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "6a75809f-fc13-4fed-b570-2b40494b7dfe",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "6befb82f-c02d-4f57-90a7-33dbac20c3bd",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "750949f1-fab8-4625-9809-d6f860b95722",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "799cd1ba-c772-400c-a1cc-2aed7f575f87",
+            "target": 2,
+            "acquired": 2
+          },
+          {
+            "cardId": "7e596aad-0081-41bb-b1cf-23b6bbb66408",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "997234ad-8d13-427f-a331-155f11e3b4ec",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "998a77ea-cf16-4a15-b484-1f0a1a7163cf",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "9eaf38af-eaf3-4224-bb71-f7b10215c255",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "9fcf3945-09c3-4ab0-a6d3-706b12c6eb4b",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "a9a5005d-6b3b-4b88-9c70-c4a4eea87b48",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "aa8229f3-0569-449a-b2ae-5240bd675f19",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "ab9441c5-8fb7-4da6-8b19-40f60af963cd",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "aeb34fa4-e405-4e37-95cd-99a5cc4f0a3a",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "aeec8a30-86b7-41e7-8d80-0a2ebcbc7269",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "b54417f1-c19c-4d0e-a13d-f866383bb60f",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "c39ce673-c4bb-459a-8562-e626f2188e43",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "c6e8e005-189c-44c4-8792-59084a174f30",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "cd6a062d-4dca-4351-a8ab-6eb07b6fbfce",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "ce557280-a614-4cc6-b318-e6c30f001be6",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "d7f822ab-0451-4292-94ed-3d7cd4e73ac2",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "da65103e-d5d5-431c-8662-8b0d3df1fb25",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "dbfce16d-e4ee-416e-b141-24aeff976900",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "de0ebdc6-1a3b-4e54-8e59-7604fc7d724c",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "dfb29fa3-0fd9-4597-a0ae-7b955b8c2847",
+            "target": 1,
+            "acquired": 1
+          },
+          {
+            "cardId": "e168421f-d90c-4392-b60b-e35967ea7c87",
+            "target": 2,
+            "acquired": 1
+          },
+          {
+            "cardId": "e5b26b62-9aa9-4a91-86ae-e0d75fed8ebc",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "eb2714f0-7787-44e5-8ded-376c6cc3f3f8",
+            "target": 1,
+            "acquired": 0
+          },
+          {
+            "cardId": "fc6e757f-2458-4f9e-bf80-1c9efab885d0",
+            "target": 1,
+            "acquired": 0
+          }
+        ]
+      },
+      "encounters": {},
+      "returnAnchorId": null,
+      "quests": {
+        "active": null,
+        "completedQuestIds": [],
+        "pendingReward": null,
+        "items": []
+      },
+      "flags": [],
+      "activeWaypointIds": [
+        "d9700000-0000-4000-8000-000000000003"
+      ],
+      "lastPlace": {
+        "kind": "waypoint",
+        "anchorId": "d9700000-0000-4000-8000-000000000003"
+      },
+      "shops": {
+        "d9700000-0000-4000-8000-000000000005": {
+          "slots": [
+            {
+              "cardId": "799cd1ba-c772-400c-a1cc-2aed7f575f87",
+              "price": 5,
+              "purchased": true
+            },
+            {
+              "cardId": "64a22621-40dd-44b3-979b-d471bd868e0c",
+              "price": 5,
+              "purchased": false
+            },
+            {
+              "cardId": "c39ce673-c4bb-459a-8562-e626f2188e43",
+              "price": 80,
+              "purchased": false
+            },
+            {
+              "cardId": "67bdd80f-517e-4566-9ba2-1c4e4d3b2a71",
+              "price": 15,
+              "purchased": false
+            }
+          ],
+          "restockedThisVisit": false,
+          "rolls": 1
+        }
+      }
+    }
+  },
+  "battle": null
+}

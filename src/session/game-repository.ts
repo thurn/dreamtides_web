@@ -2,6 +2,7 @@
 //
 //   games/<gameId>                 game record: genesis, local player, head
 //   game/<gameId>/checkpoint       latest fold checkpoint
+//   game/<gameId>/snapshot         latest versioned snapshot (D97 games)
 //   game/<gameId>/events/<seq>     one encoded event per seq (zero-padded)
 //   game/<gameId>/log/<chunk>      a batch of journey-log JSONL lines
 //   logs/<gameId>                  log record: chunk counter, size, last write
@@ -65,6 +66,8 @@ export interface StoredLocalGame {
   summary: LocalGameSummary;
   genesis: StoredGenesis;
   checkpoint: StoredCheckpoint | null;
+  /** The game's durable versioned snapshot, as written, or null (D97 games write one). */
+  snapshot: string | null;
 }
 
 /** The listing view of one game's stored journey log. */
@@ -86,11 +89,22 @@ export interface GameLogTrim {
   droppedCharacters: number;
 }
 
-/** One atomic write: new events, the updated summary, maybe a checkpoint. */
+/** One atomic write: new events, the updated summary, maybe a checkpoint and a snapshot. */
 export interface LocalGameWrite {
   summary: LocalGameSummary;
   events: readonly CommittedEvent[];
   checkpoint?: StoredCheckpoint;
+  snapshot?: string;
+}
+
+/**
+ * One atomic rebase: the game continues from `snapshot` under a new genesis.
+ * Its stored events stay as history; its checkpoint is dropped.
+ */
+export interface LocalGameRebase {
+  summary: LocalGameSummary;
+  genesis: Genesis;
+  snapshot: string | null;
 }
 
 /** A stored game whose records do not decode. */
@@ -108,6 +122,8 @@ export interface GameRepository {
   /** Stored events with seq > `afterSeq`, ascending. */
   readEvents(gameId: GameId, afterSeq: number): Promise<CommittedEvent[]>;
   write(gameId: GameId, write: LocalGameWrite): Promise<void>;
+  /** Rebase the game onto a new genesis and snapshot, in one atomic write. */
+  rebaseGame(gameId: GameId, rebase: LocalGameRebase): Promise<void>;
   /** Every stored game, most recently updated first. */
   listGames(): Promise<LocalGameSummary[]>;
   /**
@@ -138,6 +154,7 @@ export interface GameRepository {
 
 const gameRecordKey = (gameId: GameId): string => `games/${gameId}`;
 const checkpointKey = (gameId: GameId): string => `game/${gameId}/checkpoint`;
+const snapshotKey = (gameId: GameId): string => `game/${gameId}/snapshot`;
 const eventsPrefix = (gameId: GameId): string => `game/${gameId}/events/`;
 const eventKey = (gameId: GameId, seq: number): string =>
   `${eventsPrefix(gameId)}${String(seq).padStart(SEQ_KEY_DIGITS, "0")}`;
@@ -301,9 +318,10 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
     },
 
     async readGame(gameId) {
-      const [record, checkpoint] = await Promise.all([
+      const [record, checkpoint, snapshot] = await Promise.all([
         store.get(gameRecordKey(gameId)),
         store.get(checkpointKey(gameId)),
+        store.get(snapshotKey(gameId)),
       ]);
       if (record === undefined) return null;
       const decoded = decodeGameRecord(record);
@@ -315,6 +333,7 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
         // An undecodable checkpoint is skipped: the events alone rebuild it.
         checkpoint:
           checkpoint === undefined ? null : decodeCheckpoint(checkpoint),
+        snapshot: typeof snapshot === "string" ? snapshot : null,
       };
     },
 
@@ -347,11 +366,28 @@ export function createGameRepository(store: KeyValueStore): GameRepository {
       if (write.checkpoint !== undefined) {
         entries.push([checkpointKey(gameId), write.checkpoint]);
       }
+      if (write.snapshot !== undefined) {
+        entries.push([snapshotKey(gameId), write.snapshot]);
+      }
       entries.push([
         gameRecordKey(gameId),
         encodeGameRecord(write.summary, await encodedGenesis(gameId)),
       ]);
       await store.putAll(entries);
+    },
+
+    async rebaseGame(gameId, rebase) {
+      const encoded = JSON.stringify(rebase.genesis);
+      const entries: KeyValueEntry[] = [[gameRecordKey(gameId), encodeGameRecord(rebase.summary, encoded)]];
+      if (rebase.snapshot !== null) entries.push([snapshotKey(gameId), rebase.snapshot]);
+      await store.replaceRanges(
+        [
+          [checkpointKey(gameId), `${checkpointKey(gameId)}${EXACT_KEY_END}`],
+          [snapshotKey(gameId), `${snapshotKey(gameId)}${EXACT_KEY_END}`],
+        ],
+        entries,
+      );
+      encodedGenesisByGame.set(gameId, encoded);
     },
 
     async listGames() {
