@@ -13,6 +13,8 @@ import type { JourneyState } from "../types/journey";
 import type { JourneySeed } from "../types/journey-seed";
 import type { TutorialPlaybackState } from "../types/tutorial";
 import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance";
+import { initialD97State, type D97State } from "./d97/d97-state";
+import { genesisMode } from "../eventlog/types";
 
 // The authoritative engine battle host shape lives in `battle/fold.ts`.
 // Its plain engine slice carries committed state and any suspended prompt;
@@ -51,6 +53,11 @@ export interface FoldState {
   readonly cardTutorialScreenKeysSeen: readonly CardTutorialScreenKey[];
   /** Shared card-and-speech journey currently presented over a site screen. */
   readonly cardTutorialPresentation: CardTutorialGuidancePresentation | null;
+  /**
+   * The Dreamtides 97 run of a D97 game (genesis `mode: "d97"`). Journey
+   * games omit the key, so their states and hashes are unaffected by it.
+   */
+  readonly d97?: D97State;
 }
 
 /** The pinned economy tunables a journey's initial state reads. */
@@ -85,13 +92,19 @@ export function initialFoldState(
   };
 }
 
-/** The initial fold state of a game, from its genesis. */
+/**
+ * The initial fold state of a game, from its genesis. A D97 game adds its
+ * {@link initialD97State} slice beside the unused journey slice.
+ */
 export function genesisFoldState(genesis: Genesis): FoldState {
-  return initialFoldState(
+  const state = initialFoldState(
     genesis.seed,
     genesis.contentConfig,
     genesis.frontDoorEntry,
   );
+  return genesisMode(genesis) === "d97"
+    ? { ...state, d97: initialD97State() }
+    : state;
 }
 
 /**

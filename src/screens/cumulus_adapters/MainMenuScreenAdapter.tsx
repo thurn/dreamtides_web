@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   MainMenuScreen,
   type MainMenuActionId,
@@ -7,9 +7,13 @@ import {
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { buildMainMenuView } from "./main-menu-view-model";
-import { parseFrontDoorActionId } from "../../types/identifiers";
+import { parseFrontDoorActionId, type GameId } from "../../types/identifiers";
+import { useGameSwitch } from "../../session/game-switch";
 
-/** Game-log-backed `/main` wiring, including its cinematic New Journey transition. */
+/**
+ * Game-log-backed `/main` wiring, including its cinematic New Journey
+ * transition and the Dreamtides 97 entries, which switch to a D97 game.
+ */
 export function MainMenuScreenAdapter({
   playbackSpeed = 1,
 }: {
@@ -17,7 +21,28 @@ export function MainMenuScreenAdapter({
 }) {
   const hasLoggedPresentation = useRef(false);
   const { state, mutations } = useFrontDoor();
-  const view = useMemo(() => buildMainMenuView(), []);
+  const gameSwitch = useGameSwitch();
+  // The stored D97 run Continue opens; null hides Continue.
+  const [recentD97Run, setRecentD97Run] = useState<GameId | null>(null);
+  useEffect(() => {
+    if (gameSwitch === null) return;
+    let current = true;
+    void gameSwitch.findRecentD97Run().then(
+      (gameId) => {
+        if (current) setRecentD97Run(gameId);
+      },
+      (error: unknown) => {
+        console.error("D97 run lookup failed", error);
+      },
+    );
+    return () => {
+      current = false;
+    };
+  }, [gameSwitch]);
+  const view = useMemo(
+    () => buildMainMenuView({ d97ContinueAvailable: recentD97Run !== null }),
+    [recentD97Run],
+  );
 
   useEffect(() => {
     if (hasLoggedPresentation.current) return;
@@ -32,6 +57,16 @@ export function MainMenuScreenAdapter({
   const handleAction = useCallback(
     (actionId: MainMenuActionId) => {
       logEvent("main_menu_action_pressed", { actionId });
+      if (actionId === "d97-new-run") {
+        gameSwitch?.startD97Run({ source: "main_menu" });
+        return;
+      }
+      if (actionId === "d97-continue") {
+        if (recentD97Run !== null) {
+          gameSwitch?.continueD97Run({ source: "main_menu" }, recentD97Run);
+        }
+        return;
+      }
       if (actionId !== "new-journey") return;
       void mutations
         .action("main", parseFrontDoorActionId(actionId))
@@ -39,7 +74,7 @@ export function MainMenuScreenAdapter({
           console.error("Main-menu action failed", error);
         });
     },
-    [mutations],
+    [gameSwitch, mutations, recentD97Run],
   );
 
   const handleSocial = useCallback(

@@ -84,6 +84,9 @@ export interface GameEvent {
   intentKey?: IntentKey;
 }
 
+/** The game mode a game plays for its whole life, fixed at genesis. */
+export type GameMode = "journey" | "d97";
+
 /**
  * Immutable metadata written once when a game is created, in the shape the
  * fold consumes: every field the initial fold state reads is present.
@@ -93,6 +96,11 @@ export interface Genesis {
   reducerVersion: ReducerVersion;
   /** Epoch milliseconds. */
   createdAt: number;
+  /**
+   * The game's mode. Journey games omit it, so every stored game without a
+   * mode is a journey game (see {@link genesisMode}).
+   */
+  mode?: GameMode;
   /**
    * Standalone front-door scene a newly created game starts on. Journey games
    * omit this and use the default main-menu scene; the journey router ignores
@@ -105,6 +113,11 @@ export interface Genesis {
    * differs is gated out of the game (see the config gate in src/App.tsx).
    */
   contentConfig: ContentConfig;
+}
+
+/** The mode of a game from its genesis; an omitted mode is a journey. */
+export function genesisMode(genesis: Pick<Genesis, "mode">): GameMode {
+  return genesis.mode ?? "journey";
 }
 
 /**

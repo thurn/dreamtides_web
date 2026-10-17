@@ -37,10 +37,13 @@ import type {
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
+  isD97EventType,
   isGameplayEventType,
   isKnownEventType,
   type GameEventType,
 } from "./events";
+import * as d97Run from "./d97/d97-run";
+import type { D97Transition } from "./d97/d97-run";
 import type { FoldState } from "./fold-state";
 import type { JourneyPurgeOccurrence, JourneyPurgeTransition, JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
@@ -358,6 +361,10 @@ export function routeDomain(
 ): ReduceResult {
   if (!isKnownEventType(event.type)) {
     // Unrecognized type string — recorded no-op, never a throw.
+    return bounce(state);
+  }
+  // Mode isolation: a D97 game folds only D97 events, a journey game none.
+  if (isD97EventType(event.type) !== (state.d97 !== undefined)) {
     return bounce(state);
   }
   if (state.journey.journeyDraw !== undefined && isGameplayEventType(event.type)) return bounce(state);
@@ -785,6 +792,10 @@ export function routeDomain(
     case "BATTLE_DEBUG":
       return foldCase(state, reduceEngineDebug(state, payload, ctx));
 
+    // --- Dreamtides 97 ---
+    case "D97_START_RUN":
+      return d97Case(state, state.d97 === undefined ? null : d97Run.startRun(state.d97, payload, ctx));
+
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":
       return foldCase(state, lifecycle.resetJourney(state, ctx));
@@ -842,6 +853,16 @@ function frontDoorCase(
   return {
     state: { ...state, frontDoor: nextFrontDoor },
     outcome: "applied",
+  };
+}
+
+/** Wrap a D97 domain result: `null` bounces, a new D97 slice applies. */
+function d97Case(state: FoldState, transition: D97Transition | null): ReduceResult {
+  if (transition === null) return bounce(state);
+  return {
+    state: { ...state, d97: transition.d97 },
+    outcome: "applied",
+    logRecords: transition.logRecords,
   };
 }
 

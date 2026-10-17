@@ -36,6 +36,7 @@ import { registerJourneyLifecycleContentProvider } from "../../rules/journey/lif
 import { registerSiteContentProvider } from "../../rules/journey/sites";
 import { registerCardTutorialGuidanceContentProvider } from "../../rules/card-tutorial-guidance";
 import { registerTutorialFrontDoorContentProvider } from "../../rules/front-door";
+import { registerD97ContentProvider } from "../../rules/d97/d97-content";
 import {
   createBattleCompletionProvider,
   createBattleInitProvider,
@@ -73,6 +74,9 @@ export function registerGameProviders(content: JourneyContent): void {
   registerCardTutorialGuidanceContentProvider(
     createCardTutorialGuidanceContentProvider(content),
   );
+  registerD97ContentProvider({
+    avatarIds: new Set(content.avatars.map((avatar) => avatar.id)),
+  });
 }
 
 /**
@@ -92,4 +96,5 @@ export function clearGameProviders(): void {
   registerBattleCompletionProvider(null);
   registerTutorialBattleInitProvider(null);
   registerCardTutorialGuidanceContentProvider(null);
+  registerD97ContentProvider(null);
 }

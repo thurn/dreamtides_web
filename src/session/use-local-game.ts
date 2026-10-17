@@ -13,9 +13,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GAME_LOGS } from "../content/game-logs";
 import { generateGameId, mintClientId } from "../eventlog/game-id";
-import type {
-  PinnedContentConfig,
-  StoredContentConfig,
+import {
+  genesisMode,
+  type GameMode,
+  type PinnedContentConfig,
+  type StoredContentConfig,
 } from "../eventlog/types";
 import { logEvent } from "../logging";
 import type { FoldState } from "../rules/fold-state";
@@ -27,6 +29,11 @@ import {
   type LocalGameControls,
 } from "./game-controls";
 import { attachGameLog, type LocalGameSelection } from "./game-log";
+import {
+  createGameSwitchControls,
+  type GameSwitchControls,
+  type LocalGameRequest,
+} from "./game-switch";
 import { createGameLogCapture, type GameLogCapture } from "./game-log-capture";
 import {
   acquireGameLock,
@@ -56,7 +63,10 @@ export type LocalGameStatus =
   | {
       kind: "ready";
       game: LocalGame<FoldState>;
+      /** The game's mode, from its genesis. */
+      mode: GameMode;
       controls: LocalGameControls;
+      gameSwitch: GameSwitchControls;
     }
   | { kind: "notFound"; gameId: GameId }
   | { kind: "openElsewhere"; gameId: GameId }
@@ -80,6 +90,8 @@ export interface UseLocalGameInput {
   contentConfig: PinnedContentConfig;
   /** Front-door scene for a newly created game. */
   frontDoorEntry?: FrontDoorEntry;
+  /** Mode of a game this hook creates without an explicit request. */
+  newGameMode?: GameMode;
   /**
    * The URL's `?seed=<n>`: the game this hook creates on load takes a seed
    * derived from it (see `createFreshGenesis`). A game created through
@@ -105,6 +117,12 @@ interface OpenedGame {
 
 type OpenResult = Exclude<LocalGameStatus, { kind: "ready" }> | OpenedGame;
 
+/** Callbacks an opened game's controls use to switch this tab's game. */
+interface GameSwitch {
+  readonly requestNewGame: () => void;
+  readonly requestGame: (request: LocalGameRequest) => void;
+}
+
 /** Attempts at drawing an unused game id before giving up. */
 const CREATE_GAME_MAX_ATTEMPTS = 3;
 
@@ -124,7 +142,7 @@ function opened(
   game: LocalGame<FoldState>,
   lock: GameLock,
   selection: LocalGameSelection,
-  requestNewGame: () => void,
+  gameSwitch: GameSwitch,
 ): OpenedGame {
   const logCapture = createGameLogCapture(repository, game.gameId, GAME_LOGS);
   return {
@@ -133,11 +151,17 @@ function opened(
     status: {
       kind: "ready",
       game,
+      mode: genesisMode(game.genesis),
       controls: createLocalGameControls(
         game,
         repository,
         logCapture,
-        requestNewGame,
+        gameSwitch.requestNewGame,
+      ),
+      gameSwitch: createGameSwitchControls(
+        game.gameId,
+        repository,
+        gameSwitch.requestGame,
       ),
     },
     lock,
@@ -151,7 +175,7 @@ async function openGame(
   locks: GameLockManager | undefined,
   gameId: GameId,
   contentConfig: PinnedContentConfig,
-  requestNewGame: () => void,
+  gameSwitch: GameSwitch,
   selection: Exclude<LocalGameSelection, "created"> = "opened",
 ): Promise<OpenResult> {
   try {
@@ -178,7 +202,7 @@ async function openGame(
         persistOptions(gameId),
       );
       if (game !== null) {
-        return opened(repository, game, lock, selection, requestNewGame);
+        return opened(repository, game, lock, selection, gameSwitch);
       }
       lock.release();
       return { kind: "notFound", gameId };
@@ -200,8 +224,9 @@ async function createGame(
   locks: GameLockManager | undefined,
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
-  requestNewGame: () => void,
+  gameSwitch: GameSwitch,
   seedOverride: number | null,
+  mode: GameMode,
 ): Promise<OpenResult> {
   for (let attempt = 0; attempt < CREATE_GAME_MAX_ATTEMPTS; attempt += 1) {
     const gameId = generateGameId();
@@ -216,6 +241,7 @@ async function createGame(
         contentConfig,
         frontDoorEntry,
         seedOverride,
+        mode,
       );
       const game = await createLocalGame<FoldState>(
         repository,
@@ -224,7 +250,7 @@ async function createGame(
         persistOptions(gameId),
       );
       replaceGameInUrl(gameId);
-      return opened(repository, game, lock, "created", requestNewGame);
+      return opened(repository, game, lock, "created", gameSwitch);
     } catch (error) {
       lock.release();
       throw error;
@@ -243,8 +269,9 @@ async function resumeOrCreateGame(
   locks: GameLockManager | undefined,
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
-  requestNewGame: () => void,
+  gameSwitch: GameSwitch,
   seedOverride: number | null,
+  mode: GameMode,
 ): Promise<OpenResult> {
   const [recent] = await repository.listGames();
   if (recent !== undefined) {
@@ -253,7 +280,7 @@ async function resumeOrCreateGame(
       locks,
       recent.gameId,
       contentConfig,
-      requestNewGame,
+      gameSwitch,
       "resumed",
     );
     if (result.kind === "ready") {
@@ -270,8 +297,9 @@ async function resumeOrCreateGame(
     locks,
     contentConfig,
     frontDoorEntry,
-    requestNewGame,
+    gameSwitch,
     seedOverride,
+    mode,
   );
 }
 
@@ -309,6 +337,7 @@ export function useLocalGame({
   resumeRecent = false,
   contentConfig,
   frontDoorEntry,
+  newGameMode = "journey",
   seedOverride = null,
   repository = browserGameRepository,
   locks = browserGameLockManager,
@@ -316,13 +345,26 @@ export function useLocalGame({
   status: LocalGameStatus;
   createNewGame: () => void;
 } {
-  const [createRequests, setCreateRequests] = useState(0);
-  const create = createRequests > 0 || (gameId === null && !resumeRecent);
-  const requestKey = create
-    ? `create:${createRequests}`
-    : gameId === null
-      ? "resume"
-      : `open:${gameId}`;
+  // The newest player request to switch games, numbered so a repeated request
+  // is a new key; null while the tab plays the game its URL selects.
+  const [switchRequest, setSwitchRequest] = useState<
+    (LocalGameRequest & { readonly serial: number }) | null
+  >(null);
+  const openRequestId =
+    switchRequest?.kind === "open" ? switchRequest.gameId : null;
+  const create =
+    switchRequest?.kind === "create" ||
+    (switchRequest === null && gameId === null && !resumeRecent);
+  const createMode =
+    switchRequest?.kind === "create" ? switchRequest.mode : newGameMode;
+  const requestKey =
+    switchRequest !== null
+      ? `${switchRequest.kind}:${String(switchRequest.serial)}`
+      : create
+        ? "create:0"
+        : gameId === null
+          ? "resume"
+          : `open:${gameId}`;
   const [status, setStatus] = useState<LocalGameStatus>({
     kind: create ? "creating" : "opening",
   });
@@ -338,15 +380,22 @@ export function useLocalGame({
   } | null>(null);
   const mountedRef = useRef(false);
 
-  const createNewGame = useCallback(() => {
-    setCreateRequests((count) => count + 1);
+  const requestGame = useCallback((request: LocalGameRequest) => {
+    setSwitchRequest((previous) => ({
+      ...request,
+      serial: (previous?.serial ?? 0) + 1,
+    }));
   }, []);
+  const createNewGame = useCallback(() => {
+    requestGame({ kind: "create", mode: newGameMode });
+  }, [newGameMode, requestGame]);
 
   useEffect(() => {
     if (requestRef.current?.key !== requestKey) {
       setStatus({ kind: create ? "creating" : "opening" });
       // Only the game the URL itself creates takes the URL's seed.
-      const genesisSeedOverride = createRequests === 0 ? seedOverride : null;
+      const genesisSeedOverride = switchRequest === null ? seedOverride : null;
+      const gameSwitch: GameSwitch = { requestNewGame: createNewGame, requestGame };
       requestRef.current = {
         key: requestKey,
         result: repository().then((loaded) =>
@@ -356,25 +405,38 @@ export function useLocalGame({
                 locks(),
                 contentConfig,
                 frontDoorEntry,
-                createNewGame,
+                gameSwitch,
                 genesisSeedOverride,
+                createMode,
               )
-            : gameId === null
-              ? resumeOrCreateGame(
+            : openRequestId !== null
+              ? openGame(
                   loaded,
                   locks(),
+                  openRequestId,
                   contentConfig,
-                  frontDoorEntry,
-                  createNewGame,
-                  genesisSeedOverride,
-                )
-              : openGame(
-                  loaded,
-                  locks(),
-                  gameId,
-                  contentConfig,
-                  createNewGame,
-                ),
+                  gameSwitch,
+                ).then((result) => {
+                  if (result.kind === "ready") replaceGameInUrl(openRequestId);
+                  return result;
+                })
+              : gameId === null
+                ? resumeOrCreateGame(
+                    loaded,
+                    locks(),
+                    contentConfig,
+                    frontDoorEntry,
+                    gameSwitch,
+                    genesisSeedOverride,
+                    newGameMode,
+                  )
+                : openGame(
+                    loaded,
+                    locks(),
+                    gameId,
+                    contentConfig,
+                    gameSwitch,
+                  ),
         ),
       };
     }
@@ -428,15 +490,19 @@ export function useLocalGame({
   }, [
     contentConfig,
     create,
+    createMode,
     createNewGame,
-    createRequests,
     frontDoorEntry,
     gameId,
     locks,
+    newGameMode,
+    openRequestId,
     repository,
+    requestGame,
     requestKey,
     resumeRecent,
     seedOverride,
+    switchRequest,
   ]);
 
   // Unmounting closes the game and frees its lock for another tab.

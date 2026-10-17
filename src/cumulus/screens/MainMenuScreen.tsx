@@ -11,7 +11,13 @@ import { useIsDesktop } from "../primitives/use-is-desktop";
 import "../primitives/cumulus-base.css";
 
 export type MainMenuActionId =
-  "new-journey" | "dream-codex" | "settings" | "about" | "quit";
+  | "new-journey"
+  | "d97-new-run"
+  | "d97-continue"
+  | "dream-codex"
+  | "settings"
+  | "about"
+  | "quit";
 
 export type MainMenuSocialId = "github" | "discord" | "reddit";
 

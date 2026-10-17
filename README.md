@@ -30,7 +30,10 @@ stored in the browser's IndexedDB, and `?game=<id>` in the URL selects it. The
 front door (`/` or `/main` with no `?game=`) resumes this browser's most
 recently played game, or creates a new one and opens Avatar selection when
 there is none. Any other entry URL, or one carrying a game-shaping parameter
-such as `?seed=` or `?goto=`, starts a new game.
+such as `?seed=` or `?goto=`, starts a new game. Each game has a mode fixed
+when it is created: a journey, or a Dreamtides 97 run. The main menu's
+Dreamtides 97 entry creates a D97 game, and Continue reopens the most recent
+one; `/d97` with no `?game=` also creates one.
 
 `npm run build` writes a static site to `dist/` and needs no env file. Card
 art is served from `public/` unless the build sets `VITE_ASSET_BASE_URL` to
@@ -859,6 +862,9 @@ scene on every load.
   `gamble`/`-enhanced`, `exploration`/`-enhanced`, `exploration-duplicates`,
   `exploration-purchases`, `random-site`, `random-site-home`.
 - **End screens:** `journeycomplete`, `journeyfailed`.
+- **Dreamtides 97** (`src/d97/qa-scenes.ts`; these create a D97 game):
+  `d97` (Avatar select), `d97-overworld` (a run started with the roster's
+  first Avatar, on the overworld).
 - **Prompt lab** (`prompt-lab-<fixture>`): the playable battle with its engine
   battle replaced by a synthetic one (`src/engine/testing/prompt-lab.ts`) that
   stops at a prompt, response window, or decision of the battle screen's

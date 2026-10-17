@@ -13,6 +13,9 @@ import {
 import { ConfigGateScreen } from "./components/ConfigGateScreen";
 import { registerGameProviders } from "./session/providers/register-game-providers";
 import { LocalGameProvider, useConfirmedHead } from "./session/hooks";
+import { GameSwitchContext } from "./session/game-switch";
+import type { GameMode } from "./eventlog/types";
+import { D97ScreenRouter } from "./components/D97ScreenRouter";
 import { useLocalGame } from "./session/use-local-game";
 import type { FrontDoorEntry } from "./session/genesis";
 import { useJourney } from "./state/journey-context";
@@ -374,12 +377,15 @@ export function JourneyApp({
 export default function App({
   runtimeConfig,
   frontDoorEntry,
+  newGameMode = "journey",
   resumeRecentGame = false,
   directTutorialBattle = false,
   previewTutorialVictory = false,
 }: {
   runtimeConfig: RuntimeConfig;
   frontDoorEntry?: FrontDoorEntry;
+  /** Mode of a game created on load (`/d97` and D97 QA scenes create D97 games). */
+  newGameMode?: GameMode;
   /** Without `?game=`, resume the most recent game (the front door). */
   resumeRecentGame?: boolean;
   directTutorialBattle?: boolean;
@@ -472,6 +478,7 @@ export default function App({
       journeyContent={journeyContent}
       runtimeConfig={runtimeConfig}
       frontDoorEntry={frontDoorEntry}
+      newGameMode={newGameMode}
       resumeRecentGame={resumeRecentGame}
       directTutorialBattle={directTutorialBattle}
       previewTutorialVictory={previewTutorialVictory}
@@ -484,6 +491,7 @@ function LocalGameApp({
   journeyContent,
   runtimeConfig,
   frontDoorEntry,
+  newGameMode,
   resumeRecentGame,
   directTutorialBattle,
   previewTutorialVictory,
@@ -491,6 +499,7 @@ function LocalGameApp({
   journeyContent: JourneyContent;
   runtimeConfig: RuntimeConfig;
   frontDoorEntry?: FrontDoorEntry;
+  newGameMode: GameMode;
   resumeRecentGame: boolean;
   directTutorialBattle: boolean;
   previewTutorialVictory: boolean;
@@ -517,6 +526,7 @@ function LocalGameApp({
     resumeRecent: resumeRecentGame,
     contentConfig,
     frontDoorEntry,
+    newGameMode,
     seedOverride: runtimeConfig.seedOverride,
   });
   const createNewGameAction = {
@@ -616,22 +626,31 @@ function LocalGameApp({
     case "ready":
       return (
         <LocalGameProvider game={status.game} controls={status.controls}>
-          <GameJourneyProvider journeyContent={journeyContent}>
-            <FrontDoorProvider>
-              <FrontDoorRouter
-                avatars={journeyContent.avatars}
-                tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
-                directTutorialBattle={directTutorialBattle}
-                previewTutorialVictory={previewTutorialVictory}
-                journey={
-                  <JourneyApp
-                    cardDatabase={journeyContent.cardDatabase}
-                    runtimeConfig={runtimeConfig}
+          <GameSwitchContext.Provider value={status.gameSwitch}>
+            <GameJourneyProvider journeyContent={journeyContent}>
+              {status.mode === "d97" ? (
+                <D97ScreenRouter
+                  journeyContent={journeyContent}
+                  gotoScene={runtimeConfig.gotoScene ?? null}
+                />
+              ) : (
+                <FrontDoorProvider>
+                  <FrontDoorRouter
+                    avatars={journeyContent.avatars}
+                    tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
+                    directTutorialBattle={directTutorialBattle}
+                    previewTutorialVictory={previewTutorialVictory}
+                    journey={
+                      <JourneyApp
+                        cardDatabase={journeyContent.cardDatabase}
+                        runtimeConfig={runtimeConfig}
+                      />
+                    }
                   />
-                }
-              />
-            </FrontDoorProvider>
-          </GameJourneyProvider>
+                </FrontDoorProvider>
+              )}
+            </GameJourneyProvider>
+          </GameSwitchContext.Provider>
         </LocalGameProvider>
       );
   }

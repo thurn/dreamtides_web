@@ -318,6 +318,9 @@ export interface EventPayloads {
   // only: `op` is a `DebugOp` (src/engine/debug/debug-actions.ts), validated
   // by the domain case. A production build bounces it.
   BATTLE_DEBUG: { op: unknown };
+
+  // --- Dreamtides 97 (D97 games only; cases in ./d97/) ---
+  D97_START_RUN: { avatarId: AvatarId };
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -487,6 +490,7 @@ const EVENT_INTENT_CLASSES = {
   BATTLE_ANSWER: "gameplay",
   BATTLE_CANCEL: "gameplay",
   BATTLE_DEBUG: "administrative", // engine debug panel
+  D97_START_RUN: "gameplay",
 } as const satisfies Record<GameEventType, EventIntentClass>;
 
 /** Event types for which journey modifiers never run. */
@@ -628,6 +632,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_ANSWER: true,
   BATTLE_CANCEL: true,
   BATTLE_DEBUG: true,
+  D97_START_RUN: true,
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.
@@ -653,4 +658,15 @@ export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<GameEventType> =
 /** Narrows a raw event `type` string to a known `GameEventType`. */
 export function isKnownEventType(type: EventType): type is GameEventType {
   return (KNOWN_EVENT_TYPES as ReadonlySet<EventType>).has(type);
+}
+
+/** The event types of the Dreamtides 97 namespace. */
+export type D97EventType = Extract<GameEventType, `D97_${string}`>;
+
+/**
+ * Whether a known event type belongs to the D97 namespace. D97 games fold
+ * only these; journey games bounce them.
+ */
+export function isD97EventType(type: GameEventType): type is D97EventType {
+  return type.startsWith("D97_");
 }

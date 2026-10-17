@@ -5,6 +5,7 @@
 import { CURRENT_REDUCER_VERSION, isReducerVersionCompatible } from "./reducer-version";
 import type {
   ContentConfig,
+  GameMode,
   PinnedContentConfig,
   PinnedGenesis,
   StoredGenesis,
@@ -42,12 +43,14 @@ export function journeySeedFromSeedOverride(seedOverride: number): JourneySeed {
  * The genesis of a new game: its seed, the current reducer protocol, now, and
  * the fold-relevant content configuration of this build. The seed is fresh
  * entropy unless `seedOverride` (the URL's `?seed=<n>`) is set, in which case it
- * is {@link journeySeedFromSeedOverride}.
+ * is {@link journeySeedFromSeedOverride}. A D97 game records its `mode` and
+ * has no front-door entry; a journey game omits the mode.
  */
 export function createFreshGenesis(
   contentConfig: PinnedContentConfig,
   frontDoorEntry?: FrontDoorEntry,
   seedOverride: number | null = null,
+  mode: GameMode = "journey",
 ): PinnedGenesis {
   return {
     seed:
@@ -57,7 +60,11 @@ export function createFreshGenesis(
     reducerVersion: CURRENT_REDUCER_VERSION,
     createdAt: Date.now(),
     contentConfig,
-    ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
+    ...(mode === "d97"
+      ? { mode }
+      : frontDoorEntry === undefined
+        ? {}
+        : { frontDoorEntry }),
   };
 }
 

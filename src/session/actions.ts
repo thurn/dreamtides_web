@@ -392,6 +392,10 @@ export interface GameActions {
   ) => Promise<number>;
   /** Apply an engine debug action (D4); development builds only. */
   battleDebug: (op: EngineDebugOp) => Promise<number>;
+
+  // --- Dreamtides 97 ---
+  /** Start a D97 game's run with the chosen roster Avatar. */
+  d97StartRun: (avatarId: AvatarId) => Promise<number>;
 }
 
 /**
@@ -828,5 +832,10 @@ export function makeActions(append: AppendFn): GameActions {
     cancelPrompt: (side, promptId, actor) =>
       emit("BATTLE_CANCEL", { side, promptId }, undefined, actor),
     battleDebug: (op) => emit("BATTLE_DEBUG", { op }),
+
+    // --- Dreamtides 97 ---
+    // A game starts one run: repeated picks share the run's intent key.
+    d97StartRun: (avatarId) =>
+      emit("D97_START_RUN", { avatarId }, parseIntentKey("d97-start-run")),
   };
 }

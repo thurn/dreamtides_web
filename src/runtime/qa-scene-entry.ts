@@ -8,9 +8,17 @@
  */
 import type * as Scenes from "./qa-scenes";
 import type { QaScene } from "./qa-scenes";
+import type * as D97Scenes from "../d97/qa-scenes";
+import type { D97QaScene } from "../d97/qa-scenes";
 import type { QaSceneId } from "../types/identifiers";
 
 const scenes: typeof Scenes | null = import.meta.env.DEV ? await import("./qa-scenes") : null;
+const d97Scenes: typeof D97Scenes | null = import.meta.env.DEV ? await import("../d97/qa-scenes") : null;
+
+/** The Dreamtides 97 QA scene `id` names, or `null` (always in production). */
+export function findD97QaScene(id: QaSceneId): D97QaScene | null {
+  return d97Scenes?.findD97QaScene(id) ?? null;
+}
 
 /** The registered QA scene `id` names, or `null` (always `null` in a production build). */
 export function findQaScene(id: QaSceneId): QaScene | null {

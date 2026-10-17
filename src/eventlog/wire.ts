@@ -117,7 +117,7 @@ export function decodeGenesis(raw: unknown): StoredGenesis | null {
     return null;
   }
   if (!isRecord(parsed)) return null;
-  const { seed, reducerVersion, createdAt, frontDoorEntry } = parsed;
+  const { seed, reducerVersion, createdAt, frontDoorEntry, mode } = parsed;
   const journeySeed = journeySeedFromUnknown(seed);
   if (
     journeySeed === null ||
@@ -130,7 +130,8 @@ export function decodeGenesis(raw: unknown): StoredGenesis | null {
       frontDoorEntry === "main" ||
       frontDoorEntry === "loading" ||
       frontDoorEntry === "tutorial"
-    )
+    ) ||
+    !(mode === undefined || mode === "journey" || mode === "d97")
   ) {
     return null;
   }
@@ -141,6 +142,7 @@ export function decodeGenesis(raw: unknown): StoredGenesis | null {
     reducerVersion: parseReducerVersion(reducerVersion),
     createdAt,
     ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
+    ...(mode === undefined ? {} : { mode }),
     ...(contentConfig === undefined ? {} : { contentConfig }),
   };
 }

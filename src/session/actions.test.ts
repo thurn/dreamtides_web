@@ -269,6 +269,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.answerPrompt("player", parsePromptId("1:1:0"), 1);
   void actions.cancelPrompt("player", parsePromptId("1:1:0"));
   void actions.battleDebug({ kind: "mark" });
+  void actions.d97StartRun(testAvatarId("dc-1"));
 
   return drafts;
 }

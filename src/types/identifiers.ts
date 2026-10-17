@@ -103,6 +103,10 @@ export type DreamscapeId = DomainIdentity<"DreamscapeId">;
 export type DreamscapeArtKey = DomainIdentity<"DreamscapeArtKey">;
 export type DreamsignId = DomainIdentity<"DreamsignId">;
 export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
+/** One Dreamtides 97 campaign run, minted by the event that starts it. */
+export type D97RunId = DomainIdentity<"D97RunId">;
+/** Stable entropy a Dreamtides 97 run's generators derive from. */
+export type D97RunSeed = DomainIdentity<"D97RunSeed">;
 /** A pending battle prompt: `<committed version>:<answers recorded>`. */
 export type PromptId = DomainIdentity<"PromptId">;
 export type ExplorationActionId = DomainIdentity<"ExplorationActionId">;
@@ -166,6 +170,8 @@ const brandDreamscapeId = identityConstructor<DreamscapeId>();
 const brandDreamscapeArtKey = identityConstructor<DreamscapeArtKey>();
 const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
+const brandD97RunId = identityConstructor<D97RunId>();
+const brandD97RunSeed = identityConstructor<D97RunSeed>();
 const brandPromptId = identityConstructor<PromptId>();
 const brandExplorationActionId = identityConstructor<ExplorationActionId>();
 const brandFrontDoorActionId = identityConstructor<FrontDoorActionId>();
@@ -350,6 +356,11 @@ export const parseGuideArtKey = identityParser(
   (value) => /^[a-z0-9_]+$/u.test(value),
 );
 export const parseJourneyId = identityParser("Journey id", brandJourneyId);
+export const parseD97RunId = identityParser("D97 run id", brandD97RunId);
+export const parseD97RunSeed = identityParser(
+  "D97 run seed",
+  brandD97RunSeed,
+);
 export const parseIntentKey = identityParser("Intent key", brandIntentKey);
 export const parseAuguryCategoryId = identityParser(
   "Augury category id",
@@ -436,6 +447,7 @@ export const atlasNodeIdFromUnknown = identityDecoder(parseAtlasNodeId);
 export const auguryArchetypeIdFromUnknown = identityDecoder(
   parseAuguryArchetypeId,
 );
+export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const battleCardIdFromUnknown = identityDecoder(parseBattleCardId);
 export const clientIdFromUnknown = identityDecoder(parseClientId);
 export const cardTypeChangePredicateIdFromUnknown = identityDecoder(
