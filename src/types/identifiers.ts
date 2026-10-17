@@ -107,6 +107,8 @@ export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
 export type D97CharacterId = DomainIdentity<"D97CharacterId">;
 /** A Universal LPC generator sheet definition, by its file name. */
 export type LpcSheetKey = DomainIdentity<"LpcSheetKey">;
+/** One Dreamtides 97 dream module: a map and its residents (a UUID). */
+export type D97DreamId = DomainIdentity<"D97DreamId">;
 /** One authored Dreamtides 97 dream map. */
 export type DreamMapId = DomainIdentity<"DreamMapId">;
 /** One anchor (door, waypoint, shop, NPC spot…) on a D97 dream map. */
@@ -200,6 +202,7 @@ const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
 const brandD97CharacterId = identityConstructor<D97CharacterId>();
 const brandLpcSheetKey = identityConstructor<LpcSheetKey>();
+const brandD97DreamId = identityConstructor<D97DreamId>();
 const brandDreamMapId = identityConstructor<DreamMapId>();
 const brandDreamAnchorId = identityConstructor<DreamAnchorId>();
 const brandDreamMapSourceHash = identityConstructor<DreamMapSourceHash>();
@@ -408,6 +411,12 @@ export const parseLpcSheetKey = identityParser(
   "LPC sheet key",
   brandLpcSheetKey,
   (value) => /^[a-z0-9_]+$/u.test(value),
+);
+export const parseD97DreamId = identityParser(
+  "D97 dream id",
+  brandD97DreamId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
 );
 export const parseDreamMapId = identityParser(
   "Dream map id",

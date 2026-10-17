@@ -3,10 +3,13 @@
 // later open keeps the stock; buying pays the quote once, records the price
 // and enters the reserve; selling pays the guarded sale quote and is refused
 // at the collection floor; one paid restock per visit re-rolls every slot.
+// The full contract runs at the development dream's shop; every dream
+// module's shop opens, found by its topology.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { D97_COLLECTION } from "../../content/d97/collection";
-import { D97_SLICE_DREAM } from "../../content/d97/dreams";
+import { D97_DREAM_MODULES } from "../../content/d97/dreams";
+import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
 import { findCopy } from "../../d97/collection/collection";
@@ -24,7 +27,7 @@ import type { D97Run, D97Shop } from "./d97-state";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-shop-avatar");
-const SHOP = D97_SLICE_DREAM.shopAnchorId;
+const SHOP = DEVELOPMENT_DREAM.topology.shopAnchorId;
 let seq = 0;
 
 function apply(state: FoldState, type: string, payload: Record<string, unknown>) {
@@ -88,7 +91,14 @@ describe("D97_OPEN_SHOP", () => {
 
   it("bounces for an anchor that is not the dream's shop", () => {
     const started = apply(genesisFoldState(D97_GENESIS), "D97_START_RUN", { avatarId: AVATAR }).state;
-    expect(apply(started, "D97_OPEN_SHOP", { anchorId: D97_SLICE_DREAM.waypointAnchorId }).outcome).toBe("bounced");
+    expect(apply(started, "D97_OPEN_SHOP", { anchorId: DEVELOPMENT_DREAM.topology.waypointAnchorId }).outcome).toBe("bounced");
+  });
+
+  it.each(D97_DREAM_MODULES.map((dream) => [dream.id, dream] as const))("opens dream %s's shop and no other anchor of its topology", (_id, dream) => {
+    const started = apply(genesisFoldState(D97_GENESIS), "D97_START_RUN", { avatarId: AVATAR }).state;
+    const result = applied(started, "D97_OPEN_SHOP", { anchorId: dream.topology.shopAnchorId });
+    expect(runOf(result.state).shops[dream.topology.shopAnchorId]?.slots.length).toBeGreaterThan(0);
+    expect(apply(started, "D97_OPEN_SHOP", { anchorId: dream.topology.exitDoorAnchorId }).outcome).toBe("bounced");
   });
 });
 

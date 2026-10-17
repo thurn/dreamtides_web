@@ -6,7 +6,7 @@
 // arrives.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { D97DreamTopology } from "../../../content/d97/dreams";
+import type { D97DreamTopology } from "../../../content/d97/dreams/schema";
 import type { CompiledAnchor } from "../../../d97/map/compiled";
 import type { VeilVariant } from "../../../d97/overworld/dream-veil";
 import type { InteractionRegistry } from "../../../d97/overworld/interactions";
@@ -56,7 +56,8 @@ export function useD97Travel(args: {
 
   // Where the player stands is presentation once placed: the arrival is read
   // when the overworld opens (after a battle or a reload), not on every event.
-  const [arrival] = useState(() => arrivalFor(run));
+  // A run that has not travelled yet arrives through its dream's arrival door.
+  const [arrival] = useState((): OverworldArrival => arrivalFor(run) ?? { kind: "entry", anchorId: dream.arrivalDoorAnchorId });
   const veils = useMemo(() => buildD97DoorVeils(dream), [dream]);
   const activeWaypointIds = useMemo(() => new Set(run.activeWaypointIds), [run.activeWaypointIds]);
   return { arrival, veils, activeWaypointIds };

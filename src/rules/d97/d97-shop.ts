@@ -7,7 +7,7 @@
 // This module obeys the src/rules/ lint rails: no React, no live clock or rng.
 
 import { D97_COLLECTION } from "../../content/d97/collection";
-import { D97_SLICE_DREAM } from "../../content/d97/dreams";
+import { d97DreamByAnchor } from "../../content/d97/dreams";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
 import { acquireCopy, findCopy, removeCopies } from "../../d97/collection/collection";
@@ -31,7 +31,9 @@ import type { D97Run, D97Shop, D97ShopSlot, D97State } from "./d97-state";
 function shopContext(d97: D97State, payload: Record<string, unknown>): { run: D97Run; anchorId: DreamAnchorId } | null {
   const run = d97.run;
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || d97.screen.type !== "overworld" || anchorId !== D97_SLICE_DREAM.shopAnchorId) return null;
+  // The shop of whichever dream module's topology names the anchor.
+  const dream = anchorId === null ? null : d97DreamByAnchor(anchorId);
+  if (run === null || d97.screen.type !== "overworld" || dream === null || anchorId !== dream.topology.shopAnchorId) return null;
   return { run, anchorId };
 }
 

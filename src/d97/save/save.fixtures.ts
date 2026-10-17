@@ -2,7 +2,7 @@
 // golden save fixture: a started run that has opened its shop, bought a card
 // and touched its waypoint.
 
-import { D97_SLICE_DREAM } from "../../content/d97/dreams";
+import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { eventRng } from "../../eventlog/rng";
 import type { Genesis } from "../../eventlog/types";
 import { registerD97ContentProvider } from "../../rules/d97/d97-content";
@@ -24,9 +24,9 @@ export function registerSaveContent(): void {
 export function foldSyntheticRun(): { readonly state: FoldState; readonly seq: number } {
   const steps: [string, Record<string, unknown>][] = [
     ["D97_START_RUN", { avatarId: SAVE_AVATAR }],
-    ["D97_OPEN_SHOP", { anchorId: D97_SLICE_DREAM.shopAnchorId }],
-    ["D97_BUY_SHOP_CARD", { anchorId: D97_SLICE_DREAM.shopAnchorId, slotIndex: 0 }],
-    ["D97_ACTIVATE_WAYPOINT", { anchorId: D97_SLICE_DREAM.waypointAnchorId }],
+    ["D97_OPEN_SHOP", { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId }],
+    ["D97_BUY_SHOP_CARD", { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId, slotIndex: 0 }],
+    ["D97_ACTIVATE_WAYPOINT", { anchorId: DEVELOPMENT_DREAM.topology.waypointAnchorId }],
   ];
   let state = genesisFoldState(SAVE_GENESIS);
   let seq = 0;

@@ -4,7 +4,7 @@
 // gets the act-exit veil.
 
 import { describe, expect, it } from "vitest";
-import { D97_SLICE_DREAM } from "../../../content/d97/dreams";
+import { DEVELOPMENT_DREAM } from "../../../content/d97/dreams/development";
 import type { D97Run } from "../../../rules/d97/d97-state";
 import type { AvatarContent } from "../../../types/content";
 import { parseDreamAnchorId } from "../../../types/identifiers";
@@ -45,8 +45,9 @@ describe("buildD97SliceEndView", () => {
 
 describe("buildD97DoorVeils", () => {
   it("gives only the exit door the act-exit veil", () => {
-    const veils = buildD97DoorVeils(D97_SLICE_DREAM);
-    expect(veils.get(D97_SLICE_DREAM.exitDoorAnchorId)).toBe("actExit");
-    expect(veils.has(D97_SLICE_DREAM.arrivalDoorAnchorId)).toBe(false);
+    const { topology } = DEVELOPMENT_DREAM;
+    const veils = buildD97DoorVeils(topology);
+    expect(veils.get(topology.exitDoorAnchorId)).toBe("actExit");
+    expect(veils.has(topology.arrivalDoorAnchorId)).toBe(false);
   });
 });

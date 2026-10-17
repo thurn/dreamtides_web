@@ -5,7 +5,7 @@
 // events; and a journey game writes no snapshot.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { D97_SLICE_DREAM } from "../content/d97/dreams";
+import { DEVELOPMENT_DREAM } from "../content/d97/dreams/development";
 import { SAVE_AVATAR, registerSaveContent } from "../d97/save/save.fixtures";
 import type { D97SaveBuild } from "../d97/save/snapshot";
 import type { Genesis, PinnedContentConfig } from "../eventlog/types";
@@ -55,10 +55,10 @@ const OPTIONS: LocalGameOptions<FoldState> = {
 async function playedGame(repository: GameRepository, genesis: Genesis = GENESIS): Promise<FoldState> {
   const game = await createLocalGame<FoldState>(repository, GAME_ENGINE_CONFIG, { gameId: GAME, genesis, localPlayerId: parseClientId("p1") }, OPTIONS);
   game.log.append({ type: "D97_START_RUN", payload: { avatarId: SAVE_AVATAR } });
-  game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: D97_SLICE_DREAM.shopAnchorId } });
-  game.log.append({ type: "D97_ACTIVATE_WAYPOINT", payload: { anchorId: D97_SLICE_DREAM.waypointAnchorId } });
+  game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId } });
+  game.log.append({ type: "D97_ACTIVATE_WAYPOINT", payload: { anchorId: DEVELOPMENT_DREAM.topology.waypointAnchorId } });
   // A bounced intent after the last applied one.
-  game.log.append({ type: "D97_STEP_THROUGH_DOOR", payload: { anchorId: D97_SLICE_DREAM.exitDoorAnchorId } });
+  game.log.append({ type: "D97_STEP_THROUGH_DOOR", payload: { anchorId: DEVELOPMENT_DREAM.topology.exitDoorAnchorId } });
   const state = game.log.state();
   await game.close();
   return state;
@@ -105,7 +105,7 @@ describe("D97 saves", () => {
     expect(game.log.state().d97).toEqual(state.d97);
     expect(game.log.head()).toBe(4);
     // The rebased game keeps playing from its old head.
-    game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: D97_SLICE_DREAM.shopAnchorId } });
+    game.log.append({ type: "D97_OPEN_SHOP", payload: { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId } });
     expect(game.log.head()).toBe(5);
     await game.close();
   });

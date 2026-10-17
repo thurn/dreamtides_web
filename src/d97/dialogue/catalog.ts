@@ -1,7 +1,6 @@
 // The registered dialogue content, indexed by UUID: the dream catalog's
 // dialogue, quests and items, plus the development dream's fixtures, which
-// stand on the development dream the overworld shows until authored dreams
-// are wired in.
+// its QA scenes and the run's fallback play.
 
 import { D97_DIALOGUE_CONTENT } from "../../content/d97/dialogue";
 import type {

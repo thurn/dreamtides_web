@@ -2,8 +2,9 @@
 // play a quest from offer to reward without authored dream content. Two
 // plaza friendlies give quests: a lost lantern beyond the river (a card-choice
 // reward) and a parcel for a third friendly (an Essence reward). The two
-// townsfolk bark, reacting to a flag and to the lantern quest. Fixture copy
-// only; no dream's real residents live here.
+// townsfolk bark, reacting to a flag and to the lantern quest. The
+// development dream module (src/content/d97/dreams/development.ts) places
+// each speaker at its anchor. Fixture copy only.
 
 import {
   defineDialogue,
@@ -18,8 +19,6 @@ import {
   parseD97ItemId,
   parseD97QuestId,
   parseD97QuestStepId,
-  type D97DialogueId,
-  type DreamAnchorId,
 } from "../../types/identifiers";
 import { devAnchorId } from "./dev-map";
 
@@ -234,11 +233,5 @@ export const DEV_DIALOGUE_CONTENT: D97DialogueContent = {
   ],
 };
 
-/** Which fixture dialogue each development anchor speaks. */
-export const DEV_DIALOGUE_BY_ANCHOR: ReadonlyMap<DreamAnchorId, D97DialogueId> = new Map([
-  [LANTERN_GIVER, WREN],
-  [PARCEL_GIVER, BRAM],
-  [PARCEL_RECIPIENT, ODA],
-  [devAnchorId(15), PIP],
-  [devAnchorId(16), MOSS],
-]);
+/** The fixture dialogue modules the development dream's residents speak. */
+export const DEV_DIALOGUES = { wren: WREN, bram: BRAM, oda: ODA, pip: PIP, moss: MOSS } as const;

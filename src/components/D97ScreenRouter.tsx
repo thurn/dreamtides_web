@@ -44,6 +44,7 @@ export function D97ScreenRouter({
   const qaScene = gotoScene === null ? null : findD97QaScene(gotoScene);
   const startsQaRun = qaScene?.startsRun === true;
   const opensDeckEditor = qaScene?.opensDeckEditor === true;
+  const playsDevelopmentDream = qaScene?.playsDevelopmentDream === true;
   const firstAvatarId = journeyContent.avatars[0]?.id ?? null;
   useEffect(() => {
     if (
@@ -71,6 +72,7 @@ export function D97ScreenRouter({
         run={d97.run}
         journeyContent={journeyContent}
         initialDeckEditorOpen={opensDeckEditor}
+        developmentDream={playsDevelopmentDream}
       />
     ) : d97.screen.type === "sliceEnd" && d97.run !== null ? (
       <D97SliceEndScreenAdapter run={d97.run} avatars={journeyContent.avatars} />

@@ -1,7 +1,7 @@
 // The pure view-model builders for the D97 overworld: its HUD and its door
 // veils.
 
-import type { D97DreamTopology } from "../../../content/d97/dreams";
+import type { D97DreamTopology } from "../../../content/d97/dreams/schema";
 import type { VeilVariant } from "../../../d97/overworld/dream-veil";
 import type { DreamAnchorId } from "../../../types/identifiers";
 import type {

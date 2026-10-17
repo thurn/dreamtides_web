@@ -1,4 +1,5 @@
-// Adapter for the D97 overworld: the development dream on the Pixi canvas,
+// Adapter for the D97 overworld: the run's dream (./use-d97-dream.ts) on the
+// Pixi canvas, a loading screen while its map arrives,
 // the HUD view, the encounter preview, deck editor, quest log, conversation
 // and Menu panels, beaten opponents without badges, the quest marks over the
 // world, door veils and lit waypoints, the arrival beside the last battle's
@@ -14,7 +15,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { D97_COLLECTION } from "../../../content/d97/collection";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
-import { D97_SLICE_DREAM } from "../../../content/d97/dreams";
 import { DEV_KNIGHT } from "../../../content/d97/characters/development";
 import {
   D97_ACT_CHALLENGER_TIERS,
@@ -23,6 +23,7 @@ import {
 } from "../../../content/d97/tunables";
 import { GlassButton } from "../../../cumulus/components/controls/GlassButton";
 import { GlassDialog } from "../../../cumulus/components/overlay/GlassDialog";
+import { D97DreamLoadingScreen } from "../../../cumulus/screens/d97/D97DreamLoadingScreen";
 import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
 import { D97EncounterPreview } from "../../../cumulus/screens/d97/D97EncounterPreview";
 import {
@@ -30,8 +31,6 @@ import {
   type D97OverworldControlId,
 } from "../../../cumulus/screens/d97/D97OverworldScreen";
 import type { JourneyContent } from "../../../data/journey-content";
-import { compileDevMap } from "../../../d97/overworld/dev-map";
-import { devOccupants } from "../../../d97/overworld/dev-occupants";
 import { registeredDialogueCatalog } from "../../../d97/dialogue/catalog";
 import { createInteractionRegistry, type OverworldInteraction } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
@@ -40,6 +39,7 @@ import { useActions, useGameState } from "../../../session/hooks";
 import type { D97OwnedCopyId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
 import { buildD97OverworldHudView } from "./d97-overworld-view-model";
+import { useD97Dream, type D97PlayedDream } from "./use-d97-dream";
 import { useD97Encounter } from "./use-d97-encounter";
 import { buildD97QuestMarks } from "./d97-quest-view-model";
 import { D97QuestSurfacesAdapter } from "./D97QuestSurfacesAdapter";
@@ -56,30 +56,31 @@ const ENABLED_CONTROLS: ReadonlySet<D97OverworldControlId> = new Set(["deck", "q
 
 type Panel = "deck" | "menu" | "quests" | { readonly conversation: DreamAnchorId } | { readonly shop: DreamAnchorId };
 
-let devDream: { map: ReturnType<typeof compileDevMap>; occupants: ReturnType<typeof devOccupants> } | null = null;
-function currentDream() {
-  if (devDream === null) {
-    const map = compileDevMap();
-    devDream = { map, occupants: devOccupants(map) };
-  }
-  return devDream;
-}
-
 function reportFailure(error: unknown): void {
   console.error("D97 deck edit failed", error);
 }
 
-/** Live overworld of a started run. */
-export function D97OverworldScreenAdapter({
-  run,
-  journeyContent,
-  initialDeckEditorOpen = false,
-}: {
+interface D97OverworldProps {
   readonly run: D97Run;
   readonly journeyContent: JourneyContent;
   readonly initialDeckEditorOpen?: boolean;
-}) {
-  const { map, occupants: placed } = currentDream();
+}
+
+/** Live overworld of a started run; a development QA scene plays the development dream. */
+export function D97OverworldScreenAdapter({
+  developmentDream = false,
+  ...props
+}: D97OverworldProps & { readonly developmentDream?: boolean }) {
+  const dream = useD97Dream(props.run.runId, developmentDream);
+  return dream === null ? <D97DreamLoadingScreen /> : <D97DreamOverworld {...props} dream={dream} />;
+}
+
+function D97DreamOverworld({
+  run,
+  journeyContent,
+  initialDeckEditorOpen = false,
+  dream: { dream, map, occupants: placed },
+}: D97OverworldProps & { readonly dream: D97PlayedDream }) {
   const catalog = registeredDialogueCatalog();
   // Beaten opponents stay as ordinary characters: no badge, desaturated.
   const beatenKey = Object.values(run.encounters).filter((encounter) => encounter?.beaten === true).map((encounter) => encounter?.anchorId).join(",");
@@ -119,7 +120,7 @@ export function D97OverworldScreenAdapter({
     logEvent("d97_deck_editor_opened", { runId: run.runId });
     setPanel("deck");
   }, [run.runId]);
-  const travel = useD97Travel({ run, dream: D97_SLICE_DREAM, registry, actions });
+  const travel = useD97Travel({ run, dream: dream.topology, registry, actions });
   const encounter = useD97Encounter({ run, registry, actions, avatars: journeyContent.avatars, cardsById: cards, openDeckEditor });
   const deckView = useMemo(
     () => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize),

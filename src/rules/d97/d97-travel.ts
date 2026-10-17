@@ -1,11 +1,13 @@
 // The D97 travel cases (Appendix B §B5, §B6, §B17): touching a waypoint and
 // stepping through a door. Each records where a reload places the player.
 // In the M1 slice the exit door is the only door that leads anywhere: once its
-// guardian is beaten, stepping through it ends the slice.
+// guardian is beaten, stepping through it ends the slice. A dream is found by
+// the touched anchor across every dream module (`d97DreamByAnchor`), so the
+// rules agree with whichever dream the overworld plays.
 //
 // This module obeys the src/rules/ lint rails: no React, no live clock or rng.
 
-import { D97_SLICE_DREAM } from "../../content/d97/dreams";
+import { d97DreamByAnchor } from "../../content/d97/dreams";
 import { dreamAnchorIdFromUnknown } from "../../types/identifiers";
 import type { D97Transition } from "./d97-run";
 import type { D97State } from "./d97-state";
@@ -17,7 +19,8 @@ import type { D97State } from "./d97-state";
 export function activateWaypoint(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
   const run = d97.run;
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || d97.screen.type !== "overworld" || anchorId !== D97_SLICE_DREAM.waypointAnchorId) return null;
+  const dream = anchorId === null ? null : d97DreamByAnchor(anchorId);
+  if (run === null || d97.screen.type !== "overworld" || dream === null || anchorId !== dream.topology.waypointAnchorId) return null;
   const firstActivation = !run.activeWaypointIds.includes(anchorId);
   return {
     d97: {
@@ -32,7 +35,7 @@ export function activateWaypoint(d97: D97State, payload: Record<string, unknown>
     logRecords: [
       {
         event: "d97_waypoint_activated",
-        fields: { runId: run.runId, anchorId, mapId: D97_SLICE_DREAM.mapId, firstActivation },
+        fields: { runId: run.runId, anchorId, mapId: dream.mapId, firstActivation },
       },
     ],
   };
@@ -45,8 +48,9 @@ export function activateWaypoint(d97: D97State, payload: Record<string, unknown>
 export function stepThroughDoor(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
   const run = d97.run;
   const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || d97.screen.type !== "overworld" || anchorId !== D97_SLICE_DREAM.exitDoorAnchorId) return null;
-  const guardian = run.encounters[D97_SLICE_DREAM.exitGuardianAnchorId];
+  const dream = anchorId === null ? null : d97DreamByAnchor(anchorId);
+  if (run === null || d97.screen.type !== "overworld" || dream === null || anchorId !== dream.topology.exitDoorAnchorId) return null;
+  const guardian = run.encounters[dream.topology.exitGuardianAnchorId];
   if (guardian?.beaten !== true) return null;
   return {
     d97: {
@@ -59,8 +63,8 @@ export function stepThroughDoor(d97: D97State, payload: Record<string, unknown>)
         fields: {
           runId: run.runId,
           anchorId,
-          mapId: D97_SLICE_DREAM.mapId,
-          guardianAnchorId: D97_SLICE_DREAM.exitGuardianAnchorId,
+          mapId: dream.mapId,
+          guardianAnchorId: dream.topology.exitGuardianAnchorId,
           destination: "sliceEnd",
           battlesFought: run.battlesFought,
           essence: run.essence,

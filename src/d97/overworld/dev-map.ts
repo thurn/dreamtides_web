@@ -1,5 +1,5 @@
-// The synthetic development dream the overworld shows until the first
-// authored dream lands: a medium (110×110) blank-canvas map with walls, a
+// The development dream's synthetic map, which development QA scenes and the
+// run's fallback play: a medium (110×110) blank-canvas map with walls, a
 // lake, a river with two bridges, a few house blocks and one anchor of every
 // kind. It has no tilesets, so it always draws placeholders. It is compiled
 // in code from a map module, so it exercises the real compiler.

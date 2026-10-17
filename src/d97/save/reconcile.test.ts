@@ -8,7 +8,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { D97SaveTuning } from "../../content/d97/save";
-import { D97_SLICE_DREAM } from "../../content/d97/dreams";
+import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { registerD97ContentProvider } from "../../rules/d97/d97-content";
 import type { D97Encounter, D97Run } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
@@ -28,8 +28,8 @@ const REMOVED: DreamAnchorId = parseDreamAnchorId("d9700000-0000-4000-8000-00000
 const ANCHORS: { id: DreamAnchorId; kind: DreamAnchorKind }[] = [
   { id: CHALLENGER, kind: "challenger" },
   { id: SPARE_CHALLENGER, kind: "challenger" },
-  { id: D97_SLICE_DREAM.shopAnchorId, kind: "shop" },
-  { id: D97_SLICE_DREAM.waypointAnchorId, kind: "waypoint" },
+  { id: DEVELOPMENT_DREAM.topology.shopAnchorId, kind: "shop" },
+  { id: DEVELOPMENT_DREAM.topology.waypointAnchorId, kind: "waypoint" },
 ];
 
 function snapshot(edit: (run: D97Run) => D97Run = (run) => run): D97Snapshot {
@@ -99,11 +99,11 @@ describe("reconcileSnapshot", () => {
   });
 
   it("forgets places on removed anchors", () => {
-    const save = snapshot((run) => ({ ...run, lastPlace: { kind: "door", anchorId: REMOVED }, returnAnchorId: REMOVED, activeWaypointIds: [REMOVED, D97_SLICE_DREAM.waypointAnchorId] }));
+    const save = snapshot((run) => ({ ...run, lastPlace: { kind: "door", anchorId: REMOVED }, returnAnchorId: REMOVED, activeWaypointIds: [REMOVED, DEVELOPMENT_DREAM.topology.waypointAnchorId] }));
     const next = reconcileSnapshot(save, catalog(), TUNING).snapshot.d97.run!;
     expect(next.lastPlace).toBeNull();
     expect(next.returnAnchorId).toBeNull();
-    expect(next.activeWaypointIds).toEqual([D97_SLICE_DREAM.waypointAnchorId]);
+    expect(next.activeWaypointIds).toEqual([DEVELOPMENT_DREAM.topology.waypointAnchorId]);
   });
 
   it("abandons a held quest whose definition was removed", () => {

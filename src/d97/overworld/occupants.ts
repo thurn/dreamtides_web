@@ -1,8 +1,7 @@
 // Who stands at a dream's character anchors, as the overworld draws them:
 // a character look, an optional head-icon badge, a scale role and the
-// dialogue they speak. Later
-// beads derive occupants from the run (challengers, residents, guardians);
-// the development dream uses development occupants.
+// dialogue they speak, assembled from a dream module's residents
+// (./dream-occupants.ts).
 
 import type { D97CharacterId, D97DialogueId, DreamAnchorId } from "../../types/identifiers";
 import type { BadgeKind } from "./characters/badges";

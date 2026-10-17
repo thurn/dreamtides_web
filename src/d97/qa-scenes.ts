@@ -2,7 +2,8 @@
 // development builds through src/runtime/qa-scene-entry.ts. A D97 scene
 // creates a D97 game; a scene that starts a run records the real
 // `D97_START_RUN` intent with the roster's first Avatar, so the parked game
-// is an ordinary saved run.
+// is an ordinary saved run. The run-starting scenes play the development
+// dream and its fixture residents; Avatar select leads to the catalog dream.
 
 import { parseQaSceneId, type QaSceneId } from "../types/identifiers";
 
@@ -17,6 +18,8 @@ export interface D97QaScene {
   readonly startsRun: boolean;
   /** Open the overworld's deck editor on the first render. */
   readonly opensDeckEditor: boolean;
+  /** Play the development dream instead of the run's catalog dream. */
+  readonly playsDevelopmentDream: boolean;
 }
 
 const D97_QA_SCENES: readonly D97QaScene[] = [
@@ -26,15 +29,17 @@ const D97_QA_SCENES: readonly D97QaScene[] = [
     description: "A new Dreamtides 97 game on Avatar select.",
     startsRun: false,
     opensDeckEditor: false,
+    playsDevelopmentDream: false,
   },
   {
     id: parseQaSceneId("d97-overworld"),
     label: "D97 Overworld",
     description:
       "A new Dreamtides 97 run started with the roster's first Avatar, on " +
-      "the overworld.",
+      "the development dream's overworld.",
     startsRun: true,
     opensDeckEditor: false,
+    playsDevelopmentDream: true,
   },
   {
     id: parseQaSceneId("d97-deck"),
@@ -44,6 +49,7 @@ const D97_QA_SCENES: readonly D97QaScene[] = [
       "the deck editor open over the overworld.",
     startsRun: true,
     opensDeckEditor: true,
+    playsDevelopmentDream: true,
   },
 ];
 
