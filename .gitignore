@@ -25,6 +25,7 @@ logs/
 .playwright-mcp/
 .superpowers/
 artifacts/qa/
+docs/dreamtides-97/visual-guide/
 artifacts/heavy.lock
 artifacts/browser-qa.lock
 artifacts/browser-qa.lock.*

@@ -47,10 +47,12 @@ usually three to six, where friendly NPCs gather like a small town.
 Limbo has one fixed map. Key dreams use catalog maps (Appendix C §C6).
 
 **Presentation.** The target is an isometric 3D view with click or tap to
-move. The web prototype renders maps as top-down 2D tile maps from a CC0
-pixel-art dungeon tileset, linked into the workspace by
-`scripts/prepare-workspace.mjs` like card art and never committed. With the
-art missing, the prototype renders flat placeholder tiles. Clicking or tapping
+move. The web prototype renders maps as top-down Liberated Pixel Cup pixel
+art, linked into the workspace by `scripts/prepare-workspace.mjs` like card
+art and never committed; a map is either tile-built or a pre-composed
+backdrop with a walkability grid. With the art missing, the prototype renders
+flat placeholder tiles. The [overworld visual guide](overworld-visual-guide.md)
+designs the tilesets, doors, markers and characters. Clicking or tapping
 ground walks there; clicking or tapping a character, door, chest, object or
 waypoint walks to it and interacts.
 

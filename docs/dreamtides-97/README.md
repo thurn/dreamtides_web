@@ -55,6 +55,7 @@ tables:
 | [C: Bosses, Limbo and keys](appendix-c-bosses-and-keys.md) | Ordinary guardians, incarnations, Limbo and Apollyon, keys, key dreams and prizes |
 | [D: Reusing Dreamtides content](appendix-d-content-reuse.md) | How every existing site, Dream Guide, Avatar, Dreamsign, transfiguration, Exploration and Augury outcome fits D97, including exclusions |
 | [E: Acquisition-rate calibration](appendix-e-calibration.md) | Shandalar reference rates, bundle calibration, the campaign's card, Essence and amulet ledgers, and the measurement plan |
+| [Overworld visual guide](overworld-visual-guide.md) | The prototype's pixel-art tilesets, dream doors, waypoints, head icons, character sprites, map authoring and React overlay |
 
 Research inputs, outside this repository:
 
@@ -343,9 +344,10 @@ Algorithms: [Appendix A](appendix-a-economy.md).
   act, each traversed door, and each dream's tier, guardians and waypoint
   status.
 - **Presentation.** The target is an isometric 3D view with click or tap to
-  move. The web prototype mocks it with top-down 2D tile maps built from a CC0
-  pixel-art dungeon set, linked into the workspace like card art and never
-  committed.
+  move. The web prototype mocks it with top-down Liberated Pixel Cup pixel art
+  in a PixiJS canvas under the existing React UI; the
+  [overworld visual guide](overworld-visual-guide.md) designs its tilesets,
+  doors, markers and characters.
 
 ## Encounters and battles
 
