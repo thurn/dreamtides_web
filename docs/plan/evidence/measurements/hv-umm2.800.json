@@ -1,0 +1,2936 @@
+{
+  "bead": "hv-umm2.800",
+  "phase": 5,
+  "base": "b5465bf788959baed52dd8b339f076117c516c92",
+  "auditSource": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+  "sourceApplicability": {
+    "auditSource": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+    "currentBase": "b5465bf788959baed52dd8b339f076117c516c92",
+    "actualGitDelta": [
+      "docs/dreamtides-97/README.md",
+      "docs/dreamtides-97/appendix-a-economy.md",
+      "docs/dreamtides-97/appendix-c-bosses-and-keys.md",
+      "docs/dreamtides-97/appendix-d-content-reuse.md"
+    ],
+    "allExecutableTestCatalogConfigBytesEqual": true,
+    "noOutsideDocsTouched": true
+  },
+  "status": "ACCEPTED_BOUNDED_PROTOTYPE",
+  "codeRollback": false,
+  "measurementBoundary": {
+    "at": "2026-10-17T12:20:03.317543+00:00",
+    "sha256": "1c3800fc44d9ad1e7321e314a3924377b3e473a65077e6e1398215e7b34c6dc7",
+    "beforeAnyEditOrBaseline": true,
+    "chosenMetric": "COMPLETE scripts/tournament/contracts.test.ts scripts/review.mjs TEST STAGE wall INCLUDING collection/setup/environment; unchanged2workers",
+    "threshold": "observed>=10percent and all retained contracts or exact code rollback; no timing CI/causal forecast"
+  },
+  "stageSeconds": {
+    "baseline": 9.1,
+    "prototype": 7.0
+  },
+  "observedImprovementPercent": 23.076923076923073,
+  "qualification": "One ordered baseline then prototype. Complete review test stage includes collection/setup/environment at unchanged2workers. External wrapper preparation/restoration excluded. Rounded stage timing, cache warming, order and recorded host load prevent a causal or aggregate full-suite forecast. No timing assertion enters CI. Current fullsuite89.38s Vitest/90.4s stage fails D19<=60 unwaived. No aggregate, sweep, soak, browser, final Sage or phase acceptance credit.",
+  "hostLoadSamples": {
+    "baseline": {
+      "start": [
+        3.75634765625,
+        4.6005859375,
+        5.3642578125
+      ],
+      "end": [
+        4.60693359375,
+        4.7490234375,
+        5.4033203125
+      ]
+    },
+    "prototype": {
+      "start": [
+        3.87646484375,
+        4.560546875,
+        5.3154296875
+      ],
+      "end": [
+        3.98779296875,
+        4.55859375,
+        5.3056640625
+      ]
+    },
+    "review": {
+      "start": [
+        3.59423828125,
+        4.2568359375,
+        5.1181640625
+      ],
+      "end": [
+        3.9833984375,
+        4.291015625,
+        5.1083984375
+      ]
+    },
+    "knip": {
+      "start": [
+        5.39794921875,
+        4.63720703125,
+        5.2060546875
+      ],
+      "end": [
+        4.955078125,
+        4.56640625,
+        5.173828125
+      ]
+    },
+    "preservation": {
+      "start": [
+        4.6142578125,
+        4.51904296875,
+        5.14599609375
+      ],
+      "end": [
+        4.6142578125,
+        4.51904296875,
+        5.14599609375
+      ]
+    },
+    "final-preservation": {
+      "start": [
+        3.94091796875,
+        4.35791015625,
+        5.0576171875
+      ],
+      "end": [
+        3.94091796875,
+        4.35791015625,
+        5.0576171875
+      ]
+    }
+  },
+  "externalWallCPU": {
+    "baseline": {
+      "wallS": 14.434150665998459,
+      "childCpuS": 18.029762,
+      "qualification": "Complete wrapper including preparation/restoration; not chosen timing boundary."
+    },
+    "prototype": {
+      "wallS": 9.906042791961227,
+      "childCpuS": 14.016336,
+      "qualification": "Complete wrapper including preparation/restoration; not chosen timing boundary."
+    },
+    "review": {
+      "wallS": 18.799623792001512,
+      "childCpuS": 51.275178999999994,
+      "qualification": "Complete wrapper including preparation/restoration; not chosen timing boundary."
+    },
+    "knip": {
+      "wallS": 6.463549125008285,
+      "childCpuS": 5.887677,
+      "qualification": "Complete wrapper including preparation/restoration; not chosen timing boundary."
+    },
+    "preservation": {
+      "wallS": 0.19534533395199105,
+      "childCpuS": 0.19030499999999997,
+      "qualification": "Complete wrapper including preparation/restoration; not chosen timing boundary."
+    },
+    "final-preservation": {
+      "wallS": 0.193290708004497,
+      "childCpuS": 0.18995599999999996,
+      "qualification": "Complete wrapper including preparation/restoration; not chosen timing boundary."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review runner launch before required review command"
+      }
+    }
+  },
+  "caseParity": {
+    "count": 11,
+    "namesAndStatuses": [
+      [
+        "pairs the same deal and starting seat while each policy pilots each deck and moves first once",
+        "passed"
+      ],
+      [
+        "decodes repeated card UUID entries and rejects malformed, unknown, and duplicate deck identities",
+        "passed"
+      ],
+      [
+        "rejects odd games, unknown policies, unsafe destinations, and malformed budgets before runtime effects",
+        "passed"
+      ],
+      [
+        "reproduces engine outcomes and recorded prompt answers without spending policy RNG on replay",
+        "passed"
+      ],
+      [
+        "durable resume retains committed games across a partial tail and rejects duplicate or mismatched completed games",
+        "passed"
+      ],
+      [
+        "durable resume rejects malformed interior data without truncating its bytes",
+        "passed"
+      ],
+      [
+        "durable resume keeps failures eligible and excludes them from the outcome digest",
+        "passed"
+      ],
+      [
+        "durable resume refuses a live concurrent owner, recovers a dead same-host owner explicitly, and preserves a replacement lock",
+        "passed"
+      ],
+      [
+        "runs actual Node workers, resumes a one-leg prefix equivalently, and settles workers on failure",
+        "passed"
+      ],
+      [
+        "reports worker request order errors without poisoning the next valid catalog boot",
+        "passed"
+      ],
+      [
+        "scores draws as halves and fits symmetric, finite relative Elo estimates",
+        "passed"
+      ]
+    ],
+    "allPassed": true,
+    "otherTenBodies": "Exact source prefix/suffix outside scoped lifecycle body; separately checked by preservation.py"
+  },
+  "retainedObservedContracts": {
+    "reference": {
+      "handler": "fresh production workerHandler()",
+      "bootReplyKind": "ready",
+      "gameRequests": 4,
+      "requestOrder": "unchanged matches schedule order",
+      "replyKind": "game",
+      "replyOrdinal": "exact input match.ordinal for all4",
+      "outcomeStatus": "completed for all4",
+      "recordTimestamp": "existing header.timestamp",
+      "recordSpec": "exact input match",
+      "recordOrdinal": "exact input match.ordinal",
+      "evidence": "All explicit reference assertions passed in original prototype run; records/digest bytes are not separately emitted."
+    },
+    "interrupted": {
+      "actualWorkers": 1,
+      "reason": "signal",
+      "records": 1,
+      "evidence": "Existing assertions unchanged and passed."
+    },
+    "resumed": {
+      "actualWorkers": 2,
+      "reason": "complete",
+      "remainingInputMatches": 3,
+      "digest": "Actual interrupted+resumed completed outcome digest equals same-manifest production-handler reference; equality assertion passed, opaque hash bytes not separately emitted."
+    },
+    "failure": {
+      "actualWorkers": 1,
+      "reason": "failure",
+      "completed": 0,
+      "unfinished": "exact [bad.ordinal]",
+      "failureIncludesUUID": "5e5e5e5e-0000-4000-8000-00000000ffff",
+      "evidence": "Existing malformed-card assertions unchanged and passed."
+    },
+    "cleanup": "All three real runBatch awaits retain production finally worker.terminate joins, clearTimers and process/signal listener removal. Original onTestFinished pending join, cancellation and every watchdog unchanged. Actual validation terminals0; owned PG absence recorded externally."
+  },
+  "deletedObservationMap": [
+    {
+      "deleted": "Separate full one-worker baseline runBatch and its complete/count/capacity assertions",
+      "retained": [
+        "Exact production workerHandler boot+four sequential game replies form the deterministic same-manifest reference",
+        "Existing real one-game interrupted batch: workers1/reasonsignal/one record",
+        "Existing real resumed batch: workers2/reasoncomplete/three remaining games",
+        "Existing real failed batch: workers1/reasonfailure/completed0/unfinished bad ordinal/exact missing UUID"
+      ],
+      "observables": "All four scheduled ordinals and their completed outcome digest still agree across uninterrupted reference and actual interrupted+resumed workers; real one/two-worker capacity, repeated request processing, terminal complete/signal/failure and settled-worker cleanup stay covered. A second full thread-only baseline contributes no separate handler/batch branch."
+    }
+  ],
+  "preservation": {
+    "status": "EXACT_SCOPE_PRESERVED",
+    "at": "2026-10-17T12:26:03.331041+00:00",
+    "baselineRegularInputs": 6164,
+    "prototypeRegularInputs": 6164,
+    "onlyBaselinePrototypeInputDelta": [
+      "scripts/tournament/contracts.test.ts"
+    ],
+    "unrelatedFinalRegularInputsByteEqual": 6162,
+    "otherCodeFilesByteEqual": 2752,
+    "otherTenTestBodiesByteIdentical": true,
+    "wholeFileExactAuthorizedSubstitutionsOnly": true,
+    "retainedPartialResumeFailureBodyByteIdentical": true,
+    "batchHelperCancellationCleanupWatchdogsByteIdentical": true,
+    "originalOverallTimeoutByteIdentical": true,
+    "beforeLines": 192,
+    "afterLines": 198,
+    "testCases": 11,
+    "sourceSHA256": "729dac77667e308c911b66a907c63bc4dcd947d9838f07d1e9fa85006a70d8ea",
+    "diffSHA256": "5a3627fc266b1f09226d5048988df28cdc0ef76b53d03b9caa0a37db0fe89c11",
+    "ledgerAppendPresent": true,
+    "priorLedgerBytesPreserved": true,
+    "ledgerLine": "{\"retrospective\":\"2026-10-17\",\"phase\":5,\"bead\":\"hv-umm2.800\",\"covers\":[\"hv-umm2.799\"]}"
+  },
+  "testDelta": {
+    "cases": 0,
+    "files": 0,
+    "lines": 6,
+    "realWorkers": -1,
+    "realRunBatchCalls": -1
+  },
+  "rawCommands": {
+    "baseline": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/baseline-results.json"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:21:59.444037+00:00",
+      "end": "2026-10-17T12:22:13.878512+00:00",
+      "pid": 63551,
+      "pgid": 63551,
+      "receiptSHA256": "b8531c4b9736bc345a23da4127f073eb6726c97d8a430cd2aeab49ecfa4b7ab7",
+      "logSHA256": "641efed0353a57148475a8a4977f9f7f32fc1f02b9fff92a812e602774b0c53d",
+      "inputsSHA256": "563259e30223164916c0e4bf91809918eb9790332174b04391610a9c6e4f5e4c"
+    },
+    "prototype": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/prototype-results.json"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:22:35.742937+00:00",
+      "end": "2026-10-17T12:22:45.649258+00:00",
+      "pid": 64793,
+      "pgid": 64793,
+      "receiptSHA256": "664dc1ba22faa6baccbf2fc4306eb011851e95c0ce8bfa4d58c66f67084bcbed",
+      "logSHA256": "af4ffd3b16ff4c46045db7effab375a4084332ab3f3a2cfca50c353119cba99b",
+      "inputsSHA256": "441e796367f884441214c13695c57dd5ee3f4f6f795b1ef1d21847f59535c689"
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:24:08.941057+00:00",
+      "end": "2026-10-17T12:24:27.741095+00:00",
+      "pid": 66840,
+      "pgid": 66840,
+      "receiptSHA256": "a67b9e3d0274ee02717884c8468ac227b29701274bc5a43d226dbdaaef6099b7",
+      "logSHA256": "5bdd4d9c7d81d7a244a8a38e17c8c23997ea20db2695c4ff857e3204d23da821",
+      "inputsSHA256": "09da1f7b3e085e3438cbc7cdcba4ce192e66fd7c73815dd43ade63ce4edc2728"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:24:59.423654+00:00",
+      "end": "2026-10-17T12:25:05.887455+00:00",
+      "pid": 67902,
+      "pgid": 67902,
+      "receiptSHA256": "c2cc035800205398c08cc3eb13876aa454bbe8a78a62c5e688301cf8d8a0839f",
+      "logSHA256": "6b796ced2e291a17152b09c9fce06a8b3a965111c61f9d404c7b4785726bee9f",
+      "inputsSHA256": "09da1f7b3e085e3438cbc7cdcba4ce192e66fd7c73815dd43ade63ce4edc2728"
+    },
+    "preservation": {
+      "command": [
+        "python3",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/preservation.py"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:25:20.602742+00:00",
+      "end": "2026-10-17T12:25:20.798371+00:00",
+      "pid": 68509,
+      "pgid": 68509,
+      "receiptSHA256": "eb6b09938c904288513c046f2ecb85b28805a55d67d573e28266e40f7e7b6329",
+      "logSHA256": "455c09aac770359e6e11ee30be86c68a3910a506386b3e9690c2d1ce759033c2",
+      "inputsSHA256": "9e81a65ef33ea7c074e9ab60ba88c12ae73c80888cbc685f9836dad482c57c7a"
+    },
+    "final-preservation": {
+      "command": [
+        "python3",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-worker800/preservation.py"
+      ],
+      "actualExit": 0,
+      "start": "2026-10-17T12:26:03.144020+00:00",
+      "end": "2026-10-17T12:26:03.337572+00:00",
+      "pid": 69248,
+      "pgid": 69248,
+      "receiptSHA256": "5ad93d9394840f8d15ebb05fb0599e778d90a4e2fdd53e8e2cb565192986875e",
+      "logSHA256": "e3eaf8dbf0c95cbad1404392410515d82a70bc8878309f069983075aa29e86a8",
+      "inputsSHA256": "9e81a65ef33ea7c074e9ab60ba88c12ae73c80888cbc685f9836dad482c57c7a"
+    }
+  },
+  "actualToolTerminals": {
+    "baseline": {
+      "original": 1282,
+      "launch": "01f9df",
+      "collectedTerminal": "2ffccd",
+      "actualExit": 0
+    },
+    "prototype": {
+      "original": 81127,
+      "launch": "9733b3",
+      "collectedTerminal": "0f8399",
+      "actualExit": 0
+    },
+    "npm-install": {
+      "original": 37107,
+      "collectedTerminal": "c102e3",
+      "actualExit": 0,
+      "authority": "parent setup handoff"
+    },
+    "pre-dispatch-friction": {
+      "original": "08813b",
+      "collectedTerminal": "08813b",
+      "actualExit": 0,
+      "authority": "parent setup handoff"
+    },
+    "review": {
+      "original": 6935,
+      "launch": "6a46bd",
+      "collectedTerminal": "17d3fa",
+      "actualExit": 0
+    },
+    "knip": {
+      "original": 48224,
+      "launch": "a1f329",
+      "collectedTerminal": "0b56fa",
+      "actualExit": 0
+    },
+    "preservation": {
+      "original": "f928b8",
+      "collectedTerminal": "f928b8",
+      "actualExit": 0
+    },
+    "final-preservation": {
+      "original": "6086a5",
+      "collectedTerminal": "6086a5",
+      "actualExit": 0
+    },
+    "final-schema": {
+      "original": "c00e29",
+      "collectedTerminal": "c00e29",
+      "actualExit": 0
+    },
+    "commit-first-compilation-failure": {
+      "original": "4e4eee",
+      "collectedTerminal": "4e4eee",
+      "actualExit": 1,
+      "qualification": "Python compilation failed before all statements; zero Git/index/source effects. Exact script retained commit-failed-original.py; original commit.* raw log/receipt kept."
+    }
+  },
+  "evidenceCutoff": {
+    "cutoff": "2026-10-17T12:27:36.537358+00:00",
+    "qualification": "Evidence records this actual pre-commit cutoff; exact later command end and elapsed tail are supplied externally, never inferred from Git author dates."
+  },
+  "implementationStart": {
+    "implementationStartUtc": "2026-10-17T12:21:25.641791+00:00"
+  },
+  "sage267": {
+    "qualification": "Concise durable provenance projection: full report and full proposals retained. Scope required/additional paths/hashes/ranges/chunks plus raw bindings and reading/recovery limits retained; lexical280module edge arrays omitted, their full originalscope SHA and count retained. Lexical census supported rejected barrel hypothesis only; omission grants no semantic source credit. Current source is b546 doc-only advancement from exact94e audit; no executable/test/config/catalog change. Original scope and all raw runtime artifacts remain in session scratch for cold review.",
+    "report": {
+      "source": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+      "scopePath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/scope-coverage.json",
+      "scopeSHA256": "f7b408c75bd505aeb54e3c5a5673dfa37c1112bc68701ab2aac464c1eb60ac29",
+      "runtimeExecutions": 0,
+      "repositoryWrites": 0,
+      "nativeMutations": 0,
+      "phaseAcceptance": false,
+      "status": "COMPLETE_READ_ONLY_INTERIM_D19_AUDIT",
+      "skill": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+      "packetSHA256": "0b6522a445e6c28854e3bd8d85a3b13999a6def8591d91c7106ac772a6eefdbc",
+      "scopeQualification": "All38 required inputs matched current hashes; source inputs also matched exact Git source. Required source ranges fully read, including recorded truncation recoveries. Additional partial source/import/hash views are labeled precisely in scope; no whole semantic review claimed for omitted ancestor notes,6164 full input bodies or280 import-census module bodies. Scope was written before report/proposals.",
+      "currentActual": {
+        "original": 4211,
+        "collected": "52b265",
+        "exit": 0,
+        "files": 440,
+        "tests": 12452,
+        "VitestS": 89.38,
+        "testStageS": 90.4,
+        "D19": "FAIL_UNWAIVED",
+        "loadStart": 11.29833984375,
+        "loadEnd": 12.23828125,
+        "qualification": "Higher host load than264; no causal799regression inference. Summed66.49s collection/98.60s body across2workers are diagnostic, not wall shares or removable savings."
+      },
+      "custodyVerification": [
+        "Independently hashed all six full-run raw bindings and matched282 projected assertion records to raw results, preserving duplicate fullNames as occurrences;13 selected raw diagnostic module records matched.",
+        "Independently hashed admitted-all1165raw projection and verified selected21 bead field equality; projection notes/unrelated ancestors omitted and not semantic credit.",
+        "797/798/799 raw decision/metric and parent validation/review bindings independently hashed; preserve7970% exact rollback and798/799 accepted bounded observations without permanent5929/12452 parity prohibition.",
+        "Supplemental65138/94f089 inspector source-bound run:3modules49cases, actual0, PG29040absent, parent6164input verification; raw bindings and3cpuprofile hashes independently matched. Derived top frames/stacks read; no new runtime by auditor."
+      ],
+      "supplementalNativeProfile": {
+        "ownership": {
+          "weightedMs": 7026.334,
+          "idle": 4266.297,
+          "spawnSyncSelf": 1626.42,
+          "fsyncSelf": 582.581
+        },
+        "slots": {
+          "weightedMs": 6978.292,
+          "idle": 4691.587,
+          "spawnSyncSelf": 1249.539,
+          "fsyncSelf": 515.795
+        },
+        "boundaries": {
+          "weightedMs": 4257.75,
+          "idle": 3583.292,
+          "spawnSyncSelf": 436.083,
+          "fsyncSelf": 39.082
+        },
+        "qualification": "One inspector run includes target collection/body but excludes original setup imports. V8 timeDeltas include blocking/scheduling; subprocessCPU lies outside samples. Compiled frame positions are not asserted source coordinates. Supports native-lifecycle prioritization only; no removed-wall/CPU or acceptance attribution."
+      },
+      "conclusions": [
+        {
+          "key": "D19-NATIVE-SIGNAL-MATRIX",
+          "disposition": "Recommend bounded four-row real-signal cover; exact deleted-row mapping in proposals."
+        },
+        {
+          "key": "D19-TOURNAMENT-WORKER-REFERENCE",
+          "disposition": "Recommend bounded same-manifest production-handler reference, retaining actual interrupted/resumed/failure workers; original fixture engine explicitly unsuitable."
+        }
+      ],
+      "rejectedOrUnproven": [
+        {
+          "hypothesis": "Remove or condition vi.resetModules for shared projects",
+          "disposition": "Rejected within this audit",
+          "evidence": [
+            "vitest.config.ts36-64,83-112 distinguishes module mocks and shared environment reuse",
+            "src/testing/setup-dom.ts19-26 resets registry/timers/globals/envs per file",
+            "src/session/providers/register-game-providers.ts55-95 mutates provider registrations",
+            "src/rules/journey/modifier-registry.ts157-304 creates closures/caches with production singleton308-351"
+          ],
+          "reason": "No complete safe mutable registry/global/cache/side-effect closure or contamination control proof. No reset/isolation/config change proposed."
+        },
+        {
+          "hypothesis": "Remove five content loader reexports from core engine index and migrate two actual consumers",
+          "disposition": "Rejected as next D19 cut; unmeasured dependency hypothesis only",
+          "evidence": [
+            "src/engine/index.ts13-19 eagerly reexports content-catalog; lexical census identifies only journey-content-engine and qa-scenes as actual named loader consumers through this barrel",
+            "src/session/providers/journey-content-engine.ts1-118 and src/runtime/qa-scenes.ts29,650-667 show real content consumers",
+            "Alternative path for engine-battle-presentation-items.test: engine-battle.ts46 ->fold.ts4 ->transfiguration-state.ts3 ->content-catalog",
+            "Alternative path for battle-presentation.test: fold.ts4 ->transfiguration-state.ts3 ->content-catalog",
+            "Alternative path for both required journey tests: replay.ts9 ->score-group-state.ts3 ->content-catalog"
+          ],
+          "reason": "All four inspected high-collection witnesses retain real content graph through required checkpoint validation after barrel deletion. Lexical import census is not an executable complete parser proof. No meaningful measured cost reduction or complete initialization-order proof established, so no architectural writer proposal or speed claim."
+        },
+        {
+          "hypothesis": "Repeat792 identity/port cleanup or766 linked-Git/CLI savings",
+          "disposition": "Rejected as already delivered",
+          "reason": "Current code already contains direct public provider calls, split linked fixture, single invalid identity integration and one queued/occupied tail. No new same-cause cut."
+        },
+        {
+          "hypothesis": "Shrink complete cost-composition matrix indiscriminately",
+          "disposition": "Rejected",
+          "evidence": [
+            "cost-composition.contracts.ts89-173 exhaustively covers distinct modifier modes and play routes",
+            "cost-composition.contracts.ts373-415 separates payment, least-affordability and Offering-X legality",
+            "cost-composition.contracts.ts419-481 includes rule anchors and real static producer composition"
+          ],
+          "reason": "Current inspected rows pin independent base-selection, threshold, applicability, next consumption and payment observations; no exact cheaper retained mapping demonstrated for a substantial deletion. This does not impose a global case-count parity ban."
+        },
+        {
+          "hypothesis": "Native polling/fsync/query frequency tuning",
+          "disposition": "Rejected",
+          "reason": "Profile samples show cost but no authorization to weaken durability, identity checks, real lock authority or settlement. No private tiny polling knob proposed; q331 already addressed real OS query selection."
+        },
+        {
+          "hypothesis": "Worker bootstrap/catalog lazy loading or synthetic worker entry",
+          "disposition": "Not proposed",
+          "reason": "Real worker catalog composition is part of public contract; ability serialization and DEV/Node differences require exact manifest semantics. Reference cut keeps actual unchanged worker entry and handler."
+        }
+      ],
+      "overlapAndAuthority": {
+        "nativeFiling": "Parent only; no bd/tg/hive or other native effects by auditor.",
+        "unfinishedProjection": "All23 projected records read. Active658 has evidence/native-maintenance scope only; Phase7.19 later additive budget work does not prove incompatible edits to these matrix/baseline bodies. Fresh actual native owner/Areas check remains parent duty.",
+        "proposalsIndependent": "One signal input table and one tournament baseline body; no shared editable source or helper.",
+        "phase": "Interim response covering friction799, not final Phase5 retrospective/review/runtime acceptance. All sweep/soak/journey/production/native QA/release convergence obligations remain unwaived."
+      },
+      "remainingUnknowns": [
+        "Actual whole-module before/after stage gains for both proposals; runtime0 audit cannot establish them.",
+        "Whether same-manifest main-thread workerHandler DEV catalog differences affect these actual synthetic outcomes; final actual threaded digest must prove parity or prototype rolls back.",
+        "Current low-load full-suite D19 result after accepted cuts; current89.38/90.4 evidence fails and no forecast supplied.",
+        "Full native current owner/claim/serialization state at filing time; supplied projections omit notes and unrelated ancestors.",
+        "No general safe engine/content import reset cache boundary established."
+      ],
+      "output": {
+        "scope": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/scope-coverage.json",
+        "proposals": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/proposals.json",
+        "proposalsSHA256": "666ad5d625a18269f98db2d27e8a1741a9e7df6f00e7345de8eb9258729216ac"
+      }
+    },
+    "proposals": {
+      "source": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+      "scopePath": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/scope-coverage.json",
+      "scopeSHA256": "f7b408c75bd505aeb54e3c5a5673dfa37c1112bc68701ab2aac464c1eb60ac29",
+      "runtimeExecutions": 0,
+      "repositoryWrites": 0,
+      "nativeMutations": 0,
+      "phaseAcceptance": false,
+      "status": "TWO_BOUNDED_SOURCE_SUPPORTED_PROPOSALS_FOR_PARENT_NATIVE_QUALIFICATION",
+      "proposalCount": 2,
+      "proposals": [
+        {
+          "key": "D19-NATIVE-SIGNAL-MATRIX",
+          "priority": 1,
+          "title": "Prune duplicate signal-by-diagnostic rows while retaining both native signal paths and every failure state",
+          "status": "SOURCE_SUPPORTED_BOUNDED_PROTOTYPE",
+          "kind": "D19 exact duplicate-observation matrix pruning",
+          "Areas": [
+            "scripts/qa/run-scenario-boundaries.test.mjs:121 only, the six-row it.each input table; assertions/body120-152 unchanged",
+            "own docs/plan/evidence/friction/<bead>.json",
+            "own docs/plan/evidence/measurements/<bead>.json",
+            "own docs/plan/evidence/pre-existing/<bead>.md if needed",
+            "own docs/plan/evidence/reviews/<bead>.md"
+          ],
+          "readOnlyDependencies": [
+            "scripts/qa/qa-signal-fixture.mjs",
+            "scripts/qa/qa-session-fixture.mjs",
+            "scripts/qa/qa-session-mocks.mjs",
+            "scripts/qa/run-scenario.mjs",
+            "scripts/qa/browser-lease.mjs",
+            "scripts/qa/server-ownership.mjs",
+            "scripts/screenshot-runtime.mjs"
+          ],
+          "implementation": [
+            "Replace the six signal/mode tuples by exactly four: [SIGINT,initial], [SIGTERM,interruption], [SIGINT,concurrent], [SIGTERM,concurrent]. Retain all existing test body assertions and helpers unchanged. This removes only [SIGTERM,initial] and [SIGINT,interruption].",
+            "Keep genuine child.kill(signal), actual runner PID readiness/exit, native lease/evidence locks, native child identities and all no-descendant assertions. Do not alter signals, providers, lockf, fsync, server cleanup, process groups, error injection, watchdogs or mocks."
+          ],
+          "sourceProof": [
+            {
+              "path": "scripts/qa/run-scenario.mjs",
+              "ranges": [
+                [
+                  637,
+                  663
+                ]
+              ],
+              "fact": "One generated handler body is installed for both names. Name only labels diagnostics and selects130/143; the abort/interruption/close/finally path is shared. Production has no initial/interruption/concurrent mode."
+            },
+            {
+              "path": "scripts/qa/qa-signal-fixture.mjs",
+              "ranges": [
+                [
+                  33,
+                  44
+                ],
+                [
+                  55,
+                  61
+                ],
+                [
+                  65,
+                  102
+                ]
+              ],
+              "fact": "Fixture modes select initial diagnostic rejection, interruption+diagnostic rejection, or a pending public-close browser RPC. Both native signal names still run concurrent close. IPC reporter snapshots resources BEFORE fallback close, so fallback cannot certify production cleanup."
+            },
+            {
+              "path": "scripts/qa/run-scenario-boundaries.test.mjs",
+              "ranges": [
+                [
+                  120,
+                  152
+                ]
+              ],
+              "fact": "All six rows share identical assertions; only signal-dependent exit code and interruption-dependent cause inclusion vary."
+            }
+          ],
+          "exactDeletionMap": [
+            {
+              "deleted": "SIGTERM/initial",
+              "retained": [
+                "SIGINT/initial",
+                "SIGTERM/concurrent"
+              ],
+              "observables": "Initial diagnostic rejection still proves abort/cleanup despite stderr throw. Genuine SIGTERM handler registration, exit143/null, callback/transport order, resource release and descendant absence remain native in SIGTERM/concurrent. No unique production mode-by-signal branch is deleted."
+            },
+            {
+              "deleted": "SIGINT/interruption",
+              "retained": [
+                "SIGTERM/interruption",
+                "SIGINT/concurrent"
+              ],
+              "observables": "Interruption mode still proves exact interruption+diagnostic causes without other causes and actual resources settled. Genuine SIGINT registration, exit130/null, cached-close idempotence, callback/transport order and native resource release remain in SIGINT/concurrent."
+            }
+          ],
+          "retainedUniqueContracts": [
+            "Actual SIGINT and SIGTERM each target an exact owned child and exit130/143 with null terminal signal.",
+            "All three diagnostic/lifecycle states remain: initial diagnostic throw; server interruption plus diagnostic throw; already-running public close with blocked browser RPC.",
+            "Both native signals still join an already-started close; report-before-fallback proves browser-close then transport-close before exit, cached close identity, no uncaught failure, no other causes.",
+            "Each retained row proves owner/server records absent, lease and evidence kernel locks free, and every recorded own child lifetime absent; both startup/local clear error cases and all five direct SDK cleanup cause combinations remain unchanged."
+          ],
+          "expectedDelta": {
+            "moduleCasesBefore": 13,
+            "moduleCasesAfter": 11,
+            "testFilesDelta": 0,
+            "productionDelta": 0,
+            "droppedAssertionExpressions": 0
+          },
+          "observedPrioritization": {
+            "actualFullRun": "4211 /52b265",
+            "moduleBodyMs": 4317.499,
+            "moduleCollectMs": 73.30166699999972,
+            "sixNativeSignalRowsBodyMs": 3627.3048750000016,
+            "qualification": "Cumulative diagnostics from original full run. Supplemental inspector profile is compatible native-lifecycle evidence but no attributable/removable cost. Focused complete stage gain unknown."
+          },
+          "measurement": {
+            "freezeBeforeEdit": "Before any edit, freeze the complete affected module command, unchanged2workers, runner/reporter hashes, all regular input hashes, source and expected contract mapping. Capture one baseline and one final prototype under comparable recorded conditions. The current full-run per-case/module diagnostics rank work only; they are not the focused stage baseline.",
+            "chosenMetric": "Complete scripts/review.mjs test-stage wall, INCLUDING collection/setup/environment and every case in the affected semantic module; not selected-case body sum, wrapper prepare/asset restoration, V8 sample sum, or cumulative time.",
+            "threshold": "At least10% observed improvement over that frozen complete module boundary AND all retained contracts pass; otherwise exact code rollback, evidence-only delivery. Retain first failures and report cache/load/order qualification; no rerun-until-green.",
+            "evidence": "Raw stdout/stderr, JSON results, exact original actual terminal/receipt, worker setting, input manifests and cleanup proof. No timing/statistical assertion enters CI.",
+            "global": "D19<=60s at2workers/low host load remains unwaived. No claim these cuts alone recover it. One justified current full run after actual accepted source changes is parent duty; no unchanged aggregate retries.",
+            "command": [
+              "npm",
+              "test",
+              "--",
+              "scripts/qa/run-scenario-boundaries.test.mjs",
+              "--reporter=default",
+              "--reporter=json",
+              "--outputFile.json=<exclusive-epoch-result>"
+            ],
+            "semanticBoundary": "Whole existing MCP cleanup/startup-clear/native-signal boundary module; not a newly selected subset."
+          },
+          "prerequisites": {
+            "semantic": [
+              "hv-umm2.545 completed: original diagnostic/cause contracts are current baseline",
+              "hv-umm2.542 completed: terminal cleanup error contracts remain unchanged"
+            ],
+            "nativeOverlap": "Projected23 unfinished bodies show no active owner of this matrix. Parent must fresh-check native actual Areas before filing; no same-body overlap with worker proposal.",
+            "serialization": "No edge to tournament proposal or filename-only shared scripts/qa users. Add only a proven incompatible exact body writer.",
+            "finalJoin": "Attach delivered cut to hv-umm2.46 before project admission; final Sage/QA/soak/release remain owed."
+          },
+          "validation": [
+            "Whole frozen module before/after at2workers with the exact retained native observations above; all owned process trees settled.",
+            "Review the four-row cover against shared production handler plus actual fixture branches; restore a deleted row if a distinct observable is found. No silent assertion weakening to make the cut pass.",
+            "npm run review and npm run knip. review:full if actual implementation changes fixture/framework/test infrastructure; ordinary release checks remain.",
+            "New fresh read-only fork_turns:none Codex review of exact base/head, whole changed module, retained mapping and measurement; parent verifies findings and dispositions before certified delivery."
+          ],
+          "limits": [
+            "No change to production normal256/64 caps, identities, ownership authority or signal semantics.",
+            "This is a new D19 duplication judgment under current explicit authority. Prior792 preserved all signal modes; this cut still preserves every mode and both real signals and does not repeat its parser/port optimization."
+          ]
+        },
+        {
+          "key": "D19-TOURNAMENT-WORKER-REFERENCE",
+          "priority": 1,
+          "title": "Use same-manifest production-handler reference outcomes for worker resume equivalence",
+          "status": "SOURCE_SUPPORTED_BOUNDED_PROTOTYPE",
+          "kind": "D19 redundant worker baseline lifecycle elimination",
+          "Areas": [
+            "scripts/tournament/contracts.test.ts:153-178 existing real-worker lifecycle test, replacing only baseline creation166-167 and minimal same-body reference plumbing; import additions only if genuinely necessary",
+            "own docs/plan/evidence/friction/<bead>.json",
+            "own docs/plan/evidence/measurements/<bead>.json",
+            "own docs/plan/evidence/pre-existing/<bead>.md if needed",
+            "own docs/plan/evidence/reviews/<bead>.md"
+          ],
+          "readOnlyDependencies": [
+            "scripts/tournament/batch.ts",
+            "scripts/tournament/worker.ts",
+            "scripts/tournament/worker-bootstrap.mjs",
+            "scripts/tournament/game.ts",
+            "scripts/tournament/catalog.json",
+            "src/engine/policy/catalog-manifest.ts",
+            "src/engine/development.ts",
+            "all production engine/policy/content files"
+          ],
+          "implementation": [
+            "Build the reference with a fresh existing production workerHandler(). Send the exact boot request {kind:boot,manifest}; require ready. Feed each existing match and unchanged budgets through its real game request in schedule order; require a game reply for the same ordinal and a completed outcome. Form GameRecord values only for outcomesDigest comparison using existing fixture timestamp/spec/ordinal. Do not call the original synthetic engine as the reference.",
+            "Delete only the separate baseline runBatch withworkers1 over all four matches. Keep real one-leg interrupted runBatch(workers1), real remaining-three-match resumed runBatch(workers2), and actual malformed-card failed runBatch(workers1), including every existing completion/failure/unfinished/UUID/digest assertion. Preserve all awaits and onTestFinished cleanup.",
+            "The current workerHandler request-order test remains. Keep watchdog values and configured workerBootMs unchanged; update explanatory batch-count prose only if needed. No injected/stub worker, loader change, shorter game, new production option, timeout inflation or algorithm tuning."
+          ],
+          "sourceProof": [
+            {
+              "path": "scripts/tournament/contracts.test.ts",
+              "ranges": [
+                [
+                  31,
+                  41
+                ],
+                [
+                  153,
+                  184
+                ]
+              ],
+              "fact": "Five actual worker constructions occur across baseline1+partial1+resume2+failure1. Only baseline creation is duplicated; workerHandler and same manifest already import at module collection."
+            },
+            {
+              "path": "scripts/tournament/worker.ts",
+              "ranges": [
+                [
+                  8,
+                  27
+                ]
+              ],
+              "fact": "The same production request handler builds createEngine(manifestCatalog(manifest)) at boot and runs playGame for game requests. Worker thread only wraps this handler in parentPort messaging."
+            },
+            {
+              "path": "scripts/tournament/batch.ts",
+              "ranges": [
+                [
+                  42,
+                  86
+                ]
+              ],
+              "fact": "The remaining real resumed batch dispatches three matches to two actual workers; at least one worker processes another request, retaining real reused-worker send/requeue and complete-when-no-active-work behavior. Real signal/failure finally joins termination of every worker and clears timers/listeners."
+            },
+            {
+              "path": "src/engine/policy/catalog-manifest.ts",
+              "ranges": [
+                [
+                  59,
+                  82
+                ],
+                [
+                  99,
+                  115
+                ]
+              ],
+              "fact": "Manifest serialization drops abilities. The original source synthetic engine has choosing/Avatar abilities absent from textless fallback; therefore its playGame outcomes are not an acceptable reference. Reference must call exact production boot handler on exact manifest."
+            },
+            {
+              "path": "src/engine/development.ts",
+              "ranges": [
+                [
+                  23,
+                  40
+                ]
+              ],
+              "fact": "Vitest DEV and plain Node may load different lab definitions. Do not assume original synthetic engine parity or change this production behavior. Actual threaded partial/resumed digest must match the reference; disagreement rejects the prototype."
+            }
+          ],
+          "exactDeletionMap": [
+            {
+              "deleted": "Separate full one-worker baseline runBatch and its complete/count/capacity assertions",
+              "retained": [
+                "Exact production workerHandler boot+four sequential game replies form the deterministic same-manifest reference",
+                "Existing real one-game interrupted batch: workers1/reasonsignal/one record",
+                "Existing real resumed batch: workers2/reasoncomplete/three remaining games",
+                "Existing real failed batch: workers1/reasonfailure/completed0/unfinished bad ordinal/exact missing UUID"
+              ],
+              "observables": "All four scheduled ordinals and their completed outcome digest still agree across uninterrupted reference and actual interrupted+resumed workers; real one/two-worker capacity, repeated request processing, terminal complete/signal/failure and settled-worker cleanup stay covered. A second full thread-only baseline contributes no separate handler/batch branch."
+            }
+          ],
+          "retainedUniqueContracts": [
+            "Genuine Node Worker construction, tsx worker bootstrap, structured-clone boot and game messages, real catalog boot and posted replies.",
+            "One actual committed leg aborts the real single-worker batch; remaining ordinals are eligible, resume completes with two workers, and outcomesDigest matches exact same-manifest reference outcomes.",
+            "Actual bad-card worker failure reports the same UUID, completes zero and returns that ordinal unfinished; every returned batch has joined worker termination/timer and signal-listener cleanup.",
+            "All other ten existing tournament contracts remain unchanged: paired seats, UUID pool validation, CLI/budget refusal, prompt replay/RNG/same-step view, durable journal/tail/refusal/digest, native run-lock and handler order/statistics."
+          ],
+          "expectedDelta": {
+            "moduleCasesBefore": 11,
+            "moduleCasesAfter": 11,
+            "realWorkersBefore": 5,
+            "realWorkersAfter": 4,
+            "realRunBatchCallsBefore": 4,
+            "realRunBatchCallsAfter": 3,
+            "testFilesDelta": 0,
+            "productionDelta": 0
+          },
+          "observedPrioritization": {
+            "actualFullRun": "4211 /52b265",
+            "moduleBodyMs": 8656.591582999994,
+            "moduleCollectMs": 134.26637499999924,
+            "realWorkerLifecycleCaseBodyMs": 8162.417000000001,
+            "qualification": "Cumulative diagnostics only. No per-boot attribution,20% timing forecast, subprocess CPU inference or guarantee of whole-boundary gain."
+          },
+          "measurement": {
+            "freezeBeforeEdit": "Before any edit, freeze the complete affected module command, unchanged2workers, runner/reporter hashes, all regular input hashes, source and expected contract mapping. Capture one baseline and one final prototype under comparable recorded conditions. The current full-run per-case/module diagnostics rank work only; they are not the focused stage baseline.",
+            "chosenMetric": "Complete scripts/review.mjs test-stage wall, INCLUDING collection/setup/environment and every case in the affected semantic module; not selected-case body sum, wrapper prepare/asset restoration, V8 sample sum, or cumulative time.",
+            "threshold": "At least10% observed improvement over that frozen complete module boundary AND all retained contracts pass; otherwise exact code rollback, evidence-only delivery. Retain first failures and report cache/load/order qualification; no rerun-until-green.",
+            "evidence": "Raw stdout/stderr, JSON results, exact original actual terminal/receipt, worker setting, input manifests and cleanup proof. No timing/statistical assertion enters CI.",
+            "global": "D19<=60s at2workers/low host load remains unwaived. No claim these cuts alone recover it. One justified current full run after actual accepted source changes is parent duty; no unchanged aggregate retries.",
+            "command": [
+              "npm",
+              "test",
+              "--",
+              "scripts/tournament/contracts.test.ts",
+              "--reporter=default",
+              "--reporter=json",
+              "--outputFile.json=<exclusive-epoch-result>"
+            ],
+            "semanticBoundary": "Whole tournament contract module, including all eleven cases and collection/setup; no benchmark of one worker or handler only."
+          },
+          "prerequisites": {
+            "semantic": [
+              "hv-umm2.740 completed: preserve real-worker guard and cancellation/join contracts",
+              "hv-umm2.767 completed: minimal playGame input contract and its actual prompt witness unchanged"
+            ],
+            "nativeOverlap": "Projected hv-fy5h.19 has later additive budget tests and production budget transport; it does not write this baseline body. Parent fresh native check before filing; no body edge merely from contracts.test.ts filename.",
+            "serialization": "Independent of native-signal proposal; no common editable source body.",
+            "finalJoin": "Attach delivered cut to hv-umm2.46 before project admission; retain all later Phase7 budget/calibration and current gate obligations."
+          },
+          "validation": [
+            "Source-bound original/final mapping proves only the duplicate all-match baseline batch is replaced. Record exact reference kind/ordinal/completed/digest outcomes and actual1/2worker interrupted/resumed/failure outcomes. Any lab/content/manifest mismatch is a preservation failure requiring exact rollback.",
+            "Frozen whole eleven-case stage at2workers improves>=10% or exact rollback; collect actual worker/timer cleanup outcomes and preserve first failures.",
+            "npm run review and npm run knip; review:full only for actual infrastructure/crosscutting scope expansion, which needs fresh exact admission. No new browser workload for this test-only change.",
+            "New fresh read-only fork_turns:none Codex review of exact source/diff, entire test and handler/manifest/batch contracts plus evidence. Parent verifies findings/dispositions/certified delivery."
+          ],
+          "limits": [
+            "Reference is production workerHandler with the exact manifest, never createEngine over the original ability-bearing fixture catalog.",
+            "Real failed/interrupt/complete worker lifecycles remain mandatory. No production engine/policy/catalog/default threshold changes or fake worker entrypoint."
+          ]
+        }
+      ],
+      "aggregateSavings": "UNKNOWN; individual stage gates are acceptance experiments, not cumulative removable-time claims or a forecast of60s recovery."
+    },
+    "scopeProjection": {
+      "source": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+      "packetSha256": "0b6522a445e6c28854e3bd8d85a3b13999a6def8591d91c7106ac772a6eefdbc",
+      "status": "COMPLETE_READ_ONLY_INTERIM_AUDIT",
+      "runtimeExecutions": 0,
+      "requiredInputs": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/AGENTS.md",
+          "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+          "bytes": 8068,
+          "lines": 145,
+          "requiredLineRanges": [
+            [
+              1,
+              145
+            ]
+          ],
+          "actualSha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+          "hashVerified": true,
+          "actualLines": 145,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 145,
+              "requestedEnd": 145,
+              "sha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+          "finalHashVerified": true,
+          "gitBlobSha256": "48c0838b206cc112b38aa571b9367468408f8439e71a0458a6e0d7d9bae36f90",
+          "gitBlobVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/decisions.md",
+          "sha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+          "bytes": 51785,
+          "lines": 1170,
+          "requiredLineRanges": [
+            [
+              762,
+              809
+            ]
+          ],
+          "actualSha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+          "hashVerified": true,
+          "actualLines": 1170,
+          "readChunks": [
+            {
+              "start": 762,
+              "end": 809,
+              "requestedEnd": 809,
+              "sha256": "83f50850b76c35c0c7478d7d4254823584328862b34010b76e8d85d57b146584",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+          "finalHashVerified": true,
+          "gitBlobSha256": "89746a90ebb121aae32931947fc15eb165a9e1703b4e7a8f06d33ed85b09efc4",
+          "gitBlobVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/phase-5-content.md",
+          "sha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "bytes": 35727,
+          "lines": 646,
+          "requiredLineRanges": [
+            [
+              604,
+              655
+            ]
+          ],
+          "actualSha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "hashVerified": true,
+          "actualLines": 646,
+          "readChunks": [
+            {
+              "start": 604,
+              "end": 646,
+              "requestedEnd": 655,
+              "sha256": "3dab1d5c1d975b49deb4d7827d0b062b7631fb7039363988844682cf4c98cbf0",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": [
+                647,
+                655
+              ]
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "finalHashVerified": true,
+          "gitBlobSha256": "27f07009f78b266a6d6e13bdc880745b7556d74e925021e862edd9e3ef372426",
+          "gitBlobVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/vitest.config.ts",
+          "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "bytes": 3911,
+          "lines": 115,
+          "requiredLineRanges": [
+            [
+              1,
+              115
+            ]
+          ],
+          "repoPath": "vitest.config.ts",
+          "actualSha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "hashVerified": true,
+          "actualLines": 115,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 115,
+              "requestedEnd": 115,
+              "sha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "gitBlobVerified": true,
+          "finalSha256": "5f7a1526795713f1cc8ad9df0cc5727e07321ba7afd2a21a598ce98da77a8bc8",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/testing/setup-dom.ts",
+          "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "bytes": 1710,
+          "lines": 48,
+          "requiredLineRanges": [
+            [
+              1,
+              48
+            ]
+          ],
+          "repoPath": "src/testing/setup-dom.ts",
+          "actualSha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "hashVerified": true,
+          "actualLines": 48,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 48,
+              "requestedEnd": 48,
+              "sha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "gitBlobVerified": true,
+          "finalSha256": "e8c368b08803ee4ff3d67b5ec9aa9372989a7697933f31546f6f9aabd06ecdf5",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/review.mjs",
+          "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "bytes": 16054,
+          "lines": 592,
+          "requiredLineRanges": [
+            [
+              1,
+              592
+            ]
+          ],
+          "repoPath": "scripts/review.mjs",
+          "actualSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "hashVerified": true,
+          "actualLines": 592,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 592,
+              "requestedEnd": 592,
+              "sha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "gitBlobVerified": true,
+          "finalSha256": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/package.json",
+          "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+          "bytes": 2249,
+          "lines": 63,
+          "requiredLineRanges": [
+            [
+              1,
+              63
+            ]
+          ],
+          "repoPath": "package.json",
+          "actualSha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+          "hashVerified": true,
+          "actualLines": 63,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 63,
+              "requestedEnd": 63,
+              "sha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+          "gitBlobVerified": true,
+          "finalSha256": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/qa-session-fixture.mjs",
+          "sha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "bytes": 7215,
+          "lines": 135,
+          "requiredLineRanges": [
+            [
+              1,
+              135
+            ]
+          ],
+          "repoPath": "scripts/qa/qa-session-fixture.mjs",
+          "actualSha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "hashVerified": true,
+          "actualLines": 135,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 135,
+              "requestedEnd": 135,
+              "sha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "gitBlobVerified": true,
+          "finalSha256": "1fd6f444db4ff9244fc5d15f36d22c0b4e222fd17b75e64c8ea31613a55faf67",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/qa-session-mocks.mjs",
+          "sha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "bytes": 4633,
+          "lines": 91,
+          "requiredLineRanges": [
+            [
+              1,
+              91
+            ]
+          ],
+          "repoPath": "scripts/qa/qa-session-mocks.mjs",
+          "actualSha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "hashVerified": true,
+          "actualLines": 91,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 91,
+              "requestedEnd": 91,
+              "sha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "gitBlobVerified": true,
+          "finalSha256": "b4ca778b17b6e5c74f9b9b0a04e53ceb2e0b641574934a08f78b08d0f4942516",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/run-scenario-slots.test.mjs",
+          "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "bytes": 28318,
+          "lines": 501,
+          "requiredLineRanges": [
+            [
+              1,
+              501
+            ]
+          ],
+          "repoPath": "scripts/qa/run-scenario-slots.test.mjs",
+          "actualSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "hashVerified": true,
+          "actualLines": 501,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 501,
+              "requestedEnd": 501,
+              "sha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "gitBlobVerified": true,
+          "finalSha256": "1a6264e17d284b8309dfaa1cb87960bf14edb356f244d7e0ef0d90a2835c8410",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/run-scenario-ownership.test.mjs",
+          "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "bytes": 28480,
+          "lines": 426,
+          "requiredLineRanges": [
+            [
+              1,
+              426
+            ]
+          ],
+          "repoPath": "scripts/qa/run-scenario-ownership.test.mjs",
+          "actualSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "hashVerified": true,
+          "actualLines": 426,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 426,
+              "requestedEnd": 426,
+              "sha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "gitBlobVerified": true,
+          "finalSha256": "a7e63724895cf35721b9b3cff41e94bef6b7fc182bfcd5356187c8599d42f4d8",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/run-scenario-boundaries.test.mjs",
+          "sha256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+          "bytes": 10047,
+          "lines": 152,
+          "requiredLineRanges": [
+            [
+              1,
+              152
+            ]
+          ],
+          "repoPath": "scripts/qa/run-scenario-boundaries.test.mjs",
+          "actualSha256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+          "hashVerified": true,
+          "actualLines": 152,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 152,
+              "requestedEnd": 152,
+              "sha256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+          "gitBlobVerified": true,
+          "finalSha256": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/provider-ownership.test.mjs",
+          "sha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "bytes": 16800,
+          "lines": 275,
+          "requiredLineRanges": [
+            [
+              1,
+              275
+            ]
+          ],
+          "repoPath": "scripts/qa/provider-ownership.test.mjs",
+          "actualSha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "hashVerified": true,
+          "actualLines": 275,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 275,
+              "requestedEnd": 275,
+              "sha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "gitBlobVerified": true,
+          "finalSha256": "11475342aef09640c6fe50d323fe22e9c41354f0f1ee7cbc679aa6d63a88fc7d",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/browser-lease.test.mjs",
+          "sha256": "ff16d942dc7eef1042841a2c1b9a4cd56e688d9b9dd0229ddd6c7a29d2f3760d",
+          "bytes": 13537,
+          "lines": 223,
+          "requiredLineRanges": [
+            [
+              1,
+              223
+            ]
+          ],
+          "repoPath": "scripts/qa/browser-lease.test.mjs",
+          "actualSha256": "ff16d942dc7eef1042841a2c1b9a4cd56e688d9b9dd0229ddd6c7a29d2f3760d",
+          "hashVerified": true,
+          "actualLines": 223,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 223,
+              "requestedEnd": 223,
+              "sha256": "ff16d942dc7eef1042841a2c1b9a4cd56e688d9b9dd0229ddd6c7a29d2f3760d",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "ff16d942dc7eef1042841a2c1b9a4cd56e688d9b9dd0229ddd6c7a29d2f3760d",
+          "gitBlobVerified": true,
+          "finalSha256": "ff16d942dc7eef1042841a2c1b9a4cd56e688d9b9dd0229ddd6c7a29d2f3760d",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/browser-lease-slots.test.mjs",
+          "sha256": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+          "bytes": 13171,
+          "lines": 291,
+          "requiredLineRanges": [
+            [
+              1,
+              291
+            ]
+          ],
+          "repoPath": "scripts/qa/browser-lease-slots.test.mjs",
+          "actualSha256": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+          "hashVerified": true,
+          "actualLines": 291,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 291,
+              "requestedEnd": 291,
+              "sha256": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+          "gitBlobVerified": true,
+          "finalSha256": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/browser-lease-fixture.mjs",
+          "sha256": "24382df2df6524aa1577ce6bde6e785115a7e150eaa7a1d8a9cb3842f8d38988",
+          "bytes": 6028,
+          "lines": 146,
+          "requiredLineRanges": [
+            [
+              1,
+              146
+            ]
+          ],
+          "repoPath": "scripts/qa/browser-lease-fixture.mjs",
+          "actualSha256": "24382df2df6524aa1577ce6bde6e785115a7e150eaa7a1d8a9cb3842f8d38988",
+          "hashVerified": true,
+          "actualLines": 146,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 146,
+              "requestedEnd": 146,
+              "sha256": "24382df2df6524aa1577ce6bde6e785115a7e150eaa7a1d8a9cb3842f8d38988",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "24382df2df6524aa1577ce6bde6e785115a7e150eaa7a1d8a9cb3842f8d38988",
+          "gitBlobVerified": true,
+          "finalSha256": "24382df2df6524aa1577ce6bde6e785115a7e150eaa7a1d8a9cb3842f8d38988",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/server-ownership.test.mjs",
+          "sha256": "600ae556a5b38ae8d4224b4521be01a4f58166c757e1e357dc1b8591157a8d18",
+          "bytes": 20288,
+          "lines": 320,
+          "requiredLineRanges": [
+            [
+              1,
+              320
+            ]
+          ],
+          "repoPath": "scripts/qa/server-ownership.test.mjs",
+          "actualSha256": "600ae556a5b38ae8d4224b4521be01a4f58166c757e1e357dc1b8591157a8d18",
+          "hashVerified": true,
+          "actualLines": 320,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 320,
+              "requestedEnd": 320,
+              "sha256": "600ae556a5b38ae8d4224b4521be01a4f58166c757e1e357dc1b8591157a8d18",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "600ae556a5b38ae8d4224b4521be01a4f58166c757e1e357dc1b8591157a8d18",
+          "gitBlobVerified": true,
+          "finalSha256": "600ae556a5b38ae8d4224b4521be01a4f58166c757e1e357dc1b8591157a8d18",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/run-scenario.mjs",
+          "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "bytes": 38939,
+          "lines": 827,
+          "requiredLineRanges": [
+            [
+              1,
+              827
+            ]
+          ],
+          "repoPath": "scripts/qa/run-scenario.mjs",
+          "actualSha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "hashVerified": true,
+          "actualLines": 827,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 827,
+              "requestedEnd": 827,
+              "sha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "gitBlobVerified": true,
+          "finalSha256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/server-ownership.mjs",
+          "sha256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+          "bytes": 13127,
+          "lines": 247,
+          "requiredLineRanges": [
+            [
+              1,
+              247
+            ]
+          ],
+          "repoPath": "scripts/qa/server-ownership.mjs",
+          "actualSha256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+          "hashVerified": true,
+          "actualLines": 247,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 247,
+              "requestedEnd": 247,
+              "sha256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+          "gitBlobVerified": true,
+          "finalSha256": "c108667d1b2f57a6e6d17e661e48ba66b0cee5a7f07aa3dc52f3f708933ab0cb",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/browser-lease.mjs",
+          "sha256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+          "bytes": 14230,
+          "lines": 391,
+          "requiredLineRanges": [
+            [
+              1,
+              391
+            ]
+          ],
+          "repoPath": "scripts/qa/browser-lease.mjs",
+          "actualSha256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+          "hashVerified": true,
+          "actualLines": 391,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 391,
+              "requestedEnd": 391,
+              "sha256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+          "gitBlobVerified": true,
+          "finalSha256": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/tournament/contracts.test.ts",
+          "sha256": "07f2aec0312d03d7beb7507ac75c591abb2daeaea35a04918159a8dad7af34ee",
+          "bytes": 15002,
+          "lines": 192,
+          "requiredLineRanges": [
+            [
+              1,
+              192
+            ]
+          ],
+          "repoPath": "scripts/tournament/contracts.test.ts",
+          "actualSha256": "07f2aec0312d03d7beb7507ac75c591abb2daeaea35a04918159a8dad7af34ee",
+          "hashVerified": true,
+          "actualLines": 192,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 192,
+              "requestedEnd": 192,
+              "sha256": "07f2aec0312d03d7beb7507ac75c591abb2daeaea35a04918159a8dad7af34ee",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "07f2aec0312d03d7beb7507ac75c591abb2daeaea35a04918159a8dad7af34ee",
+          "gitBlobVerified": true,
+          "finalSha256": "07f2aec0312d03d7beb7507ac75c591abb2daeaea35a04918159a8dad7af34ee",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/tournament/batch.ts",
+          "sha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "bytes": 4934,
+          "lines": 90,
+          "requiredLineRanges": [
+            [
+              1,
+              90
+            ]
+          ],
+          "repoPath": "scripts/tournament/batch.ts",
+          "actualSha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "hashVerified": true,
+          "actualLines": 90,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 90,
+              "requestedEnd": 90,
+              "sha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "gitBlobVerified": true,
+          "finalSha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/tournament/worker.ts",
+          "sha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "bytes": 1294,
+          "lines": 27,
+          "requiredLineRanges": [
+            [
+              1,
+              27
+            ]
+          ],
+          "repoPath": "scripts/tournament/worker.ts",
+          "actualSha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "hashVerified": true,
+          "actualLines": 27,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 27,
+              "requestedEnd": 27,
+              "sha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "gitBlobVerified": true,
+          "finalSha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/tournament/worker-bootstrap.mjs",
+          "sha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "bytes": 81,
+          "lines": 3,
+          "requiredLineRanges": [
+            [
+              1,
+              3
+            ]
+          ],
+          "repoPath": "scripts/tournament/worker-bootstrap.mjs",
+          "actualSha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "hashVerified": true,
+          "actualLines": 3,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 3,
+              "requestedEnd": 3,
+              "sha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "gitBlobVerified": true,
+          "finalSha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/tournament/game.ts",
+          "sha256": "7e8eef3336b50e94fe3c6c68740fc4fb16c01dfee89937c74685febcaa18cb6e",
+          "bytes": 5789,
+          "lines": 91,
+          "requiredLineRanges": [
+            [
+              1,
+              91
+            ]
+          ],
+          "repoPath": "scripts/tournament/game.ts",
+          "actualSha256": "7e8eef3336b50e94fe3c6c68740fc4fb16c01dfee89937c74685febcaa18cb6e",
+          "hashVerified": true,
+          "actualLines": 91,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 91,
+              "requestedEnd": 91,
+              "sha256": "7e8eef3336b50e94fe3c6c68740fc4fb16c01dfee89937c74685febcaa18cb6e",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "7e8eef3336b50e94fe3c6c68740fc4fb16c01dfee89937c74685febcaa18cb6e",
+          "gitBlobVerified": true,
+          "finalSha256": "7e8eef3336b50e94fe3c6c68740fc4fb16c01dfee89937c74685febcaa18cb6e",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/tournament/catalog.json",
+          "sha256": "424ecb73baf7dd55eff4b7a29097af51ef5ffb09646a0c1b858f950ded6120b8",
+          "bytes": 546,
+          "lines": 30,
+          "requiredLineRanges": [
+            [
+              1,
+              30
+            ]
+          ],
+          "repoPath": "scripts/tournament/catalog.json",
+          "actualSha256": "424ecb73baf7dd55eff4b7a29097af51ef5ffb09646a0c1b858f950ded6120b8",
+          "hashVerified": true,
+          "actualLines": 30,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 30,
+              "requestedEnd": 30,
+              "sha256": "424ecb73baf7dd55eff4b7a29097af51ef5ffb09646a0c1b858f950ded6120b8",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "424ecb73baf7dd55eff4b7a29097af51ef5ffb09646a0c1b858f950ded6120b8",
+          "gitBlobVerified": true,
+          "finalSha256": "424ecb73baf7dd55eff4b7a29097af51ef5ffb09646a0c1b858f950ded6120b8",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/plan-source-packet.test.mjs",
+          "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "bytes": 11827,
+          "lines": 235,
+          "requiredLineRanges": [
+            [
+              1,
+              235
+            ]
+          ],
+          "repoPath": "scripts/plan-source-packet.test.mjs",
+          "actualSha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "hashVerified": true,
+          "actualLines": 235,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 235,
+              "requestedEnd": 235,
+              "sha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "gitBlobVerified": true,
+          "finalSha256": "1d2da16055a73ee881e42ba123ab67024e3df012547accbc292b6a10dbc0d5cd",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/battle/components/battle-presentation.test.tsx",
+          "sha256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+          "bytes": 21785,
+          "lines": 426,
+          "requiredLineRanges": [
+            [
+              1,
+              426
+            ]
+          ],
+          "repoPath": "src/battle/components/battle-presentation.test.tsx",
+          "actualSha256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+          "hashVerified": true,
+          "actualLines": 426,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 426,
+              "requestedEnd": 426,
+              "sha256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+          "gitBlobVerified": true,
+          "finalSha256": "a676d389ce5ea8e8ad43b203846a46cc61269cee47f0503b1eb60a828e3acc42",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/rules/journey/journey-committed-purge-prevention.test.ts",
+          "sha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+          "bytes": 20788,
+          "lines": 255,
+          "requiredLineRanges": [
+            [
+              1,
+              255
+            ]
+          ],
+          "repoPath": "src/rules/journey/journey-committed-purge-prevention.test.ts",
+          "actualSha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+          "hashVerified": true,
+          "actualLines": 255,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 255,
+              "requestedEnd": 255,
+              "sha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+          "gitBlobVerified": true,
+          "finalSha256": "6a47e7936f27cb0a094966015e70201d4ce7f45c084060a74a3367396874ab05",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/rules/journey/journey-deck-entry.test.ts",
+          "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "bytes": 47182,
+          "lines": 491,
+          "requiredLineRanges": [
+            [
+              1,
+              491
+            ]
+          ],
+          "repoPath": "src/rules/journey/journey-deck-entry.test.ts",
+          "actualSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "hashVerified": true,
+          "actualLines": 491,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 491,
+              "requestedEnd": 491,
+              "sha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "gitBlobVerified": true,
+          "finalSha256": "51bc709c9fb039bf05966a661b4f87f3c9f5791aedabe604ba00fb15b7da391e",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "bytes": 33743,
+          "lines": 475,
+          "requiredLineRanges": [
+            [
+              1,
+              475
+            ]
+          ],
+          "repoPath": "src/screens/cumulus_adapters/engine-battle-presentation-items.test.ts",
+          "actualSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "hashVerified": true,
+          "actualLines": 475,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 475,
+              "requestedEnd": 475,
+              "sha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "gitBlobSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "gitBlobVerified": true,
+          "finalSha256": "23e9a8d96b1267e8066ee0b100b69f77ec66f30b4356852b7f82bd9ab5c48a93",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/relevant-native-history.json",
+          "sha256": "07a07e60468a7d6ba521e6d89089cd69d5e31f357c97b31a412695a07d2bb1ed",
+          "bytes": 132990,
+          "lines": 374,
+          "requiredLineRanges": [
+            [
+              1,
+              374
+            ]
+          ],
+          "actualSha256": "07a07e60468a7d6ba521e6d89089cd69d5e31f357c97b31a412695a07d2bb1ed",
+          "hashVerified": true,
+          "actualLines": 374,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 374,
+              "requestedEnd": 374,
+              "sha256": "07a07e60468a7d6ba521e6d89089cd69d5e31f357c97b31a412695a07d2bb1ed",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "07a07e60468a7d6ba521e6d89089cd69d5e31f357c97b31a412695a07d2bb1ed",
+          "finalHashVerified": true,
+          "semanticChunks": "All21 selected beads: every projected id/title/status/assignee/metadata/description/acceptance/close field read. Raw selected fields equal admitted-all; notes and unrelated ancestors omitted by projection, not reviewed."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/unfinished-projection.json",
+          "sha256": "026acd6e6626e49afc0136055a0b24840f5ede1e17cb0ccf69797230ac5df634",
+          "bytes": 70489,
+          "lines": 309,
+          "requiredLineRanges": [
+            [
+              1,
+              309
+            ]
+          ],
+          "actualSha256": "026acd6e6626e49afc0136055a0b24840f5ede1e17cb0ccf69797230ac5df634",
+          "hashVerified": true,
+          "actualLines": 309,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 309,
+              "requestedEnd": 309,
+              "sha256": "026acd6e6626e49afc0136055a0b24840f5ede1e17cb0ccf69797230ac5df634",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "026acd6e6626e49afc0136055a0b24840f5ede1e17cb0ccf69797230ac5df634",
+          "finalHashVerified": true,
+          "semanticChunks": "All23 projected beads and all fields read; hv-fy5h.16/.17 recovered after truncation. Native mutation/filing remains parent duty."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/prior-cuts-projection.json",
+          "sha256": "4e6ac5c4b2ce6e63c496bdfbab8ce96fa63895c9a1bd9b5b0d36cf10fa9d267a",
+          "bytes": 4732,
+          "lines": 121,
+          "requiredLineRanges": [
+            [
+              1,
+              121
+            ]
+          ],
+          "actualSha256": "4e6ac5c4b2ce6e63c496bdfbab8ce96fa63895c9a1bd9b5b0d36cf10fa9d267a",
+          "hashVerified": true,
+          "actualLines": 121,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 121,
+              "requestedEnd": 121,
+              "sha256": "4e6ac5c4b2ce6e63c496bdfbab8ce96fa63895c9a1bd9b5b0d36cf10fa9d267a",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "4e6ac5c4b2ce6e63c496bdfbab8ce96fa63895c9a1bd9b5b0d36cf10fa9d267a",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/current-profile-summary.json",
+          "sha256": "86566171d1f8cb6a6d9069e03555c406376a203c1f3e6a5e7f71c75aec7fc65d",
+          "bytes": 105947,
+          "lines": 2455,
+          "requiredLineRanges": [
+            [
+              1,
+              2455
+            ]
+          ],
+          "actualSha256": "86566171d1f8cb6a6d9069e03555c406376a203c1f3e6a5e7f71c75aec7fc65d",
+          "hashVerified": true,
+          "actualLines": 2455,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 2455,
+              "requestedEnd": 2455,
+              "sha256": "86566171d1f8cb6a6d9069e03555c406376a203c1f3e6a5e7f71c75aec7fc65d",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "86566171d1f8cb6a6d9069e03555c406376a203c1f3e6a5e7f71c75aec7fc65d",
+          "finalHashVerified": true,
+          "semanticChunks": "All root fields,30 topCollect,30 topTests, cumulative qualification and282 caseRows read. Raw repeated fullNames handled as occurrence/multiset, not first-match keyed lookup."
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/parent-fullsuite-proof.json",
+          "sha256": "701fc6575023c5e90545bb6bfd4b14e25a80d98a12319ecaf727b7f4ca3dbea3",
+          "bytes": 2317,
+          "lines": 54,
+          "requiredLineRanges": [
+            [
+              1,
+              54
+            ]
+          ],
+          "actualSha256": "701fc6575023c5e90545bb6bfd4b14e25a80d98a12319ecaf727b7f4ca3dbea3",
+          "hashVerified": true,
+          "actualLines": 54,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 54,
+              "requestedEnd": 54,
+              "sha256": "701fc6575023c5e90545bb6bfd4b14e25a80d98a12319ecaf727b7f4ca3dbea3",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "701fc6575023c5e90545bb6bfd4b14e25a80d98a12319ecaf727b7f4ca3dbea3",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/post799-resume266/parent-all17-current-source-static-proof.json",
+          "sha256": "3282a2925bdb078da6135616bc9fcae461a2f561823f5cd06b3535fd9bf0c260",
+          "bytes": 6929,
+          "lines": 112,
+          "requiredLineRanges": [
+            [
+              1,
+              112
+            ]
+          ],
+          "actualSha256": "3282a2925bdb078da6135616bc9fcae461a2f561823f5cd06b3535fd9bf0c260",
+          "hashVerified": true,
+          "actualLines": 112,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 112,
+              "requestedEnd": 112,
+              "sha256": "3282a2925bdb078da6135616bc9fcae461a2f561823f5cd06b3535fd9bf0c260",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "3282a2925bdb078da6135616bc9fcae461a2f561823f5cd06b3535fd9bf0c260",
+          "finalHashVerified": true
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/post799-resume266/pre-sage267-friction.receipt.json",
+          "sha256": "6418c2d78f37f03ebb2fd3c51aaa2f20160e415ccee96d98a7b2f7c40b474e17",
+          "bytes": 970,
+          "lines": 32,
+          "requiredLineRanges": [
+            [
+              1,
+              32
+            ]
+          ],
+          "actualSha256": "6418c2d78f37f03ebb2fd3c51aaa2f20160e415ccee96d98a7b2f7c40b474e17",
+          "hashVerified": true,
+          "actualLines": 32,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 32,
+              "requestedEnd": 32,
+              "sha256": "6418c2d78f37f03ebb2fd3c51aaa2f20160e415ccee96d98a7b2f7c40b474e17",
+              "kind": "complete required range read; structured JSON fields read in bounded semantic chunks where applicable",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "complete for required ranges",
+          "finalSha256": "6418c2d78f37f03ebb2fd3c51aaa2f20160e415ccee96d98a7b2f7c40b474e17",
+          "finalHashVerified": true
+        }
+      ],
+      "additionalInputs": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/policy/catalog-manifest.ts",
+          "repoPath": "src/engine/policy/catalog-manifest.ts",
+          "sha256": "76754bad6b6545e10674c9b07df41b63d70a0c0d599bb3e7ac33461329146bd7",
+          "bytes": 5814,
+          "lines": 115,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 115,
+              "requestedEnd": 115,
+              "sha256": "76754bad6b6545e10674c9b07df41b63d70a0c0d599bb3e7ac33461329146bd7",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole manifest serialization/composition boundary"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/engine.ts",
+          "repoPath": "src/engine/engine.ts",
+          "sha256": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+          "bytes": 4945,
+          "lines": 120,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 120,
+              "requestedEnd": 120,
+              "sha256": "94fe39e1b652c82c1cad552f2c2fccfab0f6c13edc24b23f396937ee19ddd426",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole engine public boundary"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/qa-signal-fixture.mjs",
+          "repoPath": "scripts/qa/qa-signal-fixture.mjs",
+          "sha256": "d9457714d7847ce7032e7c694a965c5a5d9290e1aeee596b238266c3d700c1ad",
+          "bytes": 7074,
+          "lines": 102,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 102,
+              "requestedEnd": 102,
+              "sha256": "d9457714d7847ce7032e7c694a965c5a5d9290e1aeee596b238266c3d700c1ad",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole native signal fixture; all three modes and named signals"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/qa/server-launcher.mjs",
+          "repoPath": "scripts/qa/server-launcher.mjs",
+          "sha256": "aa4e713abc8882fc69d3138f09cbf621cd83ffb55aa76f1e0fdf31a929f354d8",
+          "bytes": 1902,
+          "lines": 32,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 32,
+              "requestedEnd": 32,
+              "sha256": "aa4e713abc8882fc69d3138f09cbf621cd83ffb55aa76f1e0fdf31a929f354d8",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole native server launch gate/forwarding"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/rules/replay/replay.ts",
+          "repoPath": "src/rules/replay/replay.ts",
+          "sha256": "945e388232e063a80d8ed8b1f967cc497c021f5131868f3af2016c17637e47c2",
+          "bytes": 5241,
+          "lines": 121,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 121,
+              "requestedEnd": 121,
+              "sha256": "945e388232e063a80d8ed8b1f967cc497c021f5131868f3af2016c17637e47c2",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole canonical checkpoint/decode wiring"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/session/providers/register-game-providers.ts",
+          "repoPath": "src/session/providers/register-game-providers.ts",
+          "sha256": "0ba00d007f719018645471d45c6ed2187802ab4dd06790d559ca5580235a1820",
+          "bytes": 4808,
+          "lines": 95,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 95,
+              "requestedEnd": 95,
+              "sha256": "0ba00d007f719018645471d45c6ed2187802ab4dd06790d559ca5580235a1820",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole registration/clear global-provider wiring"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/rules/journey/modifier-registry.ts",
+          "repoPath": "src/rules/journey/modifier-registry.ts",
+          "sha256": "2230e9e7bf14ae951cf96ee76efdb7055bfb731278847632c57a22245391036e",
+          "bytes": 27668,
+          "lines": 351,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 99,
+              "requestedEnd": 99,
+              "sha256": "66f65c793b9bb3eab3d8d815be603c97251f209be46c3f19c5be13f1e857260c",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            },
+            {
+              "start": 100,
+              "end": 220,
+              "requestedEnd": 220,
+              "sha256": "2d2391f5d48eb4b9b4fe142fa898e8716e22060194791a53277a89a73712e258",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            },
+            {
+              "start": 221,
+              "end": 351,
+              "requestedEnd": 351,
+              "sha256": "78c7184c36fe4f23e4c5ba3406efae41770f99ef0a5936cbe02877359274abcc",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole registry source; production registrations and stateful closure"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/index.ts",
+          "repoPath": "src/engine/index.ts",
+          "sha256": "8b594a91dc94d601feb2d0494f512893f80a7451bdc9739c679d77d8cee4df44",
+          "bytes": 2040,
+          "lines": 80,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 80,
+              "requestedEnd": 80,
+              "sha256": "8b594a91dc94d601feb2d0494f512893f80a7451bdc9739c679d77d8cee4df44",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole core export module"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/screens/cumulus_adapters/engine-battle-presentation.fixtures.ts",
+          "repoPath": "src/screens/cumulus_adapters/engine-battle-presentation.fixtures.ts",
+          "sha256": "a013234179b2a6a7dd1a8b996e334cc46fc7d5dfed121cf3382ee14923f94755",
+          "bytes": 4455,
+          "lines": 80,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 80,
+              "requestedEnd": 80,
+              "sha256": "a013234179b2a6a7dd1a8b996e334cc46fc7d5dfed121cf3382ee14923f94755",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole presentation fixtures and imports"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/development.ts",
+          "repoPath": "src/engine/development.ts",
+          "sha256": "98ca7d85d549294ab357eb8e5a4489dec5e4468dc487a0948ae2a673523ef0ba",
+          "bytes": 1800,
+          "lines": 45,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 45,
+              "requestedEnd": 45,
+              "sha256": "98ca7d85d549294ab357eb8e5a4489dec5e4468dc487a0948ae2a673523ef0ba",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole DEV-only conditional import semantics"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/content-catalog.ts",
+          "repoPath": "src/engine/content-catalog.ts",
+          "sha256": "18b661357206d708d5b73de5c97bd1069744c884246506340495659144d9ed52",
+          "bytes": 5228,
+          "lines": 126,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 126,
+              "requestedEnd": 128,
+              "sha256": "18b661357206d708d5b73de5c97bd1069744c884246506340495659144d9ed52",
+              "kind": "semantic source read",
+              "absentRequestedTail": [
+                127,
+                128
+              ]
+            }
+          ],
+          "semanticStatus": "whole content conversion functions and imports"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/session/providers/journey-content-engine.ts",
+          "repoPath": "src/session/providers/journey-content-engine.ts",
+          "sha256": "99f931de2485f0eb5789dcb2fd7f90aba0bb34d91f02191b443cf24e1f05d5d2",
+          "bytes": 5860,
+          "lines": 118,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 118,
+              "requestedEnd": 118,
+              "sha256": "99f931de2485f0eb5789dcb2fd7f90aba0bb34d91f02191b443cf24e1f05d5d2",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole actual loader consumer and cache/UUID composition"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/runtime/qa-scenes.ts",
+          "repoPath": "src/runtime/qa-scenes.ts",
+          "sha256": "34a59ba3bcdf37b98f2ec10e17636c2d4e1245737cca6a9aaa3160f29eb38f90",
+          "bytes": 69947,
+          "lines": 1704,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 85,
+              "requestedEnd": 85,
+              "sha256": "578ba722819f59ae0240c1f8404f17e5ea67ef5daf25b37250eb0750e56c5801",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            },
+            {
+              "start": 630,
+              "end": 685,
+              "requestedEnd": 685,
+              "sha256": "2783e84ef6109bdf80d5052f1cdd000c74b31546f592b0a0046db8ac89bbaed8",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "partial: import declarations and both contentCardDefinitions use sites; unrelated QA body not reviewed"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/bench-engine.ts",
+          "repoPath": "scripts/bench-engine.ts",
+          "sha256": "f39588c1bfaf20e84fcb6e620e226ea738b5fc38364c4f80462ced2519e3ebcd",
+          "bytes": 7966,
+          "lines": 183,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 85,
+              "requestedEnd": 85,
+              "sha256": "c2bb5be130d0bfb90212905a688701134d2593cd072df6df392498c28666ef37",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "partial import/caller source only; no benchmark execution"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/scripts/fuzz-engine.ts",
+          "repoPath": "scripts/fuzz-engine.ts",
+          "sha256": "431367813903e5641bda35672daffaf268487214ad4646ec14efe0938925333d",
+          "bytes": 6547,
+          "lines": 138,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 85,
+              "requestedEnd": 85,
+              "sha256": "583d9791640ffb1677b0358da6931fb6e4d7f6de2633279d888e04e14df9f356",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "partial import/caller source only; no fuzz execution"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/policy/catalog-manifest.test.ts",
+          "repoPath": "src/engine/policy/catalog-manifest.test.ts",
+          "sha256": "d04d544f807364e038325b1effbf55f01c89cc238b8959ff1404e7e9156a7f52",
+          "bytes": 7104,
+          "lines": 131,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 85,
+              "requestedEnd": 85,
+              "sha256": "e14d1ea61014ddc370a2e4f783cb95b422b8325788e82fdefd2869b257edfb3b",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "partial existing catalog-composition contract only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/content/specs/specs.test.ts",
+          "repoPath": "src/content/specs/specs.test.ts",
+          "sha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+          "bytes": 1922,
+          "lines": 52,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 52,
+              "requestedEnd": 52,
+              "sha256": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole scenario registry test runner"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/core.test.ts",
+          "repoPath": "src/engine/core.test.ts",
+          "sha256": "450690c311a2a58305d936cb0f44f5429a2fe334c3be1fac7d3125b5594bdbb8",
+          "bytes": 15694,
+          "lines": 273,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 85,
+              "requestedEnd": 85,
+              "sha256": "000ce97902a54804be5c798fdfc1c2998a714d61aa29488c97841f7e2af3cf56",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "partial imports and initial contracts only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/effects/primitives/contracts.test.ts",
+          "repoPath": "src/engine/effects/primitives/contracts.test.ts",
+          "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+          "bytes": 311,
+          "lines": 6,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 6,
+              "requestedEnd": 6,
+              "sha256": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole eager glob entrypoint only; not credit for all imported contracts"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/testing/fuzz.ts",
+          "repoPath": "src/engine/testing/fuzz.ts",
+          "sha256": "aa48a2981f6c452da8f0ee1a1b42075921e29ff45f080d43a0c2011702290159",
+          "bytes": 39350,
+          "lines": 775,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 70,
+              "requestedEnd": 70,
+              "sha256": "093584c30ace35342050ec6e6d7461f0f7fc06e3d7b036a7c4ac67db07381f3e",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "partial imports/types only"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "repoPath": "src/engine/effects/primitives/contracts/cost-composition.contracts.ts",
+          "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+          "bytes": 31386,
+          "lines": 481,
+          "gitBlobVerified": true,
+          "readChunks": [
+            {
+              "start": 1,
+              "end": 481,
+              "requestedEnd": 481,
+              "sha256": "6c50327b1fbf908be764446ce15d007bb1ab4cef8bcc73dd61f85d763fae841a",
+              "kind": "semantic source read",
+              "absentRequestedTail": null
+            }
+          ],
+          "semanticStatus": "whole cost matrix; no proposal to prune exhaustive route/mode obligations"
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/sage/SKILL.md",
+          "sha256": "20e3675876f238eff256451083f646b512e1f7e75dbfdf48fac26baff38f52e9",
+          "bytes": 744,
+          "lines": 8,
+          "semanticStatus": "whole invoked skill"
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/shared/entry.md",
+          "sha256": "27fda8b65d50a992bcaf4d218d43a79fb18a528c362179f62dadb8b9258649b3",
+          "bytes": 4917,
+          "lines": 26,
+          "semanticStatus": "whole entry skill"
+        },
+        {
+          "path": "/Users/dthurn/.llms/skills/shared/filing.md",
+          "sha256": "4a44cf0cca16f61b22c00e63f48f89e2c15ba856533b8d6714c471095bdbcf47",
+          "bytes": 5427,
+          "lines": 22,
+          "semanticStatus": "whole filing skill; parent owns effects"
+        },
+        {
+          "path": "/Users/dthurn/brain/hive.json",
+          "sha256": "c32e575291380bd6ca073f5882385c3d4fba90fee02204969f330f6caa5782cc",
+          "bytes": 998,
+          "lines": 37,
+          "semanticStatus": "only matching dreamtides_web project record; other projects not semantic scope"
+        }
+      ],
+      "truncationRecoveries": [
+        {
+          "read": "run-scenario-slots plus boundaries combined",
+          "actualTruncation": true,
+          "affected": "slots around340-365",
+          "recovered": "slots330-397 separately; boundaries full visible"
+        },
+        {
+          "read": "committed-purge plus first250 deck-entry",
+          "actualTruncation": true,
+          "affected": "purge230-255; deck-entry beginning1-46",
+          "recovered": "purge225-255; deck-entry1-49; deck-entry251-491 separately"
+        },
+        {
+          "read": "native history first7beads",
+          "actualTruncation": true,
+          "affected": "middle of796description/tail and792/768",
+          "recovered": "whole792/768 separately;796last11000chars overlapping first read plus acceptance/close"
+        },
+        {
+          "read": "unfinished16-22",
+          "actualTruncation": true,
+          "affected": "17acceptance and16body/header",
+          "recovered": "17acceptance/16description+acceptance;16metadata separately"
+        },
+        {
+          "read": "additional source replay/provider/registry/index/fixtures/development",
+          "actualTruncation": true,
+          "affected": "modifier-registry100-217",
+          "recovered": "100-220 separately"
+        },
+        {
+          "read": "broad regex engine namespace search",
+          "actualTruncation": true,
+          "affected": "unrelated primitive namespace matches",
+          "recovered": "exact resolved engine-index import-target census; omitted unrelated hits not treated as semantic reads"
+        },
+        {
+          "read": "supplemental parent-profile-proof full pretty JSON",
+          "actualTruncation": true,
+          "affected": "large repeated profile arrays and stacks",
+          "recovered": "all topSelf/topInclusive/topFiles from profile-summary and all topStacks compact tuples; duplicate frame sampleWeightedMs zero fields structurally checked only"
+        },
+        {
+          "read": "prior-cut raw preservation arrays",
+          "actualTruncation": true,
+          "affected": "797/798full preservation census arrays",
+          "recovered": "decision/metric/freeze and parent status qualification fields reread; omitted prior preservation path arrays receive no semantic credit"
+        }
+      ],
+      "rawBindings": [
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/profile-derived.json",
+          "sha256": "3484ca2aba49e9e30c9d16de5265d95d3b88e0b2acbbc14e82a6aca6f7bebba8",
+          "expectedSha256": "3484ca2aba49e9e30c9d16de5265d95d3b88e0b2acbbc14e82a6aca6f7bebba8",
+          "hashVerified": true,
+          "bytes": 4109115,
+          "lines": 75460,
+          "read": "root keys only; selected fields independently matched to raw diagnostics/results; not all12452 assertions"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/vitest-results.json",
+          "sha256": "b5594059e9f01194948e4483efbb7a3cfafc3bd5beb0db026b38bb535ed9dee0",
+          "expectedSha256": "b5594059e9f01194948e4483efbb7a3cfafc3bd5beb0db026b38bb535ed9dee0",
+          "hashVerified": true,
+          "bytes": 4439121,
+          "lines": 1,
+          "read": "root totals;13 modules/282 projected assertion records matched by fullName/status/duration with duplicate names preserved"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/module-diagnostics.json",
+          "sha256": "f1544833200568edc94d54d832c5974b94b1f5a8fd2167776862b2be9a15e3c0",
+          "expectedSha256": "f1544833200568edc94d54d832c5974b94b1f5a8fd2167776862b2be9a15e3c0",
+          "hashVerified": true,
+          "bytes": 202666,
+          "lines": 5289,
+          "read": "root+13 selected modules by moduleId; top30 collect/test projection matched"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/fullsuite.log",
+          "sha256": "97ab5b4d3cffbcbe7d0419885e0d2722d773475e57b690b9e2cb937158ab69f5",
+          "expectedSha256": "97ab5b4d3cffbcbe7d0419885e0d2722d773475e57b690b9e2cb937158ab69f5",
+          "hashVerified": true,
+          "bytes": 130054,
+          "lines": 1055,
+          "read": "last15lines actual90.4stage/89.38Vitest and clean restore"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/fullsuite.inputs.json",
+          "sha256": "b337bb3ae27fe2b092ada28e7bfcb890f2c395f52cc5b8aa5a321739b8826c3a",
+          "expectedSha256": "b337bb3ae27fe2b092ada28e7bfcb890f2c395f52cc5b8aa5a321739b8826c3a",
+          "hashVerified": true,
+          "bytes": 751727,
+          "lines": 6188,
+          "read": "hash custody only; parent6164 verification relied on as stated"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/final-acceptance266/fullsuite.receipt.json",
+          "sha256": "5fc59e7016f705375c5d0f48930a8de9da83cad7fd899585ea3c54125ba354e6",
+          "expectedSha256": "5fc59e7016f705375c5d0f48930a8de9da83cad7fd899585ea3c54125ba354e6",
+          "hashVerified": true,
+          "bytes": 1336,
+          "lines": 37,
+          "read": "hash custody plus parent proof; timing values not independently executed"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/admitted-all.json",
+          "sha256": "828b6645470b347bced9dca6f643fd0494000c015df3bef71288afb5b8ffe122",
+          "expectedSha256": "828b6645470b347bced9dca6f643fd0494000c015df3bef71288afb5b8ffe122",
+          "hashVerified": true,
+          "bytes": 14033240,
+          "lines": 83007,
+          "read": "all21 projected selected field images independently compared with raw; notes/unrelated ancestors not read"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/evidence/measurements/hv-umm2.797.json",
+          "sha256": "0cbb49b7b2d6eb6c8ba9f82ae4edaea3bf0bda5b99db66c4b3ccd046e9aaf08b",
+          "expectedSha256": "0cbb49b7b2d6eb6c8ba9f82ae4edaea3bf0bda5b99db66c4b3ccd046e9aaf08b",
+          "hashVerified": true,
+          "bytes": 322934,
+          "lines": 6917,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-hooks797/parent-validation-proof.json",
+          "sha256": "42e42a7bd75a5f562a5ab3d53fde8cc89c416850d2a6283f13468a1d840f63b0",
+          "expectedSha256": "42e42a7bd75a5f562a5ab3d53fde8cc89c416850d2a6283f13468a1d840f63b0",
+          "hashVerified": true,
+          "bytes": 10774,
+          "lines": 301,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-hooks797/parent-cold-proof.json",
+          "sha256": "d033849ab3fbba0818bab89553027b510c95885b374c3c847548d8f41543ee69",
+          "expectedSha256": "d033849ab3fbba0818bab89553027b510c95885b374c3c847548d8f41543ee69",
+          "hashVerified": true,
+          "bytes": 3034,
+          "lines": 128,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/evidence/measurements/hv-umm2.798.json",
+          "sha256": "65a579f2f76a459b297809dbcaf8933189a5297bd41f19febdd552441d357ff0",
+          "expectedSha256": "65a579f2f76a459b297809dbcaf8933189a5297bd41f19febdd552441d357ff0",
+          "hashVerified": true,
+          "bytes": 28655,
+          "lines": 677,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/parent-validation-proof.json",
+          "sha256": "03ea3bacf183f8b34f41b08ea13bdc189038242fb2f2bffd8d8bfe1bf7ab2d4e",
+          "expectedSha256": "03ea3bacf183f8b34f41b08ea13bdc189038242fb2f2bffd8d8bfe1bf7ab2d4e",
+          "hashVerified": true,
+          "bytes": 5318,
+          "lines": 189,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/parent-cold-proof.json",
+          "sha256": "c5b282519200084722eedcc6ea1152d63a6b2f1fc214b751152799712b28e483",
+          "expectedSha256": "c5b282519200084722eedcc6ea1152d63a6b2f1fc214b751152799712b28e483",
+          "hashVerified": true,
+          "bytes": 1658,
+          "lines": 56,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/evidence/measurements/hv-umm2.799.json",
+          "sha256": "1c3810b52949b465c9d2129778aad462ed57c8cca019b9d26f7d73d1e067fc40",
+          "expectedSha256": "1c3810b52949b465c9d2129778aad462ed57c8cca019b9d26f7d73d1e067fc40",
+          "hashVerified": true,
+          "bytes": 283744,
+          "lines": 5420,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-copy799/parent-validation-proof.json",
+          "sha256": "aa09dcad950679928ddffa813bb03f57d7bea7b9e17d6081386f4cb12bbc914e",
+          "expectedSha256": "aa09dcad950679928ddffa813bb03f57d7bea7b9e17d6081386f4cb12bbc914e",
+          "hashVerified": true,
+          "bytes": 8099,
+          "lines": 246,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-copy799/parent-cold-proof.json",
+          "sha256": "f6065d5e5b36aa0f8ed33bf2be8c611ba4d69ec2325780744afb096b618c9d82",
+          "expectedSha256": "f6065d5e5b36aa0f8ed33bf2be8c611ba4d69ec2325780744afb096b618c9d82",
+          "hashVerified": true,
+          "bytes": 2590,
+          "lines": 94,
+          "read": "only decision/metric/freeze/scope and parent terminal/status qualification fields; no full ancestor semantic claim"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/profile-summary.json",
+          "sha256": "dd9a37d0910cb19bd27dfa70f17f8169e1fd532f73348f15ee314635a2044514",
+          "expectedSha256": null,
+          "hashVerified": true,
+          "bytes": 61661,
+          "lines": 2065,
+          "read": "root qualifications/raw bindings;all3 profile topSelf/topInclusive/topFiles;parent topStacks all compact tuples read"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/parent-profile-proof.json",
+          "sha256": "838a8de440001334724984ae8fa754e01caf7884a5b06dff255cc96d6d5e4342",
+          "expectedSha256": null,
+          "hashVerified": true,
+          "bytes": 136041,
+          "lines": 4387,
+          "read": "root qualifications/raw bindings;all3 profile topSelf/topInclusive/topFiles;parent topStacks all compact tuples read"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/freeze.json",
+          "sha256": "101bbf4eb2ba78c8462931086fa26fdaf624cd08696dfa3265d214453bb65fb2",
+          "expectedSha256": "101bbf4eb2ba78c8462931086fa26fdaf624cd08696dfa3265d214453bb65fb2",
+          "hashVerified": true,
+          "bytes": 1695,
+          "lines": 28,
+          "read": "hash custody only; source-bound parent proof and inspector summaries used, no whole runtime execution by auditor"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/qa-profile.inputs.json",
+          "sha256": "367e3ff1c4dca1d976e52ff52e05b2e927c55ba7282d7ef772d11640ef3dedfd",
+          "expectedSha256": "367e3ff1c4dca1d976e52ff52e05b2e927c55ba7282d7ef772d11640ef3dedfd",
+          "hashVerified": true,
+          "bytes": 750694,
+          "lines": 6170,
+          "read": "hash custody only; source-bound parent proof and inspector summaries used, no whole runtime execution by auditor"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/qa-profile.launch.json",
+          "sha256": "96a55d75e74dcc3ccb498623d2ed10b71bb4aad68d4bb1e26cc072bea2c2385f",
+          "expectedSha256": "96a55d75e74dcc3ccb498623d2ed10b71bb4aad68d4bb1e26cc072bea2c2385f",
+          "hashVerified": true,
+          "bytes": 1115,
+          "lines": 29,
+          "read": "hash custody only; source-bound parent proof and inspector summaries used, no whole runtime execution by auditor"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/qa-profile.receipt.json",
+          "sha256": "f9d504f0e6299d9af3a13bce4c05392d221ca270e9629d5063622c75e900497e",
+          "expectedSha256": "f9d504f0e6299d9af3a13bce4c05392d221ca270e9629d5063622c75e900497e",
+          "hashVerified": true,
+          "bytes": 1469,
+          "lines": 42,
+          "read": "hash custody only; source-bound parent proof and inspector summaries used, no whole runtime execution by auditor"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/qa-profile.log",
+          "sha256": "5900a7729fbc15aed5a7783af1c3a8d1479bd71e6bf756172ae0852d5a9da282",
+          "expectedSha256": "5900a7729fbc15aed5a7783af1c3a8d1479bd71e6bf756172ae0852d5a9da282",
+          "hashVerified": true,
+          "bytes": 38065,
+          "lines": 241,
+          "read": "hash custody only; source-bound parent proof and inspector summaries used, no whole runtime execution by auditor"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/results.json",
+          "sha256": "cc6683a6f0994abd5accad1f48017508608dd6a23820c3f4b1dab625d08aecfa",
+          "expectedSha256": "cc6683a6f0994abd5accad1f48017508608dd6a23820c3f4b1dab625d08aecfa",
+          "hashVerified": true,
+          "bytes": 17783,
+          "lines": 1,
+          "read": "hash custody only; source-bound parent proof and inspector summaries used, no whole runtime execution by auditor"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/profiles/run-scenario-ownership.test.mjs.29074.2.cpuprofile",
+          "sha256": "f59e5778631eafd5233bf3fa7e2040e41dcda6ea44fc78249c69dc55eab305de",
+          "expectedSha256": "f59e5778631eafd5233bf3fa7e2040e41dcda6ea44fc78249c69dc55eab305de",
+          "hashVerified": true,
+          "bytes": 454006,
+          "lines": 1,
+          "read": "hash/sample count structural verification; named top frames/stacks read through derived report; not whole raw frame semantic review"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/profiles/run-scenario-slots.test.mjs.29074.1.cpuprofile",
+          "sha256": "928848ad8de61432f11f7e3003c62792292bac4da7ecf5b92cdd206c31553d6f",
+          "expectedSha256": "928848ad8de61432f11f7e3003c62792292bac4da7ecf5b92cdd206c31553d6f",
+          "hashVerified": true,
+          "bytes": 363226,
+          "lines": 1,
+          "read": "hash/sample count structural verification; named top frames/stacks read through derived report; not whole raw frame semantic review"
+        },
+        {
+          "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/cpu-profile266-qa/profiles/run-scenario-boundaries.test.mjs.29074.3.cpuprofile",
+          "sha256": "80d058b547b73ce7e8e732e64e0cc2b8b47893837a8390592b5a6e151f9f8a83",
+          "expectedSha256": "80d058b547b73ce7e8e732e64e0cc2b8b47893837a8390592b5a6e151f9f8a83",
+          "hashVerified": true,
+          "bytes": 222267,
+          "lines": 1,
+          "read": "hash/sample count structural verification; named top frames/stacks read through derived report; not whole raw frame semantic review"
+        }
+      ],
+      "sourceFinalVerified": true,
+      "worktreeClean": true,
+      "repositoryWrites": 0,
+      "nativeMutations": 0,
+      "helpersSpawned": 0,
+      "readingLimits": [
+        "Read-first phase page requested604-655 has physical EOF646;647-655 do not exist, recorded in required range chunk.",
+        "All38 required input hashes match; whole required semantic source ranges read. Additional lexical graph and hash-only artifacts are explicitly not body review.",
+        "First raw-case equality used a first-name match and failed on duplicate case names; corrected occurrence-preserving comparison matches all282. No source defect inferred.",
+        "Supplemental profile sample weighted durations include scheduling/blocking and exclude subprocess CPU; compiled positions are not source coordinates."
+      ]
+    },
+    "lexicalCensusProjection": {
+      "qualification": "Read-only regex census, not TypeScript parser or dynamic-import proof and not semantic review of280 module bodies. Used only to reject/materially qualify core-barrel idea. No reset change proposed.",
+      "count": 280,
+      "omission": "all280 file/import edge records; mechanically hash-verified by parent, no semantic-body credit"
+    },
+    "parentQualification": {
+      "status": "PARENT_ACCEPTED_READ_ONLY_SAGE267",
+      "at": "2026-10-17T12:16:42.313555+00:00",
+      "source": "94e41702a87e99167cd62dc87ee849ac3faa7b95",
+      "packetSHA256": "0b6522a445e6c28854e3bd8d85a3b13999a6def8591d91c7106ac772a6eefdbc",
+      "artifacts": {
+        "scope-coverage.json": "f7b408c75bd505aeb54e3c5a5673dfa37c1112bc68701ab2aac464c1eb60ac29",
+        "report.json": "69a5352d3d1534dc06f36eef018a343f80cc81568f2f6a1077493acc4f8f1cc7",
+        "proposals.json": "666ad5d625a18269f98db2d27e8a1741a9e7df6f00e7345de8eb9258729216ac"
+      },
+      "requiredInputs": 38,
+      "requiredExistingSemanticLines": 10851,
+      "absentRequestedTails": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-gate46-266/docs/plan/phase-5-content.md",
+          "range": [
+            647,
+            655
+          ]
+        }
+      ],
+      "additionalInputsHashesAndClaimedChunksVerified": 25,
+      "rawBindingsVerified": 27,
+      "lexicalCensusBindingsVerified": 280,
+      "rawCaseOccurrenceMatches": 282,
+      "nativeHistory21ProjectionFieldsVerified": true,
+      "truncationRecoveries": [
+        {
+          "read": "run-scenario-slots plus boundaries combined",
+          "actualTruncation": true,
+          "affected": "slots around340-365",
+          "recovered": "slots330-397 separately; boundaries full visible"
+        },
+        {
+          "read": "committed-purge plus first250 deck-entry",
+          "actualTruncation": true,
+          "affected": "purge230-255; deck-entry beginning1-46",
+          "recovered": "purge225-255; deck-entry1-49; deck-entry251-491 separately"
+        },
+        {
+          "read": "native history first7beads",
+          "actualTruncation": true,
+          "affected": "middle of796description/tail and792/768",
+          "recovered": "whole792/768 separately;796last11000chars overlapping first read plus acceptance/close"
+        },
+        {
+          "read": "unfinished16-22",
+          "actualTruncation": true,
+          "affected": "17acceptance and16body/header",
+          "recovered": "17acceptance/16description+acceptance;16metadata separately"
+        },
+        {
+          "read": "additional source replay/provider/registry/index/fixtures/development",
+          "actualTruncation": true,
+          "affected": "modifier-registry100-217",
+          "recovered": "100-220 separately"
+        },
+        {
+          "read": "broad regex engine namespace search",
+          "actualTruncation": true,
+          "affected": "unrelated primitive namespace matches",
+          "recovered": "exact resolved engine-index import-target census; omitted unrelated hits not treated as semantic reads"
+        },
+        {
+          "read": "supplemental parent-profile-proof full pretty JSON",
+          "actualTruncation": true,
+          "affected": "large repeated profile arrays and stacks",
+          "recovered": "all topSelf/topInclusive/topFiles from profile-summary and all topStacks compact tuples; duplicate frame sampleWeightedMs zero fields structurally checked only"
+        },
+        {
+          "read": "prior-cut raw preservation arrays",
+          "actualTruncation": true,
+          "affected": "797/798full preservation census arrays",
+          "recovered": "decision/metric/freeze and parent status qualification fields reread; omitted prior preservation path arrays receive no semantic credit"
+        }
+      ],
+      "qualification": "Required ranges and explicit recovered reads only; eight recovery histories retained, including two semantic limitations for unrelated broad search and prior preservation arrays. No whole semantic credit for omitted ancestor notes,6164sourcefile bodies or280lexical-censusmodule bodies. Parent-requested phase range604-655 extends9lines past actualEOF646; clamped, no credit for absent lines. Original artifacts unchanged.",
+      "proposalKeys": [
+        "D19-NATIVE-SIGNAL-MATRIX",
+        "D19-TOURNAMENT-WORKER-REFERENCE"
+      ],
+      "runtime": 0,
+      "finalPhaseRetrospective": false,
+      "phaseAcceptance": false
+    },
+    "originalArtifacts": {
+      "packet.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/packet.json",
+        "sha256": "0b6522a445e6c28854e3bd8d85a3b13999a6def8591d91c7106ac772a6eefdbc"
+      },
+      "scope-coverage.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/scope-coverage.json",
+        "sha256": "f7b408c75bd505aeb54e3c5a5673dfa37c1112bc68701ab2aac464c1eb60ac29"
+      },
+      "report.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/report.json",
+        "sha256": "69a5352d3d1534dc06f36eef018a343f80cc81568f2f6a1077493acc4f8f1cc7"
+      },
+      "proposals.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/proposals.json",
+        "sha256": "666ad5d625a18269f98db2d27e8a1741a9e7df6f00e7345de8eb9258729216ac"
+      },
+      "parent-qualified.json": {
+        "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/phase5-gate46/epoch8/sage267/parent-qualified.json",
+        "sha256": "db7f85a7891159e0786a567bd7bf56c239689bf8b6b1f59d36b226796ea808ab"
+      }
+    }
+  },
+  "readingLimits": {
+    "preparation": "Initial oversized combined reads recovered by scoped source/proposal/D19/workflow reads. Full projected scope is retained for provenance, not an implementation claim to have semantically reread every Sage input. Two missing guessed scratch paths caused read-only failures before corrected discovery; no runtime/source/native effect.",
+    "originalParentQualified": "The parent qualification is embedded at sage267.parentQualification and originalArtifacts, not a scratch-local parent-qualified.json.",
+    "lexical": "The280 import edge records are intentionally omitted from committed projection. Their original full scope hash/count and explicit non-semantic limitations remain."
+  }
+}

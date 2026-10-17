@@ -152,8 +152,8 @@ describe("durable resume", () => {
 
 it("runs actual Node workers, resumes a one-leg prefix equivalently, and settles workers on failure", async ({ signal, onTestFinished }) => {
   // Each batch allows a catalog boot interval for startup and another for finite
-  // synthetic game work. Four batch deadlines plus a settlement interval bound
-  // this lifecycle check; these watchdogs do not assert execution speed.
+  // synthetic game work. The overall watchdog covers three batches, the reference
+  // games, and settlement; these watchdogs do not assert execution speed.
   // Cancellation must join runBatch's worker/timer cleanup before Vitest moves on.
   let pending: ReturnType<typeof runBatch> | undefined;
   onTestFinished(async () => { await pending; }, SETTINGS.workerBootMs);
@@ -162,9 +162,15 @@ it("runs actual Node workers, resumes a one-leg prefix equivalently, and settles
     pending = runBatch({ ...input, batchMs: 2 * SETTINGS.workerBootMs, signal: interrupt === undefined ? signal : AbortSignal.any([signal, interrupt]) });
     return pending;
   };
-  const baseline: GameRecord[] = [];
-  const all = await batch({ manifest, matches, budgets: config.budgets, workers: 1, onGame: (game) => baseline.push(game) });
-  expect(all.reason).toBe("complete"); expect(all.completed).toBe(matches.length); expect(all.workers).toBe(1);
+  const baseline: GameRecord[] = [], handle = workerHandler();
+  expect(handle({ kind: "boot", manifest }).kind).toBe("ready");
+  for (const match of matches) {
+    const reply = handle({ kind: "game", spec: match, budgets: config.budgets });
+    expect(reply.kind).toBe("game");
+    if (reply.kind !== "game") throw new Error("Reference must return a game outcome");
+    expect(reply.ordinal).toBe(match.ordinal); expect(reply.outcome.status).toBe("completed");
+    baseline.push({ event: "tournament.game", timestamp: header.timestamp, ordinal: match.ordinal, spec: match, outcome: reply.outcome });
+  }
   const partial: GameRecord[] = [], abort = new AbortController();
   const first = await batch({ manifest, matches, budgets: config.budgets, workers: 1, onGame(game) { partial.push(game); abort.abort(); } }, abort.signal);
   expect(first.reason).toBe("signal"); expect(partial).toHaveLength(1); expect(first.workers).toBe(1);
