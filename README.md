@@ -919,7 +919,8 @@ scene on every load.
 - **End screens:** `journeycomplete`, `journeyfailed`.
 - **Dreamtides 97** (`src/d97/qa-scenes.ts`; these create a D97 game):
   `d97` (Avatar select), `d97-overworld` (a run started with the roster's
-  first Avatar, on the overworld).
+  first Avatar in the development dream, which the run records), `d97-deck`
+  (the same, with the deck editor open).
 - **Prompt lab** (`prompt-lab-<fixture>`): the playable battle with its engine
   battle replaced by a synthetic one (`src/engine/testing/prompt-lab.ts`) that
   stops at a prompt, response window, or decision of the battle screen's

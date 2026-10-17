@@ -3,8 +3,9 @@
 // of a retired card without one is removed and compensated in Essence while
 // its other references are dropped; an encounter or shop on a removed anchor
 // moves to a free anchor of its kind, or is dropped; places on removed
-// anchors are forgotten; and a held quest whose definition was removed is
-// abandoned.
+// anchors are forgotten; a run whose dream was removed moves to the default
+// dream, and a moved record prefers the run's own dream; and a held quest
+// whose definition was removed is abandoned.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { D97SaveTuning } from "../../content/d97/save";
@@ -12,7 +13,7 @@ import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { registerD97ContentProvider } from "../../rules/d97/d97-content";
 import type { D97Encounter, D97Run } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
-import { parseD97QuestId, parseDreamAnchorId, type DreamAnchorId } from "../../types/identifiers";
+import { parseD97DreamId, parseD97QuestId, parseDreamAnchorId, type DreamAnchorId } from "../../types/identifiers";
 import type { DreamAnchorKind } from "../map/definition";
 import { reconcileSnapshot, type D97SaveCatalog } from "./reconcile";
 import { foldSyntheticRun, registerSaveContent } from "./save.fixtures";
@@ -24,6 +25,8 @@ const QUEST = parseD97QuestId("d97a0000-0000-4000-8000-000000000001");
 const CHALLENGER: DreamAnchorId = parseDreamAnchorId("d9700000-0000-4000-8000-000000000006");
 const SPARE_CHALLENGER: DreamAnchorId = parseDreamAnchorId("d9700000-0000-4000-8000-000000000007");
 const REMOVED: DreamAnchorId = parseDreamAnchorId("d9700000-0000-4000-8000-0000000000ff");
+const OTHER_DREAM = parseD97DreamId("d97b0000-0000-4000-8000-000000000001");
+const OTHER_CHALLENGER: DreamAnchorId = parseDreamAnchorId("d97b0000-0000-4000-8000-000000000006");
 
 const ANCHORS: { id: DreamAnchorId; kind: DreamAnchorKind }[] = [
   { id: CHALLENGER, kind: "challenger" },
@@ -39,7 +42,13 @@ function snapshot(edit: (run: D97Run) => D97Run = (run) => run): D97Snapshot {
 }
 
 function catalog(retired: ReadonlySet<CardId> = new Set(), overrides: Partial<D97SaveCatalog> = {}): D97SaveCatalog {
-  return { hasCard: (cardId) => !retired.has(cardId), anchors: ANCHORS, questIds: new Set([QUEST]), ...overrides };
+  return {
+    hasCard: (cardId) => !retired.has(cardId),
+    dreams: [{ id: DEVELOPMENT_DREAM.id, anchors: ANCHORS }],
+    defaultDreamId: DEVELOPMENT_DREAM.id,
+    questIds: new Set([QUEST]),
+    ...overrides,
+  };
 }
 
 function encounter(anchorId: DreamAnchorId, cards: readonly CardId[]): D97Encounter {
@@ -93,9 +102,26 @@ describe("reconcileSnapshot", () => {
     const moved = reconcileSnapshot(save, catalog(), TUNING);
     expect(moved.snapshot.d97.run!.encounters[SPARE_CHALLENGER]?.anchorId).toBe(SPARE_CHALLENGER);
     expect(moved.reconciliations).toEqual([{ kind: "anchorMoved", where: "encounter", anchorId: REMOVED, toAnchorId: SPARE_CHALLENGER }]);
-    const full = reconcileSnapshot(save, catalog(new Set(), { anchors: ANCHORS.filter((anchor) => anchor.id !== SPARE_CHALLENGER) }), TUNING);
+    const full = reconcileSnapshot(save, catalog(new Set(), { dreams: [{ id: DEVELOPMENT_DREAM.id, anchors: ANCHORS.filter((anchor) => anchor.id !== SPARE_CHALLENGER) }] }), TUNING);
     expect(full.snapshot.d97.run!.encounters[REMOVED]).toBeUndefined();
     expect(full.reconciliations).toEqual([{ kind: "anchorDropped", where: "encounter", anchorId: REMOVED }]);
+  });
+
+  it("keeps records on any dream's anchors, and moves a removed one into the run's dream first", () => {
+    const save = snapshot((run) => ({ ...run, encounters: { [OTHER_CHALLENGER]: encounter(OTHER_CHALLENGER, []), [REMOVED]: encounter(REMOVED, []) } }));
+    // The other dream is listed first, yet the run's own dream takes the moved record.
+    const dreams = [{ id: OTHER_DREAM, anchors: [{ id: OTHER_CHALLENGER, kind: "challenger" as const }, { id: parseDreamAnchorId("d97b0000-0000-4000-8000-000000000007"), kind: "challenger" as const }] }, { id: DEVELOPMENT_DREAM.id, anchors: ANCHORS }];
+    const result = reconcileSnapshot(save, catalog(new Set(), { dreams }), TUNING);
+    expect(result.reconciliations).toEqual([{ kind: "anchorMoved", where: "encounter", anchorId: REMOVED, toAnchorId: CHALLENGER }]);
+    expect(Object.keys(result.snapshot.d97.run!.encounters).sort()).toEqual([CHALLENGER, OTHER_CHALLENGER].sort());
+  });
+
+  it("moves a run whose dream was removed to the default dream", () => {
+    const save = snapshot();
+    const dreams = [{ id: OTHER_DREAM, anchors: ANCHORS }];
+    const result = reconcileSnapshot(save, catalog(new Set(), { dreams, defaultDreamId: OTHER_DREAM }), TUNING);
+    expect(result.snapshot.d97.run!.dreamId).toBe(OTHER_DREAM);
+    expect(result.reconciliations).toEqual([{ kind: "dreamMoved", dreamId: DEVELOPMENT_DREAM.id, toDreamId: OTHER_DREAM }]);
   });
 
   it("forgets places on removed anchors", () => {

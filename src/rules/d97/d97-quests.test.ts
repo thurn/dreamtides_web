@@ -32,7 +32,7 @@ import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
 import { registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
-import { D97_CURRENT_ACT, type D97Run } from "./d97-state";
+import { d97RunAct, type D97Run } from "./d97-state";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-quest-avatar");
@@ -82,8 +82,8 @@ function logged(state: FoldState, type: Parameters<typeof event>[0], payload: Re
   return { state: result.state, records: result.logRecords ?? [] };
 }
 
-const essenceFor = (kind: keyof typeof D97_QUESTS.essenceReward) =>
-  questEssence(D97_QUESTS.essenceReward[kind], D97_CURRENT_ACT);
+const essenceFor = (kind: keyof typeof D97_QUESTS.essenceReward, run: D97Run) =>
+  questEssence(D97_QUESTS.essenceReward[kind], d97RunAct(run));
 
 beforeEach(() => {
   seq = 1;
@@ -140,7 +140,7 @@ describe("defeat quests", () => {
     const essence = runOf(state).essence;
     bounces(state, "D97_COMPLETE_QUEST", { questId: DEFEAT_QUEST.id, anchorId: ANCHORS.recipient });
     const done = logged(state, "D97_COMPLETE_QUEST", { questId: DEFEAT_QUEST.id, anchorId: ANCHORS.giver });
-    expect(runOf(done.state).essence).toBe(essence + essenceFor("defeat"));
+    expect(runOf(done.state).essence).toBe(essence + essenceFor("defeat", runOf(state)));
     expect(runOf(done.state).quests).toMatchObject({ active: null, completedQuestIds: [DEFEAT_QUEST.id] });
     expect(done.records.map((record) => record.event)).toEqual(["d97_quest_completed", "d97_quest_reward_paid"]);
     bounces(done.state, "D97_ACCEPT_QUEST", { questId: DEFEAT_QUEST.id, anchorId: ANCHORS.giver });
@@ -218,7 +218,7 @@ describe("errand quests", () => {
     bounces(state, "D97_ADVANCE_QUEST", { questId: ERRAND_QUEST.id, stepId: STEPS.visit, anchorId: ANCHORS.townsperson });
     const essence = runOf(state).essence;
     state = applied(state, "D97_COMPLETE_QUEST", { questId: ERRAND_QUEST.id, anchorId: ANCHORS.recipient });
-    expect(runOf(state).essence).toBe(essence + essenceFor("errand"));
+    expect(runOf(state).essence).toBe(essence + essenceFor("errand", runOf(state)));
   });
 });
 
@@ -237,7 +237,7 @@ describe("delivery quests", () => {
     bounces(state, "D97_COMPLETE_QUEST", { questId: DELIVERY_QUEST.id, anchorId: ANCHORS.giver });
     const essence = runOf(state).essence;
     state = applied(state, "D97_COMPLETE_QUEST", { questId: DELIVERY_QUEST.id, anchorId: ANCHORS.recipient });
-    expect(runOf(state).essence).toBe(essence + essenceFor("delivery"));
+    expect(runOf(state).essence).toBe(essence + essenceFor("delivery", runOf(state)));
   });
 
   it("is refused without the item", () => {

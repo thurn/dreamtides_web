@@ -30,7 +30,7 @@ import {
 } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
-import { D97_CURRENT_ACT, d97BeatenAnchorIds, type D97Run, type D97State } from "./d97-state";
+import { d97BeatenAnchorIds, d97RunAct, type D97Run, type D97State } from "./d97-state";
 
 function withRun(d97: D97State, run: D97Run, logRecords: readonly ReducerLogRecord[]): D97Transition {
   return { d97: { ...d97, run }, logRecords };
@@ -131,7 +131,7 @@ export function completeQuest(
     fields: { runId: run.runId, questId: quest.id, anchorId, rewardKind: quest.reward.kind },
   };
   if (quest.reward.kind === "essence") {
-    const amount = questEssence(D97_QUESTS.essenceReward[quest.kind], D97_CURRENT_ACT);
+    const amount = questEssence(D97_QUESTS.essenceReward[quest.kind], d97RunAct(run));
     const essence = run.essence + amount;
     return withRun(d97, { ...run, essence, quests }, [
       completed,

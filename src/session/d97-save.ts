@@ -10,10 +10,12 @@
 // are never folded again under new rules. D97 games never meet the
 // content-configuration gate; journey games keep it.
 
+import { D97_DREAM_MODULES, D97_FIRST_DREAM } from "../content/d97/dreams";
+import { D97_DREAM_MAPS } from "../content/d97/maps";
 import { D97_SAVE } from "../content/d97/save";
-import { compileDevMap } from "../d97/overworld/dev-map";
+import { DEV_MAP_DEFINITION } from "../d97/overworld/dev-map";
 import { D97_SAVE_MIGRATIONS } from "../d97/save/migrations";
-import { reconcileSnapshot, type D97SaveCatalog } from "../d97/save/reconcile";
+import { reconcileSnapshot, type D97SaveCatalog, type D97SaveDream } from "../d97/save/reconcile";
 import {
   decodeSnapshot,
   encodeSnapshot,
@@ -74,13 +76,27 @@ export function needsD97Rebase(
   return decoded !== null && (decoded.migratedFrom !== null || !sameBuild(decoded.snapshot.build, build));
 }
 
+/**
+ * Every dream module of this build with its map's declared anchors, read
+ * from the map modules (and the development map's definition) so a rebase
+ * needs neither the map library nor the compiled maps.
+ */
+function currentDreams(): D97SaveDream[] {
+  const maps = new Map([...D97_DREAM_MAPS, DEV_MAP_DEFINITION].map((map) => [map.id, map]));
+  return D97_DREAM_MODULES.map((dream) => ({
+    id: dream.id,
+    anchors: (maps.get(dream.mapId)?.anchors ?? []).map(({ id, kind }) => ({ id, kind })),
+  }));
+}
+
 /** The catalog this build reconciles saves against. */
 function currentCatalog(): D97SaveCatalog | null {
   const content = d97ContentProvider();
   if (content === null) return null;
   return {
     hasCard: (cardId) => content.cardPriceFacts(cardId) !== null,
-    anchors: compileDevMap().anchors.map(({ id, kind }) => ({ id, kind })),
+    dreams: currentDreams(),
+    defaultDreamId: D97_FIRST_DREAM.id,
     questIds: new Set(content.quests.keys()),
   };
 }

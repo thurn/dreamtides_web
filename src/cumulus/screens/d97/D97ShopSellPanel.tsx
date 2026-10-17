@@ -1,7 +1,8 @@
 // D97ShopSellPanel — selling owned copies to a Dreamtides 97 shop: one
 // CardBrowserPanel over the collection, switching between the reserve and the
 // active deck, each copy captioned with what the shop pays for it. Pressing a
-// copy sells it. At the collection floor every copy is disabled.
+// copy sells it. At the collection floor every copy is disabled, and while
+// the active deck is at its minimum size every deck copy is.
 // PURE: it renders from a view model and reports each sale by owned-copy id;
 // the adapter records it as an intent. Which half is shown is local view
 // state.
@@ -25,6 +26,10 @@ export interface D97ShopSellView {
   readonly collectionFloor: number;
   /** Whether the collection is at its floor, so nothing may be sold. */
   readonly atFloor: boolean;
+  /** The fewest copies the active deck may hold. */
+  readonly minimumDeckSize: number;
+  /** Whether the active deck is at its minimum, so no deck copy may be sold. */
+  readonly deckAtMinimum: boolean;
 }
 
 export interface D97ShopSellPanelProps {
@@ -56,7 +61,8 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
   }, [onClose]);
 
   const cards = zone === "reserve" ? view.reserve : view.deck;
-  const shown = view.atFloor ? cards.map((card) => ({ ...card, disabled: true })) : cards;
+  const deckLocked = zone === "deck" && view.deckAtMinimum;
+  const shown = view.atFloor || deckLocked ? cards.map((card) => ({ ...card, disabled: true })) : cards;
   return (
     <div
       role="dialog"
@@ -66,6 +72,7 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
       data-d97-shop-sell=""
       data-d97-shop-sell-zone={zone}
       data-d97-shop-sell-at-floor={view.atFloor ? "true" : "false"}
+      data-d97-shop-sell-deck-at-minimum={view.deckAtMinimum ? "true" : "false"}
       style={{
         position: "fixed",
         inset: 0,
@@ -91,7 +98,9 @@ export function D97ShopSellPanel({ view, onSell, onClose }: D97ShopSellPanelProp
           subtitle={
             view.atFloor
               ? `You cannot sell below ${String(view.collectionFloor)} cards.`
-              : "Tap a card to sell it for the price shown."
+              : deckLocked
+                ? `Your deck cannot go below ${String(view.minimumDeckSize)} cards.`
+                : "Tap a card to sell it for the price shown."
           }
           rightAccessory={{
             kind: "glassButton",

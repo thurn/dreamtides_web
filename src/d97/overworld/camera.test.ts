@@ -11,6 +11,7 @@ const TUNABLES: D97OverworldTunables = {
   desktopZoom: 2,
   phoneZooms: [2, 1],
   phoneMinTilesAcross: 11,
+  hudClearancePx: 12,
 };
 const MEDIUM = { width: 110, height: 110, tileWidth: 32, tileHeight: 32 };
 
@@ -45,6 +46,18 @@ describe("followCamera", () => {
     const far = followCamera({ x: 99999, y: 99999 }, viewport, MEDIUM, 2);
     expect(far.x).toBe(110 * 32 - 720);
     expect(far.y).toBe(110 * 32 - 450);
+  });
+
+  it("frames the view above a bottom inset, keeping the map's bottom row above it", () => {
+    const inset = { bottom: 100 };
+    const centered = followCamera({ x: 1760, y: 1760 }, viewport, MEDIUM, 2, inset);
+    expect(centered.y).toBe(1760 - (900 - 100) / 4);
+    const bottom = followCamera({ x: 1760, y: 110 * 32 - 16 }, viewport, MEDIUM, 2, inset);
+    // The map's bottom edge sits exactly at the inset's top edge on screen.
+    expect((110 * 32 - bottom.y) * 2).toBe(900 - 100);
+    // Without the inset it would sit at the viewport's bottom, under the HUD.
+    expect((110 * 32 - followCamera({ x: 1760, y: 110 * 32 - 16 }, viewport, MEDIUM, 2).y) * 2).toBe(900);
+    expect(followCamera({ x: 0, y: 0 }, viewport, MEDIUM, 2, inset).y).toBe(0);
   });
 
   it("centers a map smaller than the view", () => {

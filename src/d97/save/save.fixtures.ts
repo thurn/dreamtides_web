@@ -1,6 +1,8 @@
-// A synthetic D97 run folded through the real reducer, for save tests and the
-// golden save fixture: a started run that has opened its shop, bought a card
-// and touched its waypoint.
+// A synthetic D97 run folded through the real reducer, for save tests: a run
+// started in the development dream that has opened its shop, bought a card
+// and touched its waypoint. The frozen golden schema-version-1 fixture
+// (`./fixtures/d97-save-v1.json`) was written from it; while the schema is
+// version 1, a test pins that this run still has that fixture's shape.
 
 import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { eventRng } from "../../eventlog/rng";
@@ -23,7 +25,7 @@ export function registerSaveContent(): void {
 /** The folded synthetic run and the seq of its last applied event. */
 export function foldSyntheticRun(): { readonly state: FoldState; readonly seq: number } {
   const steps: [string, Record<string, unknown>][] = [
-    ["D97_START_RUN", { avatarId: SAVE_AVATAR }],
+    ["D97_START_RUN", { avatarId: SAVE_AVATAR, dreamId: DEVELOPMENT_DREAM.id }],
     ["D97_OPEN_SHOP", { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId }],
     ["D97_BUY_SHOP_CARD", { anchorId: DEVELOPMENT_DREAM.topology.shopAnchorId, slotIndex: 0 }],
     ["D97_ACTIVATE_WAYPOINT", { anchorId: DEVELOPMENT_DREAM.topology.waypointAnchorId }],

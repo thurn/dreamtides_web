@@ -146,6 +146,22 @@ describe("D97_SELL_COPY", () => {
     expect(runOf(above).collection.copies.length).toBeGreaterThan(D97_COLLECTION.collectionFloor);
     expect(apply(above, "D97_SELL_COPY", { anchorId: SHOP, copyId: runOf(above).collection.copies[0].copyId }).outcome).toBe("applied");
   });
+
+  it("refuses to sell a deck copy at the minimum deck size, and sells reserve copies", () => {
+    const atMinimum = withRun(opened(), (run) => {
+      let deck = 0;
+      const copies = run.collection.copies.map((copy) =>
+        copy.zone === "deck" && (deck += 1) > D97_COLLECTION.minimumDeckSize ? { ...copy, zone: "reserve" as const } : copy,
+      );
+      return { ...run, collection: { ...run.collection, copies } };
+    });
+    const copies = runOf(atMinimum).collection.copies;
+    expect(copies.filter((copy) => copy.zone === "deck")).toHaveLength(D97_COLLECTION.minimumDeckSize);
+    const deckCopy = copies.find((copy) => copy.zone === "deck")!;
+    expect(apply(atMinimum, "D97_SELL_COPY", { anchorId: SHOP, copyId: deckCopy.copyId }).outcome).toBe("bounced");
+    const reserveCopy = copies.find((copy) => copy.zone === "reserve")!;
+    expect(apply(atMinimum, "D97_SELL_COPY", { anchorId: SHOP, copyId: reserveCopy.copyId }).outcome).toBe("applied");
+  });
 });
 
 describe("D97_RESTOCK_SHOP", () => {

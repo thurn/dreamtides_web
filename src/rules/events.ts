@@ -7,6 +7,7 @@ import type {
   ChoiceId,
   DeckEntryId,
   AvatarId,
+  D97DreamId,
   D97OwnedCopyId,
   D97FlagId,
   D97ItemId,
@@ -327,7 +328,8 @@ export interface EventPayloads {
   BATTLE_DEBUG: { op: unknown };
 
   // --- Dreamtides 97 (D97 games only; cases in ./d97/) ---
-  D97_START_RUN: { avatarId: AvatarId };
+  /** `dreamId` omitted: the run starts in the first catalog dream. */
+  D97_START_RUN: { avatarId: AvatarId; dreamId?: D97DreamId };
   D97_EQUIP_COPY: { copyId: D97OwnedCopyId };
   D97_UNEQUIP_COPY: { copyId: D97OwnedCopyId };
   D97_PREVIEW_ENCOUNTER: { anchorId: DreamAnchorId };

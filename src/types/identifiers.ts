@@ -580,6 +580,7 @@ export const auguryArchetypeIdFromUnknown = identityDecoder(
   parseAuguryArchetypeId,
 );
 export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
+export const d97DreamIdFromUnknown = identityDecoder(parseD97DreamId);
 export const d97OwnedCopyIdFromUnknown = identityDecoder(parseD97OwnedCopyId);
 export const dreamAnchorIdFromUnknown = identityDecoder(parseDreamAnchorId);
 export const d97QuestIdFromUnknown = identityDecoder(parseD97QuestId);

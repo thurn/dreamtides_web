@@ -8,7 +8,7 @@ import { D97QuestLogPanel } from "../../../cumulus/screens/d97/D97QuestLogPanel"
 import { D97QuestRewardPanel, type D97QuestRewardSlot } from "../../../cumulus/screens/d97/D97QuestRewardPanel";
 import type { D97DialogueCatalog } from "../../../d97/dialogue/catalog";
 import type { OverworldOccupants } from "../../../d97/overworld/occupants";
-import { D97_CURRENT_ACT, type D97Run } from "../../../rules/d97/d97-state";
+import { d97RunAct, type D97Run } from "../../../rules/d97/d97-state";
 import { useActions } from "../../../session/hooks";
 import type { CardId } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
@@ -54,7 +54,7 @@ export function D97QuestSurfacesAdapter({
 }) {
   const actions = useActions();
   const context = useMemo(
-    () => buildD97DialogueContext(run, catalog.quests, cards, D97_CURRENT_ACT),
+    () => buildD97DialogueContext(run, catalog.quests, cards, d97RunAct(run)),
     [run, catalog.quests, cards],
   );
   const speakerAt = useCallback(

@@ -10,6 +10,8 @@ export interface D97OverworldTunables {
   readonly phoneZooms: readonly number[];
   /** Fewest tiles a phone camera shows across. */
   readonly phoneMinTilesAcross: number;
+  /** Screen pixels the camera keeps between the HUD control bar and the world it frames. */
+  readonly hudClearancePx: number;
 }
 
 export const D97_OVERWORLD_TUNABLES: D97OverworldTunables = {
@@ -17,6 +19,7 @@ export const D97_OVERWORLD_TUNABLES: D97OverworldTunables = {
   desktopZoom: 2,
   phoneZooms: [2, 1],
   phoneMinTilesAcross: 11,
+  hudClearancePx: 12,
 };
 
 /** Challenger tier `t` by act (Appendix B §B3), act 1 first. */

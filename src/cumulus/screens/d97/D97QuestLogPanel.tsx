@@ -1,12 +1,14 @@
 // D97QuestLogPanel — the quest log: the one held quest, its current step,
 // the items it has the player carry, and Abandon (which is free); or a line
-// saying no quest is held. PURE: it renders from a view model and reports
-// Abandon and Close.
+// saying no quest is held. Escape or the close disc closes it, returning focus
+// to the control that opened it. PURE: it renders from a view model and
+// reports Abandon and Close.
 
 import type { ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
+import { useEscapeToClose } from "../../primitives/use-escape-to-close";
 import type { D97QuestId } from "../../../types/identifiers";
 
 export interface D97QuestLogQuestView {
@@ -35,6 +37,7 @@ export interface D97QuestLogPanelProps {
 }
 
 export function D97QuestLogPanel({ view, onAbandon, onClose }: D97QuestLogPanelProps): ReactElement {
+  useEscapeToClose(onClose);
   const quest = view.quest;
   return (
     <GlassDialog title={view.title} presentation="popup" onClose={onClose}>

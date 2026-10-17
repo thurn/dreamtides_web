@@ -1,13 +1,13 @@
-// The dream the overworld plays and its occupants. Which dream is pure
-// (`selectRunDream` over the dream catalog); only whether its compiled map
-// has arrived yet is view state. The development dream is ready at once; a
-// catalog dream is null while its map loads, and becomes the development
-// dream if its map cannot be loaded. Logs the dream played, any fallback and
-// any topology or resident findings, with UUIDs.
+// The dream the overworld plays and its occupants. Which dream is folded
+// state: the run's `dreamId` (`selectRunDream` over the dream modules); only
+// whether its compiled map has arrived yet is view state. The development
+// dream is ready at once; a catalog dream is null while its map loads, and
+// becomes the development dream if its map cannot be loaded. A run whose
+// dream is in no module plays the development dream. Logs the dream played,
+// any fallback and any topology or resident findings, with UUIDs.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
-import { D97_DREAMS } from "../../../content/d97/dreams";
 import { DEVELOPMENT_DREAM } from "../../../content/d97/dreams/development";
 import type { D97DreamDefinition } from "../../../content/d97/dreams/schema";
 import { registeredDialogueCatalog } from "../../../d97/dialogue/catalog";
@@ -17,7 +17,8 @@ import { loadCompiledDreamMap, selectRunDream, type D97DreamMapLoad } from "../.
 import { dreamOccupants, validateDreamResidents, validateDreamTopology } from "../../../d97/overworld/dream-occupants";
 import type { OverworldOccupants } from "../../../d97/overworld/occupants";
 import { logEvent } from "../../../logging";
-import type { D97RunId, DreamMapId } from "../../../types/identifiers";
+import type { D97Run } from "../../../rules/d97/d97-state";
+import type { DreamMapId } from "../../../types/identifiers";
 
 export interface D97PlayedDream {
   readonly dream: D97DreamDefinition;
@@ -50,9 +51,10 @@ function developmentDream(): D97PlayedDream {
   return play(DEVELOPMENT_DREAM, devMap);
 }
 
-/** The dream `runId` plays, or null while its map loads. */
-export function useD97Dream(runId: D97RunId, development: boolean): D97PlayedDream | null {
-  const selection = useMemo(() => selectRunDream(D97_DREAMS, { development }), [development]);
+/** The dream `run` is in, or null while its map loads. */
+export function useD97Dream(run: D97Run): D97PlayedDream | null {
+  const { runId, dreamId } = run;
+  const selection = useMemo(() => selectRunDream(dreamId), [dreamId]);
   const [load, setLoad] = useState<{ readonly mapId: DreamMapId; readonly result: D97DreamMapLoad } | null>(null);
   const loggedRef = useRef<string | null>(null);
   const { dream, source } = selection;
@@ -65,6 +67,10 @@ export function useD97Dream(runId: D97RunId, development: boolean): D97PlayedDre
       loggedRef.current = key;
       return true;
     };
+    if (source === "unknown") {
+      if (once()) logEvent("d97_dream_fallback", { runId, dreamId, mapId: null, reason: "unknownDream", fallbackDreamId: dream.id });
+      return;
+    }
     if (source === "development") {
       if (once()) logEvent("d97_dream_loaded", { runId, dreamId: dream.id, mapId: dream.mapId, source });
       return;
@@ -88,9 +94,9 @@ export function useD97Dream(runId: D97RunId, development: boolean): D97PlayedDre
     return () => {
       cancelled = true;
     };
-  }, [dream.id, dream.mapId, runId, source]);
+  }, [dream.id, dream.mapId, dreamId, runId, source]);
 
-  if (source === "development") return developmentDream();
+  if (source !== "catalog") return developmentDream();
   if (load === null || load.mapId !== dream.mapId) return null;
   return load.result.ok ? play(dream, load.result.map) : developmentDream();
 }

@@ -4,6 +4,7 @@
 // (./dream-occupants.ts).
 
 import type { D97CharacterId, D97DialogueId, DreamAnchorId } from "../../types/identifiers";
+import type { DreamAnchorKind } from "../map/definition";
 import type { BadgeKind } from "./characters/badges";
 
 export type OccupantScale = "standard" | "incarnation" | "apollyon";
@@ -20,3 +21,19 @@ export interface OverworldOccupant {
 }
 
 export type OverworldOccupants = ReadonlyMap<DreamAnchorId, OverworldOccupant>;
+
+/** Anchor kinds that exist only through the character standing at them. */
+const RESIDENT_ANCHOR_KINDS: ReadonlySet<DreamAnchorKind> = new Set(["friendly", "townsfolk", "challenger", "guardian"]);
+
+/**
+ * The anchors present in the world: every anchor except a friendly,
+ * townsperson, challenger or guardian anchor nobody stands at, which is empty
+ * ground (a dream's assembly may leave such anchors open). Doors, waypoints,
+ * shops, chests and objects are always present.
+ */
+export function presentAnchors<A extends { readonly id: DreamAnchorId; readonly kind: DreamAnchorKind }>(
+  anchors: readonly A[],
+  occupants: OverworldOccupants,
+): A[] {
+  return anchors.filter((anchor) => !RESIDENT_ANCHOR_KINDS.has(anchor.kind) || occupants.has(anchor.id));
+}

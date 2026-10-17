@@ -32,6 +32,7 @@ import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
 import type {
   AvatarId,
+  D97DreamId,
   D97FlagId,
   D97ItemId,
   D97OwnedCopyId,
@@ -403,8 +404,11 @@ export interface GameActions {
   battleDebug: (op: EngineDebugOp) => Promise<number>;
 
   // --- Dreamtides 97 ---
-  /** Start a D97 game's run with the chosen roster Avatar. */
-  d97StartRun: (avatarId: AvatarId) => Promise<number>;
+  /**
+   * Start a D97 game's run with the chosen roster Avatar, in `dreamId`, or
+   * the first catalog dream when omitted.
+   */
+  d97StartRun: (avatarId: AvatarId, dreamId?: D97DreamId) => Promise<number>;
   /**
    * Move a D97 reserve copy into the active deck. Unkeyed: equipping and
    * unequipping the same copy may repeat any number of times.
@@ -893,8 +897,8 @@ export function makeActions(append: AppendFn): GameActions {
 
     // --- Dreamtides 97 ---
     // A game starts one run: repeated picks share the run's intent key.
-    d97StartRun: (avatarId) =>
-      emit("D97_START_RUN", { avatarId }, parseIntentKey("d97-start-run")),
+    d97StartRun: (avatarId, dreamId) =>
+      emit("D97_START_RUN", dreamId === undefined ? { avatarId } : { avatarId, dreamId }, parseIntentKey("d97-start-run")),
     d97EquipCopy: (copyId) => emit("D97_EQUIP_COPY", { copyId }),
     d97UnequipCopy: (copyId) => emit("D97_UNEQUIP_COPY", { copyId }),
     // An encounter is fixed once: repeated first previews share its key.

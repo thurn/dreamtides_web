@@ -35,7 +35,7 @@ import { idleFacing } from "./characters/animation";
 import { BADGE_HEIGHT, BADGE_WIDTH, drawBadge, orderBadges, type BadgeKind } from "./characters/badges";
 import type { CharacterLooks } from "./characters/character-looks";
 import { CharacterView } from "./characters/character-view";
-import type { OverworldOccupants } from "./occupants";
+import { presentAnchors, type OverworldOccupants } from "./occupants";
 import {
   drawCapsule,
   PLACEHOLDER_ANCHORS,
@@ -126,6 +126,10 @@ export interface OverworldSceneHandle {
   readonly anchors: () => readonly CompiledAnchor[];
   /** The door veils and waypoint states drawn, for QA. */
   readonly markers: () => OverworldMarkersState;
+  /** Every anchor with a view in the world (veil, marker or character), for QA. */
+  readonly drawnAnchorIds: () => readonly DreamAnchorId[];
+  /** The player's on-screen box in CSS pixels, for QA. */
+  readonly playerScreenRect: () => { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
 }
 
 export interface OverworldMarkersState {
@@ -199,6 +203,7 @@ export class OverworldScene implements OverworldSceneHandle {
   private view: CameraView = { x: 0, y: 0, zoom: 1 };
   private range: TileRange | null = null;
   private inputEnabled = true;
+  private hudInset = 0;
   private readonly held: Facing[] = [];
 
   constructor(options: OverworldSceneOptions) {
@@ -214,7 +219,9 @@ export class OverworldScene implements OverworldSceneHandle {
     this.desktop = options.desktop;
     this.veils = options.veils;
     const beaten = new Set([...this.occupants].filter(([, occupant]) => occupant.beaten === true).map(([anchorId]) => anchorId));
-    this.anchorsStanding = standingAnchors(this.map, beaten);
+    // A character anchor nobody stands at is empty ground: not drawn, walked
+    // through and never interacted with.
+    this.anchorsStanding = standingAnchors({ ...this.map, anchors: presentAnchors(this.map.anchors, this.occupants) }, beaten);
     this.standingGuardians = this.anchorsStanding.filter((anchor) => anchor.kind === "guardian" && !beaten.has(anchor.id));
     this.grid = movementGrid(this.map, this.anchorsStanding);
     this.byTile = anchorsByTile(this.anchorsStanding);
@@ -290,6 +297,15 @@ export class OverworldScene implements OverworldSceneHandle {
     for (const [anchorId, view] of this.waypointViews) view.setActive(active.has(anchorId));
   }
 
+  /**
+   * Screen pixels at the bottom the HUD controls cover; the camera keeps the
+   * world it frames, and so the player, above them by the HUD clearance.
+   */
+  setHudInset(bottom: number): void {
+    this.hudInset = Math.max(0, bottom);
+    this.layout();
+  }
+
   /** While a React panel is open the canvas ignores input and the walk pauses. */
   setInputEnabled(enabled: boolean): void {
     this.inputEnabled = enabled;
@@ -301,6 +317,13 @@ export class OverworldScene implements OverworldSceneHandle {
   walker = (): WalkerState => this.state;
   camera = (): CameraView => this.view;
   viewport = (): Viewport => ({ width: this.app.screen.width, height: this.app.screen.height });
+
+  drawnAnchorIds = (): readonly DreamAnchorId[] => [...this.anchorViews.keys()];
+
+  playerScreenRect = () => {
+    const bounds = this.player.getBounds();
+    return { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height };
+  };
 
   walkToTile = (tile: TilePoint): boolean => {
     const anchor = this.shownAnchorAt(tile);
@@ -582,6 +605,7 @@ export class OverworldScene implements OverworldSceneHandle {
       viewport,
       this.map,
       zoom,
+      { bottom: this.hudInset === 0 ? 0 : this.hudInset + this.tunables.hudClearancePx },
     );
     this.world.scale.set(zoom);
     this.world.position.set(-this.view.x * zoom, -this.view.y * zoom);

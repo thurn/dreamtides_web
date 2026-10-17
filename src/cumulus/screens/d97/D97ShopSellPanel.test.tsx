@@ -50,7 +50,7 @@ function entry(index: number): D97ShopSellCardView {
   };
 }
 
-const VIEW: D97ShopSellView = { reserve: [entry(1)], deck: [entry(2), entry(3)], collectionFloor: 25, atFloor: false };
+const VIEW: D97ShopSellView = { reserve: [entry(1)], deck: [entry(2), entry(3)], collectionFloor: 25, atFloor: false, minimumDeckSize: 25, deckAtMinimum: false };
 
 beforeEach(() => {
   stubMatchMedia(() => false);
@@ -83,5 +83,20 @@ describe("D97ShopSellPanel", () => {
     expect(container.querySelector("[data-d97-shop-sell-at-floor]")?.getAttribute("data-d97-shop-sell-at-floor")).toBe("true");
     act(() => container.querySelector<HTMLElement>(`[data-testid="d97-shop-sell-card-${copyId(1)}"]`)?.click());
     expect(onSell).not.toHaveBeenCalled();
+  });
+
+  it("disables deck copies, not reserve copies, while the deck is at its minimum", () => {
+    const onSell = vi.fn();
+    const { container } = renderInCumulus(<D97ShopSellPanel view={{ ...VIEW, deckAtMinimum: true }} onSell={onSell} onClose={() => undefined} />);
+    expect(container.querySelector("[data-d97-shop-sell-deck-at-minimum]")?.getAttribute("data-d97-shop-sell-deck-at-minimum")).toBe("true");
+    act(() => container.querySelector<HTMLElement>(`[data-testid="d97-shop-sell-card-${copyId(1)}"]`)?.click());
+    expect(onSell).toHaveBeenCalledWith(copyId(1));
+    // The second tab is the active deck.
+    const deckTab = container.querySelectorAll<HTMLElement>("[role=tab]")[1];
+    expect(deckTab).toBeDefined();
+    act(() => deckTab.click());
+    expect(container.querySelector("[data-d97-shop-sell-zone]")?.getAttribute("data-d97-shop-sell-zone")).toBe("deck");
+    act(() => container.querySelector<HTMLElement>(`[data-testid="d97-shop-sell-card-${copyId(2)}"]`)?.click());
+    expect(onSell).toHaveBeenCalledTimes(1);
   });
 });

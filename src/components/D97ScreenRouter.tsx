@@ -1,8 +1,10 @@
 // Renders a Dreamtides 97 game's current screen from its folded `d97` slice,
 // keeps the address bar on `/d97` (the `?game=` query stays the resume key),
-// and starts the run for a run-starting D97 QA scene on a fresh game.
+// and starts the run for a run-starting D97 QA scene on a fresh game, in the
+// dream the scene requests.
 
 import { useEffect, useRef } from "react";
+import { DEVELOPMENT_DREAM } from "../content/d97/dreams/development";
 import type { JourneyContent } from "../data/journey-content";
 import { logEvent } from "../logging";
 import { findD97QaScene } from "../runtime/qa-scene-entry";
@@ -44,7 +46,7 @@ export function D97ScreenRouter({
   const qaScene = gotoScene === null ? null : findD97QaScene(gotoScene);
   const startsQaRun = qaScene?.startsRun === true;
   const opensDeckEditor = qaScene?.opensDeckEditor === true;
-  const playsDevelopmentDream = qaScene?.playsDevelopmentDream === true;
+  const qaRunDreamId = qaScene?.startsInDevelopmentDream === true ? DEVELOPMENT_DREAM.id : undefined;
   const firstAvatarId = journeyContent.avatars[0]?.id ?? null;
   useEffect(() => {
     if (
@@ -57,11 +59,11 @@ export function D97ScreenRouter({
       return;
     }
     qaRunStartedRef.current = true;
-    logEvent("d97_qa_scene_run_started", { gotoScene, avatarId: firstAvatarId });
-    void actions.d97StartRun(firstAvatarId).catch((error: unknown) => {
+    logEvent("d97_qa_scene_run_started", { gotoScene, avatarId: firstAvatarId, dreamId: qaRunDreamId ?? null });
+    void actions.d97StartRun(firstAvatarId, qaRunDreamId).catch((error: unknown) => {
       console.error("D97 QA run start failed", error);
     });
-  }, [actions, head, d97?.run, firstAvatarId, gotoScene, startsQaRun]);
+  }, [actions, head, d97?.run, firstAvatarId, gotoScene, qaRunDreamId, startsQaRun]);
 
   if (d97 === undefined) return null;
   const content =
@@ -72,7 +74,6 @@ export function D97ScreenRouter({
         run={d97.run}
         journeyContent={journeyContent}
         initialDeckEditorOpen={opensDeckEditor}
-        developmentDream={playsDevelopmentDream}
       />
     ) : d97.screen.type === "sliceEnd" && d97.run !== null ? (
       <D97SliceEndScreenAdapter run={d97.run} avatars={journeyContent.avatars} />

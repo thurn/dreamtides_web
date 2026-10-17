@@ -1,5 +1,5 @@
-// Dream selection and compiled-map loading: a run plays the catalog's first
-// dream, a development scene or an empty catalog plays the development dream;
+// Dream selection and compiled-map loading: a run plays the dream it records,
+// and the development dream when no dream module names it;
 // a compiled map passes the shape check, and a malformed, mismatched or
 // unavailable one is a failure the overworld falls back from.
 
@@ -21,15 +21,15 @@ const dream = (n: number) =>
   });
 
 describe("selectRunDream", () => {
-  const catalog = [dream(1), dream(2)];
+  const modules = [dream(1), dream(2), DEVELOPMENT_DREAM];
 
-  it("plays the catalog's first dream", () => {
-    expect(selectRunDream(catalog, { development: false })).toEqual({ dream: catalog[0], source: "catalog" });
+  it("plays the dream the run records", () => {
+    expect(selectRunDream(modules[1].id, modules)).toEqual({ dream: modules[1], source: "catalog" });
+    expect(selectRunDream(DEVELOPMENT_DREAM.id, modules)).toEqual({ dream: DEVELOPMENT_DREAM, source: "development" });
   });
 
-  it("plays the development dream for a development scene or an empty catalog", () => {
-    expect(selectRunDream(catalog, { development: true })).toEqual({ dream: DEVELOPMENT_DREAM, source: "development" });
-    expect(selectRunDream([], { development: false })).toEqual({ dream: DEVELOPMENT_DREAM, source: "development" });
+  it("plays the development dream for a dream no module names", () => {
+    expect(selectRunDream(dream(3).id, modules)).toEqual({ dream: DEVELOPMENT_DREAM, source: "unknown" });
   });
 });
 

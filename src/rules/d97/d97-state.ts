@@ -15,6 +15,7 @@ import type { CardId } from "../../types/card-identity";
 import type {
   AvatarId,
   D97CharacterId,
+  D97DreamId,
   D97FlagId,
   D97OwnedCopyId,
   D97RunId,
@@ -84,6 +85,12 @@ export interface D97Run {
   /** Recorded once when the run starts; generators derive from it. */
   readonly runSeed: D97RunSeed;
   readonly avatarId: AvatarId;
+  /**
+   * The dream the run is in: the dream it started in, recorded by
+   * `D97_START_RUN`. The overworld plays this dream; travel between dreams
+   * (Phase 3) moves it.
+   */
+  readonly dreamId: D97DreamId;
   /** The starting event's timestamp, for diagnostics. */
   readonly startedAt: string;
   /** Spendable Essence. */
@@ -131,10 +138,13 @@ export interface D97Shop {
 }
 
 /**
- * The act every run is in: M1 runs play the first act, and act progression
- * arrives with act assembly.
+ * The act `run` is in: M1 runs play the first act (decision P7), and act
+ * progression arrives with act assembly. Every act-dependent rule and view
+ * reads it here.
  */
-export const D97_CURRENT_ACT = 1;
+export function d97RunAct(_run: D97Run): number {
+  return 1;
+}
 
 /** The challenger and guardian anchors `run` has beaten (its encounters). */
 export function d97BeatenAnchorIds(run: D97Run): DreamAnchorId[] {

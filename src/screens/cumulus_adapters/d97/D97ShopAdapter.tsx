@@ -60,7 +60,13 @@ export function D97ShopAdapter({
     [anchorId, cards, guide, run.essence, shop, title],
   );
   const sellView = useMemo(
-    () => buildD97ShopSellView({ run, cards, collectionFloor: D97_COLLECTION.collectionFloor, tuning: D97_SHOP }),
+    () => buildD97ShopSellView({
+        run,
+        cards,
+        collectionFloor: D97_COLLECTION.collectionFloor,
+        minimumDeckSize: D97_COLLECTION.minimumDeckSize,
+        tuning: D97_SHOP,
+      }),
     [cards, run],
   );
 

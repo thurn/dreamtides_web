@@ -37,6 +37,8 @@ export interface OverworldCanvasProps {
   readonly activeWaypointIds: ReadonlySet<DreamAnchorId>;
   /** False while a React panel is open: the canvas ignores input. */
   readonly inputEnabled: boolean;
+  /** CSS pixels at the bottom the HUD controls cover; the camera keeps the player above them. */
+  readonly hudInset: number;
   /** Head icons shown in place of occupants' role badges (quest icons). */
   readonly badges: ReadonlyMap<DreamAnchorId, BadgeKind>;
   /** Anchors neither drawn nor interactive (quest objects out of their quest). */
@@ -60,6 +62,7 @@ function SceneMount({
   veils,
   activeWaypointIds,
   inputEnabled,
+  hudInset,
   badges,
   hiddenAnchorIds,
   assets,
@@ -102,6 +105,10 @@ function SceneMount({
   useEffect(() => {
     sceneRef.current?.setInputEnabled(inputEnabled);
   }, [inputEnabled, isInitialised]);
+
+  useEffect(() => {
+    scene?.setHudInset(hudInset);
+  }, [hudInset, scene]);
 
   useEffect(() => {
     scene?.setHiddenAnchors(hiddenAnchorIds);

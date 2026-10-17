@@ -22,8 +22,7 @@ import {
   D97_CHARACTER_TUNABLES,
   D97_OVERWORLD_TUNABLES,
 } from "../../../content/d97/tunables";
-import { GlassButton } from "../../../cumulus/components/controls/GlassButton";
-import { GlassDialog } from "../../../cumulus/components/overlay/GlassDialog";
+import { D97MenuPanel } from "../../../cumulus/screens/d97/D97MenuPanel";
 import { D97DreamLoadingScreen } from "../../../cumulus/screens/d97/D97DreamLoadingScreen";
 import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
 import { D97EncounterPreview } from "../../../cumulus/screens/d97/D97EncounterPreview";
@@ -35,7 +34,7 @@ import type { JourneyContent } from "../../../data/journey-content";
 import { registeredDialogueCatalog } from "../../../d97/dialogue/catalog";
 import { createInteractionRegistry, type OverworldInteraction } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
-import { D97_CURRENT_ACT, type D97Run } from "../../../rules/d97/d97-state";
+import { d97RunAct, type D97Run } from "../../../rules/d97/d97-state";
 import { useActions, useGameState } from "../../../session/hooks";
 import type { D97OwnedCopyId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
@@ -67,12 +66,9 @@ interface D97OverworldProps {
   readonly initialDeckEditorOpen?: boolean;
 }
 
-/** Live overworld of a started run; a development QA scene plays the development dream. */
-export function D97OverworldScreenAdapter({
-  developmentDream = false,
-  ...props
-}: D97OverworldProps & { readonly developmentDream?: boolean }) {
-  const dream = useD97Dream(props.run.runId, developmentDream);
+/** Live overworld of a started run, in the dream the run is in. */
+export function D97OverworldScreenAdapter(props: D97OverworldProps) {
+  const dream = useD97Dream(props.run);
   return dream === null ? <D97DreamLoadingScreen /> : <D97DreamOverworld {...props} dream={dream} />;
 }
 
@@ -98,6 +94,7 @@ function D97DreamOverworld({
   const actions = useActions();
   const registry = useRef(createInteractionRegistry()).current;
   const [panel, setPanel] = useState<Panel | null>(initialDeckEditorOpen ? "deck" : null);
+  const [hudInset, setHudInset] = useState(0);
   const loggedRef = useRef(false);
 
   useEffect(() => {
@@ -109,12 +106,12 @@ function D97DreamOverworld({
   const view = useMemo(
     () =>
       buildD97OverworldHudView({
-        act: D97_CURRENT_ACT,
+        act: d97RunAct(run),
         actTiers: D97_ACT_CHALLENGER_TIERS,
         essence: run.essence,
         enabled: ENABLED_CONTROLS,
       }),
-    [run.essence],
+    [run],
   );
   const cards = useMemo(() => cardsByUuid(journeyContent.cardDatabase), [journeyContent.cardDatabase]);
   const openDeckEditor = useCallback(() => {
@@ -202,10 +199,13 @@ function D97DreamOverworld({
     [actions],
   );
 
+  const panelOpen = panel !== null || encounter.open || run.quests.pendingReward !== null;
   return (
     <D97OverworldScreen
       view={view}
       onControl={handleControl}
+      panelOpen={panelOpen}
+      onHudInset={setHudInset}
       world={
         <Suspense fallback={null}>
           <OverworldCanvas
@@ -218,7 +218,8 @@ function D97DreamOverworld({
             arrival={travel.arrival}
             veils={travel.veils}
             activeWaypointIds={travel.activeWaypointIds}
-            inputEnabled={panel === null && !encounter.open && run.quests.pendingReward === null}
+            inputEnabled={!panelOpen}
+            hudInset={hudInset}
             badges={marks.badges}
             hiddenAnchorIds={marks.hiddenAnchorIds}
           />
@@ -258,11 +259,7 @@ function D97DreamOverworld({
               onClose={closePanel}
             />
           )}
-          {panel === "menu" && (
-            <GlassDialog title={"Menu"} presentation="popup" onClose={closePanel}>
-              <GlassButton label={"Resume"} testId="d97-menu-resume" onPress={closePanel} />
-            </GlassDialog>
-          )}
+          {panel === "menu" && <D97MenuPanel onClose={closePanel} />}
         </>
       }
     />

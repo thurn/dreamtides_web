@@ -44,15 +44,27 @@ export interface CameraView {
 }
 
 /**
- * Center the camera on `focus` (world pixels), clamped so the view stays on
- * the map; on an axis where the map is smaller than the view it centers the
- * map. The origin rounds to whole screen pixels.
+ * Screen pixels at the viewport's bottom edge covered by HUD controls. The
+ * camera frames the world in the viewport above them, so the player stays
+ * visible above the controls even at the map's bottom edge; the world still
+ * draws under them.
+ */
+export interface CameraInsets {
+  readonly bottom: number;
+}
+
+/**
+ * Center the camera on `focus` (world pixels) within the viewport above
+ * `insets.bottom`, clamped so that framed view stays on the map; on an axis
+ * where the map is smaller than the framed view it centers the map. The
+ * origin rounds to whole screen pixels.
  */
 export function followCamera(
   focus: { readonly x: number; readonly y: number },
   viewport: Viewport,
   map: MapMetrics,
   zoom: number,
+  insets: CameraInsets = { bottom: 0 },
 ): CameraView {
   const axis = (center: number, viewSize: number, mapSize: number) => {
     const span = viewSize / zoom;
@@ -64,7 +76,7 @@ export function followCamera(
   };
   return {
     x: axis(focus.x, viewport.width, map.width * map.tileWidth),
-    y: axis(focus.y, viewport.height, map.height * map.tileHeight),
+    y: axis(focus.y, Math.max(viewport.height - Math.max(insets.bottom, 0), 0), map.height * map.tileHeight),
     zoom,
   };
 }

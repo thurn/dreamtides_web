@@ -1,6 +1,7 @@
 // The D97 run contract: a D97 genesis folds a D97 slice on Avatar select
 // while a journey genesis folds none; `D97_START_RUN` records the run (id,
-// seed, roster Avatar) once, deals its reward bag and Standard starting
+// seed, roster Avatar, and its dream: the requested dream module, or the
+// first catalog dream) once, deals its reward bag and Standard starting
 // package, moves to the overworld and logs it; equip and unequip move owned
 // copies between the deck and the reserve; and each mode bounces the other
 // mode's events.
@@ -10,6 +11,8 @@ import {
   D97_COLLECTION,
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
+import { D97_FIRST_DREAM } from "../../content/d97/dreams";
+import { DEVELOPMENT_DREAM } from "../../content/d97/dreams/development";
 import { acquireCopy } from "../../d97/collection/collection";
 import { bagWeight } from "../../d97/collection/reward-bag";
 import { eventRng } from "../../eventlog/rng";
@@ -34,10 +37,10 @@ const STARTER_DILUTION =
   D97_STARTING_PACKAGE.starterBase +
   D97_STARTING_PACKAGE.starterPerDifficulty * D97_STARTING_PACKAGE.difficulty;
 
-function startRun(state: FoldState, avatarId: unknown, seq = 1) {
+function startRun(state: FoldState, avatarId: unknown, seq = 1, extra: Record<string, unknown> = {}) {
   return reduceGameEvent(
     state,
-    event("D97_START_RUN", { avatarId }),
+    event("D97_START_RUN", { avatarId, ...extra }),
     ctx({ seq, rng: eventRng(D97_GENESIS.seed, seq) }),
   );
 }
@@ -107,8 +110,23 @@ describe("D97_START_RUN", () => {
         runId: run?.runId,
         runSeed: run?.runSeed,
         avatarId: ROSTER_AVATAR,
+        dreamId: D97_FIRST_DREAM.id,
       },
     });
+  });
+
+  it("records the run's dream: the first catalog dream, or the dream module requested", () => {
+    const genesis = genesisFoldState(D97_GENESIS);
+    expect(startRun(genesis, ROSTER_AVATAR).state.d97?.run?.dreamId).toBe(D97_FIRST_DREAM.id);
+    const development = startRun(genesis, ROSTER_AVATAR, 1, { dreamId: DEVELOPMENT_DREAM.id });
+    expect(development.state.d97?.run?.dreamId).toBe(DEVELOPMENT_DREAM.id);
+    expect(development.logRecords?.[0]?.fields).toMatchObject({ dreamId: DEVELOPMENT_DREAM.id });
+  });
+
+  it("bounces a dream no dream module names", () => {
+    const genesis = genesisFoldState(D97_GENESIS);
+    expect(startRun(genesis, ROSTER_AVATAR, 1, { dreamId: "d9700000-0000-4000-8000-0000000000ff" }).outcome).toBe("bounced");
+    expect(startRun(genesis, ROSTER_AVATAR, 1, { dreamId: "not a dream" }).outcome).toBe("bounced");
   });
 
   it("derives the same run from the same event and a different seed from another seq", () => {

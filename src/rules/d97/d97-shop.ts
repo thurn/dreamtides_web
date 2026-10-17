@@ -10,8 +10,9 @@ import { D97_COLLECTION } from "../../content/d97/collection";
 import { d97DreamByAnchor } from "../../content/d97/dreams";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
-import { acquireCopy, findCopy, removeCopies } from "../../d97/collection/collection";
+import { acquireCopy, canUnequip, findCopy, removeCopies } from "../../d97/collection/collection";
 import { recordAcquisition, sampleFilteredOffer } from "../../d97/collection/reward-bag";
+import type { D97CopyZone } from "../../d97/collection/types";
 import {
   buyQuote,
   cardBaseValue,
@@ -133,8 +134,18 @@ export function shopSaleQuote(run: D97Run, copyId: ReturnType<typeof d97OwnedCop
 }
 
 /**
+ * Whether the shop may buy `copy` from `run`: an active-deck copy only while
+ * the deck is above its minimum size, as for unequipping; a reserve copy
+ * always (the collection floor still applies to both).
+ */
+function copySellable(run: D97Run, copy: { readonly zone: D97CopyZone }): boolean {
+  return copy.zone === "reserve" || canUnequip(run.collection, D97_COLLECTION.minimumDeckSize);
+}
+
+/**
  * `D97_SELL_COPY { anchorId, copyId }`: sell an owned copy for its sale quote
- * under the resale guard. Refused when it would cross the collection floor.
+ * under the resale guard. Refused when it would cross the collection floor,
+ * or take the active deck below its minimum size.
  */
 export function sellCopy(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
   const context = shopContext(d97, payload);
@@ -145,7 +156,7 @@ export function sellCopy(d97: D97State, payload: Record<string, unknown>): D97Tr
   const shop = run.shops[anchorId];
   const copy = findCopy(run.collection, copyId);
   const price = shopSaleQuote(run, copyId, content);
-  if (shop === undefined || copy === null || price === null) return null;
+  if (shop === undefined || copy === null || price === null || !copySellable(run, copy)) return null;
   const collection = removeCopies(run.collection, [copyId], D97_COLLECTION.collectionFloor);
   if (collection === null) return null;
   const essence = run.essence + price;

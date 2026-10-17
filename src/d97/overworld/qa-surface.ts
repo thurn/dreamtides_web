@@ -59,6 +59,8 @@ export function installD97QaSurface(
         camera: scene.camera(),
         viewport: scene.viewport(),
         anchors: scene.anchors().map(({ id, kind, at }) => ({ id, kind, at })),
+        drawnAnchorIds: scene.drawnAnchorIds(),
+        playerScreenRect: scene.playerScreenRect(),
         hiddenAnchorIds: scene.hiddenAnchorIds(),
       };
     },

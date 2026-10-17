@@ -59,16 +59,26 @@ describe("buildD97ShopSellView", () => {
       run: run([copy(1, "deck", { channel: "starting" }), copy(2, "reserve", { channel: "shop", price: 10 })]),
       cards: CARDS,
       collectionFloor: 1,
+      minimumDeckSize: 0,
       tuning: D97_SHOP,
     });
     // An Uncommon 2-cost Event: v = max(60 × 2, 100) = 120, sale = 5 × floor(120 × 3 / 50) = 35.
     expect(view.deck.map((entry) => entry.caption)).toEqual([{ kind: "essence", amount: 35 }]);
     expect(view.reserve.map((entry) => entry.caption)).toEqual([{ kind: "essence", amount: 10 }]);
     expect(view.atFloor).toBe(false);
+    expect(view.deckAtMinimum).toBe(false);
   });
 
   it("marks the collection floor", () => {
-    const view = buildD97ShopSellView({ run: run([copy(1, "deck", { channel: "starting" })]), cards: CARDS, collectionFloor: 1, tuning: D97_SHOP });
+    const view = buildD97ShopSellView({ run: run([copy(1, "deck", { channel: "starting" })]), cards: CARDS, collectionFloor: 1, minimumDeckSize: 0, tuning: D97_SHOP });
     expect(view.atFloor).toBe(true);
+  });
+
+  it("marks a deck at its minimum size, with reserve copies still above the floor", () => {
+    const copies = [copy(1, "deck", { channel: "starting" }), copy(2, "reserve", { channel: "shop", price: 10 })];
+    const atMinimum = buildD97ShopSellView({ run: run(copies), cards: CARDS, collectionFloor: 1, minimumDeckSize: 1, tuning: D97_SHOP });
+    expect(atMinimum).toMatchObject({ atFloor: false, deckAtMinimum: true });
+    const above = buildD97ShopSellView({ run: run(copies), cards: CARDS, collectionFloor: 1, minimumDeckSize: 0, tuning: D97_SHOP });
+    expect(above.deckAtMinimum).toBe(false);
   });
 });

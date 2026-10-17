@@ -104,4 +104,13 @@ describe("D97QuestLogPanel", () => {
     const empty = renderInCumulus(<D97QuestLogPanel view={{ ...VIEW, quest: null }} onAbandon={onAbandon} onClose={() => undefined} />);
     expect(empty.container.ownerDocument.querySelector('[data-testid="d97-quest-abandon"]')).toBeNull();
   });
+
+  it("closes on Escape", () => {
+    const onClose = vi.fn();
+    renderInCumulus(<D97QuestLogPanel view={VIEW} onAbandon={() => undefined} onClose={onClose} />);
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
 });

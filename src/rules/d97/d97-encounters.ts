@@ -36,7 +36,7 @@ import type { FoldState } from "../fold-state";
 import { advanceDefeatQuest } from "./d97-quests";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97ContentProvider } from "./d97-content";
-import type { D97Encounter, D97Run, D97State } from "./d97-state";
+import { d97RunAct, type D97Encounter, type D97Run, type D97State } from "./d97-state";
 
 /** A D97 case over the whole fold (it starts or ends a battle). */
 export interface D97FoldTransition {
@@ -47,11 +47,6 @@ export interface D97FoldTransition {
 /** A 32-bit seed from text, so seeds derive from the run seed and UUIDs. */
 export function hashSeed(text: string): number {
   return Number.parseInt(sha256(text).slice(0, 8), 16) >>> 0;
-}
-
-/** The act a run is in. M1 runs are a single act (decision P7). */
-function runAct(_run: D97Run): number {
-  return 1;
 }
 
 /** The knob row a tier uses: the highest row at or below it. */
@@ -111,7 +106,7 @@ export function previewEncounter(
   if (run.encounters[anchorId] !== undefined) return null;
   const challenger = challengerAt(anchorId);
   if (challenger === null) return null;
-  const tier = encounterTier(challenger.role, runAct(run));
+  const tier = encounterTier(challenger.role, d97RunAct(run));
   const knob = tierKnob(tier, D97_ENCOUNTERS.tierKnobs);
   const avatarId =
     challenger.deck.kind === "generic"
@@ -147,7 +142,7 @@ export function previewEncounter(
     draftPool: build.draftPool,
     dreamsignIds: build.dreamsignIds,
     signatureCardIds: build.signatureCardIds,
-    scoreToWin: D97_ENCOUNTERS.actScoreTargets[runAct(run) - 1] ?? D97_ENCOUNTERS.actScoreTargets[0] ?? 0,
+    scoreToWin: D97_ENCOUNTERS.actScoreTargets[d97RunAct(run) - 1] ?? D97_ENCOUNTERS.actScoreTargets[0] ?? 0,
     headStarts: { player: 0, opponent: knob.headStart },
     playerAnteCopyId: playerAnte?.copyId ?? null,
     opponentAnteCardId: opponentAnte,

@@ -2,13 +2,14 @@
 // shared card-shop view (each slot's fixed quote, bought slots empty, slots
 // the player cannot afford disabled, and this visit's one restock), and the
 // sell panel (every owned copy captioned with what the shop pays for it,
-// under the resale guard). Card UUIDs resolve to cards only here.
+// under the resale guard; deck copies unsellable while the deck is at its
+// minimum size). Card UUIDs resolve to cards only here.
 
 import type { D97ShopTuning } from "../../../content/d97/shop";
 import type { CardShopSiteView } from "../../../cumulus/screens/CardShopSiteScreen";
 import type { SiteLayoutGuideView } from "../../../cumulus/components/layout/SiteLayout";
 import type { D97ShopSellCardView, D97ShopSellView } from "../../../cumulus/screens/d97/D97ShopSellPanel";
-import { copiesInZone } from "../../../d97/collection/collection";
+import { canUnequip, copiesInZone } from "../../../d97/collection/collection";
 import type { D97CopyZone } from "../../../d97/collection/types";
 import { cardBaseValue, cardPriceFactsOf, restockPrice, saleQuote } from "../../../d97/shop/pricing";
 import type { D97Run, D97Shop } from "../../../rules/d97/d97-state";
@@ -61,6 +62,7 @@ export function buildD97ShopSellView(input: {
   readonly run: D97Run;
   readonly cards: ReadonlyMap<CardId, CardData>;
   readonly collectionFloor: number;
+  readonly minimumDeckSize: number;
   readonly tuning: D97ShopTuning;
 }): D97ShopSellView {
   const { run, cards, tuning } = input;
@@ -83,5 +85,7 @@ export function buildD97ShopSellView(input: {
     deck: zone("deck"),
     collectionFloor: input.collectionFloor,
     atFloor: run.collection.copies.length <= input.collectionFloor,
+    minimumDeckSize: input.minimumDeckSize,
+    deckAtMinimum: !canUnequip(run.collection, input.minimumDeckSize),
   };
 }

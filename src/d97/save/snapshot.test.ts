@@ -1,8 +1,12 @@
 // The D97 snapshot contract: a folded run's snapshot round-trips through its
 // encoding to exactly the fold state it was taken from; a journey game has no
 // snapshot; foreign, newer or unmigratable saves do not decode; and the golden
-// schema-version-1 save loads under the current migrations.
+// schema-version-1 save is frozen: its committed bytes never change, they
+// decode under the current migrations, and while the current schema is still
+// version 1 a run folded today has exactly its shape (so a change to the
+// persisted shape must bump the schema version and ship a migration, P5).
 
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { registerD97ContentProvider } from "../../rules/d97/d97-content";
@@ -52,13 +56,44 @@ describe("D97 snapshots", () => {
     expect(decodeSnapshot(JSON.stringify({ ...raw, d97: null }), D97_SAVE_MIGRATIONS)).toBeNull();
   });
 
-  it("load the golden schema-version-1 save", () => {
-    const raw = readFileSync(new URL("./fixtures/d97-save-v1.json", import.meta.url), "utf8");
-    const decoded = decodeSnapshot(raw, D97_SAVE_MIGRATIONS);
-    expect(decoded).not.toBeNull();
-    expect(decoded!.snapshot.format).toBe(D97_SAVE_FORMAT);
-    expect(decoded!.snapshot.schemaVersion).toBe(D97_SAVE_SCHEMA_VERSION);
-    const restored = snapshotFoldState(SAVE_GENESIS, decoded!.snapshot);
-    expect(restored.d97?.run?.collection.copies.length).toBeGreaterThan(0);
+  describe("the frozen golden schema-version-1 save", () => {
+    const raw = readFileSync(new URL("./fixtures/d97-save-v1.json", import.meta.url), "utf8").replace(/\r\n/gu, "\n");
+
+    it("keeps its committed bytes", () => {
+      // Frozen by bead 1.16. Never regenerate it: a change to the persisted
+      // shape bumps the schema version, adds a migration from version 1 and
+      // commits a new golden fixture beside this one.
+      expect(createHash("sha256").update(raw).digest("hex")).toBe(GOLDEN_V1_SHA256);
+      expect((JSON.parse(raw) as { schemaVersion: unknown }).schemaVersion).toBe(1);
+    });
+
+    it("loads under the current migrations", () => {
+      const decoded = decodeSnapshot(raw, D97_SAVE_MIGRATIONS);
+      expect(decoded).not.toBeNull();
+      expect(decoded!.snapshot.format).toBe(D97_SAVE_FORMAT);
+      expect(decoded!.snapshot.schemaVersion).toBe(D97_SAVE_SCHEMA_VERSION);
+      expect(decoded!.migratedFrom).toBe(D97_SAVE_SCHEMA_VERSION === 1 ? null : 1);
+      const restored = snapshotFoldState(SAVE_GENESIS, decoded!.snapshot);
+      expect(restored.d97?.run?.collection.copies.length).toBeGreaterThan(0);
+    });
+
+    it.runIf(D97_SAVE_SCHEMA_VERSION === 1)("has the shape a run folded today writes, while the schema is version 1", () => {
+      const { state, seq } = foldSyntheticRun();
+      const current = JSON.parse(encodeSnapshot(takeSnapshot(state, seq, [], BUILD)!)) as unknown;
+      expect(shapeOf(current)).toEqual(shapeOf(JSON.parse(raw)));
+    });
   });
 });
+
+/** SHA-256 of `fixtures/d97-save-v1.json`, LF line endings. */
+const GOLDEN_V1_SHA256 = "d3b766ae02cf7c4a919de4ae19a8394e6e7dbe3fbf733476c413707cb89f5d85";
+
+/** A JSON value's shape: object keys and value kinds, recursively; arrays by their elements' shapes. */
+function shapeOf(value: unknown): unknown {
+  if (value === null) return "null";
+  if (Array.isArray(value)) return [...new Set(value.map((entry) => JSON.stringify(shapeOf(entry))))].sort();
+  if (typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, entry]) => [key, shapeOf(entry)]));
+  }
+  return typeof value;
+}
