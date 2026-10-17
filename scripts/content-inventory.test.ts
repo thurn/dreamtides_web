@@ -266,7 +266,6 @@ minimalSources.set(scopedModule("whenRemovesEnemyTrigger", triggersModule),
 minimalSources.set(scopedModule("whenForeseeTrigger", triggersModule), "export function whenForesee() {}");
 minimalSources.set(scopedModule("historyRefs", typesModule), 'export type CharacterRef = { kind: "lastMaterialized" };');
 minimalSources.set(scopedModule("historyRefs", buildersModule), "export function lastPlayed() {} export function lastMaterialized() {}");
-const minimalResolver = inventoryCapabilityResolver(minimalSources);
 
 // Every immutable source state has its own virtual module namespace. Relative
 // implementation/reexport paths stay together; missing modules have no entry.
@@ -305,8 +304,22 @@ const contractSources = {
   retiredHistory: new Map([...completeAuthoringFixtures, [typesModule, (completeAuthoringFixtures.get(typesModule) ?? "").replace('tag: "playedThisTurn"', 'tag: "playedThisTrun"')]]),
 };
 const contractModule = (state: string, module: string) => `inventory-contracts/${state}/${module}`;
-const contractResolver = inventoryCapabilityResolver(new Map(Object.entries(contractSources).flatMap(([state, sources]) =>
-  [...sources].map(([module, source]) => [contractModule(state, module), source]))));
+const lifecyclePrefix = "inventory-lifecycle";
+const lifecycleSources = new Map([
+  [`${lifecyclePrefix}/missing.ts`, 'export type Action = { kind: "other" }; export interface Options {} export type Speed = "standard";'],
+  [`${lifecyclePrefix}/present.ts`, 'export function operation() {} export type Action = { kind: "feature" }; export interface Options { feature?: number } export type Speed = "standard" | "feature";'],
+  [`${lifecyclePrefix}/renamed.ts`, 'export function renamed() {} export type Action = { kind: "renamed" }; export interface Options { renamed?: number } export type Speed = "standard" | "renamed";'],
+  [`${lifecyclePrefix}/removed.ts`, 'export type Action = { kind: "other" }; export interface Options {} export type Speed = "standard";'],
+]);
+const contractModules = new Map(Object.entries(contractSources).flatMap(([state, sources]) =>
+  [...sources].map(([module, source]) => [contractModule(state, module), source])));
+// Immutable fixture groups use disjoint external-module paths in one real Program.
+const minimalResolver = inventoryCapabilityResolver(new Map([
+  ...minimalSources, ...contractModules, ...completeAuthoringFixtures, ...lifecycleSources,
+]));
+const contractResolver = minimalResolver;
+const intendedResolver = minimalResolver;
+const lifecycleResolver = minimalResolver;
 const fixtureResolver = (state: keyof typeof contractSources) => {
   const scoped = (forms: readonly InventoryCapabilityForm[]) => forms.map(form => ({ ...form, module: contractModule(state, form.module) }));
   return Object.assign((forms: readonly InventoryCapabilityForm[]) => contractResolver(scoped(forms)), {
@@ -314,7 +327,6 @@ const fixtureResolver = (state: keyof typeof contractSources) => {
   });
 };
 
-const intendedResolver = inventoryCapabilityResolver(completeAuthoringFixtures);
 
 // Intended API target contracts are independent of lifecycle declarations.
 const intendedBinding = (form: InventoryCapabilityForm): InventoryCapabilityForm => {
@@ -417,14 +429,6 @@ if (pendingBindings.length > 0) describe("pending inventory lifecycle", () => {
 });
 
 
-const lifecyclePrefix = "inventory-lifecycle";
-const lifecycleSources = new Map([
-  [`${lifecyclePrefix}/missing.ts`, 'export type Action = { kind: "other" }; export interface Options {} export type Speed = "standard";'],
-  [`${lifecyclePrefix}/present.ts`, 'export function operation() {} export type Action = { kind: "feature" }; export interface Options { feature?: number } export type Speed = "standard" | "feature";'],
-  [`${lifecyclePrefix}/renamed.ts`, 'export function renamed() {} export type Action = { kind: "renamed" }; export interface Options { renamed?: number } export type Speed = "standard" | "renamed";'],
-  [`${lifecyclePrefix}/removed.ts`, 'export type Action = { kind: "other" }; export interface Options {} export type Speed = "standard";'],
-]);
-const lifecycleResolver = inventoryCapabilityResolver(lifecycleSources);
 const lifecycleForms: readonly InventoryCapabilityForm[] = [
   { module: `${lifecyclePrefix}/present.ts`, symbol: "operation", kind: "builder", pending: "export" },
   { module: `${lifecyclePrefix}/present.ts`, symbol: "Action", kind: "form", member: "feature", pending: "member" },

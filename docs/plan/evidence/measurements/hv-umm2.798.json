@@ -1,0 +1,677 @@
+{
+  "bead": "hv-umm2.798",
+  "phase": 5,
+  "sourceBase": "868033799bbdf64eccbcf340497a4cf37a13ffbb",
+  "scope": "Only scripts/content-inventory.test.ts immutable fixture setup and four own evidence files",
+  "decision": "Accept bounded prototype: observed frozen stage gain exceeds 10% with all finite parity intact",
+  "metric": {
+    "freeze": {
+      "frozenUtc": "2026-10-17T11:09:07.699964+00:00",
+      "runnerSHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "metric": "Complete three-module review test-stage wall, including collection/setup/environment; not wrapper wall or summed cases",
+      "workers": 2,
+      "minimumImprovementPercent": 10,
+      "rollback": "Exact code rollback if parity fails or gain below10%",
+      "commands": {
+        "baseline": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts",
+          "scripts/content-inventory-journey.test.ts",
+          "scripts/content-inventory-variants.test.ts",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.json"
+        ],
+        "prototype": [
+          "npm",
+          "test",
+          "--",
+          "scripts/content-inventory.test.ts",
+          "scripts/content-inventory-journey.test.ts",
+          "scripts/content-inventory-variants.test.ts",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.json"
+        ]
+      },
+      "qualification": "One ordered baseline followed by prototype; cache/load conditions observed, no causal or aggregate forecast"
+    },
+    "baselineStageSeconds": 3.8,
+    "prototypeStageSeconds": 3.2,
+    "improvementPercent": 15.789473684210519,
+    "baselineVitestSeconds": 2.94,
+    "prototypeVitestSeconds": 2.63,
+    "baselineWrapperSeconds": 9.463115042017307,
+    "prototypeWrapperSeconds": 6.355086333001964,
+    "qualification": "One ordered baseline then prototype at two workers. Cache and host load differ; the rounded complete review test-stage wall is the frozen metric. Wrapper preparation savings are excluded. This is an observed bounded comparison, with no causal attribution or whole-suite forecast.",
+    "fullSuiteD19BudgetSeconds": 60,
+    "aggregateAcceptance": "Unwaived and unmeasured by this bead"
+  },
+  "implementation": {
+    "currentMainLineCount": 463,
+    "singleRealResolverConstruction": true,
+    "fourRoleAliases": "minimalResolver, contractResolver, intendedResolver and lifecycleResolver share one eagerly constructed real resolver after all four maps are complete",
+    "maps": "Independently authored immutable maps retain their original roots, literal source text and query adapters",
+    "journeyMutableExperiment": "Whole journey test file remains byte-equal; changed and restored map calls still construct fresh real Programs",
+    "productionClosure": "All production code, compiler options, source probes, catalog bootstrap, CLI, package and test configuration remain byte-equal to the base"
+  },
+  "preservation": {
+    "at": "2026-10-17T11:11:09.548964+00:00",
+    "base": "868033799bbdf64eccbcf340497a4cf37a13ffbb",
+    "sourceNormalizationExact": true,
+    "sourceSHA256": "340aa315ed9b01668c084ecbb914300f3af2e9c8aa9f96886206294c2cff1418",
+    "baseSourceSHA256": "b565ea21745aa87d19935a83ee2cfad38a66845058349a790a1d735b63bc8635",
+    "unchangedCodeFileCount": 2752,
+    "productionClosureSHA256": "127293ecaf3447ef382c891d0b02f7c94084c3ad4db79be75d32a3fbc7a1258a",
+    "allUnrelatedBaselineInputsExactCount": 6155,
+    "allBaselineRegularInputCount": 6156,
+    "same127NamesOutcomes": true,
+    "same92MainNamesOutcomes": true,
+    "outcomesSHA256": "2c66e776f15de1751bce562fc0ff2fc337f19067a30cc89fb8c5be486a988626",
+    "censusSHA256": "7488739af358a943e38490cae6b7532e78d8927f5e9e60d4976661a2afc302a1",
+    "censusSummary": {
+      "allRootsDisjoint": true,
+      "allFixturesExternalModules": true,
+      "groupsByteEqual": true,
+      "groupCounts": {
+        "complete": 6,
+        "minimal": 348,
+        "contracts": 43,
+        "lifecycle": 4
+      },
+      "totalRoots": 401,
+      "fixtureLiteralCount": 90,
+      "allLiteralCount": 452,
+      "assertionExpressionCount": 84
+    },
+    "stageSeconds": {
+      "baseline": 3.8,
+      "prototype": 3.2
+    },
+    "improvementPercent": 15.789473684210519,
+    "decision": "accept bounded prototype",
+    "sage263Reference": {
+      "source": "868033799bbdf64eccbcf340497a4cf37a13ffbb",
+      "path": "docs/plan/evidence/measurements/hv-umm2.797.json",
+      "SHA256": "0cbb49b7b2d6eb6c8ba9f82ae4edaea3bf0bda5b99db66c4b3ccd046e9aaf08b"
+    },
+    "cli796ReusedByExactSourceClosure": true,
+    "journeyMutableSnapshotWholeFileByteEqual": true,
+    "ownedPGs": [
+      {
+        "receipt": "knip.receipt.json",
+        "pgid": 3681,
+        "absent": true,
+        "actualExit": 0
+      },
+      {
+        "receipt": "pre-dispatch-friction.receipt.json",
+        "pgid": 91358,
+        "absent": true,
+        "actualExit": 0
+      },
+      {
+        "receipt": "review.receipt.json",
+        "pgid": 1414,
+        "absent": true,
+        "actualExit": 0
+      },
+      {
+        "receipt": "npm-install.receipt.json",
+        "pgid": 90598,
+        "absent": true,
+        "actualExit": 0
+      },
+      {
+        "receipt": "baseline.receipt.json",
+        "pgid": 95997,
+        "absent": true,
+        "actualExit": 0
+      },
+      {
+        "receipt": "prototype.receipt.json",
+        "pgid": 99387,
+        "absent": true,
+        "actualExit": 0
+      }
+    ]
+  },
+  "namespace": {
+    "summary": {
+      "allRootsDisjoint": true,
+      "allFixturesExternalModules": true,
+      "groupsByteEqual": true,
+      "groupCounts": {
+        "complete": 6,
+        "minimal": 348,
+        "contracts": 43,
+        "lifecycle": 4
+      },
+      "totalRoots": 401,
+      "fixtureLiteralCount": 90,
+      "allLiteralCount": 452,
+      "assertionExpressionCount": 84
+    },
+    "absentModuleQueries": [
+      "inventory-contracts/invalid/inventory-fixtures/missing.ts",
+      "missing/module.ts"
+    ],
+    "relativeBindings": [
+      {
+        "group": "contracts",
+        "module": "inventory-contracts/aliases/inventory-fixtures/forms.ts",
+        "specifier": "./implementation",
+        "target": "inventory-contracts/aliases/inventory-fixtures/implementation.ts"
+      },
+      {
+        "group": "contracts",
+        "module": "inventory-contracts/aliases/inventory-fixtures/forms.ts",
+        "specifier": "./implementation",
+        "target": "inventory-contracts/aliases/inventory-fixtures/implementation.ts"
+      }
+    ],
+    "binding": "The complete 401-root source/hash rows, all 90 fixture literals, 452 total literals and 84 assertion expressions for both source epochs are in the source-bound namespace-census.json supplemental artifact. AST reads compare exact source literal text and complete assertion call expressions; current source is independently normalized to the exact authorized edits."
+  },
+  "sage263": {
+    "source": "868033799bbdf64eccbcf340497a4cf37a13ffbb",
+    "path": "docs/plan/evidence/measurements/hv-umm2.797.json",
+    "SHA256": "0cbb49b7b2d6eb6c8ba9f82ae4edaea3bf0bda5b99db66c4b3ccd046e9aaf08b"
+  },
+  "prior796CliEvidence": {
+    "source": "972d988574cb6c78e049c88f829d0315b42f5de4",
+    "path": "docs/plan/evidence/measurements/hv-umm2.796.json",
+    "SHA256": "82efa27797481d1963baecf3a8b8776ae830d15ded12f2d71c5fdc5258368661",
+    "qualification": "All 2,752 code files other than the changed fixture match current base; source epoch796 to868 consists only of797 evidence. Existing 27 CLI contracts remain source-applicable. No CLI runtime repeated and no new runtime credit asserted."
+  },
+  "commands": {
+    "baseline": {
+      "name": "baseline",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "scripts/content-inventory-journey.test.ts",
+        "scripts/content-inventory-variants.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-inventory798",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.runner.py",
+      "runnerSHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "inputsSHA256": "a6dae5401d0794adf201e068266f7d1153ca3f6df2f922158531e00fa4f09b48",
+      "time": "2026-10-17T11:09:11.649540+00:00",
+      "load": [
+        5.513671875,
+        5.4814453125,
+        5.263671875
+      ],
+      "workers": "2",
+      "pid": 95997,
+      "pgid": 95997,
+      "actualExit": 0,
+      "end": "2026-10-17T11:09:21.113016+00:00",
+      "wallS": 9.463115042017307,
+      "childCpuS": 15.132355,
+      "loadEnd": [
+        6.1484375,
+        5.6142578125,
+        5.3125
+      ],
+      "logSHA256": "f78a880d72a2f9438327dc59b6b1c61c8cd8c229c7d83bca672f427202685fd7",
+      "runnerBytesUnchanged": true
+    },
+    "prototype": {
+      "name": "prototype",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "scripts/content-inventory-journey.test.ts",
+        "scripts/content-inventory-variants.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-inventory798",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.runner.py",
+      "runnerSHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "inputsSHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "time": "2026-10-17T11:09:58.897777+00:00",
+      "load": [
+        5.10400390625,
+        5.4228515625,
+        5.255859375
+      ],
+      "workers": "2",
+      "pid": 99387,
+      "pgid": 99387,
+      "actualExit": 0,
+      "end": "2026-10-17T11:10:05.253185+00:00",
+      "wallS": 6.355086333001964,
+      "childCpuS": 12.275717,
+      "loadEnd": [
+        5.33544921875,
+        5.46533203125,
+        5.271484375
+      ],
+      "logSHA256": "08122d98ae683908604f68d981713ee58421a9e52251ff02f79161c7021a506d",
+      "runnerBytesUnchanged": true
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-inventory798",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.runner.py",
+      "runnerSHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "inputsSHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "time": "2026-10-17T11:10:20.637186+00:00",
+      "load": [
+        5.50048828125,
+        5.49169921875,
+        5.283203125
+      ],
+      "workers": "2",
+      "pid": 1414,
+      "pgid": 1414,
+      "actualExit": 0,
+      "end": "2026-10-17T11:10:35.031807+00:00",
+      "wallS": 14.394125040969811,
+      "childCpuS": 49.327782,
+      "loadEnd": [
+        6.50341796875,
+        5.7255859375,
+        5.3701171875
+      ],
+      "logSHA256": "7f5fb13d85bbd207838d0da53aca05c91043fbb62e2d5f0be8e659647200b86b",
+      "runnerBytesUnchanged": true
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-inventory798",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.runner.py",
+      "runnerSHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "inputsSHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "time": "2026-10-17T11:10:52.467688+00:00",
+      "load": [
+        6.013671875,
+        5.662109375,
+        5.3544921875
+      ],
+      "workers": "2",
+      "pid": 3681,
+      "pgid": 3681,
+      "actualExit": 0,
+      "end": "2026-10-17T11:10:57.751479+00:00",
+      "wallS": 5.283382458030246,
+      "childCpuS": 6.192741,
+      "loadEnd": [
+        6.41259765625,
+        5.75048828125,
+        5.38720703125
+      ],
+      "logSHA256": "80ade5e76668ee2b74eccea1b1bf629309f2e2ca0828e1bf9a2d5ddbf9a32ab9",
+      "runnerBytesUnchanged": true
+    },
+    "preservation": {
+      "name": "preservation",
+      "command": [
+        "python3",
+        "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-d19-inventory798",
+      "runner": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.runner.py",
+      "runnerSHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "inputsSHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "time": "2026-10-17T11:11:09.290994+00:00",
+      "load": [
+        6.04150390625,
+        5.6923828125,
+        5.37060546875
+      ],
+      "workers": "2",
+      "pid": 4969,
+      "pgid": 4969,
+      "actualExit": 0,
+      "end": "2026-10-17T11:11:09.556394+00:00",
+      "wallS": 0.26513225003145635,
+      "childCpuS": 0.254876,
+      "loadEnd": [
+        6.04150390625,
+        5.6923828125,
+        5.37060546875
+      ],
+      "logSHA256": "e1fbd9ccbcff425d5e89739b2ca881b43236ea187254b71a07c7475768cade6e",
+      "runnerBytesUnchanged": true
+    }
+  },
+  "actualOriginalToolTerminals": {
+    "npm-install": {
+      "original": 17571,
+      "collectedTerminal": "b6d19a",
+      "actualExit": 0
+    },
+    "pre-dispatch-friction": {
+      "original": "immediate",
+      "collectedTerminal": "7b5a1a",
+      "actualExit": 0
+    },
+    "baseline": {
+      "original": 34141,
+      "launch": "1c73ad",
+      "collectedTerminal": "df4b5f",
+      "actualExit": 0
+    },
+    "prototype": {
+      "original": 65218,
+      "launch": "811913",
+      "collectedTerminal": "0192da",
+      "actualExit": 0
+    },
+    "review": {
+      "original": 14062,
+      "launch": "a0eca3",
+      "collectedTerminal": "52753d",
+      "actualExit": 0
+    },
+    "knip": {
+      "original": 13795,
+      "launch": "b0102b",
+      "collectedTerminal": "afcabb",
+      "actualExit": 0
+    },
+    "preservation": {
+      "original": "immediate",
+      "collectedTerminal": "6d84fc",
+      "actualExit": 0
+    },
+    "namespace-census": {
+      "original": "immediate",
+      "collectedTerminal": "f40590",
+      "actualExit": 0
+    }
+  },
+  "rawBindings": [
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/npm-install.inputs.json",
+      "SHA256": "a6dae5401d0794adf201e068266f7d1153ca3f6df2f922158531e00fa4f09b48",
+      "bytes": 749728
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/npm-install.launch.json",
+      "SHA256": "a0193325e3306cac0818145bb40d93e8a8c1739761594cdcdb8db29547e48e2c",
+      "bytes": 571
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/npm-install.started.json",
+      "SHA256": "ebae6576a1884ddc9327e69aeaf21d8f6363143a65550983ee975dacfef7b8d6",
+      "bytes": 604
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/npm-install.receipt.json",
+      "SHA256": "ff3c177961f7dc632dca7cab334a9954a2390ac2d79c1e1488cebff2fee4bf5b",
+      "bytes": 910
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/npm-install.log",
+      "SHA256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+      "bytes": 326
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/pre-dispatch-friction.inputs.json",
+      "SHA256": "a6dae5401d0794adf201e068266f7d1153ca3f6df2f922158531e00fa4f09b48",
+      "bytes": 749728
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/pre-dispatch-friction.launch.json",
+      "SHA256": "1b32dfe038897bc836a1c5390ae8888324a0f02313175730307b611343f0525b",
+      "bytes": 598
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/pre-dispatch-friction.started.json",
+      "SHA256": "85e50b5616ec85096354ea4fef9c3c9b759ffdad04c64ca4aa6f631776d59108",
+      "bytes": 631
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/pre-dispatch-friction.receipt.json",
+      "SHA256": "f5460d0ee5c1c89ba634c991b18621a91bdc37d8173926feb5a8f379d86e76a1",
+      "bytes": 946
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/pre-dispatch-friction.log",
+      "SHA256": "bd79f4e83bd8df05f77698d17249d51e7dc0b6f63d6207c07546d3f0181f23f5",
+      "bytes": 22811
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.inputs.json",
+      "SHA256": "a6dae5401d0794adf201e068266f7d1153ca3f6df2f922158531e00fa4f09b48",
+      "bytes": 749728
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.launch.json",
+      "SHA256": "83b64583465a6319cefd421e121f36f897bf77f35b0263312cc8e7f421884408",
+      "bytes": 894
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.started.json",
+      "SHA256": "c2474c10d885b2ec30c923ef62b1caa0457326fc406119a443d13fd3597b87ca",
+      "bytes": 927
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.receipt.json",
+      "SHA256": "1e38b01bc6488ece53cfbdebb5d4a2ac42dc0759bc1bb88608335fd2762dace8",
+      "bytes": 1226
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.log",
+      "SHA256": "f78a880d72a2f9438327dc59b6b1c61c8cd8c229c7d83bca672f427202685fd7",
+      "bytes": 49452
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.inputs.json",
+      "SHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "bytes": 749763
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.launch.json",
+      "SHA256": "6f4a96ea037f6e475fb1e219d3ecb42c4e80a8ac38993780216c712641dd3438",
+      "bytes": 898
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.started.json",
+      "SHA256": "553487965e4caa40f9c381e48c482500413ecb60439c00335a316217d4d08035",
+      "bytes": 931
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.receipt.json",
+      "SHA256": "32830296f72638abf321840160d3c615c4078116a0b95b3b923448ff0fdab2f5",
+      "bytes": 1240
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.log",
+      "SHA256": "08122d98ae683908604f68d981713ee58421a9e52251ff02f79161c7021a506d",
+      "bytes": 49463
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/review.inputs.json",
+      "SHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "bytes": 749763
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/review.launch.json",
+      "SHA256": "0064b0f78225ad9db4392926057cf00b2f9d1a4e285218fb49d91fc3fb3f6c29",
+      "bytes": 583
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/review.started.json",
+      "SHA256": "f85b9bb4ba148e97ae65e78c160d3d3a2dfd28bf361023bea2adb3a8cf9ac814",
+      "bytes": 614
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/review.receipt.json",
+      "SHA256": "8ab045d863caa494d0b1d00bc39d0fddcdd032afb71f0cd05936608f674d4963",
+      "bytes": 924
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/review.log",
+      "SHA256": "7f5fb13d85bbd207838d0da53aca05c91043fbb62e2d5f0be8e659647200b86b",
+      "bytes": 49473
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/knip.inputs.json",
+      "SHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "bytes": 749763
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/knip.launch.json",
+      "SHA256": "ec9c8bf834a8e3387502f755a31da149b437f326f652bb075ac326b4ac313ae2",
+      "bytes": 576
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/knip.started.json",
+      "SHA256": "980ba57e9dfb3ffbcb476ea745e59758910a2ac7fa6e40cb3be24d36ac979662",
+      "bytes": 607
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/knip.receipt.json",
+      "SHA256": "742fa33e9637a79c49021e63ac471b72c89cb7e54f3401359c8bc384e8f64ac4",
+      "bytes": 917
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/knip.log",
+      "SHA256": "80ade5e76668ee2b74eccea1b1bf629309f2e2ca0828e1bf9a2d5ddbf9a32ab9",
+      "bytes": 48484
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.inputs.json",
+      "SHA256": "eb5260a7bc9f5189b08778a1e572c9e30839bfd3a4dd522af1356ea3c13efb38",
+      "bytes": 749763
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.launch.json",
+      "SHA256": "a16197a566e18a2aa829d0b5f4c5343250235d838442fe9af4c31bbe0bf8444a",
+      "bytes": 679
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.started.json",
+      "SHA256": "307be476c0f782bdd32d871e23af34c2cb910683b9d260ef9baf3e42557fc49a",
+      "bytes": 710
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.receipt.json",
+      "SHA256": "72fd9c86c002bf0baed12f563063641285182f60cea725e58663173330e67ab8",
+      "bytes": 1021
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.log",
+      "SHA256": "e1fbd9ccbcff425d5e89739b2ca881b43236ea187254b71a07c7475768cade6e",
+      "bytes": 1475
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.runner.py",
+      "SHA256": "1d0a5c9b43b66e331836140b984cef47fd3631ba104847ae963580469b2a22c9",
+      "bytes": 2364
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/validation.freeze.json",
+      "SHA256": "5dacabe911ff585ea775a81ef3414d39eb539b8297ef351bcbdab41603f3d385",
+      "bytes": 1327
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.json",
+      "SHA256": "d2f8240eeb67bca54796ebe6b432db7f4939628594ed1773ea2fa4c596e58878",
+      "bytes": 46547
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.json",
+      "SHA256": "5aa566f16a4e9dbf5034262d3c481487edbde1cf6aebbd393d3afe6ef8ca6e87",
+      "bytes": 46541
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/baseline.source.ts",
+      "SHA256": "b565ea21745aa87d19935a83ee2cfad38a66845058349a790a1d735b63bc8635",
+      "bytes": 31741
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.source.ts",
+      "SHA256": "340aa315ed9b01668c084ecbb914300f3af2e9c8aa9f96886206294c2cff1418",
+      "bytes": 31858
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/prototype.diff",
+      "SHA256": "2cc060226a05af5ccc38e4784eedff552181be4de2b8ecdae1579058db862f9d",
+      "bytes": 4690
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/authorized-substitutions.json",
+      "SHA256": "d5c4fd35b97a00f18aecce3e110c96e0ff31a35ebe5fb654ad44a9c829857c95",
+      "bytes": 2641
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/census.cjs",
+      "SHA256": "0c9bdefc48d5a126a0fd3ef41a34089736c90ff6e2c4b9ae52862637fd5eaef1",
+      "bytes": 4583
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/namespace-census.json",
+      "SHA256": "7488739af358a943e38490cae6b7532e78d8927f5e9e60d4976661a2afc302a1",
+      "bytes": 539672
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation.py",
+      "SHA256": "9e4b05c188fba05ba0827947767a5c0838fa0aa77894ac4e73e2f04d94849ca3",
+      "bytes": 4247
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/preservation-proof.json",
+      "SHA256": "2ca81f0464a63700b9a812c481466deae019632d5dee1ff51e168811df09f82d",
+      "bytes": 2360
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/actual-tool-terminals.json",
+      "SHA256": "79fcadf0a508d6c5a8f167374686d3d3e8392e032d5c92ffd4c7424e0c80baaf",
+      "bytes": 932
+    },
+    {
+      "path": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/d19-inventory798/implementation-window-start.json",
+      "SHA256": "1c285bfcdfae7bf75e8c35cc74766cf1a34f640c512294c5d94bee343b252f12",
+      "bytes": 185
+    }
+  ],
+  "implementationWindow": {
+    "inclusiveStart": "2026-10-17T11:07:38Z",
+    "inclusiveStartProvenance": "Actual native claim started_at supplied by parent claim.json",
+    "externallySuppliedPredispatchLowerBound": "2026-10-17T11:08:09.001725Z",
+    "helperObservedStart": {
+      "observedStartUtc": "2026-10-17T11:08:47.739970+00:00",
+      "qualification": "First cwd-only tool preceded this timestamp; parent pre-dispatch is the conservative inclusive start."
+    },
+    "evidenceCutoff": "2026-10-17T11:12:21.674098+00:00",
+    "inclusiveSecondsToCutoff": 283.674098,
+    "tail": "Final schema, commit and actual end/tail are recorded externally after this cutoff in implementation-final-proof.json; no timestamp is represented as an exact helper dispatch time."
+  },
+  "reviewRequirement": "Fresh read-only Codex fork_turns:none core review by parent on immutable exact base/head; no implementer independent-review claim",
+  "runtimeNotRun": [
+    "full suite",
+    "browser QA",
+    "manual CLI parity"
+  ],
+  "requiredChecks": "Review, Knip, complete affected tests and preservation passed; final friction schema and exact final regular-input equality follow externally after cutoff",
+  "frictionNotes": [
+    "First cwd-only read preceded helper observed start; inclusive window uses earlier actual native claim.",
+    "One initial combined source read was truncated; complete affected test source was recovered in explicit 1-160,161-330 and331-end chunks. Routine asset warning tails in command tool outputs are truncated, with complete raw logs hashed and stage/actual-exit receipts preserved. No substantive source review credit comes from unseen output."
+  ]
+}
