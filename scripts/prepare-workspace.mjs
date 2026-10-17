@@ -13,6 +13,11 @@ export const WORKSPACE_GENERATORS = [
     nodeArgs: ["--import", "tsx"],
   },
   {
+    label: "D97 maps",
+    script: "scripts/d97/compile-maps.ts",
+    nodeArgs: ["--import", "tsx"],
+  },
+  {
     label: "typed Cumulus tokens",
     script: "scripts/generate-cumulus-tokens.mjs",
     nodeArgs: [],

@@ -20,6 +20,7 @@
     "review:gate": "node scripts/review.mjs gate",
     "setup-assets": "tsx scripts/setup-assets.ts",
     "prepare-workspace": "node scripts/prepare-workspace.mjs",
+    "d97:maps": "tsx scripts/d97/compile-maps.ts",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",
     "bead:entities": "tsx scripts/bead-entities.ts",
     "lab:preflight": "tsx scripts/qa/lab-preflight.ts",

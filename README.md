@@ -21,7 +21,11 @@ deck at sites, and fights seven card battles, the last against Apollyon.
   `src/content/d97/art-sources.ts`. Setup links each source's served subtrees
   into `public/d97/` and lists the sources it found in
   `public/d97/art-library.json`; without the library, setup warns and D97
-  draws placeholders.
+  draws placeholders. Setup also compiles each D97 map module
+  (`src/content/d97/maps/`, read by `src/d97/map/`) from its Tiled source in
+  the library into `public/d97/maps/<map-id>.json`; `npm run d97:maps` does
+  that alone, and `--strict` fails on a missing source or a map that does not
+  compile (such as a source whose hash no longer matches its module).
 
 ## Running
 

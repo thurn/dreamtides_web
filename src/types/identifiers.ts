@@ -103,6 +103,16 @@ export type DreamscapeId = DomainIdentity<"DreamscapeId">;
 export type DreamscapeArtKey = DomainIdentity<"DreamscapeArtKey">;
 export type DreamsignId = DomainIdentity<"DreamsignId">;
 export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
+/** One authored Dreamtides 97 dream map. */
+export type DreamMapId = DomainIdentity<"DreamMapId">;
+/** One anchor (door, waypoint, shop, NPC spot…) on a D97 dream map. */
+export type DreamAnchorId = DomainIdentity<"DreamAnchorId">;
+/** SHA-256 (hex) pinning a D97 map module to its source file. */
+export type DreamMapSourceHash = DomainIdentity<"DreamMapSourceHash">;
+/** Slug naming a D97 map stamp (a reusable LPC chunk) in the stamp catalog. */
+export type D97StampId = DomainIdentity<"D97StampId">;
+/** Slug naming a D97 auto-tiled terrain in the terrain catalog. */
+export type D97TerrainId = DomainIdentity<"D97TerrainId">;
 /** One Dreamtides 97 campaign run, minted by the event that starts it. */
 export type D97RunId = DomainIdentity<"D97RunId">;
 /** Stable entropy a Dreamtides 97 run's generators derive from. */
@@ -170,6 +180,11 @@ const brandDreamscapeId = identityConstructor<DreamscapeId>();
 const brandDreamscapeArtKey = identityConstructor<DreamscapeArtKey>();
 const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
+const brandDreamMapId = identityConstructor<DreamMapId>();
+const brandDreamAnchorId = identityConstructor<DreamAnchorId>();
+const brandDreamMapSourceHash = identityConstructor<DreamMapSourceHash>();
+const brandD97StampId = identityConstructor<D97StampId>();
+const brandD97TerrainId = identityConstructor<D97TerrainId>();
 const brandD97RunId = identityConstructor<D97RunId>();
 const brandD97RunSeed = identityConstructor<D97RunSeed>();
 const brandPromptId = identityConstructor<PromptId>();
@@ -356,6 +371,34 @@ export const parseGuideArtKey = identityParser(
   (value) => /^[a-z0-9_]+$/u.test(value),
 );
 export const parseJourneyId = identityParser("Journey id", brandJourneyId);
+export const parseDreamMapId = identityParser(
+  "Dream map id",
+  brandDreamMapId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseDreamAnchorId = identityParser(
+  "Dream anchor id",
+  brandDreamAnchorId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseDreamMapSourceHash = identityParser(
+  "Dream map source hash",
+  brandDreamMapSourceHash,
+  (value) => /^[0-9a-f]{64}$/iu.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97StampId = identityParser(
+  "D97 stamp id",
+  brandD97StampId,
+  (value) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(value),
+);
+export const parseD97TerrainId = identityParser(
+  "D97 terrain id",
+  brandD97TerrainId,
+  (value) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(value),
+);
 export const parseD97RunId = identityParser("D97 run id", brandD97RunId);
 export const parseD97RunSeed = identityParser(
   "D97 run seed",
