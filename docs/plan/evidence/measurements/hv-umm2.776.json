@@ -1,0 +1,301 @@
+{
+  "bead": "hv-umm2.776",
+  "phase": 5,
+  "source": {
+    "artifactDirectory": "/private/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/captured-cost776/implementation",
+    "base": "119265f8d90afefaaf1442549566d695eedf855a",
+    "workspace": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+    "writerSHA256": {
+      "src/engine/rules/costs.ts": "d799f3c2f8250898e33eb08f88b3c9494a1dc2c7056bbbbd854b881e6caf4cec",
+      "src/engine/steps/kinds/play.ts": "2e97fa94a0879956379fe4d8768bb77707891c438fc9ae011ae2c6623091f625",
+      "src/engine/rules/costs-capture-composition.test.ts": "00856f45b0481621a489fff133de641a4be98a4626278410425c46a6b79859ee"
+    },
+    "claimUTC": "2026-10-17T01:57:37+00:00",
+    "implementationEnd": "2026-10-17T02:06:54.787963+00:00",
+    "windowQualification": "Claim-inclusive elapsed window includes parent bootstrap. Exact helper execution start was not recorded. Parent post-dispatch observation at 2026-10-17T01:59:07.077300+00:00 is not a start timestamp. Final end is the last evidence write immediately before commit.",
+    "areasAmendment": "Native comment 01a14797-1d49-7979-9b5d-6f1e374bbc95 admits exact type-only play.ts import/declaration fallout before edit; other writers stay in assigned areas."
+  },
+  "contract": {
+    "findings": [
+      "P5-02-001",
+      "P5-02-002"
+    ],
+    "binding": "Later direct and nested character payment selectors use the current shared captured X; when no payment binds it, selectorX or source stored X supplies the fallback.",
+    "occurrences": "Mandatory prepared captures carry their owning top-level cost index and only that root consumes the prepared selection. Reused public descriptor objects retain separate payments.",
+    "coverage": "Synthetic UUID/branded fixtures, both actors, play and activation; direct selectors and nested optional/alternative affordability; repeated discard and effective-spark captures; exact distinct zone payment events in printed order; target/payment exclusion; energy and count agreement; conflicting captures; unbound stored source X. Every composed prompt exercises cancel and invalid-answer atomicity, concealed projections, cold JSON reload and fingerprint/event/final-state parity with inline replay.",
+    "acceptanceCredit": "Bounded synthetic public engine contracts only. Gate46 historical games and stock QA retain their historical source scope; final source acceptance and 10k soak belong to the parent.",
+    "testTypeCorrection": "The first review rejected only synthetic fixture typing: the factory now accepts AdditionalCost (including optional and choice), and its board helper returns a new state with explicit interactive config. Production types passed.",
+    "testCorrection": "Initial post-fix run reached payment but 4 assertions assumed void-list order. Void membership uses sets; printed payment order is asserted through actual discard events."
+  },
+  "validation": {
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:03:43.435395+00:00",
+      "ended": "2026-10-17T02:03:52.765079+00:00",
+      "exitCode": 0,
+      "wallS": 9.325339082977735,
+      "cpuS": 7.267600000000001,
+      "sysctlLoadStart": "{ 5.74 5.78 5.63 }",
+      "pid": 29678,
+      "pgid": 29678,
+      "survivors": [],
+      "log": "knip.log"
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:06:48.188479+00:00",
+      "ended": "2026-10-17T02:06:48.335187+00:00",
+      "exitCode": 0,
+      "wallS": 0.14405279100174084,
+      "cpuS": 0.08435799999999999,
+      "sysctlLoadStart": "{ 6.67 6.31 5.88 }",
+      "pid": 42877,
+      "pgid": 42877,
+      "survivors": [],
+      "log": "evidence-schema.log"
+    },
+    "knip-final": {
+      "label": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:06:25.784064+00:00",
+      "ended": "2026-10-17T02:06:32.312058+00:00",
+      "exitCode": 0,
+      "wallS": 6.524244290951174,
+      "cpuS": 6.3877369999999996,
+      "sysctlLoadStart": "{ 6.86 6.28 5.85 }",
+      "pid": 41289,
+      "pgid": 41289,
+      "survivors": [],
+      "log": "knip-final.log"
+    },
+    "focused-composition": {
+      "label": "focused-composition",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-capture-composition.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:02:20.734031+00:00",
+      "ended": "2026-10-17T02:02:24.738269+00:00",
+      "exitCode": 0,
+      "wallS": 4.001853541994933,
+      "cpuS": 5.13584,
+      "sysctlLoadStart": "{ 3.81 5.72 5.59 }",
+      "pid": 23684,
+      "pgid": 23684,
+      "survivors": [],
+      "log": "focused-composition.log"
+    },
+    "focused-initial": {
+      "label": "focused-initial",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-capture-composition.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:00:11.602453+00:00",
+      "ended": "2026-10-17T02:00:15.557014+00:00",
+      "exitCode": 1,
+      "wallS": 3.951965084008407,
+      "cpuS": 5.068454000000001,
+      "sysctlLoadStart": "{ 5.98 6.87 5.93 }",
+      "pid": 14539,
+      "pgid": 14539,
+      "survivors": [],
+      "log": "focused-initial.log"
+    },
+    "baseline-repeated": {
+      "label": "baseline-repeated",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-capture-composition.test.ts",
+        "-t",
+        "prepares reused"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T01:59:56.788242+00:00",
+      "ended": "2026-10-17T02:00:00.844304+00:00",
+      "exitCode": 1,
+      "wallS": 4.0536199159687385,
+      "cpuS": 5.036498,
+      "sysctlLoadStart": "{ 5.91 6.90 5.92 }",
+      "pid": 13400,
+      "pgid": 13400,
+      "survivors": [],
+      "log": "baseline-repeated.log"
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:03:36.373741+00:00",
+      "ended": "2026-10-17T02:05:04.645432+00:00",
+      "exitCode": 2,
+      "wallS": 88.26719720801339,
+      "cpuS": 252.437389,
+      "sysctlLoadStart": "{ 4.50 5.54 5.54 }",
+      "pid": 29141,
+      "pgid": 29141,
+      "survivors": [],
+      "log": "review.log"
+    },
+    "baseline-direct": {
+      "label": "baseline-direct",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-capture-composition.test.ts",
+        "-t",
+        "propagates a captured"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T01:59:52.301037+00:00",
+      "ended": "2026-10-17T01:59:57.652992+00:00",
+      "exitCode": 1,
+      "wallS": 5.34880662499927,
+      "cpuS": 6.276826999999999,
+      "sysctlLoadStart": "{ 5.73 6.89 5.91 }",
+      "pid": 13024,
+      "pgid": 13024,
+      "survivors": [],
+      "log": "baseline-direct.log"
+    },
+    "review-final": {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:05:13.810049+00:00",
+      "ended": "2026-10-17T02:06:36.655213+00:00",
+      "exitCode": 0,
+      "wallS": 82.8415090420167,
+      "cpuS": 220.496617,
+      "sysctlLoadStart": "{ 6.67 6.11 5.76 }",
+      "pid": 36126,
+      "pgid": 36126,
+      "survivors": [],
+      "log": "review-final.log"
+    },
+    "focused-related": {
+      "label": "focused-related",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-capture-composition.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/rules/costs-discard.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-776-captured-costs",
+      "started": "2026-10-17T02:02:52.010698+00:00",
+      "ended": "2026-10-17T02:02:56.107740+00:00",
+      "exitCode": 0,
+      "wallS": 4.094770083029289,
+      "cpuS": 5.680325,
+      "sysctlLoadStart": "{ 4.14 5.64 5.57 }",
+      "pid": 25869,
+      "pgid": 25869,
+      "survivors": [],
+      "log": "focused-related.log"
+    }
+  },
+  "validationCounts": {
+    "focusedComposition": {
+      "files": 1,
+      "passed": 24
+    },
+    "focusedRelated": {
+      "files": 3,
+      "passed": 46
+    },
+    "reviewFirstRelated": {
+      "files": 355,
+      "passed": 11236
+    },
+    "reviewFinalRelated": {
+      "files": 355,
+      "passed": 11236
+    },
+    "baselineDirect": {
+      "files": 1,
+      "failed": 4,
+      "skipped": 4
+    },
+    "baselineRepeated": {
+      "files": 1,
+      "failed": 4,
+      "skipped": 4
+    }
+  },
+  "originalFailedBaseline": {
+    "direct": {
+      "label": "baseline-direct",
+      "failed": 4,
+      "scope": "Both actors, play and activation, public fold rejects legal captured-X continuation as illegalAction"
+    },
+    "repeated": {
+      "label": "baseline-repeated",
+      "failed": 4,
+      "scope": "Both actors, play and activation, public fold rejects legal repeated descriptor preparation as illegalAction"
+    },
+    "frozenTest": "failed-baseline.test.ts",
+    "frozenTestSHA256": "fadb422def8fc00455943c2ecfc7a6ef3a329cbafe9bca5153427aed98f839c6"
+  },
+  "reviewFull": "Not required: bounded prepareCostX/planCosts correctness repair plus one caller type annotation and synthetic tests. No test infrastructure, repository configuration or cross-cutting architecture change. Standard review/knip and focused tests are not heavy by D17; JOURNEY_TEST_WORKERS=2. No heavy command started.",
+  "browser": "No browser QA: internal payment rule composition, no UI or presentation code or fixture changes.",
+  "cleanup": {
+    "ownedLongLivedProcesses": [],
+    "commandProcessGroups": {
+      "knip": [],
+      "evidence-schema": [],
+      "knip-final": [],
+      "focused-composition": [],
+      "focused-initial": [],
+      "baseline-repeated": [],
+      "review": [],
+      "baseline-direct": [],
+      "review-final": [],
+      "focused-related": []
+    },
+    "qualification": "Every recorded validation subprocess reached a collected terminal; no server/browser/fuzzer started. Parent owns native candidate, review and worktree cleanup."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final command group start; sysctl -n vm.loadavg"
+      }
+    }
+  },
+  "timingQualification": "Wall and child CPU scopes are whole command groups including preparation and restoration. Nested runner steps overlap those groups and are not added again. No speed claim or cross-source baseline comparison."
+}

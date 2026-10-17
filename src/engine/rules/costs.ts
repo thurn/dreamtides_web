@@ -278,7 +278,7 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
 /** A play or activation's local X binding and mandatory captured-card selections before targeting. */
 export interface PreparedCostX {
   readonly x: number | null;
-  readonly payments: readonly PlannedCost[];
+  readonly payments: readonly (PlannedCost & { readonly costIndex: number })[];
 }
 
 /**
@@ -301,7 +301,7 @@ export function prepareCostX(
   options: { readonly modifier?: CostModifier; readonly fixedX?: number; readonly excluded?: readonly InstanceId[] } = {},
 ): PreparedCostX {
   let x = options.fixedX ?? chooseX(ctx, side, costs, purpose("chooseX"), options.modifier);
-  const payments: PlannedCost[] = [];
+  const payments: (PlannedCost & { readonly costIndex: number })[] = [];
   if (!targetsNeedX) return { x, payments };
   for (const [index, cost] of costs.entries()) {
     if (cost.cost !== "discard" && cost.cost !== "abandon") continue;
@@ -316,7 +316,7 @@ export function prepareCostX(
     const value = capturesSpark ? effectiveSpark(ctx.state, ctx.catalog, cards[0]) : copiableCostOf(ctx.state, ctx.catalog, cards[0]);
     if (x !== null && x !== value) throw new Infeasible("Captured card payment disagrees with X");
     x = value;
-    payments.push({ cost, cards });
+    payments.push({ cost, cards, costIndex: index });
   }
   const counts = costs.filter((cost): cost is ChoosingCost =>
     (cost.cost === "discard" || cost.cost === "banishFromVoid" || cost.cost === "abandon") && cost.count === "x",
@@ -352,12 +352,13 @@ export function prepareCostX(
  * caller whose next operation is the commit point: it allows a final discard
  * or void banish (from the payer's void or a selected void) with
  * already-payable resources to prove all its card selections at once.
- * `selectorX` supplies prepared X to character-cost selectors during play or
- * activation. Callers with no explicit binding, including manual planning,
+ * Character-cost selectors use the current shared payment X. `selectorX` supplies
+ * a fallback during play or activation. Callers with no explicit binding, including manual planning,
  * use the source card's stored X. `preparedPayments` carries mandatory
  * copiable-cost or effective-spark captures selected before immediate targeting; these cards
  * must still be available and distinct from targets and earlier payments.
- * Payment purposes receive their owning top-level cost index, including nested leaves.
+ * Prepared captures retain their owning top-level cost index, even when descriptors
+ * are reused. Payment purposes receive that index, including nested leaves.
  */
 export function planCosts(
   ctx: StepContext,
@@ -368,7 +369,7 @@ export function planCosts(
   purpose: (role: PromptRole, costIndex?: number) => PromptPurpose,
   excluded: readonly InstanceId[],
   modifier: CostModifier = NO_COST_MODIFIER,
-  options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: readonly PlannedCost[] } = {},
+  options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: PreparedCostX["payments"] } = {},
 ): CostPlan {
   if (!validOpponentGrants(costs)) throw new Infeasible("Opponent-point payments require positive safe integers");
   if (hasNestedAbandonX(costs)) throw new Infeasible("Abandon X must be a top-level mandatory cost");
@@ -419,7 +420,7 @@ export function planCosts(
     if (choosing.some(({ cost }) => cost.count === "x" && capturedX !== null && capturedX < leastCount(cost))) return false;
     const demands = choosing.map(({ cost, index }) => ({
       count: cost.count === "x" ? (capturedX ?? leastCount(cost)) : cost.count,
-      pool: cardCandidates(state, catalog, side, source, cost, options.selectorX).filter((id) =>
+      pool: cardCandidates(state, catalog, side, source, cost, capturedX ?? options.selectorX).filter((id) =>
         !used.includes(id) && !(handTaken >= 0 && index > handTaken && hand.includes(id)) &&
         !(leavesPlay(cost) && id === source && list.slice(index + 1).some(cannotFollowDeparture)),
       ),
@@ -466,7 +467,7 @@ export function planCosts(
       payments.push({ cost, cards: [] });
       return;
     }
-    const candidates = cardCandidates(state, catalog, side, source, cost, options.selectorX);
+    const candidates = cardCandidates(state, catalog, side, source, cost, capturedX ?? options.selectorX);
     const variable = cost.count === "x";
     const count = variable ? capturedX : cost.count;
     // An X bound earlier below a variable count's least X leaves no count to choose.
@@ -480,7 +481,7 @@ export function planCosts(
     const allAnswersPayable = options.endsPlayTime === true && !nested && isLast &&
       (cost.cost === "discard" || cost.cost === "banishFromVoid" || cost.cost === "banishFromAnyVoid") &&
       !("captureCost" in cost && cost.captureCost === true) && resourcesPayable();
-    const prepared = options.preparedPayments?.find(payment => payment.cost === cost);
+    const prepared = nested ? undefined : options.preparedPayments?.find(payment => payment.costIndex === costIndex);
     if (prepared !== undefined && (
       prepared.cards.length !== (count ?? leastCount(cost)) ||
       prepared.cards.some(id => !remaining.includes(id)) ||

@@ -2,7 +2,7 @@ import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { choosePlayTime, purposeOf, targetsNeedOptionalCost } from "../../effects/interpreter";
 import { playPermission } from "../../continuous/permissions";
-import { prepareCostX, payCosts, planCosts, type CostPlan, type PlannedCost } from "../../rules/costs";
+import { prepareCostX, payCosts, planCosts, type CostPlan, type PreparedCostX } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
 import { endFloating } from "../../rules/floating";
 import { instanceOrigin } from "../../rules/activation";
@@ -78,7 +78,7 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
     ...declared.flatMap((ability, index) => ability.kind === "additionalCost" ? ability.costs.map(() => index) : []),
   ] : undefined;
   const costPurpose = (role: PromptRole, index?: number) => purpose(index === undefined ? costAbility : costAbilities?.[index] ?? costAbility, role);
-  let preparedPayments: readonly PlannedCost[] = [];
+  let preparedPayments: PreparedCostX["payments"] = [];
   let x: number | null;
   let choices: readonly EffectChoices[];
   if (definition.synthetic?.play !== undefined) {
