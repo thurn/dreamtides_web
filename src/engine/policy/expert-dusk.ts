@@ -14,7 +14,9 @@
  * Only repositions that can change the challenge are searched: into a lane
  * opposite a challenger, into a back-rank slot supporting such a lane, or
  * out of the way to the first open back-rank slot. A move elsewhere neither
- * blocks nor supports a blocker.
+ * blocks nor supports a blocker, and with no challenger the current layout
+ * is the only one scored. Layouts are reached only while the budget can
+ * still score them.
  */
 import { AI } from "../../content/ai";
 import type { Engine } from "../engine";
@@ -114,6 +116,12 @@ export function planDusk(state: BattleState, ctx: ExpertContext, budget: number)
     layouts += 1;
     const value = scoreLayout(engine, ctx, entry.state, source);
     if (value !== null && (best === null || value > best.value)) best = { moves: entry.moves, value };
+    // With no challenger there is no block to make, and a full queue already holds every layout the budget can score.
+    if (lanes.length === 0) continue;
+    if (queue.length >= Math.max(1, budget)) {
+      exhaustive = false;
+      continue;
+    }
     for (const action of engine.legalActions(entry.state, side)) {
       if (action.kind !== "reposition" || !relevant(entry.state, side, lanes, action.to)) continue;
       let moved: BattleState;

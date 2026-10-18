@@ -77,6 +77,44 @@ export const AI = {
     // A deck with fewer cards than this carries Fatigue risk.
     fatigueHorizon: 5,
   },
+  // The Expert policy (src/engine/policy/expert.ts, phase-7-ai § 7.3).
+  expert: {
+    // Determinizations of its view sampled per top-level decision.
+    determinizations: 3,
+    // Candidates kept in each decision's log line.
+    traceTopK: 3,
+    // Day lookahead: the best first actions each valued by their best follow-up.
+    lookahead: { firstActions: 3 },
+    // Layouts the exact Dusk assignment scores for each Dusk projected while valuing an action.
+    projectedDuskBudget: 4,
+    weights: {
+      // Layouts the exact Dusk assignment scores for a Dusk the Expert defends.
+      duskBudget: 16,
+      // Decisions passed while playing a candidate on to the end of the turn's challenge.
+      passLimit: 64,
+      // Repetitions of an optional loop valued per candidate.
+      loopIterationLimit: 32,
+      // A preferred class (removal before deployment) wins within this much of the best score.
+      sequencingTolerance: 0.5,
+      // An Interrupt is held unless using it gains more than this over passing.
+      interruptHoldMargin: 1,
+      // An "unless" cost of at most this much energy is paid when affordable.
+      cheapUnlessCost: 2,
+    },
+    // The ongoing value of a character in play's printed abilities, added to
+    // the position evaluation: per AST feature, for each contribution its
+    // triggered, static and activated abilities make in its controller's favor.
+    abilityValue: {
+      weights: { draw: 1, energy: 0.5, points: 1.5, spark: 0.75, removal: 1.5, recursion: 0.75, tempo: 0.5, trigger: 0.25 },
+      // Largest exact amount credited to one contribution; other amounts count 1.
+      amountCap: 3,
+    },
+    prompts: {
+      // Legal answers scored when an answer valuation is available.
+      scoredAnswers: 16,
+      cheapUnlessCost: 2,
+    },
+  },
   // Frozen reference policies (D25), read only by their snapshot modules in
   // src/engine/policy/reference/. Their values never change; a new reference
   // gets a new entry.

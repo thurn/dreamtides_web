@@ -20,16 +20,13 @@ const WEIGHTS: ExpertWeights = { duskBudget: 64, passLimit: 64, loopIterationLim
 const context = (side: Side) => expertContext(engine, side, { player: entries(deck), enemy: entries(deck) });
 
 describe("the Expert Day sequencing", () => {
-  it("weighs a character play at each open back-rank slot and other actions as they are", () => {
-    const { state } = boardState(engine.catalog, { active: "player", phase: "day", player: { deck, hand: [vanilla0.id, event0.id], back: [vanilla3.id] }, enemy: { deck } });
+  it("weighs a character play at each open slot supporting an occupied lane and at the first open slot", () => {
+    const { state } = boardState(engine.catalog, { active: "player", phase: "day", player: { deck, hand: [vanilla0.id, event0.id], back: [vanilla3.id], front: [null, null, null, null, vanilla3.id] }, enemy: { deck } });
     const legal = engine.legalActions(state, "player");
     const expanded = withPlacements(state, legal, context("player"));
-    const character = (action: Action) => action.kind === "play" && state.instances[action.card]?.printing.kind === "card" && state.sides.player.hand[0] === action.card;
+    const character = (action: Action) => action.kind === "play" && state.sides.player.hand[0] === action.card;
     const placements = expanded.filter(character);
-    expect(placements.map((action) => action.kind === "play" ? action.slot : null)).toEqual(
-      Array.from({ length: 9 }, (_, index) => ({ rank: "back", index: index + 1 })),
-    );
-    for (const action of placements) expect(engine.legalActions(state, "player").some((legalAction) => legalAction.kind === "play" && action.kind === "play" && legalAction.card === action.card)).toBe(true);
+    expect(placements.map((action) => action.kind === "play" ? action.slot : null)).toEqual([1, 4, 5].map((index) => ({ rank: "back", index })));
     expect(expanded.filter((action) => !character(action))).toEqual(legal.filter((action) => !character(action)));
   });
 
@@ -55,6 +52,14 @@ describe("the Expert Day sequencing", () => {
       const challenger = ids[side].front[0];
       const decision = chooseDayAction([state], engine.legalActions(state, side), context(side), WEIGHTS);
       expect(decision.action).toMatchObject({ kind: "reposition", card: challenger, to: { rank: "back" } });
+    });
+  }
+
+  for (const side of SIDES) {
+    it(`passes rather than repositioning for no gain, for ${side}`, () => {
+      const { state } = boardState(engine.catalog, { active: side, phase: "day", [side]: { deck, back: [vanilla0.id] }, [opponent(side)]: { deck } });
+      const decision = chooseDayAction([state], engine.legalActions(state, side), context(side), { ...WEIGHTS, sequencingTolerance: Number.POSITIVE_INFINITY });
+      expect(decision.action).toEqual({ kind: "pass" });
     });
   }
 

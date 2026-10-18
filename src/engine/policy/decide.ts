@@ -16,6 +16,7 @@ import type { BattleInit } from "../state/types";
 import type { Decklists } from "../view/determinize";
 import { promptView, type BattleView } from "../view/view";
 import { policyOverride } from "./overrides";
+import { EXPERT_POLICY } from "./expert";
 import { GREEDY_POLICY } from "./greedy";
 import { PolicyRandom, RANDOM_POLICY } from "./random";
 import { GREEDY_5_POLICY } from "./reference/greedy-5";
@@ -28,6 +29,7 @@ const lab = import.meta.env?.DEV === true ? await import("../testing/card-lab") 
 export const POLICIES: Readonly<Record<PolicyId, Policy>> = {
   random: RANDOM_POLICY,
   greedy: GREEDY_POLICY,
+  expert: EXPERT_POLICY,
   "greedy@5": GREEDY_5_POLICY,
   "greedy@7.2": GREEDY_7_2_POLICY,
 };

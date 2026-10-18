@@ -147,7 +147,7 @@ describe("runtime-config", () => {
       });
 
       it("runs the journey default for any other value", () => {
-        for (const search of ["", "?ai=1", "?ai=expert", "?ai="]) {
+        for (const search of ["", "?ai=1", "?ai=unknown", "?ai="]) {
           expect(parseRuntimeConfig(search).enemyPolicy).toBe(AI.enginePolicy.journeyDefault);
         }
       });
