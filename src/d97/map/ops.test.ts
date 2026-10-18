@@ -10,6 +10,7 @@ import { TERRAIN_FULL, type D97SeasonFamily, type DreamStamp, type DreamTerrain 
 import { compileDreamMap, type DreamMapCompileInput } from "./compile";
 import { isWalkable, type CompiledDreamMap } from "./compiled";
 import type { DreamMapDefinition, DreamMapRecipeOp } from "./definition";
+import { mergeTileset, tilesetSpan, type WorkingMap } from "./ops/working-map";
 import { FIXTURE_TMX, HUT, HUT_STAMP, WATER, WATER_TERRAIN, WATER_TILESET, fixtureDefinition, loadFixtureText } from "./map-fixtures";
 import type { D97MapTuning } from "./tuning";
 import { validateDreamMap } from "./validate";
@@ -159,6 +160,18 @@ describe("reseason", () => {
       { ...INPUT, seasons: [] },
     );
     expect(result.ok === false && result.errors[0]?.kind).toBe("recipe");
+  });
+});
+
+describe("merging a tileset", () => {
+  it("places it after a sheet that leaves out its tile count", () => {
+    // A 96×192 sheet of 32×32 tiles holds 18 tiles even when its tileset
+    // states no tilecount, as Big Island's and Neverwell Moor's do.
+    const countless = { ...WATER_TILESET, name: "countless", firstGid: 1, tileCount: 0, columns: 0, tiles: [] };
+    expect(tilesetSpan(countless)).toBe(18);
+    const map = { tilesets: [countless] } as unknown as WorkingMap;
+    const merged = mergeTileset(map, { ...WATER_TILESET, name: "added", image: { path: "terrain/added.png", width: 64, height: 64 } });
+    expect(merged).toBe(19);
   });
 });
 

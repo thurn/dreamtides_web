@@ -135,9 +135,25 @@ export function layerOrCreate(map: WorkingMap, name: string): WorkingLayer {
   return created;
 }
 
-function tilesetSpan(tileset: TiledTileset): number {
+/** Tiles of a sheet along one image side, as Tiled lays them out. */
+function tilesAlong(size: number, tile: number, tileset: TiledTileset): number {
+  return Math.max(0, Math.floor((size - 2 * tileset.margin + tileset.spacing) / (tile + tileset.spacing)));
+}
+
+/**
+ * The gids `tileset` occupies. Older Tiled tilesets leave out `tilecount`
+ * (Big Island's and Neverwell Moor's all do), so a sheet's span also counts
+ * the tiles its image holds; otherwise a tileset merged after it would take
+ * gids its tiles use.
+ */
+export function tilesetSpan(tileset: TiledTileset): number {
   const highestTile = tileset.tiles.reduce((max, tile) => Math.max(max, tile.id + 1), 0);
-  return Math.max(tileset.tileCount, highestTile, 1);
+  const sheetTiles =
+    tileset.image === null
+      ? 0
+      : tilesAlong(tileset.image.width, tileset.tileWidth, tileset) *
+        tilesAlong(tileset.image.height, tileset.tileHeight, tileset);
+  return Math.max(tileset.tileCount, sheetTiles, highestTile, 1);
 }
 
 function sameTileset(a: TiledTileset, b: TiledTileset): boolean {
