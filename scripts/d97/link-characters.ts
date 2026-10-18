@@ -104,16 +104,23 @@ export interface LinkCharactersResult {
  */
 export function linkCharacters(generator: string, outDir: string, recipes: readonly CharacterSprite[]): LinkCharactersResult {
   const sheetsDir = join(outDir, "sheets");
+  const characters: Partial<Record<D97CharacterId, ManifestCharacter>> = {};
+  if (!existsSync(join(generator, "sheet_definitions"))) {
+    // A pass without the library (a review's empty asset cache) keeps the
+    // last pass's sheets, manifest and credits; only a workspace that has
+    // none gets the capsule manifest.
+    console.warn(`  Warning: LPC character generator not found at ${generator}; D97 characters keep their last linked sheets, or draw as capsules`);
+    if (!existsSync(join(outDir, "manifest.json"))) {
+      mkdirSync(outDir, { recursive: true });
+      for (const recipe of recipes) characters[recipe.id] = { layers: [], missing: ["no character generator library"] };
+      writeJson(outDir, "manifest.json", { format: CHARACTER_MANIFEST_FORMAT, characters } satisfies CharacterManifest);
+    }
+    return { linked: 0, credits: null };
+  }
   rmSync(sheetsDir, { recursive: true, force: true });
   rmSync(join(outDir, "credits.json"), { force: true });
   mkdirSync(sheetsDir, { recursive: true });
-
-  const characters: Partial<Record<D97CharacterId, ManifestCharacter>> = {};
-  const available = existsSync(join(generator, "sheet_definitions"));
-  if (!available) {
-    console.warn(`  Warning: LPC character generator not found at ${generator}; D97 characters draw as capsules`);
-  }
-  const library = available ? generatorLibrary(generator) : null;
+  const library = generatorLibrary(generator);
   let linked = 0;
   const used = new Set<string>();
   /** Link `sheet` (spritesheets-relative) and return its served URL. */
@@ -128,10 +135,6 @@ export function linkCharacters(generator: string, outDir: string, recipes: reado
     return `${CHARACTER_SHEETS_PATH}${relative(sheetsDir, target).split("\\").join("/")}`;
   };
   for (const recipe of recipes) {
-    if (library === null) {
-      characters[recipe.id] = { layers: [], missing: ["no character generator library"] };
-      continue;
-    }
     const resolved = resolveCharacterSprite(recipe, library);
     for (const reason of resolved.missing) console.warn(`  Warning: D97 character ${recipe.id}: ${reason}`);
     characters[recipe.id] = {
@@ -147,7 +150,6 @@ export function linkCharacters(generator: string, outDir: string, recipes: reado
   writeJson(outDir, "manifest.json", manifest);
 
   const csvPath = join(generator, "CREDITS.csv");
-  if (!available) return { linked, credits: null };
   if (!existsSync(csvPath)) {
     console.warn(`  Warning: ${csvPath} not found; the D97 credits list the generator's contributors in summary`);
     return { linked, credits: null };

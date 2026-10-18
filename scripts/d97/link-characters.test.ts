@@ -4,7 +4,9 @@
 // and licenses deduplicated (case-insensitively) and collated, and a used
 // sheet without a row reported; the CSV parser tolerates the generator's
 // stray whitespace after closing quotes, quoted commas and doubled quotes.
-// Without a library no credits are written.
+// Without a library no credits are written, and a pass without it keeps the
+// last pass's sheets, manifest and credits (a fresh workspace gets the
+// capsule manifest).
 
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -96,6 +98,28 @@ describe("linkCharacters", () => {
     expect(linkCharacters(join(root, "absent"), out, [RECIPE]).credits).toBeNull();
     expect(existsSync(join(out, "credits.json"))).toBe(false);
     expect(existsSync(join(out, "manifest.json"))).toBe(true);
+  });
+});
+
+describe("linkCharacters without the library", () => {
+  it("keeps the last pass's sheets, manifest and credits, and writes the capsule manifest only when none exists", () => {
+    const root = tempDir();
+    const out = join(root, "out");
+    linkCharacters(generator(root, true), out, [RECIPE]);
+    const manifest = readFileSync(join(out, "manifest.json"), "utf8");
+    const credits = readFileSync(join(out, "credits.json"), "utf8");
+    expect(existsSync(join(out, "sheets", "body", "male", "walk.png"))).toBe(true);
+
+    expect(linkCharacters(join(root, "absent"), out, [RECIPE])).toEqual({ linked: 0, credits: null });
+    expect(readFileSync(join(out, "manifest.json"), "utf8")).toBe(manifest);
+    expect(readFileSync(join(out, "credits.json"), "utf8")).toBe(credits);
+    expect(existsSync(join(out, "sheets", "body", "male", "walk.png"))).toBe(true);
+
+    const fresh = join(root, "fresh");
+    linkCharacters(join(root, "absent"), fresh, [RECIPE]);
+    const capsules = parseCharacterManifest(JSON.parse(readFileSync(join(fresh, "manifest.json"), "utf8")));
+    expect(capsules?.characters[RECIPE.id]?.layers).toEqual([]);
+    expect(existsSync(join(fresh, "credits.json"))).toBe(false);
   });
 });
 
