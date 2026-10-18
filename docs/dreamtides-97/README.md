@@ -345,6 +345,7 @@ Algorithms: [Appendix A](appendix-a-economy.md).
   [Appendix B §B2](appendix-b-dreams.md#b2-dream-catalog).
 - **Unnamed dreams.** Dreams have no names anywhere in the game: not on doors,
   in the Atlas or in sage hints. Characters, quests and items have names.
+  Limbo is the one named place: the door to it carries a "Limbo" nameplate.
 - **Rooms.** A dream may own rooms: small interior maps entered through
   ordinary building doors, with no veil. A room shares its dream's waypoint
   and tier.

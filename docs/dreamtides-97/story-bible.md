@@ -887,8 +887,8 @@ cannot contradict them.
    Avatars, incarnations and Apollyon are dream-aware.
 3. **Guardians are not Apollyon's servants;** only the incarnations are his.
 4. **Acts as depth:** dialogue never says "act" or an act number.
-5. **Limbo may be named** by walkers, because the game itself labels its
-   door "Limbo".
+5. **Limbo may be named** by walkers: it is the one named place, and the
+   game labels its door "Limbo" (design overview, Unnamed dreams).
 6. **"Dreamer"** is reserved for Apollyon's voices; each guide has their own
    address or none; no gendered address to the player.
 7. **No design numbers in lines,** except through module placeholders.
@@ -916,15 +916,6 @@ cannot contradict them.
 These are reported for the owners of those documents; this bible does not
 resolve them.
 
-- **Guide appearances per act.** Appendix B §B7 says 13 Dream Guide
-  appearances per act, but the §B13 table sums to 12 per act (60 per
-  campaign).
-- **Limbo's name.** The glossary calls Limbo "the final campaign dream" and
-  P10 says dreams have no names, yet the visual guide gives the door to
-  Limbo a "Limbo" nameplate. This bible treats Limbo as the one place that
-  is named (ruling 5).
-- **Hope's End's category.** Appendix B names Hope's End as a home tileset
-  without a category; the visual guide files it under Fantasy.
 - **The first dream and empty guardian anchors.** The first dream's brief
   says someone always stands in the ember arch, and its guardian's lines
   refer to the arch. Under act assembly (B4) that anchor may hold an

@@ -15,13 +15,12 @@ internal labels for art sets and never appear in game:
 
 | Category | Tilesets |
 | --- | --- |
-| Fantasy | Dwarven dungeon (Frostforge), elven realm, talking-animal village (Tumbleleaf Village) |
+| Fantasy | Dwarven dungeon (Frostforge), elven realm, talking-animal village (Tumbleleaf Village), graveyard chapel (Hope's End) |
 | Sci-Fi | Space colony (Farpoint Station), cyberpunk city (Grid City), post-apocalyptic wasteland (The Rust Expanse) |
 | Historic | Egypt (Pharaoh's Gate), Viking (Winterwake Fjords), samurai Japan (Tsukiren), pirate island |
 | Nature | Enchanted forest (Wilderveil), meadow, snowfield |
 
-The ten Dream Guides' home dreamscapes are tilesets; the table names most of
-them, and Hope's End is one more. A tileset has no mechanical effect, except
+The ten Dream Guides' home dreamscapes are tilesets in this table. A tileset has no mechanical effect, except
 that a Dream Guide appearing in their home tileset is enhanced (B13).
 
 **Maps.** Each dream has one map, a committed TS **map module** in
@@ -284,7 +283,7 @@ Assembly fills each act's anchors:
 | Amulet merchants | 1–2 per act | Each resonance at least once across Acts 1–3 |
 | Amulet changer | 1 per act from Act 2 | |
 | Sages | About one dream in two | |
-| Dream Guide appearances | 13 per act (B13) | At most 3 per dream, 1 in a small dream |
+| Dream Guide appearances | 12 per act (B13), plus one in each key dream | At most 3 per dream, 1 in a small dream |
 | Avatar quest giver | 1 in Act 2, 1 in Act 3 | A friendly Avatar character at a cluster anchor |
 | Prize duelists | 1 per act | |
 | Chests | 1–2 per dream | About a quarter behind a chokepoint |

@@ -365,7 +365,6 @@ of Source of Tales' Mountainwatch.
 | Grid City | Sci-Fi | "Layaway" | Tile-built |
 | Limbo | — | — | Tile-built, fixed map |
 
-Hope's End has no category in Appendix B; this guide files it under Fantasy.
 The elven realm, snowfield and pirate island wait for later art passes: the
 snowfield can reuse the winter backdrop terrain, and the pirate island the
 beach pack, boats and palms.
