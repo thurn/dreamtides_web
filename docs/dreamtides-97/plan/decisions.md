@@ -162,7 +162,8 @@ D97 runs in the same fold, reducer and event log as the journey:
   stored games.
 - `FoldState` gains a `d97` slice beside `journey`, null in journey games.
 - D97 events use a `D97_` prefix in `EventPayloads`. Their cases live in
-  `src/rules/d97/`, and `actions.ts` gains their creators.
+  `src/rules/d97/`, each declared once as a spec in `src/rules/d97/events/`,
+  and `actions.ts` records them through one `d97(intent)` method.
 - The battle host's `BattleMode` gains a `d97` kind. D97 battles use
   `createEngineBattleInit` and `buildTideOpponentDeck` with D97 inputs. D97
   adds its own begin and end battle cases, because the journey's assume an

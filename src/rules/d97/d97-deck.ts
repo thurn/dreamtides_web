@@ -10,25 +10,22 @@ import {
   unequipCopy as unequipInCollection,
 } from "../../d97/collection/collection";
 import type { D97Collection } from "../../d97/collection/types";
-import {
-  d97OwnedCopyIdFromUnknown,
-  type D97OwnedCopyId,
-} from "../../types/identifiers";
+import type { D97OwnedCopyId } from "../../types/identifiers";
 import type { D97Transition } from "./d97-run";
-import type { D97State } from "./d97-state";
+import type { D97RunInput } from "./events/spec";
+
+/** A deck edit's payload: the copy it moves. */
+type CopyPayload = { readonly copyId: D97OwnedCopyId };
 
 function editDeck(
-  d97: D97State,
-  payload: Record<string, unknown>,
+  { d97, run }: D97RunInput,
+  { copyId }: CopyPayload,
   event: "d97_copy_equipped" | "d97_copy_unequipped",
   edit: (
     collection: D97Collection,
     copyId: D97OwnedCopyId,
   ) => D97Collection | null,
 ): D97Transition | null {
-  const run = d97.run;
-  const copyId = d97OwnedCopyIdFromUnknown(payload.copyId);
-  if (run === null || copyId === null) return null;
   const collection = edit(run.collection, copyId);
   const copy = collection === null ? null : findCopy(collection, copyId);
   if (collection === null || copy === null) return null;
@@ -50,22 +47,16 @@ function editDeck(
 }
 
 /** `D97_EQUIP_COPY { copyId }`: move a reserve copy into the deck. */
-export function equipCopy(
-  d97: D97State,
-  payload: Record<string, unknown>,
-): D97Transition | null {
-  return editDeck(d97, payload, "d97_copy_equipped", equipInCollection);
+export function equipCopy(input: D97RunInput, payload: CopyPayload): D97Transition | null {
+  return editDeck(input, payload, "d97_copy_equipped", equipInCollection);
 }
 
 /**
  * `D97_UNEQUIP_COPY { copyId }`: move a deck copy into the reserve, refused
  * when the deck is at its minimum size.
  */
-export function unequipCopy(
-  d97: D97State,
-  payload: Record<string, unknown>,
-): D97Transition | null {
-  return editDeck(d97, payload, "d97_copy_unequipped", (collection, copyId) =>
+export function unequipCopy(input: D97RunInput, payload: CopyPayload): D97Transition | null {
+  return editDeck(input, payload, "d97_copy_unequipped", (collection, copyId) =>
     unequipInCollection(collection, copyId, D97_COLLECTION.minimumDeckSize),
   );
 }

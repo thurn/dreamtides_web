@@ -7,13 +7,6 @@ import type {
   ChoiceId,
   DeckEntryId,
   AvatarId,
-  D97DreamId,
-  D97OwnedCopyId,
-  D97FlagId,
-  D97ItemId,
-  D97QuestId,
-  D97QuestStepId,
-  DreamAnchorId,
   DreamsignId,
   ExplorationActionId,
   FrontDoorActionId,
@@ -39,7 +32,8 @@ import type {
 import type { BattleSide } from "../battle/types";
 import type { SelectionRulesVersion } from "../reward-selection/types";
 import type { EventType } from "../eventlog/types";
-import type { D97ServiceKind } from "../content/d97/dialogue/schema";
+import { d97EventTable } from "./d97/events/catalog";
+import type { D97EventPayloads } from "./d97/events";
 
 // The reducer-internal typed view of every event that folds over `FoldState`.
 //
@@ -79,9 +73,10 @@ export type AuguryAcceptPayload = AuguryDeclinePayload & {
 
 /**
  * Maps each event `type` literal to its payload interface. Keys are the
- * authoritative set of event types the rules layer understands.
+ * authoritative set of event types the rules layer understands. The
+ * Dreamtides 97 events (D97 games only) come from their specs in ./d97/events/.
  */
-export interface EventPayloads {
+export interface EventPayloads extends D97EventPayloads {
   // --- standalone front door ---
   FRONT_DOOR_ACTION: {
     surface: "main" | "tutorial";
@@ -326,34 +321,6 @@ export interface EventPayloads {
   // only: `op` is a `DebugOp` (src/engine/debug/debug-actions.ts), validated
   // by the domain case. A production build bounces it.
   BATTLE_DEBUG: { op: unknown };
-
-  // --- Dreamtides 97 (D97 games only; cases in ./d97/) ---
-  /** `dreamId` omitted: the run starts in the first catalog dream. */
-  D97_START_RUN: { avatarId: AvatarId; dreamId?: D97DreamId };
-  D97_EQUIP_COPY: { copyId: D97OwnedCopyId };
-  D97_UNEQUIP_COPY: { copyId: D97OwnedCopyId };
-  D97_PREVIEW_ENCOUNTER: { anchorId: DreamAnchorId };
-  D97_DECLINE_ENCOUNTER: { anchorId: DreamAnchorId };
-  D97_BEGIN_BATTLE: { anchorId: DreamAnchorId };
-  D97_END_BATTLE: Record<string, never>;
-  // Quests and dialogue effects (cases in ./d97/d97-quests.ts). Each names
-  // the anchor whose character the player is dealing with.
-  D97_ACCEPT_QUEST: { questId: D97QuestId; anchorId: DreamAnchorId };
-  D97_ADVANCE_QUEST: { questId: D97QuestId; stepId: D97QuestStepId; anchorId: DreamAnchorId };
-  D97_COMPLETE_QUEST: { questId: D97QuestId; anchorId: DreamAnchorId };
-  D97_CHOOSE_QUEST_REWARD: { questId: D97QuestId; cardId: CardId };
-  D97_ABANDON_QUEST: { questId: D97QuestId };
-  D97_PICK_UP_OBJECT: { anchorId: DreamAnchorId };
-  D97_GIVE_ITEM: { itemId: D97ItemId; anchorId: DreamAnchorId };
-  D97_TAKE_ITEM: { itemId: D97ItemId; anchorId: DreamAnchorId };
-  D97_SET_FLAG: { flagId: D97FlagId; value: boolean; anchorId: DreamAnchorId };
-  D97_OPEN_SHOP: { anchorId: DreamAnchorId };
-  D97_OPEN_SERVICE: { anchorId: DreamAnchorId; service: D97ServiceKind };
-  D97_ACTIVATE_WAYPOINT: { anchorId: DreamAnchorId };
-  D97_STEP_THROUGH_DOOR: { anchorId: DreamAnchorId };
-  D97_BUY_SHOP_CARD: { anchorId: DreamAnchorId; slotIndex: number };
-  D97_SELL_COPY: { anchorId: DreamAnchorId; copyId: D97OwnedCopyId };
-  D97_RESTOCK_SHOP: { anchorId: DreamAnchorId };
 }
 
 /** Every event `type` string the rules layer recognizes. */
@@ -503,29 +470,7 @@ const EVENT_INTENT_CLASSES = {
   BATTLE_ANSWER: "gameplay",
   BATTLE_CANCEL: "gameplay",
   BATTLE_DEBUG: "administrative", // engine debug panel
-  D97_START_RUN: "gameplay",
-  D97_EQUIP_COPY: "gameplay",
-  D97_UNEQUIP_COPY: "gameplay",
-  D97_PREVIEW_ENCOUNTER: "gameplay",
-  D97_DECLINE_ENCOUNTER: "gameplay",
-  D97_BEGIN_BATTLE: "gameplay",
-  D97_END_BATTLE: "gameplay",
-  D97_ACCEPT_QUEST: "gameplay",
-  D97_ADVANCE_QUEST: "gameplay",
-  D97_COMPLETE_QUEST: "gameplay",
-  D97_CHOOSE_QUEST_REWARD: "gameplay",
-  D97_ABANDON_QUEST: "gameplay",
-  D97_PICK_UP_OBJECT: "gameplay",
-  D97_GIVE_ITEM: "gameplay",
-  D97_TAKE_ITEM: "gameplay",
-  D97_SET_FLAG: "gameplay",
-  D97_OPEN_SHOP: "gameplay",
-  D97_OPEN_SERVICE: "gameplay",
-  D97_ACTIVATE_WAYPOINT: "gameplay",
-  D97_STEP_THROUGH_DOOR: "gameplay",
-  D97_BUY_SHOP_CARD: "gameplay",
-  D97_SELL_COPY: "gameplay",
-  D97_RESTOCK_SHOP: "gameplay",
+  ...d97EventTable("gameplay" as const),
 } as const satisfies Record<GameEventType, EventIntentClass>;
 
 /** Event types for which journey modifiers never run. */
@@ -667,29 +612,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_ANSWER: true,
   BATTLE_CANCEL: true,
   BATTLE_DEBUG: true,
-  D97_START_RUN: true,
-  D97_EQUIP_COPY: true,
-  D97_UNEQUIP_COPY: true,
-  D97_PREVIEW_ENCOUNTER: true,
-  D97_DECLINE_ENCOUNTER: true,
-  D97_BEGIN_BATTLE: true,
-  D97_END_BATTLE: true,
-  D97_ACCEPT_QUEST: true,
-  D97_ADVANCE_QUEST: true,
-  D97_COMPLETE_QUEST: true,
-  D97_CHOOSE_QUEST_REWARD: true,
-  D97_ABANDON_QUEST: true,
-  D97_PICK_UP_OBJECT: true,
-  D97_GIVE_ITEM: true,
-  D97_TAKE_ITEM: true,
-  D97_SET_FLAG: true,
-  D97_OPEN_SHOP: true,
-  D97_OPEN_SERVICE: true,
-  D97_ACTIVATE_WAYPOINT: true,
-  D97_STEP_THROUGH_DOOR: true,
-  D97_BUY_SHOP_CARD: true,
-  D97_SELL_COPY: true,
-  D97_RESTOCK_SHOP: true,
+  ...d97EventTable(true as const),
 };
 
 // Fails to compile on drift between EventPayloads and KNOWN_EVENT_TYPES_AS_OBJECT.
@@ -715,15 +638,4 @@ export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<GameEventType> =
 /** Narrows a raw event `type` string to a known `GameEventType`. */
 export function isKnownEventType(type: EventType): type is GameEventType {
   return (KNOWN_EVENT_TYPES as ReadonlySet<EventType>).has(type);
-}
-
-/** The event types of the Dreamtides 97 namespace. */
-export type D97EventType = Extract<GameEventType, `D97_${string}`>;
-
-/**
- * Whether a known event type belongs to the D97 namespace. D97 games fold
- * only these; journey games bounce them.
- */
-export function isD97EventType(type: GameEventType): type is D97EventType {
-  return type.startsWith("D97_");
 }

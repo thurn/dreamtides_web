@@ -33,19 +33,14 @@ import type {
   ReducerLogRecord,
 } from "../eventlog/types";
 import {
-  isD97EventType,
   isGameplayEventType,
   isKnownEventType,
   PROMPT_GATE_EXEMPT_EVENT_TYPES,
   type GameEventType,
 } from "./events";
-import * as d97Run from "./d97/d97-run";
-import * as d97Deck from "./d97/d97-deck";
-import * as d97Quests from "./d97/d97-quests";
-import type { D97Transition } from "./d97/d97-run";
-import * as d97Encounters from "./d97/d97-encounters";
-import * as d97Travel from "./d97/d97-travel";
-import * as d97Shop from "./d97/d97-shop";
+import type { D97FoldTransition } from "./d97/d97-encounters";
+import { foldD97Event } from "./d97/events";
+import { isD97EventType } from "./d97/events/catalog";
 
 /** Engine intents a D97 game folds while its D97 battle is running. */
 const D97_BATTLE_INTENTS: ReadonlySet<EventType> = new Set(["BATTLE_ACTION", "BATTLE_ANSWER", "BATTLE_CANCEL", "BATTLE_DEBUG"]);
@@ -378,6 +373,7 @@ export function routeDomain(
     !(journey.screen.type === "journeyPurge" && type === "ACCEPT_ESSENCE" && journey.screen.choice.kind === "essenceSite" && payload.siteId === journey.screen.choice.siteId)) {
     return bounce(state);
   }
+  if (isD97EventType(type)) return d97Case(state, foldD97Event(state, type, payload, ctx));
   switch (type) {
     // --- standalone front door ---
     case "FRONT_DOOR_ACTION":
@@ -767,54 +763,6 @@ export function routeDomain(
     case "BATTLE_DEBUG":
       return foldCase(state, reduceEngineDebug(state, payload, ctx));
 
-    // --- Dreamtides 97 ---
-    case "D97_START_RUN":
-      return d97Case(state, state.d97 === undefined ? null : d97Run.startRun(state.d97, payload, ctx));
-    case "D97_EQUIP_COPY":
-      return d97Case(state, state.d97 === undefined ? null : d97Deck.equipCopy(state.d97, payload));
-    case "D97_UNEQUIP_COPY":
-      return d97Case(state, state.d97 === undefined ? null : d97Deck.unequipCopy(state.d97, payload));
-    case "D97_PREVIEW_ENCOUNTER":
-      return d97Case(state, d97Encounters.previewEncounter(state, payload, ctx));
-    case "D97_DECLINE_ENCOUNTER":
-      return d97Case(state, state.d97 === undefined ? null : d97Encounters.declineEncounter(state.d97, payload));
-    case "D97_BEGIN_BATTLE":
-      return d97FoldCase(state, d97Encounters.beginEncounterBattle(state, payload, ctx));
-    case "D97_END_BATTLE":
-      return d97FoldCase(state, d97Encounters.endEncounterBattle(state, ctx));
-    case "D97_ACCEPT_QUEST":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.acceptQuest(state.d97, payload));
-    case "D97_ADVANCE_QUEST":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.advanceQuest(state.d97, payload));
-    case "D97_COMPLETE_QUEST":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.completeQuest(state.d97, payload, ctx));
-    case "D97_CHOOSE_QUEST_REWARD":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.chooseQuestReward(state.d97, payload));
-    case "D97_ABANDON_QUEST":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.abandonQuest(state.d97, payload));
-    case "D97_PICK_UP_OBJECT":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.pickUpObject(state.d97, payload));
-    case "D97_GIVE_ITEM":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.giveItem(state.d97, payload));
-    case "D97_TAKE_ITEM":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.takeItem(state.d97, payload));
-    case "D97_SET_FLAG":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.setFlag(state.d97, payload));
-    case "D97_OPEN_SHOP":
-      return d97Case(state, state.d97 === undefined ? null : d97Shop.openShop(state.d97, payload, ctx));
-    case "D97_OPEN_SERVICE":
-      return d97Case(state, state.d97 === undefined ? null : d97Quests.handOff(state.d97, payload));
-    case "D97_BUY_SHOP_CARD":
-      return d97Case(state, state.d97 === undefined ? null : d97Shop.buyShopCard(state.d97, payload));
-    case "D97_SELL_COPY":
-      return d97Case(state, state.d97 === undefined ? null : d97Shop.sellCopy(state.d97, payload));
-    case "D97_RESTOCK_SHOP":
-      return d97Case(state, state.d97 === undefined ? null : d97Shop.restockShop(state.d97, payload, ctx));
-    case "D97_ACTIVATE_WAYPOINT":
-      return d97Case(state, state.d97 === undefined ? null : d97Travel.activateWaypoint(state.d97, payload));
-    case "D97_STEP_THROUGH_DOOR":
-      return d97Case(state, state.d97 === undefined ? null : d97Travel.stepThroughDoor(state.d97, payload));
-
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":
       return foldCase(state, lifecycle.resetJourney(state, ctx));
@@ -875,20 +823,10 @@ function frontDoorCase(
   };
 }
 
-/** Wrap a whole-fold D97 result: `null` bounces, its state applies. */
-function d97FoldCase(state: FoldState, transition: d97Encounters.D97FoldTransition | null): ReduceResult {
+/** Wrap a D97 event's result (./d97/events/): `null` bounces, its state applies. */
+function d97Case(state: FoldState, transition: D97FoldTransition | null): ReduceResult {
   if (transition === null) return bounce(state);
   return { state: transition.state, outcome: "applied", logRecords: transition.logRecords };
-}
-
-/** Wrap a D97 domain result: `null` bounces, a new D97 slice applies. */
-function d97Case(state: FoldState, transition: D97Transition | null): ReduceResult {
-  if (transition === null) return bounce(state);
-  return {
-    state: { ...state, d97: transition.d97 },
-    outcome: "applied",
-    logRecords: transition.logRecords,
-  };
 }
 
 /** Wrap a whole-fold domain result: `null` bounces, a new `FoldState` applies. */

@@ -62,7 +62,7 @@ export function useD97Encounter(args: {
       const encounter = runRef.current.encounters[id];
       if (routeChallenge({ beaten: encounter?.beaten === true }) === "none") return;
       logEvent("d97_encounter_opened", { runId: runRef.current.runId, anchorId: id, firstPreview: encounter === undefined });
-      if (encounter === undefined) void actions.d97PreviewEncounter(id).catch(reportFailure);
+      if (encounter === undefined) void actions.d97({ type: "D97_PREVIEW_ENCOUNTER", payload: { anchorId: id } }).catch(reportFailure);
       setAnchorId(id);
     },
     [actions],
@@ -98,13 +98,13 @@ export function useD97Encounter(args: {
       openDeckEditor();
       return;
     }
-    void actions.d97BeginBattle(anchorId).catch(reportFailure);
+    void actions.d97({ type: "D97_BEGIN_BATTLE", payload: { anchorId } }).catch(reportFailure);
   }, [actions, anchorId, openDeckEditor]);
 
   const notNow = useCallback(() => {
     if (anchorId === null) return;
     setAnchorId(null);
-    void actions.d97DeclineEncounter(anchorId).catch(reportFailure);
+    void actions.d97({ type: "D97_DECLINE_ENCOUNTER", payload: { anchorId } }).catch(reportFailure);
   }, [actions, anchorId]);
 
   return { preview, open: anchorId !== null, fight, notNow, challenge };

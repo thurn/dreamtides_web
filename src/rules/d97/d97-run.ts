@@ -1,12 +1,13 @@
-// The D97 run lifecycle cases. Each is a pure `(d97, payload, ctx)` function
-// returning the next slice with its log records, or null to bounce.
+// The D97 run lifecycle case, declared in ./events/run.ts. It is a pure
+// `(input, payload, ctx)` function returning the next slice with its log
+// records, or null to bounce.
 
 import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
 import {
-  avatarIdFromUnknown,
-  d97DreamIdFromUnknown,
   parseD97RunId,
   parseD97RunSeed,
+  type AvatarId,
+  type D97DreamId,
 } from "../../types/identifiers";
 import { D97_STARTING_PACKAGE } from "../../content/d97/collection";
 import { acquireCopy, emptyCollection } from "../../d97/collection/collection";
@@ -25,6 +26,7 @@ import { emptyQuestState } from "../../d97/quests/quests";
 import type { D97RunId } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import type { D97Run, D97State } from "./d97-state";
+import type { D97SelectInput } from "./events/spec";
 
 /** A D97 case's applied result. */
 export interface D97Transition {
@@ -71,17 +73,16 @@ export function bagDrawLogRecord(
  * waypoint is active from the start.
  */
 export function startRun(
-  d97: D97State,
-  payload: Record<string, unknown>,
+  _input: D97SelectInput,
+  payload: { readonly avatarId: AvatarId; readonly dreamId?: D97DreamId },
   ctx: EventContext,
 ): D97Transition | null {
-  if (d97.run !== null || d97.screen.type !== "avatarSelect") return null;
-  const avatarId = avatarIdFromUnknown(payload.avatarId);
+  const { avatarId } = payload;
   const content = d97ContentProvider();
-  if (avatarId === null || content === null || !content.avatarIds.has(avatarId)) {
+  if (content === null || !content.avatarIds.has(avatarId)) {
     return null;
   }
-  const requested = payload.dreamId === undefined ? content.defaultDreamId : d97DreamIdFromUnknown(payload.dreamId);
+  const requested = payload.dreamId ?? content.defaultDreamId;
   const dream = requested === null ? undefined : content.dreams.get(requested)?.definition;
   if (dream === undefined) return null;
   let drawIndex = 0;

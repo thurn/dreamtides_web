@@ -30,17 +30,8 @@ import type {
 import { SELECTION_RULES_VERSION } from "../reward-selection";
 import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
-import type {
-  AvatarId,
-  D97DreamId,
-  D97FlagId,
-  D97ItemId,
-  D97OwnedCopyId,
-  D97QuestId,
-  D97QuestStepId,
-  DreamAnchorId,
-} from "../types/identifiers";
-import type { D97ServiceKind } from "../content/d97/dialogue/schema";
+import type { AvatarId } from "../types/identifiers";
+import { d97IntentKey, type D97Intent } from "../rules/d97/events";
 import type { SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { CardId, CardSubtype } from "../types/card-identity";
@@ -405,59 +396,11 @@ export interface GameActions {
 
   // --- Dreamtides 97 ---
   /**
-   * Start a D97 game's run with the chosen roster Avatar, in `dreamId`, or
-   * the first catalog dream when omitted.
+   * Record one D97 intent, under the intent key its spec names
+   * (src/rules/d97/events/): starting the run and an encounter's first
+   * preview are keyed, so a repeat applies at most once.
    */
-  d97StartRun: (avatarId: AvatarId, dreamId?: D97DreamId) => Promise<number>;
-  /**
-   * Move a D97 reserve copy into the active deck. Unkeyed: equipping and
-   * unequipping the same copy may repeat any number of times.
-   */
-  d97EquipCopy: (copyId: D97OwnedCopyId) => Promise<number>;
-  /** Move a D97 deck copy into the reserve. Unkeyed, like `d97EquipCopy`. */
-  d97UnequipCopy: (copyId: D97OwnedCopyId) => Promise<number>;
-  /** First preview of a challenger or guardian: fixes its deck, antes and extra. */
-  d97PreviewEncounter: (anchorId: DreamAnchorId) => Promise<number>;
-  /** Not now: leave a previewed encounter for later. */
-  d97DeclineEncounter: (anchorId: DreamAnchorId) => Promise<number>;
-  /** Fight a previewed encounter. */
-  d97BeginBattle: (anchorId: DreamAnchorId) => Promise<number>;
-  /** Settle the finished D97 battle and return to the overworld. */
-  d97EndBattle: () => Promise<number>;
-  // Quests and dialogue effects. Unkeyed: each case refuses a repeat that no
-  // longer applies (a held quest, a done step, a held item).
-  /** Accept the quest the character at `anchorId` offers. */
-  d97AcceptQuest: (questId: D97QuestId, anchorId: DreamAnchorId) => Promise<number>;
-  /** Do the held quest's visit or deliver step at `anchorId`. */
-  d97AdvanceQuest: (questId: D97QuestId, stepId: D97QuestStepId, anchorId: DreamAnchorId) => Promise<number>;
-  /** Turn the held, ready quest in at `anchorId`. */
-  d97CompleteQuest: (questId: D97QuestId, anchorId: DreamAnchorId) => Promise<number>;
-  /** Take one card of a quest's card-choice reward. */
-  d97ChooseQuestReward: (questId: D97QuestId, cardId: CardId) => Promise<number>;
-  /** Abandon the held quest, for free. */
-  d97AbandonQuest: (questId: D97QuestId) => Promise<number>;
-  /** Pick up the held quest's lost object at `anchorId`. */
-  d97PickUpObject: (anchorId: DreamAnchorId) => Promise<number>;
-  /** The character at `anchorId` hands the player an item. */
-  d97GiveItem: (itemId: D97ItemId, anchorId: DreamAnchorId) => Promise<number>;
-  /** The character at `anchorId` takes a carried item. */
-  d97TakeItem: (itemId: D97ItemId, anchorId: DreamAnchorId) => Promise<number>;
-  /** Set or clear a story flag in conversation at `anchorId`. */
-  d97SetFlag: (flagId: D97FlagId, value: boolean, anchorId: DreamAnchorId) => Promise<number>;
-  /** Hand a conversation off to the shop at `anchorId`. */
-  d97OpenShop: (anchorId: DreamAnchorId) => Promise<number>;
-  /** Hand a conversation off to a friendly character's service. */
-  d97OpenService: (anchorId: DreamAnchorId, service: D97ServiceKind) => Promise<number>;
-  /** Touch the dream's waypoint: activates it and makes it the reload place. */
-  d97ActivateWaypoint: (anchorId: DreamAnchorId) => Promise<number>;
-  /** Step through a door; the beaten guardian's exit door ends the slice. */
-  d97StepThroughDoor: (anchorId: DreamAnchorId) => Promise<number>;
-  /** Buy the shop slot at `slotIndex`. Unkeyed: a bought slot refuses a repeat. */
-  d97BuyShopCard: (anchorId: DreamAnchorId, slotIndex: number) => Promise<number>;
-  /** Sell an owned copy to the shop at `anchorId`. */
-  d97SellCopy: (anchorId: DreamAnchorId, copyId: D97OwnedCopyId) => Promise<number>;
-  /** Pay for this visit's one restock of the shop at `anchorId`. */
-  d97RestockShop: (anchorId: DreamAnchorId) => Promise<number>;
+  d97: (intent: D97Intent) => Promise<number>;
 }
 
 /**
@@ -896,33 +839,9 @@ export function makeActions(append: AppendFn): GameActions {
     battleDebug: (op) => emit("BATTLE_DEBUG", { op }),
 
     // --- Dreamtides 97 ---
-    // A game starts one run: repeated picks share the run's intent key.
-    d97StartRun: (avatarId, dreamId) =>
-      emit("D97_START_RUN", dreamId === undefined ? { avatarId } : { avatarId, dreamId }, parseIntentKey("d97-start-run")),
-    d97EquipCopy: (copyId) => emit("D97_EQUIP_COPY", { copyId }),
-    d97UnequipCopy: (copyId) => emit("D97_UNEQUIP_COPY", { copyId }),
-    // An encounter is fixed once: repeated first previews share its key.
-    d97PreviewEncounter: (anchorId) =>
-      emit("D97_PREVIEW_ENCOUNTER", { anchorId }, parseIntentKey(`d97-preview:${anchorId}`)),
-    d97DeclineEncounter: (anchorId) => emit("D97_DECLINE_ENCOUNTER", { anchorId }),
-    d97BeginBattle: (anchorId) => emit("D97_BEGIN_BATTLE", { anchorId }),
-    d97EndBattle: () => emit("D97_END_BATTLE", {}),
-    d97AcceptQuest: (questId, anchorId) => emit("D97_ACCEPT_QUEST", { questId, anchorId }),
-    d97AdvanceQuest: (questId, stepId, anchorId) =>
-      emit("D97_ADVANCE_QUEST", { questId, stepId, anchorId }),
-    d97CompleteQuest: (questId, anchorId) => emit("D97_COMPLETE_QUEST", { questId, anchorId }),
-    d97ChooseQuestReward: (questId, cardId) => emit("D97_CHOOSE_QUEST_REWARD", { questId, cardId }),
-    d97AbandonQuest: (questId) => emit("D97_ABANDON_QUEST", { questId }),
-    d97PickUpObject: (anchorId) => emit("D97_PICK_UP_OBJECT", { anchorId }),
-    d97GiveItem: (itemId, anchorId) => emit("D97_GIVE_ITEM", { itemId, anchorId }),
-    d97TakeItem: (itemId, anchorId) => emit("D97_TAKE_ITEM", { itemId, anchorId }),
-    d97SetFlag: (flagId, value, anchorId) => emit("D97_SET_FLAG", { flagId, value, anchorId }),
-    d97OpenShop: (anchorId) => emit("D97_OPEN_SHOP", { anchorId }),
-    d97OpenService: (anchorId, service) => emit("D97_OPEN_SERVICE", { anchorId, service }),
-    d97ActivateWaypoint: (anchorId) => emit("D97_ACTIVATE_WAYPOINT", { anchorId }),
-    d97StepThroughDoor: (anchorId) => emit("D97_STEP_THROUGH_DOOR", { anchorId }),
-    d97BuyShopCard: (anchorId, slotIndex) => emit("D97_BUY_SHOP_CARD", { anchorId, slotIndex }),
-    d97SellCopy: (anchorId, copyId) => emit("D97_SELL_COPY", { anchorId, copyId }),
-    d97RestockShop: (anchorId) => emit("D97_RESTOCK_SHOP", { anchorId }),
+    d97: (intent) => {
+      const intentKey = d97IntentKey(intent);
+      return append({ type: intent.type, payload: intent.payload, ...(intentKey === undefined ? {} : { intentKey }) });
+    },
   };
 }

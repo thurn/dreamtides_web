@@ -1,5 +1,5 @@
-// The D97 quest and dialogue-effect cases (README § S33, decision P17). Each
-// is a pure `(d97, payload, ctx)` function returning the next slice with its
+// The D97 quest and dialogue-effect cases (README § S33, decision P17),
+// declared in ./events/quests.ts. Each is a pure `(input, payload, ctx)` function returning the next slice with its
 // log records, or null to bounce. Quest definitions come from the registered
 // content provider; log records carry UUIDs only. A defeat step reads the
 // encounters' beaten state; `advanceDefeatQuest` is the hook D97_END_BATTLE
@@ -28,19 +28,19 @@ import {
   recordDefeat,
 } from "../../d97/quests/quests";
 import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
-import { cardIdFromUnknown } from "../../types/card-identity";
-import {
-  d97FlagIdFromUnknown,
-  d97ItemIdFromUnknown,
-  d97QuestIdFromUnknown,
-  d97QuestStepIdFromUnknown,
-  dreamAnchorIdFromUnknown,
-  type DreamAnchorId,
+import type { CardId } from "../../types/card-identity";
+import type {
+  D97FlagId,
+  D97ItemId,
+  D97QuestId,
+  D97QuestStepId,
+  DreamAnchorId,
 } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97BeatenAnchorIds, d97RunAct, type D97Run, type D97State } from "./d97-state";
+import type { D97RunInput } from "./events/spec";
 
 /**
  * Whether the resident at `anchorId` in the run's own dream speaks a
@@ -56,23 +56,18 @@ function withRun(d97: D97State, run: D97Run, logRecords: readonly ReducerLogReco
   return { d97: { ...d97, run }, logRecords };
 }
 
-/** The started run and the payload's registered quest, or null. */
-function runAndQuest(
-  d97: D97State,
-  payload: Record<string, unknown>,
-): { readonly run: D97Run; readonly quest: D97QuestDefinition } | null {
-  const run = d97.run;
-  const questId = d97QuestIdFromUnknown(payload.questId);
-  const quest = questId === null ? undefined : d97ContentProvider()?.quests.get(questId);
-  return run === null || quest === undefined ? null : { run, quest };
+/** The registered quest `questId` names, or null. */
+function registeredQuest(questId: D97QuestId): D97QuestDefinition | null {
+  return d97ContentProvider()?.quests.get(questId) ?? null;
 }
 
 /** `D97_ACCEPT_QUEST { questId, anchorId }`: take a quest from its giver. */
-export function acceptQuest(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const found = runAndQuest(d97, payload);
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (found === null || anchorId === null) return null;
-  const { run, quest } = found;
+export function acceptQuest(
+  { d97, run }: D97RunInput,
+  { questId, anchorId }: { readonly questId: D97QuestId; readonly anchorId: DreamAnchorId },
+): D97Transition | null {
+  const quest = registeredQuest(questId);
+  if (quest === null) return null;
   const accepted = acceptInState(run.quests, quest, anchorId, d97BeatenAnchorIds(run));
   if (accepted === null) return null;
   return withRun(d97, { ...run, quests: accepted.state }, [
@@ -105,12 +100,12 @@ function stepRecord(run: D97Run, quest: D97QuestDefinition, step: D97QuestDefini
 }
 
 /** `D97_ADVANCE_QUEST { questId, stepId, anchorId }`: a visit or a delivery. */
-export function advanceQuest(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const found = runAndQuest(d97, payload);
-  const stepId = d97QuestStepIdFromUnknown(payload.stepId);
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (found === null || stepId === null || anchorId === null) return null;
-  const { run, quest } = found;
+export function advanceQuest(
+  { d97, run }: D97RunInput,
+  { questId, stepId, anchorId }: { readonly questId: D97QuestId; readonly stepId: D97QuestStepId; readonly anchorId: DreamAnchorId },
+): D97Transition | null {
+  const quest = registeredQuest(questId);
+  if (quest === null) return null;
   if (!speakerOffers(run, anchorId, { kind: "advanceQuest", questId: quest.id, stepId })) return null;
   const quests = advanceInState(run.quests, quest, stepId, anchorId);
   const step = quest.steps.find((candidate) => candidate.id === stepId);
@@ -119,11 +114,9 @@ export function advanceQuest(d97: D97State, payload: Record<string, unknown>): D
 }
 
 /** `D97_PICK_UP_OBJECT { anchorId }`: pick up the held quest's lost object. */
-export function pickUpObject(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const run = d97.run;
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
+export function pickUpObject({ d97, run }: D97RunInput, { anchorId }: { readonly anchorId: DreamAnchorId }): D97Transition | null {
   const content = d97ContentProvider();
-  if (run === null || anchorId === null || content === null) return null;
+  if (content === null) return null;
   const picked = pickUpInState(run.quests, content.quests, anchorId);
   const quest = run.quests.active === null ? undefined : content.quests.get(run.quests.active.questId);
   if (picked === null || quest === undefined) return null;
@@ -136,14 +129,12 @@ export function pickUpObject(d97: D97State, payload: Record<string, unknown>): D
  * the reward bag without removing any copy and waits for the pick.
  */
 export function completeQuest(
-  d97: D97State,
-  payload: Record<string, unknown>,
+  { d97, run }: D97RunInput,
+  { questId, anchorId }: { readonly questId: D97QuestId; readonly anchorId: DreamAnchorId },
   ctx: EventContext,
 ): D97Transition | null {
-  const found = runAndQuest(d97, payload);
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (found === null || anchorId === null) return null;
-  const { run, quest } = found;
+  const quest = registeredQuest(questId);
+  if (quest === null) return null;
   if (quest.reward.kind === "cardChoice" && run.quests.pendingReward !== null) return null;
   const quests = completeInState(run.quests, quest, anchorId);
   if (quests === null) return null;
@@ -175,12 +166,12 @@ export function completeQuest(
  * enters the reserve and removes one copy from the bag, if the bag still
  * holds one.
  */
-export function chooseQuestReward(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const run = d97.run;
-  const questId = d97QuestIdFromUnknown(payload.questId);
-  const cardId = cardIdFromUnknown(payload.cardId);
-  const pending = run?.quests.pendingReward ?? null;
-  if (run === null || pending === null || cardId === null || pending.questId !== questId) return null;
+export function chooseQuestReward(
+  { d97, run }: D97RunInput,
+  { questId, cardId }: { readonly questId: D97QuestId; readonly cardId: CardId },
+): D97Transition | null {
+  const pending = run.quests.pendingReward;
+  if (pending === null || pending.questId !== questId) return null;
   if (!pending.cardIds.includes(cardId)) return null;
   const draw = takeFromBag(run.bag, cardId);
   const bag = draw === null ? recordAcquisition(run.bag, cardId) : draw.bag;
@@ -211,10 +202,9 @@ export function chooseQuestReward(d97: D97State, payload: Record<string, unknown
 }
 
 /** `D97_ABANDON_QUEST { questId }`: drop the held quest for free. */
-export function abandonQuest(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const found = runAndQuest(d97, payload);
-  if (found === null) return null;
-  const { run, quest } = found;
+export function abandonQuest({ d97, run }: D97RunInput, { questId }: { readonly questId: D97QuestId }): D97Transition | null {
+  const quest = registeredQuest(questId);
+  if (quest === null) return null;
   const quests = abandonInState(run.quests, quest);
   if (quests === null) return null;
   return withRun(d97, { ...run, quests }, [
@@ -230,15 +220,10 @@ export function abandonQuest(d97: D97State, payload: Record<string, unknown>): D
   ]);
 }
 
-function itemCase(
-  d97: D97State,
-  payload: Record<string, unknown>,
-  give: boolean,
-): D97Transition | null {
-  const run = d97.run;
-  const itemId = d97ItemIdFromUnknown(payload.itemId);
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || itemId === null || anchorId === null) return null;
+/** An item case's payload: the item and the anchor of the character exchanging it. */
+type ItemPayload = { readonly itemId: D97ItemId; readonly anchorId: DreamAnchorId };
+
+function itemCase({ d97, run }: D97RunInput, { itemId, anchorId }: ItemPayload, give: boolean): D97Transition | null {
   if (d97ContentProvider()?.itemIds.has(itemId) !== true) return null;
   if (!speakerOffers(run, anchorId, { kind: give ? "giveItem" : "takeItem", itemId })) return null;
   const held = run.quests.items.includes(itemId);
@@ -250,22 +235,20 @@ function itemCase(
 }
 
 /** `D97_GIVE_ITEM { itemId, anchorId }`: a character hands the player an item. */
-export function giveItem(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  return itemCase(d97, payload, true);
+export function giveItem(input: D97RunInput, payload: ItemPayload): D97Transition | null {
+  return itemCase(input, payload, true);
 }
 
 /** `D97_TAKE_ITEM { itemId, anchorId }`: a character takes a carried item. */
-export function takeItem(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  return itemCase(d97, payload, false);
+export function takeItem(input: D97RunInput, payload: ItemPayload): D97Transition | null {
+  return itemCase(input, payload, false);
 }
 
 /** `D97_SET_FLAG { flagId, value, anchorId }`: set or clear a story flag. */
-export function setFlag(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const run = d97.run;
-  const flagId = d97FlagIdFromUnknown(payload.flagId);
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || flagId === null || anchorId === null || typeof payload.value !== "boolean") return null;
-  const value = payload.value;
+export function setFlag(
+  { d97, run }: D97RunInput,
+  { flagId, value, anchorId }: { readonly flagId: D97FlagId; readonly value: boolean; readonly anchorId: DreamAnchorId },
+): D97Transition | null {
   if (!speakerOffers(run, anchorId, { kind: "setFlag", flagId, value })) return null;
   if (run.flags.includes(flagId) === value) return null;
   const flags = value ? [...run.flags, flagId] : run.flags.filter((flag) => flag !== flagId);
@@ -274,22 +257,15 @@ export function setFlag(d97: D97State, payload: Record<string, unknown>): D97Tra
   ]);
 }
 
-const SERVICES: readonly D97ServiceKind[] = ["dreamGuide", "sage", "amuletMerchant", "amuletChanger"];
-
-function serviceFromUnknown(value: unknown): D97ServiceKind | null {
-  return SERVICES.find((service) => service === value) ?? null;
-}
-
 /**
  * `D97_OPEN_SERVICE`: a conversation hands the player to the speaker's
  * service. The hand-off is logged; the surface it opens owns its own state.
  * (`D97_OPEN_SHOP` is the shop's own case, in ./d97-shop.ts.)
  */
-export function handOff(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const run = d97.run;
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  const service = serviceFromUnknown(payload.service);
-  if (run === null || anchorId === null || service === null) return null;
+export function handOff(
+  { d97, run }: D97RunInput,
+  { anchorId, service }: { readonly anchorId: DreamAnchorId; readonly service: D97ServiceKind },
+): D97Transition | null {
   if (!speakerOffers(run, anchorId, { kind: "openService", service })) return null;
   return withRun(d97, run, [
     { event: "d97_dialogue_hand_off", fields: { runId: run.runId, anchorId, surface: "service", service } },

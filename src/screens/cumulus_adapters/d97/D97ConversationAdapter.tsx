@@ -9,38 +9,13 @@ import type { D97DialogueModule } from "../../../content/d97/dialogue/schema";
 import { D97_QUESTS } from "../../../content/d97/quests";
 import { D97DialoguePanel } from "../../../cumulus/screens/d97/D97DialoguePanel";
 import type { D97DialogueContext } from "../../../d97/dialogue/conditions";
-import { effectIntent, type D97DialogueIntent } from "../../../d97/dialogue/effects";
+import { effectIntent } from "../../../d97/dialogue/effects";
 import { dialogueNode, openingNode, visibleChoices } from "../../../d97/dialogue/runtime";
 import { logEvent } from "../../../logging";
-import type { GameActions } from "../../../session/actions";
 import { useActions } from "../../../session/hooks";
 import type { AvatarContent } from "../../../types/content";
 import type { D97CharacterId, D97DialogueNodeId, DreamAnchorId } from "../../../types/identifiers";
 import { buildD97DialogueView } from "./d97-quest-view-model";
-
-/** Record `intent` through its action creator. */
-function recordIntent(actions: GameActions, intent: D97DialogueIntent): Promise<number> {
-  switch (intent.type) {
-    case "D97_ACCEPT_QUEST":
-      return actions.d97AcceptQuest(intent.payload.questId, intent.payload.anchorId);
-    case "D97_ADVANCE_QUEST":
-      return actions.d97AdvanceQuest(intent.payload.questId, intent.payload.stepId, intent.payload.anchorId);
-    case "D97_COMPLETE_QUEST":
-      return actions.d97CompleteQuest(intent.payload.questId, intent.payload.anchorId);
-    case "D97_GIVE_ITEM":
-      return actions.d97GiveItem(intent.payload.itemId, intent.payload.anchorId);
-    case "D97_TAKE_ITEM":
-      return actions.d97TakeItem(intent.payload.itemId, intent.payload.anchorId);
-    case "D97_OPEN_SHOP":
-      return actions.d97OpenShop(intent.payload.anchorId);
-    case "D97_OPEN_SERVICE":
-      return actions.d97OpenService(intent.payload.anchorId, intent.payload.service);
-    case "D97_SET_FLAG":
-      return actions.d97SetFlag(intent.payload.flagId, intent.payload.value, intent.payload.anchorId);
-    case "D97_PREVIEW_ENCOUNTER":
-      return actions.d97PreviewEncounter(intent.payload.anchorId);
-  }
-}
 
 function reportFailure(error: unknown): void {
   console.error("D97 dialogue intent failed", error);
@@ -121,7 +96,7 @@ export function D97ConversationAdapter({
         onOpenShop(anchorId);
         return;
       }
-      if (choice.effect !== undefined) void recordIntent(actions, effectIntent(choice.effect, anchorId)).catch(reportFailure);
+      if (choice.effect !== undefined) void actions.d97(effectIntent(choice.effect, anchorId)).catch(reportFailure);
       if (choice.next === null) onClose();
       else setPosition({ nodeId: choice.next, line: 0 });
     },

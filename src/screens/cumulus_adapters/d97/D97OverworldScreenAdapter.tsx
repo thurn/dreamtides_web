@@ -175,7 +175,7 @@ function D97DreamOverworld({
   const closePanel = useCallback(() => setPanel(null), []);
   const openShop = useCallback(
     (anchorId: DreamAnchorId) => {
-      void actions.d97OpenShop(anchorId).catch(reportFailure);
+      void actions.d97({ type: "D97_OPEN_SHOP", payload: { anchorId } }).catch(reportFailure);
       setPanel({ shop: anchorId });
     },
     [actions],
@@ -187,7 +187,7 @@ function D97DreamOverworld({
       if (occupants.get(anchor.id)?.dialogue != null) converse(anchor.id);
     };
     const pickUp: OverworldInteraction = (anchor) => {
-      void actions.d97PickUpObject(anchor.id).catch(reportFailure);
+      void actions.d97({ type: "D97_PICK_UP_OBJECT", payload: { anchorId: anchor.id } }).catch(reportFailure);
     };
     // A shopkeeper with a dialogue talks first (its Shop choice opens the
     // shop); one without opens the shop at once.
@@ -205,13 +205,13 @@ function D97DreamOverworld({
   }, [actions, converse, occupants, openShop, registry]);
   const equip = useCallback(
     (copyId: D97OwnedCopyId) => {
-      void actions.d97EquipCopy(copyId).catch(reportFailure);
+      void actions.d97({ type: "D97_EQUIP_COPY", payload: { copyId } }).catch(reportFailure);
     },
     [actions],
   );
   const unequip = useCallback(
     (copyId: D97OwnedCopyId) => {
-      void actions.d97UnequipCopy(copyId).catch(reportFailure);
+      void actions.d97({ type: "D97_UNEQUIP_COPY", payload: { copyId } }).catch(reportFailure);
     },
     [actions],
   );

@@ -48,7 +48,7 @@ export function D97AvatarSelectScreenAdapter({
   const handlePick = useCallback(
     (avatarId: AvatarId) => {
       if (!offered.some((avatar) => avatar.id === avatarId)) return;
-      void actions.d97StartRun(avatarId).catch((error: unknown) => {
+      void actions.d97({ type: "D97_START_RUN", payload: { avatarId } }).catch((error: unknown) => {
         console.error("D97 run start failed", error);
       });
     },

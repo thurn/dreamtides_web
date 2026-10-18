@@ -69,7 +69,8 @@ export function D97ScreenRouter({
     }
     qaRunStartedRef.current = true;
     logEvent("d97_qa_scene_run_started", { gotoScene, avatarId: firstAvatarId, dreamId: qaRunDreamId ?? null });
-    void actions.d97StartRun(firstAvatarId, qaRunDreamId).catch((error: unknown) => {
+    const payload = qaRunDreamId === undefined ? { avatarId: firstAvatarId } : { avatarId: firstAvatarId, dreamId: qaRunDreamId };
+    void actions.d97({ type: "D97_START_RUN", payload }).catch((error: unknown) => {
       console.error("D97 QA run start failed", error);
     });
   }, [actions, head, d97?.run, firstAvatarId, gotoScene, qaRunDreamId, startsQaRun]);

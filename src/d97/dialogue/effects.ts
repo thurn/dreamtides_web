@@ -10,7 +10,7 @@ import type {
   D97DialogueModule,
   D97SpeakerKind,
 } from "../../content/d97/dialogue/schema";
-import type { EventPayloads } from "../../rules/events";
+import type { D97Intent } from "../../rules/d97/events";
 import type { DreamAnchorId } from "../../types/identifiers";
 
 /** The event types dialogue effects record. */
@@ -26,9 +26,7 @@ export type D97DialogueEventType =
   | "D97_PREVIEW_ENCOUNTER";
 
 /** One intent event, typed by its event type. */
-export type D97DialogueIntent = {
-  readonly [Type in D97DialogueEventType]: { readonly type: Type; readonly payload: EventPayloads[Type] };
-}[D97DialogueEventType];
+export type D97DialogueIntent = Extract<D97Intent, { readonly type: D97DialogueEventType }>;
 
 /** The intent `effect` records when chosen while speaking at `anchorId`. */
 export function effectIntent(effect: D97DialogueEffect, anchorId: DreamAnchorId): D97DialogueIntent {

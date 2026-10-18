@@ -40,7 +40,7 @@ export function useD97Travel(args: {
   useEffect(() => {
     const touchWaypoint = (anchor: CompiledAnchor) => {
       if (anchor.id !== dream.waypointAnchorId) return;
-      void actions.d97ActivateWaypoint(anchor.id).catch(reportFailure);
+      void actions.d97({ type: "D97_ACTIVATE_WAYPOINT", payload: { anchorId: anchor.id } }).catch(reportFailure);
     };
     const touchDoor = (anchor: CompiledAnchor) => {
       const current = runRef.current;
@@ -50,7 +50,7 @@ export function useD97Travel(args: {
         logEvent("d97_door_unopened", { runId: current.runId, anchorId: anchor.id, reason: exit ? "guardianStanding" : "noDestination" });
         return;
       }
-      void actions.d97StepThroughDoor(anchor.id).catch(reportFailure);
+      void actions.d97({ type: "D97_STEP_THROUGH_DOOR", payload: { anchorId: anchor.id } }).catch(reportFailure);
     };
     const removals = [registry.register("waypoint", touchWaypoint), registry.register("door", touchDoor)];
     return () => removals.forEach((remove) => remove());

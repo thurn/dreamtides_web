@@ -719,7 +719,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
   );
 
   // A journey battle hands off to the journey; a D97 battle settles its encounter.
-  const endBattle = battle.mode.kind === "d97" ? actions.d97EndBattle : actions.endBattle;
+  const endBattle = battle.mode.kind === "d97" ? () => actions.d97({ type: "D97_END_BATTLE", payload: {} }) : actions.endBattle;
 
   function handleResultAction(action: MobileBattleResultAction): void {
     if (result === null) return;

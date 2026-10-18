@@ -72,14 +72,14 @@ export function D97QuestSurfacesAdapter({
   );
   const rewardView = useMemo(() => buildD97QuestRewardView(run.quests, catalog, cards), [cards, catalog, run.quests]);
   const abandon = useCallback(
-    (questId: D97QuestId) => void actions.d97AbandonQuest(questId).catch(reportFailure),
+    (questId: D97QuestId) => void actions.d97({ type: "D97_ABANDON_QUEST", payload: { questId } }).catch(reportFailure),
     [actions],
   );
   const choose = useCallback(
     (slot: D97QuestRewardSlot) => {
       const cardId = rewardSlotCard(run.quests, slot);
       const pending = run.quests.pendingReward;
-      if (cardId !== null && pending !== null) void actions.d97ChooseQuestReward(pending.questId, cardId).catch(reportFailure);
+      if (cardId !== null && pending !== null) void actions.d97({ type: "D97_CHOOSE_QUEST_REWARD", payload: { questId: pending.questId, cardId } }).catch(reportFailure);
     },
     [actions, run.quests],
   );

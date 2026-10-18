@@ -151,7 +151,7 @@ describe("D97 game switching", () => {
     expect(d97.game.log.state().d97?.screen.type).toBe("avatarSelect");
 
     await makeActions((draft) => Promise.resolve(d97.game.log.append(draft)))
-      .d97StartRun(AVATAR);
+      .d97({ type: "D97_START_RUN", payload: { avatarId: AVATAR } });
     const run = d97.game.log.state().d97?.run;
     expect(run?.avatarId).toBe(AVATAR);
     await tab.close();

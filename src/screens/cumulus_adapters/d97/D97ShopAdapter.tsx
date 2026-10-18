@@ -59,9 +59,9 @@ export function D97ShopAdapter({
     [cards, keeper, run],
   );
 
-  const buy = useCallback((slotIndex: number) => void actions.d97BuyShopCard(anchorId, slotIndex).catch(reportFailure), [actions, anchorId]);
-  const restock = useCallback(() => void actions.d97RestockShop(anchorId).catch(reportFailure), [actions, anchorId]);
-  const sell = useCallback((copyId: D97OwnedCopyId) => void actions.d97SellCopy(anchorId, copyId).catch(reportFailure), [actions, anchorId]);
+  const buy = useCallback((slotIndex: number) => void actions.d97({ type: "D97_BUY_SHOP_CARD", payload: { anchorId, slotIndex } }).catch(reportFailure), [actions, anchorId]);
+  const restock = useCallback(() => void actions.d97({ type: "D97_RESTOCK_SHOP", payload: { anchorId } }).catch(reportFailure), [actions, anchorId]);
+  const sell = useCallback((copyId: D97OwnedCopyId) => void actions.d97({ type: "D97_SELL_COPY", payload: { anchorId, copyId } }).catch(reportFailure), [actions, anchorId]);
   const openSell = useCallback(() => {
     logEvent("d97_shop_sell_opened", { runId: run.runId, anchorId });
     setSelling(true);

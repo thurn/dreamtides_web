@@ -26,9 +26,9 @@ import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
 import {
-  dreamAnchorIdFromUnknown,
   parseBattleId,
   type D97OwnedCopyId,
+  type DreamAnchorId,
 } from "../../types/identifiers";
 import { engineBattleResult, startEngineBattleWithCommits } from "../battle/engine-battle";
 import { d97BattleOf } from "../battle/fold";
@@ -38,7 +38,11 @@ import { advanceDefeatQuest } from "./d97-quests";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
-import { d97RunAct, type D97Encounter, type D97Run, type D97State } from "./d97-state";
+import { d97RunAct, type D97Encounter, type D97Run } from "./d97-state";
+import type { D97RunInput } from "./events/spec";
+
+/** An encounter case's payload: the challenger's or guardian's anchor. */
+type EncounterPayload = { readonly anchorId: DreamAnchorId };
 
 /** A D97 case over the whole fold (it starts or ends a battle). */
 export interface D97FoldTransition {
@@ -98,15 +102,12 @@ function anteAllowance(collection: D97Collection): number {
  * preview reads the stored encounter and needs no event.
  */
 export function previewEncounter(
-  state: FoldState,
-  payload: Record<string, unknown>,
+  { d97, run }: D97RunInput,
+  { anchorId }: EncounterPayload,
   ctx: EventContext,
 ): D97Transition | null {
-  const d97 = state.d97;
-  const run = d97?.run ?? null;
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
   const content = d97ContentProvider();
-  if (d97 === undefined || run === null || anchorId === null || content === null || state.battle !== null) return null;
+  if (content === null) return null;
   if (run.encounters[anchorId] !== undefined) return null;
   // Only a challenger or guardian of the run's own dream.
   const challenger = runDreamAnchor(run, content, anchorId)?.challengers.get(anchorId);
@@ -186,10 +187,7 @@ export function previewEncounter(
 }
 
 /** `D97_DECLINE_ENCOUNTER { anchorId }`: Not now. Free; recorded for the log. */
-export function declineEncounter(d97: D97State, payload: Record<string, unknown>): D97Transition | null {
-  const run = d97.run;
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
-  if (run === null || anchorId === null) return null;
+export function declineEncounter({ d97, run }: D97RunInput, { anchorId }: EncounterPayload): D97Transition | null {
   const encounter = run.encounters[anchorId];
   if (encounter === undefined) return null;
   return {
@@ -233,15 +231,12 @@ export function resolvePlayerAnte(
  * player's ante and starts the engine battle the content builds.
  */
 export function beginEncounterBattle(
-  state: FoldState,
-  payload: Record<string, unknown>,
+  { state, run }: D97RunInput,
+  { anchorId }: EncounterPayload,
   ctx: EventContext,
 ): D97FoldTransition | null {
-  const d97 = state.d97;
-  const run = d97?.run ?? null;
-  const anchorId = dreamAnchorIdFromUnknown(payload.anchorId);
   const content = d97ContentProvider();
-  if (d97 === undefined || run === null || anchorId === null || content === null || state.battle !== null) return null;
+  if (content === null) return null;
   const encounter = run.encounters[anchorId];
   if (encounter === undefined || encounter.beaten) return null;
   if (deckSize(run.collection) < D97_COLLECTION.minimumDeckSize) return null;
