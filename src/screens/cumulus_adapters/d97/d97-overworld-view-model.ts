@@ -54,11 +54,36 @@ export function buildD97DoorVeils(dream: D97DreamTopology): ReadonlyMap<DreamAnc
 /** The panel open over the overworld: an interaction's, or a HUD control's. */
 export type D97OverworldPanel = InteractionPanel | { readonly kind: "menu" } | { readonly kind: "quests" };
 
-export type D97OverworldPanelAction = { readonly type: "open"; readonly panel: D97OverworldPanel } | { readonly type: "close" };
+export type D97OverworldPanelAction =
+  | { readonly type: "open"; readonly panel: D97OverworldPanel }
+  | { readonly type: "close" }
+  /** The fold bounced `event`; the panel it opened, if open, closes. */
+  | { readonly type: "openingBounced"; readonly event: { readonly type: string; readonly payload: unknown } };
 
 /** Opening a panel replaces the open one; closing returns to the world. */
-export function overworldPanelReducer(_panel: D97OverworldPanel | null, action: D97OverworldPanelAction): D97OverworldPanel | null {
-  return action.type === "open" ? action.panel : null;
+export function overworldPanelReducer(panel: D97OverworldPanel | null, action: D97OverworldPanelAction): D97OverworldPanel | null {
+  if (action.type === "open") return action.panel;
+  if (action.type === "openingBounced") return panel !== null && opensPanel(action.event, panel) ? null : panel;
+  return null;
+}
+
+/** The intent that opens `panel` with it, by type: the preview's first record or the shop's opening. */
+const OPENING_INTENTS: Partial<Record<D97OverworldPanel["kind"], string>> = {
+  preview: "D97_PREVIEW_ENCOUNTER",
+  shop: "D97_OPEN_SHOP",
+};
+
+/**
+ * Whether `event` is the intent that opened `panel`. The overworld opens the
+ * encounter preview and the shop as it sends their intent; when the fold
+ * bounces it (on content the overworld cannot see, such as an opponent deck
+ * that cannot be built) the panel would stand empty and hold the canvas's
+ * input, so a bounced opening intent closes its panel.
+ */
+export function opensPanel(event: { readonly type: string; readonly payload: unknown }, panel: D97OverworldPanel): boolean {
+  if (OPENING_INTENTS[panel.kind] !== event.type || !("anchorId" in panel)) return false;
+  const payload = event.payload;
+  return typeof payload === "object" && payload !== null && "anchorId" in payload && payload.anchorId === panel.anchorId;
 }
 
 /** The anchors of the run's beaten opponents, joined as stable text (a memo dependency). */

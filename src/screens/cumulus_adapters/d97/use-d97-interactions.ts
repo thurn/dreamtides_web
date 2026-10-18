@@ -18,9 +18,9 @@ import {
   type InteractionResult,
 } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
-import { useActions } from "../../../session/hooks";
+import { useActions, useEventOutcomes } from "../../../session/hooks";
 import type { DreamAnchorId } from "../../../types/identifiers";
-import { overworldPanelReducer, type D97OverworldPanel } from "./d97-overworld-view-model";
+import { opensPanel, overworldPanelReducer, type D97OverworldPanel } from "./d97-overworld-view-model";
 
 function reportFailure(error: unknown): void {
   console.error("D97 overworld intent failed", error);
@@ -51,6 +51,17 @@ export function useD97Interactions(context: InteractionContext, initialPanel: D9
   contextRef.current = context;
   const runId = context.run.runId;
   const questId = context.run.quests.active?.questId ?? null;
+  const panelRef = useRef(panel);
+  panelRef.current = panel;
+  // A preview or shop opened with an intent the fold bounces closes again
+  // (./d97-overworld-view-model.ts `opensPanel`), logged.
+  useEventOutcomes((event, seq, outcome) => {
+    if (outcome !== "bounced") return;
+    const open = panelRef.current;
+    if (open === null || !opensPanel(event, open)) return;
+    logEvent("d97_panel_closed_on_bounce", { runId, seq, eventType: event.type, panel: open.kind, anchorId: "anchorId" in open ? open.anchorId : null });
+    dispatch({ type: "openingBounced", event });
+  });
 
   const apply = useCallback(
     (result: InteractionResult): boolean => {
