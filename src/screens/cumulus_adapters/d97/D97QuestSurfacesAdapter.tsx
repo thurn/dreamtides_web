@@ -86,9 +86,11 @@ export function D97QuestSurfacesAdapter({
 
   const dialogueId = conversationAnchorId === null ? null : (occupants.get(conversationAnchorId)?.dialogue ?? null);
   const module = dialogueId === null ? undefined : catalog.dialogues.get(dialogueId);
-  if (rewardView !== null) return <D97QuestRewardPanel view={rewardView} onChoose={choose} />;
+  // A pending card choice stands in front of the conversation that turned the
+  // quest in; the conversation stays mounted underneath and resumes after it.
   return (
     <>
+      {rewardView !== null && <D97QuestRewardPanel view={rewardView} onChoose={choose} />}
       {conversationAnchorId !== null && module !== undefined && (
         <D97ConversationAdapter
           key={conversationAnchorId}
@@ -100,9 +102,10 @@ export function D97QuestSurfacesAdapter({
           onChallenge={onChallenge}
           onOpenShop={onOpenShop}
           onClose={onClose}
+          suspended={rewardView !== null}
         />
       )}
-      {questLogOpen && <D97QuestLogPanel view={logView} onAbandon={abandon} onClose={onClose} />}
+      {rewardView === null && questLogOpen && <D97QuestLogPanel view={logView} onAbandon={abandon} onClose={onClose} />}
     </>
   );
 }

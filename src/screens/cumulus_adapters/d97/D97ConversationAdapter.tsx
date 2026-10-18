@@ -2,7 +2,10 @@
 // dialogue's first entry that holds, keeps the node and line showing as view
 // state, records a chosen choice's effect as its intent (a challenge opens the
 // encounter preview, which records its own preview intent), and logs openings,
-// quest offers shown and choices (UUIDs only). Wiring only.
+// quest offers shown and choices (UUIDs only). While another panel stands in
+// front of it (`suspended`: a card-choice reward the turn-in opened) it stays
+// mounted and draws nothing, so the conversation resumes at the turn-in
+// choice's next node. Wiring only.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { D97DialogueModule } from "../../../content/d97/dialogue/schema";
@@ -30,6 +33,7 @@ export function D97ConversationAdapter({
   onChallenge,
   onOpenShop,
   onClose,
+  suspended = false,
 }: {
   readonly module: D97DialogueModule;
   readonly anchorId: DreamAnchorId;
@@ -42,6 +46,8 @@ export function D97ConversationAdapter({
   /** Hands the conversation to the speaker's shop, which records its own open intent. */
   readonly onOpenShop: (anchorId: DreamAnchorId) => void;
   readonly onClose: () => void;
+  /** Another panel stands in front: keep the position, draw nothing. */
+  readonly suspended?: boolean;
 }) {
   const actions = useActions();
   const [position, setPosition] = useState<{ nodeId: D97DialogueNodeId | null; line: number }>(() => ({
@@ -59,6 +65,7 @@ export function D97ConversationAdapter({
   const loggedNodes = useRef(new Set<string>());
 
   useEffect(() => {
+    if (suspended) return;
     if (node === null) {
       onClose();
       return;
@@ -71,7 +78,7 @@ export function D97ConversationAdapter({
         logEvent("d97_quest_offer_shown", { dialogueId: module.id, anchorId, questId: choice.effect.questId });
       }
     }
-  }, [anchorId, context, module.id, node, onClose]);
+  }, [anchorId, context, module.id, node, onClose, suspended]);
 
   const onContinue = useCallback(() => setPosition((current) => ({ ...current, line: current.line + 1 })), []);
   const onChoose = useCallback(
@@ -103,6 +110,6 @@ export function D97ConversationAdapter({
     [actions, anchorId, module.id, node, onChallenge, onClose, onOpenShop],
   );
 
-  if (view === null) return null;
+  if (view === null || suspended) return null;
   return <D97DialoguePanel view={view} onContinue={onContinue} onChoose={onChoose} onClose={onClose} />;
 }
