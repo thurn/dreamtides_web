@@ -189,6 +189,12 @@ npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
   between two doors, a pond, up to three of the theme's stamps and a
   reseason. It compiles and validates as written; edit it from there.
 
+`npm run d97:pools` curates the pinned reward pools
+(`src/content/d97/pools/`, Appendix A §A2): it chooses each Avatar's tide set
+and pins one tides4 deal over it, deterministically, and prints the scores;
+`-- --write` rewrites the catalog modules. It is an offline tool; the
+committed modules are the content.
+
 Recipe operations (`src/d97/map/definition.ts`, one handler module each under
 `src/d97/map/ops/`) are `crop`, `erase`, `stamp`, `brush`, `paintTerrain`,
 `reseason`, `hideLayer`, `abovePlayer`, `block` and `open`:

@@ -37,12 +37,12 @@ D97 combines three references:
   time.
 
 **The reward bag.** Random rewards draw from the current Avatar's **reward
-bag**, without replacement. The bag starts with each card of the Avatar's
-signature tide at its authored pool count of one or two copies, and grows a
-layer at a time as the campaign advances: first broader cards, then third and
-fourth copies. Each layer sets a target copy count per card, and the bag
-supplies only the copies the player has not yet acquired, so random rewards
-never pass four copies of a card. Early rewards stay on the Avatar's plan and
+bag**, without replacement. The bag starts with one copy of each eligible
+card of the Avatar's signature tide, and grows a layer at a time as the
+campaign advances: first its facets' cards, then second, third and fourth
+copies. Each layer raises a per-card capacity, and the bag supplies only the
+copies not yet drawn from it, so it never supplies more than four copies of a
+card. Early rewards stay on the Avatar's plan and
 rarely repeat; late rewards broaden and build toward four-copy decks. Antes, guardian picks, amulet merchants, Tobias Tanglefur's
 curiosities and key prizes reach beyond the bag, and every card in the game
 can be obtained within a single run.
@@ -168,7 +168,7 @@ Refills make the battle count unbounded above. The endgame has no fixed length.
 | **Active deck** | The owned copies equipped for battle. |
 | **Reserve** | Owned copies not in the active deck. |
 | **Reward bag** | The current Avatar's supply for random rewards, drawn without replacement and refilled by layers up to a per-card copy target. |
-| **Tide set** | An Avatar's authored signature tide and three facets, which define its bag. Hidden from the player. |
+| **Tide set** | An Avatar's pinned signature tide and three facets, which define its bag. Hidden from the player. |
 | **Ante** | The card each side risks on a battle. |
 | **Victory bundle** | The cards a won battle pays. |
 | **Extra** | A challenger's advertised prize besides cards: an Essence purse, one amulet or one key. |

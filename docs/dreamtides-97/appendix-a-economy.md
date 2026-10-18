@@ -33,16 +33,28 @@ where D97 departs from it.
 
 ## A2. The reward bag
 
-**Tide sets.** Each Avatar has an authored **tide set**, stored in a D97
-catalog module keyed by Avatar UUID:
+**Tide sets.** Each Avatar has a pinned **tide set**, stored with its pinned
+pool in a D97 catalog module keyed by Avatar UUID (`src/content/d97/pools/`):
 
 - **Signature tide.** The Avatar's own signature tide. Each of the 12 Avatars
   without one has a fixed borrowed signature tide; each signature tide is lent
   to at most one other Avatar.
-- **Three facets,** chosen by hand from the 32 facet tides and not limited to
-  the facets the Avatar's journey tide pool lists. Each chosen facet adds at
-  least 25 eligible cards outside the signature tide, and each facet serves two
-  to four Avatars, so the 32 tide sets cover the card pool evenly.
+- **Three facets,** chosen from the 32 facet tides and not limited to the
+  facets the Avatar's journey tide pool lists. Each chosen facet adds at least
+  25 eligible cards outside the signature tide, ring 2 holds 60–100 cards, and
+  each facet serves two to four Avatars, so the 32 tide sets cover the card
+  pool evenly.
+
+**Pinned pools.** The curation tool (`npm run d97:pools`, an offline script
+whose output is the committed catalog) chooses each Avatar's tide set by
+those rules, favoring facets the Avatar's journey tide pool lists and facets
+close to its signature, and pins one tides4 deal over that tide set: the
+deal, from fixed seeds, that best reaches its facets and matches its rings'
+rarity mix. The pinned **dealt pool** (eligible cards with their copy counts)
+is the player's battle draft pool for that Avatar. The bag's rings come from
+the tide set's full eligible lists, not from the dealt pool. Opponents'
+decks are built from a tides4 deal of their own Avatar per encounter, not
+from the pinned pools.
 
 Neutral tides are not part of any tide set. The player never sees tide sets;
 they shape rewards only.
@@ -104,15 +116,9 @@ bag later draws use. Contents already rolled never change.
   rest appear only in neutral tides and reach the player through antes,
   curiosities and amulet merchants.
 
-**The first slice's bag.** Until the tide sets are authored, a run's bag is
-the tides4 pool the journey's draft would deal the chosen Avatar (its
-starter tide plus up to three of its facets, at most 2 copies of each card),
-dealt from the run seed and stored in state at run start. Its dealt counts
-are the copy targets.
-
 Origin: the tide catalog (`src/content/tides.ts`) and the draft engine's
 remaining-copies bag. The journey deals a random tides4 pool per run; D97
-replaces it with authored tide sets that grow by layers.
+pins one tide set and pool per Avatar, whose bag grows by layers.
 
 ## A3. Rarity
 
