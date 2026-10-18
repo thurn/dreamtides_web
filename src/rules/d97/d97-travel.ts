@@ -7,7 +7,7 @@
 //
 // This module obeys the src/rules/ lint rails: no React, no live clock or rng.
 
-import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
+import type { D97DreamDefinition, D97DreamTopology } from "../../content/d97/dreams/schema";
 import type { DreamAnchorId } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
@@ -29,13 +29,32 @@ function travelContext(
   return dream === null ? null : { run, anchorId, dream: dream.definition };
 }
 
+/** Why touching `anchorId` activates no waypoint in a dream of `topology`, or null when it does. */
+export function waypointRefusal(topology: D97DreamTopology, anchorId: DreamAnchorId): "notTheWaypoint" | null {
+  return anchorId === topology.waypointAnchorId ? null : "notTheWaypoint";
+}
+
+/**
+ * Why stepping through the door at `anchorId` in a dream of `topology` goes
+ * nowhere for `run`, or null when it opens: only the exit door leads
+ * anywhere, and only once its guardian is beaten.
+ */
+export function doorRefusal(
+  run: D97Run,
+  topology: D97DreamTopology,
+  anchorId: DreamAnchorId,
+): "noDestination" | "guardianStanding" | null {
+  if (anchorId !== topology.exitDoorAnchorId) return "noDestination";
+  return run.encounters[topology.exitGuardianAnchorId]?.beaten === true ? null : "guardianStanding";
+}
+
 /**
  * `D97_ACTIVATE_WAYPOINT { anchorId }`: touch the dream's waypoint. The first
  * touch activates it; every touch makes it the reload place.
  */
 export function activateWaypoint(input: D97RunInput, payload: AnchorPayload): D97Transition | null {
   const context = travelContext(input, payload);
-  if (context === null || context.anchorId !== context.dream.topology.waypointAnchorId) return null;
+  if (context === null || waypointRefusal(context.dream.topology, context.anchorId) !== null) return null;
   const { run, anchorId, dream } = context;
   const firstActivation = !run.activeWaypointIds.includes(anchorId);
   return {
@@ -63,10 +82,8 @@ export function activateWaypoint(input: D97RunInput, payload: AnchorPayload): D9
  */
 export function stepThroughDoor(input: D97RunInput, payload: AnchorPayload): D97Transition | null {
   const context = travelContext(input, payload);
-  if (context === null || context.anchorId !== context.dream.topology.exitDoorAnchorId) return null;
+  if (context === null || doorRefusal(context.run, context.dream.topology, context.anchorId) !== null) return null;
   const { run, anchorId, dream } = context;
-  const guardian = run.encounters[dream.topology.exitGuardianAnchorId];
-  if (guardian?.beaten !== true) return null;
   return {
     d97: {
       screen: { type: "sliceEnd" },

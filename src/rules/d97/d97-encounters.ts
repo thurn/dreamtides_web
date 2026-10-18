@@ -223,6 +223,18 @@ export function resolvePlayerAnte(
 }
 
 /**
+ * Why Fight at `anchorId` starts no battle for `run`, or null when it does:
+ * the encounter must be previewed and unbeaten, and the active deck at least
+ * its minimum size.
+ */
+export function battleRefusal(run: D97Run, anchorId: DreamAnchorId): "notPreviewed" | "beaten" | "deckTooSmall" | null {
+  const encounter = run.encounters[anchorId];
+  if (encounter === undefined) return "notPreviewed";
+  if (encounter.beaten) return "beaten";
+  return deckSize(run.collection) < D97_COLLECTION.minimumDeckSize ? "deckTooSmall" : null;
+}
+
+/**
  * `D97_BEGIN_BATTLE { anchorId }`: Fight. Requires a previewed, unbeaten
  * encounter and an active deck of at least the minimum size; resolves the
  * player's ante and starts the engine battle the content builds.
@@ -235,8 +247,7 @@ export function beginEncounterBattle(
   const content = d97ContentProvider();
   if (content === null) return null;
   const encounter = run.encounters[anchorId];
-  if (encounter === undefined || encounter.beaten) return null;
-  if (deckSize(run.collection) < D97_COLLECTION.minimumDeckSize) return null;
+  if (encounter === undefined || battleRefusal(run, anchorId) !== null) return null;
   const engine = getBattleInitProvider()?.engine ?? null;
   if (engine === null) return null;
   let drawIndex = 0;

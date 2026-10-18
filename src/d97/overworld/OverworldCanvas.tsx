@@ -10,8 +10,7 @@ import type { BadgeKind } from "./characters/badges";
 import { loadCharacterLooks, type CharacterLooks } from "./characters/character-looks";
 import type { OverworldOccupants } from "./occupants";
 import { DESKTOP_MIN_WIDTH } from "../../cumulus/primitives/use-is-desktop";
-import type { CompiledDreamMap } from "../map/compiled";
-import type { InteractionRegistry } from "./interactions";
+import type { CompiledAnchor, CompiledDreamMap } from "../map/compiled";
 import { OverworldScene } from "./overworld-scene";
 import { installD97QaSurface } from "./qa-surface";
 import type { VeilVariant } from "./dream-veil";
@@ -23,7 +22,8 @@ const VOID_COLOR = 0x0b0d12;
 
 export interface OverworldCanvasProps {
   readonly map: CompiledDreamMap;
-  readonly registry: InteractionRegistry;
+  /** Carries out the player's interaction with an anchor; false when its kind has none. Read when the player interacts. */
+  readonly onInteract: (anchor: CompiledAnchor) => boolean;
   readonly tunables: D97OverworldTunables;
   readonly characterTunables: D97CharacterTunables;
   readonly occupants: OverworldOccupants;
@@ -54,7 +54,7 @@ interface SceneAssets {
 
 function SceneMount({
   map,
-  registry,
+  onInteract,
   tunables,
   characterTunables,
   occupants,
@@ -73,6 +73,8 @@ function SceneMount({
   const [scene, setScene] = useState<OverworldScene | null>(null);
   const activeWaypointsRef = useRef(activeWaypointIds);
   activeWaypointsRef.current = activeWaypointIds;
+  const onInteractRef = useRef(onInteract);
+  onInteractRef.current = onInteract;
 
   useEffect(() => {
     if (!isInitialised) return;
@@ -87,7 +89,7 @@ function SceneMount({
       veils,
       // The scene opens with the current waypoints; later changes apply in place.
       activeWaypointIds: activeWaypointsRef.current,
-      registry,
+      onInteract: (anchor) => onInteractRef.current(anchor),
       tunables,
       characterTunables,
       desktop: () => window.innerWidth >= DESKTOP_MIN_WIDTH,
@@ -101,7 +103,7 @@ function SceneMount({
       setScene(null);
       scene.destroy();
     };
-  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, registry, arrival, veils, tunables]);
+  }, [app, assets, characterTunables, isInitialised, map, occupants, playerCharacter, arrival, veils, tunables]);
 
   useEffect(() => {
     sceneRef.current?.setInputEnabled(inputEnabled);

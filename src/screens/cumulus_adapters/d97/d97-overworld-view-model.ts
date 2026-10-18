@@ -1,8 +1,12 @@
-// The pure view-model builders for the D97 overworld: its HUD and its door
-// veils.
+// The pure view-model builders for the D97 overworld: its HUD, its door
+// veils, beaten opponents drawn without badges, and which panel is open (view
+// state: interactions open panels, and closing one returns to the world).
 
 import type { D97DreamTopology } from "../../../content/d97/dreams/schema";
 import type { VeilVariant } from "../../../d97/overworld/dream-veil";
+import type { InteractionPanel } from "../../../d97/overworld/interactions";
+import type { OverworldOccupants } from "../../../d97/overworld/occupants";
+import type { D97Run } from "../../../rules/d97/d97-state";
 import type { DreamAnchorId } from "../../../types/identifiers";
 import type {
   D97OverworldControlId,
@@ -45,4 +49,28 @@ export function buildD97OverworldHudView(input: D97OverworldHudInput): D97Overwo
  */
 export function buildD97DoorVeils(dream: D97DreamTopology): ReadonlyMap<DreamAnchorId, VeilVariant> {
   return new Map<DreamAnchorId, VeilVariant>([[dream.exitDoorAnchorId, "actExit"]]);
+}
+
+/** The panel open over the overworld: an interaction's, or a HUD control's. */
+export type D97OverworldPanel = InteractionPanel | { readonly kind: "menu" } | { readonly kind: "quests" };
+
+export type D97OverworldPanelAction = { readonly type: "open"; readonly panel: D97OverworldPanel } | { readonly type: "close" };
+
+/** Opening a panel replaces the open one; closing returns to the world. */
+export function overworldPanelReducer(_panel: D97OverworldPanel | null, action: D97OverworldPanelAction): D97OverworldPanel | null {
+  return action.type === "open" ? action.panel : null;
+}
+
+/** The anchors of the run's beaten opponents, joined as stable text (a memo dependency). */
+export function beatenOpponentsText(encounters: D97Run["encounters"]): string {
+  return Object.values(encounters)
+    .filter((encounter) => encounter?.beaten === true)
+    .map((encounter) => encounter?.anchorId)
+    .join(",");
+}
+
+/** Beaten opponents (by `beatenText`) stay as ordinary characters: no badge, desaturated. */
+export function withBeatenOpponents(placed: OverworldOccupants, beatenText: string): OverworldOccupants {
+  const beaten = new Set(beatenText.split(","));
+  return new Map([...placed].map(([anchorId, occupant]) => [anchorId, beaten.has(anchorId) ? { ...occupant, badge: null, beaten: true as const } : occupant]));
 }

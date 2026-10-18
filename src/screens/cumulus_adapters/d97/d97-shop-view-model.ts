@@ -1,18 +1,21 @@
 // The pure view-model builders for a Dreamtides 97 shop: its keeper, the
 // player's Essence and its stock (each slot's fixed quote, bought slots
 // empty, slots the player cannot afford disabled, and this visit's one
-// restock), and the sell panel (every owned copy captioned with what the
-// shop pays for it, under the resale guard; deck copies unsellable while the
-// deck is at its minimum size). Card UUIDs resolve to cards only here.
+// restock), and the sell panel (every owned copy captioned with the rules'
+// sale quote, `shopSaleQuote`, and disabled when the rules' `sellRefusal`
+// refuses it). Card UUIDs resolve to cards only here.
 
+import { D97_COLLECTION } from "../../../content/d97/collection";
 import type { D97DialogueModule } from "../../../content/d97/dialogue/schema";
 import type { D97ShopTuning } from "../../../content/d97/shop";
 import type { D97ShopKeeperView, D97ShopView } from "../../../cumulus/screens/d97/D97ShopPanel";
 import type { D97ShopSellCardView, D97ShopSellView } from "../../../cumulus/screens/d97/D97ShopSellPanel";
-import { canUnequip, copiesInZone } from "../../../d97/collection/collection";
+import { copiesInZone } from "../../../d97/collection/collection";
 import type { D97CopyZone } from "../../../d97/collection/types";
 import type { OverworldOccupant } from "../../../d97/overworld/occupants";
-import { cardBaseValue, cardPriceFactsOf, restockPrice, saleQuote } from "../../../d97/shop/pricing";
+import { restockPrice } from "../../../d97/shop/pricing";
+import type { D97ContentProvider } from "../../../rules/d97/d97-content";
+import { sellRefusal, shopSaleQuote, shopSellGuards } from "../../../rules/d97/d97-shop";
 import type { D97Run, D97Shop } from "../../../rules/d97/d97-state";
 import type { CardId } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
@@ -92,26 +95,29 @@ export function buildD97ShopView(input: {
   };
 }
 
-/** The sell panel view of `run`'s collection, at `keeper`'s shop. Copies of unknown cards are hidden. */
+/**
+ * The sell panel view of `run`'s collection, at `keeper`'s shop: prices and
+ * refusals are the rules' own. Copies of unknown cards are hidden.
+ */
 export function buildD97ShopSellView(input: {
   readonly run: D97Run;
   readonly keeper: D97ShopKeeper | null;
   readonly cards: ReadonlyMap<CardId, CardData>;
-  readonly collectionFloor: number;
-  readonly minimumDeckSize: number;
-  readonly tuning: D97ShopTuning;
+  /** The content the rules price cards from. */
+  readonly content: Pick<D97ContentProvider, "cardPriceFacts">;
 }): D97ShopSellView {
-  const { run, cards, tuning } = input;
+  const { run, cards, content } = input;
   const zone = (name: D97CopyZone): D97ShopSellCardView[] =>
     copiesInZone(run.collection, name).flatMap((copy) => {
       const card = cards.get(copy.cardId);
-      if (card === undefined) return [];
-      const price = saleQuote(copy, cardBaseValue(cardPriceFactsOf(card), tuning), tuning.priceBand, tuning);
+      const price = shopSaleQuote(run, copy.copyId, content);
+      if (card === undefined || price === null) return [];
       return [
         {
           entryId: copy.copyId,
           model: { cardId: card.id, displaySnapshot: card },
           caption: { kind: "essence", amount: price },
+          disabled: sellRefusal(run, copy.copyId) !== null,
           testId: `d97-shop-sell-card-${copy.copyId}`,
         },
       ];
@@ -121,9 +127,8 @@ export function buildD97ShopSellView(input: {
     essence: run.essence,
     reserve: zone("reserve"),
     deck: zone("deck"),
-    collectionFloor: input.collectionFloor,
-    atFloor: run.collection.copies.length <= input.collectionFloor,
-    minimumDeckSize: input.minimumDeckSize,
-    deckAtMinimum: !canUnequip(run.collection, input.minimumDeckSize),
+    collectionFloor: D97_COLLECTION.collectionFloor,
+    minimumDeckSize: D97_COLLECTION.minimumDeckSize,
+    ...shopSellGuards(run),
   };
 }

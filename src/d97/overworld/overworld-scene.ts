@@ -22,7 +22,7 @@ import {
   type TileRange,
   type Viewport,
 } from "./camera";
-import { anchorAt, pathBeside, shownMovement, type AnchorMovement, type InteractionRegistry } from "./interactions";
+import { anchorAt, pathBeside, shownMovement, type AnchorMovement } from "./interactions";
 import { blockingGuardian, standingAnchors } from "./chokepoint";
 import { DreamVeil, WaypointObelisk, type VeilVariant } from "./dream-veil";
 import { idleFacing } from "./characters/animation";
@@ -84,7 +84,8 @@ export interface OverworldSceneOptions {
   readonly app: Application;
   readonly map: CompiledDreamMap;
   readonly textures: TileTextures;
-  readonly registry: InteractionRegistry;
+  /** Carries out the player's interaction with `anchor`; false when its kind has none. */
+  readonly onInteract: (anchor: CompiledAnchor) => boolean;
   readonly tunables: D97OverworldTunables;
   readonly characterTunables: D97CharacterTunables;
   /** Loaded looks for the occupants' and the player's characters. */
@@ -165,7 +166,7 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly app: Application;
   private readonly map: CompiledDreamMap;
   private readonly textures: TileTextures;
-  private readonly registry: InteractionRegistry;
+  private readonly onInteract: (anchor: CompiledAnchor) => boolean;
   private readonly tunables: D97OverworldTunables;
   private readonly characterTunables: D97CharacterTunables;
   private readonly looks: CharacterLooks;
@@ -218,7 +219,7 @@ export class OverworldScene implements OverworldSceneHandle {
     this.app = options.app;
     this.map = options.map;
     this.textures = options.textures;
-    this.registry = options.registry;
+    this.onInteract = options.onInteract;
     this.tunables = options.tunables;
     this.characterTunables = options.characterTunables;
     this.looks = options.looks;
@@ -629,7 +630,7 @@ export class OverworldScene implements OverworldSceneHandle {
   }
 
   private interactWith(anchor: CompiledAnchor): boolean {
-    const handled = this.registry.interact(anchor);
+    const handled = this.onInteract(anchor);
     logEvent("d97_overworld_interaction", {
       mapId: this.map.id,
       anchorId: anchor.id,

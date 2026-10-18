@@ -1,69 +1,35 @@
 // Adapter for the D97 overworld: the run's dream (./use-d97-dream.ts) on the
-// Pixi canvas, a loading screen while its map arrives, an unavailable screen
-// with a way back to the main menu when it cannot be played,
-// the HUD view, the encounter preview, deck editor, quest log, conversation
-// and Menu panels, beaten opponents without badges, the quest marks over the
-// world, door veils and lit waypoints, the arrival beside the last battle's
-// anchor or at the last door or waypoint used, and the input-focus rule
-// (the canvas ignores input while a panel, a preview or a pending reward is
-// open). Talking to a friendly or townsperson opens their dialogue, as does
-// talking to a challenger or guardian that has one (./use-d97-encounter.ts);
-// interacting with a quest object picks it up. Which panel is open is view
-// state; every equip, unequip and pick-up is recorded as an intent. Wiring
-// only.
-// The canvas module (and Pixi with it) loads on first use, so journey
-// players never download it.
+// Pixi canvas (loaded on first use, so journey players never download Pixi),
+// a loading or unavailable screen until it can be played, the HUD, beaten
+// opponents without badges, quest marks, door veils and lit waypoints, the
+// panels (./D97OverworldPanelsAdapter.tsx), and the input-focus rule: the
+// canvas ignores input while a panel or a pending reward is open. Every
+// interaction goes through ./use-d97-interactions.ts. Wiring only.
 
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { D97_COLLECTION } from "../../../content/d97/collection";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
-import {
-  D97_ACT_CHALLENGER_TIERS,
-  D97_CHARACTER_TUNABLES,
-  D97_OVERWORLD_TUNABLES,
-} from "../../../content/d97/tunables";
-import { D97MenuPanel } from "../../../cumulus/screens/d97/D97MenuPanel";
+import { D97_ACT_CHALLENGER_TIERS, D97_CHARACTER_TUNABLES, D97_OVERWORLD_TUNABLES } from "../../../content/d97/tunables";
 import { D97DreamLoadingScreen } from "../../../cumulus/screens/d97/D97DreamLoadingScreen";
-import { D97DreamUnavailableScreen } from "../../../cumulus/screens/d97/D97DreamUnavailableScreen";
-import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
-import { D97EncounterPreview } from "../../../cumulus/screens/d97/D97EncounterPreview";
-import {
-  D97OverworldScreen,
-  type D97OverworldControlId,
-} from "../../../cumulus/screens/d97/D97OverworldScreen";
+import { D97OverworldScreen, type D97OverworldControlId } from "../../../cumulus/screens/d97/D97OverworldScreen";
 import type { JourneyContent } from "../../../data/journey-content";
 import { buildDialogueCatalog } from "../../../d97/dialogue/catalog";
-import { createInteractionRegistry, type OverworldInteraction } from "../../../d97/overworld/interactions";
 import { logEvent } from "../../../logging";
 import { d97ContentProvider } from "../../../rules/d97/d97-content";
 import { d97RunAct, type D97Run } from "../../../rules/d97/d97-state";
-import { useGameSwitch } from "../../../session/game-switch";
-import { useActions } from "../../../session/hooks";
-import type { D97OwnedCopyId, DreamAnchorId } from "../../../types/identifiers";
-import { buildD97DeckEditorView, cardsByUuid } from "./d97-deck-editor-view-model";
-import { buildD97OverworldHudView } from "./d97-overworld-view-model";
-import { useD97Dream, type D97PlayedDream } from "./use-d97-dream";
-import { useD97Encounter } from "./use-d97-encounter";
+import { cardsByUuid } from "./d97-deck-editor-view-model";
+import { beatenOpponentsText, buildD97OverworldHudView, withBeatenOpponents } from "./d97-overworld-view-model";
 import { buildD97QuestMarks } from "./d97-quest-view-model";
-import { D97QuestSurfacesAdapter } from "./D97QuestSurfacesAdapter";
+import { D97DreamUnavailableAdapter } from "./D97DreamUnavailableAdapter";
+import { D97OverworldPanelsAdapter } from "./D97OverworldPanelsAdapter";
+import { useD97Dream, type D97PlayedDream } from "./use-d97-dream";
+import { useD97Interactions } from "./use-d97-interactions";
 import { useD97Travel } from "./use-d97-travel";
-import { D97ShopAdapter } from "./D97ShopAdapter";
 
-const OverworldCanvas = lazy(() =>
-  import("../../../d97/overworld/OverworldCanvas").then((module) => ({
-    default: module.OverworldCanvas,
-  })),
-);
+const OverworldCanvas = lazy(() => import("../../../d97/overworld/OverworldCanvas").then((module) => ({ default: module.OverworldCanvas })));
 
 const NO_DIALOGUE = buildDialogueCatalog([]);
 
 const ENABLED_CONTROLS: ReadonlySet<D97OverworldControlId> = new Set(["deck", "quests", "menu"]);
-
-type Panel = "deck" | "menu" | "quests" | { readonly conversation: DreamAnchorId } | { readonly shop: DreamAnchorId };
-
-function reportFailure(error: unknown): void {
-  console.error("D97 deck edit failed", error);
-}
 
 interface D97OverworldProps {
   readonly run: D97Run;
@@ -77,15 +43,8 @@ interface D97OverworldProps {
 export function D97OverworldScreenAdapter(props: D97OverworldProps) {
   const dream = useD97Dream(props.run);
   if (dream.kind === "loading") return <D97DreamLoadingScreen />;
-  if (dream.kind === "unavailable") return <D97DreamUnavailable />;
+  if (dream.kind === "unavailable") return <D97DreamUnavailableAdapter />;
   return <D97DreamOverworld {...props} dream={dream.played} />;
-}
-
-/** The run's dream cannot be played (logged by `useD97Dream`): offer the main menu. */
-function D97DreamUnavailable() {
-  const gameSwitch = useGameSwitch();
-  const mainMenu = useCallback(() => gameSwitch?.openMainMenu({ source: "d97_dream_unavailable" }), [gameSwitch]);
-  return <D97DreamUnavailableScreen onMainMenu={gameSwitch === null ? null : mainMenu} />;
 }
 
 function D97DreamOverworld({
@@ -96,21 +55,12 @@ function D97DreamOverworld({
   dream: { dream, map, occupants: placed },
 }: D97OverworldProps & { readonly dream: D97PlayedDream }) {
   const catalog = d97ContentProvider()?.dialogue ?? NO_DIALOGUE;
-  // Beaten opponents stay as ordinary characters: no badge, desaturated.
-  const beatenKey = Object.values(run.encounters).filter((encounter) => encounter?.beaten === true).map((encounter) => encounter?.anchorId).join(",");
-  const occupants = useMemo(() => {
-    const beaten = new Set(beatenKey.split(","));
-    return new Map([...placed].map(([anchorId, occupant]) => [anchorId, beaten.has(anchorId) ? { ...occupant, badge: null, beaten: true as const } : occupant]));
-  }, [beatenKey, placed]);
-  // The player walks as their Avatar's recipe (every Avatar has one), or as a
-  // capsule for an Avatar without one.
-  const playerCharacter = useMemo(
-    () => D97_CHARACTER_SPRITES.find((recipe) => recipe.avatarId === run.avatarId)?.id ?? null,
-    [run.avatarId],
-  );
-  const actions = useActions();
-  const registry = useRef(createInteractionRegistry()).current;
-  const [panel, setPanel] = useState<Panel | null>(initialDeckEditorOpen ? "deck" : null);
+  const beatenText = beatenOpponentsText(run.encounters);
+  const occupants = useMemo(() => withBeatenOpponents(placed, beatenText), [beatenText, placed]);
+  // The player walks as their Avatar's recipe, or as a capsule for an Avatar without one.
+  const playerCharacter = useMemo(() => D97_CHARACTER_SPRITES.find((recipe) => recipe.avatarId === run.avatarId)?.id ?? null, [run.avatarId]);
+  const interactions = useD97Interactions({ run, topology: dream.topology, occupants }, initialDeckEditorOpen ? { kind: "deck" } : null);
+  const travel = useD97Travel({ run, dream: dream.topology, returningFromBattle });
   const [hudInset, setHudInset] = useState(0);
   const loggedRef = useRef(false);
 
@@ -121,113 +71,24 @@ function D97DreamOverworld({
   }, [map.id, run.runId]);
 
   const view = useMemo(
-    () =>
-      buildD97OverworldHudView({
-        act: d97RunAct(run),
-        actTiers: D97_ACT_CHALLENGER_TIERS,
-        essence: run.essence,
-        enabled: ENABLED_CONTROLS,
-      }),
+    () => buildD97OverworldHudView({ act: d97RunAct(run), actTiers: D97_ACT_CHALLENGER_TIERS, essence: run.essence, enabled: ENABLED_CONTROLS }),
     [run],
   );
   const cards = useMemo(() => cardsByUuid(journeyContent.cardDatabase), [journeyContent.cardDatabase]);
-  const openDeckEditor = useCallback(() => {
-    logEvent("d97_deck_editor_opened", { runId: run.runId });
-    setPanel("deck");
-  }, [run.runId]);
-  const converse = useCallback(
-    (anchorId: DreamAnchorId) => {
-      logEvent("d97_dialogue_opened", { runId: run.runId, anchorId });
-      setPanel({ conversation: anchorId });
-    },
-    [run.runId],
-  );
-  const travel = useD97Travel({ run, dream: dream.topology, registry, actions, returningFromBattle });
-  const encounter = useD97Encounter({
-    run,
-    registry,
-    actions,
-    avatars: journeyContent.avatars,
-    cardsById: cards,
-    occupants,
-    dialogues: catalog.dialogues,
-    converse,
-    openDeckEditor,
-  });
-  const deckView = useMemo(
-    () => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize),
-    [run.collection, cards],
-  );
-
-  const handleControl = useCallback(
-    (id: D97OverworldControlId) => {
-      logEvent("d97_overworld_control_pressed", { control: id });
-      if (id === "deck") logEvent("d97_deck_editor_opened", { runId: run.runId });
-      if (id === "quests") logEvent("d97_quest_log_opened", { runId: run.runId, questId: run.quests.active?.questId ?? null });
-      setPanel(id);
-    },
-    [run.quests.active?.questId, run.runId],
-  );
-  const closeDeck = useCallback(() => {
-    logEvent("d97_deck_editor_closed", { runId: run.runId });
-    setPanel(null);
-  }, [run.runId]);
-  const closePanel = useCallback(() => setPanel(null), []);
-  const openShop = useCallback(
-    (anchorId: DreamAnchorId) => {
-      void actions.d97({ type: "D97_OPEN_SHOP", payload: { anchorId } }).catch(reportFailure);
-      setPanel({ shop: anchorId });
-    },
-    [actions],
-  );
   const marks = useMemo(() => buildD97QuestMarks(run.quests, catalog.quests, map.anchors), [catalog.quests, map.anchors, run.quests]);
 
-  useEffect(() => {
-    const talk: OverworldInteraction = (anchor) => {
-      if (occupants.get(anchor.id)?.dialogue != null) converse(anchor.id);
-    };
-    const pickUp: OverworldInteraction = (anchor) => {
-      void actions.d97({ type: "D97_PICK_UP_OBJECT", payload: { anchorId: anchor.id } }).catch(reportFailure);
-    };
-    // A shopkeeper with a dialogue talks first (its Shop choice opens the
-    // shop); one without opens the shop at once.
-    const shopkeeper: OverworldInteraction = (anchor) => {
-      if (occupants.get(anchor.id)?.dialogue == null) openShop(anchor.id);
-      else talk(anchor);
-    };
-    const removals = [
-      registry.register("friendly", talk),
-      registry.register("townsfolk", talk),
-      registry.register("object", pickUp),
-      registry.register("shop", shopkeeper),
-    ];
-    return () => removals.forEach((remove) => remove());
-  }, [actions, converse, occupants, openShop, registry]);
-  const equip = useCallback(
-    (copyId: D97OwnedCopyId) => {
-      void actions.d97({ type: "D97_EQUIP_COPY", payload: { copyId } }).catch(reportFailure);
-    },
-    [actions],
-  );
-  const unequip = useCallback(
-    (copyId: D97OwnedCopyId) => {
-      void actions.d97({ type: "D97_UNEQUIP_COPY", payload: { copyId } }).catch(reportFailure);
-    },
-    [actions],
-  );
-
-  const panelOpen = panel !== null || encounter.open || run.quests.pendingReward !== null;
+  const panelOpen = interactions.panel !== null || run.quests.pendingReward !== null;
   return (
     <D97OverworldScreen
       view={view}
-      onControl={handleControl}
+      onControl={interactions.control}
       panelOpen={panelOpen}
       onHudInset={setHudInset}
       world={
         <Suspense fallback={null}>
           <OverworldCanvas
             map={map}
-            registry={registry}
+            onInteract={interactions.interact}
             tunables={D97_OVERWORLD_TUNABLES}
             characterTunables={D97_CHARACTER_TUNABLES}
             occupants={occupants}
@@ -243,41 +104,7 @@ function D97DreamOverworld({
         </Suspense>
       }
       panel={
-        <>
-          <D97DeckEditorScreen
-            isOpen={panel === "deck"}
-            view={deckView}
-            onEquip={equip}
-            onUnequip={unequip}
-            onClose={closeDeck}
-          />
-          {encounter.preview !== null && (
-            <D97EncounterPreview view={encounter.preview} onFight={encounter.fight} onNotNow={encounter.notNow} />
-          )}
-          <D97QuestSurfacesAdapter
-            run={run}
-            catalog={catalog}
-            occupants={occupants}
-            cards={cards}
-            avatars={journeyContent.avatars}
-            conversationAnchorId={typeof panel === "object" && panel !== null && "conversation" in panel ? panel.conversation : null}
-            questLogOpen={panel === "quests"}
-            onChallenge={encounter.challenge}
-            onOpenShop={openShop}
-            onClose={closePanel}
-          />
-          {typeof panel === "object" && panel !== null && "shop" in panel && (
-            <D97ShopAdapter
-              run={run}
-              anchorId={panel.shop}
-              keeper={occupants.get(panel.shop)}
-              dialogues={catalog.dialogues}
-              cards={cards}
-              onClose={closePanel}
-            />
-          )}
-          {panel === "menu" && <D97MenuPanel onClose={closePanel} />}
-        </>
+        <D97OverworldPanelsAdapter run={run} interactions={interactions} occupants={occupants} catalog={catalog} cards={cards} avatars={journeyContent.avatars} />
       }
     />
   );

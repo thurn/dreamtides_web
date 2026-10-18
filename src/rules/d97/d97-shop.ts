@@ -7,11 +7,11 @@
 // This module obeys the src/rules/ lint rails: no React, no live clock or rng.
 
 import { D97_COLLECTION } from "../../content/d97/collection";
+import type { D97DreamTopology } from "../../content/d97/dreams/schema";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
 import { acquireCopy, canUnequip, findCopy, removeCopies } from "../../d97/collection/collection";
 import { recordAcquisition, sampleFilteredOffer } from "../../d97/collection/reward-bag";
-import type { D97CopyZone } from "../../d97/collection/types";
 import {
   buyQuote,
   cardBaseValue,
@@ -32,6 +32,11 @@ import type { D97RunInput } from "./events/spec";
 /** A shop case's payload names the dream's shop anchor. */
 type ShopPayload = { readonly anchorId: DreamAnchorId };
 
+/** Whether `anchorId` is the shop of a dream of `topology`, the only shop its cases open. */
+export function isDreamShop(topology: D97DreamTopology, anchorId: DreamAnchorId): boolean {
+  return anchorId === topology.shopAnchorId;
+}
+
 /** The run, shop anchor and content a shop case acts on, or null to bounce. */
 function shopContext(
   { run }: D97RunInput,
@@ -41,7 +46,7 @@ function shopContext(
   if (content === null) return null;
   // Only the shop of the run's own dream.
   const dream = runDreamAnchor(run, content, anchorId);
-  if (dream === null || anchorId !== dream.definition.topology.shopAnchorId) return null;
+  if (dream === null || !isDreamShop(dream.definition.topology, anchorId)) return null;
   return { run, anchorId, content };
 }
 
@@ -132,7 +137,11 @@ export function buyShopCard(input: D97RunInput, payload: ShopPayload & { readonl
 }
 
 /** What the dream's shop pays for `copyId` now, or null for an unknown copy or card. */
-export function shopSaleQuote(run: D97Run, copyId: D97OwnedCopyId, content: D97ContentProvider): number | null {
+export function shopSaleQuote(
+  run: D97Run,
+  copyId: D97OwnedCopyId,
+  content: Pick<D97ContentProvider, "cardPriceFacts">,
+): number | null {
   const copy = findCopy(run.collection, copyId);
   const facts = copy === null ? null : content.cardPriceFacts(copy.cardId);
   if (copy === null || facts === null) return null;
@@ -140,12 +149,24 @@ export function shopSaleQuote(run: D97Run, copyId: D97OwnedCopyId, content: D97C
 }
 
 /**
- * Whether the shop may buy `copy` from `run`: an active-deck copy only while
- * the deck is above its minimum size, as for unequipping; a reserve copy
- * always (the collection floor still applies to both).
+ * What stops the shop buying from `run` now: at the collection floor it buys
+ * nothing, and while the active deck is at its minimum size it buys no deck
+ * copy (as for unequipping).
  */
-function copySellable(run: D97Run, copy: { readonly zone: D97CopyZone }): boolean {
-  return copy.zone === "reserve" || canUnequip(run.collection, D97_COLLECTION.minimumDeckSize);
+export function shopSellGuards(run: D97Run): { readonly atFloor: boolean; readonly deckAtMinimum: boolean } {
+  return {
+    atFloor: run.collection.copies.length <= D97_COLLECTION.collectionFloor,
+    deckAtMinimum: !canUnequip(run.collection, D97_COLLECTION.minimumDeckSize),
+  };
+}
+
+/** Why the shop will not buy `copyId` from `run` (`shopSellGuards`), or null when it will. */
+export function sellRefusal(run: D97Run, copyId: D97OwnedCopyId): "unknownCopy" | "atFloor" | "deckAtMinimum" | null {
+  const copy = findCopy(run.collection, copyId);
+  if (copy === null) return "unknownCopy";
+  const guards = shopSellGuards(run);
+  if (guards.atFloor) return "atFloor";
+  return copy.zone === "deck" && guards.deckAtMinimum ? "deckAtMinimum" : null;
 }
 
 /**
@@ -161,7 +182,7 @@ export function sellCopy(input: D97RunInput, payload: ShopPayload & { readonly c
   const shop = run.shops[anchorId];
   const copy = findCopy(run.collection, copyId);
   const price = shopSaleQuote(run, copyId, content);
-  if (shop === undefined || copy === null || price === null || !copySellable(run, copy)) return null;
+  if (shop === undefined || copy === null || price === null || sellRefusal(run, copyId) !== null) return null;
   const collection = removeCopies(run.collection, [copyId], D97_COLLECTION.collectionFloor);
   if (collection === null) return null;
   const essence = run.essence + price;

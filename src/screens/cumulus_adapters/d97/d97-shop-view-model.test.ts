@@ -1,10 +1,15 @@
 // D97 shop view-model rules: slots show their fixed quotes, bought slots are
 // purchased and unaffordable ones disabled; the restock reads as used once
 // spent; the sell panel captions each copy with its guarded sale quote and
-// marks the collection floor.
+// disables exactly what the rules refuse: its prices and disabled states are
+// the rules' `shopSaleQuote` and `sellRefusal` on a synthetic run.
 
 import { describe, expect, it } from "vitest";
+import { D97_COLLECTION } from "../../../content/d97/collection";
 import { D97_SHOP } from "../../../content/d97/shop";
+import type { D97OwnedCopy } from "../../../d97/collection/types";
+import { cardPriceFactsOf } from "../../../d97/shop/pricing";
+import { sellRefusal, shopSaleQuote, shopSellGuards } from "../../../rules/d97/d97-shop";
 import type { D97DialogueModule } from "../../../content/d97/dialogue/schema";
 import type { D97Run, D97Shop } from "../../../rules/d97/d97-state";
 import { parseCardId } from "../../../types/card-identity";
@@ -69,43 +74,56 @@ describe("buildD97ShopView", () => {
 });
 
 describe("buildD97ShopSellView", () => {
-  const copy = (ordinal: number, zone: "deck" | "reserve", provenance: object) => ({
-    copyId: parseD97OwnedCopyId(`00000000-0000-4000-8000-0000000000${String(ordinal).padStart(2, "0")}`),
-    cardId: CARD_A,
+  const CONTENT = { cardPriceFacts: (cardId: typeof CARD_A) => { const data = CARDS.get(cardId); return data === undefined ? null : cardPriceFactsOf(data); } };
+  const copy = (ordinal: number, zone: "deck" | "reserve"): D97OwnedCopy => ({
+    copyId: parseD97OwnedCopyId(`00000000-0000-4000-8000-${String(ordinal).padStart(12, "0")}`),
+    cardId: ordinal % 2 === 0 ? CARD_A : CARD_B,
     zone,
     modifications: [],
-    provenance: { battleCount: 0, ...provenance },
+    // Every third copy was bought, so the resale guard caps its quote.
+    provenance: ordinal % 3 === 0 ? { channel: "shop", battleCount: 0, price: 10 } : { channel: "starting", battleCount: 0 },
   });
-  const run = (copies: readonly ReturnType<typeof copy>[]) => ({ essence: 70, collection: { copies, nextCopyOrdinal: copies.length } }) as unknown as D97Run;
+  /** A synthetic run whose active deck holds `deck` copies and whose reserve holds `reserve`. */
+  const run = (deck: number, reserve: number) => {
+    const copies = [
+      ...Array.from({ length: deck }, (_, index) => copy(index + 1, "deck")),
+      ...Array.from({ length: reserve }, (_, index) => copy(deck + index + 1, "reserve")),
+    ];
+    return { essence: 70, collection: { copies, nextCopyOrdinal: copies.length } } as unknown as D97Run;
+  };
+  const { minimumDeckSize, collectionFloor } = D97_COLLECTION;
 
-  it("captions each copy with its guarded sale quote, by zone", () => {
-    const view = buildD97ShopSellView({
-      run: run([copy(1, "deck", { channel: "starting" }), copy(2, "reserve", { channel: "shop", price: 10 })]),
-      keeper: KEEPER,
-      cards: CARDS,
-      collectionFloor: 1,
-      minimumDeckSize: 0,
-      tuning: D97_SHOP,
-    });
-    // An Uncommon 2-cost Event: v = max(60 × 2, 100) = 120, sale = 5 × floor(120 × 3 / 50) = 35.
-    expect(view.deck.map((entry) => entry.caption)).toEqual([{ kind: "essence", amount: 35 }]);
-    expect(view.reserve.map((entry) => entry.caption)).toEqual([{ kind: "essence", amount: 10 }]);
-    expect(view.atFloor).toBe(false);
-    expect(view.deckAtMinimum).toBe(false);
+  it.each([
+    { name: "above both limits", deck: minimumDeckSize + 1, reserve: 2 },
+    { name: "with the deck at its minimum", deck: minimumDeckSize, reserve: collectionFloor - minimumDeckSize + 2 },
+    { name: "at the collection floor", deck: minimumDeckSize, reserve: collectionFloor - minimumDeckSize },
+  ])("prices and disables every copy as the rules do, $name", ({ deck, reserve }) => {
+    const synthetic = run(deck, reserve);
+    const view = buildD97ShopSellView({ run: synthetic, keeper: KEEPER, cards: CARDS, content: CONTENT });
+    const shown = [...view.reserve, ...view.deck];
+    expect(shown).toHaveLength(deck + reserve);
+    for (const entry of shown) {
+      expect(entry.caption).toEqual({ kind: "essence", amount: shopSaleQuote(synthetic, entry.entryId, CONTENT) });
+      expect(entry.disabled).toBe(sellRefusal(synthetic, entry.entryId) !== null);
+    }
+    expect(view).toMatchObject(shopSellGuards(synthetic));
+  });
+
+  it("disables only deck copies while the deck is at its minimum, and everything at the floor", () => {
+    const atMinimum = buildD97ShopSellView({ run: run(minimumDeckSize, collectionFloor - minimumDeckSize + 2), keeper: null, cards: CARDS, content: CONTENT });
+    expect(atMinimum).toMatchObject({ atFloor: false, deckAtMinimum: true });
+    expect(atMinimum.deck.every((entry) => entry.disabled === true)).toBe(true);
+    expect(atMinimum.reserve.every((entry) => entry.disabled === false)).toBe(true);
+    const atFloor = buildD97ShopSellView({ run: run(minimumDeckSize, collectionFloor - minimumDeckSize), keeper: null, cards: CARDS, content: CONTENT });
+    expect(atFloor.atFloor).toBe(true);
+    expect([...atFloor.deck, ...atFloor.reserve].every((entry) => entry.disabled === true)).toBe(true);
+  });
+
+  it("captions a bought copy with at most what was paid, and presents the keeper and Essence", () => {
+    const view = buildD97ShopSellView({ run: run(minimumDeckSize + 1, 2), keeper: KEEPER, cards: CARDS, content: CONTENT });
+    const bought = view.deck[2];
+    expect(bought?.caption).toEqual({ kind: "essence", amount: 10 });
     expect(view.keeper).toMatchObject({ characterId: KEEPER_ID, name: KEEPER_NAME });
     expect(view.essence).toBe(70);
-  });
-
-  it("marks the collection floor", () => {
-    const view = buildD97ShopSellView({ keeper: null, run: run([copy(1, "deck", { channel: "starting" })]), cards: CARDS, collectionFloor: 1, minimumDeckSize: 0, tuning: D97_SHOP });
-    expect(view.atFloor).toBe(true);
-  });
-
-  it("marks a deck at its minimum size, with reserve copies still above the floor", () => {
-    const copies = [copy(1, "deck", { channel: "starting" }), copy(2, "reserve", { channel: "shop", price: 10 })];
-    const atMinimum = buildD97ShopSellView({ keeper: null, run: run(copies), cards: CARDS, collectionFloor: 1, minimumDeckSize: 1, tuning: D97_SHOP });
-    expect(atMinimum).toMatchObject({ atFloor: false, deckAtMinimum: true });
-    const above = buildD97ShopSellView({ keeper: null, run: run(copies), cards: CARDS, collectionFloor: 1, minimumDeckSize: 0, tuning: D97_SHOP });
-    expect(above.deckAtMinimum).toBe(false);
   });
 });
