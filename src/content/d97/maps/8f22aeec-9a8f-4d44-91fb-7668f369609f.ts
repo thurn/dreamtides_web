@@ -3,7 +3,8 @@
 // Source of Tales' Goldenfields pub. Its tap room has three tables, barrels
 // and a long bar along the east wall; the storeroom off the west end is
 // walled off. A short passage leads south from the tap room to the inn door.
-// Wenna Ashdown keeps the dream's shop in front of the bar.
+// Wenna Ashdown keeps the dream's shop in front of the bar; two townsfolk
+// sit in the tap room, one by the west table and one between the back tables.
 
 import { defineDreamMap } from "../../../d97/map/definition";
 import { parseDreamAnchorId, parseDreamMapId, parseDreamMapSourceHash } from "../../../types/identifiers";
@@ -30,5 +31,8 @@ export default defineDreamMap({
   anchors: [
     { id: parseDreamAnchorId("3d1b6084-0b8f-4c0f-a41d-2b4cad8a9af6"), kind: "buildingDoor", at: { landmark: "the inn door" }, entry: [10, 8] },
     { id: parseDreamAnchorId("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), kind: "shop", at: { landmark: "the counter" } },
+    // Townsfolk: beside the west table's chair, and between the two back tables.
+    { id: parseDreamAnchorId("38e9424d-ba12-45d7-ad0d-e164ed590f70"), kind: "townsfolk", at: [4, 3] },
+    { id: parseDreamAnchorId("aad4297c-5246-4f3f-897a-f0ef14088e36"), kind: "townsfolk", at: [11, 3] },
   ],
 });

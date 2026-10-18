@@ -7,13 +7,11 @@
 // The innkeeper keeps the shop in the inn, the dream's one room (decision
 // P19), behind the inn door on the well square; the reeve keeps the hall
 // steps and Hessa the wheat corner; five townsfolk and five challengers fill
-// the valley.
+// the valley, and two more townsfolk sit in the inn's tap room.
 // Vaela guards the ember arch, or Tessa when the player is Vaela: an ember of
 // a day that will not end, then a gleaner of its last field. Each appears,
-// speaks and fights as herself; Tessa has no lines yet, so she challenges
-// without a conversation. The square's four
-// open friendly anchors stand empty for the friendly characters later
-// assembly places.
+// speaks and fights as herself. The square's four open friendly anchors stand
+// empty for the friendly characters later assembly places.
 
 import {
   parseAvatarId,
@@ -25,17 +23,19 @@ import {
   parseDreamMapId,
 } from "../../../types/identifiers";
 import {
-  ALDO_HEWITT,
   AMBROSE_FINCH,
+  BARNABY_THATCH,
   COBB,
   DILLY_SORREL,
   GARROW_THRESHER,
   HESSA_MOTT,
+  JORY_HEWITT,
+  LAMBERT_ROOK,
   MOTHER_YARROW,
+  NETTIE_FURROW,
   OSWIN_MARL,
   PELL,
   THE_SCARECROW,
-  TOBIN_ROOK,
   WENNA_ASHDOWN,
   WIDOW_MARRABLE,
 } from "../characters/3229d6c7-0700-4f37-9b07-921e3dccb8b6";
@@ -85,13 +85,13 @@ export default defineDream({
         kind: "avatar",
         incarnations: [
           { avatarId: VAELA, characterId: VAELA_CHARACTER, dialogueId: LINES.vaela },
-          { avatarId: TESSA, characterId: TESSA_CHARACTER },
+          { avatarId: TESSA, characterId: TESSA_CHARACTER, dialogueId: LINES.tessa },
         ],
       },
     },
     // The inn's bar, the hall steps and the wheat corner.
     { role: "shop", anchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), characterId: WENNA_ASHDOWN.id, scale: "standard", dialogueId: LINES.wenna },
-    { role: "friendly", anchorId: anchor("8d202783-1114-45ae-af43-115eb6688d64"), characterId: TOBIN_ROOK.id, scale: "standard", dialogueId: LINES.tobin },
+    { role: "friendly", anchorId: anchor("8d202783-1114-45ae-af43-115eb6688d64"), characterId: LAMBERT_ROOK.id, scale: "standard", dialogueId: LINES.reeve },
     { role: "friendly", anchorId: anchor("ee1d1483-32ee-414b-98cd-5f3788471b13"), characterId: HESSA_MOTT.id, scale: "standard", dialogueId: LINES.hessa },
     // Townsfolk: the square's east houses, north of the well, the wheat
     // field's west end, the creek well and the white bridge's west end.
@@ -100,6 +100,9 @@ export default defineDream({
     { role: "townsfolk", anchorId: anchor("bc4b6a27-abf6-430c-9a5e-23b899945106"), characterId: DILLY_SORREL.id, scale: "standard", dialogueId: LINES.dilly },
     { role: "townsfolk", anchorId: anchor("c36ac406-967d-4dee-9fa7-faebc17b1da7"), characterId: WIDOW_MARRABLE.id, scale: "standard", dialogueId: LINES.marrable },
     { role: "townsfolk", anchorId: anchor("e2f1e61b-dcf6-4c18-86a7-412d8fcdb536"), characterId: COBB.id, scale: "standard", dialogueId: LINES.cobb },
+    // In the inn's tap room: by the west table, and between the back tables.
+    { role: "townsfolk", anchorId: anchor("38e9424d-ba12-45d7-ad0d-e164ed590f70"), characterId: BARNABY_THATCH.id, scale: "standard", dialogueId: LINES.barnaby },
+    { role: "townsfolk", anchorId: anchor("aad4297c-5246-4f3f-897a-f0ef14088e36"), characterId: NETTIE_FURROW.id, scale: "standard", dialogueId: LINES.nettie },
     // Challengers. The terraces: a hedge-witch (Edran's tides).
     {
       role: "challenger",
@@ -122,9 +125,9 @@ export default defineDream({
     {
       role: "challenger",
       anchorId: anchor("7a2a2fa2-608f-4f41-81dc-659bf11bd0a2"),
-      characterId: ALDO_HEWITT.id,
+      characterId: JORY_HEWITT.id,
       scale: "standard",
-      dialogueId: LINES.aldo,
+      dialogueId: LINES.jory,
       deck: deckOf(parseAvatarId("94e7c651-25e9-4a62-9de4-eaf5ba20542c")),
     },
     // The south fields: the scarecrow (Vethran's tides).

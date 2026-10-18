@@ -6,18 +6,21 @@
 //
 // - Wenna Ashdown, the innkeeper: broad, brisk, floury-sleeved; counts
 //   everything in barrels, time included.
-// - Reeve Tobin Rook: old, upright, fond of rules about bells.
+// - Reeve Lambert Rook: old, upright, fond of rules about bells.
 // - Hessa Mott: a young reaper, sharp, sunburnt, impatient with ceremony.
 // - Pell the baker: cheerful about loaves that never finish rising.
 // - Ambrose Finch: a fiddler forever tuning one string.
 // - Dilly Sorrel: a child who always loses count at the same sheaf.
 // - Widow Marrable: lays an extra place for whoever comes in from the dark.
 // - Cobb: the bridge-keeper, who counts every crossing.
+// - Barnaby Thatch: an old harvest hand in the inn, nursing a full cup he
+//   will not touch before the bell.
+// - Nettie Furrow: the inn's pot-girl, forever setting out the feast cups.
 // - Garrow: a thresher who plays the way he works, in rhythm.
 // - The Scarecrow: down off its pole; it does not explain itself.
 // - Oswin Marl: the reeve's tithe clerk, who tallies a deck as he plays it.
 // - Mother Yarrow: a hedge-witch amused by everything.
-// - Aldo Hewitt: a woodcutter, blunt and fair.
+// - Jory Hewitt: a woodcutter, blunt and fair.
 
 import { parseD97CharacterId, parseLpcSheetKey } from "../../../types/identifiers";
 import { characterSprite } from "./schema";
@@ -39,7 +42,7 @@ export const WENNA_ASHDOWN = characterSprite({
   ],
 });
 
-export const TOBIN_ROOK = characterSprite({
+export const LAMBERT_ROOK = characterSprite({
   id: character("af2eff5b-991f-4f3b-b634-645a4a3d6e05"),
   body: "male",
   skin: "light",
@@ -193,7 +196,7 @@ export const MOTHER_YARROW = characterSprite({
   ],
 });
 
-export const ALDO_HEWITT = characterSprite({
+export const JORY_HEWITT = characterSprite({
   id: character("ce35f8cf-1350-4aec-86d2-2a659e4b717b"),
   body: "male",
   skin: "light",
@@ -208,9 +211,38 @@ export const ALDO_HEWITT = characterSprite({
   ],
 });
 
+export const BARNABY_THATCH = characterSprite({
+  id: character("faa8903d-4b8e-49ec-9844-62b04a84b26d"),
+  body: "male",
+  skin: "light",
+  parts: [
+    { sheet: sheet("heads_human_male_plump"), colors: ["light", "gray"] },
+    { sheet: sheet("hair_plain"), colors: ["white"] },
+    { sheet: sheet("beards_beard"), colors: ["white"] },
+    { sheet: sheet("torso_clothes_longsleeve"), colors: ["tan"] },
+    { sheet: sheet("torso_clothes_vest_open"), colors: ["brown"] },
+    { sheet: sheet("legs_pants"), colors: ["brown"] },
+    { sheet: sheet("feet_boots_basic"), colors: ["walnut"] },
+  ],
+});
+
+export const NETTIE_FURROW = characterSprite({
+  id: character("12fc3cb6-97b7-45c0-9e85-9552b8266b9a"),
+  body: "teen",
+  skin: "olive",
+  parts: [
+    { sheet: sheet("heads_human_female_small"), colors: ["olive", "brown"] },
+    { sheet: sheet("hair_ponytail"), colors: ["dark_brown"] },
+    { sheet: sheet("hat_headband_kerchief"), colors: ["maroon"] },
+    { sheet: sheet("torso_clothes_shortsleeve"), colors: ["white"] },
+    { sheet: sheet("legs_skirts_plain"), colors: ["maroon"] },
+    { sheet: sheet("feet_shoes_basic"), colors: ["brown"] },
+  ],
+});
+
 export const FIRST_DREAM_CHARACTER_SPRITES = [
   WENNA_ASHDOWN,
-  TOBIN_ROOK,
+  LAMBERT_ROOK,
   HESSA_MOTT,
   PELL,
   AMBROSE_FINCH,
@@ -221,5 +253,7 @@ export const FIRST_DREAM_CHARACTER_SPRITES = [
   THE_SCARECROW,
   OSWIN_MARL,
   MOTHER_YARROW,
-  ALDO_HEWITT,
+  JORY_HEWITT,
+  BARNABY_THATCH,
+  NETTIE_FURROW,
 ];
