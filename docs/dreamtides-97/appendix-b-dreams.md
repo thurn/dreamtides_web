@@ -94,10 +94,13 @@ shop. Building doors without a room are scenery.
   The dream module lists its rooms, each with its UUID, its map module and
   its two doors; the dream validator checks each door is a building door on
   the right map.
-- **One dream.** A room's anchors register with its dream's, so every rule
-  that scopes an anchor to the run's dream treats them as the dream's. The
-  dream module lists the room's residents with the dream's, and the dream's
-  shop may stand inside. The dream's waypoint and doors stand on its own map.
+- **One dream.** A room's anchors register with its dream's, each with the
+  room it stands in, so every rule that scopes an anchor to the run's dream
+  treats them as the dream's. A rule resolves an anchor only on the map the
+  player is on: an intent at a room's anchor bounces on the dream's map, and
+  one at the dream map's anchor bounces inside a room. The dream module lists
+  the room's residents with the dream's, and the dream's shop may stand
+  inside. The dream's waypoint and doors stand on its own map.
 - **Passing through.** Stepping through a building door is an intent event:
   entering records the room's door as the run's last place, in that room,
   and leaving records the building door outside, on the dream's map. The

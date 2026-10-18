@@ -133,12 +133,12 @@ describe("registerDream", () => {
     expect(dream.speakerDialogue(syntheticDreamAnchor(1, 10), AVATAR)).toBe(SPEAKER_A);
     expect(dream.speakerDialogue(syntheticDreamAnchor(1, 6), AVATAR)).toBeNull();
     expect(dream.speakerDialogue(syntheticDreamAnchor(2, 10), AVATAR)).toBeNull();
-    expect(dream.anchorIds.has(syntheticDreamAnchor(1, 30))).toBe(true);
-    expect(dream.anchorIds.has(DREAM_A.topology.waypointAnchorId)).toBe(true);
-    expect(dream.anchorIds.has(DREAM_B.topology.waypointAnchorId)).toBe(false);
+    expect(dream.anchorRooms.has(syntheticDreamAnchor(1, 30))).toBe(true);
+    expect(dream.anchorRooms.has(DREAM_A.topology.waypointAnchorId)).toBe(true);
+    expect(dream.anchorRooms.has(DREAM_B.topology.waypointAnchorId)).toBe(false);
     // A room's doors are the dream's, and the room registers by id.
     const room = DREAM_A.rooms[0];
-    expect(dream.anchorIds.has(room.buildingDoorAnchorId) && dream.anchorIds.has(room.doorAnchorId)).toBe(true);
+    expect(dream.anchorRooms.get(room.buildingDoorAnchorId) === null && dream.anchorRooms.get(room.doorAnchorId) === room.id).toBe(true);
     expect(dream.rooms.get(room.id)).toBe(room);
   });
 

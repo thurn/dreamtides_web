@@ -72,8 +72,12 @@ export interface D97RegisteredDream {
   readonly definition: D97DreamDefinition;
   /** Its maps' declared anchors, its rooms' included (empty for a synthetic dream without maps). */
   readonly anchors: readonly D97RegisteredAnchor[];
-  /** Every anchor the dream declares: its maps', its topology's, its rooms' doors and its residents'. */
-  readonly anchorIds: ReadonlySet<DreamAnchorId>;
+  /**
+   * Every anchor the dream declares (its maps', its topology's, its rooms'
+   * doors and its residents'), with the room it stands in: null on the
+   * dream's own map, which is also where an anchor no map places stands.
+   */
+  readonly anchorRooms: ReadonlyMap<DreamAnchorId, D97RoomId | null>;
   /** The dream's rooms, by id. */
   readonly rooms: ReadonlyMap<D97RoomId, D97DreamRoom>;
   /** The challenger or guardian at each battle anchor. */

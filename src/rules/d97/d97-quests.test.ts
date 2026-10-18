@@ -354,6 +354,14 @@ describe("items, flags and hand-offs", () => {
 });
 
 describe("dialogue-effect intents and the speaker's dialogue", () => {
+  it("apply only on the speaker's map: a dream-map speaker's effects bounce while the player is inside a room", () => {
+    const room = DREAM.rooms[0];
+    const inside = applied(started(), "D97_ENTER_ROOM", { anchorId: room.buildingDoorAnchorId });
+    bounces(inside, "D97_SET_FLAG", { flagId: FLAG, value: true, anchorId: ANCHORS.giver });
+    const outside = applied(inside, "D97_LEAVE_ROOM", { anchorId: room.doorAnchorId });
+    expect(runOf(applied(outside, "D97_SET_FLAG", { flagId: FLAG, value: true, anchorId: ANCHORS.giver })).flags).toEqual([FLAG]);
+  });
+
   it("gives and takes only the items the speaker's dialogue hands over", () => {
     const state = started();
     bounces(state, "D97_GIVE_ITEM", { itemId: ITEMS.relic, anchorId: ANCHORS.recipient });

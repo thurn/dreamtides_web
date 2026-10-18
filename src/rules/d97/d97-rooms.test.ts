@@ -6,8 +6,10 @@
 // bounces from the wrong map, through another dream's door, through a door no
 // room has, outside the overworld (Avatar select, a D97 battle, the slice
 // end), and the dream's waypoint and exit door bounce inside a room. A room's
-// anchors are its dream's: a challenger inside the room previews and fights
-// for a run in its dream and bounces for a run in another dream.
+// anchors are its dream's, on the room's map: a challenger inside the room
+// previews and fights only from inside it, never from the dream's map or for
+// a run in another dream, and the dream map's anchors (a challenger, the
+// shop) bounce while the player is inside the room.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
@@ -172,14 +174,31 @@ describe("the dream's travel anchors from inside a room", () => {
 });
 
 describe("a room's anchors", () => {
-  it("are the dream's: a challenger inside previews for a run in its dream, never for a run in another", () => {
+  it("are the dream's, on the room's map: a challenger inside resolves and previews only from inside its room", () => {
     const content = d97ContentProvider()!;
     const inside = syntheticRoomAnchor(1, 6);
-    expect(runDreamAnchor(runOf(started()), content, inside)?.definition.id).toBe(DREAM_A.id);
+    expect(runDreamAnchor(runOf(entered()), content, inside)?.definition.id).toBe(DREAM_A.id);
+    expect(runDreamAnchor(runOf(started()), content, inside)).toBeNull();
     expect(runDreamAnchor(runOf(started(DREAM_B)), content, inside)).toBeNull();
     const previewed = applied(entered(), "D97_PREVIEW_ENCOUNTER", { anchorId: inside });
     expect(runOf(previewed).encounters[inside]?.anchorId).toBe(inside);
+    expect(apply(started(), "D97_PREVIEW_ENCOUNTER", { anchorId: inside }).outcome).toBe("bounced");
     expect(apply(started(DREAM_B), "D97_PREVIEW_ENCOUNTER", { anchorId: inside }).outcome).toBe("bounced");
+  });
+
+  it("bounce anchor intents across maps: a room's from the dream's map, the dream map's from inside the room", () => {
+    const outsideChallenger = DREAM_A.residents.find((resident) => resident.role === "challenger")!.anchorId;
+    const inside = syntheticRoomAnchor(1, 6);
+    // A preview made inside the room cannot start its battle from outside, nor the reverse.
+    const previewedInside = applied(entered(), "D97_PREVIEW_ENCOUNTER", { anchorId: inside });
+    const leftAfterPreview = applied(previewedInside, "D97_LEAVE_ROOM", { anchorId: ROOM_A.doorAnchorId });
+    expect(apply(leftAfterPreview, "D97_BEGIN_BATTLE", { anchorId: inside }).outcome).toBe("bounced");
+    const previewedOutside = applied(started(), "D97_PREVIEW_ENCOUNTER", { anchorId: outsideChallenger });
+    const enteredAfterPreview = applied(previewedOutside, "D97_ENTER_ROOM", { anchorId: ROOM_A.buildingDoorAnchorId });
+    expect(apply(enteredAfterPreview, "D97_BEGIN_BATTLE", { anchorId: outsideChallenger }).outcome).toBe("bounced");
+    expect(apply(entered(), "D97_PREVIEW_ENCOUNTER", { anchorId: outsideChallenger }).outcome).toBe("bounced");
+    expect(apply(entered(), "D97_OPEN_SHOP", { anchorId: DREAM_A.topology.shopAnchorId }).outcome).toBe("bounced");
+    expect(apply(started(), "D97_OPEN_SHOP", { anchorId: DREAM_A.topology.shopAnchorId }).outcome).toBe("applied");
   });
 });
 
