@@ -99,7 +99,8 @@ Locals talk about battles as games ("Fancy a hand?"); walkers can say more
 Avatars who stand in front of doors are **guardians**. They are not
 Apollyon's servants. Each holds a door for reasons of their own (pride,
 duty, a taste for testing travelers) and steps aside, without grudge, once
-beaten. Within a dream, the guarded door is often the thing the dream is
+beaten. The deepest door of each act is held instead by one of Apollyon's
+incarnations (below), which is Apollyon himself, not a guardian. Within a dream, the guarded door is often the thing the dream is
 stuck on: in the first dream, the sun will not set through the arch while
 someone stands in its mouth.
 
@@ -801,7 +802,7 @@ who sells "the shop" in local terms ("provisions for the road").
   inside a dream are lowercase descriptive phrases ("the well square", "the
   white bridge"), never capitalized place names.
 - **Character names** are a given name, a given name and surname, or a
-  title and name ("Reeve Tobin Rook", "Widow Marrable", "Mother Yarrow").
+  title and name ("Hessa Mott", "Widow Marrable", "Mother Yarrow").
   An epithet follows a comma ("Amunet, the Tomb-Keeper"; "Aldric, the
   Seer").
 - **Avoid sound-alikes within a dream** and with the recurring cast: no two
@@ -813,7 +814,8 @@ who sells "the shop" in local terms ("provisions for the road").
   the incarnation titles. Also avoid near-homophones of them, especially of
   the hard-K Avatar names (Kael Voss, Kaleth, Karev Soltis, Kell Tarn,
   Korrax, Kragg) and of the guides (a "Tobin" beside "Tobias" is already
-  close enough).
+  too close: the first dream's Reeve Tobin Rook breaks this rule and is not
+  a model).
 - **Card and Dreamsign names.** Before using a name, search
   `src/content/cards/` and `src/content/dreamsigns/`; a character or item
   that shares a card's or Dreamsign's name will read as that card.
