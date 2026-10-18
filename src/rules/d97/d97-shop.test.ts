@@ -11,6 +11,7 @@ import { D97_COLLECTION } from "../../content/d97/collection";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
 import { findCopy } from "../../d97/collection/collection";
+import { bagWeight } from "../../d97/collection/reward-bag";
 import { restockPrice, shopSlotCount, slotCeiling } from "../../d97/shop/pricing";
 import { eventRng } from "../../eventlog/rng";
 import type { Genesis } from "../../eventlog/types";
@@ -113,6 +114,10 @@ describe("D97_BUY_SHOP_CARD", () => {
     expect(copy).toMatchObject({ cardId: slot.cardId, zone: "reserve", provenance: { channel: "shop", price: slot.price } });
     expect(run.essence).toBe(before.essence - slot.price);
     expect(shopOf(bought.state).slots[0]?.purchased).toBe(true);
+    expect(bagWeight(before.bag, slot.cardId)).toBeGreaterThan(0);
+    expect(bagWeight(run.bag, slot.cardId)).toBe(bagWeight(before.bag, slot.cardId) - 1);
+    expect(bought.logRecords?.map((record) => record.event)).toEqual(["d97_bag_draw", "d97_shop_card_bought"]);
+    expect(bought.logRecords?.[0]).toMatchObject({ fields: { runId: run.runId, cardId: slot.cardId } });
     expect(apply(bought.state, "D97_BUY_SHOP_CARD", { anchorId: SHOP, slotIndex: 0 }).outcome).toBe("bounced");
   });
 

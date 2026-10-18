@@ -3,7 +3,7 @@
 // them, and disables unequipping at the minimum.
 
 import { describe, expect, it } from "vitest";
-import { acquireCopy, emptyCollection } from "../../../d97/collection/collection";
+import { testCollection } from "../../../d97/collection/collection.fixtures";
 import type { D97Collection, D97CopyZone } from "../../../d97/collection/types";
 import type { CardData } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
@@ -18,16 +18,7 @@ const CARDS = cardsByUuid(
 );
 
 function collection(entries: readonly [CardId, D97CopyZone][]): D97Collection {
-  let next = emptyCollection();
-  for (const [cardId, zone] of entries) {
-    next = acquireCopy(next, {
-      runSeed: parseD97RunSeed("deck-editor-seed"),
-      cardId,
-      provenance: { channel: "starting", battleCount: 0 },
-      zone,
-    }).collection;
-  }
-  return next;
+  return testCollection(entries, parseD97RunSeed("deck-editor-seed"));
 }
 
 describe("buildD97DeckEditorView", () => {

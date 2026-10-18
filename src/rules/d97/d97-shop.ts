@@ -10,8 +10,9 @@ import { D97_COLLECTION } from "../../content/d97/collection";
 import type { D97DreamTopology } from "../../content/d97/dreams/schema";
 import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
-import { acquireCopy, canUnequip, findCopy, removeCopies } from "../../d97/collection/collection";
-import { recordAcquisition, sampleFilteredOffer } from "../../d97/collection/reward-bag";
+import { acquireForRun } from "../../d97/collection/acquisition";
+import { canUnequip, findCopy, removeCopies } from "../../d97/collection/collection";
+import { sampleFilteredOffer } from "../../d97/collection/reward-bag";
 import {
   buyQuote,
   cardBaseValue,
@@ -120,15 +121,13 @@ export function buyShopCard(input: D97RunInput, payload: ShopPayload & { readonl
   const shop = run.shops[anchorId];
   const slot = shop?.slots[slotIndex];
   if (shop === undefined || slot === undefined || slot.purchased || slot.price > run.essence) return null;
-  const { collection, copy } = acquireCopy(run.collection, {
-    runSeed: run.runSeed,
-    cardId: slot.cardId,
-    provenance: { channel: "shop", battleCount: run.battlesFought, price: slot.price },
-    zone: "reserve",
-  });
+  const acquired = acquireForRun(run, { cardId: slot.cardId, channel: "shop", price: slot.price, zone: "reserve", source: "named" });
+  const { collection, bag } = acquired.run;
+  const { copy } = acquired;
   const slots = shop.slots.map((candidate, index) => (index === slotIndex ? { ...candidate, purchased: true } : candidate));
   const essence = run.essence - slot.price;
-  return withShop(input.d97, run, anchorId, { ...shop, slots }, { collection, essence, bag: recordAcquisition(run.bag, slot.cardId) }, [
+  return withShop(input.d97, run, anchorId, { ...shop, slots }, { collection, essence, bag }, [
+    ...acquired.logRecords,
     {
       event: "d97_shop_card_bought",
       fields: { runId: run.runId, anchorId, slotIndex, cardId: slot.cardId, copyId: copy.copyId, price: slot.price, essence },

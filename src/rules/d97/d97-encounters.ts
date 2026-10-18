@@ -12,15 +12,15 @@ import { D97_ENCOUNTERS, type D97TierKnob } from "../../content/d97/encounters";
 import { incarnationFor, type D97BattleResident } from "../../content/d97/dreams/schema";
 import { D97_SHOP } from "../../content/d97/shop";
 import { D97_ACT_CHALLENGER_TIERS } from "../../content/d97/tunables";
+import { acquireForRun, type D97AcquiringRun } from "../../d97/collection/acquisition";
 import {
-  acquireCopy,
   copiesInZone,
   deckSize,
   findCopy,
   removeCopies,
 } from "../../d97/collection/collection";
 import type { D97Collection, D97OwnedCopy } from "../../d97/collection/types";
-import { drawFromBag, recordAcquisition } from "../../d97/collection/reward-bag";
+import { pickFromBag } from "../../d97/collection/reward-bag";
 import { cardBaseValue, saleQuote } from "../../d97/shop/pricing";
 import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
@@ -34,7 +34,7 @@ import { engineBattleResult, startEngineBattleWithCommits } from "../battle/engi
 import { getBattleInitProvider } from "../battle/journey-battle";
 import type { FoldState } from "../fold-state";
 import { advanceDefeatQuest } from "./d97-quests";
-import { bagDrawLogRecord, type D97Transition } from "./d97-run";
+import type { D97Transition } from "./d97-run";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
 import { d97RunAct, type D97Encounter, type D97Run } from "./d97-state";
@@ -316,31 +316,25 @@ export function endEncounterBattle(
     let drawIndex = 0;
     const random = (): number => ctx.rng(drawIndex++);
     let remaining = role === "challenger" ? bundleBudget(tier) : 0;
+    let acquiring: D97AcquiringRun = { runId: run.runId, runSeed: run.runSeed, battlesFought, collection, bag };
     if (opponentAnteCardId !== null) {
-      collection = acquireCopy(collection, {
-        runSeed: run.runSeed,
-        cardId: opponentAnteCardId,
-        provenance: { channel: "ante", battleCount: battlesFought },
-        zone: "reserve",
-      }).collection;
-      bag = recordAcquisition(bag, opponentAnteCardId);
+      const ante = acquireForRun(acquiring, { cardId: opponentAnteCardId, channel: "ante", zone: "reserve", source: "named" });
+      acquiring = ante.run;
+      records.push(...ante.logRecords);
       wonCardIds.push(opponentAnteCardId);
       remaining -= rarityCost(content.cardRarity(opponentAnteCardId));
     }
     while (remaining > 0) {
-      const draw = drawFromBag(bag, random);
-      if (draw === null) break;
-      bag = draw.bag;
-      records.push(bagDrawLogRecord(run.runId, draw));
-      collection = acquireCopy(collection, {
-        runSeed: run.runSeed,
-        cardId: draw.cardId,
-        provenance: { channel: "bundle", battleCount: battlesFought },
-        zone: "reserve",
-      }).collection;
-      wonCardIds.push(draw.cardId);
-      remaining -= rarityCost(content.cardRarity(draw.cardId));
+      const cardId = pickFromBag(acquiring.bag, random);
+      if (cardId === null) break;
+      const drawn = acquireForRun(acquiring, { cardId, channel: "bundle", zone: "reserve", source: "draw" });
+      if (drawn === null) break;
+      acquiring = drawn.run;
+      records.push(...drawn.logRecords);
+      wonCardIds.push(cardId);
+      remaining -= rarityCost(content.cardRarity(cardId));
     }
+    ({ collection, bag } = acquiring);
     essence += encounter.extra?.amount ?? 0;
   } else if (lost && playerAnteCopyId !== null) {
     const copy = findCopy(collection, playerAnteCopyId);

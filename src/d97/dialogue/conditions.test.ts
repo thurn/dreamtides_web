@@ -8,7 +8,7 @@ import type { CardId } from "../../types/card-identity";
 import { parseCardSubtype } from "../../types/card-identity";
 import { parseD97RunSeed } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
-import { acquireCopy, emptyCollection } from "../collection/collection";
+import { testCollection } from "../collection/collection.fixtures";
 import { emptyQuestState } from "../quests/quests";
 import type { D97QuestState } from "../quests/types";
 import { evaluateCondition, type D97CardFacts, type D97DialogueContext } from "./conditions";
@@ -33,16 +33,7 @@ const FACTS: ReadonlyMap<CardId, D97CardFacts> = new Map<CardId, D97CardFacts>([
 ]);
 
 function collectionOf(cardIds: readonly CardId[]) {
-  let collection = emptyCollection();
-  for (const cardId of cardIds) {
-    collection = acquireCopy(collection, {
-      runSeed: parseD97RunSeed("seed"),
-      cardId,
-      provenance: { channel: "starting", battleCount: 0 },
-      zone: "deck",
-    }).collection;
-  }
-  return collection;
+  return testCollection(cardIds.map((cardId) => [cardId, "deck"] as const), parseD97RunSeed("seed"));
 }
 
 function context(overrides: Partial<D97DialogueContext> = {}): D97DialogueContext {

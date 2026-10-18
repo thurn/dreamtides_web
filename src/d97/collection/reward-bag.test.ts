@@ -1,20 +1,20 @@
 // Reward bag v0 contract: copy targets equal the dealt counts; `w` falls with
-// every acquisition from any channel and never goes negative; draws remove
-// copies without replacement and never exceed the targets; offers sample
-// without removing and never show a card more than `w(c)` times.
+// every acquisition from any channel and never goes negative; draw picks never
+// pick a card the bag no longer holds; offers sample without removing and
+// never show a card more than `w(c)` times.
 
 import { describe, expect, it } from "vitest";
 import { makeRng } from "../../draft/pool/rng";
 import type { CardId } from "../../types/card-identity";
 import { testAvatarId, testCardId } from "../../types/test-identities";
+import { acquireForRun } from "./acquisition";
+import { testAcquiringRun } from "./collection.fixtures";
 import {
   bagSize,
   bagWeight,
   createRewardBag,
-  drawFromBag,
-  recordAcquisition,
+  pickFromBag,
   sampleBagOffer,
-  takeFromBag,
 } from "./reward-bag";
 import type { D97RewardBag } from "./types";
 
@@ -36,6 +36,14 @@ function smallBag(): D97RewardBag {
   });
 }
 
+/** `bag` after acquiring one copy of `cardId` through a named channel. */
+function afterAcquiring(bag: D97RewardBag, cardId: CardId): D97RewardBag {
+  return acquireForRun(
+    { ...testAcquiringRun(), bag },
+    { cardId, channel: "ante", zone: "reserve", source: "named" },
+  ).run.bag;
+}
+
 describe("copy targets", () => {
   it("sets each target to the dealt count", () => {
     const bag = smallBag();
@@ -48,50 +56,35 @@ describe("copy targets", () => {
 
   it("counts every acquisition, from any channel, and never goes negative", () => {
     let bag = smallBag();
-    bag = recordAcquisition(bag, A);
+    bag = afterAcquiring(bag, A);
     expect(bagWeight(bag, A)).toBe(1);
-    bag = recordAcquisition(bag, A);
-    bag = recordAcquisition(bag, A);
+    bag = afterAcquiring(bag, A);
+    bag = afterAcquiring(bag, A);
     expect(bagWeight(bag, A)).toBe(0);
     expect(bagSize(bag)).toBe(3);
-    expect(takeFromBag(bag, A)).toBeNull();
-    expect(recordAcquisition(bag, OUTSIDE)).toBe(bag);
+    expect(afterAcquiring(bag, OUTSIDE)).toBe(bag);
   });
 });
 
-describe("drawFromBag", () => {
-  it("draws without replacement until the bag is empty", () => {
-    let bag = smallBag();
-    const drawn = new Map<CardId, number>();
-    const random = makeRng(11);
-    for (let draw = 0; draw < 5; draw += 1) {
-      const result = drawFromBag(bag, random);
-      if (result === null) throw new Error("bag emptied early");
-      bag = result.bag;
-      drawn.set(result.cardId, (drawn.get(result.cardId) ?? 0) + 1);
-      expect(result.remaining).toBe(bagWeight(bag, result.cardId));
-      expect(result.bagSize).toBe(4 - draw);
+describe("pickFromBag", () => {
+  it("picks only cards the bag still holds and removes nothing", () => {
+    const bag = afterAcquiring(smallBag(), B);
+    for (let seed = 0; seed < 20; seed += 1) {
+      expect(pickFromBag(bag, makeRng(seed))).not.toBe(B);
     }
-    expect(Object.fromEntries(drawn)).toEqual({ [A]: 2, [B]: 1, [C]: 2 });
-    expect(drawFromBag(bag, random)).toBeNull();
+    expect(bagSize(bag)).toBe(4);
   });
 
-  it("never draws a card whose acquisitions already met its target", () => {
-    let bag = recordAcquisition(smallBag(), B);
-    const random = makeRng(3);
-    for (let draw = 0; draw < 4; draw += 1) {
-      const result = drawFromBag(bag, random);
-      expect(result?.cardId).not.toBe(B);
-      if (result === null) break;
-      bag = result.bag;
-    }
-    expect(drawFromBag(bag, random)).toBeNull();
+  it("picks nothing from an empty bag", () => {
+    let bag = smallBag();
+    for (const cardId of [A, A, B, C, C]) bag = afterAcquiring(bag, cardId);
+    expect(pickFromBag(bag, makeRng(1))).toBeNull();
   });
 });
 
 describe("sampleBagOffer", () => {
   it("never shows a card more than w(c) times and removes nothing", () => {
-    const bag = recordAcquisition(smallBag(), A);
+    const bag = afterAcquiring(smallBag(), A);
     for (let seed = 0; seed < 20; seed += 1) {
       const offer = sampleBagOffer(bag, 10, makeRng(seed));
       expect(offer).toHaveLength(bagSize(bag));

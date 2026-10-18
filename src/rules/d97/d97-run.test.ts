@@ -11,7 +11,7 @@ import {
   D97_COLLECTION,
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
-import { acquireCopy } from "../../d97/collection/collection";
+import { acquireForRun } from "../../d97/collection/acquisition";
 import { bagWeight } from "../../d97/collection/reward-bag";
 import { eventRng } from "../../eventlog/rng";
 import type { Genesis } from "../../eventlog/types";
@@ -257,11 +257,11 @@ describe("D97_EQUIP_COPY and D97_UNEQUIP_COPY", () => {
   it("bounces unknown, malformed and wrong-zone copies", () => {
     const started = startedState();
     const copy = runOf(started).collection.copies[0];
-    const stranger = acquireCopy(runOf(started).collection, {
-      runSeed: runOf(started).runSeed,
+    const stranger = acquireForRun(runOf(started), {
       cardId: testCardId("d97-stranger-card"),
-      provenance: { channel: "bag", battleCount: 0 },
+      channel: "bag",
       zone: "reserve",
+      source: "named",
     }).copy;
     for (const type of ["D97_EQUIP_COPY", "D97_UNEQUIP_COPY"] as const) {
       expect(deckEdit(started, type, stranger.copyId).outcome).toBe("bounced");

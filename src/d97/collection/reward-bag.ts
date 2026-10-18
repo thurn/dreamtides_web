@@ -1,7 +1,8 @@
 // Reward bag v0 operations (decision P29, Appendix A §A2). Pure functions
 // over the stored bag: `w(c) = target(c) − acquired(c)`, where `acquired(c)`
-// counts every copy of `c` the run ever acquired, through any channel. Owned
-// copies never decrease it, so a sold copy never returns to the bag.
+// counts every copy of `c` the run ever acquired, through any channel
+// (`./acquisition.ts` counts each one). Owned copies never decrease it, so a
+// sold copy never returns to the bag.
 
 import type { CardId } from "../../types/card-identity";
 import type { AvatarId, TideId } from "../../types/identifiers";
@@ -11,16 +12,6 @@ import type { D97BagEntry, D97RewardBag } from "./types";
 export interface D97DealtCard {
   readonly cardId: CardId;
   readonly copies: number;
-}
-
-/** A card taken from the bag, with the bag's state after it. */
-export interface D97BagDraw {
-  readonly bag: D97RewardBag;
-  readonly cardId: CardId;
-  /** `w(cardId)` after the draw. */
-  readonly remaining: number;
-  /** Copies left in the whole bag after the draw. */
-  readonly bagSize: number;
 }
 
 function codeUnits(left: string, right: string): number {
@@ -76,43 +67,6 @@ export function bagCardIds(bag: D97RewardBag): CardId[] {
     .map((entry) => entry.cardId);
 }
 
-/**
- * Count one acquired copy of `cardId`, from any channel. A card outside the
- * bag has a target of zero, so its acquisition leaves the bag unchanged.
- */
-export function recordAcquisition(
-  bag: D97RewardBag,
-  cardId: CardId,
-): D97RewardBag {
-  if (!bag.entries.some((entry) => entry.cardId === cardId)) return bag;
-  return {
-    ...bag,
-    entries: bag.entries.map((entry) =>
-      entry.cardId === cardId
-        ? { ...entry, acquired: entry.acquired + 1 }
-        : entry,
-    ),
-  };
-}
-
-/**
- * Acquire one copy of a chosen card from the bag, or null when the bag holds
- * none of it.
- */
-export function takeFromBag(
-  bag: D97RewardBag,
-  cardId: CardId,
-): D97BagDraw | null {
-  if (bagWeight(bag, cardId) === 0) return null;
-  const next = recordAcquisition(bag, cardId);
-  return {
-    bag: next,
-    cardId,
-    remaining: bagWeight(next, cardId),
-    bagSize: bagSize(next),
-  };
-}
-
 /** Pick an index with probability proportional to its weight. */
 function weightedIndex(
   weights: readonly number[],
@@ -130,16 +84,16 @@ function weightedIndex(
 }
 
 /**
- * A bag draw: pick card `c` with probability proportional to `w(c)` and
- * acquire that copy. Null when the bag is empty.
+ * A bag draw's pick: card `c` with probability proportional to `w(c)`, or
+ * null when the bag is empty. The pick removes nothing; acquiring the card
+ * (`acquireForRun` with source `draw`) counts it against the bag.
  */
-export function drawFromBag(
+export function pickFromBag(
   bag: D97RewardBag,
   random: () => number,
-): D97BagDraw | null {
+): CardId | null {
   const index = weightedIndex(bag.entries.map(entryWeight), random);
-  const entry = index === null ? undefined : bag.entries[index];
-  return entry === undefined ? null : takeFromBag(bag, entry.cardId);
+  return index === null ? null : (bag.entries[index]?.cardId ?? null);
 }
 
 /**

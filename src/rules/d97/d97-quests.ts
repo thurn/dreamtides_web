@@ -15,8 +15,8 @@
 
 import type { D97DialogueEffect, D97QuestDefinition, D97ServiceKind } from "../../content/d97/dialogue/schema";
 import { D97_QUESTS } from "../../content/d97/quests";
-import { acquireCopy } from "../../d97/collection/collection";
-import { bagSize, recordAcquisition, sampleBagOffer, takeFromBag } from "../../d97/collection/reward-bag";
+import { acquireForRun } from "../../d97/collection/acquisition";
+import { bagSize, sampleBagOffer } from "../../d97/collection/reward-bag";
 import { dialogueCarriesEffect } from "../../d97/dialogue/effects";
 import {
   abandonQuest as abandonInState,
@@ -38,7 +38,7 @@ import type {
 } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
-import { bagDrawLogRecord, type D97Transition } from "./d97-run";
+import type { D97Transition } from "./d97-run";
 import { d97BeatenAnchorIds, d97RunAct, type D97OverworldState, type D97Run } from "./d97-state";
 import type { D97RunInput } from "./events/spec";
 
@@ -173,19 +173,12 @@ export function chooseQuestReward(
   const pending = run.quests.pendingReward;
   if (pending === null || pending.questId !== questId) return null;
   if (!pending.cardIds.includes(cardId)) return null;
-  const draw = takeFromBag(run.bag, cardId);
-  const bag = draw === null ? recordAcquisition(run.bag, cardId) : draw.bag;
-  const acquired = acquireCopy(run.collection, {
-    runSeed: run.runSeed,
-    cardId,
-    provenance: { channel: "bag", battleCount: run.battlesFought },
-    zone: "reserve",
-  });
+  const acquired = acquireForRun(run, { cardId, channel: "bag", zone: "reserve", source: "named" });
   return withRun(
     d97,
-    { ...run, bag, collection: acquired.collection, quests: { ...run.quests, pendingReward: null } },
+    { ...acquired.run, quests: { ...run.quests, pendingReward: null } },
     [
-      ...(draw === null ? [] : [bagDrawLogRecord(run.runId, draw)]),
+      ...acquired.logRecords,
       {
         event: "d97_quest_reward_chosen",
         fields: {
@@ -194,7 +187,7 @@ export function chooseQuestReward(
           cardId,
           copyId: acquired.copy.copyId,
           offeredCardIds: pending.cardIds,
-          collectionSize: acquired.collection.copies.length,
+          collectionSize: acquired.run.collection.copies.length,
         },
       },
     ],

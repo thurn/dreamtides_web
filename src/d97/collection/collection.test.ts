@@ -6,11 +6,10 @@
 import { describe, expect, it } from "vitest";
 import { parseD97RunSeed } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
+import { testCollection } from "./collection.fixtures";
 import {
-  acquireCopy,
   canUnequip,
   deckSize,
-  emptyCollection,
   equipCopy,
   ownedCopyId,
   removeCopies,
@@ -23,20 +22,11 @@ const CARD = testCardId("collection-card");
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 
 function collectionOf(deck: number, reserve: number): D97Collection {
-  let collection = emptyCollection();
   const zones: D97CopyZone[] = [
     ...Array<D97CopyZone>(deck).fill("deck"),
     ...Array<D97CopyZone>(reserve).fill("reserve"),
   ];
-  for (const zone of zones) {
-    collection = acquireCopy(collection, {
-      runSeed: SEED,
-      cardId: CARD,
-      provenance: { channel: "bag", battleCount: 0 },
-      zone,
-    }).collection;
-  }
-  return collection;
+  return testCollection(zones.map((zone) => [CARD, zone] as const), SEED);
 }
 
 describe("owned copies", () => {
@@ -53,17 +43,6 @@ describe("owned copies", () => {
     const collection = collectionOf(40, 0);
     expect(deckSize(collection)).toBe(40);
     expect(collection.copies.every((copy) => copy.cardId === CARD)).toBe(true);
-  });
-
-  it("records provenance with a price for a bought copy", () => {
-    const { copy } = acquireCopy(emptyCollection(), {
-      runSeed: SEED,
-      cardId: CARD,
-      provenance: { channel: "bag", battleCount: 3, price: 120 },
-      zone: "reserve",
-    });
-    expect(copy.provenance).toEqual({ channel: "bag", battleCount: 3, price: 120 });
-    expect(copy.modifications).toEqual([]);
   });
 });
 

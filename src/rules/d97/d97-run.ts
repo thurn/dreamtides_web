@@ -10,20 +10,17 @@ import {
   type D97DreamId,
 } from "../../types/identifiers";
 import { D97_STARTING_PACKAGE } from "../../content/d97/collection";
-import { acquireCopy, emptyCollection } from "../../d97/collection/collection";
 import {
-  bagSize,
-  createRewardBag,
-  recordAcquisition,
-  takeFromBag,
-  type D97BagDraw,
-} from "../../d97/collection/reward-bag";
+  acquireForRun,
+  type D97AcquiringRun,
+} from "../../d97/collection/acquisition";
+import { emptyCollection } from "../../d97/collection/collection";
+import { bagSize, createRewardBag } from "../../d97/collection/reward-bag";
 import {
   chooseStartingCollection,
   startingEssence,
 } from "../../d97/collection/starting-collection";
 import { emptyQuestState } from "../../d97/quests/quests";
-import type { D97RunId } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import type { D97Run, D97State } from "./d97-state";
 import type { D97SelectInput } from "./events/spec";
@@ -44,23 +41,6 @@ function drawHex(value: number): string {
 /** The 32-bit seed one [0, 1) draw names. */
 function drawSeed(value: number): number {
   return Math.floor(value * 0x100000000) >>> 0;
-}
-
-/** The reducer log record of one bag draw: UUIDs and counts only. */
-export function bagDrawLogRecord(
-  runId: D97RunId,
-  draw: D97BagDraw,
-): ReducerLogRecord {
-  return {
-    event: "d97_bag_draw",
-    fields: {
-      runId,
-      avatarId: draw.bag.avatarId,
-      cardId: draw.cardId,
-      remaining: draw.remaining,
-      bagSize: draw.bagSize,
-    },
-  };
 }
 
 /**
@@ -91,44 +71,40 @@ export function startRun(
   const runSeed = parseD97RunSeed(`${drawHex(random())}${drawHex(random())}`);
   const dealSeed = drawSeed(random());
   const deal = content.dealRewardPool(avatarId, dealSeed);
-  let bag = createRewardBag({
+  const dealtBag = createRewardBag({
     avatarId,
     dealSeed,
     joinedTideIds: deal.joinedTideIds,
     dealt: deal.cards,
   });
-  const dealtBagSize = bagSize(bag);
+  const dealtBagSize = bagSize(dealtBag);
   const starting = chooseStartingCollection({
-    bag,
+    bag: dealtBag,
     content,
     tuning: D97_STARTING_PACKAGE,
     random,
   });
   const battlesFought = 0;
-  const provenance = { channel: "starting", battleCount: battlesFought } as const;
-  let collection = emptyCollection();
+  let acquiring: D97AcquiringRun = {
+    runId,
+    runSeed,
+    battlesFought,
+    collection: emptyCollection(),
+    bag: dealtBag,
+  };
   const drawRecords: ReducerLogRecord[] = [];
-  for (const cardId of starting.keptCardIds) {
-    const draw = takeFromBag(bag, cardId);
-    if (draw === null) continue;
-    bag = draw.bag;
-    drawRecords.push(bagDrawLogRecord(runId, draw));
-    collection = acquireCopy(collection, {
-      runSeed,
-      cardId,
-      provenance,
-      zone: "deck",
-    }).collection;
+  const acquisitions = [
+    ...starting.keptCardIds.map((cardId) => ({ cardId, source: "draw" as const })),
+    ...starting.starterCardIds.map((cardId) => ({ cardId, source: "named" as const })),
+  ];
+  for (const { cardId, source } of acquisitions) {
+    // A kept card the bag no longer holds is not acquired.
+    const acquired = acquireForRun(acquiring, { cardId, channel: "starting", zone: "deck", source });
+    if (acquired === null) continue;
+    acquiring = acquired.run;
+    drawRecords.push(...acquired.logRecords);
   }
-  for (const cardId of starting.starterCardIds) {
-    bag = recordAcquisition(bag, cardId);
-    collection = acquireCopy(collection, {
-      runSeed,
-      cardId,
-      provenance,
-      zone: "deck",
-    }).collection;
-  }
+  const { collection, bag } = acquiring;
   const run: D97Run = {
     runId,
     runSeed,

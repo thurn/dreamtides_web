@@ -4,7 +4,6 @@
 // arrive as arguments from the `src/content/d97/` catalog.
 
 import { sha256 } from "js-sha256";
-import type { CardId } from "../../types/card-identity";
 import {
   parseD97OwnedCopyId,
   type D97OwnedCopyId,
@@ -12,7 +11,6 @@ import {
 } from "../../types/identifiers";
 import type {
   D97Collection,
-  D97CopyProvenance,
   D97CopyZone,
   D97OwnedCopy,
 } from "./types";
@@ -58,35 +56,6 @@ export function findCopy(
   copyId: D97OwnedCopyId,
 ): D97OwnedCopy | null {
   return collection.copies.find((copy) => copy.copyId === copyId) ?? null;
-}
-
-/**
- * Add one newly acquired copy of `cardId` in `zone`: new copies enter the
- * reserve, except the starting collection, which starts in the deck.
- */
-export function acquireCopy(
-  collection: D97Collection,
-  args: {
-    runSeed: D97RunSeed;
-    cardId: CardId;
-    provenance: D97CopyProvenance;
-    zone: D97CopyZone;
-  },
-): { collection: D97Collection; copy: D97OwnedCopy } {
-  const copy: D97OwnedCopy = {
-    copyId: ownedCopyId(args.runSeed, collection.nextCopyOrdinal),
-    cardId: args.cardId,
-    zone: args.zone,
-    modifications: [],
-    provenance: args.provenance,
-  };
-  return {
-    collection: {
-      copies: [...collection.copies, copy],
-      nextCopyOrdinal: collection.nextCopyOrdinal + 1,
-    },
-    copy,
-  };
 }
 
 function moveCopy(
