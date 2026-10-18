@@ -260,7 +260,9 @@ of a prototype care more about what is in a dream than about its layout.
 
 **Choosing a path.** Crop an existing Tiled map when one fits the theme,
 reseason or edit it when it nearly fits, and compose from stamps only when no
-source map covers the theme.
+source map covers the theme. [Art coverage](art-coverage.md) names, for each
+tileset, the local source maps worth cropping, the stamps that dress it and
+the art it lacks.
 
 ## Shared visual language
 

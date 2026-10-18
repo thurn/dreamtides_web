@@ -63,6 +63,26 @@ import handCart02d71085 from "./hand-cart-02d71085";
 import clockTower993f1121 from "./clock-tower-993f1121";
 import winchWell70d71581 from "./winch-well-70d71581";
 import signposts63183394 from "./signposts-63183394";
+import scarecrow33be7cfd from "./scarecrow-33be7cfd";
+import clockOakDa2dde52 from "./clock-oak-da2dde52";
+import gardenShedCe5f48a0 from "./garden-shed-ce5f48a0";
+import roundHayBale062aa74f from "./round-hay-bale-062aa74f";
+import birdbathE41c7674 from "./birdbath-e41c7674";
+import hoodedStatueA71de33a from "./hooded-statue-a71de33a";
+import wolfStatue8bffff94 from "./wolf-statue-8bffff94";
+import wroughtIronArchB1f47948 from "./wrought-iron-arch-b1f47948";
+import columnedPortico4ed63fa9 from "./columned-portico-4ed63fa9";
+import vendingMachineA2e74a5d from "./vending-machine-a2e74a5d";
+import burningBarrel49ab05be from "./burning-barrel-49ab05be";
+import streetLamp815c6fcb from "./street-lamp-815c6fcb";
+import junkHeap85ab0875 from "./junk-heap-85ab0875";
+import serverRack79f84432 from "./server-rack-79f84432";
+import energyCrystal19145f9a from "./energy-crystal-19145f9a";
+import rowboatDd35bdd7 from "./rowboat-dd35bdd7";
+import sampanBoatBfa6ec65 from "./sampan-boat-bfa6ec65";
+import plankBarn2985ee18 from "./plank-barn-2985ee18";
+import hayLeanTo78ba625c from "./hay-lean-to-78ba625c";
+import paleGatehouse61ae9649 from "./pale-gatehouse-61ae9649";
 
 export const D97_STAMPS: readonly D97CatalogStamp[] = [
   emberArch684f3b39,
@@ -121,4 +141,24 @@ export const D97_STAMPS: readonly D97CatalogStamp[] = [
   clockTower993f1121,
   winchWell70d71581,
   signposts63183394,
+  scarecrow33be7cfd,
+  clockOakDa2dde52,
+  gardenShedCe5f48a0,
+  roundHayBale062aa74f,
+  birdbathE41c7674,
+  hoodedStatueA71de33a,
+  wolfStatue8bffff94,
+  wroughtIronArchB1f47948,
+  columnedPortico4ed63fa9,
+  vendingMachineA2e74a5d,
+  burningBarrel49ab05be,
+  streetLamp815c6fcb,
+  junkHeap85ab0875,
+  serverRack79f84432,
+  energyCrystal19145f9a,
+  rowboatDd35bdd7,
+  sampanBoatBfa6ec65,
+  plankBarn2985ee18,
+  hayLeanTo78ba625c,
+  paleGatehouse61ae9649,
 ];

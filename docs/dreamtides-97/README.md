@@ -60,6 +60,7 @@ tables:
 | [D: Reusing Dreamtides content](appendix-d-content-reuse.md) | How every existing site, Dream Guide, Avatar, Dreamsign, transfiguration, Exploration and Augury outcome fits D97, including exclusions |
 | [E: Acquisition-rate calibration](appendix-e-calibration.md) | Shandalar reference rates, bundle calibration, the campaign's card, Essence and amulet ledgers, and the measurement plan |
 | [Overworld visual guide](overworld-visual-guide.md) | The prototype's pixel-art tilesets, dream doors, waypoints, head icons, character sprites, map authoring and React overlay |
+| [Art coverage](art-coverage.md) | Which local LPC sources, source maps and stamps cover each tileset, and the art gaps |
 
 Research inputs, outside this repository:
 
