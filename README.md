@@ -537,6 +537,48 @@ runs in the MCP server with a Playwright page and may not read its module's
 other bindings or imports. The sandbox has no `URL`, `setTimeout`, or
 `require`.
 
+**Scenario serialization.** The runner imports the module in Node, but only
+to read `viewports` and the steps: each step is turned back into source
+with `String(step)` (`Function.prototype.toString`) and pasted into the call
+as `const scenario = <source>;`, beside the prelude's own source. A step
+therefore runs as if written alone in an empty file:
+
+- It may use its parameter `qa`, the sandbox's globals, and anything it
+  defines inside its own body, including nested helper functions.
+- It may not use the module's imports, top-level constants or helper
+  functions, or any closure over them. Nothing fails at import time: the
+  name is simply undefined (a `ReferenceError`) when the step runs. JSDoc
+  `import()` types and module-level `@typedef`s are comments, so they are
+  fine.
+- A step is a function expression or declaration (`async function step(qa)
+  { … }` or `async (qa) => …`), never an object method's shorthand, whose
+  source is not an expression.
+- Functions passed to `qa.read`, `qa.waitFor`, or `page.evaluate` are
+  serialized once more into the page, so they see neither the step's
+  locals nor `qa`; pass values through their `arg`. A `qa.gameLog.waitFor`
+  predicate runs in the sandbox and may read the step's locals.
+- Values reach a step only through `qa`: parameters from the command line as
+  `qa.args` (`--arg key=value`, always strings), and the previous step's
+  return as `qa.carry`. A step's return travels as JSON, so return plain
+  data (no functions, `Map`s, or `undefined` fields).
+
+```js
+/** @param {import("../prelude.mjs").Qa} qa */
+async function step(qa) {
+  // Helpers live inside the step.
+  const name = (/** @type {string} */ beat) => `my-scenario-${beat}-${qa.viewportName}`;
+  const target = qa.args.anchor ?? "d9700000-0000-4000-8000-00000000000a";
+  if (qa.step === 0) {
+    await qa.open("/?goto=d97-overworld&debug=1");
+    await qa.capture(name("start"));
+    return { target }; // the next step's qa.carry
+  }
+  const { target: carried } = /** @type {{ target: string }} */ (qa.carry);
+  return { carried };
+}
+export default [step, step];
+```
+
 **Steps and viewports.** One MCP call's response is lost when the call
 outlasts about 300 s (likely Node fetch's body timeout in the MCP client), so
 a longer walk is split:
@@ -785,6 +827,39 @@ with the player's state and the anchor's kind and tile:
   `shop`, `shop-sell`, `deck-editor`, or `slice-end`. It returns
   `{ panel, id }`, where `id` is the preview's or shop's anchor, or the
   dialogue's node.
+- `qa.d97.advanceDialogue({ close?, timeout? })` waits for the open
+  dialogue and presses its Continue (`[data-testid=d97-dialogue-continue]`)
+  line by line. It returns where it stopped, with the presses it made as
+  `continues`:
+  - `{ kind: "choices", dialogueId, nodeId, choices, continues }` when the
+    node's choices show; `choices` are their indices in the node's authored
+    choices.
+  - `{ kind: "ended", dialogueId, nodeId, continues }` when the conversation
+    closed; a last line that offers only Close
+    (`[data-testid=d97-dialogue-close]`) is pressed too.
+  - `{ kind: "last-line", dialogueId, nodeId, continues }` at that Close-only
+    last line instead, with `close: false`.
+
+  It fails with the last dialogue state seen and the presses so far after
+  `timeout` (default 30 s), and on `__caps`.
+- `qa.d97.chooseDialogue(nodeId, index, { timeout? })` takes the choice at
+  `index` in node `nodeId`, the pair the `d97_dialogue_choice` log row
+  records as `nodeId` and `choiceIndex` (choices have no UUID of their own).
+  It presses `[data-testid=d97-dialogue-choice-<index>]` inside
+  `[data-d97-dialogue-node="<nodeId>"]`, waits until the dialogue leaves the
+  node, and returns `{ nodeId, index, next }`, where `next` is the node now
+  showing, or null when the conversation closed. It fails at once, naming
+  what shows, when the dialogue shows another node, a line before the
+  choices, or no such choice; and after `timeout` (default 15 s) when no
+  dialogue opens or it stays on the node.
+
+  ```js
+  await qa.d97.teleport(residentId);
+  await qa.d97.interact();
+  const greeting = await qa.d97.advanceDialogue();
+  if (greeting.kind !== "choices") throw new Error(JSON.stringify(greeting));
+  const { next } = await qa.d97.chooseDialogue(greeting.nodeId, greeting.choices[0]);
+  ```
 
 `qa.touch.longPress(target, ms?)` holds a finger on a target, as on an
 InfoCard source: it waits until the target is rendered and uncovered, then
@@ -824,7 +899,11 @@ Tracked scenarios:
   (`--arg ai=<policy>` adds `?ai=` to the entry). Its waits use test IDs,
   data attributes, and card UUIDs, never copy.
 - `d97-slice` starts a Dreamtides 97 run on the development dream
-  (`?goto=d97-overworld&debug=1`) on desktop and mobile, walks to the
+  (`?goto=d97-overworld&debug=1`) on desktop and mobile, talks to a
+  resident (`--arg talkTo=<anchor UUID>`, default the development dream's
+  Wren) through a multi-line greeting, a first choice and a parting choice
+  (`qa.d97.advanceDialogue`, `qa.d97.chooseDialogue`), checking the
+  persisted log's applied flag and logged choices, then walks to the
   challenger nearest the arrival tile (`qa.d97.walkTo`), waits for its
   encounter preview, fights and wins the battle (`qa.battle.win`), and takes
   the reward's Continue back to the overworld, where it checks the persisted

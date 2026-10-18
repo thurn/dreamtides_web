@@ -4,22 +4,27 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { runInNewContext } from "node:vm";
 import { createBattleDriver, createQa } from "./prelude.mjs";
-import { parseBattleId, parseDreamAnchorId } from "../../src/types/identifiers";
+import { parseBattleId, parseD97DialogueId, parseD97DialogueNodeId, parseDreamAnchorId } from "../../src/types/identifiers";
 
 afterEach(() => vi.useRealTimers());
 
 const ANCHOR = parseDreamAnchorId("5e5e5e5e-0000-4000-8000-000000000097");
 const ELSEWHERE = parseDreamAnchorId("5e5e5e5e-0000-4000-8000-000000000098");
+const DIALOGUE = parseD97DialogueId("d97d0000-0000-4000-8000-000000000001");
+const GREET = parseD97DialogueNodeId("d97d0000-0000-4000-8000-000000000011");
+const ASK = parseD97DialogueNodeId("d97d0000-0000-4000-8000-000000000012");
 const CAPS = () => ({ errors: [], rejections: [], consoleErrors: [] });
 
 /**
  * A page whose evaluations and native waits run against `context`; each
- * native-wait poll first calls `tick`, the synthetic page's passage of time.
+ * native-wait poll first calls `tick`, the synthetic page's passage of time;
+ * `mouse` receives its pointer input.
  *
  * @param {Record<string, unknown>} context
  * @param {() => void} [tick]
+ * @param {{ click: (x: number, y: number) => Promise<void>, move: (x: number, y: number) => Promise<void> }} [mouse]
  */
-async function pageFixture(context, tick = () => {}) {
+async function pageFixture(context, tick = () => {}, mouse = { click: async () => {}, move: async () => {} }) {
   vi.useFakeTimers();
   const run = (/** @type {Function} */ fn, /** @type {unknown} */ arg) =>
     /** @type {unknown} */ (runInNewContext(`(${String(fn)})(${JSON.stringify(arg) ?? "null"})`, context));
@@ -41,6 +46,7 @@ async function pageFixture(context, tick = () => {}) {
       }
     },
     waitForTimeout,
+    mouse,
   }));
   const qa = await createQa(page, { baseUrl: "http://localhost:5174", bead: "fixture", captureDir: "/fixture", prod: false, args: {} });
   return { qa, waitForTimeout };
@@ -119,6 +125,142 @@ describe("qa.d97", () => {
     expect(await qa.d97.waitForPanel("encounter-preview")).toEqual({ panel: "encounter-preview", id: ANCHOR });
     expect(selectors.length).toBe(3);
     await expect(qa.d97.waitForPanel(/** @type {import("./prelude.mjs").D97PanelName} */ (/** @type {unknown} */ ("nowhere")))).rejects.toThrow(/unknown panel nowhere/);
+  });
+});
+
+/**
+ * A synthetic dialogue panel over `nodes`, opening on `start`: the panel's
+ * data attributes and buttons as `D97DialoguePanel` renders them, and a mouse
+ * whose click presses the button `__qa.hitPoint` last resolved at that x.
+ * A `stuck` Continue does nothing.
+ *
+ * @param {Record<string, { lines: number, choices: Array<{ index: number, next: import("../../src/types/identifiers").D97DialogueNodeId | null }> }>} nodes
+ * @param {import("../../src/types/identifiers").D97DialogueNodeId} start
+ * @param {{ stuck?: boolean }} [options]
+ */
+function dialogueFixture(nodes, start, { stuck = false } = {}) {
+  /** @type {{ nodeId: string, line: number } | null} */
+  let at = { nodeId: start, line: 0 };
+  const presses = /** @type {string[]} */ ([]);
+  /** @param {string} testId @param {() => void} press */
+  const button = (testId, press) => ({ testId, press, getAttribute: (/** @type {string} */ name) => (name === "data-testid" ? testId : null) });
+  const buttons = () => {
+    if (at === null) return [];
+    const position = at;
+    const node = nodes[position.nodeId];
+    if (node === undefined) throw new Error(`no synthetic node ${position.nodeId}`);
+    if (position.line < node.lines - 1) return [button("d97-dialogue-continue", () => { if (!stuck) position.line += 1; })];
+    if (node.choices.length === 0) return [button("d97-dialogue-close", () => { at = null; })];
+    return node.choices.map(({ index, next }) => button(`d97-dialogue-choice-${String(index)}`, () => { at = next === null ? null : { nodeId: next, line: 0 }; }));
+  };
+  const attributes = () => {
+    if (at === null) return {};
+    const node = nodes[at.nodeId];
+    return {
+      "data-d97-dialogue": DIALOGUE,
+      "data-d97-dialogue-node": at.nodeId,
+      "data-d97-dialogue-line": String(at.line),
+      "data-d97-dialogue-last-line": String(node !== undefined && at.line >= node.lines - 1),
+    };
+  };
+  const panel = {
+    getAttribute: (/** @type {string} */ name) => /** @type {Record<string, string>} */ (attributes())[name] ?? null,
+    querySelectorAll: (/** @type {string} */ selector) =>
+      selector === '[data-testid^="d97-dialogue-choice-"]' ? buttons().filter((b) => b.testId.startsWith("d97-dialogue-choice-")) : [],
+    querySelector: (/** @type {string} */ selector) => buttons().find((b) => selector === `[data-testid=${b.testId}]`) ?? null,
+  };
+  /** @param {string} selector */
+  const resolve = (selector) => {
+    const scoped = /^\[data-d97-dialogue-node="([^"]+)"\] (.*)$/.exec(selector);
+    if (scoped !== null && scoped[1] !== at?.nodeId) return null;
+    const inner = scoped === null ? selector : scoped[2];
+    return buttons().find((b) => inner === `[data-testid=${b.testId}]`) ?? null;
+  };
+  const hit = /** @type {Array<{ testId: string, press: () => void }>} */ ([]);
+  const document = { querySelector: (/** @type {string} */ selector) => (selector === "[data-d97-dialogue-node]" && at !== null ? panel : null) };
+  const qaDom = {
+    rendered: (/** @type {{ selector: string }} */ { selector }) => resolve(selector),
+    hitPoint: (/** @type {{ selector: string }} */ { selector }) => {
+      const found = resolve(selector);
+      if (found === null) return null;
+      return { x: hit.push(found) - 1, y: 0, covered: null };
+    },
+  };
+  const mouse = {
+    click: (/** @type {number} */ x) => {
+      const pressed = hit[x];
+      if (pressed === undefined) return Promise.reject(new Error(`nothing pressed at ${String(x)}`));
+      presses.push(pressed.testId);
+      pressed.press();
+      return Promise.resolve();
+    },
+    move: async () => {},
+  };
+  return {
+    presses,
+    page: () => pageFixture({ window: { __caps: CAPS(), __qa: qaDom }, document, location: { href: "http://localhost:5174/d97" }, innerWidth: 1440, innerHeight: 900 }, () => {}, mouse),
+  };
+}
+
+describe("qa.d97 dialogue", () => {
+  const nodes = {
+    [GREET]: { lines: 3, choices: [{ index: 0, next: ASK }, { index: 2, next: null }] },
+    [ASK]: { lines: 2, choices: [] },
+  };
+
+  it("presses Continue through the lines until the node's choices show", async () => {
+    const { presses, page } = dialogueFixture(nodes, GREET);
+    const { qa } = await page();
+    expect(await qa.d97.advanceDialogue()).toEqual({ kind: "choices", dialogueId: DIALOGUE, nodeId: GREET, choices: [0, 2], continues: 2 });
+    expect(presses).toEqual(["d97-dialogue-continue", "d97-dialogue-continue"]);
+  });
+
+  it("presses Continue, then Close, until the conversation ends, or stops at the last line", async () => {
+    const closing = dialogueFixture(nodes, ASK);
+    const { qa } = await closing.page();
+    expect(await qa.d97.advanceDialogue()).toEqual({ kind: "ended", dialogueId: DIALOGUE, nodeId: ASK, continues: 1 });
+    expect(closing.presses).toEqual(["d97-dialogue-continue", "d97-dialogue-close"]);
+
+    const stopping = dialogueFixture(nodes, ASK);
+    const { qa: held } = await stopping.page();
+    expect(await held.d97.advanceDialogue({ close: false })).toEqual({ kind: "last-line", dialogueId: DIALOGUE, nodeId: ASK, continues: 1 });
+    expect(stopping.presses).toEqual(["d97-dialogue-continue"]);
+  });
+
+  it("times out with the dialogue's state when Continue does not advance it", async () => {
+    const { page } = dialogueFixture(nodes, GREET, { stuck: true });
+    const { qa } = await page();
+    const failure = qa.d97.advanceDialogue({ timeout: 2_000 });
+    await expect(failure).rejects.toMatchObject({ name: "QaTimeoutError" });
+    await expect(failure).rejects.toThrow(new RegExp(`did not leave .*"nodeId":"${GREET}","line":0.* within 2000 ms \\(1 Continue presses\\)`));
+  });
+
+  it("times out naming the missing dialogue when none opens", async () => {
+    const { qa } = await pageFixture({ window: { __caps: CAPS() }, document: { querySelector: () => null }, location: { href: "http://localhost:5174/d97" }, innerWidth: 1440, innerHeight: 900 });
+    await expect(qa.d97.advanceDialogue({ timeout: 1_000 })).rejects.toThrow(/no dialogue opened within 1000 ms/);
+  });
+
+  it("takes a choice by its node and index and reports the next node or the end", async () => {
+    const { presses, page } = dialogueFixture(nodes, GREET);
+    const { qa } = await page();
+    await qa.d97.advanceDialogue();
+    expect(await qa.d97.chooseDialogue(GREET, 0)).toEqual({ nodeId: GREET, index: 0, next: ASK });
+    expect(presses.at(-1)).toBe("d97-dialogue-choice-0");
+
+    const ending = dialogueFixture(nodes, GREET);
+    const { qa: other } = await ending.page();
+    await other.d97.advanceDialogue();
+    expect(await other.d97.chooseDialogue(GREET, 2)).toEqual({ nodeId: GREET, index: 2, next: null });
+  });
+
+  it("fails clearly on a choice the node does not offer, another node, or a node still mid-line", async () => {
+    const { presses, page } = dialogueFixture(nodes, GREET);
+    const { qa } = await page();
+    await expect(qa.d97.chooseDialogue(GREET, 0)).rejects.toThrow(/shows no choices at line 0; advance it first/);
+    await qa.d97.advanceDialogue();
+    await expect(qa.d97.chooseDialogue(GREET, 1)).rejects.toThrow(/offers choices \[0,2\], not 1/);
+    await expect(qa.d97.chooseDialogue(ASK, 0)).rejects.toThrow(new RegExp(`shows node ${GREET}, not ${ASK}`));
+    expect(presses).toEqual(["d97-dialogue-continue", "d97-dialogue-continue"]);
   });
 });
 

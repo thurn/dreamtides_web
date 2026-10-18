@@ -445,6 +445,53 @@
  *   Waits until the panel is rendered (default 15 000 ms); `id` is its keyed
  *   hook's value where it has one: the anchor of an encounter preview or a
  *   shop, the node of a dialogue.
+ * @property {(options?: { close?: boolean, timeout?: number }) => Promise<D97DialogueStop>} advanceDialogue
+ *   Waits for the open dialogue (`[data-d97-dialogue-node]`), then presses
+ *   its Continue (`[data-testid=d97-dialogue-continue]`) line by line until
+ *   the node's choices show (`choices`) or the conversation closes
+ *   (`ended`). A last line that offers only Close
+ *   (`[data-testid=d97-dialogue-close]`) is pressed too, unless `close` is
+ *   false (default true), which stops there (`last-line`). Fails with the
+ *   last dialogue state seen, and the Continue presses so far, after
+ *   `timeout` (default 30 000 ms) or on `__caps`.
+ * @property {(nodeId: import("../../src/types/identifiers").D97DialogueNodeId, index: number, options?: { timeout?: number }) => Promise<D97DialogueChosen>} chooseDialogue
+ *   Takes the choice at `index` in node `nodeId` (its position in the
+ *   node's authored choices, the `choiceIndex` the `d97_dialogue_choice` log
+ *   row carries), pressing `[data-testid=d97-dialogue-choice-<index>]` once
+ *   the dialogue shows that node's choices, then waits until the dialogue
+ *   leaves the node. Fails at once when the dialogue shows another node, or
+ *   that node does not offer the choice, naming what it shows; fails with
+ *   the last state seen after `timeout` (default 15 000 ms).
+ */
+
+/**
+ * The open dialogue as its panel's test hooks report it: the
+ * `data-d97-dialogue`, `data-d97-dialogue-node`, `data-d97-dialogue-line`
+ * and `data-d97-dialogue-last-line` attributes, the node's choice indices
+ * (from `data-testid=d97-dialogue-choice-<index>`), and whether Continue and
+ * Close show.
+ *
+ * @typedef {{ dialogueId: import("../../src/types/identifiers").D97DialogueId, nodeId: import("../../src/types/identifiers").D97DialogueNodeId, line: number, lastLine: boolean, choices: number[], canContinue: boolean, canClose: boolean }} D97DialogueSeen
+ */
+
+/**
+ * Where `qa.d97.advanceDialogue` stopped, with the Continue presses it made
+ * (`continues`): the node's `choices` (their indices in the node), the last
+ * line of a node with none (`last-line`, only with `close: false`), or the
+ * conversation's end (`ended`, its panel gone; `nodeId` is the last node
+ * shown).
+ *
+ * @typedef {{ kind: "choices", dialogueId: import("../../src/types/identifiers").D97DialogueId, nodeId: import("../../src/types/identifiers").D97DialogueNodeId, choices: number[], continues: number }
+ *   | { kind: "last-line", dialogueId: import("../../src/types/identifiers").D97DialogueId, nodeId: import("../../src/types/identifiers").D97DialogueNodeId, continues: number }
+ *   | { kind: "ended", dialogueId: import("../../src/types/identifiers").D97DialogueId, nodeId: import("../../src/types/identifiers").D97DialogueNodeId, continues: number }} D97DialogueStop
+ */
+
+/**
+ * What `qa.d97.chooseDialogue` took and where the dialogue went: the node it
+ * shows next, or null when the conversation closed (a choice that ends it, or
+ * hands it to an encounter preview or a shop).
+ *
+ * @typedef {{ nodeId: import("../../src/types/identifiers").D97DialogueNodeId, index: number, next: import("../../src/types/identifiers").D97DialogueNodeId | null }} D97DialogueChosen
  */
 
 /**
@@ -1331,6 +1378,48 @@ export async function createQa(page, config) {
     }
   };
 
+  /**
+   * Reads the open dialogue's test hooks, or null when no dialogue shows.
+   *
+   * @param {number} timeout
+   * @returns {Promise<D97DialogueSeen | null>}
+   */
+  const readDialogue = (timeout) => read(() => {
+    const panel = document.querySelector("[data-d97-dialogue-node]");
+    if (panel === null) return null;
+    const prefix = "d97-dialogue-choice-";
+    const choices = [...panel.querySelectorAll(`[data-testid^="${prefix}"]`)]
+      .map((button) => Number((button.getAttribute("data-testid") ?? "").slice(prefix.length)))
+      .filter((index) => Number.isInteger(index));
+    return /** @type {D97DialogueSeen} */ (/** @type {unknown} */ ({
+      dialogueId: panel.getAttribute("data-d97-dialogue"),
+      nodeId: panel.getAttribute("data-d97-dialogue-node"),
+      line: Number(panel.getAttribute("data-d97-dialogue-line")),
+      lastLine: panel.getAttribute("data-d97-dialogue-last-line") === "true",
+      choices,
+      canContinue: panel.querySelector("[data-testid=d97-dialogue-continue]") !== null,
+      canClose: panel.querySelector("[data-testid=d97-dialogue-close]") !== null,
+    }));
+  }, null, { timeout });
+
+  /**
+   * Presses one dialogue button, failing with the dialogue's state when the
+   * press does not land before `deadline`.
+   *
+   * @param {string} label
+   * @param {string} selector
+   * @param {D97DialogueSeen} seen
+   * @param {number} deadline
+   */
+  const pressDialogue = async (label, selector, seen, deadline) => {
+    try {
+      await qa.click(selector, { timeout: Math.max(1, deadline - Date.now()) });
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      throw timeoutError(`${label}: could not press ${selector} on ${JSON.stringify(seen)}: ${reason}`, error);
+    }
+  };
+
   /** @type {D97Helpers} */
   const d97 = {
     async state({ timeout = 15_000 } = {}) {
@@ -1373,6 +1462,93 @@ export async function createQa(page, config) {
         ? null
         : await read(({ selector, key }) => document.querySelector(selector)?.getAttribute(key) ?? null, { selector: hook.selector, key: hook.key });
       return { panel, id };
+    },
+    async advanceDialogue({ close = true, timeout = 30_000 } = {}) {
+      const label = "qa.d97.advanceDialogue";
+      const deadline = Date.now() + timeout;
+      /** @type {D97DialogueSeen | null} The last dialogue state acted on. */
+      let last = null;
+      /** @type {D97DialogueSeen | null} The state a press must leave before the next. */
+      let pressed = null;
+      let continues = 0;
+      for (;;) {
+        assertObserved(label);
+        const seen = await readDialogue(Math.max(1, deadline - Date.now()));
+        if (seen === null && last !== null) {
+          /** @type {D97DialogueStop} */
+          const stop = { kind: "ended", dialogueId: last.dialogueId, nodeId: last.nodeId, continues };
+          note(label, stop);
+          return stop;
+        }
+        if (seen !== null && (pressed === null || seen.nodeId !== pressed.nodeId || seen.line !== pressed.line)) {
+          pressed = null;
+          last = seen;
+          if (seen.choices.length > 0) {
+            /** @type {D97DialogueStop} */
+            const stop = { kind: "choices", dialogueId: seen.dialogueId, nodeId: seen.nodeId, choices: seen.choices, continues };
+            note(label, stop);
+            return stop;
+          }
+          if (seen.canContinue) {
+            await pressDialogue(label, "[data-testid=d97-dialogue-continue]", seen, deadline);
+            continues += 1;
+            pressed = seen;
+            continue;
+          }
+          if (seen.lastLine && seen.canClose) {
+            if (!close) {
+              /** @type {D97DialogueStop} */
+              const stop = { kind: "last-line", dialogueId: seen.dialogueId, nodeId: seen.nodeId, continues };
+              note(label, stop);
+              return stop;
+            }
+            await pressDialogue(label, "[data-testid=d97-dialogue-close]", seen, deadline);
+            pressed = seen;
+            continue;
+          }
+        }
+        if (Date.now() >= deadline) {
+          const state = last === null
+            ? "no dialogue opened"
+            : pressed === null
+              ? `the dialogue offers neither choices, Continue nor Close; last seen ${JSON.stringify(last)}`
+              : `the dialogue did not leave ${JSON.stringify(pressed)} after its last press`;
+          throw timeoutError(`${label}: ${state} within ${String(timeout)} ms (${String(continues)} Continue presses)`);
+        }
+        await page.waitForTimeout(Math.min(100, Math.max(1, deadline - Date.now())));
+      }
+    },
+    async chooseDialogue(nodeId, index, { timeout = 15_000 } = {}) {
+      const label = `qa.d97.chooseDialogue ${nodeId} #${String(index)}`;
+      const deadline = Date.now() + timeout;
+      /** @type {D97DialogueSeen | null} */
+      let seen = null;
+      while (seen === null) {
+        assertObserved(label);
+        seen = await readDialogue(Math.max(1, deadline - Date.now()));
+        if (seen === null) {
+          if (Date.now() >= deadline) throw timeoutError(`${label}: no dialogue is open after ${String(timeout)} ms`);
+          await page.waitForTimeout(Math.min(100, Math.max(1, deadline - Date.now())));
+        }
+      }
+      if (seen.nodeId !== nodeId) throw new Error(`${label}: the dialogue shows node ${seen.nodeId}, not ${nodeId}; ${JSON.stringify(seen)}`);
+      if (seen.choices.length === 0) {
+        throw new Error(`${label}: node ${nodeId} shows no choices at line ${String(seen.line)}${seen.canContinue ? "; advance it first (qa.d97.advanceDialogue)" : ""}`);
+      }
+      if (!seen.choices.includes(index)) throw new Error(`${label}: node ${nodeId} offers choices ${JSON.stringify(seen.choices)}, not ${String(index)}`);
+      await pressDialogue(label, `[data-d97-dialogue-node="${nodeId}"] [data-testid=d97-dialogue-choice-${String(index)}]`, seen, deadline);
+      for (;;) {
+        assertObserved(label);
+        const after = await readDialogue(Math.max(1, deadline - Date.now()));
+        if (after === null || after.nodeId !== nodeId) {
+          /** @type {D97DialogueChosen} */
+          const chosen = { nodeId, index, next: after === null ? null : after.nodeId };
+          note(label, chosen);
+          return chosen;
+        }
+        if (Date.now() >= deadline) throw timeoutError(`${label}: the dialogue stayed on node ${nodeId} for ${String(timeout)} ms after the press; last seen ${JSON.stringify(after)}`);
+        await page.waitForTimeout(Math.min(100, Math.max(1, deadline - Date.now())));
+      }
     },
   };
 
