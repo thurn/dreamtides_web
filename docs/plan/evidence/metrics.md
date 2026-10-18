@@ -1205,3 +1205,30 @@ Folded from `measurements/<bead-id>.md`; each file keeps the full tables.
 | D19 budgets | [above](#d19-suite-budgets-2): 26.6 s, 218 files at measurement (Phase 4 ceiling revised to 216 with its reason), 50 `jsdom` | pass, ceiling revised |
 | Metrics re-measured | this section; `release` contains every Phase 4 commit when the gate bead closes (its notes) | pass |
 
+
+
+## Phase 5 gate (2026-10-17, hv-umm2.46)
+
+The confirmation follows [D46](../decisions.md#d46-lean-phase-5-gate-and-early-ai-build),
+using the existing commands. Source: `31d1ce024b0b544233519bd70482f80c6ea7b787`,
+Node v24.16.0, Apple M5 Max. The card verdicts in the QA ledger stand.
+
+| Check | Result |
+| --- | --- |
+| Current catalog authoring | No content definition is marked pending. |
+| Coverage gate | `npm test -- src/engine/content-gates.test.ts`: 20 tests pass, 2.34 s Vitest duration. |
+| Full suite | `npm run test:full`: 527 files, 13,030 tests pass; 99.46 s Vitest duration, 100.4 s test step, 108.72 s whole command. |
+| D19 | Two workers; 99.46 s exceeds the 60 s suite budget. Another Tollgate release fuzzer was active. File count is informational under current D19. This gate records the measurement. |
+| Unused code | `npm run knip`: pass, 2.2 s knip step. |
+| Desktop Greedy journey | Existing seed-1 run `run-UHIHwM`, game `usv4cw`: Journey Complete, three real battles and four disclosed debug-assisted battles, `__caps` empty. Native command exits 0; 743.973 s total. Source `417ca62ceef3cef64239f867f419c3d3fd604c0f`. |
+| Release | `release` contains the Phase 5 baseline `7ef63d6240edbeed5661b5be7fb86fecf75dc83b`. Final source containment is recorded in the native gate closing notes. |
+
+The existing `fuzz:engine` command plays Random against Random and has no
+Greedy option. The Greedy portion is skipped under D46; no replacement
+runner is built. The existing Random-only 1,000-game command result is
+recorded in the native gate notes and `fuzz-1000.log`.
+
+Evidence is in `artifacts/qa/hv-umm2.46/reduced-gate/`. Desktop journey
+captures and its persisted log are in `invocations/run-UHIHwM/` under the
+same bead directory; representative capture:
+`gate46-journey-battle-1-result-desktop.png`.
