@@ -1,5 +1,6 @@
-// The D97 dream map catalog: every committed map module (decision P11), and
-// the stamps, terrains and seasonal sheet families their recipes place.
+// The D97 dream map catalog: every committed map module (decision P11), the
+// dreams' maps and their rooms' (decision P19) alike, and the stamps,
+// terrains and seasonal sheet families their recipes place.
 // Workspace preparation compiles each dream map into the gitignored
 // `public/d97/maps/<map-id>.json` (`scripts/d97/compile-maps.ts`). Stamps
 // come from the stamp catalog (`src/content/d97/stamps/`), terrains and
@@ -16,9 +17,10 @@ import { D97_STAMPS } from "../stamps";
 import { D97_TERRAINS } from "../terrains";
 import { D97_SEASON_FAMILIES } from "../terrains/seasons";
 import map3229d6c7 from "./3229d6c7-0700-4f37-9b07-921e3dccb8b6";
+import room8f22aeec from "./8f22aeec-9a8f-4d44-91fb-7668f369609f";
 import example9ad96a1d from "./9ad96a1d-4542-4228-a20f-1e4f6e274058";
 
-export const D97_DREAM_MAPS: readonly DreamMapDefinition[] = [map3229d6c7];
+export const D97_DREAM_MAPS: readonly DreamMapDefinition[] = [map3229d6c7, room8f22aeec];
 
 export const D97_EXAMPLE_MAPS: readonly DreamMapDefinition[] = [example9ad96a1d];
 

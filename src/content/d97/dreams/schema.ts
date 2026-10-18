@@ -19,6 +19,12 @@
 // guardian blocking it, and its shop. The travel and shop rules resolve these
 // anchors in the run's own dream only (`runDreamAnchor` in
 // src/rules/d97/d97-dreams.ts).
+//
+// A dream may own rooms (decision P19): small interior maps, each a map
+// module of its own, joined to the dream's map by a pair of building doors.
+// A room belongs to its dream: its anchors are the dream's, its residents are
+// listed with the dream's, the dream's shop may stand in one, and it shares
+// the dream's waypoint and tier.
 
 import type { BadgeKind } from "../../../d97/overworld/characters/badges";
 import type { OccupantScale } from "../../../d97/overworld/occupants";
@@ -27,6 +33,7 @@ import type {
   D97CharacterId,
   D97DialogueId,
   D97DreamId,
+  D97RoomId,
   DreamAnchorId,
   DreamMapId,
 } from "../../../types/identifiers";
@@ -104,8 +111,22 @@ export interface D97DreamTopology {
   readonly exitDoorAnchorId: DreamAnchorId;
   /** The guardian anchor standing at the exit door's chokepoint. */
   readonly exitGuardianAnchorId: DreamAnchorId;
-  /** The dream's one shop. */
+  /** The dream's one shop, on its map or in one of its rooms. */
   readonly shopAnchorId: DreamAnchorId;
+}
+
+/**
+ * One room of a dream (decision P19): its map module and the two building
+ * doors that join it to the dream's map.
+ */
+export interface D97DreamRoom {
+  readonly id: D97RoomId;
+  /** The room's map module (`src/content/d97/maps/`). */
+  readonly mapId: DreamMapId;
+  /** The building door on the dream's map that leads in; the player comes out at its entry. */
+  readonly buildingDoorAnchorId: DreamAnchorId;
+  /** The building door in the room that leads out; the player comes in, and a reload inside places them, at its entry. */
+  readonly doorAnchorId: DreamAnchorId;
 }
 
 export interface D97DreamDefinition {
@@ -113,7 +134,9 @@ export interface D97DreamDefinition {
   /** The dream's map module (`src/content/d97/maps/`). */
   readonly mapId: DreamMapId;
   readonly topology: D97DreamTopology;
-  /** At most one resident per anchor; an anchor without one stays empty. */
+  /** The dream's rooms, each behind one building door of its map. */
+  readonly rooms: readonly D97DreamRoom[];
+  /** At most one resident per anchor, on the dream's map or in a room; an anchor without one stays empty. */
   readonly residents: readonly D97DreamResident[];
 }
 

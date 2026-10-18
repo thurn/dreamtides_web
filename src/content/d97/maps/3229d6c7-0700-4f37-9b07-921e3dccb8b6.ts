@@ -1,7 +1,9 @@
 // The first dream's map: a 110×110 crop of Source of Tales' Mountainwatch
 // (the hill town, its white bridge and falls, the great wheat field, the
 // creek row and the cliffs to the south), with the ember arch stamped into
-// the well square as the exit door. The dream's brief is
+// the well square as the exit door. The inn door is a building door into
+// the dream's one room, the inn (`./8f22aeec-9a8f-4d44-91fb-7668f369609f.ts`),
+// where the shop is. The dream's brief is
 // `../dreams/3229d6c7-0700-4f37-9b07-921e3dccb8b6.md`; every landmark it
 // names is a landmark or region here.
 //
@@ -25,6 +27,7 @@ const EXIT_DOOR = parseDreamAnchorId("2ef5689f-f791-402c-9cc6-6e59cf0c5e14");
 const ADIT_DOOR = parseDreamAnchorId("106a0852-85a9-4c0a-b17d-bd434a6c668d");
 const LOW_CAVE_DOOR = parseDreamAnchorId("c9f6d615-0e4c-465b-a990-7bd30bdb0fc8");
 const ARCH_GUARDIAN = parseDreamAnchorId("649daef4-9f8b-4e0e-b3f2-3d2ab91a844d");
+const INN_DOOR = parseDreamAnchorId("be2ecdb3-f77c-4efd-84a8-11d197767a0b");
 
 /** Layers the source draws over its characters: roofs, treetops, cliff lips. */
 const ABOVE_PLAYER_LAYERS = ["MountainOver1", "MountainOver2", "Over", "Over1", "Over2", "Over3"];
@@ -39,13 +42,14 @@ const ANCHORS: readonly DreamAnchorDefinition[] = [
   { id: ARCH_GUARDIAN, kind: "guardian", at: [60, 30], blocksDoor: EXIT_DOOR },
 
   { id: parseDreamAnchorId("d01c6e03-c291-4164-a3ec-50393ed0c817"), kind: "waypoint", at: [67, 30] },
-  { id: parseDreamAnchorId("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), kind: "shop", at: { landmark: "the barrel stall" } },
+  // The inn door leads into the inn, which holds the shop.
+  { id: INN_DOOR, kind: "buildingDoor", at: [51, 23], entry: { landmark: "the inn door" } },
 
-  // Residents: the shopkeeper and the two quest givers.
+  // Residents: the two quest givers, and an open place beside the inn door.
   {
     id: parseDreamAnchorId("63620809-4908-4881-b5ed-f7e5b3410b2a"),
     kind: "friendly",
-    at: { landmark: "the inn door" },
+    at: [52, 25],
     cluster: "well square",
   },
   {
@@ -120,8 +124,8 @@ export default defineDreamMap({
   landmarks: [
     { name: "the ember arch", at: [60, 28], note: "The exit door, stamped into the square." },
     { name: "the well", at: [67, 26] },
-    { name: "the inn door", at: [51, 24] },
-    { name: "the barrel stall", at: [54, 24], note: "The shop front, before the inn's barrels." },
+    { name: "the inn door", at: [51, 24], note: "Before the inn's door, a building door into the inn." },
+    { name: "the barrel stall", at: [54, 24], note: "The inn's barrels." },
     { name: "the hall steps", at: [56, 23], note: "The reeve's hall." },
     { name: "the barrel lane", at: [60, 16], note: "The lane up to the high field." },
     { name: "the white bridge", at: [82, 42] },

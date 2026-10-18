@@ -14,6 +14,7 @@ const TUNABLES: D97OverworldTunables = {
   phoneMinZoom: 1.5,
   phoneMinTilesAcross: 7,
   hudClearancePx: 12,
+  roomFadeSeconds: 0.3,
 };
 const MEDIUM = { width: 110, height: 110, tileWidth: 32, tileHeight: 32 };
 

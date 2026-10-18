@@ -70,7 +70,7 @@ describe.each([SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B].map((dream) => [dream.id, d
       const first = apply(withD97Run(state, { ...runOf(state), returnAnchorId: topology.exitGuardianAnchorId }), "D97_ACTIVATE_WAYPOINT", { anchorId }, 2);
       expect(first.outcome).toBe("applied");
       expect(runOf(first.state).activeWaypointIds).toEqual([anchorId]);
-      expect(runOf(first.state).lastPlace).toEqual({ kind: "waypoint", anchorId });
+      expect(runOf(first.state).lastPlace).toEqual({ kind: "waypoint", anchorId, roomId: null });
       expect(runOf(first.state).returnAnchorId).toBeNull();
       const activated = first.logRecords?.find((record) => record.event === "d97_waypoint_activated");
       expect(activated?.fields).toMatchObject({ anchorId, mapId: dream.mapId, firstActivation: true });
@@ -99,7 +99,7 @@ describe.each([SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B].map((dream) => [dream.id, d
       const result = apply(withGuardian(dream, started(), true), "D97_STEP_THROUGH_DOOR", { anchorId }, 2);
       expect(result.outcome).toBe("applied");
       expect(result.state.d97?.screen).toEqual({ type: "sliceEnd" });
-      expect(runOf(result.state).lastPlace).toEqual({ kind: "door", anchorId });
+      expect(runOf(result.state).lastPlace).toEqual({ kind: "door", anchorId, roomId: null });
       const stepped = result.logRecords?.find((record) => record.event === "d97_door_stepped_through");
       expect(stepped?.fields).toMatchObject({ mapId: dream.mapId, guardianAnchorId: topology.exitGuardianAnchorId });
       expect(apply(result.state, "D97_STEP_THROUGH_DOOR", { anchorId }, 3).outcome).toBe("bounced");

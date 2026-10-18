@@ -24,6 +24,7 @@ import {
   parseD97CharacterId,
   parseD97DialogueId,
   parseD97DreamId,
+  parseD97RoomId,
   parseDreamAnchorId,
   parseDreamMapId,
 } from "../../types/identifiers";
@@ -55,7 +56,7 @@ function lines(dialogueId: typeof GREETING, kind: D97DialogueModule["speaker"]["
 
 const KINDS: readonly DreamAnchorKind[] = ["challenger", "challenger", "guardian", "shop", "friendly", "townsfolk", "friendly", "door", "waypoint", "door"];
 /** Anchor 3, the guardian, blocks anchor 8, the exit door. */
-const ANCHORS = KINDS.map((kind, index) => ({ id: anchor(index + 1), kind, ...(index === 2 ? { blocksDoor: anchor(8) } : {}) }));
+const ANCHORS = KINDS.map((kind, index) => ({ id: anchor(index + 1), kind, roomId: null, ...(index === 2 ? { blocksDoor: anchor(8) } : {}) }));
 const TOPOLOGY: D97DreamTopology = {
   waypointAnchorId: anchor(9),
   arrivalDoorAnchorId: anchor(10),
@@ -93,7 +94,7 @@ const RESIDENTS: readonly D97DreamResident[] = [
 ];
 
 const dream = (residents: readonly D97DreamResident[], topology: D97DreamTopology = TOPOLOGY) =>
-  defineDream({ id: parseD97DreamId(id(400)), mapId: parseDreamMapId(id(401)), topology, residents });
+  defineDream({ id: parseD97DreamId(id(400)), mapId: parseDreamMapId(id(401)), topology, rooms: [], residents });
 
 describe("dreamOccupants", () => {
   const occupants = dreamOccupants(dream(RESIDENTS), REGISTRY, PLAYER);
@@ -205,20 +206,58 @@ describe("validateDreamTopology", () => {
     ]);
     expect(rules({ ...TOPOLOGY, exitDoorAnchorId: anchor(10), arrivalDoorAnchorId: anchor(8) })).toEqual([["unguarded-exit", anchor(3)]]);
   });
+
+  describe("with rooms", () => {
+    const ROOM = parseD97RoomId(id(500));
+    const OTHER_ROOM = parseD97RoomId(id(501));
+    const OUTSIDE = anchor(20);
+    const INSIDE = anchor(21);
+    const ROOM_SHOP = anchor(22);
+    const WITH_ROOM = [
+      ...ANCHORS.filter((entry) => entry.id !== anchor(4)),
+      { id: OUTSIDE, kind: "buildingDoor" as const, roomId: null },
+      { id: INSIDE, kind: "buildingDoor" as const, roomId: ROOM },
+      { id: ROOM_SHOP, kind: "shop" as const, roomId: ROOM },
+      { id: anchor(23), kind: "waypoint" as const, roomId: ROOM },
+    ];
+    const room = { id: ROOM, mapId: parseDreamMapId(id(502)), buildingDoorAnchorId: OUTSIDE, doorAnchorId: INSIDE };
+    const roomRules = (rooms: readonly (typeof room)[], topology: D97DreamTopology = { ...TOPOLOGY, shopAnchorId: ROOM_SHOP }) =>
+      validateDreamTopology({ ...dream([], topology), rooms }, WITH_ROOM).map((finding) => [finding.rule, finding.anchorId]);
+
+    it("passes a room joining a building door of the dream's map to one inside it, with the shop inside", () => {
+      expect(roomRules([room])).toEqual([]);
+    });
+
+    it("reports a room whose doors are not building doors on the right maps, or that repeats a room or a door", () => {
+      expect(roomRules([{ ...room, buildingDoorAnchorId: INSIDE, doorAnchorId: OUTSIDE }])).toEqual([
+        ["room-door", INSIDE],
+        ["room-door", OUTSIDE],
+      ]);
+      expect(roomRules([{ ...room, buildingDoorAnchorId: anchor(8) }])).toEqual([["room-door", anchor(8)]]);
+      expect(roomRules([room, { ...room, id: OTHER_ROOM }])).toEqual([
+        ["room-door", OUTSIDE],
+        ["room-door", INSIDE],
+      ]);
+    });
+
+    it("keeps the waypoint, doors and guardian on the dream's own map", () => {
+      expect(roomRules([room], { ...TOPOLOGY, shopAnchorId: ROOM_SHOP, waypointAnchorId: anchor(23) })).toEqual([["topology-anchor", anchor(23)]]);
+    });
+  });
 });
 
 describe("the development dream", () => {
   const { dream: DEVELOPMENT_DREAM, dialogue, characterSprites } = D97_DEVELOPMENT_CONTENT;
   const map = compileDevMap();
   const registry: D97DreamResidentRegistry = {
-    anchors: map.anchors,
+    anchors: map.anchors.map((entry) => ({ ...entry, roomId: null })),
     characterIds: new Set([...D97_CHARACTER_SPRITES, ...characterSprites].map((recipe) => recipe.id)),
     dialogues: new Map(dialogue.dialogues.map((module) => [module.id, module])),
   };
 
   it("occupies exactly its map's character anchors, with the guardian at incarnation scale", () => {
     expect(validateDreamResidents(DEVELOPMENT_DREAM, registry)).toEqual([]);
-    expect(validateDreamTopology(DEVELOPMENT_DREAM, map.anchors)).toEqual([]);
+    expect(validateDreamTopology(DEVELOPMENT_DREAM, registry.anchors)).toEqual([]);
     const occupants = dreamOccupants(DEVELOPMENT_DREAM, registry, PLAYER);
     for (const { id: anchorId, kind } of map.anchors) {
       const character = ["challenger", "guardian", "shop", "friendly", "townsfolk"].includes(kind);

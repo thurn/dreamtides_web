@@ -34,6 +34,7 @@ export const DEVELOPMENT_DREAM = defineDream({
     exitGuardianAnchorId: devAnchorId(4),
     shopAnchorId: devAnchorId(5),
   },
+  rooms: [],
   residents: [
     // Four challengers and the guardian; the fourth challenger is a prize duel.
     { role: "challenger", anchorId: devAnchorId(6), characterId: DEV_KNIGHT.id, scale: "standard", deck: generic(CORVATH) },

@@ -3,7 +3,8 @@
 // In the M1 slice the exit door is the only door that leads anywhere: once its
 // guardian is beaten, stepping through it ends the slice. The touched anchor
 // is resolved in the run's own dream (`runDreamAnchor`), so another dream's
-// waypoint or door bounces.
+// waypoint or door bounces. Both stand on the dream's own map, so neither
+// opens while the player is inside one of its rooms (./d97-rooms.ts).
 //
 // This module obeys the src/rules/ lint rails: no React, no live clock or rng.
 
@@ -12,19 +13,19 @@ import type { DreamAnchorId } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
 import type { D97Transition } from "./d97-run";
-import type { D97Run } from "./d97-state";
+import { d97RunRoomId, type D97Run } from "./d97-state";
 import type { D97RunInput } from "./events/spec";
 
 /** A travel case's payload: the anchor touched. */
 type AnchorPayload = { readonly anchorId: DreamAnchorId };
 
-/** The run, the payload's anchor and the run's dream declaring it; or null. */
+/** The run, the payload's anchor and the run's dream declaring it, on the dream's own map; or null. */
 function travelContext(
   { run }: D97RunInput,
   { anchorId }: AnchorPayload,
 ): { readonly run: D97Run; readonly anchorId: DreamAnchorId; readonly dream: D97DreamDefinition } | null {
   const content = d97ContentProvider();
-  if (content === null) return null;
+  if (content === null || d97RunRoomId(run) !== null) return null;
   const dream = runDreamAnchor(run, content, anchorId);
   return dream === null ? null : { run, anchorId, dream: dream.definition };
 }
@@ -63,7 +64,7 @@ export function activateWaypoint(input: D97RunInput, payload: AnchorPayload): D9
       run: {
         ...run,
         activeWaypointIds: firstActivation ? [...run.activeWaypointIds, anchorId] : run.activeWaypointIds,
-        lastPlace: { kind: "waypoint", anchorId },
+        lastPlace: { kind: "waypoint", anchorId, roomId: null },
         returnAnchorId: null,
       },
     },
@@ -87,7 +88,7 @@ export function stepThroughDoor(input: D97RunInput, payload: AnchorPayload): D97
   return {
     d97: {
       screen: { type: "sliceEnd" },
-      run: { ...run, lastPlace: { kind: "door", anchorId }, returnAnchorId: null },
+      run: { ...run, lastPlace: { kind: "door", anchorId, roomId: null }, returnAnchorId: null },
     },
     logRecords: [
       {

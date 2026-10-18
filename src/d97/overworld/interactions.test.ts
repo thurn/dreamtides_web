@@ -3,7 +3,8 @@
 // an anchor walks to the nearest tile beside it. `resolveInteraction` answers
 // every anchor kind with intents, a panel or a refusal (residents with and
 // without a dialogue, beaten and unbeaten opponents, the door with its
-// guardian standing or beaten, the waypoint, the shop, objects and chests),
+// guardian standing or beaten, the waypoint, the shop, objects, chests and
+// the building doors into and out of a room),
 // and Fight refuses a deck below its minimum by opening the deck editor. Over
 // synthetic content, every intent the resolver offers applies in the reducer
 // and every refused travel or Fight would bounce there.
@@ -90,7 +91,7 @@ describe("pathBeside", () => {
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-interactions-avatar");
-const { topology } = SYNTHETIC_DREAM_A;
+const { topology, rooms } = SYNTHETIC_DREAM_A;
 const CHALLENGER = syntheticDreamAnchor(1, 6);
 const RESIDENT = syntheticDreamAnchor(1, 8);
 const DIALOGUE = parseD97DialogueId("d9792000-0000-4000-8000-0000000000c1");
@@ -145,7 +146,7 @@ function occupant(dialogue: boolean): OverworldOccupant {
 
 function context(run: D97Run, speaking: readonly DreamAnchorId[] = [], silent: readonly DreamAnchorId[] = []): InteractionContext {
   const occupants: OverworldOccupants = new Map([...speaking.map((id) => [id, occupant(true)] as const), ...silent.map((id) => [id, occupant(false)] as const)]);
-  return { run, topology, occupants };
+  return { run, topology, rooms, occupants };
 }
 
 const anchor = (id: DreamAnchorId, kind: DreamAnchorKind): CompiledAnchor => ({ id, kind, at: [0, 0] });
@@ -235,6 +236,25 @@ describe("resolveInteraction", () => {
     expect(summary(touched)).toEqual({ intents: [{ type: "D97_ACTIVATE_WAYPOINT", payload: { anchorId: topology.waypointAnchorId } }], logged: [] });
     expect(intentsApply(state, touched)).toBe(true);
     expect(resolveInteraction(context(run), anchor(RESIDENT, "waypoint"))).toMatchObject({ intents: [], refusal: "notTheWaypoint" });
+  });
+
+  it("steps into the room through its building door, out through the room's door, and refuses the door of the other map", () => {
+    const state = startedState();
+    const room = rooms[0];
+    const outside = anchor(room.buildingDoorAnchorId, "buildingDoor");
+    const inside = anchor(room.doorAnchorId, "buildingDoor");
+    const entered = resolveInteraction(context(runOf(state)), outside);
+    expect(summary(entered)).toEqual({ intents: [{ type: "D97_ENTER_ROOM", payload: { anchorId: outside.id } }], logged: [] });
+    expect(intentsApply(state, entered)).toBe(true);
+    expect(resolveInteraction(context(runOf(state)), inside)).toMatchObject({ intents: [], refusal: "notHere" });
+
+    const inRoom = reduceGameEvent(state, event("D97_ENTER_ROOM", { anchorId: outside.id }), ctx({ seq: 2 })).state;
+    const left = resolveInteraction(context(runOf(inRoom)), inside);
+    expect(summary(left)).toEqual({ intents: [{ type: "D97_LEAVE_ROOM", payload: { anchorId: inside.id } }], logged: [] });
+    expect(intentsApply(inRoom, left)).toBe(true);
+    const refused = resolveInteraction(context(runOf(inRoom)), outside);
+    expect(summary(refused)).toEqual({ intents: [], refusal: "notHere", logged: ["d97_door_unopened"] });
+    expect(resolveInteraction(context(runOf(inRoom)), anchor(RESIDENT, "buildingDoor"))).toMatchObject({ intents: [], refusal: "noRoom" });
   });
 
   it("picks up an object and has nothing for a chest", () => {

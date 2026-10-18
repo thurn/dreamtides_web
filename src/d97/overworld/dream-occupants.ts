@@ -3,8 +3,10 @@
 // with the badge its role derives unless it sets its own, and the validators
 // that check a dream module against its map: its residents against the map's
 // anchors and the character and dialogue catalogs, and its topology against
-// the map's anchors. Assembly places only residents that pass validation, so
-// a stale module never puts a character where its map has no such anchor.
+// the map's anchors. A dream's anchors are its maps': its own map's and its
+// rooms' (decision P19), each with the room it stands in. Assembly places
+// only residents that pass validation, so a stale module never puts a
+// character where its maps have no such anchor.
 // An Avatar resident is drawn as the incarnation the run meets
 // (`incarnationFor`), the same one its encounter fights as; the validator
 // checks every incarnation's character and dialogue.
@@ -16,7 +18,7 @@ import {
   type D97DreamDefinition,
   type D97DreamResident,
 } from "../../content/d97/dreams/schema";
-import type { AvatarId, D97CharacterId, D97DialogueId, D97DreamId, DreamAnchorId } from "../../types/identifiers";
+import type { AvatarId, D97CharacterId, D97DialogueId, D97DreamId, D97RoomId, DreamAnchorId } from "../../types/identifiers";
 import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
 import type { DreamAnchorKind } from "../map/definition";
 import type { OverworldOccupant, OverworldOccupants } from "./occupants";
@@ -36,6 +38,12 @@ export type D97DreamRule =
   | "incarnation-speaker"
   /** A topology anchor is not on the map, or is not the kind its role needs. */
   | "topology-anchor"
+  /**
+   * A room's building door is not a building door on the dream's own map,
+   * its door is not a building door inside the room, or two rooms share an
+   * id or a door.
+   */
+  | "room-door"
   /** The exit guardian does not block the exit door. */
   | "unguarded-exit";
 
@@ -45,15 +53,17 @@ export interface D97DreamFinding {
   readonly anchorId: DreamAnchorId;
 }
 
-/** What the validators read of a map anchor. */
+/** What the validators read of a dream's map anchor. */
 interface DreamAnchorSummary {
   readonly id: DreamAnchorId;
   readonly kind: DreamAnchorKind;
   readonly blocksDoor?: DreamAnchorId;
+  /** The room the anchor stands in, or null on the dream's own map. */
+  readonly roomId: D97RoomId | null;
 }
 
 export interface D97DreamResidentRegistry {
-  /** The anchors of the dream's map, with their kinds. */
+  /** The anchors of the dream's maps (its rooms' included), with their kinds. */
   readonly anchors: readonly DreamAnchorSummary[];
   readonly characterIds: ReadonlySet<D97CharacterId>;
   /** The dialogue catalog's modules, by id. */
@@ -90,20 +100,40 @@ export function validateDreamResidents(
   return findings;
 }
 
-/** Every finding for `dream`'s topology against its map's `anchors`. */
+/**
+ * Every finding for `dream`'s topology and rooms against its maps' `anchors`:
+ * the waypoint, the doors and the guardian stand on the dream's own map, the
+ * shop on it or in a room, and each room joins a building door of the
+ * dream's map to a building door inside it.
+ */
 export function validateDreamTopology(dream: D97DreamDefinition, anchors: readonly DreamAnchorSummary[]): D97DreamFinding[] {
   const { waypointAnchorId, arrivalDoorAnchorId, exitDoorAnchorId, exitGuardianAnchorId, shopAnchorId } = dream.topology;
   const byId = new Map(anchors.map((anchor) => [anchor.id, anchor]));
   const findings: D97DreamFinding[] = [];
-  const expected: readonly (readonly [DreamAnchorId, DreamAnchorKind])[] = [
-    [waypointAnchorId, "waypoint"],
-    [arrivalDoorAnchorId, "door"],
-    [exitDoorAnchorId, "door"],
-    [exitGuardianAnchorId, "guardian"],
-    [shopAnchorId, "shop"],
+  const onDreamMap = (anchorId: DreamAnchorId) => byId.get(anchorId)?.roomId === null;
+  const expected: readonly (readonly [DreamAnchorId, DreamAnchorKind, boolean])[] = [
+    [waypointAnchorId, "waypoint", true],
+    [arrivalDoorAnchorId, "door", true],
+    [exitDoorAnchorId, "door", true],
+    [exitGuardianAnchorId, "guardian", true],
+    [shopAnchorId, "shop", false],
   ];
-  for (const [anchorId, kind] of expected) {
-    if (byId.get(anchorId)?.kind !== kind) findings.push({ rule: "topology-anchor", dreamId: dream.id, anchorId });
+  for (const [anchorId, kind, dreamMapOnly] of expected) {
+    if (byId.get(anchorId)?.kind !== kind || (dreamMapOnly && !onDreamMap(anchorId))) {
+      findings.push({ rule: "topology-anchor", dreamId: dream.id, anchorId });
+    }
+  }
+  const roomIds = new Set<D97RoomId>();
+  const doors = new Set<DreamAnchorId>();
+  for (const room of dream.rooms) {
+    const report = (anchorId: DreamAnchorId) => findings.push({ rule: "room-door", dreamId: dream.id, anchorId });
+    const outside = byId.get(room.buildingDoorAnchorId);
+    const inside = byId.get(room.doorAnchorId);
+    if (outside?.kind !== "buildingDoor" || outside.roomId !== null || doors.has(room.buildingDoorAnchorId)) report(room.buildingDoorAnchorId);
+    if (inside?.kind !== "buildingDoor" || inside.roomId !== room.id || doors.has(room.doorAnchorId) || roomIds.has(room.id)) report(room.doorAnchorId);
+    roomIds.add(room.id);
+    doors.add(room.buildingDoorAnchorId);
+    doors.add(room.doorAnchorId);
   }
   const guardian = byId.get(exitGuardianAnchorId);
   if (guardian?.kind === "guardian" && guardian.blocksDoor !== exitDoorAnchorId) {

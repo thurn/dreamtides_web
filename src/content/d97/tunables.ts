@@ -15,6 +15,11 @@ export interface D97OverworldTunables {
   readonly phoneMinTilesAcross: number;
   /** Screen pixels the camera keeps between the HUD control bar and the world it frames. */
   readonly hudClearancePx: number;
+  /**
+   * Seconds each half of the plain fade between a dream's map and one of its
+   * rooms takes (decision P19): out of the map left, then into the map entered.
+   */
+  readonly roomFadeSeconds: number;
 }
 
 export const D97_OVERWORLD_TUNABLES: D97OverworldTunables = {
@@ -25,6 +30,8 @@ export const D97_OVERWORLD_TUNABLES: D97OverworldTunables = {
   phoneMinZoom: 1.5,
   phoneMinTilesAcross: 7,
   hudClearancePx: 12,
+  // About as long as the dream veil's fade (the overworld visual guide).
+  roomFadeSeconds: 0.3,
 };
 
 /** Challenger tier `t` by act (Appendix B §B3), act 1 first. */

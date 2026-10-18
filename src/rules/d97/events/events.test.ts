@@ -13,6 +13,7 @@ import { DECK_EVENTS } from "./deck";
 import { ENCOUNTER_EVENTS } from "./encounters";
 import { D97_EVENTS, d97IntentKey } from "./index";
 import { QUEST_EVENTS } from "./quests";
+import { ROOM_EVENTS } from "./rooms";
 import { RUN_EVENTS } from "./run";
 import { SHOP_EVENTS } from "./shop";
 import { TRAVEL_EVENTS } from "./travel";
@@ -33,7 +34,7 @@ describe("D97_EVENTS", () => {
   });
 
   it("spreads subsystem tables that declare disjoint events", () => {
-    const tables = [RUN_EVENTS, DECK_EVENTS, ENCOUNTER_EVENTS, QUEST_EVENTS, SHOP_EVENTS, TRAVEL_EVENTS];
+    const tables = [RUN_EVENTS, DECK_EVENTS, ENCOUNTER_EVENTS, QUEST_EVENTS, SHOP_EVENTS, TRAVEL_EVENTS, ROOM_EVENTS];
     const declared = tables.flatMap((table) => Object.keys(table));
     expect(new Set(declared).size).toBe(declared.length);
     expect([...declared].sort()).toEqual([...TYPES].sort());

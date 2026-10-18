@@ -164,6 +164,46 @@ describe("validateDreamMap", () => {
   });
 });
 
+describe("room reachability (P19)", () => {
+  const buildingDoor = (id: CompiledAnchor["id"], at: TilePoint, entry: TilePoint): CompiledAnchor => ({
+    id,
+    kind: "buildingDoor",
+    at,
+    entry,
+  });
+  /** A dream map: a door's yard, and a walled-off house front whose building door is at 9,0. */
+  const DREAM_ROWS = ["#########.#", "#....#....#", "#....#....#", "###########"];
+
+  it("reports a building door its dream map's entries cannot reach", () => {
+    const map = compiledFromRows(DREAM_ROWS, [door(ROW_ANCHORS.doorA, [0, 1], [1, 1]), buildingDoor(ROW_ANCHORS.doorB, [9, 0], [9, 1])]);
+    expect(validateAnchorsReachable(map)).toEqual([
+      expect.objectContaining({ rule: "anchor-reachable", anchorId: ROW_ANCHORS.doorB, at: [9, 1] }),
+    ]);
+  });
+
+  it("passes a building door the dream map's entries reach, which is no entry itself", () => {
+    const open = ["#########.#", "#.........#", "#....#....#", "###########"];
+    const map = compiledFromRows(open, [door(ROW_ANCHORS.doorA, [0, 1], [1, 1]), buildingDoor(ROW_ANCHORS.doorB, [9, 0], [9, 1])]);
+    expect(validateAnchorsReachable(map)).toEqual([]);
+  });
+
+  it("reaches a room's anchors from its building door, and reports one walled off from it", () => {
+    const ROOM_ROWS = ["#######", "#..#..#", "#..#..#", "#.#####"];
+    const door = buildingDoor(ROW_ANCHORS.doorC, [1, 3], [1, 2]);
+    const reachable = compiledFromRows(ROOM_ROWS, [door, { id: ROW_ANCHORS.shop, kind: "shop", at: [2, 1] }]);
+    expect(validateAnchorsReachable(reachable)).toEqual([]);
+    const walled = compiledFromRows(ROOM_ROWS, [door, { id: ROW_ANCHORS.chest, kind: "chest", at: [5, 1] }]);
+    expect(validateAnchorsReachable(walled)).toEqual([
+      expect.objectContaining({ rule: "anchor-reachable", anchorId: ROW_ANCHORS.chest, at: [5, 1] }),
+    ]);
+  });
+
+  it("holds a room to no main route", () => {
+    const room = compiledFromRows(["#.#", "#.#"], [buildingDoor(ROW_ANCHORS.doorC, [1, 1], [1, 0])]);
+    expect(validateMainRouteCrossing(room, TUNING)).toEqual([]);
+  });
+});
+
 describe("validateTilesetsServed", () => {
   const tileset = (name: string, image: string | null, tileImages: readonly string[] = []) => ({
     firstGid: 1,

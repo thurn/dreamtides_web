@@ -68,7 +68,7 @@ export interface CompiledAnchor {
   readonly id: DreamAnchorId;
   readonly kind: DreamAnchorKind;
   readonly at: TilePoint;
-  /** A door's arrival tile. */
+  /** A door's or building door's arrival tile. */
   readonly entry?: TilePoint;
   /** A guardian's blocked door. */
   readonly blocksDoor?: DreamAnchorId;

@@ -176,6 +176,8 @@ export class OverworldScene implements OverworldSceneHandle {
   private readonly anchorsStanding: readonly CompiledAnchor[];
   /** Unbeaten guardians, which close their chokepoints. */
   private readonly standingGuardians: readonly CompiledAnchor[];
+  /** What a held step into it uses: an unbeaten guardian, or a building door. */
+  private readonly bumpable: readonly CompiledAnchor[];
   /** Walking and interaction among the shown anchors; rebuilt when visibility changes. */
   private movement: AnchorMovement;
   private readonly veils: ReadonlyMap<DreamAnchorId, VeilVariant>;
@@ -232,6 +234,7 @@ export class OverworldScene implements OverworldSceneHandle {
     // through and never interacted with.
     this.anchorsStanding = standingAnchors({ ...this.map, anchors: presentAnchors(this.map.anchors, this.occupants) }, beaten);
     this.standingGuardians = this.anchorsStanding.filter((anchor) => anchor.kind === "guardian" && !beaten.has(anchor.id));
+    this.bumpable = [...this.standingGuardians, ...this.anchorsStanding.filter((anchor) => anchor.kind === "buildingDoor")];
     this.movement = shownMovement(this.map, this.anchorsStanding, this.hidden);
     const arrival = arrivalPlacement(this.map, this.anchorsStanding, this.movement.grid, options.arrival);
     this.state = initialWalker(arrival.tile);
@@ -435,21 +438,24 @@ export class OverworldScene implements OverworldSceneHandle {
     return true;
   }
 
-  /** A held step into an unbeaten guardian opens its preview, once per bump. */
-  private bumpGuardian(): void {
+  /**
+   * A held step into an unbeaten guardian opens its preview, and one into a
+   * building door steps through it, once per bump.
+   */
+  private bumpAnchor(): void {
     const direction = this.held[this.held.length - 1];
     if (direction === undefined || !isIdle(this.state)) return;
     const [dx, dy] = FACING_STEPS[direction];
     const ahead: TilePoint = [this.state.tile[0] + dx, this.state.tile[1] + dy];
-    const guardian = this.standingGuardians.find((candidate) => candidate.at[0] === ahead[0] && candidate.at[1] === ahead[1]);
-    const key = guardian === undefined ? null : `${String(ahead[0])},${String(ahead[1])}`;
-    if (guardian === undefined || key === this.bumped) {
+    const bumped = this.bumpable.find((candidate) => candidate.at[0] === ahead[0] && candidate.at[1] === ahead[1]);
+    const key = bumped === undefined ? null : `${String(ahead[0])},${String(ahead[1])}`;
+    if (bumped === undefined || key === this.bumped) {
       this.bumped = key;
       return;
     }
     this.bumped = key;
-    this.state = faceTile(this.state, guardian.at);
-    this.interactWith(guardian);
+    this.state = faceTile(this.state, bumped.at);
+    this.interactWith(bumped);
   }
 
   private buildObjects(): void {
@@ -472,6 +478,8 @@ export class OverworldScene implements OverworldSceneHandle {
   private buildAnchors(): void {
     const { tileWidth: w, tileHeight: h } = this.map;
     this.anchorsStanding.forEach((anchor, index) => {
+      // A building door is the tile art's own door: it has no veil or marker.
+      if (anchor.kind === "buildingDoor") return;
       const color = PLACEHOLDER_ANCHORS[anchor.kind];
       const [x, y] = anchor.at;
       if (anchor.kind === "door" || anchor.kind === "waypoint") {
@@ -553,7 +561,7 @@ export class OverworldScene implements OverworldSceneHandle {
       const before = this.state;
       this.state = advanceWalker(this.state, seconds, this.tunables.walkTilesPerSecond, this.canEnter);
       if (before.step !== null && this.state.step === null) this.arriveIfIdle();
-      this.bumpGuardian();
+      this.bumpAnchor();
     }
     this.clock += seconds;
     for (const view of this.veilViews.values()) view.advance(seconds);

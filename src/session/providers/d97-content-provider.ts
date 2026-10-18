@@ -21,7 +21,7 @@ import type { D97DealtCard } from "../../d97/collection/reward-bag";
 import { cardPriceFactsOf, type D97CardPriceFacts } from "../../d97/shop/pricing";
 import { generatePoolFromData } from "../../draft/pool/generate";
 import type { D97ContentProvider, D97RegisteredDream } from "../../rules/d97/d97-content";
-import { registerDream } from "../../rules/d97/d97-dreams";
+import { dreamMapAnchors, registerDream } from "../../rules/d97/d97-dreams";
 import { buildTideAffinityIndex } from "../../selection/tide-affinity";
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
@@ -67,7 +67,12 @@ export function createD97ContentProvider(
   const maps = new Map((development === null ? D97_DREAM_MAPS : [...D97_DREAM_MAPS, development.map]).map((map) => [map.id, map]));
   const dreams = new Map<D97DreamId, D97RegisteredDream>();
   for (const dream of development === null ? D97_DREAMS : [...D97_DREAMS, development.dream]) {
-    const anchors = (maps.get(dream.mapId)?.anchors ?? []).map(({ id, kind }) => ({ id, kind }));
+    const anchors = dreamMapAnchors(dream, (mapId) => maps.get(mapId)?.anchors).map((anchor) => ({
+      id: anchor.id,
+      kind: anchor.kind,
+      roomId: anchor.roomId,
+      ...(anchor.kind === "guardian" ? { blocksDoor: anchor.blocksDoor } : {}),
+    }));
     dreams.set(dream.id, registerDream(dream, anchors, dialogue.dialogues));
   }
   return {

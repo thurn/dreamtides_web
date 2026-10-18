@@ -292,7 +292,10 @@ around the frame, motes drifting upward and a faint rune ring on the threshold.
 - **Stepping through.** The veil brightens and the screen fades to the veil
   color for about 300 ms, then fades in on the destination's matching door.
 - **Building doors** into a dream's rooms are ordinary scenery doors with no
-  veil; entering a room is a plain fade.
+  veil or marker; walking into one, or using it, enters the room. Entering
+  or leaving a room is a plain fade: the world fades to the screen's
+  background over about 300 ms, under the HUD, then fades in at the other
+  door's entry once that map has drawn.
 - **Key dreams** have no door. Using a key at a waypoint opens a gold ring
   around the waypoint obelisk; touching it enters the key dream.
 

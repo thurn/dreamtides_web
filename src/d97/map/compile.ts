@@ -301,9 +301,10 @@ function resolveAnchors(
     const at = place(anchor.at, "position");
     if (at === null) continue;
     switch (anchor.kind) {
-      case "door": {
+      case "door":
+      case "buildingDoor": {
         const entry = place(anchor.entry, "entry");
-        if (entry !== null) out.push({ id: anchor.id, kind: "door", at, entry });
+        if (entry !== null) out.push({ id: anchor.id, kind: anchor.kind, at, entry });
         break;
       }
       case "guardian":

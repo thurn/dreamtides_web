@@ -9,13 +9,14 @@ import type { D97TierKnob } from "../../content/d97/encounters";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { CardId } from "../../types/card-identity";
 import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
-import type { D97BattleResident, D97DreamDefinition } from "../../content/d97/dreams/schema";
+import type { D97BattleResident, D97DreamDefinition, D97DreamRoom } from "../../content/d97/dreams/schema";
 import type { DreamAnchorKind } from "../../d97/map/definition";
 import type {
   AvatarId,
   BattleId,
   D97DreamId,
   D97ItemId,
+  D97RoomId,
   DreamAnchorId,
   DreamsignId,
   TideId,
@@ -51,23 +52,30 @@ export interface D97BattleStartInput {
   readonly playerAnteCopyId: D97BattleInit["playerAnteCopyId"];
 }
 
-/** One anchor of a registered dream's map. */
+/** One anchor of a registered dream's maps. */
 export interface D97RegisteredAnchor {
   readonly id: DreamAnchorId;
   readonly kind: DreamAnchorKind;
+  /** The room the anchor stands in, or null on the dream's own map. */
+  readonly roomId: D97RoomId | null;
+  /** A guardian's blocked door. */
+  readonly blocksDoor?: DreamAnchorId;
 }
 
 /**
  * A dream registered with the content (`./d97-dreams.ts`): its module, its
- * map's anchors, and the challengers and speakers standing at its anchors.
- * The rules read a run's dream only through `runDreamAnchor`.
+ * maps' anchors (its rooms' included), and the challengers and speakers
+ * standing at its anchors. The rules read a run's dream only through
+ * `runDreamAnchor`.
  */
 export interface D97RegisteredDream {
   readonly definition: D97DreamDefinition;
-  /** Its map's declared anchors (empty for a synthetic dream without a map). */
+  /** Its maps' declared anchors, its rooms' included (empty for a synthetic dream without maps). */
   readonly anchors: readonly D97RegisteredAnchor[];
-  /** Every anchor the dream declares: its map's, its topology's and its residents'. */
+  /** Every anchor the dream declares: its maps', its topology's, its rooms' doors and its residents'. */
   readonly anchorIds: ReadonlySet<DreamAnchorId>;
+  /** The dream's rooms, by id. */
+  readonly rooms: ReadonlyMap<D97RoomId, D97DreamRoom>;
   /** The challenger or guardian at each battle anchor. */
   readonly challengers: ReadonlyMap<DreamAnchorId, D97BattleResident>;
   /**

@@ -165,7 +165,9 @@ npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
   behind guardians) reachable while their guardian stands, doors closer than
   the minimum spacing, a main route outside its size class's crossing target,
   and tilesets whose images workspace preparation does not serve (the art
-  manifest's `served` subtrees).
+  manifest's `served` subtrees). On a dream's map a building door must be
+  reached from the doors and waypoint; in a room every anchor must be reached
+  from its building door, and a room has no main route.
 - **stamps** manages the stamp catalog (`src/content/d97/stamps/`), one
   module per stamp with a UUID, name, theme (building, nature, dungeon,
   desert, winter, japanese, scifi, graveyard, street), footprint, walkability
@@ -203,7 +205,9 @@ Recipe operations (`src/d97/map/definition.ts`, one handler module each under
 The compiler drops tilesets no drawn layer or tile object uses, so a
 compiled map names only art the renderer draws.
 
-Entries are door entry tiles and waypoints; the main route is the longest
+Entries are door entry tiles and waypoints, and in a room (a map with
+building doors and no door or waypoint) its building doors' entry tiles; the
+main route is the longest
 shortest walk between two doors' entry tiles (`src/d97/map/routes.ts`). Walking
 speed, size classes, crossing targets and door spacing are tunables in
 `src/content/d97/map-tuning.ts`. The example map

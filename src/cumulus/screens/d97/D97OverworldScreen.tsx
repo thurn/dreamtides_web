@@ -7,8 +7,10 @@
 // clicks through to the world except on its controls, and hides while a
 // panel occupies the screen so no HUD text shows through it (overlays carry
 // no scrim). It reports how much of the screen's bottom the control bar
-// covers, so the camera keeps the player above it. The screen carries the
-// Cumulus type floor: no D97 chrome text renders under 12px.
+// covers, so the camera keeps the player above it. Between a dream's map and
+// one of its rooms the world fades out to the screen's background and back
+// in (decision P19): a plain fade, with no veil, under the HUD. The screen
+// carries the Cumulus type floor: no D97 chrome text renders under 12px.
 // PURE: it renders from a view model and reports control presses; the adapter
 // owns the canvas, the panels and the input-focus rule.
 
@@ -37,10 +39,17 @@ export interface D97OverworldHudView {
   readonly controls: readonly D97OverworldControlView[];
 }
 
+/** The world's fade: covered while one map gives way to another, over the tuned seconds per half. */
+export interface D97WorldFadeView {
+  readonly covered: boolean;
+  readonly seconds: number;
+}
+
 export interface D97OverworldScreenProps {
   readonly view: D97OverworldHudView;
   /** The world canvas, sized to fill the screen. */
   readonly world: ReactNode;
+  readonly worldFade: D97WorldFadeView;
   /** The open React panel, drawn over the world in place of the HUD. */
   readonly panel?: ReactNode;
   /** Whether a panel occupies the screen: the HUD hides under it. */
@@ -84,6 +93,7 @@ function HudPill({ children }: { readonly children: ReactNode }): ReactElement {
 export function D97OverworldScreen({
   view,
   world,
+  worldFade,
   panel,
   panelOpen,
   onControl,
@@ -124,6 +134,18 @@ export function D97OverworldScreen({
       }}
     >
       {world}
+      <div
+        data-d97-world-fade={worldFade.covered ? "covered" : "clear"}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: token("--bg-app"),
+          opacity: worldFade.covered ? 1 : 0,
+          transition: `opacity ${String(worldFade.seconds)}s ${token("--ease-in-out")}`,
+          pointerEvents: worldFade.covered ? "auto" : "none",
+        }}
+      />
       <div
         data-d97-hud=""
         data-d97-hud-hidden={panelOpen ? "true" : "false"}

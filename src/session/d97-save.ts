@@ -76,15 +76,15 @@ export function needsD97Rebase(
 /**
  * The catalog this build reconciles saves against: the registered dreams
  * (the catalog's, and the development dream in a development build) with
- * their maps' declared anchors, so a rebase needs neither the map library
- * nor the compiled maps.
+ * their maps' declared anchors (their rooms' included) and their rooms, so a
+ * rebase needs neither the map library nor the compiled maps.
  */
 function currentCatalog(): D97SaveCatalog | null {
   const content = d97ContentProvider();
   if (content === null || content.defaultDreamId === null) return null;
   return {
     hasCard: (cardId) => content.cardPriceFacts(cardId) !== null,
-    dreams: [...content.dreams.values()].map((dream) => ({ id: dream.definition.id, anchors: dream.anchors })),
+    dreams: [...content.dreams.values()].map((dream) => ({ id: dream.definition.id, anchors: dream.anchors, rooms: dream.definition.rooms })),
     defaultDreamId: content.defaultDreamId,
     questIds: new Set(content.quests.keys()),
   };

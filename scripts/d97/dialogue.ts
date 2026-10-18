@@ -1,10 +1,11 @@
 // The D97 dialogue validator (decision P17): `npm run d97:dialogue -- validate`
 // checks every dialogue module, quest and item (the catalog's and the
 // development fixtures') against the maps' anchors, and every dream module
-// (the catalog dreams and the development dream): its topology against its
-// map's anchors, and its residents against those anchors and the character
-// and dialogue catalogs; it prints each finding, and exits 1 on any. The rules are in src/d97/dialogue/validate.ts and
-// src/d97/overworld/dream-occupants.ts.
+// (the catalog dreams and the development dream): its topology and rooms
+// against its maps' anchors (its rooms' included), and its residents against
+// those anchors and the character and dialogue catalogs; it prints each
+// finding, and exits 1 on any. The rules are in src/d97/dialogue/validate.ts
+// and src/d97/overworld/dream-occupants.ts.
 
 import { D97_CHARACTER_SPRITES } from "../../src/content/d97/characters/index.ts";
 import { D97_DIALOGUE_CONTENT } from "../../src/content/d97/dialogue/index.ts";
@@ -14,6 +15,7 @@ import { D97_DEVELOPMENT_CONTENT } from "../../src/d97/development-content.ts";
 import { validateDialogueContent, type D97DialogueFinding } from "../../src/d97/dialogue/validate.ts";
 import type { DreamAnchorKind } from "../../src/d97/map/definition.ts";
 import { validateDreamResidents, validateDreamTopology, type D97DreamFinding } from "../../src/d97/overworld/dream-occupants.ts";
+import { dreamMapAnchors } from "../../src/rules/d97/d97-dreams.ts";
 import type { DreamAnchorId } from "../../src/types/identifiers.ts";
 
 const USAGE = "Usage: npm run d97:dialogue -- validate";
@@ -36,11 +38,12 @@ function dreamFindings(): string[] {
   const characterIds = new Set(CHARACTER_SPRITES.map((recipe) => recipe.id));
   const dialogues = new Map(DIALOGUE_CONTENT.flatMap((content) => content.dialogues.map((module) => [module.id, module] as const)));
   return DREAMS.flatMap((dream) => {
-    const map = MAPS.find((candidate) => candidate.id === dream.mapId);
-    if (map === undefined) return [`error unknown-map: dream ${dream.id}: map ${dream.mapId}`];
+    const missing = [dream.mapId, ...dream.rooms.map((room) => room.mapId)].filter((mapId) => !MAPS.some((map) => map.id === mapId));
+    if (missing.length > 0) return missing.map((mapId) => `error unknown-map: dream ${dream.id}: map ${mapId}`);
+    const anchors = dreamMapAnchors(dream, (mapId) => MAPS.find((map) => map.id === mapId)?.anchors);
     return [
-      ...validateDreamTopology(dream, map.anchors),
-      ...validateDreamResidents(dream, { anchors: map.anchors, characterIds, dialogues }),
+      ...validateDreamTopology(dream, anchors),
+      ...validateDreamResidents(dream, { anchors, characterIds, dialogues }),
     ].map(formatDreamFinding);
   });
 }

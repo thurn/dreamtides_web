@@ -176,7 +176,7 @@ describe("D97 saves", () => {
       expect(run?.encounters[challenger]).toBeDefined();
       expect(run?.shops[dream.topology.shopAnchorId]).toBeDefined();
       expect(run?.activeWaypointIds).toEqual([dream.topology.waypointAnchorId]);
-      expect(run?.lastPlace).toEqual({ kind: "waypoint", anchorId: dream.topology.waypointAnchorId });
+      expect(run?.lastPlace).toEqual({ kind: "waypoint", anchorId: dream.topology.waypointAnchorId, roomId: null });
       await game.close();
     });
 

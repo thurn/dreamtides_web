@@ -76,6 +76,7 @@ export const PREVIEW_GRID_MARGIN = 28;
 /** The letter marking each anchor kind in previews. */
 export const ANCHOR_LETTERS: Readonly<Record<DreamAnchorKind, string>> = {
   door: "D",
+  buildingDoor: "B",
   waypoint: "W",
   shop: "S",
   guardian: "G",
@@ -88,6 +89,7 @@ export const ANCHOR_LETTERS: Readonly<Record<DreamAnchorKind, string>> = {
 
 const ANCHOR_COLORS: Readonly<Record<DreamAnchorKind, Rgb>> = {
   door: [150, 80, 220],
+  buildingDoor: [95, 70, 50],
   waypoint: [40, 170, 220],
   shop: [215, 165, 30],
   guardian: [210, 45, 45],

@@ -280,6 +280,8 @@ function captureAllDrafts(): EventDraft[] {
   void actions.d97({ type: "D97_END_BATTLE", payload: {} });
   void actions.d97({ type: "D97_ACTIVATE_WAYPOINT", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000003") } });
   void actions.d97({ type: "D97_STEP_THROUGH_DOOR", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000002") } });
+  void actions.d97({ type: "D97_ENTER_ROOM", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000050") } });
+  void actions.d97({ type: "D97_LEAVE_ROOM", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000100") } });
   void actions.d97({ type: "D97_BUY_SHOP_CARD", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000005"), slotIndex: 0 } });
   void actions.d97({ type: "D97_SELL_COPY", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000005"), copyId: parseD97OwnedCopyId("00000000-0000-4000-8000-000000000097") } });
   void actions.d97({ type: "D97_RESTOCK_SHOP", payload: { anchorId: parseDreamAnchorId("d9700000-0000-4000-8000-000000000005") } });

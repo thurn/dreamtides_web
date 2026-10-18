@@ -18,6 +18,7 @@ import type {
   D97DreamId,
   D97FlagId,
   D97OwnedCopyId,
+  D97RoomId,
   D97RunId,
   D97RunSeed,
   DreamAnchorId,
@@ -26,11 +27,19 @@ import type {
 
 /**
  * The last door the player stepped through or waypoint they used, whichever
- * was later (Appendix B §B17): a reload places the player there.
+ * was later (Appendix B §B17): a reload places the player there. A building
+ * door is a door: entering a room makes the room's own door the place, and
+ * leaving makes the building door outside it the place (decision P19).
  */
 export interface D97Place {
   readonly kind: "door" | "waypoint";
   readonly anchorId: DreamAnchorId;
+  /**
+   * The room the place is in, or null on the dream's own map. Every way off
+   * a map is a door that records the place it leads to, so this is also the
+   * map the player is on ({@link d97RunRoomId}).
+   */
+  readonly roomId: D97RoomId | null;
 }
 
 /**
@@ -136,6 +145,16 @@ export interface D97Shop {
  */
 export function d97RunAct(_run: D97Run): number {
   return 1;
+}
+
+/**
+ * The room of its dream `run`'s player is in, or null on the dream's own map:
+ * the room of the last place, since entering and leaving a room each record
+ * a place on the map they lead to. The overworld plays this map, and a
+ * reload opens it.
+ */
+export function d97RunRoomId(run: D97Run): D97RoomId | null {
+  return run.lastPlace?.roomId ?? null;
 }
 
 /** The challenger and guardian anchors `run` has beaten (its encounters). */

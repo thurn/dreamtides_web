@@ -3,7 +3,9 @@
 // snapshot; foreign, newer or unmigratable saves do not decode; the golden
 // schema-version-1 save is frozen: its committed bytes never change and they
 // decode under the current migrations, version 1 to 2 dropping encounters'
-// head starts (shown on the exported milestone save, whose encounters carry them); and the golden save of the current version has exactly the
+// head starts (shown on the exported milestone save, whose encounters carry
+// them) and version 2 to 3 placing the last place on its dream's own map;
+// and the golden save of the current version has exactly the
 // shape a run folded today writes (so a change to the persisted shape must
 // bump the schema version and ship a migration, P5), re-encoding to its own
 // JSON through the live phase union, which refuses a screen and run that

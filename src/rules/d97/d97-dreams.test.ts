@@ -13,14 +13,16 @@ import {
   parseD97DialogueNodeId,
   parseD97FlagId,
   type DreamAnchorId,
+  type DreamMapId,
 } from "../../types/identifiers";
+import type { DreamAnchorKind } from "../../d97/map/definition";
 import { testAvatarId } from "../../types/test-identities";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
 import { d97ContentProvider, registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
-import { registerDream, runDreamAnchor } from "./d97-dreams";
+import { dreamMapAnchors, registerDream, runDreamAnchor } from "./d97-dreams";
 import { speakingResident, syntheticDream, syntheticDreamAnchor } from "./d97-dreams.fixtures";
 import type { D97Encounter, D97Run } from "./d97-state";
 import { withD97Run } from "./d97-state.fixtures";
@@ -103,10 +105,27 @@ describe("a run in dream A", () => {
   });
 });
 
+describe("dreamMapAnchors", () => {
+  it("lists the dream map's anchors on its map, then each room's in that room, skipping unknown maps", () => {
+    const room = DREAM_A.rooms[0];
+    const outside = { id: syntheticDreamAnchor(1, 1), kind: "waypoint" as DreamAnchorKind };
+    const inside = { id: syntheticDreamAnchor(1, 0x100), kind: "buildingDoor" as DreamAnchorKind };
+    const maps = new Map<DreamMapId, readonly (typeof outside)[]>([
+      [DREAM_A.mapId, [outside]],
+      [room.mapId, [inside]],
+    ]);
+    expect(dreamMapAnchors(DREAM_A, (mapId) => maps.get(mapId))).toEqual([
+      { ...outside, roomId: null },
+      { ...inside, roomId: room.id },
+    ]);
+    expect(dreamMapAnchors(DREAM_A, (mapId) => (mapId === room.mapId ? undefined : maps.get(mapId)))).toEqual([{ ...outside, roomId: null }]);
+  });
+});
+
 describe("registerDream", () => {
   it("keys challengers and speakers by the dream's own anchors", () => {
     const dialogues = new Map([[SPEAKER_A.id, SPEAKER_A]]);
-    const dream = registerDream(DREAM_A, [{ id: syntheticDreamAnchor(1, 30), kind: "object" }], dialogues);
+    const dream = registerDream(DREAM_A, [{ id: syntheticDreamAnchor(1, 30), kind: "object", roomId: null }], dialogues);
     expect([...dream.challengers.keys()].sort()).toEqual(
       [syntheticDreamAnchor(1, 4), syntheticDreamAnchor(1, 6), syntheticDreamAnchor(1, 7)].sort(),
     );
@@ -117,6 +136,10 @@ describe("registerDream", () => {
     expect(dream.anchorIds.has(syntheticDreamAnchor(1, 30))).toBe(true);
     expect(dream.anchorIds.has(DREAM_A.topology.waypointAnchorId)).toBe(true);
     expect(dream.anchorIds.has(DREAM_B.topology.waypointAnchorId)).toBe(false);
+    // A room's doors are the dream's, and the room registers by id.
+    const room = DREAM_A.rooms[0];
+    expect(dream.anchorIds.has(room.buildingDoorAnchorId) && dream.anchorIds.has(room.doorAnchorId)).toBe(true);
+    expect(dream.rooms.get(room.id)).toBe(room);
   });
 
   it("leaves a resident whose dialogue is unregistered silent", () => {

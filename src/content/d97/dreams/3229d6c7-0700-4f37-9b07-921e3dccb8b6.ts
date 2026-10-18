@@ -4,16 +4,26 @@
 // are in `../characters/3229d6c7-0700-4f37-9b07-921e3dccb8b6.ts` and their
 // dialogue and quests in `../dialogue/3229d6c7-0700-4f37-9b07-921e3dccb8b6.ts`.
 //
-// The innkeeper keeps the barrel stall, the reeve the hall steps and Hessa
-// the wheat corner; five townsfolk and five challengers fill the valley.
+// The innkeeper keeps the shop in the inn, the dream's one room (decision
+// P19), behind the inn door on the well square; the reeve keeps the hall
+// steps and Hessa the wheat corner; five townsfolk and five challengers fill
+// the valley.
 // Vaela guards the ember arch, or Tessa when the player is Vaela: an ember of
 // a day that will not end, then a gleaner of its last field. Each appears,
 // speaks and fights as herself; Tessa has no lines yet, so she challenges
-// without a conversation. The inn door and
-// the square's three open friendly anchors stand empty for the friendly
-// characters later assembly places.
+// without a conversation. The square's four
+// open friendly anchors stand empty for the friendly characters later
+// assembly places.
 
-import { parseAvatarId, parseD97CharacterId, type AvatarId, parseD97DreamId, parseDreamAnchorId, parseDreamMapId } from "../../../types/identifiers";
+import {
+  parseAvatarId,
+  parseD97CharacterId,
+  type AvatarId,
+  parseD97DreamId,
+  parseD97RoomId,
+  parseDreamAnchorId,
+  parseDreamMapId,
+} from "../../../types/identifiers";
 import {
   ALDO_HEWITT,
   AMBROSE_FINCH,
@@ -53,9 +63,18 @@ export default defineDream({
     // The ember arch and the guardian filling its mouth.
     exitDoorAnchorId: anchor("2ef5689f-f791-402c-9cc6-6e59cf0c5e14"),
     exitGuardianAnchorId: anchor("649daef4-9f8b-4e0e-b3f2-3d2ab91a844d"),
-    // The barrel stall.
+    // In front of the inn's bar.
     shopAnchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"),
   },
+  rooms: [
+    // The inn, behind the inn door on the well square.
+    {
+      id: parseD97RoomId("8f22aeec-9a8f-4d44-91fb-7668f369609f"),
+      mapId: parseDreamMapId("8f22aeec-9a8f-4d44-91fb-7668f369609f"),
+      buildingDoorAnchorId: anchor("be2ecdb3-f77c-4efd-84a8-11d197767a0b"),
+      doorAnchorId: anchor("3d1b6084-0b8f-4c0f-a41d-2b4cad8a9af6"),
+    },
+  ],
   residents: [
     // The ember arch.
     {
@@ -70,7 +89,7 @@ export default defineDream({
         ],
       },
     },
-    // The barrel stall, the hall steps and the wheat corner.
+    // The inn's bar, the hall steps and the wheat corner.
     { role: "shop", anchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), characterId: WENNA_ASHDOWN.id, scale: "standard", dialogueId: LINES.wenna },
     { role: "friendly", anchorId: anchor("8d202783-1114-45ae-af43-115eb6688d64"), characterId: TOBIN_ROOK.id, scale: "standard", dialogueId: LINES.tobin },
     { role: "friendly", anchorId: anchor("ee1d1483-32ee-414b-98cd-5f3788471b13"), characterId: HESSA_MOTT.id, scale: "standard", dialogueId: LINES.hessa },

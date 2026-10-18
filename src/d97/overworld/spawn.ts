@@ -2,10 +2,13 @@
 // battle, beside the opponent they fought; otherwise, as on a reload, at the
 // entry point of the last door they stepped through or beside the last
 // waypoint they used, else at the entry of the dream's first door, or failing
-// that the walkable tile nearest the map's center.
+// that the walkable tile nearest the map's center. Inside a room the last
+// door is the room's own (decision P19), so a reload stands the player at its
+// entry.
 
 import { isWalkable, type CompiledAnchor, type CompiledDreamMap, type WalkabilityGrid } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
+import type { D97Run } from "../../rules/d97/d97-state";
 import type { DreamAnchorId } from "../../types/identifiers";
 import { FACING_STEPS } from "./walker";
 
@@ -19,13 +22,7 @@ export type OverworldArrival =
  * battle (`returningFromBattle`) places the player beside its opponent; any
  * other open, a reload included, uses the last door or waypoint.
  */
-export function arrivalFor(
-  run: {
-    readonly returnAnchorId: DreamAnchorId | null;
-    readonly lastPlace: { readonly kind: "door" | "waypoint"; readonly anchorId: DreamAnchorId } | null;
-  },
-  returningFromBattle: boolean,
-): OverworldArrival | null {
+export function arrivalFor(run: Pick<D97Run, "returnAnchorId" | "lastPlace">, returningFromBattle: boolean): OverworldArrival | null {
   if (returningFromBattle && run.returnAnchorId !== null) return { kind: "beside", anchorId: run.returnAnchorId };
   if (run.lastPlace === null) return null;
   return { kind: run.lastPlace.kind === "door" ? "entry" : "beside", anchorId: run.lastPlace.anchorId };

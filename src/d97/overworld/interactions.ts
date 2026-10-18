@@ -6,11 +6,14 @@
 // anchor kind: the intent events to append, the panel to open, or a refusal,
 // with the log records the overworld writes for it. Refusals come from the
 // rules' own predicates (`doorRefusal`, `waypointRefusal`, `isDreamShop`,
-// `battleRefusal`), so the overworld never offers what the reducer bounces.
+// `battleRefusal`, `roomPassage`), so the overworld never offers what the
+// reducer bounces. A building door steps into or out of one of the dream's
+// rooms (decision P19).
 // Battle residents route through ./encounter-routing.ts. Pure.
 
-import type { D97DreamTopology } from "../../content/d97/dreams/schema";
+import type { D97DreamRoom, D97DreamTopology } from "../../content/d97/dreams/schema";
 import { battleRefusal } from "../../rules/d97/d97-encounters";
+import { roomPassage } from "../../rules/d97/d97-rooms";
 import { isDreamShop } from "../../rules/d97/d97-shop";
 import type { D97Run } from "../../rules/d97/d97-state";
 import { doorRefusal, waypointRefusal } from "../../rules/d97/d97-travel";
@@ -23,10 +26,11 @@ import { routeBattleResident, routeChallenge } from "./encounter-routing";
 import type { OverworldOccupants } from "./occupants";
 import { FACING_STEPS } from "./walker";
 
-/** What an interaction reads: the run, its dream's topology and who stands where. */
+/** What an interaction reads: the run, its dream's topology and rooms, and who stands where. */
 export interface InteractionContext {
   readonly run: D97Run;
   readonly topology: D97DreamTopology;
+  readonly rooms: readonly D97DreamRoom[];
   readonly occupants: OverworldOccupants;
 }
 
@@ -47,7 +51,9 @@ export type InteractionRefusal =
   | "noDestination"
   | "guardianStanding"
   | "notTheWaypoint"
-  | "notTheShop";
+  | "notTheShop"
+  | "noRoom"
+  | "notHere";
 
 /** A record the overworld logs for an interaction. */
 export interface InteractionLog {
@@ -134,6 +140,16 @@ function door({ run, topology }: InteractionContext, anchorId: DreamAnchorId): I
   return { intents: [{ type: "D97_STEP_THROUGH_DOOR", payload: { anchorId } }], logs: [] };
 }
 
+/** Step through the building door at `anchorId`: into its room, or out of the room the player is in. */
+function buildingDoor({ run, rooms }: InteractionContext, anchorId: DreamAnchorId): InteractionResult {
+  const passage = roomPassage(run, rooms, anchorId);
+  if (passage.kind === "refused") {
+    return refuse(passage.refusal, [{ event: "d97_door_unopened", fields: { runId: run.runId, anchorId, reason: passage.refusal } }]);
+  }
+  const type = passage.kind === "enter" ? "D97_ENTER_ROOM" : "D97_LEAVE_ROOM";
+  return { intents: [{ type, payload: { anchorId } }], logs: [] };
+}
+
 /** What interacting with `anchor` does, by its kind. */
 export function resolveInteraction(ctx: InteractionContext, anchor: CompiledAnchor): InteractionResult {
   const anchorId = anchor.id;
@@ -156,6 +172,8 @@ export function resolveInteraction(ctx: InteractionContext, anchor: CompiledAnch
     }
     case "door":
       return door(ctx, anchorId);
+    case "buildingDoor":
+      return buildingDoor(ctx, anchorId);
     case "chest":
       return refuse("noInteraction");
     default: {

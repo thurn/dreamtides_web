@@ -1,10 +1,11 @@
-// Adapter for the D97 overworld: the run's dream (./use-d97-dream.ts) on the
-// Pixi canvas (loaded on first use, so journey players never download Pixi),
-// a loading or unavailable screen until it can be played, the HUD, beaten
-// opponents without badges, quest marks, door veils and lit waypoints, the
-// panels (./D97OverworldPanelsAdapter.tsx), and the input-focus rule: the
-// canvas ignores input while a panel or a pending reward is open. Every
-// interaction goes through ./use-d97-interactions.ts. Wiring only.
+// Adapter for the D97 overworld: the map of the run's dream the player is on
+// (./use-d97-dream.ts: its own or a room's) on the Pixi canvas, loaded on
+// first use, with the fade between maps (./use-d97-map-transition.ts); a
+// loading or unavailable screen until it can be played, the HUD, beaten
+// opponents, quest marks, door veils, lit waypoints, the panels, and the
+// input-focus rule: the canvas ignores input while a panel or pending reward
+// is open or the world is faded. Interactions go through
+// ./use-d97-interactions.ts. Wiring only.
 
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
@@ -12,6 +13,7 @@ import { D97_ACT_CHALLENGER_TIERS, D97_CHARACTER_TUNABLES, D97_OVERWORLD_TUNABLE
 import { D97DreamLoadingScreen } from "../../../cumulus/screens/d97/D97DreamLoadingScreen";
 import { D97OverworldScreen, type D97OverworldControlId } from "../../../cumulus/screens/d97/D97OverworldScreen";
 import type { JourneyContent } from "../../../data/journey-content";
+import type { CompiledDreamMap } from "../../../d97/map/compiled";
 import { buildDialogueCatalog } from "../../../d97/dialogue/catalog";
 import { logEvent } from "../../../logging";
 import { d97ContentProvider } from "../../../rules/d97/d97-content";
@@ -23,6 +25,7 @@ import { D97DreamUnavailableAdapter } from "./D97DreamUnavailableAdapter";
 import { D97OverworldPanelsAdapter } from "./D97OverworldPanelsAdapter";
 import { useD97Dream, type D97PlayedDream } from "./use-d97-dream";
 import { useD97Interactions } from "./use-d97-interactions";
+import { useD97MapTransition, type D97MapTransition } from "./use-d97-map-transition";
 import { useD97Travel } from "./use-d97-travel";
 
 const OverworldCanvas = lazy(() => import("../../../d97/overworld/OverworldCanvas").then((module) => ({ default: module.OverworldCanvas })));
@@ -42,9 +45,10 @@ interface D97OverworldProps {
 /** Live overworld of a started run, in the dream the run is in. */
 export function D97OverworldScreenAdapter(props: D97OverworldProps) {
   const dream = useD97Dream(props.run);
-  if (dream.kind === "loading") return <D97DreamLoadingScreen />;
+  const transition = useD97MapTransition(dream, D97_OVERWORLD_TUNABLES.roomFadeSeconds);
   if (dream.kind === "unavailable") return <D97DreamUnavailableAdapter />;
-  return <D97DreamOverworld {...props} dream={dream.played} />;
+  if (transition.shown === null) return <D97DreamLoadingScreen />;
+  return <D97DreamOverworld {...props} dream={transition.shown} transition={transition} />;
 }
 
 function D97DreamOverworld({
@@ -52,23 +56,25 @@ function D97DreamOverworld({
   journeyContent,
   initialDeckEditorOpen = false,
   returningFromBattle = false,
-  dream: { dream, map, occupants: placed },
-}: D97OverworldProps & { readonly dream: D97PlayedDream }) {
+  dream: { dream, roomId, map, occupants: placed },
+  transition: { covered, onSceneReady },
+}: D97OverworldProps & { readonly dream: D97PlayedDream; readonly transition: D97MapTransition }) {
   const catalog = d97ContentProvider()?.dialogue ?? NO_DIALOGUE;
   const beatenText = beatenOpponentsText(run.encounters);
   const occupants = useMemo(() => withBeatenOpponents(placed, beatenText), [beatenText, placed]);
   // The player walks as their Avatar's recipe, or as a capsule for an Avatar without one.
   const playerCharacter = useMemo(() => D97_CHARACTER_SPRITES.find((recipe) => recipe.avatarId === run.avatarId)?.id ?? null, [run.avatarId]);
-  const interactions = useD97Interactions({ run, topology: dream.topology, occupants }, initialDeckEditorOpen ? { kind: "deck" } : null);
-  const travel = useD97Travel({ run, dream: dream.topology, returningFromBattle });
+  const interactions = useD97Interactions({ run, topology: dream.topology, rooms: dream.rooms, occupants }, initialDeckEditorOpen ? { kind: "deck" } : null);
+  const travel = useD97Travel({ run, dream: dream.topology, mapId: map.id, returningFromBattle });
   const [hudInset, setHudInset] = useState(0);
-  const loggedRef = useRef(false);
+  const loggedRef = useRef<CompiledDreamMap["id"] | null>(null);
 
   useEffect(() => {
-    if (loggedRef.current) return;
-    loggedRef.current = true;
-    logEvent("d97_overworld_shown", { runId: run.runId, mapId: map.id });
-  }, [map.id, run.runId]);
+    // Once per map shown, despite StrictMode's doubled effects.
+    if (loggedRef.current === map.id) return;
+    loggedRef.current = map.id;
+    logEvent("d97_overworld_shown", { runId: run.runId, dreamId: dream.id, roomId, mapId: map.id });
+  }, [dream.id, map.id, roomId, run.runId]);
 
   const view = useMemo(
     () => buildD97OverworldHudView({ act: d97RunAct(run), actTiers: D97_ACT_CHALLENGER_TIERS, essence: run.essence, enabled: ENABLED_CONTROLS }),
@@ -78,12 +84,14 @@ function D97DreamOverworld({
   const marks = useMemo(() => buildD97QuestMarks(run.quests, catalog.quests, map.anchors), [catalog.quests, map.anchors, run.quests]);
 
   const panelOpen = interactions.panel !== null || run.quests.pendingReward !== null;
+  const worldFade = useMemo(() => ({ covered, seconds: D97_OVERWORLD_TUNABLES.roomFadeSeconds }), [covered]);
   return (
     <D97OverworldScreen
       view={view}
       onControl={interactions.control}
       panelOpen={panelOpen}
       onHudInset={setHudInset}
+      worldFade={worldFade}
       world={
         <Suspense fallback={null}>
           <OverworldCanvas
@@ -96,10 +104,11 @@ function D97DreamOverworld({
             arrival={travel.arrival}
             veils={travel.veils}
             activeWaypointIds={travel.activeWaypointIds}
-            inputEnabled={!panelOpen}
+            inputEnabled={!panelOpen && !covered}
             hudInset={hudInset}
             badges={marks.badges}
             hiddenAnchorIds={marks.hiddenAnchorIds}
+            onSceneReady={onSceneReady}
           />
         </Suspense>
       }

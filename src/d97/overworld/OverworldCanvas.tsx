@@ -44,6 +44,8 @@ export interface OverworldCanvasProps {
   readonly badges: ReadonlyMap<DreamAnchorId, BadgeKind>;
   /** Anchors neither drawn nor interactive (quest objects out of their quest). */
   readonly hiddenAnchorIds: ReadonlySet<DreamAnchorId>;
+  /** Reports each map whose scene has drawn its first frame's content. */
+  readonly onSceneReady: (map: CompiledDreamMap) => void;
 }
 
 /** Everything a scene draws that loads asynchronously. */
@@ -66,6 +68,7 @@ function SceneMount({
   hudInset,
   badges,
   hiddenAnchorIds,
+  onSceneReady,
   assets,
 }: OverworldCanvasProps & { readonly assets: SceneAssets }) {
   const { app, isInitialised } = useApplication();
@@ -75,6 +78,8 @@ function SceneMount({
   activeWaypointsRef.current = activeWaypointIds;
   const onInteractRef = useRef(onInteract);
   onInteractRef.current = onInteract;
+  const onSceneReadyRef = useRef(onSceneReady);
+  onSceneReadyRef.current = onSceneReady;
 
   useEffect(() => {
     if (!isInitialised) return;
@@ -96,6 +101,7 @@ function SceneMount({
     });
     sceneRef.current = scene;
     setScene(scene);
+    onSceneReadyRef.current(map);
     const uninstall = import.meta.env.DEV ? installD97QaSurface(map, scene) : () => undefined;
     return () => {
       uninstall();

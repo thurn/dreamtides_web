@@ -15,6 +15,7 @@ export const PLACEHOLDER_PLAYER = { body: 0xf2c94c, ring: 0xffe58a } as const;
 
 export const PLACEHOLDER_ANCHORS: Readonly<Record<DreamAnchorKind, number>> = {
   door: 0x9b6bff,
+  buildingDoor: 0x8a6a4a,
   waypoint: 0x5ad1e6,
   shop: 0xf29e4c,
   guardian: 0xd64545,

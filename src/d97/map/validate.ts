@@ -10,6 +10,7 @@ import type { DreamAnchorKind, TilePoint } from "./definition";
 import {
   anchorStandTile,
   isReached,
+  isRoomMap,
   mainRoute,
   mapEntries,
   reachableCells,
@@ -88,7 +89,10 @@ export function validateAnchorsWalkable(map: CompiledDreamMap): DreamMapFinding[
 /**
  * Every anchor is reachable from the entries with every guardian beaten. An
  * entry anchor (a door or a waypoint) must be reachable from another entry,
- * so a door on an island fails even though it reaches itself.
+ * so a door on an island fails even though it reaches itself. On a dream's
+ * map a building door is no entry, so the door into each room must be
+ * reached from the map's doors and waypoint; in a room (P19) the entries are
+ * its building doors, so every anchor inside must be reached from its door.
  */
 export function validateAnchorsReachable(map: CompiledDreamMap): DreamMapFinding[] {
   const entries = mapEntries(map);
@@ -171,9 +175,11 @@ export function validateDoorSpacing(map: CompiledDreamMap, tuning: D97MapTuning)
 /**
  * The main route's crossing time at walking speed lies within the size
  * class's target band, `target × (1 ± tolerance)`. The class's
- * `crossingSeverity` grades a miss: P12 holds medium maps to the target.
+ * `crossingSeverity` grades a miss: P12 holds medium maps to the target. A
+ * room has no doors between dreams, so it has no main route.
  */
 export function validateMainRouteCrossing(map: CompiledDreamMap, tuning: D97MapTuning): DreamMapFinding[] {
+  if (isRoomMap(map)) return [];
   const sizeClass = mapSizeClass(tuning, map);
   const severity = sizeClass.crossingSeverity;
   const route = mainRoute(map, tuning.walkingSpeedTilesPerSecond);

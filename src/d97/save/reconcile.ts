@@ -9,27 +9,42 @@
 // - an encounter or shop whose anchor is on no dream's map moves to a free
 //   anchor of the same kind, the run's dream first, or is dropped when none
 //   is free; places on removed anchors are forgotten;
+// - anchors inside a dream's rooms (decision P19) are the dream's, so they
+//   resolve, move and are forgotten like any other; the last place follows
+//   its room's door when that door's anchor changed, is forgotten with a room
+//   the dream no longer has, and records the room its anchor stands in now;
+//   the anchor a battle returns the player beside is dropped when it is not
+//   on the last place's map;
 // - a held quest whose definition was removed is abandoned.
 //
 // New tunables need no repair: they apply going forward.
 
 import type { D97SaveTuning } from "../../content/d97/save";
-import type { D97Encounter, D97Run, D97Shop, D97State } from "../../rules/d97/d97-state";
+import type { D97Encounter, D97Place, D97Run, D97Shop, D97State } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
-import type { D97DreamId, D97OwnedCopyId, D97QuestId, DreamAnchorId } from "../../types/identifiers";
+import type { D97DreamId, D97OwnedCopyId, D97QuestId, D97RoomId, DreamAnchorId } from "../../types/identifiers";
 import type { DreamAnchorKind } from "../map/definition";
 import type { D97Snapshot } from "./snapshot";
 
-/** One anchor of a dream's map. */
+/** One anchor of a dream's maps. */
 export interface D97SaveAnchor {
   readonly id: DreamAnchorId;
   readonly kind: DreamAnchorKind;
+  /** The room it stands in, or null on the dream's own map. */
+  readonly roomId: D97RoomId | null;
 }
 
-/** One dream module of the current catalog and its map's anchors. */
+/** One room of a dream and the door a reload inside it places the player at. */
+export interface D97SaveRoom {
+  readonly id: D97RoomId;
+  readonly doorAnchorId: DreamAnchorId;
+}
+
+/** One dream module of the current catalog, its maps' anchors and its rooms. */
 export interface D97SaveDream {
   readonly id: D97DreamId;
   readonly anchors: readonly D97SaveAnchor[];
+  readonly rooms: readonly D97SaveRoom[];
 }
 
 /** The current catalog a save reconciles against. */
@@ -51,6 +66,8 @@ export type D97Reconciliation =
   | { readonly kind: "anchorMoved"; readonly where: string; readonly anchorId: DreamAnchorId; readonly toAnchorId: DreamAnchorId }
   | { readonly kind: "anchorDropped"; readonly where: string; readonly anchorId: DreamAnchorId }
   | { readonly kind: "dreamMoved"; readonly dreamId: D97DreamId | null; readonly toDreamId: D97DreamId }
+  | { readonly kind: "roomRemoved"; readonly roomId: D97RoomId }
+  | { readonly kind: "placeRoomChanged"; readonly anchorId: DreamAnchorId; readonly roomId: D97RoomId | null; readonly toRoomId: D97RoomId | null }
   | { readonly kind: "questAbandoned"; readonly questId: D97QuestId };
 
 type CardFate = { readonly kind: "keep" } | { readonly kind: "replace"; readonly to: CardId } | { readonly kind: "retire" };
@@ -62,6 +79,10 @@ class Reconciler {
   private readonly known: ReadonlySet<DreamAnchorId>;
   /** Every anchor, the run's dream's first: where a removed anchor's record moves. */
   private candidates: readonly D97SaveAnchor[] = [];
+  /** The run's dream's rooms. */
+  private rooms: readonly D97SaveRoom[] = [];
+  /** The room each of the run's dream's anchors stands in. */
+  private anchorRooms: ReadonlyMap<DreamAnchorId, D97RoomId | null> = new Map();
 
   constructor(
     private readonly catalog: D97SaveCatalog,
@@ -113,6 +134,8 @@ class Reconciler {
     const own = this.catalog.dreams.filter((dream) => dream.id === dreamId);
     const others = this.catalog.dreams.filter((dream) => dream.id !== dreamId);
     this.candidates = [...own, ...others].flatMap((dream) => dream.anchors);
+    this.rooms = own.flatMap((dream) => dream.rooms);
+    this.anchorRooms = new Map(own.flatMap((dream) => dream.anchors.map((anchor) => [anchor.id, anchor.roomId] as const)));
     let essence = run.essence;
     const copies = run.collection.copies.flatMap((copy) => {
       const fate = this.fate(copy.cardId);
@@ -131,6 +154,7 @@ class Reconciler {
     });
     const quests = run.quests;
     const pending = quests.pendingReward;
+    const lastPlace = this.lastPlace(run.lastPlace);
     return {
       ...run,
       dreamId,
@@ -139,8 +163,8 @@ class Reconciler {
       bag: { ...run.bag, entries: bagEntries },
       encounters: this.anchored(run.encounters, (encounter) => (encounter.role === "guardian" ? "guardian" : "challenger"), "encounter", (encounter, anchorId) => this.encounter({ ...encounter, anchorId })),
       shops: this.anchored(run.shops, () => "shop", "shop", (shop) => this.shop(shop)),
-      returnAnchorId: this.place(run.returnAnchorId, "returnAnchor"),
-      lastPlace: run.lastPlace === null || this.place(run.lastPlace.anchorId, "lastPlace") === null ? null : run.lastPlace,
+      returnAnchorId: this.returnAnchor(run.returnAnchorId, lastPlace),
+      lastPlace,
       activeWaypointIds: run.activeWaypointIds.filter((anchorId) => this.place(anchorId, "waypoint") !== null),
       quests: {
         ...quests,
@@ -173,6 +197,45 @@ class Reconciler {
         return cardId === null ? [] : [{ ...slot, cardId }];
       }),
     };
+  }
+
+  /** The room `anchorId` stands in among the run's dream's anchors; null on its map or elsewhere. */
+  private roomOf(anchorId: DreamAnchorId): D97RoomId | null {
+    return this.anchorRooms.get(anchorId) ?? null;
+  }
+
+  /**
+   * The run's last place: in a room the dream still has, at that room's door;
+   * forgotten with a room it no longer has or an anchor no map holds; in the
+   * room its anchor stands in now.
+   */
+  private lastPlace(place: D97Place | null): D97Place | null {
+    if (place === null) return null;
+    let { anchorId } = place;
+    if (place.roomId !== null) {
+      const room = this.rooms.find((candidate) => candidate.id === place.roomId);
+      if (room === undefined) {
+        this.log.push({ kind: "roomRemoved", roomId: place.roomId });
+        this.log.push({ kind: "anchorDropped", where: "lastPlace", anchorId });
+        return null;
+      }
+      if (room.doorAnchorId !== anchorId) {
+        this.log.push({ kind: "anchorMoved", where: "lastPlace", anchorId, toAnchorId: room.doorAnchorId });
+        anchorId = room.doorAnchorId;
+      }
+    }
+    if (this.place(anchorId, "lastPlace") === null) return null;
+    const roomId = this.roomOf(anchorId);
+    if (roomId !== place.roomId) this.log.push({ kind: "placeRoomChanged", anchorId, roomId: place.roomId, toRoomId: roomId });
+    return { ...place, anchorId, roomId };
+  }
+
+  /** The anchor a battle returns the player beside: dropped when removed or off the last place's map. */
+  private returnAnchor(anchorId: DreamAnchorId | null, lastPlace: D97Place | null): DreamAnchorId | null {
+    const kept = this.place(anchorId, "returnAnchor");
+    if (kept === null || this.roomOf(kept) === (lastPlace?.roomId ?? null)) return kept;
+    this.log.push({ kind: "anchorDropped", where: "returnAnchor", anchorId: kept });
+    return null;
   }
 
   private place(anchorId: DreamAnchorId | null, where: string): DreamAnchorId | null {

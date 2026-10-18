@@ -13,6 +13,7 @@ import type { D97FoldTransition } from "../d97-encounters";
 import { DECK_EVENTS } from "./deck";
 import { ENCOUNTER_EVENTS } from "./encounters";
 import { QUEST_EVENTS } from "./quests";
+import { ROOM_EVENTS } from "./rooms";
 import { RUN_EVENTS } from "./run";
 import { SHOP_EVENTS } from "./shop";
 import { d97PhaseInput, type D97Outcome, type D97Phase, type D97PhaseInputs } from "./spec";
@@ -26,6 +27,7 @@ export const D97_EVENTS = {
   ...QUEST_EVENTS,
   ...SHOP_EVENTS,
   ...TRAVEL_EVENTS,
+  ...ROOM_EVENTS,
 };
 
 /** The event types of the Dreamtides 97 namespace. */

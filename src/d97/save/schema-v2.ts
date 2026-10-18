@@ -1,10 +1,9 @@
 // The persisted D97 save, schema version 2 (decision P5), written out in full.
 //
 // This module never imports the live run types: the persisted shape is its
-// own contract. The converters in ./snapshot.ts tie the live state to it at
-// compile time, so a change to the live state that is not also a schema
-// change fails type checking; the fix is the next schema module, a migration
-// and a golden fixture, never an edit here.
+// own contract, frozen. The current schema is version 3 (./schema-v3.ts);
+// the version 2 to 3 migration (./migrations/v2-to-v3.ts) reads a version-2
+// snapshot through this parser.
 //
 // `parseSnapshotV2` validates an untrusted, already-migrated snapshot field by
 // field, branded identities included, and returns null for anything that

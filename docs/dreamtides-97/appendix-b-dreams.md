@@ -78,13 +78,34 @@ model:
 - **The validator** checks that anchors stand on walkable cells, that every
   anchor is reachable from the entries, that a guarded door is unreachable
   while its guardian stands, that doors keep their spacing, and that a
-  medium map's main route meets its crossing-time target.
+  medium map's main route meets its crossing-time target. A building door
+  on a dream's map must be reached from its doors and waypoint, and every
+  anchor in a room from the room's own building door.
 
 **Rooms.** A dream may own **rooms**: small interior maps, each a map module
 of its own, entered through ordinary building doors rather than dream doors.
 Entering one is a fade with no veil. A room belongs to its dream, shares its
 waypoint and tier, and can hold friendly NPCs, chests, quest objects and the
 shop. Building doors without a room are scenery.
+
+- **Building doors.** A room joins its dream's map through a pair of
+  `buildingDoor` anchors, one on the dream's map and one inside the room,
+  each with the entry tile where a player coming through the other arrives.
+  The dream module lists its rooms, each with its UUID, its map module and
+  its two doors; the dream validator checks each door is a building door on
+  the right map.
+- **One dream.** A room's anchors register with its dream's, so every rule
+  that scopes an anchor to the run's dream treats them as the dream's. The
+  dream module lists the room's residents with the dream's, and the dream's
+  shop may stand inside. The dream's waypoint and doors stand on its own map.
+- **Passing through.** Stepping through a building door is an intent event:
+  entering records the room's door as the run's last place, in that room,
+  and leaving records the building door outside, on the dream's map. The
+  room of the last place is the map the overworld plays. Each passage logs
+  the run, dream, room, map and both doors.
+- **Saves.** Reconciliation keeps a last place inside a room at that room's
+  current door, forgets one in a room the dream no longer has, and records
+  the room a place's anchor stands in.
 
 Limbo has one fixed map. Key dreams use catalog maps (Appendix C §C6).
 
@@ -588,7 +609,8 @@ bag cards, and gain one amulet.
 Clients write intent events only. Walking is view-local and never logged.
 These are intent events:
 
-- step through a door, activate a waypoint, fast-travel;
+- step through a door (a dream door, or a building door into or out of a
+  room), activate a waypoint, fast-travel;
 - preview a challenger, fight, choose Not now;
 - open a shop, buy, sell, restock; buy from an amulet merchant or changer;
 - use a guide site; ask a sage;
@@ -604,7 +626,8 @@ defeats Apollyon.
 **Placement.** Returning from a battle places the player beside the opponent
 they fought. A reload places the player at the entry point of the last door
 they stepped through or beside the last waypoint they used, whichever was
-later. A new run starts at its arrival door's entry.
+later. A reload inside a room places the player at the entry of the room's
+own door. A new run starts at its arrival door's entry.
 
 **Saves.** A run must survive every later build: tuning, content, rules and
 code changes.

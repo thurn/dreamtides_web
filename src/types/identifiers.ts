@@ -109,6 +109,8 @@ export type D97CharacterId = DomainIdentity<"D97CharacterId">;
 export type LpcSheetKey = DomainIdentity<"LpcSheetKey">;
 /** One Dreamtides 97 dream module: a map and its residents (a UUID). */
 export type D97DreamId = DomainIdentity<"D97DreamId">;
+/** One room of a D97 dream: a small interior map behind a building door (a UUID). */
+export type D97RoomId = DomainIdentity<"D97RoomId">;
 /** One authored Dreamtides 97 dream map. */
 export type DreamMapId = DomainIdentity<"DreamMapId">;
 /** One anchor (door, waypoint, shop, NPC spot…) on a D97 dream map. */
@@ -203,6 +205,7 @@ const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
 const brandD97CharacterId = identityConstructor<D97CharacterId>();
 const brandLpcSheetKey = identityConstructor<LpcSheetKey>();
 const brandD97DreamId = identityConstructor<D97DreamId>();
+const brandD97RoomId = identityConstructor<D97RoomId>();
 const brandDreamMapId = identityConstructor<DreamMapId>();
 const brandDreamAnchorId = identityConstructor<DreamAnchorId>();
 const brandDreamMapSourceHash = identityConstructor<DreamMapSourceHash>();
@@ -418,6 +421,12 @@ export const parseD97DreamId = identityParser(
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );
+export const parseD97RoomId = identityParser(
+  "D97 room id",
+  brandD97RoomId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
 export const parseDreamMapId = identityParser(
   "Dream map id",
   brandDreamMapId,
@@ -581,6 +590,7 @@ export const auguryArchetypeIdFromUnknown = identityDecoder(
 );
 export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const d97DreamIdFromUnknown = identityDecoder(parseD97DreamId);
+export const d97RoomIdFromUnknown = identityDecoder(parseD97RoomId);
 export const d97OwnedCopyIdFromUnknown = identityDecoder(parseD97OwnedCopyId);
 export const dreamAnchorIdFromUnknown = identityDecoder(parseDreamAnchorId);
 export const d97QuestIdFromUnknown = identityDecoder(parseD97QuestId);

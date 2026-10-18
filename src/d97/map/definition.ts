@@ -124,9 +124,13 @@ export type DreamMapRecipeOp =
   | ({ readonly op: "block" } & TileRect)
   | ({ readonly op: "open" } & TileRect);
 
-/** The anchor kinds of Appendix B §B1, plus ambient townsfolk (P20). */
+/**
+ * The anchor kinds of Appendix B §B1, plus ambient townsfolk (P20) and the
+ * building doors that join a dream's map to its rooms (P19).
+ */
 export type DreamAnchorKind =
   | "door"
+  | "buildingDoor"
   | "waypoint"
   | "shop"
   | "guardian"
@@ -148,6 +152,17 @@ export type DreamAnchorDefinition =
   | (AnchorBase & {
       readonly kind: "door";
       /** Where a player stepping through this door from elsewhere arrives. */
+      readonly entry: DreamAnchorPlacement;
+    })
+  | (AnchorBase & {
+      /**
+       * An ordinary building door (P19), with no veil: on a dream's map it
+       * leads into one of the dream's rooms, and in a room it leads back out.
+       * The dream module pairs the two (`rooms` in
+       * src/content/d97/dreams/schema.ts).
+       */
+      readonly kind: "buildingDoor";
+      /** Where a player coming through the paired door arrives. */
       readonly entry: DreamAnchorPlacement;
     })
   | (AnchorBase & {

@@ -51,19 +51,36 @@ export function walkingRoute(
 
 /** The tile a player walks to in order to use an anchor. */
 export function anchorStandTile(anchor: CompiledAnchor): TilePoint {
-  return anchor.kind === "door" ? (anchor.entry ?? anchor.at) : anchor.at;
+  return anchor.kind === "door" || anchor.kind === "buildingDoor" ? (anchor.entry ?? anchor.at) : anchor.at;
 }
 
 export interface MapEntry {
   readonly anchorId: DreamAnchorId;
-  readonly kind: "door" | "waypoint";
+  readonly kind: "door" | "waypoint" | "buildingDoor";
   readonly at: TilePoint;
 }
 
-/** Where a player can arrive on the map: door entry tiles and waypoints. */
+/**
+ * Whether `map` is a room (P19): it has building doors but no door or
+ * waypoint, so it is entered only from its dream's map.
+ */
+export function isRoomMap(map: CompiledDreamMap): boolean {
+  return (
+    map.anchors.some((anchor) => anchor.kind === "buildingDoor") &&
+    !map.anchors.some((anchor) => anchor.kind === "door" || anchor.kind === "waypoint")
+  );
+}
+
+/**
+ * Where a player can arrive on the map: door entry tiles and waypoints. A
+ * room's arrivals are its building doors' entry tiles. On a dream's map a
+ * building door is no arrival: the player comes out of a room only after
+ * walking to its door, so the door must be reached from the map's entries.
+ */
 export function mapEntries(map: CompiledDreamMap): MapEntry[] {
+  const room = isRoomMap(map);
   return map.anchors.flatMap((anchor): MapEntry[] =>
-    anchor.kind === "door" || anchor.kind === "waypoint"
+    anchor.kind === "door" || anchor.kind === "waypoint" || (room && anchor.kind === "buildingDoor")
       ? [{ anchorId: anchor.id, kind: anchor.kind, at: anchorStandTile(anchor) }]
       : [],
   );

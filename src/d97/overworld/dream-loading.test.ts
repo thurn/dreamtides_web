@@ -16,6 +16,7 @@ const dream = (n: number) =>
     id: parseD97DreamId(uuid(n)),
     mapId: parseDreamMapId(uuid(n + 100)),
     topology: { waypointAnchorId: anchor(n + 200), arrivalDoorAnchorId: anchor(n + 201), exitDoorAnchorId: anchor(n + 202), exitGuardianAnchorId: anchor(n + 203), shopAnchorId: anchor(n + 204) },
+    rooms: [],
     residents: [],
   });
 
