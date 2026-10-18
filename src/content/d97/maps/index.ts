@@ -16,11 +16,12 @@ import type { D97StampId, D97TerrainId } from "../../../types/identifiers";
 import { D97_STAMPS } from "../stamps";
 import { D97_TERRAINS } from "../terrains";
 import { D97_SEASON_FAMILIES } from "../terrains/seasons";
+import map0a5a7441 from "./0a5a7441-da58-417c-8787-4b854f400714";
 import map3229d6c7 from "./3229d6c7-0700-4f37-9b07-921e3dccb8b6";
 import room8f22aeec from "./8f22aeec-9a8f-4d44-91fb-7668f369609f";
 import example9ad96a1d from "./9ad96a1d-4542-4228-a20f-1e4f6e274058";
 
-export const D97_DREAM_MAPS: readonly DreamMapDefinition[] = [map3229d6c7, room8f22aeec];
+export const D97_DREAM_MAPS: readonly DreamMapDefinition[] = [map3229d6c7, room8f22aeec, map0a5a7441];
 
 export const D97_EXAMPLE_MAPS: readonly DreamMapDefinition[] = [example9ad96a1d];
 

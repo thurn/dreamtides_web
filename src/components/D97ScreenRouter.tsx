@@ -56,7 +56,8 @@ export function D97ScreenRouter({
   const qaScene = gotoScene === null ? null : findD97QaScene(gotoScene);
   const startsQaRun = qaScene?.startsRun === true;
   const opensDeckEditor = qaScene?.opensDeckEditor === true;
-  const qaRunDreamId = qaScene?.startsInDevelopmentDream === true ? d97DevelopmentContent()?.dream.id : undefined;
+  const qaRunDreamId =
+    qaScene?.catalogDreamId ?? (qaScene?.startsInDevelopmentDream === true ? d97DevelopmentContent()?.dream.id : undefined);
   const firstAvatarId = journeyContent.avatars[0]?.id ?? null;
   useEffect(() => {
     if (

@@ -83,6 +83,7 @@ import sampanBoatBfa6ec65 from "./sampan-boat-bfa6ec65";
 import plankBarn2985ee18 from "./plank-barn-2985ee18";
 import hayLeanTo78ba625c from "./hay-lean-to-78ba625c";
 import paleGatehouse61ae9649 from "./pale-gatehouse-61ae9649";
+import desertSand5ecb3e8c from "./desert-sand-5ecb3e8c";
 
 export const D97_STAMPS: readonly D97CatalogStamp[] = [
   emberArch684f3b39,
@@ -161,4 +162,5 @@ export const D97_STAMPS: readonly D97CatalogStamp[] = [
   plankBarn2985ee18,
   hayLeanTo78ba625c,
   paleGatehouse61ae9649,
+  desertSand5ecb3e8c,
 ];

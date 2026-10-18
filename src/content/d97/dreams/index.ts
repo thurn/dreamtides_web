@@ -9,7 +9,8 @@
 // build, the development dream (`./development.ts`) in development builds
 // only.
 
+import dream0a5a7441 from "./0a5a7441-da58-417c-8787-4b854f400714";
 import dream3229d6c7 from "./3229d6c7-0700-4f37-9b07-921e3dccb8b6";
 import type { D97CatalogDream } from "./schema";
 
-export const D97_DREAMS: readonly D97CatalogDream[] = [dream3229d6c7];
+export const D97_DREAMS: readonly D97CatalogDream[] = [dream3229d6c7, dream0a5a7441];

@@ -5,9 +5,11 @@
 // is an ordinary saved run. The run-starting scenes request the development
 // dream through the intent's `dreamId`, so the run records it and plays its
 // fixture residents on every reload; Avatar select leads to the catalog
-// dream.
+// dream. Each catalog dream also has a scene, `?goto=d97-dream-<dream-uuid>`,
+// whose run starts in that dream, for browser QA of any dream in the catalog.
 
-import { parseQaSceneId, type QaSceneId } from "../types/identifiers";
+import { D97_DREAMS } from "../content/d97/dreams";
+import { parseQaSceneId, type D97DreamId, type QaSceneId } from "../types/identifiers";
 
 export interface D97QaScene {
   /** URL token, e.g. `?goto=d97-overworld`. Lowercase, stable. */
@@ -22,6 +24,8 @@ export interface D97QaScene {
   readonly opensDeckEditor: boolean;
   /** Start the run in the development dream instead of the first catalog dream. */
   readonly startsInDevelopmentDream: boolean;
+  /** Start the run in this catalog dream instead of the first. */
+  readonly catalogDreamId?: D97DreamId;
 }
 
 const D97_QA_SCENES: readonly D97QaScene[] = [
@@ -53,6 +57,17 @@ const D97_QA_SCENES: readonly D97QaScene[] = [
     opensDeckEditor: true,
     startsInDevelopmentDream: true,
   },
+  ...D97_DREAMS.map(
+    (dream): D97QaScene => ({
+      id: parseQaSceneId(`d97-dream-${dream.id}`),
+      label: `D97 Dream ${dream.id}`,
+      description: "A new Dreamtides 97 run started with the roster's first Avatar, at this catalog dream's town door.",
+      startsRun: true,
+      opensDeckEditor: false,
+      startsInDevelopmentDream: false,
+      catalogDreamId: dream.id,
+    }),
+  ),
 ];
 
 /** The D97 QA scene `id` names, or null. */
