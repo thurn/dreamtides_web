@@ -1,5 +1,6 @@
 /** D20: battle-start Foresee shares the completed-opening occasion and its event boundary. */
 import { expect } from "vitest";
+import { BATTLE } from "../battle";
 import { parseEngineBattleFold } from "../../rules/battle/fold";
 import { parseDreamsignId, parsePromptId } from "../../types/identifiers";
 import type { EngineCardDefinition } from "../../engine/catalog";
@@ -88,7 +89,7 @@ for (const side of SIDES) {
       expect(w.opened.published.filter(e => e.kind === "cardDrawn")).toHaveLength(6);
       for (const holder of SIDES) {
         expect(p.display.sides[holder].hand).toHaveLength(3);
-        expect(p.display.sides[holder].currentEnergy).toBe(holder === "player" ? 3 : 4);
+        expect(p.display.sides[holder].currentEnergy).toBe(BATTLE.startingEnergy + (holder === "player" ? 3 : 4));
       }
       expect(p.display.turn.turnNumber).toBe(0);
       expect(engine.decision(w.opened.slice.committed)).toBeNull();

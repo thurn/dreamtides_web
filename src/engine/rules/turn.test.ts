@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { BATTLE } from "../../content/battle";
 import type { EngineCardDefinition, EngineDreamsignDefinition } from "../catalog";
 import { all, characterYouControl, energy, enemyCharacter, event, noCardsIn, target, winCondition } from "../dsl/builders";
 import type { Ability } from "../dsl/types";
@@ -85,8 +86,8 @@ describe("battle start and the phase machine", () => {
     const drawn = roundTwo.events.find((event) => event.kind === "dreamwellDrawn");
     expect(drawn?.kind === "dreamwellDrawn" && drawn.side).toBe("player");
     const added = drawn?.kind === "dreamwellDrawn" ? drawn.energyAdded : 0;
-    expect(roundTwo.state.sides.player.maxEnergy).toBe(added);
-    expect(roundTwo.state.sides.player.currentEnergy).toBe(added);
+    expect(roundTwo.state.sides.player.maxEnergy).toBe(BATTLE.startingEnergy + added);
+    expect(roundTwo.state.sides.player.currentEnergy).toBe(BATTLE.startingEnergy + added);
     expect(roundTwo.state.sides.player.hand).toHaveLength(6);
   });
 

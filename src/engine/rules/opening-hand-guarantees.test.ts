@@ -1,5 +1,6 @@
 /** Physical opening guarantees through the real engine, fold, cold guard and private event projection. */
 import { describe, expect, it } from "vitest";
+import { BATTLE } from "../../content/battle";
 import { parseEngineBattleFold } from "../../rules/battle/fold";
 import { parseDeckEntryId, parseDreamsignId } from "../../types/identifiers";
 import { createEngine, NO_PROMPTS, ScriptedSource, type BattleInit, type BattleSetup, type BattleState, type Side } from "../index";
@@ -108,7 +109,7 @@ describe("guaranteed original opening slots", () => {
     for (const side of SIDES) {
       if (mode < 2) expect(out.boundary.config.openingHandSize[side]).toBe(mode);
       expect(out.boundary.sides[side].hand).toHaveLength(Math.max(out.boundary.config.openingHandSize[side], 3) + 2);
-      expect(out.boundary.sides[side]).toMatchObject({ currentEnergy: 4, maxEnergy: 4 });
+      expect(out.boundary.sides[side]).toMatchObject({ currentEnergy: BATTLE.startingEnergy + 4, maxEnergy: BATTLE.startingEnergy + 4 });
     }
     const completed = out.events.filter(event => event.kind === "openingHandCompleted");
     expect(completed).toEqual([{ kind: "openingHandCompleted", side: "enemy" }, { kind: "openingHandCompleted", side: "player" }]);

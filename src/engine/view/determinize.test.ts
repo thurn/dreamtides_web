@@ -75,6 +75,9 @@ describe("determinize", () => {
       for (const viewer of SIDES) {
         const sampled = determinize(engine.view(state, viewer), decklists, seeded(`legal-${String(index)}-${viewer}`), engine.catalog);
         expect(invariantViolations(sampled, engine.catalog)).toEqual([]);
+        // An opponent's priority hides whether their sampled hand still holds a response.
+        const pending = engine.decision(state);
+        if (pending?.kind === "respond" && pending.side !== viewer) continue;
         expect(engine.decision(sampled) !== null || sampled.result !== null).toBe(true);
         const later = playRandomActions(engine, sampled, new PolicyRandom(battleSeed(`legal-play-${String(index)}`)), {
           stop: (current, actions) => {

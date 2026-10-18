@@ -535,9 +535,10 @@ and Ending run as automatic bookends.
    Auto-advances when the stack is empty, after which the turn passes to the
    opponent, unless the active player has an extra turn to take.
 
-**Battle start:** Each player draws 5 cards as their opening hand. Both players
-skip the Dreamwell draw in round 1. The first player's first turn skips the Draw
-phase.
+**Battle start:** Each player draws 5 cards as their opening hand and begins
+with 2● current and 2 maximum ●; starting energy granted for the battle adds to
+both. Both players skip the Dreamwell draw in round 1. The first player's first
+turn skips the Draw phase.
 
 **Guaranteed opening cards:** A guarantee identifies one original physical deck
 slot. Deal distinct guaranteed cards first in their held-source order, counting

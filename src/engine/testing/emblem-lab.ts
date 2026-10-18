@@ -24,7 +24,7 @@ export function emblemLabBattle(
 ): { init: BattleInit; slice: BattleSlice } {
   definition(engine, request);
   const deck = Array.from({ length: BATTLE.minimumDeckSize }, () => ({ cardId: SYNTHETIC.vanilla1.id }));
-  const energy = { openingHand: [], startingEnergy: BATTLE.energyCap, smallerHandAndCostDiscount: [] };
+  const energy = { openingHand: [], startingEnergy: BATTLE.energyCap - BATTLE.startingEnergy, smallerHandAndCostDiscount: [] };
   const init: BattleInit = {
     seed: battleSeed(`${request.kind}-lab:${request.id}:${request.side}`),
     scoreToWin: BATTLE.scoreTargets[0], startingSide: request.side,

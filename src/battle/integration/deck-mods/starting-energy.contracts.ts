@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import { BATTLE } from "../../../content/battle";
 import { instanceCard } from "../../../engine/catalog";
 import { energy } from "../../../engine/dsl/builders";
 import { createEngine } from "../../../engine/engine";
@@ -31,6 +32,7 @@ const eventCard = makeAuguryTestCard({ id: paidEvent.id, cardNumber: 63802, ener
 const victoryCard = makeAuguryTestCard({ id: FIXTURE_POINTS_CARD_ID, cardNumber: 63803, energyCost: 0, cardType: "Event", subtype: EVENT_CARD_SUBTYPE, spark: null });
 const content = makeAuguryTestContent({ cards: [character, eventCard, victoryCard] });
 const engine = createEngine(testCatalog([paidEvent]));
+const BASE = BATTLE.startingEnergy;
 const other = (side: Side): Side => side === "player" ? "enemy" : "player";
 const entry = (cardNumber = character.cardNumber, transfiguration: DeckEntry["transfiguration"] = null): DeckEntry => ({
   entryId: parseDeckEntryId(`energy:${cardNumber}:${transfiguration ?? "base"}`), cardNumber, transfiguration, isBane: false,
@@ -115,9 +117,9 @@ describe("starting energy through public reward, engine and journey boundaries",
     const input = init(journey);
     expect(input.nextBattle?.enemy).toBeUndefined();
     const started = engine.createBattle(input, NO_PROMPTS);
-    expect(energies(started.state, "player")).toEqual({ current: count, max: count });
-    expect(energies(started.state, "enemy")).toEqual({ current: 0, max: 0 });
-    const energyIndex = started.events.findIndex(e => e.kind === "energyChanged" && e.side === "player" && e.current === count && e.max === count);
+    expect(energies(started.state, "player")).toEqual({ current: BASE + count, max: BASE + count });
+    expect(energies(started.state, "enemy")).toEqual({ current: BASE, max: BASE });
+    const energyIndex = started.events.findIndex(e => e.kind === "energyChanged" && e.side === "player" && e.current === BASE + count && e.max === BASE + count);
     const completed = started.events.flatMap((e, index) => e.kind === "openingHandCompleted" ? [index] : []);
     expect(energyIndex).toBeGreaterThanOrEqual(0);
     expect(completed).toHaveLength(2);
@@ -129,11 +131,11 @@ describe("starting energy through public reward, engine and journey boundaries",
     const once = rewarded({ ...testJourneyState(), deck: [entry()] }, 2);
     const stacked = rewarded(once, 3, 1);
     const started = engine.createBattle(init(stacked), NO_PROMPTS);
-    expect(energies(started.state, "player")).toEqual({ current: 5, max: 5 });
+    expect(energies(started.state, "player")).toEqual({ current: BASE + 5, max: BASE + 5 });
     const expired = { ...stacked, battleModifiers: stacked.battleModifiers.map(modifier => ({ ...modifier, battlesRemaining: 0 })) };
     expect(init(expired).nextBattle).toBeUndefined();
     const unrelated: JourneyState = { ...once, battleModifiers: [{ kind: "reward_reduction_flat", amount: 9, battlesRemaining: 1, source: once.battleModifiers[0].source }] };
-    expect(energies(engine.createBattle(init(unrelated), NO_PROMPTS).state, "player")).toEqual({ current: 0, max: 0 });
+    expect(energies(engine.createBattle(init(unrelated), NO_PROMPTS).state, "player")).toEqual({ current: BASE, max: BASE });
   });
 
   for (const side of ["player", "enemy"] as const) for (const card of [character, eventCard]) for (const form of [null, "Amplified"] as const) {
@@ -146,18 +148,17 @@ describe("starting energy through public reward, engine and journey boundaries",
       const instance = start.state.instances[physical];
       expect(instance).toMatchObject({ owner: side, controller: side, printing: { kind: "card", cardId: card.id }, variant: { amplified: form === "Amplified", deckMods: { costReduction: 1 } } });
       expect(instanceCard(engine.catalog, instance)).toMatchObject({ cardType: card.cardType === "Character" ? "character" : "event", costs: [energy(1)] });
-      expect(energies(start.state, side)).toEqual({ current: 2, max: 2 });
-      expect(energies(start.state, other(side))).toEqual({ current: 0, max: 0 });
+      expect(energies(start.state, side)).toEqual({ current: BASE + 2, max: BASE + 2 });
+      expect(energies(start.state, other(side))).toEqual({ current: BASE, max: BASE });
       expect(Object.values(start.state.instances).filter(i => i.owner === other(side)).every(i => !i.variant.amplified && i.variant.deckMods === undefined)).toBe(true);
       const play = { kind: "play", card: physical, from: "hand" } as const;
       const paid = engine.apply(start.state, side, play, NO_PROMPTS);
-      expect(paid.events).toContainEqual(expect.objectContaining({ kind: "energyChanged", side, current: 1, max: 2, change: -1, maxChange: 0, cause: "payment" }));
-      expect(energies(paid.state, side)).toEqual({ current: 1, max: 2 });
+      expect(paid.events).toContainEqual(expect.objectContaining({ kind: "energyChanged", side, current: BASE + 1, max: BASE + 2, change: -1, maxChange: 0, cause: "payment" }));
+      expect(energies(paid.state, side)).toEqual({ current: BASE + 1, max: BASE + 2 });
       const dropped = engine.createBattle({ ...input, nextBattle: undefined }, NO_PROMPTS);
       const unpaid = dropped.state.sides[side].hand[0];
-      expect(energies(dropped.state, side)).toEqual({ current: 0, max: 0 });
-      expect(engine.legalActions(dropped.state, side).some(action => action.kind === "play" && action.card === unpaid)).toBe(false);
-      expect(() => engine.apply(dropped.state, side, { kind: "play", card: unpaid, from: "hand" }, NO_PROMPTS)).toThrow();
+      expect(energies(dropped.state, side)).toEqual({ current: BASE, max: BASE });
+      expect(instanceCard(engine.catalog, dropped.state.instances[unpaid]).costs).toEqual([energy(1)]);
       expect([card, character, eventCard]).toEqual(printed);
     });
   }
@@ -188,13 +189,13 @@ describe("starting energy through public reward, engine and journey boundaries",
     incomplete.delete(eventCard.cardNumber);
     expect(() => init(journey, "player", incomplete)).toThrow();
     expect(journey).toEqual(before);
-    expect(energies(engine.createBattle(init(journey), NO_PROMPTS).state, "player")).toEqual({ current: 2, max: 2 });
+    expect(energies(engine.createBattle(init(journey), NO_PROMPTS).state, "player")).toEqual({ current: BASE + 2, max: BASE + 2 });
   });
 
   it.each(["player", "enemy"] as const)("consumes %s-seated rewards only at an actual victorious END_BATTLE", side => {
     const started = battle(side), modifiers = structuredClone(started.journey.battleModifiers);
-    expect(energies(board(started), side)).toEqual({ current: 5, max: 5 });
-    expect(energies(board(started), other(side))).toEqual({ current: 0, max: 0 });
+    expect(energies(board(started), side)).toEqual({ current: BASE + 5, max: BASE + 5 });
+    expect(energies(board(started), other(side))).toEqual({ current: BASE, max: BASE });
     expect(apply(started, "END_BATTLE").state).toBe(started);
     expect(started.journey.battleModifiers).toEqual(modifiers);
     const terminal = victory(started), before = structuredClone(terminal);
@@ -210,11 +211,11 @@ describe("starting energy through public reward, engine and journey boundaries",
     expect(apply(ended, "END_BATTLE").state).toBe(ended);
     expect(accepted(terminal, "END_BATTLE")).toEqual(ended);
     const next = FIXTURE_ENGINE.createBattle(init(ended.journey, side), NO_PROMPTS);
-    expect(energies(next.state, side)).toEqual({ current: 0, max: 0 });
+    expect(energies(next.state, side)).toEqual({ current: BASE, max: BASE });
     const longer = { ...terminal, journey: { ...terminal.journey, battleModifiers: modifiers.map(modifier => ({ ...modifier, battlesRemaining: 2 })) } };
     const retained = accepted(longer, "END_BATTLE");
     expect(retained.journey.battleModifiers).toEqual(modifiers);
-    expect(energies(FIXTURE_ENGINE.createBattle(init(retained.journey, side), NO_PROMPTS).state, side)).toEqual({ current: 5, max: 5 });
+    expect(energies(FIXTURE_ENGINE.createBattle(init(retained.journey, side), NO_PROMPTS).state, side)).toEqual({ current: BASE + 5, max: BASE + 5 });
   });
 
   it("keeps startup energy through cancel, reload and stale/wrong-side play answers", () => {
@@ -224,7 +225,7 @@ describe("starting energy through public reward, engine and journey boundaries",
     if (prompt === null) throw new Error("Missing actual cancellable play prompt");
     expect(accepted(started, "BATTLE_ACTION", play)).toEqual(pending);
     const cancelled = accepted(pending, "BATTLE_CANCEL", { side: "player", promptId: prompt.prompt.id });
-    expect(energies(board(cancelled), "player")).toEqual({ current: 5, max: 5 });
+    expect(energies(board(cancelled), "player")).toEqual({ current: BASE + 5, max: BASE + 5 });
     expect(cancelled.journey.battleModifiers).toEqual(started.journey.battleModifiers);
     const loaded = accepted(cancelled, "LOAD_STATE", { snapshot: JSON.parse(JSON.stringify(cancelled.journey)), battle: JSON.parse(JSON.stringify(cancelled.battle)) });
     const retried = accepted(loaded, "BATTLE_ACTION", play), current = pendingEnginePrompt(retried.battle, FIXTURE_ENGINE);
@@ -236,6 +237,6 @@ describe("starting energy through public reward, engine and journey boundaries",
     const terminal = accepted(retried, "BATTLE_ANSWER", answer);
     expect(apply(terminal, "BATTLE_ANSWER", answer).state).toBe(terminal);
     expect(terminal.journey.battleModifiers).toEqual(started.journey.battleModifiers);
-    expect(energies(board(terminal), "player")).toEqual({ current: 5, max: 5 });
+    expect(energies(board(terminal), "player")).toEqual({ current: BASE + 5, max: BASE + 5 });
   });
 });

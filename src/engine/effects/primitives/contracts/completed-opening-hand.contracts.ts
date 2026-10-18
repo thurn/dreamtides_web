@@ -1,5 +1,6 @@
 /** Completed opening setup uses ordinary trigger FIFO, prompts and saved replay before turn one. */
 import { describe, expect, it } from "vitest";
+import { BATTLE } from "../../../../content/battle";
 import { parseCardSubtype } from "../../../../types/card-identity";
 import { parseEngineBattleFold } from "../../../../rules/battle/fold";
 import { parseAvatarId, parseDreamsignId, parsePromptId } from "../../../../types/identifiers";
@@ -100,7 +101,7 @@ describe("completed opening hand", () => {
     for (const side of SIDES) {
       expect(out.state.sides[side].hand).toHaveLength(2);
       expect(out.state.sides[side].score).toBe(17);
-      expect(out.state.sides[side].currentEnergy).toBe(side === "player" ? 3 : 4);
+      expect(out.state.sides[side].currentEnergy).toBe(BATTLE.startingEnergy + (side === "player" ? 3 : 4));
     }
     const begun = out.events.findIndex(e => e.kind === "turnStarted");
     expect(out.events.slice(begun).some(e => e.kind === "triggerResolved")).toBe(false);

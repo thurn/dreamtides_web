@@ -15,6 +15,9 @@ export const BATTLE = {
   // Highest numbered battle round. Advancing beyond it without a winner ends
   // the battle in a draw.
   turnLimit: 50,
+  // Current and maximum energy each side begins a battle with, before any
+  // next-battle starting energy is added.
+  startingEnergy: 2,
   // Maximum energy available to either side under the standard energy ramp.
   energyCap: 10,
   // Maximum cards a side keeps when end-of-turn automation discards excess

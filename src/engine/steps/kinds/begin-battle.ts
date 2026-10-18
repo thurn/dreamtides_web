@@ -2,6 +2,7 @@ import { drawGuaranteedOpeningHand } from "../../rules/opening-hand-guarantees";
 import { cardMatchesFilter } from "../../continuous/characteristics";
 import { buildDreamwellDeck } from "../../rules/dreamwell";
 import { drawCard, setEnergy } from "../../rules/resources";
+import { BATTLE } from "../../../content/battle";
 import { beginFirstTurn, beginPreparedPhase } from "../../rules/turn";
 import { opponent, SIDES } from "../../state/ids";
 import type { DreamwellCardId, Side } from "../../state/ids";
@@ -20,7 +21,7 @@ export interface BeginBattleStep {
   readonly guaranteedOpeningHand?: BattleInit["guaranteedOpeningHand"];
   /** Extra opening-hand draws per side, after the ordinary hand. */
   readonly openingHand?: Readonly<Partial<Record<Side, readonly OpeningHandDraw[]>>>;
-  /** Energy, current and maximum, each side begins with. */
+  /** Next-battle energy each side adds to the standard starting energy. */
   readonly startingEnergy?: Readonly<Partial<Record<Side, number>>>;
   /** Entry to an explicitly prepared phase, without opening-hand effects. */
   readonly preparedPhase?: BattleSetup["turn"]["phase"];
@@ -90,7 +91,7 @@ export const beginBattle: StepDefinition<BeginBattleStep> = {
         }
       }
       for (const draw of step.openingHand?.[side] ?? []) drawOpeningGroup(ctx, side, draw);
-      const energy = step.startingEnergy?.[side] ?? 0;
+      const energy = BATTLE.startingEnergy + (step.startingEnergy?.[side] ?? 0);
       if (energy > 0) setEnergy(ctx, side, energy, energy);
     }
     for (const side of [state.turn.active, opponent(state.turn.active)]) {
