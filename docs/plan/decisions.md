@@ -7,7 +7,8 @@ D26 amended; D43–D45 added), amended on 2026-10-09 for sequential
 execution (D17, D18, D26, D37, D43, and D44), and amended on 2026-10-10 for
 peer executor sessions (D17, D18, D26, D29, D42, D43, D44, and D45), and
 amended on 2026-10-14 for permanent fresh Codex subagent review routing
-(D18). They are
+(D18), and amended on 2026-10-17 for a lean Phase 5 gate and an early AI
+build (D46). They are
 binding for the run. In the
 [rules ambiguity ladder](#d10-rules-ambiguity-ladder) they outrank every other
 precedent.
@@ -934,6 +935,28 @@ strength bar.
 The Expert values actions and states from AST-derived features, plus
 hand-written phase strategy. Per-card overrides exist only for observed
 misplays.
+
+### D46. Lean Phase 5 gate and early AI build
+
+The Phase 5 gate is a short confirmation with existing commands: the
+coverage gate, a 1,000-game fuzz soak, one desktop journey smoke against
+Greedy, one review of the gate commit, and the metrics update. It does not
+re-sweep cards, play mobile journeys, review the whole phase diff, or wait
+for retrospective beads. The 10,000-game soak, full journeys and full review
+stay in Phase 7 final acceptance (7.10).
+
+AI build work starts during the gate. Task 7.2 splits into 7.2a, the
+evaluation module with its catalog weights and contract tests, and 7.2, the
+Greedy upgrade with its comparison report and the `greedy@7.2` freeze. 7.2a
+and the Expert build children depend only on built code. They leave the
+Greedy and Random policies unchanged. Every tournament, strength report,
+frozen reference and calibration still waits for the gate.
+
+**Why:** after about 30 hours the gate had run none of its checks. Its
+sessions had spent the time building gate infrastructure and reviewing their
+own process, and found no product defect on 2026-10-17. Phase 5 content was
+complete. Its per-card verdicts were already recorded, and 7.10 repeats the
+full soak and journeys on the final code.
 
 ## Planner defaults
 

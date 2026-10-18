@@ -24,7 +24,11 @@ children use the adopted native lanes below:
 
 - 7.1 ← Phase 4.5. The harness and deck pool are built during Phase 5,
   because they need only the policy interface.
-- 7.2 ← 7.1, the Phase 5 gate. Tuning against incomplete content is wasted.
+- 7.2a evaluation build ← 7.1. It starts during the Phase 5 gate
+  ([D46](decisions.md#d46-lean-phase-5-gate-and-early-ai-build)).
+- 7.2 Greedy upgrade, comparison and `greedy@7.2` freeze ← 7.2a, the Phase 5
+  gate.
+- Expert build children `.13`–`.16` ← 7.2a.
 - Original 7.3 integration/reference/strength ← 7.2 and its four delivered
   functional children.
 - Original 7.4 baseline report ← completed Expert 7.3 and delivered ISMCTS/
@@ -39,8 +43,11 @@ children use the adopted native lanes below:
 - 7.11 ← 7.10
 
 The adopted functional build lanes and original acceptance joins are recorded
-in [hv-umm2.606](evidence/parallelism/hv-umm2.606.md). All actual AI build or
-tuning waits for the Phase 5 gate (`hv-umm2.46`), including every child below.
+in [hv-umm2.606](evidence/parallelism/hv-umm2.606.md). The 7.2a evaluation
+build and the Expert build children `.13`–`.16` run during the Phase 5 gate.
+They do not change the Greedy or Random policies the gate runs. Every
+tournament, strength report, frozen reference and calibration waits for the
+Phase 5 gate (`hv-umm2.46`).
 
 | Build owner | Delivered work | Required consumer/join |
 | --- | --- | --- |
@@ -98,6 +105,14 @@ three consecutive iterations produce no new champion.
 - Re-running with the same seed reproduces identical outcomes.
 
 ### 7.2 Evaluation function
+
+This task has two beads
+([D46](decisions.md#d46-lean-phase-5-gate-and-early-ai-build)):
+
+- **7.2a** builds the evaluation module, its weights in `src/content/ai.ts`,
+  and its contract tests. It leaves the Greedy and Random policies unchanged.
+- **7.2** upgrades Greedy to use it, runs the comparison and freezes
+  `greedy@7.2`, after the Phase 5 gate.
 
 Hand-written features computed from the engine view:
 

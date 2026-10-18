@@ -618,29 +618,30 @@ coverage gate must stay green after each one.
 
 ### 5.10 Phase gate
 
+The gate is a short confirmation run with the commands that already exist
+([D46](decisions.md#d46-lean-phase-5-gate-and-early-ai-build)). It builds no
+new harness, runner, or QA infrastructure. A check that an existing command
+cannot run is recorded in the gate notes and skipped.
+
 1. **Nothing pending:** no entry is `pending` and the coverage gate passes.
-2. **Full re-sweep** of every card (base and amplified) on the final code, plus
-   the transfiguration and deck-modification samples. This is automated. Run
-   it in ≤30-minute batches, split across two QA subagents on separate ports.
-3. **Fuzz soak:** 10,000 games, full-pool random decks, random
-   transfigurations, random deck-entry modifications, Random and Greedy
-   policies. Zero violations.
-4. **Journey playthrough** on desktop and mobile against Greedy, with real
-   battles for at least three of the seven.
-5. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
-   and land the beads it files.
-6. **Independent review:** the full diff of engine and primitives, plus a
-   deterministic 10% sample of content definitions, listed for the reviewer.
-7. Update `metrics.md`, including the D19 suite budgets. In staged mode,
+2. **Fuzz soak:** 1,000 games with the existing fuzz runner, full-pool random
+   decks, random transfigurations, random deck-entry modifications, Random
+   and Greedy policies. Zero violations.
+3. **Journey smoke:** one desktop journey against Greedy with at least one
+   real battle; `__caps` stays empty.
+4. **Review:** one fresh Codex review of the gate's own commit.
+5. Update `metrics.md`, including the D19 suite budgets. In staged mode,
    confirm `release` contains every commit of the phase.
-8. Close the epic.
+6. Close the epic.
+
+The per-card sweep verdicts already in the QA ledger stand; the gate does not
+re-sweep. The phase retrospective runs as its own bead after the gate and
+does not block it.
 
 ## Exit gate
 
 - Every entity is implemented and gated.
-- The ledger is complete per D21.
-- The soak is clean.
+- The 1,000-game soak is clean.
 - The card issues and RD entries are recorded.
 - Every mason bead filed this phase has landed.
-- The retrospective's improvement beads have landed.
-- The review is resolved.
+- The gate review is resolved.
