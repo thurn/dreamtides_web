@@ -15,13 +15,14 @@ import {
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
 import { D97_DREAMS } from "../../content/d97/dreams";
+import { incarnationFor, type D97DreamResident } from "../../content/d97/dreams/schema";
 import { D97_DEVELOPMENT_CONTENT } from "../../d97/development-content";
 import { eventRng } from "../../eventlog/rng";
 import { genesisFoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
 import { ctx, event } from "../../rules/reducer-fixtures";
 import { serializeCardNumber } from "../../types/draft";
-import { testJourneySeed } from "../../types/test-identities";
+import { testAvatarId, testJourneySeed } from "../../types/test-identities";
 import { createD97ContentProvider } from "./d97-content-provider";
 import {
   AVATAR_ID,
@@ -75,17 +76,19 @@ describe("createD97ContentProvider", () => {
     expect(provider.dreams.get(dream.id)?.anchors.map((anchor) => anchor.id)).toEqual(map.anchors.map((anchor) => anchor.id));
   });
 
-  it("indexes each speaking resident's registered dialogue by its anchor, in its own dream", () => {
+  it("finds each speaking resident's registered dialogue by its anchor, in its own dream", () => {
     const provider = createD97ContentProvider(makeJourneyContent(), D97_DEVELOPMENT_CONTENT);
     const dreams = [...D97_DREAMS, D97_DEVELOPMENT_CONTENT.dream];
-    expect(dreams.some((dream) => dream.residents.some((resident) => resident.dialogueId !== undefined))).toBe(true);
+    const player = testAvatarId("d97-provider-player");
+    const spoken = (resident: D97DreamResident) => incarnationFor(resident, player).dialogueId;
+    expect(dreams.some((dream) => dream.residents.some((resident) => spoken(resident) !== null))).toBe(true);
     for (const dream of dreams) {
       const registered = provider.dreams.get(dream.id);
-      for (const resident of dream.residents.filter((entry) => entry.dialogueId !== undefined)) {
-        expect(registered?.speakerDialogues.get(resident.anchorId)?.id).toBe(resident.dialogueId);
+      for (const resident of dream.residents) {
+        expect(registered?.speakerDialogue(resident.anchorId, player)?.id ?? null).toBe(spoken(resident));
       }
       for (const other of dreams.filter((entry) => entry.id !== dream.id)) {
-        for (const resident of other.residents) expect(registered?.speakerDialogues.has(resident.anchorId)).toBe(false);
+        for (const resident of other.residents) expect(registered?.speakerDialogue(resident.anchorId, player)).toBeNull();
       }
     }
   });

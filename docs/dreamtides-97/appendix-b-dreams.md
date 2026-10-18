@@ -132,7 +132,10 @@ a dream module carries none:
   speaks. Residents are the shopkeeper, 1–3 quest givers and 3–8 townsfolk,
   with authored personas. A resident challenger or guardian also names its
   deck; in the one-dream slice the dream module seats its challengers and
-  exit guardian this way, where act assembly places them otherwise (B7);
+  exit guardian this way, where act assembly places them otherwise (B7). An
+  Avatar challenger or guardian instead lists the Avatars it may appear as,
+  each with that Avatar's own character and dialogue; a run meets the first
+  one the player is not playing, which it sees, hears and fights alike;
 - its 1–3 **quests**, written for its tileset (B15);
 - personas for its generic challengers (name and sprite), suited to its
   tileset.

@@ -140,6 +140,8 @@ export interface OverworldCharactersState {
   readonly playerLayered: boolean;
   readonly residents: readonly {
     readonly anchorId: CompiledAnchor["id"];
+    /** The character recipe drawn at the anchor. */
+    readonly characterId: D97CharacterId;
     readonly facing: Facing;
     readonly layered: boolean;
     readonly badge: {
@@ -192,6 +194,7 @@ export class OverworldScene implements OverworldSceneHandle {
   /** Characters standing at anchors, with their badges. */
   private readonly residents: {
     readonly anchor: CompiledAnchor;
+    readonly characterId: D97CharacterId;
     readonly view: CharacterView;
     /** The occupant's role badge, shown unless an override replaces it. */
     readonly roleBadge: BadgeKind | null;
@@ -371,8 +374,9 @@ export class OverworldScene implements OverworldSceneHandle {
 
   characters = (): OverworldCharactersState => ({
     playerLayered: this.playerView?.layered ?? false,
-    residents: this.residents.map(({ anchor, view, badge, badgeKind }) => ({
+    residents: this.residents.map(({ anchor, characterId, view, badge, badgeKind }) => ({
       anchorId: anchor.id,
+      characterId,
       facing: view.currentFacing,
       layered: view.layered,
       badge:
@@ -518,7 +522,7 @@ export class OverworldScene implements OverworldSceneHandle {
     if (occupant.beaten === true) view.tint = BEATEN_TINT;
     this.sorted.addChild(view);
     this.anchorViews.set(anchor.id, view);
-    this.residents.push({ anchor, view, roleBadge: occupant.badge, badgeKind: null, badge: null });
+    this.residents.push({ anchor, characterId: occupant.character, view, roleBadge: occupant.badge, badgeKind: null, badge: null });
   }
 
   private buildPlayer(): void {

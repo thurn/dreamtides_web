@@ -5,9 +5,19 @@
 // anchors and the character and dialogue catalogs, and its topology against
 // the map's anchors. Assembly places only residents that pass validation, so
 // a stale module never puts a character where its map has no such anchor.
+// An Avatar resident is drawn as the incarnation the run meets
+// (`incarnationFor`), the same one its encounter fights as; the validator
+// checks every incarnation's character and dialogue.
 
-import { derivedBadge, type D97DreamDefinition, type D97DreamResident } from "../../content/d97/dreams/schema";
-import type { D97CharacterId, D97DialogueId, D97DreamId, DreamAnchorId } from "../../types/identifiers";
+import {
+  derivedBadge,
+  incarnationFor,
+  residentLooks,
+  type D97DreamDefinition,
+  type D97DreamResident,
+} from "../../content/d97/dreams/schema";
+import type { AvatarId, D97CharacterId, D97DialogueId, D97DreamId, DreamAnchorId } from "../../types/identifiers";
+import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
 import type { DreamAnchorKind } from "../map/definition";
 import type { OverworldOccupant, OverworldOccupants } from "./occupants";
 
@@ -18,10 +28,12 @@ export type D97DreamRule =
   | "unknown-anchor"
   /** The resident's role is not its anchor's kind. */
   | "kind-mismatch"
-  /** The resident's character has no sprite recipe. */
+  /** The resident's character, or an incarnation's, has no sprite recipe. */
   | "unknown-character"
-  /** The resident speaks a dialogue module the catalog does not hold. */
+  /** The resident, or an incarnation, speaks a dialogue module the catalog does not hold. */
   | "unknown-dialogue"
+  /** An incarnation speaks a dialogue whose speaker portrays another Avatar. */
+  | "incarnation-speaker"
   /** A topology anchor is not on the map, or is not the kind its role needs. */
   | "topology-anchor"
   /** The exit guardian does not block the exit door. */
@@ -44,7 +56,8 @@ export interface D97DreamResidentRegistry {
   /** The anchors of the dream's map, with their kinds. */
   readonly anchors: readonly DreamAnchorSummary[];
   readonly characterIds: ReadonlySet<D97CharacterId>;
-  readonly dialogueIds: ReadonlySet<D97DialogueId>;
+  /** The dialogue catalog's modules, by id. */
+  readonly dialogues: ReadonlyMap<D97DialogueId, D97DialogueModule>;
 }
 
 /** Every finding for `dream`'s residents against `registry`, in resident order. */
@@ -62,8 +75,17 @@ export function validateDreamResidents(
     const kind = kinds.get(resident.anchorId);
     if (kind === undefined) report("unknown-anchor");
     else if (kind !== resident.role) report("kind-mismatch");
-    if (!registry.characterIds.has(resident.characterId)) report("unknown-character");
-    if (resident.dialogueId !== undefined && !registry.dialogueIds.has(resident.dialogueId)) report("unknown-dialogue");
+    const looks = residentLooks(resident);
+    if (looks.some((look) => !registry.characterIds.has(look.characterId))) report("unknown-character");
+    const spoken = looks.flatMap((look) =>
+      look.dialogueId === null ? [] : [{ look, module: registry.dialogues.get(look.dialogueId) }],
+    );
+    if (spoken.some(({ module }) => module === undefined)) report("unknown-dialogue");
+    // An incarnation's dialogue portrays that incarnation's Avatar.
+    const mismatched = spoken.some(
+      ({ look, module }) => module !== undefined && look.portrays !== null && module.speaker.avatarId !== look.portrays,
+    );
+    if (mismatched) report("incarnation-speaker");
   }
   return findings;
 }
@@ -90,22 +112,28 @@ export function validateDreamTopology(dream: D97DreamDefinition, anchors: readon
   return findings;
 }
 
-function occupantOf(resident: D97DreamResident): OverworldOccupant {
+function occupantOf(resident: D97DreamResident, runAvatarId: AvatarId): OverworldOccupant {
+  const { characterId, dialogueId } = incarnationFor(resident, runAvatarId);
   return {
-    character: resident.characterId,
+    character: characterId,
     badge: resident.badge ?? derivedBadge(resident.role),
     scale: resident.scale,
-    dialogue: resident.dialogueId ?? null,
+    dialogue: dialogueId,
   };
 }
 
 /**
- * The occupants of `dream` on its map: every resident without a finding,
- * keyed by anchor. Anchors without a resident stay unoccupied.
+ * The occupants of `dream` on its map for a run playing `runAvatarId`: every
+ * resident without a finding, keyed by anchor, each Avatar resident as the
+ * incarnation the run meets. Anchors without a resident stay unoccupied.
  */
-export function dreamOccupants(dream: D97DreamDefinition, registry: D97DreamResidentRegistry): OverworldOccupants {
+export function dreamOccupants(
+  dream: D97DreamDefinition,
+  registry: D97DreamResidentRegistry,
+  runAvatarId: AvatarId,
+): OverworldOccupants {
   const flawed = new Set(validateDreamResidents(dream, registry).map((finding) => finding.anchorId));
   return new Map(
-    dream.residents.filter((resident) => !flawed.has(resident.anchorId)).map((resident) => [resident.anchorId, occupantOf(resident)]),
+    dream.residents.filter((resident) => !flawed.has(resident.anchorId)).map((resident) => [resident.anchorId, occupantOf(resident, runAvatarId)]),
   );
 }

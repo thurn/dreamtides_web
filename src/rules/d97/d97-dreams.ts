@@ -8,26 +8,28 @@
 
 import { dreamChallengers } from "../../content/d97/challengers";
 import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
-import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
-import type { D97DialogueId, DreamAnchorId } from "../../types/identifiers";
+import { incarnationFor, type D97DreamDefinition } from "../../content/d97/dreams/schema";
+import type { AvatarId, D97DialogueId, DreamAnchorId } from "../../types/identifiers";
 import type { D97ContentProvider, D97RegisteredAnchor, D97RegisteredDream } from "./d97-content";
 import type { D97Run } from "./d97-state";
 
 /**
  * Register `dream` over its map's `anchors`: its challengers by anchor, and
- * each speaking resident's dialogue among `dialogues` by anchor (a resident
- * whose dialogue is unregistered does not speak).
+ * the lookup of the dialogue among `dialogues` that the resident at an anchor
+ * speaks to a run playing a given Avatar (its incarnation's, for an Avatar
+ * resident; a resident whose dialogue is unregistered does not speak).
  */
 export function registerDream(
   dream: D97DreamDefinition,
   anchors: readonly D97RegisteredAnchor[],
   dialogues: ReadonlyMap<D97DialogueId, D97DialogueModule>,
 ): D97RegisteredDream {
-  const speakerDialogues = new Map<DreamAnchorId, D97DialogueModule>();
-  for (const resident of dream.residents) {
-    const module = resident.dialogueId === undefined ? undefined : dialogues.get(resident.dialogueId);
-    if (module !== undefined) speakerDialogues.set(resident.anchorId, module);
-  }
+  const residents = new Map(dream.residents.map((resident) => [resident.anchorId, resident]));
+  const speakerDialogue = (anchorId: DreamAnchorId, runAvatarId: AvatarId): D97DialogueModule | null => {
+    const resident = residents.get(anchorId);
+    const dialogueId = resident === undefined ? null : incarnationFor(resident, runAvatarId).dialogueId;
+    return (dialogueId === null ? undefined : dialogues.get(dialogueId)) ?? null;
+  };
   const { topology } = dream;
   const anchorIds = new Set<DreamAnchorId>([
     ...anchors.map((anchor) => anchor.id),
@@ -38,7 +40,7 @@ export function registerDream(
     topology.shopAnchorId,
     ...dream.residents.map((resident) => resident.anchorId),
   ]);
-  return { definition: dream, anchors, anchorIds, challengers: dreamChallengers(dream), speakerDialogues };
+  return { definition: dream, anchors, anchorIds, challengers: dreamChallengers(dream), speakerDialogue };
 }
 
 /**

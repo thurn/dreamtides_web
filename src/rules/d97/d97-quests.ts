@@ -48,8 +48,8 @@ import type { D97RunInput } from "./events/spec";
  */
 function speakerOffers(run: D97Run, anchorId: DreamAnchorId, effect: D97DialogueEffect): boolean {
   const content = d97ContentProvider();
-  const module = content === null ? undefined : runDreamAnchor(run, content, anchorId)?.speakerDialogues.get(anchorId);
-  return module !== undefined && dialogueCarriesEffect(module, effect);
+  const module = content === null ? null : (runDreamAnchor(run, content, anchorId)?.speakerDialogue(anchorId, run.avatarId) ?? null);
+  return module !== null && dialogueCarriesEffect(module, effect);
 }
 
 function withRun(d97: D97State, run: D97Run, logRecords: readonly ReducerLogRecord[]): D97Transition {

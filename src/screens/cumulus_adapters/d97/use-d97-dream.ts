@@ -4,8 +4,9 @@
 // is view state. The development dream, registered in development builds
 // only, is ready at once; a catalog dream loads while its map is fetched. A
 // run whose dream is not registered, or whose map cannot be loaded, has no
-// dream to play: the hook reports it unavailable. Logs the dream played, an
-// unavailable dream and any topology or resident findings, with UUIDs.
+// dream to play: the hook reports it unavailable. Its occupants are drawn for
+// the Avatar the run plays. Logs the dream played, an unavailable dream and
+// any topology or resident findings, with UUIDs.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { D97_CHARACTER_SPRITES } from "../../../content/d97/characters";
@@ -23,7 +24,7 @@ import { logEvent } from "../../../logging";
 import { d97ContentProvider } from "../../../rules/d97/d97-content";
 import type { D97Run } from "../../../rules/d97/d97-state";
 import { d97DevelopmentContent } from "../../../runtime/qa-scene-entry";
-import type { DreamMapId } from "../../../types/identifiers";
+import type { AvatarId, DreamMapId } from "../../../types/identifiers";
 
 export interface D97PlayedDream {
   readonly dream: D97DreamDefinition;
@@ -41,23 +42,29 @@ export type D97DreamState =
 
 const LOADING: D97DreamState = { kind: "loading" };
 
-const played = new Map<CompiledDreamMap, D97PlayedDream>();
-function play(dream: D97DreamDefinition, map: CompiledDreamMap): D97PlayedDream {
-  let entry = played.get(map);
+/** Each map's played dream, per Avatar the run plays (its residents' incarnations). */
+const played = new Map<CompiledDreamMap, Map<AvatarId, D97PlayedDream>>();
+function play(dream: D97DreamDefinition, map: CompiledDreamMap, runAvatarId: AvatarId): D97PlayedDream {
+  let byAvatar = played.get(map);
+  if (byAvatar === undefined) {
+    byAvatar = new Map();
+    played.set(map, byAvatar);
+  }
+  let entry = byAvatar.get(runAvatarId);
   if (entry === undefined) {
     const development = d97DevelopmentContent();
     const sprites = development === null ? D97_CHARACTER_SPRITES : [...D97_CHARACTER_SPRITES, ...development.characterSprites];
     const registry = {
       anchors: map.anchors,
       characterIds: new Set(sprites.map((recipe) => recipe.id)),
-      dialogueIds: new Set(d97ContentProvider()?.dialogue.dialogues.keys() ?? []),
+      dialogues: d97ContentProvider()?.dialogue.dialogues ?? new Map(),
     };
     const findings = [...validateDreamTopology(dream, map.anchors), ...validateDreamResidents(dream, registry)];
-    if (findings.length > 0) {
+    if (findings.length > 0 && byAvatar.size === 0) {
       logEvent("d97_dream_findings", { dreamId: dream.id, mapId: map.id, findings });
     }
-    entry = { dream, map, occupants: dreamOccupants(dream, registry) };
-    played.set(map, entry);
+    entry = { dream, map, occupants: dreamOccupants(dream, registry, runAvatarId) };
+    byAvatar.set(runAvatarId, entry);
   }
   return entry;
 }
@@ -66,7 +73,7 @@ const inlineMaps = new Map<DreamMapId, CompiledDreamMap>();
 
 /** The dream `run` is in: loading while its map arrives, or unavailable. */
 export function useD97Dream(run: D97Run): D97DreamState {
-  const { runId, dreamId } = run;
+  const { runId, dreamId, avatarId } = run;
   const selection = useMemo(() => {
     const dreams = [...(d97ContentProvider()?.dreams.values() ?? [])].map((dream) => dream.definition);
     return selectRunDream(dreamId, dreams, d97DevelopmentContent());
@@ -115,10 +122,10 @@ export function useD97Dream(run: D97Run): D97DreamState {
       map = compileMap();
       inlineMaps.set(dream.mapId, map);
     }
-    return { kind: "ready", played: play(dream, map) };
+    return { kind: "ready", played: play(dream, map, avatarId) };
   }
   if (load === null || load.mapId !== selection.dream.mapId) return LOADING;
   return load.result.ok
-    ? { kind: "ready", played: play(selection.dream, load.result.map) }
+    ? { kind: "ready", played: play(selection.dream, load.result.map, avatarId) }
     : { kind: "unavailable", reason: load.result.reason };
 }

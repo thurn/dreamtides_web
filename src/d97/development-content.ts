@@ -6,7 +6,7 @@
 // so its bundle holds none of it (`DEV_ONLY_MODULES` in vite.config.ts).
 
 import type { CharacterSprite } from "../content/d97/characters/schema";
-import { DEV_KNIGHT, DEV_VILLAGER, DEV_WOLF } from "../content/d97/characters/development";
+import { DEV_KNIGHT, DEV_VILLAGER } from "../content/d97/characters/development";
 import type { D97DialogueContent } from "../content/d97/dialogue/schema";
 import { DEVELOPMENT_DREAM } from "../content/d97/dreams/development";
 import type { D97DreamDefinition } from "../content/d97/dreams/schema";
@@ -31,5 +31,5 @@ export const D97_DEVELOPMENT_CONTENT: D97DevelopmentContent = {
   map: DEV_MAP_DEFINITION,
   compileMap: compileDevMap,
   dialogue: DEV_DIALOGUE_CONTENT,
-  characterSprites: [DEV_KNIGHT, DEV_VILLAGER, DEV_WOLF],
+  characterSprites: [DEV_KNIGHT, DEV_VILLAGER],
 };

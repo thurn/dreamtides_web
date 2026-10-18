@@ -9,7 +9,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { D97_DREAMS } from "../content/d97/dreams";
-import type { D97DreamDefinition } from "../content/d97/dreams/schema";
+import { incarnationFor, type D97DreamDefinition } from "../content/d97/dreams/schema";
 import { SAVE_AVATAR, SAVE_DREAM, registerSaveContent } from "../d97/save/save.fixtures";
 import type { D97SaveBuild } from "../d97/save/snapshot";
 import type { Genesis, PinnedContentConfig } from "../eventlog/types";
@@ -131,7 +131,7 @@ describe("D97 saves", () => {
     const challenger = resident.anchorId;
     const encounter = (anchorId: DreamAnchorId): D97Encounter => ({
       anchorId,
-      characterId: resident.characterId,
+      characterId: incarnationFor(resident, SAVE_AVATAR).characterId,
       role: "challenger",
       kind: "generic",
       tier: 1,

@@ -6,6 +6,9 @@
 //
 // A resident names its role, which must equal its anchor's kind on the map;
 // its look (a character recipe), its scale and the dialogue module it speaks.
+// An Avatar challenger or guardian instead lists its incarnations, each an
+// Avatar with that Avatar's look and dialogue; `incarnationFor` picks the one
+// a run meets.
 // Shop, challenger and guardian badges derive from the role; a resident sets
 // `badge` only for a badge its role does not derive (a prize duel, a sage). A
 // challenger or guardian also declares the deck it fights with; the encounter
@@ -29,33 +32,60 @@ import type {
 } from "../../../types/identifiers";
 
 /**
+ * One Avatar an Avatar resident may appear as: that Avatar's character
+ * recipe (`../characters/avatars/`) and the dialogue it speaks, if any.
+ */
+export interface D97Incarnation {
+  readonly avatarId: AvatarId;
+  readonly characterId: D97CharacterId;
+  readonly dialogueId?: D97DialogueId;
+}
+
+/**
  * A challenger's or guardian's deck. A generic character fights with a deck
  * built from its deck source Avatar's tide set and never has an Avatar
- * ability; an Avatar character fights as its own Avatar, the first of its
- * Avatars the player is not playing (Appendix B §B9, §B11).
+ * ability; an Avatar resident appears, speaks and fights as the first of its
+ * incarnations whose Avatar the player is not playing (Appendix B §B9, §B11).
  */
 export type D97ChallengerDeck =
   | { readonly kind: "generic"; readonly deckSourceAvatarId: AvatarId }
-  | { readonly kind: "avatar"; readonly avatarIds: readonly AvatarId[] };
+  | { readonly kind: "avatar"; readonly incarnations: readonly [D97Incarnation, ...D97Incarnation[]] };
 
 interface D97DreamResidentBase {
   readonly anchorId: DreamAnchorId;
-  readonly characterId: D97CharacterId;
   readonly scale: OccupantScale;
   /** A badge the role does not derive; omitted, the role's badge shows. */
   readonly badge?: BadgeKind;
+}
+
+/** A resident with one look: its character recipe and the dialogue it speaks. */
+interface D97ResidentLook {
+  readonly characterId: D97CharacterId;
   /** The dialogue module the resident speaks, if any. */
   readonly dialogueId?: D97DialogueId;
 }
 
-/** A resident who fights: a challenger, or a guardian blocking a door. */
-export interface D97BattleResident extends D97DreamResidentBase {
-  readonly role: "challenger" | "guardian";
-  readonly deck: D97ChallengerDeck;
+type D97BattleRole = "challenger" | "guardian";
+
+/** A generic challenger or guardian: one look, a deck from its deck source. */
+interface D97GenericBattleResident extends D97DreamResidentBase, D97ResidentLook {
+  readonly role: D97BattleRole;
+  readonly deck: Extract<D97ChallengerDeck, { readonly kind: "generic" }>;
 }
 
+/** An Avatar challenger or guardian: each incarnation carries its own look. */
+interface D97AvatarBattleResident extends D97DreamResidentBase {
+  readonly role: D97BattleRole;
+  readonly deck: Extract<D97ChallengerDeck, { readonly kind: "avatar" }>;
+  readonly characterId?: never;
+  readonly dialogueId?: never;
+}
+
+/** A resident who fights: a challenger, or a guardian blocking a door. */
+export type D97BattleResident = D97GenericBattleResident | D97AvatarBattleResident;
+
 /** A resident who does not fight: the shopkeeper, a friendly, a townsperson. */
-export interface D97CivilResident extends D97DreamResidentBase {
+export interface D97CivilResident extends D97DreamResidentBase, D97ResidentLook {
   readonly role: "shop" | "friendly" | "townsfolk";
 }
 
@@ -85,6 +115,56 @@ export interface D97DreamDefinition {
   readonly topology: D97DreamTopology;
   /** At most one resident per anchor; an anchor without one stays empty. */
   readonly residents: readonly D97DreamResident[];
+}
+
+/**
+ * Who `resident` is in a run whose player plays `runAvatarId`: the character
+ * drawn, the dialogue spoken and the Avatar fought as (null for a resident
+ * who does not fight). An Avatar resident is its first incarnation whose
+ * Avatar the player is not playing, or its first when the player plays them
+ * all. The encounter rules, the drawn occupants and the dialogue speaker
+ * lookup all read a resident through this, so its look, lines and deck agree.
+ */
+export interface D97ResidentIncarnation {
+  readonly characterId: D97CharacterId;
+  readonly dialogueId: D97DialogueId | null;
+  readonly avatarId: AvatarId | null;
+}
+
+function isAvatarResident(resident: D97DreamResident): resident is D97AvatarBattleResident {
+  return (resident.role === "challenger" || resident.role === "guardian") && resident.deck.kind === "avatar";
+}
+
+export function incarnationFor(resident: D97DreamResident, runAvatarId: AvatarId): D97ResidentIncarnation {
+  if (isAvatarResident(resident)) {
+    const { incarnations } = resident.deck;
+    const chosen = incarnations.find((incarnation) => incarnation.avatarId !== runAvatarId) ?? incarnations[0];
+    return { characterId: chosen.characterId, dialogueId: chosen.dialogueId ?? null, avatarId: chosen.avatarId };
+  }
+  const avatarId = resident.role === "challenger" || resident.role === "guardian" ? resident.deck.deckSourceAvatarId : null;
+  return { characterId: resident.characterId, dialogueId: resident.dialogueId ?? null, avatarId };
+}
+
+/** A look a resident may show: its character, its dialogue and the Avatar it portrays, if any. */
+export interface D97ResidentLookCandidate {
+  readonly characterId: D97CharacterId;
+  readonly dialogueId: D97DialogueId | null;
+  readonly portrays: AvatarId | null;
+}
+
+/**
+ * Every look `resident` may show across runs: its one look, or each of its
+ * incarnations'. The validators check each against the catalogs.
+ */
+export function residentLooks(resident: D97DreamResident): readonly D97ResidentLookCandidate[] {
+  if (isAvatarResident(resident)) {
+    return resident.deck.incarnations.map(({ avatarId, characterId, dialogueId }) => ({
+      characterId,
+      dialogueId: dialogueId ?? null,
+      portrays: avatarId,
+    }));
+  }
+  return [{ characterId: resident.characterId, dialogueId: resident.dialogueId ?? null, portrays: null }];
 }
 
 /** Declare a dream module. */

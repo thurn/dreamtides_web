@@ -110,14 +110,16 @@ describe("registerDream", () => {
       [syntheticDreamAnchor(1, 4), syntheticDreamAnchor(1, 6), syntheticDreamAnchor(1, 7)].sort(),
     );
     expect(dream.challengers.get(syntheticDreamAnchor(1, 4))?.role).toBe("guardian");
-    expect([...dream.speakerDialogues]).toEqual([[syntheticDreamAnchor(1, 10), SPEAKER_A]]);
+    expect(dream.speakerDialogue(syntheticDreamAnchor(1, 10), AVATAR)).toBe(SPEAKER_A);
+    expect(dream.speakerDialogue(syntheticDreamAnchor(1, 6), AVATAR)).toBeNull();
+    expect(dream.speakerDialogue(syntheticDreamAnchor(2, 10), AVATAR)).toBeNull();
     expect(dream.anchorIds.has(syntheticDreamAnchor(1, 30))).toBe(true);
     expect(dream.anchorIds.has(DREAM_A.topology.waypointAnchorId)).toBe(true);
     expect(dream.anchorIds.has(DREAM_B.topology.waypointAnchorId)).toBe(false);
   });
 
   it("leaves a resident whose dialogue is unregistered silent", () => {
-    expect(registerDream(DREAM_A, [], new Map()).speakerDialogues.size).toBe(0);
+    expect(registerDream(DREAM_A, [], new Map()).speakerDialogue(syntheticDreamAnchor(1, 10), AVATAR)).toBeNull();
   });
 });
 

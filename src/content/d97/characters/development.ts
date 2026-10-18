@@ -1,6 +1,6 @@
-// Three development character recipes: a knight, a villager and a wolf-headed
-// boss. The development dream's occupants use them; only development builds
-// register them (src/d97/development-content.ts).
+// Two development character recipes: a knight and a villager. The
+// development dream's occupants use them; only development builds register
+// them (src/d97/development-content.ts).
 
 import { parseD97CharacterId, parseLpcSheetKey } from "../../../types/identifiers";
 import { characterSprite } from "./schema";
@@ -31,17 +31,5 @@ export const DEV_VILLAGER = characterSprite({
     { sheet: sheet("torso_clothes_longsleeve"), colors: ["forest"] },
     { sheet: sheet("legs_skirts_plain"), colors: ["tan"] },
     { sheet: sheet("feet_shoes_basic"), colors: ["walnut"] },
-  ],
-});
-
-export const DEV_WOLF = characterSprite({
-  id: parseD97CharacterId("d9710000-0000-4000-8000-000000000003"),
-  body: "male",
-  skin: "fur_grey",
-  parts: [
-    { sheet: sheet("heads_wolf_male"), colors: ["fur_grey"] },
-    { sheet: sheet("torso_armour_plate"), colors: ["iron"] },
-    { sheet: sheet("legs_armour"), colors: ["iron"] },
-    { sheet: sheet("feet_armour"), colors: ["iron"] },
   ],
 });

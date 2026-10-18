@@ -11,7 +11,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, s
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { D97_CHARACTER_SPRITES } from "../../src/content/d97/characters/index.ts";
-import { DEV_KNIGHT, DEV_VILLAGER, DEV_WOLF } from "../../src/content/d97/characters/development.ts";
+import { DEV_KNIGHT, DEV_VILLAGER } from "../../src/content/d97/characters/development.ts";
 import {
   CHARACTER_MANIFEST_FORMAT,
   CHARACTER_SHEETS_PATH,
@@ -23,7 +23,7 @@ import type { D97CharacterId, LpcSheetKey } from "../../src/types/identifiers.ts
 import { defaultArtPaths } from "../setup-assets.ts";
 
 /** The catalog's recipes and the development recipes development builds draw. */
-const RECIPES = [...D97_CHARACTER_SPRITES, DEV_KNIGHT, DEV_VILLAGER, DEV_WOLF];
+const RECIPES = [...D97_CHARACTER_SPRITES, DEV_KNIGHT, DEV_VILLAGER];
 
 function definitionsIndex(root: string): Map<string, string> {
   const index = new Map<string, string>();

@@ -11,6 +11,7 @@ import type {
   D97QuestDefinition,
 } from "../../content/d97/dialogue/schema";
 import {
+  parseD97DialogueId,
   parseD97DialogueNodeId,
   parseD97FlagId,
   parseD97ItemId,
@@ -19,6 +20,7 @@ import {
   parseDreamAnchorId,
   type DreamAnchorId,
 } from "../../types/identifiers";
+import { testAvatarId } from "../../types/test-identities";
 import type { DreamAnchorKind } from "../map/definition";
 import { DEV_MAP_DEFINITION } from "../overworld/dev-map";
 import { DEV_DIALOGUE_CONTENT } from "../overworld/dev-dialogue";
@@ -79,6 +81,23 @@ describe("validateDialogueContent", () => {
       DEV_MAP_DEFINITION.anchors.map((anchor) => [anchor.id, anchor.kind]),
     );
     expect(rules(DEV_DIALOGUE_CONTENT, devAnchors)).toEqual([]);
+  });
+
+  it("accepts per-incarnation dialogue: one module per Avatar an Avatar challenger may appear as", () => {
+    const incarnation = (index: number): D97DialogueModule => {
+      const greet = parseD97DialogueNodeId(`00000007-0000-4000-8000-${String(index).padStart(12, "0")}`);
+      const beaten = parseD97DialogueNodeId(`00000008-0000-4000-8000-${String(index).padStart(12, "0")}`);
+      return {
+        id: parseD97DialogueId(`00000009-0000-4000-8000-${String(index).padStart(12, "0")}`),
+        speaker: { name: "Avatar", kind: "challenger", avatarId: testAvatarId(`d97-incarnation-${String(index)}`) },
+        entries: [{ condition: { kind: "anchorBeaten", anchorId: ANCHORS.challenger, beaten: true }, node: beaten }, { node: greet }],
+        nodes: [
+          { id: greet, lines: ["…"], choices: [{ label: "…", effect: { kind: "startChallenge" }, next: null }] },
+          { id: beaten, lines: ["…"], choices: [] },
+        ],
+      };
+    };
+    expect(rules({ ...SYNTHETIC_CONTENT, dialogues: [...SYNTHETIC_CONTENT.dialogues, incarnation(1), incarnation(2)] })).toEqual([]);
   });
 
   it("duplicate-id: a repeated node id", () => {

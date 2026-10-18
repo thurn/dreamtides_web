@@ -7,7 +7,9 @@
 // The innkeeper keeps the barrel stall, the reeve the hall steps and Hessa
 // the wheat corner; five townsfolk and five challengers fill the valley.
 // Vaela guards the ember arch, or Tessa when the player is Vaela: an ember of
-// a day that will not end, then a gleaner of its last field. The inn door and
+// a day that will not end, then a gleaner of its last field. Each appears,
+// speaks and fights as herself; Tessa has no lines yet, so she challenges
+// without a conversation. The inn door and
 // the square's three open friendly anchors stand empty for the friendly
 // characters later assembly places.
 
@@ -28,17 +30,18 @@ import {
   WIDOW_MARRABLE,
 } from "../characters/3229d6c7-0700-4f37-9b07-921e3dccb8b6";
 import { FIRST_DREAM_DIALOGUES as LINES } from "../dialogue/3229d6c7-0700-4f37-9b07-921e3dccb8b6";
-import { defineDream, type D97ChallengerDeck } from "./schema";
+import { defineDream } from "./schema";
 
 const anchor = parseDreamAnchorId;
 
 const VAELA = parseAvatarId("60bd584b-5bc8-4ee7-8a98-cbb304eb71ab");
 const TESSA = parseAvatarId("ba973428-6d90-4847-b779-cb7e25a5ac84");
-/** Vaela's own character recipe (`../characters/avatars/`). */
+/** Vaela's and Tessa's own character recipes (`../characters/avatars/`). */
 const VAELA_CHARACTER = parseD97CharacterId("e12f93c6-8033-4b31-b6e7-402eedfe566c");
+const TESSA_CHARACTER = parseD97CharacterId("f045208d-0eb8-4c96-96f4-632deec4d161");
 
 /** A generic challenger's deck, built from its deck source Avatar's tide set. */
-const deckOf = (deckSourceAvatarId: AvatarId): D97ChallengerDeck => ({ kind: "generic", deckSourceAvatarId });
+const deckOf = (deckSourceAvatarId: AvatarId) => ({ kind: "generic", deckSourceAvatarId }) as const;
 
 export default defineDream({
   id: parseD97DreamId("3229d6c7-0700-4f37-9b07-921e3dccb8b6"),
@@ -58,10 +61,14 @@ export default defineDream({
     {
       role: "guardian",
       anchorId: anchor("649daef4-9f8b-4e0e-b3f2-3d2ab91a844d"),
-      characterId: VAELA_CHARACTER,
       scale: "standard",
-      dialogueId: LINES.vaela,
-      deck: { kind: "avatar", avatarIds: [VAELA, TESSA] },
+      deck: {
+        kind: "avatar",
+        incarnations: [
+          { avatarId: VAELA, characterId: VAELA_CHARACTER, dialogueId: LINES.vaela },
+          { avatarId: TESSA, characterId: TESSA_CHARACTER },
+        ],
+      },
     },
     // The barrel stall, the hall steps and the wheat corner.
     { role: "shop", anchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), characterId: WENNA_ASHDOWN.id, scale: "standard", dialogueId: LINES.wenna },

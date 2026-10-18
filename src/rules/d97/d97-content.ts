@@ -9,8 +9,7 @@ import type { D97TierKnob } from "../../content/d97/encounters";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { CardId } from "../../types/card-identity";
 import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
-import type { D97ChallengerDefinition } from "../../content/d97/challengers";
-import type { D97DreamDefinition } from "../../content/d97/dreams/schema";
+import type { D97BattleResident, D97DreamDefinition } from "../../content/d97/dreams/schema";
 import type { DreamAnchorKind } from "../../d97/map/definition";
 import type {
   AvatarId,
@@ -70,9 +69,12 @@ export interface D97RegisteredDream {
   /** Every anchor the dream declares: its map's, its topology's and its residents'. */
   readonly anchorIds: ReadonlySet<DreamAnchorId>;
   /** The challenger or guardian at each battle anchor. */
-  readonly challengers: ReadonlyMap<DreamAnchorId, D97ChallengerDefinition>;
-  /** The registered dialogue each speaking resident speaks, by its anchor. */
-  readonly speakerDialogues: ReadonlyMap<DreamAnchorId, D97DialogueModule>;
+  readonly challengers: ReadonlyMap<DreamAnchorId, D97BattleResident>;
+  /**
+   * The registered dialogue the resident at `anchorId` speaks to a run
+   * playing `runAvatarId` (`incarnationFor`), or null when it speaks none.
+   */
+  readonly speakerDialogue: (anchorId: DreamAnchorId, runAvatarId: AvatarId) => D97DialogueModule | null;
 }
 
 /** Fold-relevant D97 content. */

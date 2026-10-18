@@ -58,7 +58,12 @@ export function syntheticDream(index: number, residents: readonly D97DreamReside
     residents: [
       { role: "challenger", anchorId: anchor(6), characterId: SYNTHETIC_CHARACTER, scale: "standard", deck },
       { role: "challenger", anchorId: anchor(7), characterId: SYNTHETIC_CHARACTER, scale: "standard", deck },
-      { role: "guardian", anchorId: anchor(4), characterId: SYNTHETIC_CHARACTER, scale: "incarnation", deck: { kind: "avatar", avatarIds: [SYNTHETIC_DECK_AVATAR] } },
+      {
+        role: "guardian",
+        anchorId: anchor(4),
+        scale: "incarnation",
+        deck: { kind: "avatar", incarnations: [{ avatarId: SYNTHETIC_DECK_AVATAR, characterId: SYNTHETIC_CHARACTER }] },
+      },
       { role: "shop", anchorId: anchor(5), characterId: SYNTHETIC_CHARACTER, scale: "standard" },
       ...residents,
     ],

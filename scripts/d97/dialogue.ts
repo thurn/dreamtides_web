@@ -34,13 +34,13 @@ function formatDreamFinding(finding: D97DreamFinding): string {
 /** Each dream module's topology and resident findings, formatted; a dream whose map is unregistered is one. */
 function dreamFindings(): string[] {
   const characterIds = new Set(CHARACTER_SPRITES.map((recipe) => recipe.id));
-  const dialogueIds = new Set(DIALOGUE_CONTENT.flatMap((content) => content.dialogues.map((module) => module.id)));
+  const dialogues = new Map(DIALOGUE_CONTENT.flatMap((content) => content.dialogues.map((module) => [module.id, module] as const)));
   return DREAMS.flatMap((dream) => {
     const map = MAPS.find((candidate) => candidate.id === dream.mapId);
     if (map === undefined) return [`error unknown-map: dream ${dream.id}: map ${dream.mapId}`];
     return [
       ...validateDreamTopology(dream, map.anchors),
-      ...validateDreamResidents(dream, { anchors: map.anchors, characterIds, dialogueIds }),
+      ...validateDreamResidents(dream, { anchors: map.anchors, characterIds, dialogues }),
     ].map(formatDreamFinding);
   });
 }

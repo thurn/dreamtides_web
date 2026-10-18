@@ -7,9 +7,9 @@
 // changes nothing. Every outcome is written into state when first produced.
 
 import { sha256 } from "js-sha256";
-import type { D97ChallengerDefinition } from "../../content/d97/challengers";
 import { D97_COLLECTION } from "../../content/d97/collection";
 import { D97_ENCOUNTERS, type D97TierKnob } from "../../content/d97/encounters";
+import { incarnationFor, type D97BattleResident } from "../../content/d97/dreams/schema";
 import { D97_SHOP } from "../../content/d97/shop";
 import { D97_ACT_CHALLENGER_TIERS } from "../../content/d97/tunables";
 import {
@@ -64,7 +64,7 @@ export function tierKnob(tier: number, knobs: readonly D97TierKnob[]): D97TierKn
 }
 
 /** An encounter's tier by its role and the run's act (Appendix B §B3, §B9). */
-export function encounterTier(role: D97ChallengerDefinition["role"], act: number): number {
+export function encounterTier(role: D97BattleResident["role"], act: number): number {
   const challengerTier = D97_ACT_CHALLENGER_TIERS[Math.min(act, D97_ACT_CHALLENGER_TIERS.length) - 1] ?? 0;
   return role === "guardian"
     ? Math.min(challengerTier + D97_ENCOUNTERS.guardianTierOffset, D97_ENCOUNTERS.guardianTierCap)
@@ -114,12 +114,10 @@ export function previewEncounter(
   if (challenger === undefined) return null;
   const tier = encounterTier(challenger.role, d97RunAct(run));
   const knob = tierKnob(tier, D97_ENCOUNTERS.tierKnobs);
-  const avatarId =
-    challenger.deck.kind === "generic"
-      ? challenger.deck.deckSourceAvatarId
-      : (challenger.deck.avatarIds.find((id) => id !== run.avatarId) ?? challenger.deck.avatarIds[0]);
-  if (avatarId === undefined) return null;
-  const deckSeed = hashSeed(`${run.runSeed}:${challenger.characterId}`);
+  // The incarnation the run meets: the look drawn and the Avatar fought as agree.
+  const { characterId, avatarId } = incarnationFor(challenger, run.avatarId);
+  if (avatarId === null) return null;
+  const deckSeed = hashSeed(`${run.runSeed}:${characterId}`);
   const build = content.buildOpponentDeck({
     avatarId,
     seed: deckSeed,
@@ -138,7 +136,7 @@ export function previewEncounter(
   );
   const encounter: D97Encounter = {
     anchorId,
-    characterId: challenger.characterId,
+    characterId,
     role: challenger.role,
     kind: challenger.deck.kind,
     tier,
