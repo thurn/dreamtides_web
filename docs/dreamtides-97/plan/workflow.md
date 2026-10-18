@@ -298,10 +298,19 @@ Creative beads follow [P16–P20](decisions.md#writing). Each one:
   sections for the anchor kinds and quest kinds it uses;
 - keeps every name, line and description in content modules, and every
   identity a UUID;
+- builds compact maps around a town
+  ([P13](decisions.md#p13-map-sizes-and-walking-speed),
+  [P33](decisions.md#p33-towns-and-walkable-paths)). The town door opens
+  into the town, the services stand in it, and the challenges lie beyond;
 - runs the map loop for maps: edit the recipe, then `validate`, then
-  `preview`, then read the PNGs back and fix what reads badly (a cramped
-  plaza, a road to nowhere, a door hidden behind a house, an empty quarter),
-  repeating until clean;
+  `preview`, then read the PNGs back with the walkability overlay. Fix what
+  reads badly, and repeat until clean. Things that read badly include:
+  - a path too narrow to find, or ground that looks walkable and is not;
+  - a long detour;
+  - a cramped plaza;
+  - a road to nowhere;
+  - a door hidden behind a house;
+  - an empty quarter;
 - runs the dialogue validator, then reads each tree aloud in order, checking
   voice, length, and that every choice leads somewhere;
 - plays its own dream in the browser once before committing (by teleport,
@@ -314,7 +323,8 @@ A dream's QA bead reviews the writing against the story bible:
 - that no tileset name or dream name appears
   ([P10](decisions.md#p10-dreams-are-unnamed)).
 
-It also plays each dream on foot.
+It also plays each dream on foot from its town door, checking that every
+challenge is found without hunting for a path.
 
 ## Browser QA
 

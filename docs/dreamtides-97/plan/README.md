@@ -13,7 +13,7 @@ The two streams share one Hive project (`dreamtides_web`), one Tollgate queue
 and one `staging` branch. Neither stream claims the other's beads.
 
 The plan runs without operator review. The operator's decisions are recorded
-in [decisions](decisions.md) (P1–P32). Where this plan and the design
+in [decisions](decisions.md) (P1–P33). Where this plan and the design
 documents differ, the decisions win, and the docs-alignment bead
 ([2.1](phase-2-consolidation.md#21-design-docs-alignment)) brings the design
 documents into line.
@@ -43,7 +43,10 @@ When the stream ends:
   all in the browser, desktop and mobile, against the engine's AI.
 - **The world is authored, and it has a voice.** These are written by agents
   against one story bible ([P16](decisions.md#p16-narrative)):
-  - a catalog of about 40 dreams, with maps;
+  - a catalog of about 40 compact dreams, with maps. Each opens on a town
+    where the player arrives and finds the dream's services, with wide paths
+    out to its challenges ([P13](decisions.md#p13-map-sizes-and-walking-speed),
+    [P33](decisions.md#p33-towns-and-walkable-paths));
   - residents, personas and ambient townsfolk;
   - dialogue trees and quests;
   - a light through-line carried by recurring characters.
@@ -102,7 +105,7 @@ economy land.
 | 0 | Bootstrap | [phase-0-bootstrap.md](phase-0-bootstrap.md) | Closed by the planning session | Hive streams live; AGENTS.md and D33 updated; Phase 1 filed and admitted |
 | 1 | First dream (**M1**) | [phase-1-first-dream.md](phase-1-first-dream.md) | now (epic `hv-rtga`) | One medium dream playable from Avatar select to the guarded exit, saved robustly; M1 review/QA landed; co-op residue removed |
 | 2 | Consolidation | [phase-2-consolidation.md](phase-2-consolidation.md) | M1 QA bead | Design docs aligned; story bible; map tooling hardened; rooms; mason refactors; first retrospective |
-| 3 | Act 1 (**M2**) | [phase-3-act-one.md](phase-3-act-one.md) | 2.2 and 2.4 | A full assembled Act 1 of about 8 catalog dreams, with doors, waypoints, Atlas, guides, sages, chests, amulets, Dreamsign slots and the incarnation |
+| 3 | Act 1 (**M2**) | [phase-3-act-one.md](phase-3-act-one.md) | 2.2 and 2.4 | M1 playtest revisions landed; a full assembled Act 1 of about 8 compact catalog dreams, each opening on a town, with doors, waypoints, Atlas, guides, sages, chests, amulets, Dreamsign slots and the incarnation |
 | 4 | Campaign (**M3**) | [phase-4-campaign.md](phase-4-campaign.md) | Phase 3 gate | Acts 2–5, Limbo and Apollyon; bag layers, refills, Avatar quests and switching; difficulty; catalog at about 40 dreams |
 | 5 | Endgame (**M4**) | [phase-5-endgame.md](phase-5-endgame.md) | Phase 4 multi-act assembly and bag-layer beads | Keys, key dreams, prizes, Legendary Dreamsigns, Perfected cards |
 | 6 | Calibration and polish (**M5**) | [phase-6-calibration.md](phase-6-calibration.md) | Simulator: Phase 4 assembly and economy beads; polish: Phase 4 gate | Run simulator; Appendix E targets met or documented; mobile polish; final acceptance |
@@ -127,6 +130,41 @@ combined review/QA bead at the milestone. From Phase 2 on:
 its phase page from what the earlier phases taught, then files the beads
 ([workflow § Filing a phase](workflow.md#filing-a-phase)). Pages for
 Phases 3–6 are outlines until then.
+
+## M1 playtest revisions
+
+The operator played M1 at `staging` `e48d73b92` and set three changes. Their
+playtest bead, `hv-j1n2.65`, records the feedback verbatim. The changes bind
+every dream, the first dream included, and they come before the Phase 3
+catalog dreams are built:
+
+- **Dreams are compact.** Every size class is at most a quarter of the first
+  dream's 110×110 area. A medium dream is about 50×50 tiles. Reach targets
+  are maxima, not minimums
+  ([P13](decisions.md#p13-map-sizes-and-walking-speed)).
+- **Paths are wide and easy to find.** Routes to every anchor are at least 2
+  tiles wide, and the main routes out of town at least 3. Detours are
+  bounded, and walkable ground looks walkable. The validator and inspector
+  enforce this ([P33](decisions.md#p33-towns-and-walkable-paths)).
+- **Every dream starts in a town.** The player arrives at the town door. The
+  waypoint, the shop, the quest givers and the placed services stand in a
+  friendly cluster around it. Challenges lie beyond, so the player never has
+  to backtrack for services
+  ([P33](decisions.md#p33-towns-and-walkable-paths)).
+
+The work runs as `playtest` beads in the Phase 3 epic, ahead of other
+ready work ([Phase 3 § Playtest revisions](phase-3-act-one.md#playtest-revisions)):
+
+| Bead | Work | Waits for |
+| --- | --- | --- |
+| PT.1 `hv-j1n2.66` (core) | Map tunables, validator and inspector for compact sizes, reach maxima, path widths, detours and towns | This plan revision |
+| PT.1a `hv-j1n2.67` | Review and QA of PT.1 | PT.1 |
+| PT.2 `hv-j1n2.68` (creative) | The first dream rebuilt at no more than 56×56 around a starting town; new runs spawn at the town door | PT.1 |
+| PT.2a `hv-j1n2.69` | Review and QA of the rebuilt first dream, on foot | PT.2 |
+| PT.3 `hv-j1n2.70` | Design documents aligned with P13 and P33 | This plan revision |
+
+Catalog dream map beads (3.19) wait for PT.1. The dream catalog schema (3.1)
+waits for PT.2.
 
 ## Operating model
 
@@ -240,6 +278,8 @@ The stream is complete when all of these hold:
    `release` contains every D97 commit.
 2. A new run can be played from Avatar select through Apollyon's defeat and
    into the endgame, on desktop and mobile, with an empty `window.__caps`.
+   Every dream is compact and opens on its town, and every map meets
+   P33's path rules in the validator.
 3. The run simulator's happy-path and full-clear policies meet the
    Appendix E acceptance targets, or `report.md` records each miss with its
    cause and the tunable that would close it.

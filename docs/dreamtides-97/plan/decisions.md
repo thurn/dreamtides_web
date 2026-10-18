@@ -331,10 +331,11 @@ legible to a model:
 - **The inspector** (`npm run d97:map -- <command>`) does five things:
   - prints per-region walkability and reachability summaries;
   - lists landmark and anchor coordinates;
-  - checks crossing time between regions at walking speed;
+  - checks reach time from the town to each anchor at walking speed, and
+    reports narrow passages;
   - renders PNG previews (the whole map, plus zoomed regions with a
-    coordinate grid, region outlines and anchor letters) to a gitignored
-    directory;
+    coordinate grid, region outlines, anchor letters and a walkability
+    overlay) to a gitignored directory;
   - prints validator findings by coordinate.
 
   The agent reads the previews back as images.
@@ -343,19 +344,27 @@ legible to a model:
   - every anchor is reachable from the entries;
   - a guarded door is unreachable while its guardian stands;
   - doors keep their spacing;
-  - a medium map's main route meets the crossing-time target.
+  - every map meets its size class's reach maximum, and the town, path
+    width and detour rules of [P33](#p33-towns-and-walkable-paths).
 
 ### P13. Map sizes and walking speed
 
-| Size | About | Main-route crossing at walking speed |
-| --- | --- | --- |
-| Small | 60×60 tiles | about 1 minute |
-| Medium | 110×110 tiles | about 2 minutes |
-| Large | 150×150 tiles | about 3 minutes |
+Dreams are compact. The M1 playtest found the 110×110 first dream far too
+big, so every size class is at most a quarter of its first area:
 
-Walking speed is 4 tiles per second. The camera never shows the whole of a
-medium map: at 2× on desktop it shows about 30×17 tiles. Speed and sizes are
-tunables, adjusted after playtests.
+| Size | About | Largest side | Reach from town at walking speed |
+| --- | --- | --- | --- |
+| Small | 32×32 tiles | 40 | at most 20 seconds |
+| Medium | 50×50 tiles | 56 | at most 30 seconds |
+| Large | 70×70 tiles | 80 | at most 45 seconds |
+
+**Reach** is the walking time from the town door's entry
+([P33](#p33-towns-and-walkable-paths)) to the farthest anchor. It is a
+maximum, never a minimum: no map pads its route to fill time.
+
+Walking speed is 4 tiles per second. At 2× on desktop the camera shows about
+30×17 tiles, so a medium map is a few screens across. Speed, sizes and reach
+are tunables in `src/content/d97/map-tuning.ts`, adjusted after playtests.
 
 ### P14. Controls
 
@@ -402,6 +411,46 @@ repository. This plan grants download authority for:
   Missing art falls back to flat placeholder tiles and capsule characters.
 - A credits screen generated from the manifest lands before the Phase 3
   gate.
+
+### P33. Towns and walkable paths
+
+The operator set this after playing M1. In their words, the player should
+"start out in 'town' and then explore the rest of the dream for challenges",
+rather than be forced to backtrack.
+
+- **Every dream has a town,** the first dream included. The town is the
+  dream's friendly cluster, gathered around its **town door**: a door
+  anchor that the dream module names.
+- **Inside the town radius** (12 tiles of the town door's entry, a tunable)
+  stand:
+  - the waypoint;
+  - the shop, or the building door to the room that holds it
+    ([P19](#p19-rooms-after-m1));
+  - every quest giver;
+  - most townsfolk;
+  - the cluster anchors where assembly places Dream Guides, amulet
+    merchants and changers, and sages.
+- **Outside it** stand every challenger, guardian, chest and quest object,
+  and the exit door. Nothing hostile stands in town.
+- **The player starts in town.** A new run arrives at the start dream's town
+  door. Act assembly links each dream's town door on the side toward the
+  act's entry dream. So the forward route's first arrival in every dream is
+  its town. Doors reached later may arrive elsewhere.
+- **Paths are wide and legible.** The playtest found narrow walking paths
+  too hard to find, so walkability is a first-class map check:
+  - every anchor's route from the town runs on paths at least 2 tiles wide;
+  - the main routes out of town are at least 3 wide;
+  - a deliberately narrow crossing (a plank bridge, say) is an explicit
+    recipe exemption, and is never the only route;
+  - no route is longer than 1.6 times the straight-line distance;
+  - walkable ground looks walkable, and blocked ground looks blocked.
+    There are no invisible walls and no walkable-looking dead ends.
+
+  Widths and the detour ratio are tunables.
+- **Tooling enforces it.** The validator ([P12](#p12-ai-legible-map-tooling))
+  checks the town radius, path widths, the detour ratio and reach. The
+  inspector reports narrow passages by coordinate, and draws a walkability
+  overlay on its previews.
 
 ## Writing
 
@@ -469,8 +518,9 @@ scenery.
 Every dream has 3–8 **townsfolk** from M1 on. Each has a sprite recipe, a
 short personality, and a small dialogue tree of barks and lore, some of it
 reacting to quest or act state. Townsfolk offer no services and carry no head
-icon. They fill large maps, carry the story bible's through-line and hint at
-quests.
+icon. Most stand in the dream's town
+([P33](#p33-towns-and-walkable-paths)); they carry the story bible's
+through-line and hint at quests.
 
 ## Tests and QA
 
