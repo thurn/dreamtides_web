@@ -1232,3 +1232,33 @@ Evidence is in `artifacts/qa/hv-umm2.46/reduced-gate/`. Desktop journey
 captures and its persisted log are in `invocations/run-UHIHwM/` under the
 same bead directory; representative capture:
 `gate46-journey-battle-1-result-desktop.png`.
+
+
+## Phase 6 gate (2026-10-17, hv-33id.5)
+
+Source: `b858623801e981ca4c496c713a6f70c77485eb65`, Node v24.16.0,
+Apple M5 Max. Native browser evidence is under `artifacts/qa/hv-33id.5/`.
+
+| Check | Result |
+| --- | --- |
+| Standalone tutorial | `tutorial-walk`, run-fpoy3k: 33 beats per viewport through real Victory and the Avatar offer; desktop and mobile pass, `__caps` empty; 402.783 s total. |
+| Desktop Greedy journey | Completed desktop subset of run-fAPzUC, game opyegs: Journey Complete, three real wins and four disclosed debug-assisted middle battles, `__caps` empty. Its later mobile reload timed out; the aggregate run is not a pass. |
+| Mobile Greedy journey | run-cW90yp, game xq7tar: Journey Complete, three real wins and four disclosed debug-assisted middle battles, `__caps` empty; command exits 0, 691.301 s total. |
+| Durable interaction | Both journeys retain the same battle and native sequence across live/result reloads, reject a stale result control, and finish with the battle torn down. |
+| Full suite and D19 | 531 files and 13,112 tests pass at two workers; Vitest 93.19 s, test step 94.0 s, whole command 105.501 s. The 60 s target is exceeded. Test-start host load was 7.942; low-load compliance is not established. File count is informational. |
+| Repository checks | `npm run review` and `npm run knip` pass. |
+| Phase retrospective | Covers hv-33id.4, .14, .15, .16, .17 and .18. Existing queue-authority, declared-input, tutorial-recipe and heavy-wait work resolves the identified causes; no new improvement bead. |
+| Independent phase review | Fresh read-only Codex review of the 17 phase commits at the source above found no actionable product defect in the inspected functional scope. Historical deletions, mechanical test migration and evidence received selective inspection. |
+| Release | All 17 phase commits are ancestors of release b858623801e981ca4c496c713a6f70c77485eb65. Final gate-commit containment is recorded in the native closing notes. |
+
+Phase measurements remain in `measurements/hv-33id.*`: the baseline and
+current tutorial walks retain authored guidance and timing; the engine port
+and journey work supply shared lifecycle, presentation and reload contracts;
+the mason follow-ups centralize queue authority and declared-input validation.
+The gate retrospective records coverage in `introspection.jsonl`.
+
+Representative captures: `tutorial-walk-20-mira-foresee-mobile.png`,
+`gate46-journey-complete-desktop.png`, and
+`gate46-journey-complete-mobile.png`. The native invocation directories retain
+the persisted UUID logs and failed attempts. Details are in
+`measurements/hv-33id.5.json`; the retained review is `phase-code-review.md`.

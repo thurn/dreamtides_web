@@ -1,0 +1,81 @@
+{
+  "bead": "hv-33id.5",
+  "source": "b858623801e981ca4c496c713a6f70c77485eb65",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run test:full wrapper start"
+      }
+    }
+  },
+  "fullSuite": {
+    "command": "npm run test:full",
+    "start": "2026-10-18T06:31:51.887871+00:00",
+    "end": "2026-10-18T06:33:37.394389+00:00",
+    "seconds": 105.5010457499884,
+    "hostLoad": "{ 7.68 8.22 9.50 }",
+    "exitCode": 0,
+    "files": 531,
+    "tests": 13112,
+    "workers": 2,
+    "vitestSeconds": 93.19,
+    "testStepSeconds": 94.0,
+    "testStartLoad": 7.94189453125,
+    "budgetSeconds": 60,
+    "lowLoadCompliance": "not established"
+  },
+  "browser": {
+    "tutorial": {
+      "invocation": "run-fpoy3k",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "beatsEach": 33,
+      "totalSeconds": 402.783,
+      "caps": []
+    },
+    "journeyDesktop": {
+      "invocation": "run-fAPzUC",
+      "gameId": "opyegs",
+      "subset": "completed desktop; aggregate failed in mobile reload",
+      "nativeRows": 1878,
+      "realWins": 3,
+      "assistedMiddleWins": 4,
+      "caps": []
+    },
+    "journeyMobile": {
+      "invocation": "run-cW90yp",
+      "gameId": "xq7tar",
+      "nativeRows": 1891,
+      "realWins": 3,
+      "assistedMiddleWins": 4,
+      "totalSeconds": 691.301,
+      "caps": []
+    },
+    "priorAttempts": "run-F1YmHC setup argument failure; run-Qus0zS battle observation failure; run-l4tHra tutorial observation failure; run-fAPzUC mobile reload timeout. Failed portions receive no acceptance credit. Overlapping or partly accepted command durations are not summed as friction."
+  },
+  "retrospective": {
+    "covered": [
+      "hv-33id.4",
+      "hv-33id.14",
+      "hv-33id.15",
+      "hv-33id.16",
+      "hv-33id.17",
+      "hv-33id.18"
+    ],
+    "newImprovementBeads": []
+  },
+  "independentReview": {
+    "head": "b858623801e981ca4c496c713a6f70c77485eb65",
+    "phaseCommits": 17,
+    "report": "phase-code-review.md",
+    "findings": 0,
+    "scope": "Phase-only functional changes and relevant current callers; historical deletions, mechanical test migration and evidence received selective inspection."
+  },
+  "releaseContainment": {
+    "release": "b858623801e981ca4c496c713a6f70c77485eb65",
+    "phaseCommits": 17,
+    "missing": []
+  }
+}
