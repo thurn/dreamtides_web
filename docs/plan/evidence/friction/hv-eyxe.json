@@ -1,0 +1,20 @@
+{
+  "bead": "hv-eyxe",
+  "phase": 5,
+  "implementMin": 3.4561789666666667,
+  "implementWindow": {
+    "start": "2026-10-18T06:59:30+00:00",
+    "end": "2026-10-18T07:02:57.370738+00:00"
+  },
+  "localValidationS": {
+    "review": 1.644399292068556,
+    "knip": 12.293277583085
+  },
+  "hostLoad": 8.47,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
