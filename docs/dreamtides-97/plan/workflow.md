@@ -209,8 +209,10 @@ For each claimed bead:
    in-scope CI repairs.
 7. **Repair** a failing candidate in the same worktree, and resubmit.
 8. **Close** after the candidate lands on `staging`, with
-   `hive_resolution=completed` and close notes that include the friction lines
-   ([Introspection](#introspection)).
+   `hive_resolution=completed` and close notes that end with the friction
+   block ([Introspection](#introspection)). Every close note ends with it,
+   whatever the bead: code, documentation, `review-qa`, `mason`, filing and
+   gate beads alike, and a bead that closes with no commit.
 
 **Updating a worktree.** When another bead lands first and conflicts, run
 `tg --no-launch update` in your own worktree. Resolve the conflicts, revalidate
@@ -347,7 +349,8 @@ challenge is found without hunting for a path.
 
 From Phase 2 on, following [P30](decisions.md#p30-phase-end-introspection):
 
-- **Friction lines.** Each bead's close notes end with a block like this:
+- **Friction lines.** Every bead's close notes end with a block like this,
+  including `review-qa`, `mason`, filing and gate beads:
 
   ```text
   Friction:
@@ -356,7 +359,17 @@ From Phase 2 on, following [P30](decisions.md#p30-phase-end-introspection):
   Implement: 95m. Validation: review 38s, focused 12s.
   ```
 
-  Tags are short kebab-case slugs. Reuse a tag for the same cause.
+  A bead with no friction ends with the empty form, which still carries the
+  time line:
+
+  ```text
+  Friction: none.
+  Implement: 20m. Validation: review 35s.
+  ```
+
+  Tags are short kebab-case slugs. Reuse a tag for the same cause. The
+  trigger below counts only what close notes record, so a missing block
+  undercounts recurring friction.
 - **Trigger.** At each dispatch boundary, check the phase's close notes. A tag
   that appears in three beads files an `introspection` bead keyed
   `trigger=<tag>/d97-phase-<n>`, unless one exists. It targets the cause,

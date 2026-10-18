@@ -382,14 +382,17 @@ comes in Phase 6.
 ### P15. Character sprites layered at runtime
 
 Characters are recipes over the Universal LPC Spritesheet Character Generator
-sheets. The renderer stacks a recipe's layer sheets as sprites that share one
-animation frame. It does not pre-compose sheets at workspace preparation, as
-the visual guide proposed. Recipes name existing color variants, so nothing
-needs recoloring.
+sheets. Workspace preparation resolves each recipe against the local
+generator into a manifest of layer sheets and palette swaps, linking only the
+sheets in use. The generator ships many of its colours as palette swaps over
+base sheets, so when a look loads the renderer recolours each layer sheet by
+its palette swaps, cuts it into frames, and stacks the layers as sprites that
+share one animation frame, in the generator's z-order. Nothing is
+pre-composed at workspace preparation.
 
-**Why:** runtime layering needs no image-processing step at workspace
-preparation and no committed composites, and a recipe edit shows up on the
-next reload.
+**Why:** runtime layering and load-time recolouring need no image-processing
+step at workspace preparation and no committed composites, reach every colour
+the generator offers, and show a recipe edit on the next reload.
 
 ### P23. Asset sourcing and licenses
 
