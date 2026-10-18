@@ -2,9 +2,8 @@
  * The Greedy policy: a one-ply search. For a top-level decision it samples
  * determinizations of its view (D22), applies each legal action to each,
  * resolves the stack with both sides passing, ends a play, reposition, or
- * immediately unproductive activation or repeat's main window to match passing's phase boundary, and scores the result with a
- * simple evaluation: score difference, board spark, cards in hand, and
- * energy. The action with the best mean score wins. Prompts are answered
+ * immediately unproductive activation or repeat's main window to match passing's phase boundary, and scores the result with the
+ * Phase 7 position evaluation (evaluation.ts). The action with the best mean score wins. Prompts are answered
  * with the prompt heuristic (`greedyAnswer`), live and in simulation; a
  * live free Discover cost choice or character type choice reads one
  * determinization of the view.
@@ -13,10 +12,12 @@ import { AI } from "../../content/ai";
 import type { Engine } from "../engine";
 import type { Prompt } from "../prompts/types";
 import type { Action } from "../rules/actions";
-import { opponent, type Side } from "../state/ids";
+import type { Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { InlineSource } from "../steps/sources";
-import type { BattleView, SideView } from "../view/view";
+import type { Decklists } from "../view/determinize";
+import type { BattleView } from "../view/view";
+import { evaluate, type EvaluationContext } from "./evaluation";
 import {
   greedyAnswer,
   greedyDeclinesChain,
@@ -31,29 +32,9 @@ import type { Policy, PolicyCandidate, PolicyChoice, PolicyContext, PolicyDecisi
 
 const GREEDY = AI.enginePolicy.greedy;
 
-function boardSpark(view: BattleView, side: SideView): number {
-  let total = 0;
-  for (const id of [...side.frontRank, ...side.backRank]) {
-    if (id !== null) total += Math.min(GREEDY.sparkValueCap, view.instances[id]?.characteristics.spark ?? 0);
-  }
-  return total;
-}
-
 /** Greedy's evaluation of a position from `side`'s view of it: higher is better for `side`. */
-export function evaluatePosition(view: BattleView, side: Side): number {
-  const weights = GREEDY.evaluation;
-  const { result } = view;
-  if (result !== null) {
-    return result.kind === "draw" ? 0 : result.winner === side ? weights.victory : -weights.victory;
-  }
-  const mine = view.sides[side];
-  const theirs = view.sides[opponent(side)];
-  return (
-    weights.scoreDifference * (mine.score - theirs.score) +
-    weights.boardSpark * (boardSpark(view, mine) - boardSpark(view, theirs)) +
-    weights.handCard * (mine.hand.count - theirs.hand.count) +
-    weights.energy * (Math.min(GREEDY.energyValueCap, mine.currentEnergy) - Math.min(GREEDY.energyValueCap, theirs.currentEnergy))
-  );
+export function evaluatePosition(view: BattleView, side: Side, context: EvaluationContext): number {
+  return evaluate(view, side, context).total;
 }
 
 /**
@@ -86,8 +67,10 @@ function simulate(
   side: Side,
   action: Action,
   loops: { simulations: number; iterations: number },
+  decklists: Decklists,
 ): number | null {
   const source = simulationSource(engine);
+  const context: EvaluationContext = { catalog: engine.catalog, decklists };
   const productiveMainAction = (action.kind === "activate" && state.stack.length === 0) || action.kind === "repeatLoop";
   const settleWindow = productiveMainAction || action.kind === "reposition" || (action.kind === "play" && state.stack.length === 0);
   const sameWindow = (current: BattleState) => current.turn.phase === state.turn.phase &&
@@ -106,9 +89,9 @@ function simulate(
       const next = engine.decision(current);
       if (next?.kind !== "respond") {
         if (productiveMainAction && !endedWindow && current.stack.length === 0 && next?.kind === "main" && next.side === side && sameWindow(current)) {
-          const immediate = evaluatePosition(engine.view(current, side), side);
+          const immediate = evaluatePosition(engine.view(current, side), side, context);
           // Useful renewable actions retain their gains before an adverse boundary.
-          if (immediate > evaluatePosition(engine.view(state, side), side)) return immediate;
+          if (immediate > evaluatePosition(engine.view(state, side), side, context)) return immediate;
         }
         // Compare a main-window candidate with passing at the same horizon. Resolve any
         // responses first, and end only this candidate's original window.
@@ -127,7 +110,7 @@ function simulate(
     // window ends. An unfinished candidate cannot compete with a completed pass.
     if (settleWindow && current.result === null && (sameWindow(current) || current.stack.length > 0 || engine.decision(current)?.kind === "respond")) return null;
     const after = engine.view(current, side);
-    return evaluatePosition(after, side);
+    return evaluatePosition(after, side, context);
   } catch {
     return null;
   }
@@ -156,7 +139,7 @@ function decideTopLevel(view: BattleView, legal: readonly Action[], ctx: PolicyC
       for (const [index, action] of candidates.entries()) {
         if (iterations >= ctx.budget.iterations || ctx.now() >= deadline) break sampling;
         iterations += 1;
-        const score = simulate(ctx.engine, state, ctx.side, action, loops);
+        const score = simulate(ctx.engine, state, ctx.side, action, loops, ctx.decklists);
         const total = totals[index];
         if (score !== null && total !== undefined) {
           total.score += score;

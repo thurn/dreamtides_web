@@ -1,4 +1,4 @@
-/** Greedy leaves renewable spark pumps while retaining finite useful activations. */
+/** The frozen Phase 5 Greedy (`greedy@5`) leaves renewable spark pumps while retaining finite useful activations. */
 import { describe, expect, it } from "vitest";
 import { parseAvatarId } from "../../types/identifiers";
 import { AI } from "../../content/ai";
@@ -18,11 +18,11 @@ import { boardState } from "../testing/board";
 import { invariantViolations } from "../testing/invariants";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { runPolicy, type PolicyRequest } from "./decide";
-import { evaluatePosition } from "./greedy";
+import { evaluatePosition } from "./reference/greedy-5";
 import { deck, entries } from "./policy.fixtures";
 
-const cap = AI.enginePolicy.greedy.sparkValueCap;
-const energyCap = AI.enginePolicy.greedy.energyValueCap;
+const cap = AI.references["greedy@5"].sparkValueCap;
+const energyCap = AI.references["greedy@5"].energyValueCap;
 const figment: EngineFigmentDefinition = { id: parseFigmentId("5e5e5e5e-0000-4000-8000-000000007450"), subtype: SYNTHETIC.vanilla1.subtype, spark: 1, status: "vanilla", abilities: () => [] };
 const pump: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(0x7451), spark: 0, status: "authored", abilities: () => [activated([abandonCost({ another: true })], gainSpark(self(), 2))] };
 function fixture(side: Side, adverse = false, energy = false, boundary = false) {
@@ -36,7 +36,7 @@ function fixture(side: Side, adverse = false, energy = false, boundary = false) 
 function request(engine: Engine, state: BattleState, side: Side, decklists: PolicyRequest["decklists"]): PolicyRequest {
   const decision = engine.decision(state);
   if (decision?.side !== side) throw new Error("wrong actor");
-  return { policy: "greedy", side, key: `${state.version}:0:decision`, view: engine.view(state, side), decision: { kind: "topLevel", decision, legal: engine.legalActions(state, side) }, decklists, seed: battleSeed("productive-activation"), budget: { iterations: 256 } };
+  return { policy: "greedy@5", side, key: `${state.version}:0:decision`, view: engine.view(state, side), decision: { kind: "topLevel", decision, legal: engine.legalActions(state, side) }, decklists, seed: battleSeed("productive-activation"), budget: { iterations: 256 } };
 }
 function deterministic(engine: Engine, state: BattleState, side: Side, decklists: PolicyRequest["decklists"]) {
   const input = request(engine, state, side, decklists), before = JSON.stringify({ state, input });
@@ -87,7 +87,7 @@ function windowAction(engine: Engine, state: BattleState, side: Side, decklists:
 function movementAnswers(engine: Engine, decklists: PolicyRequest["decklists"]) {
   const answer = (prompt: Parameters<InlineSource["answer"]>[0], work: BattleState) => {
     const state = cloneState(work), side = prompt.side;
-    const result = runPolicy(engine, { policy: "greedy", side, key: `${state.version}:0:decision`, view: engine.view(state, side), decision: { kind: "prompt", prompt }, decklists, seed: battleSeed("movement-answer"), budget: { iterations: 64 } });
+    const result = runPolicy(engine, { policy: "greedy@5", side, key: `${state.version}:0:decision`, view: engine.view(state, side), decision: { kind: "prompt", prompt }, decklists, seed: battleSeed("movement-answer"), budget: { iterations: 64 } });
     if (result.choice.kind !== "answer") throw new Error("not an answer");
     return result.choice.value;
   };
@@ -155,7 +155,7 @@ describe("main activation progress", () => {
         ...engine,
         decision(current) {
           const count = passes.get(current);
-          return count !== undefined && count < AI.enginePolicy.greedy.stackPassLimit ? { kind: "respond", side } : engine.decision(current);
+          return count !== undefined && count < AI.references["greedy@5"].stackPassLimit ? { kind: "respond", side } : engine.decision(current);
         },
         apply(current, actor, action, source, observe) {
           const count = passes.get(current);
@@ -171,7 +171,7 @@ describe("main activation progress", () => {
       };
       const input = windowRequest(engine, state, side, decklists), before = JSON.stringify({ state, input });
       expect(runPolicy(delayed, input).choice).toEqual({ kind: "action", action: { kind: "activate", source: ids[side].back[0], ability: 0 } });
-      expect(mostPasses).toBe(AI.enginePolicy.greedy.stackPassLimit);
+      expect(mostPasses).toBe(AI.references["greedy@5"].stackPassLimit);
       expect(JSON.stringify({ state, input })).toBe(before);
     });
 
@@ -228,7 +228,7 @@ describe("productive activation selection", () => {
       expect(initial.sides[side].maxEnergy).toBe(initial.sides[side].currentEnergy);
       const records: { side: Side; action: Action; answers: readonly RecordedAnswer[] }[] = [];
       const source = new InlineSource(Object.fromEntries((["player", "enemy"] as const).map(actor => [actor, (prompt: Parameters<InlineSource["answer"]>[0], work: BattleState) => {
-        const state = cloneState(work), base: PolicyRequest = { policy: "greedy" as const, side: actor, key: `${state.version}:0:decision`, view: engine.view(state, actor), decision: { kind: "prompt" as const, prompt }, decklists, seed: battleSeed("productive-answer"), budget: { iterations: 64 } };
+        const state = cloneState(work), base: PolicyRequest = { policy: "greedy@5" as const, side: actor, key: `${state.version}:0:decision`, view: engine.view(state, actor), decision: { kind: "prompt" as const, prompt }, decklists, seed: battleSeed("productive-answer"), budget: { iterations: 64 } };
         const before = JSON.stringify({ state, base }), result = runPolicy(engine, base);
         expect(JSON.stringify({ state, base })).toBe(before);
         expect(result.trace.used.iterations).toBeLessThanOrEqual(base.budget.iterations);

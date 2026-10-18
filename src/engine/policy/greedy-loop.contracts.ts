@@ -1,4 +1,4 @@
-/** Finite Greedy loop execution, productive progress, privacy and recorded-answer replay. */
+/** The frozen Phase 5 Greedy (`greedy@5`): finite loop execution, productive progress, privacy and recorded-answer replay. */
 import { describe, expect, it } from "vitest";
 import { AI } from "../../content/ai";
 import type { EngineCardDefinition } from "../catalog";
@@ -34,7 +34,7 @@ describe("Greedy", () => {
     const decision = looping.decision(state);
     if (decision?.side !== side) throw new Error("wrong loop actor");
     return {
-      policy: "greedy", side, key: decisionKeyOf(sliceOf(state)), view: looping.view(state, side),
+      policy: "greedy@5", side, key: decisionKeyOf(sliceOf(state)), view: looping.view(state, side),
       decision: { kind: "topLevel", decision, legal: looping.legalActions(state, side) },
       decklists, seed: battleSeed(`loop-budget|${side}`), budget: { iterations: 64 },
     };
@@ -46,7 +46,7 @@ describe("Greedy", () => {
     if (action.kind === "repeatLoop") {
       expect(typeof action.count).toBe("number");
       expect(action.count).toBeGreaterThanOrEqual(1);
-      expect(action.count).toBeLessThanOrEqual(Math.min(AI.enginePolicy.greedy.loopIterationLimit, state.config.loopIterationCap));
+      expect(action.count).toBeLessThanOrEqual(Math.min(AI.references["greedy@5"].loopIterationLimit, state.config.loopIterationCap));
     }
     const result = looping.apply(state, side, action, NO_PROMPTS, (_after, step) => { if (step.kind === "loopIteration") steps++; });
     if (action.kind === "repeatLoop") {
@@ -70,7 +70,7 @@ describe("Greedy", () => {
   }
 
   for (const side of ["player", "enemy"] as const) {
-    it.each([10, 2 * AI.enginePolicy.greedy.loopIterationLimit + 3])(`executes ${side}'s winning loop through legal finite choices to %s points`, target => {
+    it.each([10, 2 * AI.references["greedy@5"].loopIterationLimit + 3])(`executes ${side}'s winning loop through legal finite choices to %s points`, target => {
       const other = opponent(side);
       const { state, ids } = board({ active: side, [side]: { back: [LOOP.freePoints.id], deck }, [other]: { deck }, scoreToWin: target });
       const source = ids[side].back[0];
@@ -94,7 +94,7 @@ describe("Greedy", () => {
         current = after.state;
       }
       expect(current.result).toMatchObject({ kind: "victory", winner: side });
-      if (target > AI.enginePolicy.greedy.loopIterationLimit + 1) expect(records.length).toBeGreaterThan(1);
+      if (target > AI.references["greedy@5"].loopIterationLimit + 1) expect(records.length).toBeGreaterThan(1);
       replayLoopChoices(engine, once, records, current);
     });
 
@@ -130,7 +130,7 @@ describe("Greedy", () => {
       const request = loopRequest(looping, once, side, loopDecklists(side, [energyLoop.id, ...deck]));
       const before = JSON.stringify({ once, request });
       const result = runPolicy(observedEngine, request);
-      const limit = AI.enginePolicy.greedy.loopIterationLimit, effectiveLimit = Math.min(limit, once.config.loopIterationCap);
+      const limit = AI.references["greedy@5"].loopIterationLimit, effectiveLimit = Math.min(limit, once.config.loopIterationCap);
       expect(observed.length).toBeGreaterThan(0);
       for (const run of observed) {
         expect(typeof run.count).toBe("number");
@@ -154,7 +154,7 @@ describe("Greedy", () => {
       expect(looping.legalActions(once, side)).toEqual(legal);
       const records: { side: Side; action: Action; answers: readonly RecordedAnswer[] }[] = [];
       let current = once;
-      for (let guard = 0; guard < AI.enginePolicy.greedy.energyValueCap + 2 && current.turn.phase === "day"; guard++) {
+      for (let guard = 0; guard < AI.references["greedy@5"].energyValueCap + 2 && current.turn.phase === "day"; guard++) {
         const chosen = guard === 0 ? result : runPolicy(looping, loopRequest(looping, current, side, request.decklists));
         if (chosen.choice.kind !== "action") throw new Error("not an action");
         const next = applyLoopChoice(looping, current, side, chosen.choice.action);
@@ -162,7 +162,7 @@ describe("Greedy", () => {
         current = next.state;
       }
       expect(current.turn.phase).not.toBe("day");
-      expect(current.sides[side].currentEnergy).toBeGreaterThanOrEqual(AI.enginePolicy.greedy.energyValueCap);
+      expect(current.sides[side].currentEnergy).toBeGreaterThanOrEqual(AI.references["greedy@5"].energyValueCap);
       expect(current.sides[other].score).toBeGreaterThan(once.sides[other].score);
       replayLoopChoices(looping, once, records, current);
     });
@@ -192,7 +192,7 @@ describe("Greedy", () => {
     it.each(["error", "non-settling"] as const)(`rejects ${side}'s %s loop simulation while retaining legal progress`, failure => {
       const energyLoop: EngineCardDefinition = { ...LOOP.freePoints, id: syntheticId(0x4515), spark: 0, abilities: () => [activated([], gainEnergy(1)), triggered(onDusk(), gainPoints(100, "opponent"))] };
       const looping = createEngine(testCatalog([energyLoop])), other = opponent(side);
-      const { state, ids } = boardState(looping.catalog, { active: side, phase: "day", [side]: { back: [energyLoop.id], energy: AI.enginePolicy.greedy.energyValueCap, deck }, [other]: { deck } });
+      const { state, ids } = boardState(looping.catalog, { active: side, phase: "day", [side]: { back: [energyLoop.id], energy: AI.references["greedy@5"].energyValueCap, deck }, [other]: { deck } });
       const source = ids[side].back[0];
       if (source == null) throw new Error("no source");
       const once = looping.apply(state, side, { kind: "activate", source, ability: 0 }, NO_PROMPTS).state;

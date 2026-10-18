@@ -12,10 +12,10 @@ import type { Decklists } from "../view/determinize";
 import type { BattleView } from "../view/view";
 import type { PolicyRandom } from "./random";
 
-/** The policies the AI host can run. */
-export type PolicyId = "random" | "greedy";
+/** The policies the AI host can run: the live ones and the frozen references (D25). */
+export type PolicyId = "random" | "greedy" | "greedy@5" | "greedy@7.2";
 
-export const POLICY_IDS: readonly PolicyId[] = ["random", "greedy"];
+export const POLICY_IDS: readonly PolicyId[] = ["random", "greedy", "greedy@5", "greedy@7.2"];
 
 /** The decision a policy answers: a top-level decision with its legal actions, or a prompt. */
 export type PolicyDecision =

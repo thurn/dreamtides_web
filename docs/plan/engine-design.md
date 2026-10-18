@@ -2925,7 +2925,7 @@ Random policy's `randomAction` and the policy-private `PolicyRandom`
 stream (`policy/random.ts`) through `InlineSource` and `engine.apply`.
 
 ```ts
-type PolicyId = "random" | "greedy";
+type PolicyId = "random" | "greedy" | "greedy@5" | "greedy@7.2";
 type PolicyDecision =
   | { kind: "topLevel"; decision: Decision; legal: readonly Action[] }
   | { kind: "prompt"; prompt: Prompt };
@@ -2959,9 +2959,12 @@ iteration budget, and no request carries hidden information.
 **Random** (`policy/random.ts`) picks `randomAction` and uniformly random
 legal answers. **Greedy** (`policy/greedy.ts`) samples determinizations of
 its view, applies every legal action to each, resolves the stack with both
-sides passing, and keeps the action whose evaluation (`AI.enginePolicy.greedy`:
-victory, score difference, board spark, hand cards, energy) has the best
-mean. It answers prompts with a heuristic (`policy/prompts.ts`), live and in
+sides passing, and keeps the action whose position evaluation
+(`policy/evaluation.ts`, weighted by `AI.evaluation`) has the best mean.
+The frozen reference policies (D25) live in `policy/reference/`: `greedy@5`,
+the Phase 5 Greedy, and `greedy@7.2`, each a private copy of its policy,
+evaluation and prompt modules reading its own `AI.references` entry, with
+the module and data hashes in `reference/manifest.ts`. It answers prompts with a heuristic (`policy/prompts.ts`), live and in
 simulation: accept a "you may", pay an "unless" cost it can pay, the largest
 number, and the cards it wants most (the opponent's most valuable for a
 target, its own least valuable for a cost or discard). For a free Discover

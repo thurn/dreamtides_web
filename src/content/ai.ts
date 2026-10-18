@@ -33,19 +33,8 @@ export const AI = {
       stackPassLimit: 32,
       // Repetitions of one optional loop evaluated and selected per candidate.
       loopIterationLimit: 32,
-      // Maximum utility credited to one character's spark in Greedy evaluation.
-      sparkValueCap: 32,
-      // Maximum utility credited to one side's available energy in Greedy evaluation.
-      energyValueCap: 32,
       // Candidates kept in each decision's log line.
       traceTopK: 3,
-      evaluation: {
-        victory: 1000,
-        scoreDifference: 10,
-        boardSpark: 1,
-        handCard: 0.5,
-        energy: 0.1,
-      },
     },
   },
   // The Phase 7 position evaluation (src/engine/policy/evaluation.ts): one
@@ -87,5 +76,39 @@ export const AI = {
     energyCap: 12,
     // A deck with fewer cards than this carries Fatigue risk.
     fatigueHorizon: 5,
+  },
+  // Frozen reference policies (D25), read only by their snapshot modules in
+  // src/engine/policy/reference/. Their values never change; a new reference
+  // gets a new entry.
+  references: {
+    // The Phase 5 Greedy, preserved as the 7.2 comparison opponent.
+    // The prompt strategy both Greedy references answer with.
+    "prompts@7.2": { optionalChainCap: 8 },
+    "greedy@5": {
+      determinizations: 2,
+      stackPassLimit: 32,
+      loopIterationLimit: 32,
+      sparkValueCap: 32,
+      energyValueCap: 32,
+      traceTopK: 3,
+      evaluation: { victory: 1000, scoreDifference: 10, boardSpark: 1, handCard: 0.5, energy: 0.1 },
+    },
+    // Greedy on the Phase 7 evaluation, frozen at 7.2.
+    "greedy@7.2": {
+      determinizations: 2,
+      stackPassLimit: 32,
+      loopIterationLimit: 32,
+      traceTopK: 3,
+      evaluation: {
+        weights: {
+          victory: 1000, score: 10, race: 40, challengePoints: 6, challengeDissolutions: 4, frontSpark: 1.5, backSpark: 1,
+          support: 0.5, hand: 0.75, deck: 0.5, currentEnergy: 0.1, maxEnergy: 0.6, threats: 1.5, tempo: 0.75,
+        },
+        sparkCap: 16,
+        handCap: 10,
+        energyCap: 12,
+        fatigueHorizon: 5,
+      },
+    },
   },
 } as const;

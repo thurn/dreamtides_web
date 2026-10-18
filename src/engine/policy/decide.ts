@@ -18,12 +18,19 @@ import { promptView, type BattleView } from "../view/view";
 import { policyOverride } from "./overrides";
 import { GREEDY_POLICY } from "./greedy";
 import { PolicyRandom, RANDOM_POLICY } from "./random";
+import { GREEDY_5_POLICY } from "./reference/greedy-5";
+import { GREEDY_7_2_POLICY } from "./reference/greedy-7-2";
 import type { Policy, PolicyBudget, PolicyChoice, PolicyDecision, PolicyId, PolicyResult } from "./types";
 
 /** Lab automation is absent from production and plain Node policy hosts. */
 const lab = import.meta.env?.DEV === true ? await import("../testing/card-lab") : null;
 
-export const POLICIES: Readonly<Record<PolicyId, Policy>> = { random: RANDOM_POLICY, greedy: GREEDY_POLICY };
+export const POLICIES: Readonly<Record<PolicyId, Policy>> = {
+  random: RANDOM_POLICY,
+  greedy: GREEDY_POLICY,
+  "greedy@5": GREEDY_5_POLICY,
+  "greedy@7.2": GREEDY_7_2_POLICY,
+};
 
 /** Which D23 budget a decision gets. */
 export type BudgetKind = keyof typeof AI.enginePolicy.budgets;
