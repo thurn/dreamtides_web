@@ -2,6 +2,8 @@
 // per art source in the manifest (P23), each its title as a link to the page
 // that publishes it, the licenses it is offered under, its credited authors,
 // and the attribution files that ship with it holding per-file credits. The
+// character generator's entry may list the authors of each sprite part the
+// game uses, gathered from its per-part credits at workspace preparation. The
 // panel hugs its entries and scrolls past the viewport. Escape or the close
 // disc closes it. PURE: it renders from a view model and reports Close.
 
@@ -19,6 +21,11 @@ export interface D97CreditsSourceView {
   readonly url: string;
   readonly licenses: readonly string[];
   readonly authors: readonly string[];
+  /**
+   * Where the authors and licenses come from: the art-source catalog, or the
+   * per-part credits of the sprite parts the game uses.
+   */
+  readonly creditsFrom: "catalog" | "parts";
   /** File names of the attribution files that ship with the source. */
   readonly creditsFiles: readonly string[];
 }
@@ -40,9 +47,9 @@ const COPY = {
   creditsFiles: "Per-file credits",
 };
 
-function CreditLine({ label, values, hook }: { label: string; values: readonly string[]; hook: string }): ReactElement {
+function CreditLine({ label, values, hook, from }: { label: string; values: readonly string[]; hook: string; from?: string }): ReactElement {
   return (
-    <p data-d97-credits-line={hook} data-count={values.length} style={{ margin: 0, font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
+    <p data-d97-credits-line={hook} data-d97-credits-from={from} data-count={values.length} style={{ margin: 0, font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
       <span style={{ color: token("--text-on-glass") }}>{label}</span>
       {` · ${values.join(", ")}`}
     </p>
@@ -71,8 +78,8 @@ function CreditsEntry({ source }: { source: D97CreditsSourceView }): ReactElemen
       >
         {source.title}
       </Pressable>
-      <CreditLine label={COPY.licenses} values={source.licenses} hook="licenses" />
-      <CreditLine label={COPY.authors} values={source.authors} hook="authors" />
+      <CreditLine label={COPY.licenses} values={source.licenses} hook="licenses" from={source.creditsFrom} />
+      <CreditLine label={COPY.authors} values={source.authors} hook="authors" from={source.creditsFrom} />
       {source.creditsFiles.length > 0 && <CreditLine label={COPY.creditsFiles} values={source.creditsFiles} hook="credits-files" />}
     </li>
   );

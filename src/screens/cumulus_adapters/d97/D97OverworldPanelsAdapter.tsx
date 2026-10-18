@@ -23,6 +23,7 @@ import { buildD97CreditsView } from "./d97-credits-view-model";
 import { buildD97DeckEditorView } from "./d97-deck-editor-view-model";
 import { D97QuestSurfacesAdapter } from "./D97QuestSurfacesAdapter";
 import { D97ShopAdapter } from "./D97ShopAdapter";
+import { useD97CharacterCredits } from "./use-d97-character-credits";
 import { useD97EncounterPreview } from "./use-d97-encounter";
 import type { D97Interactions } from "./use-d97-interactions";
 
@@ -50,7 +51,8 @@ export function D97OverworldPanelsAdapter({
   const anchorOf = (kind: "conversation" | "shop" | "preview") => (panel !== null && panel.kind === kind ? panel.anchorId : null);
   const shopAnchorId = anchorOf("shop");
   const preview = useD97EncounterPreview({ run, anchorId: anchorOf("preview"), avatars, cardsById: cards, occupants, dialogues: catalog.dialogues });
-  const creditsView = useMemo(() => buildD97CreditsView(D97_ART_SOURCES), []);
+  const characterCredits = useD97CharacterCredits(panel?.kind === "credits");
+  const creditsView = useMemo(() => buildD97CreditsView(D97_ART_SOURCES, characterCredits), [characterCredits]);
   const deckView = useMemo(() => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize), [run.collection, cards]);
   const equip = useCallback(
     (copyId: D97OwnedCopyId) => void actions.d97({ type: "D97_EQUIP_COPY", payload: { copyId } }).catch(reportFailure),

@@ -5,11 +5,16 @@
 // and writes `public/d97/characters/manifest.json`, at workspace preparation
 // and on demand (`npm run d97:characters`). The generator's other sheets stay
 // unserved. A missing library or sheet is recorded in the manifest and warned
-// about; the overworld draws those characters as capsules.
+// about; the overworld draws those characters as capsules. It also folds the
+// generator's CREDITS.csv into `public/d97/characters/credits.json`: the
+// authors, licenses and pages of exactly the used sheets
+// (./character-credits.ts), which the credits screen lists (P23). Without the
+// library or its CREDITS.csv no credits file is written.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { D97_CHARACTER_SPRITES } from "../../src/content/d97/characters/index.ts";
 import { DEV_KNIGHT, DEV_VILLAGER } from "../../src/content/d97/characters/development.ts";
 import {
@@ -18,9 +23,12 @@ import {
   type CharacterManifest,
   type ManifestCharacter,
 } from "../../src/d97/overworld/characters/manifest.ts";
+import { CHARACTER_GENERATOR_DIRECTORY } from "../../src/d97/overworld/characters/credits.ts";
 import { resolveCharacterSprite, type LpcLibrary } from "../../src/d97/overworld/characters/resolve-recipe.ts";
 import type { D97CharacterId, LpcSheetKey } from "../../src/types/identifiers.ts";
+import type { CharacterSprite } from "../../src/content/d97/characters/schema.ts";
 import { defaultArtPaths } from "../setup-assets.ts";
+import { creditsForSheets, parseCreditsCsv } from "./character-credits.ts";
 
 /** The catalog's recipes and the development recipes development builds draw. */
 const RECIPES = [...D97_CHARACTER_SPRITES, DEV_KNIGHT, DEV_VILLAGER];
@@ -76,14 +84,28 @@ function generatorLibrary(generator: string): LpcLibrary {
   };
 }
 
-function main(): void {
-  const root = resolve(import.meta.dirname, "../..");
-  const home = resolve(process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir());
-  const paths = defaultArtPaths(root, home);
-  const generator = join(paths.d97ArtLibraryDir, "ulpc-generator");
-  const outDir = paths.d97CharactersDir;
+function writeJson(outDir: string, name: string, value: unknown): void {
+  const temporary = join(outDir, `.${name}.tmp`);
+  writeFileSync(temporary, `${JSON.stringify(value)}\n`);
+  renameSync(temporary, join(outDir, name));
+}
+
+/** What one linking pass did, for its report. */
+export interface LinkCharactersResult {
+  readonly linked: number;
+  /** Null when no credits were written (no library or no CREDITS.csv). */
+  readonly credits: { readonly sheets: number; readonly unmatched: readonly string[]; readonly authors: number } | null;
+}
+
+/**
+ * Resolve `recipes` against the generator checkout at `generator`, link their
+ * sheets under `outDir/sheets/` and write `outDir/manifest.json` and, when
+ * the generator has its CREDITS.csv, `outDir/credits.json`.
+ */
+export function linkCharacters(generator: string, outDir: string, recipes: readonly CharacterSprite[]): LinkCharactersResult {
   const sheetsDir = join(outDir, "sheets");
   rmSync(sheetsDir, { recursive: true, force: true });
+  rmSync(join(outDir, "credits.json"), { force: true });
   mkdirSync(sheetsDir, { recursive: true });
 
   const characters: Partial<Record<D97CharacterId, ManifestCharacter>> = {};
@@ -93,8 +115,10 @@ function main(): void {
   }
   const library = available ? generatorLibrary(generator) : null;
   let linked = 0;
+  const used = new Set<string>();
   /** Link `sheet` (spritesheets-relative) and return its served URL. */
   const link = (sheet: string): string => {
+    used.add(sheet);
     const target = join(sheetsDir, sheet);
     if (!existsSync(target)) {
       mkdirSync(dirname(target), { recursive: true });
@@ -103,7 +127,7 @@ function main(): void {
     }
     return `${CHARACTER_SHEETS_PATH}${relative(sheetsDir, target).split("\\").join("/")}`;
   };
-  for (const recipe of RECIPES) {
+  for (const recipe of recipes) {
     if (library === null) {
       characters[recipe.id] = { layers: [], missing: ["no character generator library"] };
       continue;
@@ -120,10 +144,32 @@ function main(): void {
     };
   }
   const manifest: CharacterManifest = { format: CHARACTER_MANIFEST_FORMAT, characters };
-  const temporary = join(outDir, ".manifest.json.tmp");
-  writeFileSync(temporary, `${JSON.stringify(manifest)}\n`);
-  renameSync(temporary, join(outDir, "manifest.json"));
-  console.log(`Resolved ${String(RECIPES.length)} D97 character recipes; linked ${String(linked)} sheets`);
+  writeJson(outDir, "manifest.json", manifest);
+
+  const csvPath = join(generator, "CREDITS.csv");
+  if (!available) return { linked, credits: null };
+  if (!existsSync(csvPath)) {
+    console.warn(`  Warning: ${csvPath} not found; the D97 credits list the generator's contributors in summary`);
+    return { linked, credits: null };
+  }
+  const credits = creditsForSheets(parseCreditsCsv(readFileSync(csvPath, "utf8")), used);
+  for (const sheet of credits.unmatched) console.warn(`  Warning: no CREDITS.csv row credits D97 character sheet ${sheet}`);
+  writeJson(outDir, "credits.json", credits);
+  return { linked, credits: { sheets: credits.sheets, unmatched: credits.unmatched, authors: credits.authors.length } };
 }
 
-main();
+function main(): void {
+  const root = resolve(import.meta.dirname, "../..");
+  const home = resolve(process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir());
+  const paths = defaultArtPaths(root, home);
+  const result = linkCharacters(join(paths.d97ArtLibraryDir, CHARACTER_GENERATOR_DIRECTORY), paths.d97CharactersDir, RECIPES);
+  console.log(`Resolved ${String(RECIPES.length)} D97 character recipes; linked ${String(result.linked)} sheets`);
+  if (result.credits !== null) {
+    const { sheets, unmatched, authors } = result.credits;
+    console.log(
+      `Credited ${String(sheets - unmatched.length)} of ${String(sheets)} D97 character sheets (${String(unmatched.length)} without a CREDITS.csv row) to ${String(authors)} authors`,
+    );
+  }
+}
+
+if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
