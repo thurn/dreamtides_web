@@ -4,7 +4,6 @@
 // validators read them from here.
 
 import type { D97MapTuning } from "../../d97/map/tuning";
-import { parseDreamMapId } from "../../types/identifiers";
 
 export const D97_MAP_TUNING: D97MapTuning = {
   walkingSpeedTilesPerSecond: 4,
@@ -18,9 +17,4 @@ export const D97_MAP_TUNING: D97MapTuning = {
   minPathWidthTiles: 2,
   mainRouteMinWidthTiles: 3,
   maxDetourRatio: 1.6,
-  layoutAllowlist: [
-    // The first dream predates the compact sizes and the starting town. PT.2
-    // (hv-j1n2.68) rebuilds it around its well square and removes this entry.
-    parseDreamMapId("3229d6c7-0700-4f37-9b07-921e3dccb8b6"),
-  ],
 };

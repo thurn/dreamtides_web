@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import type { CompiledAnchor } from "./compiled";
 import type { DreamMapNarrowCrossing, TilePoint } from "./definition";
 import type { DreamMapTown } from "./layout";
-import { compiledFromRows, FIXTURE_MAP_ID, FIXTURE_TUNING, ROW_ANCHORS } from "./map-fixtures";
+import { compiledFromRows, FIXTURE_TUNING, ROW_ANCHORS } from "./map-fixtures";
 import {
   validateAnchorsReachable,
   validateAnchorsWalkable,
@@ -364,20 +364,5 @@ describe("the layout rules (P13, P33)", () => {
   it("skips the town rules on a map no dream plays", () => {
     const anchors = CLEAN.map((entry) => (entry.id === ROW_ANCHORS.challenger ? { ...entry, at: [4, 4] as const } : entry));
     expect(validateDreamMap(compiledFromRows(FIELD, anchors), TUNING)).toEqual([]);
-  });
-
-  it("downgrades an allowlisted map's layout findings to allowlisted warnings", () => {
-    const allowlisted = { ...TUNING, layoutAllowlist: [FIXTURE_MAP_ID] };
-    const findings = validate(
-      FIELD,
-      [TOWN_DOOR, anchor(ROW_ANCHORS.challenger, "challenger", [19, 8]), door(ROW_ANCHORS.doorC, [0, 0], [1, 1])],
-      [],
-      allowlisted,
-    );
-    // Door spacing is no layout rule: it stays an error.
-    expect(findings).toEqual([
-      expect.objectContaining({ rule: "door-spacing", severity: "error" }),
-      expect.objectContaining({ rule: "reach", severity: "warning", allowlisted: true }),
-    ]);
   });
 });

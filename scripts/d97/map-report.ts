@@ -326,8 +326,7 @@ export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning, context: 
 
 /** One validator finding as a line. */
 export function formatFinding(finding: DreamMapFinding): string {
-  const allowlisted = "allowlisted" in finding && finding.allowlisted ? " (allowlisted)" : "";
-  const head = `${finding.severity}${allowlisted} ${finding.rule}`;
+  const head = `${finding.severity} ${finding.rule}`;
   const cells = (tiles: readonly TilePoint[]) => tiles.map(at).join(" ");
   switch (finding.rule) {
     case "anchor-walkable":

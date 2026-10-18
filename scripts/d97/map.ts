@@ -223,12 +223,8 @@ async function validate(parsed: Parsed): Promise<number> {
       narrowCrossings: loaded.definition.narrowCrossings ?? [],
     });
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
-    const allowlisted = findings.filter((finding) => "allowlisted" in finding && finding.allowlisted).length;
     errors += errorCount;
-    console.log(
-      `${loaded.argument}: ${String(errorCount)} errors, ${String(findings.length - errorCount)} warnings` +
-        (allowlisted === 0 ? "" : ` (${String(allowlisted)} allowlisted layout findings)`),
-    );
+    console.log(`${loaded.argument}: ${String(errorCount)} errors, ${String(findings.length - errorCount)} warnings`);
     if (town === undefined) {
       console.log(
         `  ${isRoomMap(loaded.map) ? "a room" : "no dream plays this map"}: no town, so the town, path-width, detour and reach rules do not run`,

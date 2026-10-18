@@ -1,10 +1,12 @@
 // Where the player appears in a dream (Appendix B §B17): returning from a
 // battle, beside the opponent they fought; otherwise, as on a reload, at the
 // entry point of the last door they stepped through or beside the last
-// waypoint they used, else at the entry of the dream's first door, or failing
-// that the walkable tile nearest the map's center. Inside a room the last
-// door is the room's own (decision P19), so a reload stands the player at its
-// entry.
+// waypoint they used. A run that has not travelled yet arrives at the entry
+// of its dream's arrival door, the town door (decision P33). When the
+// arrival names no anchor on the map, the player stands at the entry of the
+// map's first door, or failing that on the walkable tile nearest the map's
+// center. Inside a room the last door is the room's own (decision P19), so a
+// reload stands the player at its entry.
 
 import { isWalkable, type CompiledAnchor, type CompiledDreamMap, type WalkabilityGrid } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
@@ -26,6 +28,18 @@ export function arrivalFor(run: Pick<D97Run, "returnAnchorId" | "lastPlace">, re
   if (returningFromBattle && run.returnAnchorId !== null) return { kind: "beside", anchorId: run.returnAnchorId };
   if (run.lastPlace === null) return null;
   return { kind: run.lastPlace.kind === "door" ? "entry" : "beside", anchorId: run.lastPlace.anchorId };
+}
+
+/**
+ * Where a run's player arrives in its dream: the arrival its state names, or
+ * before any door or waypoint, the entry of the dream's arrival door.
+ */
+export function runArrival(
+  run: Pick<D97Run, "returnAnchorId" | "lastPlace">,
+  returningFromBattle: boolean,
+  arrivalDoorAnchorId: DreamAnchorId,
+): OverworldArrival {
+  return arrivalFor(run, returningFromBattle) ?? { kind: "entry", anchorId: arrivalDoorAnchorId };
 }
 
 export function spawnTile(map: CompiledDreamMap, grid: WalkabilityGrid = map): TilePoint {

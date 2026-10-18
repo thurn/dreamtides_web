@@ -8,9 +8,11 @@
 //
 // Two lost-object quests:
 // - The Feast Bell (Reeve Lambert Rook, on the hall steps): find the bell's
-//   tongue in the pine meadow and bring it back. Pays Essence.
-// - The Last Sheaf (Hessa Mott, at the wheat corner): find the harvest maiden
-//   at the north end of the long meadow and bring it back. Pays a card choice.
+//   tongue on the stubble terrace, down the steps off the south road, and
+//   bring it back. Pays Essence.
+// - The Last Sheaf (Hessa Mott, at the square's south corner): find the
+//   harvest maiden in the long grass at the far end of the high field and
+//   bring it back. Pays a card choice.
 //
 // Through-line hooks, all on conditions the schema has:
 // - first meetings: Wenna, the reeve and Cobb each set a "met" flag on the
@@ -54,14 +56,14 @@ const node = parseD97DialogueNodeId;
 // --- anchors ------------------------------------------------------------------
 
 const HALL_STEPS = parseDreamAnchorId("8d202783-1114-45ae-af43-115eb6688d64");
-const WHEAT_CORNER = parseDreamAnchorId("ee1d1483-32ee-414b-98cd-5f3788471b13");
+const SOUTH_CORNER = parseDreamAnchorId("ee1d1483-32ee-414b-98cd-5f3788471b13");
 const BELL_TONGUE_OBJECT = parseDreamAnchorId("f55a21ec-b472-4bb0-9403-3d21d4075340");
 const MAIDEN_OBJECT = parseDreamAnchorId("190788a7-cf67-4903-9a5d-af1ab5607ae3");
 const ARCH_GUARDIAN = parseDreamAnchorId("649daef4-9f8b-4e0e-b3f2-3d2ab91a844d");
-const TERRACES_CHALLENGER = parseDreamAnchorId("3bc16e16-b79f-4d67-8db3-5b99ccb9cdf2");
-const FAR_BANK_CHALLENGER = parseDreamAnchorId("bf1e576a-4b6b-4908-8fd2-3875b360dfd3");
-const STUMP_FIELD_CHALLENGER = parseDreamAnchorId("7a2a2fa2-608f-4f41-81dc-659bf11bd0a2");
-const SOUTH_FIELDS_CHALLENGER = parseDreamAnchorId("720d48ff-863e-4c8f-9354-b1431147d967");
+const HERB_LEDGE_CHALLENGER = parseDreamAnchorId("3bc16e16-b79f-4d67-8db3-5b99ccb9cdf2");
+const SOUTH_ROAD_CHALLENGER = parseDreamAnchorId("bf1e576a-4b6b-4908-8fd2-3875b360dfd3");
+const TERRACE_PINES_CHALLENGER = parseDreamAnchorId("7a2a2fa2-608f-4f41-81dc-659bf11bd0a2");
+const TERRACE_CHALLENGER = parseDreamAnchorId("720d48ff-863e-4c8f-9354-b1431147d967");
 const HIGH_FIELD_CHALLENGER = parseDreamAnchorId("457b0f96-1ecf-473d-bbec-62054dde63ec");
 
 // --- items, flags, quests -----------------------------------------------------
@@ -111,7 +113,7 @@ const FEAST_BELL_QUEST = defineQuest({
       kind: "findObject",
       anchorId: BELL_TONGUE_OBJECT,
       itemId: BELL_TONGUE,
-      description: "Find the bell's tongue in the pine meadow, through the dry hollow, and bring it to the reeve.",
+      description: "Find the bell's tongue on the stubble terrace, down the steps off the south road, and bring it to the reeve.",
     },
   ],
   reward: { kind: "essence" },
@@ -121,8 +123,8 @@ const LAST_SHEAF_QUEST = defineQuest({
   id: LAST_SHEAF,
   kind: "lostObject",
   title: "The Last Sheaf",
-  giverAnchorId: WHEAT_CORNER,
-  turnInAnchorId: WHEAT_CORNER,
+  giverAnchorId: SOUTH_CORNER,
+  turnInAnchorId: SOUTH_CORNER,
   carriedItemIds: [],
   steps: [
     {
@@ -130,7 +132,7 @@ const LAST_SHEAF_QUEST = defineQuest({
       kind: "findObject",
       anchorId: MAIDEN_OBJECT,
       itemId: HARVEST_MAIDEN,
-      description: "Find the harvest maiden at the north end of the long meadow, and carry her back to Hessa.",
+      description: "Find the harvest maiden in the long grass at the far end of the high field, and carry her back to Hessa.",
     },
   ],
   reward: { kind: "cardChoice" },
@@ -229,7 +231,7 @@ const REEVE_DIALOGUE = defineDialogue({
     },
     {
       id: node("cc9a8935-26ed-467d-bf15-cdf6d0264a5f"),
-      lines: ["It's lost its tongue.", "The boys rang it so hard it flew clean over the river. I'm certain of it."],
+      lines: ["It's lost its tongue.", "The boys rang it so hard it flew clean over the roofs. I'm certain of it."],
       choices: [
         { label: "I'll look for it.", effect: { kind: "offerQuest", questId: FEAST_BELL }, next: node("87d06a43-b460-46f2-ae4e-3dbecc6a0c75") },
         { label: "Not now.", next: null },
@@ -237,12 +239,12 @@ const REEVE_DIALOGUE = defineDialogue({
     },
     {
       id: node("87d06a43-b460-46f2-ae4e-3dbecc6a0c75"),
-      lines: ["Good. Try the pine meadow, through the dry hollow.", "Bring it straight to me. Nobody rings that bell but the reeve."],
+      lines: ["Good. Try the stubble terrace, down the steps off the south road.", "Bring it straight to me. Nobody rings that bell but the reeve."],
       choices: [],
     },
     {
       id: node("81c69673-1a5d-491d-87fa-a7be6f5112ce"),
-      lines: ["No tongue yet? The pine meadow, through the dry hollow."],
+      lines: ["No tongue yet? The stubble terrace, down the steps."],
       choices: [],
     },
     {
@@ -284,7 +286,7 @@ const HESSA_DIALOGUE = defineDialogue({
   nodes: [
     {
       id: node("b8cbcaec-aa4b-4c01-8c22-d4f95daaacf7"),
-      lines: ["You're not from the square. Good. They talk too much up there."],
+      lines: ["You're not from round here. Good. The rest of them talk too much."],
       choices: [
         { label: "Why aren't you at the feast?", next: node("76978662-c002-4b58-a7bd-7bbdabb45379") },
         { label: "Goodbye.", next: null },
@@ -303,12 +305,12 @@ const HESSA_DIALOGUE = defineDialogue({
     },
     {
       id: node("27f4958e-6a24-46ec-87e6-588d1bc40b7f"),
-      lines: ["She went north, up the long meadow. Bring her back whole."],
+      lines: ["She went north, over the roofs. Bring her back whole."],
       choices: [],
     },
     {
       id: node("bd393a4e-9499-4cf8-a5cd-88e7e68a1ee0"),
-      lines: ["North end of the long meadow. She'll be caught in the grass."],
+      lines: ["Up the barrel lane, at the far end of the high field.", "She'll be caught in the long grass."],
       choices: [],
     },
     {
@@ -409,7 +411,7 @@ const DILLY_DIALOGUE = defineDialogue({
     },
     {
       id: node("5572d94a-0ca7-4868-b62b-044014d61baa"),
-      lines: ["Hessa's maiden? I saw straw fly north.", "All the way up the long meadow."],
+      lines: ["Hessa's maiden? I saw straw fly over.", "Into the long grass, at the far end of the field."],
       choices: [],
     },
     {
@@ -484,16 +486,16 @@ const COBB_DIALOGUE = defineDialogue({
       id: node("4c3b5065-6dfa-4f0d-9517-33b4abd462db"),
       lines: [
         "That's you counted. Same tally as ever, somehow.",
-        "There's the fords downriver, and the plank bridge past the creek row.",
-        "And the meadow behind the pines. Nobody crosses to that one.",
+        "There's the steps down to the stubble terrace, and the barrel lane up the hill.",
+        "And the ledge past the arch, where the herb-woman sits. Nobody counts that one.",
       ],
       choices: [],
     },
     {
       id: node("1e08121a-991f-4924-a985-ff10ff4d03ec"),
       lines: [
-        "The pine meadow? Over the fords, along the creek row, through the south fields.",
-        "Then the dry hollow. I've not counted anyone that way in a long while.",
+        "The bell's tongue? It came over the roofs and down past me.",
+        "Down the steps, to the stubble terrace. I counted it, but nobody went after it.",
       ],
       choices: [],
     },
@@ -603,7 +605,7 @@ const GARROW_DIALOGUE = opponentDialogue({
   id: parseD97DialogueId("a141e172-6b7c-4e26-9f43-c6e3b6ac98ca"),
   name: "Garrow",
   kind: "challenger",
-  anchorId: FAR_BANK_CHALLENGER,
+  anchorId: SOUTH_ROAD_CHALLENGER,
   greetId: node("8fbb7d05-b1b9-47d9-b389-c80c0b9a14cf"),
   beatenId: node("3439431f-e02d-471e-b4f4-b9d3251e43cc"),
   greeting: ["One, two. One, two. That's how a floor gets threshed.", "Fancy a hand? Keep the beat if you can."],
@@ -616,7 +618,7 @@ const SCARECROW_DIALOGUE = opponentDialogue({
   id: parseD97DialogueId("789835da-d2ce-475b-8139-3812e5093315"),
   name: "The Scarecrow",
   kind: "challenger",
-  anchorId: SOUTH_FIELDS_CHALLENGER,
+  anchorId: TERRACE_CHALLENGER,
   greetId: node("3d8f12a4-3255-4e67-9d40-8e6dad03bee2"),
   beatenId: node("0af75dd1-d7c9-48d5-9dd2-895d255d8d23"),
   greeting: ["…", "Play."],
@@ -642,10 +644,10 @@ const YARROW_DIALOGUE = opponentDialogue({
   id: parseD97DialogueId("b5993bae-424b-43b7-8ff6-ddc42cc7b955"),
   name: "Mother Yarrow",
   kind: "challenger",
-  anchorId: TERRACES_CHALLENGER,
+  anchorId: HERB_LEDGE_CHALLENGER,
   greetId: node("b969ab05-fccc-4ca7-8c64-f02d7f592b45"),
   beatenId: node("82620df5-d691-47e6-87b7-73b301fdc621"),
-  greeting: ["Ha! Another one up the terraces with nowhere to be.", "Sit, sit. Thyme for luck and rue for losing. Which will you get?"],
+  greeting: ["Ha! Another one up on my ledge with nowhere to be.", "Sit, sit. Thyme for luck and rue for losing. Which will you get?"],
   accept: "Let's see.",
   decline: "Not now.",
   beaten: ["Well! The herbs never told me that. How funny."],
@@ -655,7 +657,7 @@ const JORY_DIALOGUE = opponentDialogue({
   id: parseD97DialogueId("6fbef6bc-a6b4-4a4f-a6e5-d802f183513f"),
   name: "Jory Hewitt",
   kind: "challenger",
-  anchorId: STUMP_FIELD_CHALLENGER,
+  anchorId: TERRACE_PINES_CHALLENGER,
   greetId: node("8faec48a-3f83-4f51-828d-fddea3ffac35"),
   beatenId: node("a0a38372-f26d-4695-8191-f0d1484c21ca"),
   greeting: ["I split wood and I play straight.", "You'll get a fair game off me."],

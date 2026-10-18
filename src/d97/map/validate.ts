@@ -8,9 +8,7 @@
 // The **layout rules** (decisions P13 and P33) are the size, town, path
 // width, detour and reach rules. The town, width, detour and reach rules run
 // on a dream's map, whose dream module names its town; a room (P19) or an
-// example map no dream plays has no town. On a map the tuning's
-// `layoutAllowlist` names, every layout finding is a warning marked
-// `allowlisted`.
+// example map no dream plays has no town. Layout findings are errors.
 
 import type { DreamAnchorId } from "../../types/identifiers";
 import { isWalkable, type CompiledAnchor, type CompiledDreamMap } from "./compiled";
@@ -18,8 +16,6 @@ import type { DreamAnchorKind, DreamMapNarrowCrossing, TilePoint } from "./defin
 import { anchorsOnlyThroughCrossing, townDoor, townLayout, type DreamMapTown, type TownLayout } from "./layout";
 import { anchorStandTile, isReached, isRoomMap, mapEntries, reachableCells } from "./routes";
 import { mapSizeClass, type D97MapSize, type D97MapTuning } from "./tuning";
-
-export type DreamMapFindingSeverity = "error" | "warning";
 
 interface AnchorRef {
   readonly anchorId: DreamAnchorId;
@@ -61,11 +57,9 @@ export type DreamMapFinding =
     }
   | LayoutFinding;
 
-/** A finding of the layout rules, which the layout allowlist downgrades. */
+/** A finding of the layout rules. */
 interface LayoutBase {
-  readonly severity: DreamMapFindingSeverity;
-  /** Downgraded to a warning by the tuning's `layoutAllowlist`. */
-  readonly allowlisted: boolean;
+  readonly severity: "error";
 }
 
 type LayoutFinding =
@@ -115,7 +109,7 @@ type LayoutFinding =
     } & AnchorRef &
       LayoutBase);
 
-const LAYOUT = { severity: "error", allowlisted: false } as const;
+const LAYOUT = { severity: "error" } as const;
 
 function anchorRef(anchor: CompiledAnchor): AnchorRef {
   return { anchorId: anchor.id, anchorKind: anchor.kind, at: anchorStandTile(anchor) };
@@ -393,34 +387,14 @@ export interface DreamMapValidationContext {
   readonly narrowCrossings?: readonly DreamMapNarrowCrossing[];
 }
 
-const LAYOUT_RULES: ReadonlySet<DreamMapFinding["rule"]> = new Set([
-  "map-oversize",
-  "town-missing",
-  "town-door-unknown",
-  "town-outside",
-  "town-intrusion",
-  "path-narrow",
-  "crossing-only-route",
-  "detour",
-  "reach",
-]);
-
-/** Whether `finding` comes from a layout rule (size, town, width, detour, reach). */
-function isLayoutFinding(finding: DreamMapFinding): finding is LayoutFinding {
-  return LAYOUT_RULES.has(finding.rule);
-}
-
-/**
- * Every validator rule, in a stable order. On a map the tuning's layout
- * allowlist names, layout findings are allowlisted warnings.
- */
+/** Every validator rule, in a stable order. */
 export function validateDreamMap(
   map: CompiledDreamMap,
   tuning: D97MapTuning,
   context: DreamMapValidationContext = {},
 ): DreamMapFinding[] {
   const { served, town, narrowCrossings = [] } = context;
-  const findings = [
+  return [
     ...validateAnchorsWalkable(map),
     ...validateAnchorsReachable(map),
     ...validateGuardedAnchors(map),
@@ -439,8 +413,4 @@ export function validateDreamMap(
           ]),
     ...(served === undefined ? [] : validateTilesetsServed(map, served)),
   ];
-  if (!tuning.layoutAllowlist.includes(map.id)) return findings;
-  return findings.map((finding) =>
-    isLayoutFinding(finding) ? { ...finding, severity: "warning", allowlisted: true } : finding,
-  );
 }

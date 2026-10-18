@@ -4,14 +4,17 @@
 // are in `../characters/3229d6c7-0700-4f37-9b07-921e3dccb8b6.ts` and their
 // dialogue and quests in `../dialogue/3229d6c7-0700-4f37-9b07-921e3dccb8b6.ts`.
 //
-// The innkeeper keeps the shop in the inn, the dream's one room (decision
-// P19), behind the inn door on the well square; the reeve keeps the hall
-// steps and Hessa the wheat corner; five townsfolk and five challengers fill
-// the valley, and two more townsfolk sit in the inn's tap room.
-// Vaela guards the ember arch, or Tessa when the player is Vaela: an ember of
-// a day that will not end, then a gleaner of its last field. Each appears,
-// speaks and fights as herself. The square's four open friendly anchors stand
-// empty for the friendly characters later assembly places.
+// The well square is the town (decision P33): a run arrives at its town
+// door. The innkeeper keeps the shop in the inn, the dream's one room
+// (decision P19), behind the inn door on the square; the reeve keeps the
+// hall steps and Hessa the square's south corner; three townsfolk stand in
+// the square and two more in the inn's tap room, and two townsfolk and five
+// challengers fill the high ground, the south road and the stubble terrace.
+// Vaela guards the ember arch on the high field, or Tessa when the player is
+// Vaela: an ember of a day that will not end, then a gleaner of its last
+// field. Each appears, speaks and fights as herself. The square's four open
+// friendly anchors stand empty for the friendly characters later assembly
+// places.
 
 import {
   parseAvatarId,
@@ -58,7 +61,7 @@ export default defineDream({
   mapId: parseDreamMapId("3229d6c7-0700-4f37-9b07-921e3dccb8b6"),
   topology: {
     waypointAnchorId: anchor("d01c6e03-c291-4164-a3ec-50393ed0c817"),
-    // The low cave, the map's first door.
+    // The town door, the iron arch in the well square.
     arrivalDoorAnchorId: anchor("c9f6d615-0e4c-465b-a990-7bd30bdb0fc8"),
     // The ember arch and the guardian filling its mouth.
     exitDoorAnchorId: anchor("2ef5689f-f791-402c-9cc6-6e59cf0c5e14"),
@@ -66,10 +69,8 @@ export default defineDream({
     // In front of the inn's bar.
     shopAnchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"),
   },
-  // The town is the well square's cluster. Its door is the arrival door, the
-  // low cave, far from the square: the map predates the starting town, so its
-  // layout findings are allowlisted (src/content/d97/map-tuning.ts) until
-  // PT.2 (hv-j1n2.68) rebuilds it around the square.
+  // The town is the well square's cluster around the town door, which is
+  // also the arrival door.
   town: {
     doorAnchorId: anchor("c9f6d615-0e4c-465b-a990-7bd30bdb0fc8"),
     cluster: "well square",
@@ -97,12 +98,12 @@ export default defineDream({
         ],
       },
     },
-    // The inn's bar, the hall steps and the wheat corner.
+    // The inn's bar, the hall steps and the square's south corner.
     { role: "shop", anchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), characterId: WENNA_ASHDOWN.id, scale: "standard", dialogueId: LINES.wenna },
     { role: "friendly", anchorId: anchor("8d202783-1114-45ae-af43-115eb6688d64"), characterId: LAMBERT_ROOK.id, scale: "standard", dialogueId: LINES.reeve },
     { role: "friendly", anchorId: anchor("ee1d1483-32ee-414b-98cd-5f3788471b13"), characterId: HESSA_MOTT.id, scale: "standard", dialogueId: LINES.hessa },
-    // Townsfolk: the square's east houses, north of the well, the wheat
-    // field's west end, the creek well and the white bridge's west end.
+    // Townsfolk: the square's east houses, north of the well, the high
+    // field, beside the well and the white bridge's head.
     { role: "townsfolk", anchorId: anchor("8b9d34e7-c976-49b2-a995-c22eec88f4ce"), characterId: PELL.id, scale: "standard", dialogueId: LINES.pell },
     { role: "townsfolk", anchorId: anchor("ba3c1bab-018c-4164-988d-67f48de0b423"), characterId: AMBROSE_FINCH.id, scale: "standard", dialogueId: LINES.ambrose },
     { role: "townsfolk", anchorId: anchor("bc4b6a27-abf6-430c-9a5e-23b899945106"), characterId: DILLY_SORREL.id, scale: "standard", dialogueId: LINES.dilly },
@@ -111,7 +112,7 @@ export default defineDream({
     // In the inn's tap room: by the west table, and between the back tables.
     { role: "townsfolk", anchorId: anchor("38e9424d-ba12-45d7-ad0d-e164ed590f70"), characterId: BARNABY_THATCH.id, scale: "standard", dialogueId: LINES.barnaby },
     { role: "townsfolk", anchorId: anchor("aad4297c-5246-4f3f-897a-f0ef14088e36"), characterId: NETTIE_FURROW.id, scale: "standard", dialogueId: LINES.nettie },
-    // Challengers. The terraces: a hedge-witch (Edran's tides).
+    // Challengers. The herb ledge: a hedge-witch (Edran's tides).
     {
       role: "challenger",
       anchorId: anchor("3bc16e16-b79f-4d67-8db3-5b99ccb9cdf2"),
@@ -120,7 +121,7 @@ export default defineDream({
       dialogueId: LINES.yarrow,
       deck: deckOf(parseAvatarId("5e28154d-770a-4b84-8aac-9de44f5d7d02")),
     },
-    // The far bank: a thresher, in step like a phalanx (Demetrios's tides).
+    // The south road: a thresher, in step like a phalanx (Demetrios's tides).
     {
       role: "challenger",
       anchorId: anchor("bf1e576a-4b6b-4908-8fd2-3875b360dfd3"),
@@ -129,7 +130,7 @@ export default defineDream({
       dialogueId: LINES.garrow,
       deck: deckOf(parseAvatarId("2c53b1b9-9291-4bba-8d3a-f40b545c8f3c")),
     },
-    // The stump field: a woodcutter (Grath's tides).
+    // The stubble terrace's pines: a woodcutter (Grath's tides).
     {
       role: "challenger",
       anchorId: anchor("7a2a2fa2-608f-4f41-81dc-659bf11bd0a2"),
@@ -138,7 +139,7 @@ export default defineDream({
       dialogueId: LINES.jory,
       deck: deckOf(parseAvatarId("94e7c651-25e9-4a62-9de4-eaf5ba20542c")),
     },
-    // The south fields: the scarecrow (Vethran's tides).
+    // The stubble terrace: the scarecrow (Vethran's tides).
     {
       role: "challenger",
       anchorId: anchor("720d48ff-863e-4c8f-9354-b1431147d967"),

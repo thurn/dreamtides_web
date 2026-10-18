@@ -14,7 +14,8 @@ import { parseDreamAnchorId } from "../../types/identifiers";
 import { D97_SAVE_MIGRATIONS } from "../save/migrations";
 import { foldSyntheticRun, registerSaveContent, SAVE_GENESIS, SAVE_ROOM } from "../save/save.fixtures";
 import { decodeSnapshot, encodeSnapshot, snapshotFoldState, takeSnapshot, type D97SaveBuild } from "../save/snapshot";
-import { arrivalFor } from "./spawn";
+import { compiledFromRows, ROW_ANCHORS } from "../map/map-fixtures";
+import { arrivalFor, arrivalPlacement, runArrival } from "./spawn";
 
 const OPPONENT = parseDreamAnchorId("d9700000-0000-4000-8000-0000000000c1");
 const DOOR = parseDreamAnchorId("d9700000-0000-4000-8000-0000000000c2");
@@ -31,6 +32,30 @@ describe("arrivalFor", () => {
   it("uses the last waypoint on a reload, and names no place before any door or waypoint", () => {
     expect(arrivalFor({ returnAnchorId: OPPONENT, lastPlace: { kind: "waypoint", anchorId: WAYPOINT, roomId: null } }, false)).toEqual({ kind: "beside", anchorId: WAYPOINT });
     expect(arrivalFor({ returnAnchorId: OPPONENT, lastPlace: null }, false)).toBeNull();
+  });
+});
+
+describe("runArrival", () => {
+  // Two doors: the map's first door at the west end, the dream's arrival
+  // (town) door at the east end.
+  const map = compiledFromRows(
+    ["#########", "#.......#", "#.......#", "#########"],
+    [
+      { id: ROW_ANCHORS.doorA, kind: "door", at: [1, 1], entry: [1, 2] },
+      { id: ROW_ANCHORS.doorB, kind: "door", at: [7, 1], entry: [7, 2] },
+      { id: ROW_ANCHORS.waypoint, kind: "waypoint", at: [4, 1] },
+    ],
+  );
+
+  it("brings a new run in at its dream's arrival door, not the map's first door", () => {
+    const arrival = runArrival({ returnAnchorId: null, lastPlace: null }, false, ROW_ANCHORS.doorB);
+    expect(arrival).toEqual({ kind: "entry", anchorId: ROW_ANCHORS.doorB });
+    expect(arrivalPlacement(map, map.anchors, map, arrival).tile).toEqual([7, 2]);
+  });
+
+  it("keeps the last place a run's state names", () => {
+    const run = { returnAnchorId: null, lastPlace: { kind: "waypoint" as const, anchorId: ROW_ANCHORS.waypoint, roomId: null } };
+    expect(runArrival(run, false, ROW_ANCHORS.doorB)).toEqual({ kind: "beside", anchorId: ROW_ANCHORS.waypoint });
   });
 });
 

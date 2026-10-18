@@ -178,10 +178,9 @@ npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
   door outside), path widths on each anchor's route from the town (narrow
   cells by coordinate, with the map's declared `narrowCrossings` exempt
   unless one is the only route), the detour ratio and the size class's reach
-  maximum. Maps in the tuning's `layoutAllowlist` print their layout
-  findings as allowlisted warnings. On a dream's map a building door must be
-  reached from the doors and waypoint; in a room every anchor must be reached
-  from its building door, and a room has no town.
+  maximum. On a dream's map a building door must be reached from the doors
+  and waypoint; in a room every anchor must be reached from its building
+  door, and a room has no town.
 - **stamps** manages the stamp catalog (`src/content/d97/stamps/`), one
   module per stamp with a UUID, name, theme (building, nature, dungeon,
   desert, winter, japanese, scifi, graveyard, street), footprint, walkability
@@ -232,8 +231,8 @@ wide when a w×w square of walkable cells contains it), the main routes out
 of town (to every other door of the map) and the detour ratio (a walk over
 its |dx| + |dy| open-ground distance) are defined in
 `src/d97/map/layout.ts`. Walking speed, size classes with their reach
-maxima, door spacing, the town radius, path widths, the detour ratio and the
-layout allowlist are in `src/content/d97/map-tuning.ts`. The example map
+maxima, door spacing, the town radius, path widths and the detour ratio are
+in `src/content/d97/map-tuning.ts`. The example map
 `9ad96a1d-4542-4228-a20f-1e4f6e274058` is composed only from brushes and
 stamps; no dream plays it.
 

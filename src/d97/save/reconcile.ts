@@ -8,13 +8,17 @@
 // - a run whose dream was removed moves to the catalog's default dream;
 // - an encounter or shop whose anchor is on no dream's map moves to a free
 //   anchor of the same kind, the run's dream first, or is dropped when none
-//   is free; places on removed anchors are forgotten;
+//   is free; a battle's return anchor and active waypoints on removed anchors
+//   are forgotten;
+// - the last place on a removed anchor, or in a room the dream no longer
+//   has, moves to the run's dream's arrival door, its town door (decision
+//   P33), so the player arrives in town; it is forgotten only when the
+//   dream's arrival door is itself on no map;
 // - anchors inside a dream's rooms (decision P19) are the dream's, so they
-//   resolve, move and are forgotten like any other; the last place follows
-//   its room's door when that door's anchor changed, is forgotten with a room
-//   the dream no longer has, and records the room its anchor stands in now;
-//   the anchor a battle returns the player beside is dropped when it is not
-//   on the last place's map;
+//   resolve and move like any other; the last place follows its room's door
+//   when that door's anchor changed and records the room its anchor stands
+//   in now; the anchor a battle returns the player beside is dropped when it
+//   is not on the last place's map;
 // - a held quest whose definition was removed is abandoned.
 //
 // New tunables need no repair: they apply going forward.
@@ -46,6 +50,8 @@ export interface D97SaveDream {
   readonly id: D97DreamId;
   readonly anchors: readonly D97SaveAnchor[];
   readonly rooms: readonly D97SaveRoom[];
+  /** The door a run that has not travelled arrives at: the dream's town door. */
+  readonly arrivalDoorAnchorId: DreamAnchorId;
 }
 
 /** The current catalog a save reconciles against. */
@@ -84,6 +90,8 @@ class Reconciler {
   private rooms: readonly D97SaveRoom[] = [];
   /** The room each of the run's dream's anchors stands in. */
   private anchorRooms: ReadonlyMap<DreamAnchorId, D97RoomId | null> = new Map();
+  /** The run's dream's arrival door, where a last place on a removed anchor moves. */
+  private arrivalDoorAnchorId: DreamAnchorId | null = null;
 
   constructor(
     private readonly catalog: D97SaveCatalog,
@@ -137,6 +145,7 @@ class Reconciler {
     this.candidates = [...own, ...others].flatMap((dream) => dream.anchors);
     this.rooms = own.flatMap((dream) => dream.rooms);
     this.anchorRooms = new Map(own.flatMap((dream) => dream.anchors.map((anchor) => [anchor.id, anchor.roomId] as const)));
+    this.arrivalDoorAnchorId = own[0]?.arrivalDoorAnchorId ?? null;
     let essence = run.essence;
     const copies = run.collection.copies.flatMap((copy) => {
       const fate = this.fate(copy.cardId);
@@ -217,7 +226,7 @@ class Reconciler {
 
   /**
    * The run's last place: in a room the dream still has, at that room's door;
-   * forgotten with a room it no longer has or an anchor no map holds; in the
+   * at the dream's arrival door when its room or its anchor is gone; in the
    * room its anchor stands in now.
    */
   private lastPlace(place: D97Place | null): D97Place | null {
@@ -227,18 +236,31 @@ class Reconciler {
       const room = this.rooms.find((candidate) => candidate.id === place.roomId);
       if (room === undefined) {
         this.log.push({ kind: "roomRemoved", roomId: place.roomId });
-        this.log.push({ kind: "anchorDropped", where: "lastPlace", anchorId });
-        return null;
+        return this.arrive(anchorId);
       }
       if (room.doorAnchorId !== anchorId) {
         this.log.push({ kind: "anchorMoved", where: "lastPlace", anchorId, toAnchorId: room.doorAnchorId });
         anchorId = room.doorAnchorId;
       }
     }
-    if (this.place(anchorId, "lastPlace") === null) return null;
+    if (!this.known.has(anchorId)) return this.arrive(anchorId);
     const roomId = this.roomOf(anchorId);
     if (roomId !== place.roomId) this.log.push({ kind: "placeRoomChanged", anchorId, roomId: place.roomId, toRoomId: roomId });
     return { ...place, anchorId, roomId };
+  }
+
+  /**
+   * A last place on `anchorId`, which is gone, moved to the run's dream's
+   * arrival door; forgotten when that door is on no map either.
+   */
+  private arrive(anchorId: DreamAnchorId): D97Place | null {
+    const toAnchorId = this.arrivalDoorAnchorId;
+    if (toAnchorId === null || !this.known.has(toAnchorId)) {
+      this.log.push({ kind: "anchorDropped", where: "lastPlace", anchorId });
+      return null;
+    }
+    this.log.push({ kind: "anchorMoved", where: "lastPlace", anchorId, toAnchorId });
+    return { kind: "door", anchorId: toAnchorId, roomId: this.roomOf(toAnchorId) };
   }
 
   /** The anchor a battle returns the player beside: dropped when removed or off the last place's map. */

@@ -265,7 +265,6 @@ export const FIXTURE_TUNING: D97MapTuning = {
   minPathWidthTiles: 2,
   mainRouteMinWidthTiles: 3,
   maxDetourRatio: 1.6,
-  layoutAllowlist: [],
 };
 
 /** Anchor ids for maps built by `compiledFromRows`. */

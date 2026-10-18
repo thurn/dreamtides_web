@@ -5,7 +5,7 @@
 import { useMemo, useState } from "react";
 import type { D97DreamTopology } from "../../../content/d97/dreams/schema";
 import type { VeilVariant } from "../../../d97/overworld/dream-veil";
-import { arrivalFor, type OverworldArrival } from "../../../d97/overworld/spawn";
+import { runArrival, type OverworldArrival } from "../../../d97/overworld/spawn";
 import type { D97Run } from "../../../rules/d97/d97-state";
 import type { DreamAnchorId, DreamMapId } from "../../../types/identifiers";
 import { buildD97DoorVeils } from "./d97-overworld-view-model";
@@ -28,7 +28,7 @@ export function useD97Travel(args: {
   // another map (through a building door, at the door's entry), not on every
   // event. A run that has not travelled yet arrives through its dream's
   // arrival door.
-  const place = (): OverworldArrival => arrivalFor(run, returningFromBattle) ?? { kind: "entry", anchorId: dream.arrivalDoorAnchorId };
+  const place = (): OverworldArrival => runArrival(run, returningFromBattle, dream.arrivalDoorAnchorId);
   const [placed, setPlaced] = useState(() => ({ mapId, arrival: place() }));
   if (placed.mapId !== mapId) setPlaced({ mapId, arrival: place() });
   const arrival = placed.mapId === mapId ? placed.arrival : place();

@@ -1,11 +1,8 @@
 // The shape of the D97 map tunables (decisions P13 and P33): walking speed,
 // the compact map size classes with their reach maxima, door spacing, the
-// town radius, path widths and the detour ratio, and the maps whose layout
-// findings are allowlisted. The values live in the catalog
+// town radius, path widths and the detour ratio. The values live in the catalog
 // (`src/content/d97/map-tuning.ts`); the map tools and validators take them
 // as input.
-
-import type { DreamMapId } from "../../types/identifiers";
 
 export type D97MapSize = "small" | "medium" | "large";
 
@@ -40,12 +37,6 @@ export interface D97MapTuning {
    * open-ground distance (see `townLayout` in `./layout`).
    */
   readonly maxDetourRatio: number;
-  /**
-   * Maps whose layout findings (size, town, path width, detour and reach)
-   * are reported as allowlisted warnings instead of errors. A comment beside
-   * each entry names the bead that removes it.
-   */
-  readonly layoutAllowlist: readonly DreamMapId[];
 }
 
 /**
