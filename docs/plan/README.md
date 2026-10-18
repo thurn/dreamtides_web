@@ -214,6 +214,17 @@ dreamtides_web. Execute docs/plan/README.md as one of its executor sessions,
 without pausing for approval. Promotion of in-scope plan work is authorized.
 ```
 
+For an AI-only session, which claims only the Phase 7 build and tuning beads
+in stream `ai` ([D46](decisions.md#d46-lean-phase-5-gate-and-early-ai-build)),
+start with:
+
+```text
+/executor dreamtides_web --stream ai — continuous mode is explicitly
+authorized for stream ai of project dreamtides_web. Execute the Phase 7 AI
+work of docs/plan/README.md as one of its executor sessions, without pausing
+for approval. Promotion of in-scope plan work is authorized.
+```
+
 (In Codex, invoke the `executor` skill with the same text.) A new session
 claims the next ready bead. When nothing is ready while other sessions still
 hold work, it retains a silent 65-minute `hive executor await` using Hive's

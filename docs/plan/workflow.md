@@ -40,8 +40,12 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
   `--stream` and select with `hive executor ready`, which shows only beads
   without `hive_stream`. The Dreamtides 97 plan runs beside it in stream `d97`
   ([its README](../dreamtides-97/plan/README.md)); never claim or edit a
-  `d97` bead. The streams share Tollgate, so the `ci-fix` search under
-  [Staged mode](#staged-mode) covers both streams.
+  `d97` bead. This plan's Phase 7 build and tuning beads run in stream `ai`
+  ([D46](decisions.md#d46-lean-phase-5-gate-and-early-ai-build)): sessions
+  started with `--stream ai` follow this plan and claim only those beads, and
+  beads they file carry `hive_stream=ai`. Default-stream sessions never claim
+  an `ai` bead. The streams share Tollgate, so the `ci-fix` search under
+  [Staged mode](#staged-mode) covers every stream.
 - **Continuous mode is explicitly authorized.** Each session claims the next
   ready bead as soon as its previous one lands, until the Phase 7 epic closes
   or the operator drains it ([Starting, scaling, and
@@ -1073,7 +1077,7 @@ Candidates submitted after the switch follow staged mode.
   the latest release run failed:
   1. For each failing step, check for an unfinished `ci-fix`
      [shared-duty bead](#shared-duty-beads) keyed `release_step=<step>`, in
-     either stream (search by project, not by stream). If one exists, another
+     any stream (search by project, not by stream). If one exists, another
      session owns the repair: append the run's ID to its notes and continue.
   2. Otherwise diagnose it yourself with `tg diagnose`: the failing steps,
      the tested OID, and the range since the last green `release`.

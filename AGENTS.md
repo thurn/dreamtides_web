@@ -15,8 +15,14 @@ are split into Hive streams:
   [docs/dreamtides-97/plan/README.md](docs/dreamtides-97/plan/README.md), with
   its own binding decisions and workflow beside it. Its sessions start with
   `--stream d97` and see only beads with `hive_stream=d97`.
+- **The main plan's AI work**, in stream `ai`: the Phase 7 build and tuning
+  beads of [docs/plan/phase-7-ai.md](docs/plan/phase-7-ai.md) (decision D46).
+  Its sessions start with `--stream ai`, follow the main plan and its
+  workflow, and see only beads with `hive_stream=ai`. Beads they file carry
+  `hive_stream=ai`. Phase 7 final acceptance (7.10), the report (7.11) and
+  the Phase 7 epic stay in the default stream.
 
-A session follows the plan of its stream and never claims the other stream's
+A session follows the plan of its stream and never claims another stream's
 beads. Where this file cites a `docs/plan/` workflow section, the
 pre-existing-issues path or decision D16, a D97 session uses the D97 plan's
 workflow, `docs/dreamtides-97/plan/evidence/pre-existing/<bead-id>.md` and
