@@ -26,7 +26,7 @@ import type { D97OwnedCopyId, DreamAnchorId } from "../../types/identifiers";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
 import type { D97Transition } from "./d97-run";
-import type { D97Run, D97Shop, D97ShopSlot, D97State } from "./d97-state";
+import type { D97OverworldState, D97Run, D97Shop, D97ShopSlot } from "./d97-state";
 import type { D97RunInput } from "./events/spec";
 
 /** A shop case's payload names the dream's shop anchor. */
@@ -45,7 +45,7 @@ function shopContext(
   return { run, anchorId, content };
 }
 
-function withShop(d97: D97State, run: D97Run, anchorId: DreamAnchorId, shop: D97Shop, changes: Partial<D97Run>, logRecords: readonly ReducerLogRecord[]): D97Transition {
+function withShop(d97: D97OverworldState, run: D97Run, anchorId: DreamAnchorId, shop: D97Shop, changes: Partial<D97Run>, logRecords: readonly ReducerLogRecord[]): D97Transition {
   return { d97: { ...d97, run: { ...run, ...changes, shops: { ...run.shops, [anchorId]: shop } } }, logRecords };
 }
 

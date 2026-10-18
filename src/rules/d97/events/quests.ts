@@ -46,14 +46,14 @@ const flagAtAnchor = payloadOf({ flagId: d97FlagIdFromUnknown, value: booleanFro
 const serviceAtAnchor = payloadOf({ anchorId: dreamAnchorIdFromUnknown, service: serviceFromUnknown });
 
 export const QUEST_EVENTS = {
-  D97_ACCEPT_QUEST: d97Event({ phase: "run", parse: questAtAnchor, fold: acceptQuest }),
-  D97_ADVANCE_QUEST: d97Event({ phase: "run", parse: stepAtAnchor, fold: advanceQuest }),
-  D97_COMPLETE_QUEST: d97Event({ phase: "run", parse: questAtAnchor, fold: completeQuest }),
-  D97_CHOOSE_QUEST_REWARD: d97Event({ phase: "run", parse: rewardPick, fold: chooseQuestReward }),
-  D97_ABANDON_QUEST: d97Event({ phase: "run", parse: questPayload, fold: abandonQuest }),
-  D97_PICK_UP_OBJECT: d97Event({ phase: "run", parse: anchorPayload, fold: pickUpObject }),
-  D97_GIVE_ITEM: d97Event({ phase: "run", parse: itemAtAnchor, fold: giveItem }),
-  D97_TAKE_ITEM: d97Event({ phase: "run", parse: itemAtAnchor, fold: takeItem }),
-  D97_SET_FLAG: d97Event({ phase: "run", parse: flagAtAnchor, fold: setFlag }),
-  D97_OPEN_SERVICE: d97Event({ phase: "run", parse: serviceAtAnchor, fold: handOff }),
+  D97_ACCEPT_QUEST: d97Event({ phase: "overworld", parse: questAtAnchor, fold: acceptQuest }),
+  D97_ADVANCE_QUEST: d97Event({ phase: "overworld", parse: stepAtAnchor, fold: advanceQuest }),
+  D97_COMPLETE_QUEST: d97Event({ phase: "overworld", parse: questAtAnchor, fold: completeQuest }),
+  D97_CHOOSE_QUEST_REWARD: d97Event({ phase: "overworld", parse: rewardPick, fold: chooseQuestReward }),
+  D97_ABANDON_QUEST: d97Event({ phase: "overworld", parse: questPayload, fold: abandonQuest }),
+  D97_PICK_UP_OBJECT: d97Event({ phase: "overworld", parse: anchorPayload, fold: pickUpObject }),
+  D97_GIVE_ITEM: d97Event({ phase: "overworld", parse: itemAtAnchor, fold: giveItem }),
+  D97_TAKE_ITEM: d97Event({ phase: "overworld", parse: itemAtAnchor, fold: takeItem }),
+  D97_SET_FLAG: d97Event({ phase: "overworld", parse: flagAtAnchor, fold: setFlag }),
+  D97_OPEN_SERVICE: d97Event({ phase: "overworld", parse: serviceAtAnchor, fold: handOff }),
 };

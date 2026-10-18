@@ -31,7 +31,6 @@ import {
   type DreamAnchorId,
 } from "../../types/identifiers";
 import { engineBattleResult, startEngineBattleWithCommits } from "../battle/engine-battle";
-import { d97BattleOf } from "../battle/fold";
 import { getBattleInitProvider } from "../battle/journey-battle";
 import type { FoldState } from "../fold-state";
 import { advanceDefeatQuest } from "./d97-quests";
@@ -39,7 +38,7 @@ import { bagDrawLogRecord, type D97Transition } from "./d97-run";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
 import { d97RunAct, type D97Encounter, type D97Run } from "./d97-state";
-import type { D97RunInput } from "./events/spec";
+import type { D97BattleInput, D97RunInput } from "./events/spec";
 
 /** An encounter case's payload: the challenger's or guardian's anchor. */
 type EncounterPayload = { readonly anchorId: DreamAnchorId };
@@ -283,14 +282,11 @@ export function beginEncounterBattle(
  * anchor.
  */
 export function endEncounterBattle(
-  state: FoldState,
+  { state, d97, run, battle }: D97BattleInput,
   ctx: EventContext,
 ): D97FoldTransition | null {
-  const d97 = state.d97;
-  const run = d97?.run ?? null;
-  const battle = d97BattleOf(state.battle);
   const content = d97ContentProvider();
-  if (d97 === undefined || run === null || battle === null || content === null) return null;
+  if (content === null) return null;
   const result = engineBattleResult(battle);
   if (result === null) return null;
   const { anchorId, tier, role, playerAnteCopyId, opponentAnteCardId } = battle.init;

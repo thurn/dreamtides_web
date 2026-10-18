@@ -23,6 +23,7 @@ import { syntheticD97Content } from "./d97-content.fixtures";
 import { registerDream, runDreamAnchor } from "./d97-dreams";
 import { speakingResident, syntheticDream, syntheticDreamAnchor } from "./d97-dreams.fixtures";
 import type { D97Encounter, D97Run } from "./d97-state";
+import { withD97Run } from "./d97-state.fixtures";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-dreams-avatar");
@@ -67,7 +68,7 @@ function startedInA(): FoldState {
     [DREAM_A.topology.exitGuardianAnchorId]: beaten(DREAM_A.topology.exitGuardianAnchorId),
     [DREAM_B.topology.exitGuardianAnchorId]: beaten(DREAM_B.topology.exitGuardianAnchorId),
   };
-  return { ...result.state, d97: { ...result.state.d97!, run: { ...run, encounters } } };
+  return withD97Run(result.state, { ...run, encounters });
 }
 
 /** Each scoped intent at `dream`'s anchors. */

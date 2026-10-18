@@ -15,7 +15,7 @@ import { ENCOUNTER_EVENTS } from "./encounters";
 import { QUEST_EVENTS } from "./quests";
 import { RUN_EVENTS } from "./run";
 import { SHOP_EVENTS } from "./shop";
-import { D97_PHASES, type D97Outcome, type D97Phase, type D97SelectInput } from "./spec";
+import { d97PhaseInput, type D97Outcome, type D97Phase, type D97PhaseInputs } from "./spec";
 import { TRAVEL_EVENTS } from "./travel";
 
 /** Every D97 event's spec, by event type. */
@@ -48,7 +48,7 @@ export type D97Intent = {
 interface ErasedSpec {
   readonly phase: D97Phase;
   readonly parse: (raw: Record<string, unknown>) => Record<string, unknown> | null;
-  readonly fold: (input: D97SelectInput, payload: Record<string, unknown>, ctx: EventContext) => D97Outcome | null;
+  readonly fold: (input: D97PhaseInputs[D97Phase], payload: Record<string, unknown>, ctx: EventContext) => D97Outcome | null;
   readonly intentKey?: (payload: Record<string, unknown>) => IntentKey;
 }
 
@@ -73,7 +73,7 @@ export function foldD97Event(
   ctx: EventContext,
 ): D97FoldTransition | null {
   const spec = specOf(type);
-  const input = state.d97 === undefined ? null : D97_PHASES[spec.phase](state, state.d97);
+  const input = d97PhaseInput(spec.phase, state);
   const payload = input === null ? null : spec.parse(raw);
   const outcome = input === null || payload === null ? null : spec.fold(input, payload, ctx);
   if (outcome === null) return null;

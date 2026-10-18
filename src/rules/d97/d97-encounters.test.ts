@@ -29,6 +29,8 @@ import {
   resolvePlayerAnte,
 } from "./d97-encounters";
 import type { D97Run } from "./d97-state";
+import { d97PhaseInput } from "./events/spec";
+import { withD97Run } from "./d97-state.fixtures";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-encounter-avatar");
@@ -47,9 +49,7 @@ function runOf(state: FoldState): D97Run {
 }
 
 function withRun(state: FoldState, edit: (run: D97Run) => D97Run): FoldState {
-  const d97 = state.d97;
-  if (d97 === undefined) throw new Error("no D97 slice");
-  return { ...state, d97: { ...d97, run: edit(runOf(state)) } };
+  return withD97Run(state, edit(runOf(state)));
 }
 
 function started(): FoldState {
@@ -93,7 +93,9 @@ function finished(state: FoldState, anchorId: DreamAnchorId, winner: "player" | 
 }
 
 function end(state: FoldState) {
-  const transition = endEncounterBattle(state, ctx({ seq: 9, rng: eventRng(D97_GENESIS.seed, 9) }));
+  const input = d97PhaseInput("inBattle", state);
+  if (input === null) throw new Error("not in a D97 battle");
+  const transition = endEncounterBattle(input, ctx({ seq: 9, rng: eventRng(D97_GENESIS.seed, 9) }));
   if (transition === null) throw new Error("end bounced");
   return transition;
 }

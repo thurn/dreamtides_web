@@ -9,57 +9,69 @@
 
 import type { EventContext } from "../../../eventlog/types";
 import type { IntentKey } from "../../../types/identifiers";
+import { d97BattleOf, type D97BattleFoldState } from "../../battle/fold";
 import type { FoldState } from "../../fold-state";
 import type { D97FoldTransition } from "../d97-encounters";
 import type { D97Transition } from "../d97-run";
-import type { D97Run, D97State } from "../d97-state";
+import { isD97Overworld, type D97AvatarSelectState, type D97OverworldState, type D97Run } from "../d97-state";
 
 /**
- * Where in a D97 game an event folds. The dispatcher checks it before the
- * payload parses; an event outside its phase bounces.
+ * Where in a D97 game an event folds, checked once by the dispatcher before
+ * the payload parses; an event outside its phase bounces. The slice end is
+ * no event's phase: every intent bounces there.
  *
  * - `avatarSelect`: no run yet, on Avatar select.
- * - `run`: a started run, on any screen.
- * - `overworld`: a started run on the overworld screen.
- * - `noBattle`: a started run with no battle running.
- * - `battle`: a started run with its D97 battle running.
+ * - `overworld`: a started run on the overworld, with no battle running.
+ * - `inBattle`: a started run's D97 battle running, from the overworld.
  */
-export type D97Phase = "avatarSelect" | "run" | "overworld" | "noBattle" | "battle";
+export type D97Phase = "avatarSelect" | "overworld" | "inBattle";
 
-/** What a fold sees before any run starts. */
+/** What an Avatar select fold sees. */
 export interface D97SelectInput {
   readonly state: FoldState;
-  readonly d97: D97State;
+  readonly d97: D97AvatarSelectState;
 }
 
-/** What a fold sees once its run has started. */
-export interface D97RunInput extends D97SelectInput {
+/** What an overworld fold sees: the run, out of battle. */
+export interface D97RunInput {
+  readonly state: FoldState;
+  readonly d97: D97OverworldState;
   readonly run: D97Run;
+}
+
+/** What an in-battle fold sees: the run and its D97 battle. */
+export interface D97BattleInput extends D97RunInput {
+  readonly battle: D97BattleFoldState;
 }
 
 /** The fold input each phase guarantees. */
 export interface D97PhaseInputs {
   readonly avatarSelect: D97SelectInput;
-  readonly run: D97RunInput;
   readonly overworld: D97RunInput;
-  readonly noBattle: D97RunInput;
-  readonly battle: D97RunInput;
-}
-
-function runInput(state: FoldState, d97: D97State): D97RunInput | null {
-  return d97.run === null ? null : { state, d97, run: d97.run };
+  readonly inBattle: D97BattleInput;
 }
 
 /** Each phase's check: the fold input when `state` is in it, or null. */
-export const D97_PHASES: {
-  readonly [Phase in D97Phase]: (state: FoldState, d97: D97State) => D97PhaseInputs[Phase] | null;
-} = {
-  avatarSelect: (state, d97) => (d97.run === null && d97.screen.type === "avatarSelect" ? { state, d97 } : null),
-  run: runInput,
-  overworld: (state, d97) => (d97.screen.type === "overworld" ? runInput(state, d97) : null),
-  noBattle: (state, d97) => (state.battle === null ? runInput(state, d97) : null),
-  battle: (state, d97) => (state.battle?.mode.kind === "d97" ? runInput(state, d97) : null),
+const D97_PHASES: { readonly [Phase in D97Phase]: (state: FoldState) => D97PhaseInputs[Phase] | null } = {
+  avatarSelect: (state) => {
+    const d97 = state.d97;
+    return d97 === undefined || d97.run !== null || state.battle !== null ? null : { state, d97 };
+  },
+  overworld: (state) => {
+    const d97 = state.d97;
+    return d97 === undefined || !isD97Overworld(d97) || state.battle !== null ? null : { state, d97, run: d97.run };
+  },
+  inBattle: (state) => {
+    const d97 = state.d97;
+    const battle = d97BattleOf(state.battle);
+    return d97 === undefined || !isD97Overworld(d97) || battle === null ? null : { state, d97, run: d97.run, battle };
+  },
 };
+
+/** The fold input when `state` is in `phase`, or null when it is not. */
+export function d97PhaseInput<Phase extends D97Phase>(phase: Phase, state: FoldState): D97PhaseInputs[Phase] | null {
+  return D97_PHASES[phase](state);
+}
 
 /** A D97 fold's applied result: a new D97 slice, or a whole new fold state. */
 export type D97Outcome = D97Transition | D97FoldTransition;

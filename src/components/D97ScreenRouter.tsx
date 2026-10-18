@@ -15,6 +15,7 @@ import type { QaSceneId } from "../types/identifiers";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { d97BattleOf } from "../rules/battle/fold";
+import { isD97Overworld } from "../rules/d97/d97-state";
 
 /** The path a D97 game shows in the address bar. */
 const D97_PATHNAME = "/d97";
@@ -79,17 +80,17 @@ export function D97ScreenRouter({
   const content =
     showingBattle ? (
       <PlayableBattleScreen />
-    ) : d97.screen.type === "overworld" && d97.run !== null ? (
+    ) : d97.run === null ? (
+      <D97AvatarSelectScreenAdapter journeyContent={journeyContent} />
+    ) : isD97Overworld(d97) ? (
       <D97OverworldScreenAdapter
         run={d97.run}
         journeyContent={journeyContent}
         initialDeckEditorOpen={opensDeckEditor}
         returningFromBattle={returningFromBattle}
       />
-    ) : d97.screen.type === "sliceEnd" && d97.run !== null ? (
-      <D97SliceEndScreenAdapter run={d97.run} avatars={journeyContent.avatars} />
     ) : (
-      <D97AvatarSelectScreenAdapter journeyContent={journeyContent} />
+      <D97SliceEndScreenAdapter run={d97.run} avatars={journeyContent.avatars} />
     );
   return (
     <ErrorBoundary scope={`screen:d97:${battle === null ? d97.screen.type : "battle"}`} resetKey={battle === null ? d97.screen.type : battle.init.battleId}>

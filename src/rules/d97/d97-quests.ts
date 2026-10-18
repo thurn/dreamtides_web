@@ -39,7 +39,7 @@ import type {
 import { d97ContentProvider } from "./d97-content";
 import { runDreamAnchor } from "./d97-dreams";
 import { bagDrawLogRecord, type D97Transition } from "./d97-run";
-import { d97BeatenAnchorIds, d97RunAct, type D97Run, type D97State } from "./d97-state";
+import { d97BeatenAnchorIds, d97RunAct, type D97OverworldState, type D97Run } from "./d97-state";
 import type { D97RunInput } from "./events/spec";
 
 /**
@@ -52,7 +52,7 @@ function speakerOffers(run: D97Run, anchorId: DreamAnchorId, effect: D97Dialogue
   return module !== null && dialogueCarriesEffect(module, effect);
 }
 
-function withRun(d97: D97State, run: D97Run, logRecords: readonly ReducerLogRecord[]): D97Transition {
+function withRun(d97: D97OverworldState, run: D97Run, logRecords: readonly ReducerLogRecord[]): D97Transition {
   return { d97: { ...d97, run }, logRecords };
 }
 

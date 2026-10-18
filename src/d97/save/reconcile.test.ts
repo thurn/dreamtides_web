@@ -37,7 +37,9 @@ const ANCHORS: { id: DreamAnchorId; kind: DreamAnchorKind }[] = [
 function snapshot(edit: (run: D97Run) => D97Run = (run) => run): D97Snapshot {
   const { state, seq } = foldSyntheticRun();
   const base = takeSnapshot(state, seq, [], BUILD)!;
-  return { ...base, d97: { ...base.d97, run: edit(base.d97.run!) } };
+  const d97 = base.d97;
+  if (d97.run === null) throw new Error("no D97 run");
+  return { ...base, d97: { ...d97, run: edit(d97.run) } };
 }
 
 function catalog(retired: ReadonlySet<CardId> = new Set(), overrides: Partial<D97SaveCatalog> = {}): D97SaveCatalog {
@@ -70,7 +72,7 @@ describe("reconcileSnapshot", () => {
     const run = save.d97.run!;
     const retired = run.collection.copies[0].cardId;
     const replacement = run.bag.entries.find((entry) => entry.cardId !== retired)!.cardId;
-    const withEncounter = { ...save, d97: { ...save.d97, run: { ...run, encounters: { [CHALLENGER]: encounter(CHALLENGER, [retired]) } } } };
+    const withEncounter = snapshot((edited) => ({ ...edited, encounters: { [CHALLENGER]: encounter(CHALLENGER, [retired]) } }));
     const result = reconcileSnapshot(withEncounter, catalog(new Set([retired])), { ...TUNING, retirements: [{ cardId: retired, replacementId: replacement }] });
     const next = result.snapshot.d97.run!;
     expect(next.collection.copies.some((copy) => copy.cardId === retired)).toBe(false);
@@ -86,7 +88,7 @@ describe("reconcileSnapshot", () => {
     const run = save.d97.run!;
     const retired = run.collection.copies[0].cardId;
     const owned = run.collection.copies.filter((copy) => copy.cardId === retired).length;
-    const withEncounter = { ...save, d97: { ...save.d97, run: { ...run, encounters: { [CHALLENGER]: encounter(CHALLENGER, [retired]) } } } };
+    const withEncounter = snapshot((edited) => ({ ...edited, encounters: { [CHALLENGER]: encounter(CHALLENGER, [retired]) } }));
     const result = reconcileSnapshot(withEncounter, catalog(new Set([retired])), TUNING);
     const next = result.snapshot.d97.run!;
     expect(next.collection.copies.length).toBe(run.collection.copies.length - owned);

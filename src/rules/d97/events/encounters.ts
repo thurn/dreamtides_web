@@ -9,16 +9,16 @@ const anchorPayload = payloadOf({ anchorId: dreamAnchorIdFromUnknown });
 export const ENCOUNTER_EVENTS = {
   // An encounter is fixed once: repeated first previews share its key.
   D97_PREVIEW_ENCOUNTER: d97Event({
-    phase: "noBattle",
+    phase: "overworld",
     parse: anchorPayload,
     fold: previewEncounter,
     intentKey: ({ anchorId }) => parseIntentKey(`d97-preview:${anchorId}`),
   }),
-  D97_DECLINE_ENCOUNTER: d97Event({ phase: "run", parse: anchorPayload, fold: declineEncounter }),
-  D97_BEGIN_BATTLE: d97Event({ phase: "noBattle", parse: anchorPayload, fold: beginEncounterBattle }),
+  D97_DECLINE_ENCOUNTER: d97Event({ phase: "overworld", parse: anchorPayload, fold: declineEncounter }),
+  D97_BEGIN_BATTLE: d97Event({ phase: "overworld", parse: anchorPayload, fold: beginEncounterBattle }),
   D97_END_BATTLE: d97Event({
-    phase: "battle",
+    phase: "inBattle",
     parse: (): Record<string, never> => ({}),
-    fold: ({ state }, _payload, ctx) => endEncounterBattle(state, ctx),
+    fold: (input, _payload, ctx) => endEncounterBattle(input, ctx),
   }),
 };

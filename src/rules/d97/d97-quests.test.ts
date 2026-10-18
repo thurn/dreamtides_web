@@ -42,6 +42,7 @@ import { registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
 import { speakingResident, syntheticDream, syntheticDreamAnchor } from "./d97-dreams.fixtures";
 import { d97RunAct, type D97Run } from "./d97-state";
+import { withD97Run } from "./d97-state.fixtures";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-quest-avatar");
@@ -117,9 +118,7 @@ function runOf(state: FoldState): D97Run {
 }
 
 function withRun(state: FoldState, change: (run: D97Run) => D97Run): FoldState {
-  const d97 = state.d97;
-  if (d97 === undefined) throw new Error("no D97 slice");
-  return { ...state, d97: { ...d97, run: change(runOf(state)) } };
+  return withD97Run(state, change(runOf(state)));
 }
 
 function started(): FoldState {

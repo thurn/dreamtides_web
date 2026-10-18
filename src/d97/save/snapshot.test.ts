@@ -5,7 +5,9 @@
 // decode under the current migrations, version 1 to 2 dropping encounters'
 // head starts (shown on the exported milestone save, whose encounters carry them); and the golden save of the current version has exactly the
 // shape a run folded today writes (so a change to the persisted shape must
-// bump the schema version and ship a migration, P5).
+// bump the schema version and ship a migration, P5), re-encoding to its own
+// JSON through the live phase union, which refuses a screen and run that
+// disagree.
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -57,6 +59,17 @@ describe("D97 snapshots", () => {
     expect(decodeSnapshot(JSON.stringify({ ...raw, d97: null }), D97_SAVE_MIGRATIONS)).toBeNull();
   });
 
+  it("reject a save whose screen and run disagree", () => {
+    const { state, seq } = foldSyntheticRun();
+    const raw = JSON.parse(encodeSnapshot(takeSnapshot(state, seq, [], BUILD)!)) as { d97: { run: unknown } };
+    const withScreen = (type: string, run: unknown) => JSON.stringify({ ...raw, d97: { screen: { type }, run } });
+    expect(decodeSnapshot(withScreen("overworld", raw.d97.run), D97_SAVE_MIGRATIONS)).not.toBeNull();
+    expect(decodeSnapshot(withScreen("avatarSelect", null), D97_SAVE_MIGRATIONS)).not.toBeNull();
+    expect(decodeSnapshot(withScreen("avatarSelect", raw.d97.run), D97_SAVE_MIGRATIONS)).toBeNull();
+    expect(decodeSnapshot(withScreen("overworld", null), D97_SAVE_MIGRATIONS)).toBeNull();
+    expect(decodeSnapshot(withScreen("sliceEnd", null), D97_SAVE_MIGRATIONS)).toBeNull();
+  });
+
   describe("the frozen golden schema-version-1 save", () => {
     const raw = readFileSync(new URL("./fixtures/d97-save-v1.json", import.meta.url), "utf8").replace(/\r\n/gu, "\n");
 
@@ -95,6 +108,11 @@ describe("D97 snapshots", () => {
       const { state, seq } = foldSyntheticRun();
       const current = JSON.parse(encodeSnapshot(takeSnapshot(state, seq, [], BUILD)!)) as unknown;
       expect(shapeOf(current)).toEqual(shapeOf(JSON.parse(raw)));
+    });
+
+    it("re-encodes to its own JSON through the live state", () => {
+      const decoded = decodeSnapshot(raw, D97_SAVE_MIGRATIONS);
+      expect(encodeSnapshot(decoded!.snapshot)).toBe(JSON.stringify(JSON.parse(raw)));
     });
   });
 });

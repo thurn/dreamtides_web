@@ -23,6 +23,7 @@ import { syntheticD97Content } from "./d97-content.fixtures";
 import { SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B } from "./d97-dreams.fixtures";
 import { shopSaleQuote } from "./d97-shop";
 import type { D97Run, D97Shop } from "./d97-state";
+import { withD97Run } from "./d97-state.fixtures";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-shop-avatar");
@@ -53,7 +54,7 @@ function shopOf(state: FoldState): D97Shop {
 }
 
 function withRun(state: FoldState, edit: (run: D97Run) => D97Run): FoldState {
-  return { ...state, d97: { ...state.d97!, run: edit(runOf(state)) } };
+  return withD97Run(state, edit(runOf(state)));
 }
 
 function opened(): FoldState {

@@ -24,13 +24,6 @@ import type {
   DreamsignId,
 } from "../../types/identifiers";
 
-/** The D97 screen the run currently shows. */
-export type D97Screen =
-  | { readonly type: "avatarSelect" }
-  | { readonly type: "overworld" }
-  /** The end of the M1 slice, reached through the exit door. */
-  | { readonly type: "sliceEnd" };
-
 /**
  * The last door the player stepped through or waypoint they used, whichever
  * was later (Appendix B §B17): a reload places the player there.
@@ -152,11 +145,35 @@ export function d97BeatenAnchorIds(run: D97Run): DreamAnchorId[] {
   );
 }
 
-/** Everything a D97 game folds beyond the shared fold-state fields. */
-export interface D97State {
-  readonly screen: D97Screen;
-  /** Null until `D97_START_RUN` applies. */
-  readonly run: D97Run | null;
+/** Avatar select: no run has started. */
+export interface D97AvatarSelectState {
+  readonly screen: { readonly type: "avatarSelect" };
+  readonly run: null;
+}
+
+/** The overworld of a started run, with or without its battle running. */
+export interface D97OverworldState {
+  readonly screen: { readonly type: "overworld" };
+  readonly run: D97Run;
+}
+
+/** The end of the M1 slice, reached through the exit door: no event folds here. */
+export interface D97SliceEndState {
+  readonly screen: { readonly type: "sliceEnd" };
+  readonly run: D97Run;
+}
+
+/**
+ * Everything a D97 game folds beyond the shared fold-state fields: the phase
+ * of the game, with the run present exactly where one has started.
+ * `run === null` tells Avatar select from the run's phases; `screen.type`
+ * names the phase, and {@link isD97Overworld} narrows to the overworld.
+ */
+export type D97State = D97AvatarSelectState | D97OverworldState | D97SliceEndState;
+
+/** Whether `d97` is on a started run's overworld. */
+export function isD97Overworld(d97: D97State): d97 is D97OverworldState {
+  return d97.screen.type === "overworld";
 }
 
 /** The slice a new D97 game starts with: Avatar select, no run. */

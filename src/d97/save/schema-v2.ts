@@ -1,10 +1,10 @@
 // The persisted D97 save, schema version 2 (decision P5), written out in full.
 //
 // This module never imports the live run types: the persisted shape is its
-// own contract. A compile-time tie below requires the live `D97State` to be
-// exactly `D97StateV2`, so a change to the live state that is not also a
-// schema change fails type checking; the fix is the next schema module, a
-// migration and a golden fixture, never an edit here.
+// own contract. The converters in ./snapshot.ts tie the live state to it at
+// compile time, so a change to the live state that is not also a schema
+// change fails type checking; the fix is the next schema module, a migration
+// and a golden fixture, never an edit here.
 //
 // `parseSnapshotV2` validates an untrusted, already-migrated snapshot field by
 // field, branded identities included, and returns null for anything that
@@ -13,7 +13,6 @@
 // a D97 battle envelope and otherwise kept as written.
 
 import type { D97BattleFoldState } from "../../rules/battle/fold";
-import type { D97State } from "../../rules/d97/d97-state";
 import { cardIdFromUnknown, type CardId } from "../../types/card-identity";
 import { buildGitRevisionFromUnknown, type BuildGitRevision } from "../../types/build-identity";
 import {
@@ -160,18 +159,6 @@ export interface D97SnapshotV2 {
   readonly d97: D97StateV2;
   readonly battle: D97BattleFoldState | null;
 }
-
-// --- The live-state tie -----------------------------------------------------------
-
-/** True only when `A` and `B` are the same type. */
-type Exact<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
-
-/**
- * Fails type checking when the live D97 state stops being exactly schema v2:
- * a persisted-shape change needs the next schema version and a migration.
- */
-const LIVE_STATE_IS_V2: Exact<D97State, D97StateV2> = true;
-void LIVE_STATE_IS_V2;
 
 // --- The parser ---------------------------------------------------------------------
 

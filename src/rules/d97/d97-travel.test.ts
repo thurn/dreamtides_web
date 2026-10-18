@@ -17,6 +17,7 @@ import { registerD97ContentProvider } from "./d97-content";
 import { syntheticD97Content } from "./d97-content.fixtures";
 import { SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B } from "./d97-dreams.fixtures";
 import type { D97Encounter, D97Run } from "./d97-state";
+import { withD97Run } from "./d97-state.fixtures";
 
 const D97_GENESIS: Genesis = { ...GENESIS, mode: "d97" };
 const AVATAR = testAvatarId("d97-travel-avatar");
@@ -42,7 +43,7 @@ function withGuardian(dream: D97DreamDefinition, state: FoldState, beaten: boole
   const run = runOf(state);
   const anchorId = dream.topology.exitGuardianAnchorId;
   const encounter = { anchorId, role: "guardian", beaten } as D97Encounter;
-  return { ...state, d97: { ...state.d97!, run: { ...run, encounters: { ...run.encounters, [anchorId]: encounter } } } };
+  return withD97Run(state, { ...run, encounters: { ...run.encounters, [anchorId]: encounter } });
 }
 
 beforeEach(() => {
@@ -63,10 +64,10 @@ describe.each([SYNTHETIC_DREAM_A, SYNTHETIC_DREAM_B].map((dream) => [dream.id, d
     it("activates the waypoint once and makes every touch the reload place", () => {
       // A waypoint not yet touched: the start dream's own is active from the start.
       const begun = started();
-      const state = { ...begun, d97: { ...begun.d97!, run: { ...runOf(begun), activeWaypointIds: [] } } };
+      const state = withD97Run(begun, { ...runOf(begun), activeWaypointIds: [] });
       expect(runOf(state).lastPlace).toBeNull();
       const anchorId = topology.waypointAnchorId;
-      const first = apply({ ...state, d97: { ...state.d97, run: { ...runOf(state), returnAnchorId: topology.exitGuardianAnchorId } } }, "D97_ACTIVATE_WAYPOINT", { anchorId }, 2);
+      const first = apply(withD97Run(state, { ...runOf(state), returnAnchorId: topology.exitGuardianAnchorId }), "D97_ACTIVATE_WAYPOINT", { anchorId }, 2);
       expect(first.outcome).toBe("applied");
       expect(runOf(first.state).activeWaypointIds).toEqual([anchorId]);
       expect(runOf(first.state).lastPlace).toEqual({ kind: "waypoint", anchorId });
