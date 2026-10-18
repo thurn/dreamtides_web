@@ -349,6 +349,8 @@ export function formatFinding(finding: DreamMapFinding): string {
       return `${head}: tileset ${finding.tileset} draws ${finding.image}, which workspace preparation does not serve`;
     case "map-oversize":
       return `${head}: the map's longer side is ${String(finding.side)} tiles, over the largest class's ${String(finding.maxSide)}`;
+    case "size-class":
+      return `${head}: the map's longer side is ${String(finding.side)} tiles, a ${finding.derived} map, but its dream declares ${finding.declared}`;
     case "town-missing":
       return `${head}: the map's dream names no town door and cluster`;
     case "town-door-unknown":

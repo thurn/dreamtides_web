@@ -111,6 +111,8 @@ export type LpcSheetKey = DomainIdentity<"LpcSheetKey">;
 export type D97DreamId = DomainIdentity<"D97DreamId">;
 /** One room of a D97 dream: a small interior map behind a building door (a UUID). */
 export type D97RoomId = DomainIdentity<"D97RoomId">;
+/** One D97 tileset: an art set dreams are drawn in, with its category (a UUID). */
+export type D97TilesetId = DomainIdentity<"D97TilesetId">;
 /** One authored Dreamtides 97 dream map. */
 export type DreamMapId = DomainIdentity<"DreamMapId">;
 /** One anchor (door, waypoint, shop, NPC spot…) on a D97 dream map. */
@@ -206,6 +208,7 @@ const brandD97CharacterId = identityConstructor<D97CharacterId>();
 const brandLpcSheetKey = identityConstructor<LpcSheetKey>();
 const brandD97DreamId = identityConstructor<D97DreamId>();
 const brandD97RoomId = identityConstructor<D97RoomId>();
+const brandD97TilesetId = identityConstructor<D97TilesetId>();
 const brandDreamMapId = identityConstructor<DreamMapId>();
 const brandDreamAnchorId = identityConstructor<DreamAnchorId>();
 const brandDreamMapSourceHash = identityConstructor<DreamMapSourceHash>();
@@ -424,6 +427,12 @@ export const parseD97DreamId = identityParser(
 export const parseD97RoomId = identityParser(
   "D97 room id",
   brandD97RoomId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
+export const parseD97TilesetId = identityParser(
+  "D97 tileset id",
+  brandD97TilesetId,
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );

@@ -165,6 +165,23 @@ describe("room reachability (P19)", () => {
     const room = compiledFromRows(["#.#", "#.#"], [buildingDoor(ROW_ANCHORS.doorC, [1, 1], [1, 0])]);
     const tiny = { ...TUNING, sizeClasses: [{ ...TUNING.sizeClasses[0], maxSide: 1 }] };
     expect(validateMapSize(room, tiny)).toEqual([]);
+    expect(validateMapSize(room, TUNING, "large")).toEqual([]);
+  });
+
+  it("reports a dream map outside the size class its dream declares", () => {
+    const map = compiledFromRows(["....", "...."], [door(ROW_ANCHORS.doorA, [0, 0], [1, 0])]);
+    const classes = {
+      ...TUNING,
+      sizeClasses: [
+        { ...TUNING.sizeClasses[0], size: "small" as const, maxSide: 3 },
+        { ...TUNING.sizeClasses[0], size: "medium" as const, maxSide: 8 },
+      ],
+    };
+    expect(validateMapSize(map, classes, "medium")).toEqual([]);
+    expect(validateMapSize(map, classes)).toEqual([]);
+    expect(validateMapSize(map, classes, "small")).toEqual([
+      expect.objectContaining({ rule: "size-class", declared: "small", derived: "medium", side: 4 }),
+    ]);
   });
 });
 

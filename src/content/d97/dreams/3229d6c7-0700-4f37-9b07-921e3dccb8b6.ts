@@ -15,13 +15,21 @@
 // field. Each appears, speaks and fights as herself. The square's four open
 // friendly anchors stand empty for the friendly characters later assembly
 // places.
+//
+// A medium dream in the meadow tileset (`./tilesets.ts`). Its five
+// challengers' looks are its personas, and its two quests are the brief's
+// lost-object hooks: the reeve's feast bell and Hessa's last sheaf, each
+// given and turned in by its giver.
 
 import {
   parseAvatarId,
   parseD97CharacterId,
   type AvatarId,
   parseD97DreamId,
+  parseD97QuestId,
+  parseD97QuestStepId,
   parseD97RoomId,
+  parseD97TilesetId,
   parseDreamAnchorId,
   parseDreamMapId,
 } from "../../../types/identifiers";
@@ -43,7 +51,7 @@ import {
   WIDOW_MARRABLE,
 } from "../characters/3229d6c7-0700-4f37-9b07-921e3dccb8b6";
 import { FIRST_DREAM_DIALOGUES as LINES } from "../dialogue/3229d6c7-0700-4f37-9b07-921e3dccb8b6";
-import { defineDream } from "./schema";
+import { defineCatalogDream } from "./schema";
 
 const anchor = parseDreamAnchorId;
 
@@ -53,12 +61,21 @@ const TESSA = parseAvatarId("ba973428-6d90-4847-b779-cb7e25a5ac84");
 const VAELA_CHARACTER = parseD97CharacterId("e12f93c6-8033-4b31-b6e7-402eedfe566c");
 const TESSA_CHARACTER = parseD97CharacterId("f045208d-0eb8-4c96-96f4-632deec4d161");
 
+/** The meadow (`./tilesets.ts`). */
+const MEADOW = parseD97TilesetId("bcdfb114-3804-45a7-831f-ac4db852bf8c");
+
+/** The hall steps and the square's south corner: the quest givers' anchors. */
+const HALL_STEPS = anchor("8d202783-1114-45ae-af43-115eb6688d64");
+const SOUTH_CORNER = anchor("ee1d1483-32ee-414b-98cd-5f3788471b13");
+
 /** A generic challenger's deck, built from its deck source Avatar's tide set. */
 const deckOf = (deckSourceAvatarId: AvatarId) => ({ kind: "generic", deckSourceAvatarId }) as const;
 
-export default defineDream({
+export default defineCatalogDream({
   id: parseD97DreamId("3229d6c7-0700-4f37-9b07-921e3dccb8b6"),
   mapId: parseDreamMapId("3229d6c7-0700-4f37-9b07-921e3dccb8b6"),
+  size: "medium",
+  tilesetId: MEADOW,
   topology: {
     waypointAnchorId: anchor("d01c6e03-c291-4164-a3ec-50393ed0c817"),
     // The town door, the iron arch in the well square.
@@ -100,8 +117,8 @@ export default defineDream({
     },
     // The inn's bar, the hall steps and the square's south corner.
     { role: "shop", anchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"), characterId: WENNA_ASHDOWN.id, scale: "standard", dialogueId: LINES.wenna },
-    { role: "friendly", anchorId: anchor("8d202783-1114-45ae-af43-115eb6688d64"), characterId: LAMBERT_ROOK.id, scale: "standard", dialogueId: LINES.reeve },
-    { role: "friendly", anchorId: anchor("ee1d1483-32ee-414b-98cd-5f3788471b13"), characterId: HESSA_MOTT.id, scale: "standard", dialogueId: LINES.hessa },
+    { role: "friendly", anchorId: HALL_STEPS, characterId: LAMBERT_ROOK.id, scale: "standard", dialogueId: LINES.reeve },
+    { role: "friendly", anchorId: SOUTH_CORNER, characterId: HESSA_MOTT.id, scale: "standard", dialogueId: LINES.hessa },
     // Townsfolk: the square's east houses, north of the well, the high
     // field, beside the well and the white bridge's head.
     { role: "townsfolk", anchorId: anchor("8b9d34e7-c976-49b2-a995-c22eec88f4ce"), characterId: PELL.id, scale: "standard", dialogueId: LINES.pell },
@@ -156,6 +173,41 @@ export default defineDream({
       scale: "standard",
       dialogueId: LINES.oswin,
       deck: deckOf(parseAvatarId("c72cfd7b-408b-47f6-adf1-1e486a7e20d3")),
+    },
+  ],
+  // The brief's challenger personas: the threshers, the scarecrow, the tithe
+  // clerk, the hedge-witches and the woodcutters.
+  personas: [
+    { characterId: GARROW_THRESHER.id, dialogueId: LINES.garrow },
+    { characterId: THE_SCARECROW.id, dialogueId: LINES.scarecrow },
+    { characterId: OSWIN_MARL.id, dialogueId: LINES.oswin },
+    { characterId: MOTHER_YARROW.id, dialogueId: LINES.yarrow },
+    { characterId: JORY_HEWITT.id, dialogueId: LINES.jory },
+  ],
+  quests: [
+    // The Feast Bell: the reeve's bell tongue, on the stubble terrace.
+    {
+      questId: parseD97QuestId("80b95705-22a5-4c93-a4b4-a1ba7aff87f9"),
+      roles: [
+        { role: "giver", anchorId: HALL_STEPS },
+        {
+          role: "step",
+          stepId: parseD97QuestStepId("347ec7a2-55ae-44e5-856e-f7a7eb1d2602"),
+          anchorId: anchor("f55a21ec-b472-4bb0-9403-3d21d4075340"),
+        },
+      ],
+    },
+    // The Last Sheaf: Hessa's harvest maiden, at the high field's far end.
+    {
+      questId: parseD97QuestId("64a57069-4c54-4dbb-9d4b-45b095cf9276"),
+      roles: [
+        { role: "giver", anchorId: SOUTH_CORNER },
+        {
+          role: "step",
+          stepId: parseD97QuestStepId("3a64b251-9a15-4ae2-9afd-d1eada2af014"),
+          anchorId: anchor("190788a7-cf67-4903-9a5d-af1ab5607ae3"),
+        },
+      ],
     },
   ],
 });

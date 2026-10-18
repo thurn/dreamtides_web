@@ -26,12 +26,24 @@
 // radius, path width, detour and reach rules around it, and reports a dream
 // map whose dream names no town.
 //
+// A catalog dream (`D97CatalogDream`, Appendix B §B2) is a dream module with
+// what act assembly reads: its size class, its tileset (`./tilesets.ts`,
+// which gives its category), its town (required), the personas its generic
+// challengers may take, and its quests, each with the roles the dream's
+// anchors play in it. Its brief, `<dream-uuid>.md`, sits beside it. The
+// development dream (`./development.ts`) and synthetic fixtures are plain
+// dream modules (`D97DreamDefinition`), which the rules play alike. The
+// catalog validator (src/d97/dreams/validate.ts) checks every catalog dream
+// against its maps, the character, dialogue, quest, Avatar and tileset
+// catalogs and the briefs; `npm run d97:dialogue -- validate` runs it.
+//
 // A dream may own rooms (decision P19): small interior maps, each a map
 // module of its own, joined to the dream's map by a pair of building doors.
 // A room belongs to its dream: its anchors are the dream's, its residents are
 // listed with the dream's, the dream's shop may stand in one, and it shares
 // the dream's waypoint and tier.
 
+import type { D97MapSize } from "../../../d97/map/tuning";
 import type { BadgeKind } from "../../../d97/overworld/characters/badges";
 import type { OccupantScale } from "../../../d97/overworld/occupants";
 import type {
@@ -39,7 +51,10 @@ import type {
   D97CharacterId,
   D97DialogueId,
   D97DreamId,
+  D97QuestId,
+  D97QuestStepId,
   D97RoomId,
+  D97TilesetId,
   DreamAnchorId,
   DreamMapId,
 } from "../../../types/identifiers";
@@ -148,12 +163,62 @@ export interface D97DreamDefinition {
   /** The dream's map module (`src/content/d97/maps/`). */
   readonly mapId: DreamMapId;
   readonly topology: D97DreamTopology;
-  /** The dream's town; the map validator reports a dream map without one. */
+  /**
+   * The dream's town; every catalog dream names one (`D97CatalogDream`), and
+   * the map validator reports a dream map without one.
+   */
   readonly town?: D97DreamTown;
   /** The dream's rooms, each behind one building door of its map. */
   readonly rooms: readonly D97DreamRoom[];
   /** At most one resident per anchor, on the dream's map or in a room; an anchor without one stays empty. */
   readonly residents: readonly D97DreamResident[];
+}
+
+/**
+ * A look a generic challenger placed in this dream may take (Appendix B
+ * §B7): its character recipe, which gives its sprite, and the challenger
+ * dialogue it speaks, whose speaker gives its name.
+ */
+export interface D97DreamPersona {
+  readonly characterId: D97CharacterId;
+  readonly dialogueId?: D97DialogueId;
+}
+
+/**
+ * The part an anchor of the dream plays in one of its quests (Appendix B
+ * §B15): the giver who offers it, the turn-in character when that is not the
+ * giver, or the target of one of its steps. A quest names each role once.
+ */
+export type D97QuestRole =
+  | { readonly role: "giver"; readonly anchorId: DreamAnchorId }
+  | { readonly role: "turnIn"; readonly anchorId: DreamAnchorId }
+  | { readonly role: "step"; readonly stepId: D97QuestStepId; readonly anchorId: DreamAnchorId };
+
+/**
+ * One of the dream's quests (`../dialogue/`), with the role each of its
+ * anchors plays: the giver, the turn-in when it is not the giver's, and
+ * every step's target.
+ */
+export interface D97DreamQuest {
+  readonly questId: D97QuestId;
+  readonly roles: readonly D97QuestRole[];
+}
+
+/**
+ * A catalog dream (Appendix B §B2): a dream module with its size class, its
+ * tileset, its town, its generic challenger personas and its 1–3 quests.
+ * Dreams are unnamed (decision P10); a tileset's label is internal.
+ */
+export interface D97CatalogDream extends D97DreamDefinition {
+  /** The size class (decision P13), which bounds its challenger and guardian anchors. */
+  readonly size: D97MapSize;
+  /** Its tileset (`./tilesets.ts`); the dream's category is the tileset's. */
+  readonly tilesetId: D97TilesetId;
+  readonly town: D97DreamTown;
+  /** The looks generic challengers placed here take, suited to the tileset. */
+  readonly personas: readonly D97DreamPersona[];
+  /** The dream's quests, each listed by exactly one catalog dream. */
+  readonly quests: readonly D97DreamQuest[];
 }
 
 /**
@@ -206,8 +271,13 @@ export function residentLooks(resident: D97DreamResident): readonly D97ResidentL
   return [{ characterId: resident.characterId, dialogueId: resident.dialogueId ?? null, portrays: null }];
 }
 
-/** Declare a dream module. */
+/** Declare a dream module outside the catalog: the development dream or a fixture. */
 export function defineDream(dream: D97DreamDefinition): D97DreamDefinition {
+  return dream;
+}
+
+/** Declare a catalog dream module. */
+export function defineCatalogDream(dream: D97CatalogDream): D97CatalogDream {
   return dream;
 }
 

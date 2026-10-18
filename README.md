@@ -171,8 +171,9 @@ npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
   behind guardians) reachable while their guardian stands, doors closer than
   the minimum spacing, tilesets whose images workspace preparation does not
   serve (the art manifest's `served` subtrees), and the layout rules
-  (decisions P13 and P33): a map wider than the largest size class; and on a
-  dream's map, around the town its dream module names, the town radius (the
+  (decisions P13 and P33): a map wider than the largest size class; on a
+  dream's map, a longer side outside the size class its dream module
+  declares; and around the town its dream module names, the town radius (the
   waypoint, shop or the building door to its room, quest givers and town
   cluster inside; challengers, guardians, chests, quest objects and the exit
   door outside), path widths on each anchor's route from the town (narrow
@@ -201,6 +202,15 @@ npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
   covers: the theme's base fill and cover (`themes.ts`), a winding path
   between two doors, a pond, up to three of the theme's stamps and a
   reseason. It compiles and validates as written; edit it from there.
+
+`npm run d97:dialogue -- validate` checks the dialogue modules, quests and
+items against the maps' anchors, and the dream catalog
+(`src/content/d97/dreams/`) with the catalog validator
+(`src/d97/dreams/validate.ts`): each catalog dream's brief beside its
+module, its maps, tileset, size class anchor counts, topology, town,
+rooms, residents, personas and quest roles, against the map, character,
+dialogue, quest, Avatar and tileset catalogs. It prints each finding with
+its code and exits 1 on any.
 
 `npm run d97:pools` curates the pinned reward pools
 (`src/content/d97/pools/`, Appendix A §A2): it chooses each Avatar's tide set

@@ -65,6 +65,13 @@ interface LayoutBase {
 type LayoutFinding =
   /** The map's longer side exceeds the largest size class's. */
   | ({ readonly rule: "map-oversize"; readonly side: number; readonly maxSide: number } & LayoutBase)
+  /** The map's longer side puts it in another size class than its dream module declares. */
+  | ({
+      readonly rule: "size-class";
+      readonly declared: D97MapSize;
+      readonly derived: D97MapSize;
+      readonly side: number;
+    } & LayoutBase)
   /** The map's dream names no town. */
   | ({ readonly rule: "town-missing" } & LayoutBase)
   /** The dream's town door is not a door anchor on the map. */
@@ -209,14 +216,17 @@ export function validateDoorSpacing(map: CompiledDreamMap, tuning: D97MapTuning)
 }
 
 /**
- * A map's longer side is at most the largest size class's `maxSide` (P13).
+ * A map's longer side is at most the largest size class's `maxSide` (P13),
+ * and puts the map in the size class its dream module declares, if given.
  * A room is no dream map and has no size class.
  */
-export function validateMapSize(map: CompiledDreamMap, tuning: D97MapTuning): DreamMapFinding[] {
+export function validateMapSize(map: CompiledDreamMap, tuning: D97MapTuning, declared?: D97MapSize): DreamMapFinding[] {
   if (isRoomMap(map)) return [];
   const side = Math.max(map.width, map.height);
   const maxSide = Math.max(...tuning.sizeClasses.map((entry) => entry.maxSide));
-  return side > maxSide ? [{ rule: "map-oversize", ...LAYOUT, side, maxSide }] : [];
+  if (side > maxSide) return [{ rule: "map-oversize", ...LAYOUT, side, maxSide }];
+  const derived = mapSizeClass(tuning, map).size;
+  return declared === undefined || declared === derived ? [] : [{ rule: "size-class", ...LAYOUT, declared, derived, side }];
 }
 
 /** The town rules' layout, or the finding that stops them. */
@@ -385,6 +395,8 @@ export interface DreamMapValidationContext {
   readonly town?: DreamMapTown | null;
   /** The map definition's narrow crossings. */
   readonly narrowCrossings?: readonly DreamMapNarrowCrossing[];
+  /** The size class the map's dream module declares; enables the size-class rule. */
+  readonly size?: D97MapSize;
 }
 
 /** Every validator rule, in a stable order. */
@@ -393,13 +405,13 @@ export function validateDreamMap(
   tuning: D97MapTuning,
   context: DreamMapValidationContext = {},
 ): DreamMapFinding[] {
-  const { served, town, narrowCrossings = [] } = context;
+  const { served, town, narrowCrossings = [], size } = context;
   return [
     ...validateAnchorsWalkable(map),
     ...validateAnchorsReachable(map),
     ...validateGuardedAnchors(map),
     ...validateDoorSpacing(map, tuning),
-    ...validateMapSize(map, tuning),
+    ...validateMapSize(map, tuning, size),
     ...(town === undefined
       ? []
       : town === null || townDoor(map, town) === null

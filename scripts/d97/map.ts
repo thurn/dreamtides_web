@@ -217,10 +217,12 @@ async function validate(parsed: Parsed): Promise<number> {
       continue;
     }
     const town = mapTown(loaded);
+    const size = D97_DREAMS.find((dream) => dream.mapId === loaded.definition.id)?.size;
     const findings = validateDreamMap(loaded.map, D97_MAP_TUNING, {
       served: servedArtPrefixes(),
       ...(town === undefined ? {} : { town }),
       narrowCrossings: loaded.definition.narrowCrossings ?? [],
+      ...(size === undefined ? {} : { size }),
     });
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
     errors += errorCount;
