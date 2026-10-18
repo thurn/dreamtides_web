@@ -3,7 +3,7 @@
 // object layers, a group layer, a tile object and a flipped tile), its TMJ twin, and the
 // assets (a stamp and an LPC-layout terrain) recipes place. For the map tools'
 // tests, `compiledFromRows` builds a compiled map straight from rows of
-// walkability characters.
+// walkability characters, and `FIXTURE_TUNING` sizes the rules for them.
 
 import {
   parseD97StampId,
@@ -16,6 +16,7 @@ import { lpcTerrainCorners, type DreamStamp, type DreamTerrain } from "./assets"
 import { dreamMapSourceHash } from "./compile";
 import { defineDreamMap, type DreamMapDefinition, type DreamMapRegion } from "./definition";
 import type { TiledTileset } from "./tiled";
+import type { D97MapTuning } from "./tuning";
 
 export const FIXTURE_MAP_PATH = "maps/town.tmx";
 export const FIXTURE_WIDTH = 8;
@@ -251,6 +252,22 @@ export function fixtureDefinition(
   });
 }
 
+/**
+ * Map tunables for synthetic maps: one medium class up to 100 tiles a side
+ * with a 20-second reach at 1 tile per second, a 4-tile town radius, 2-wide
+ * paths, 3-wide main routes and a 1.6 detour ratio.
+ */
+export const FIXTURE_TUNING: D97MapTuning = {
+  walkingSpeedTilesPerSecond: 1,
+  sizeClasses: [{ size: "medium", nominalSide: 12, maxSide: 100, reachMaxSeconds: 20 }],
+  doorMinSpacingTiles: 8,
+  townRadiusTiles: 4,
+  minPathWidthTiles: 2,
+  mainRouteMinWidthTiles: 3,
+  maxDetourRatio: 1.6,
+  layoutAllowlist: [],
+};
+
 /** Anchor ids for maps built by `compiledFromRows`. */
 export const ROW_ANCHORS = {
   doorA: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7101"),
@@ -260,6 +277,9 @@ export const ROW_ANCHORS = {
   chest: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7105"),
   shop: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7106"),
   waypoint: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7107"),
+  challenger: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7108"),
+  friendly: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a7109"),
+  object: parseDreamAnchorId("5c1e7a2e-3b44-4c1d-9f6a-0d2b8e4a710a"),
 } as const;
 
 /**

@@ -15,7 +15,7 @@ import type { D97MapTheme } from "../../src/content/d97/terrains/themes.ts";
 import { TERRAIN_FULL, type D97SeasonFamily, type DreamTerrain } from "../../src/d97/map/assets.ts";
 import { compileDreamMap } from "../../src/d97/map/compile.ts";
 import type { DreamMapDefinition } from "../../src/d97/map/definition.ts";
-import { HUT_STAMP, WATER, WATER_TERRAIN, WATER_TILESET } from "../../src/d97/map/map-fixtures.ts";
+import { FIXTURE_TUNING, HUT_STAMP, WATER, WATER_TERRAIN, WATER_TILESET } from "../../src/d97/map/map-fixtures.ts";
 import { renderMapPreview } from "../../src/d97/map/preview.ts";
 import { defineD97Stamp, type D97CatalogStamp } from "../../src/d97/map/stamps.ts";
 import { validateDreamMap } from "../../src/d97/map/validate.ts";
@@ -122,12 +122,11 @@ describe("composeMapSource", () => {
     if (!result.ok) throw new Error(JSON.stringify(result.errors));
     expect(result.map.tilesets.some((tileset) => tileset.image === "terrain/cover_winter.png")).toBe(true);
     const tuning = {
+      ...FIXTURE_TUNING,
       walkingSpeedTilesPerSecond: 4,
-      sizeClasses: [{ size: "small", nominalSide: 30, maxSide: 60, crossingTargetSeconds: 60, crossingSeverity: "warning" }],
-      crossingTolerance: 0.25,
-      doorMinSpacingTiles: 8,
+      sizeClasses: [{ size: "small", nominalSide: 30, maxSide: 60, reachMaxSeconds: 60 }],
     } as const;
-    expect(validateDreamMap(result.map, tuning, ["terrain", "props"]).filter((finding) => finding.severity === "error")).toEqual([]);
+    expect(validateDreamMap(result.map, tuning, { served: ["terrain", "props"] }).filter((finding) => finding.severity === "error")).toEqual([]);
   });
 
   it("refuses sides too small to lay out", () => {
@@ -225,7 +224,7 @@ describe("inspectReport", () => {
     };
     const report = inspectReport(
       loaded,
-      { walkingSpeedTilesPerSecond: 4, sizeClasses: [{ size: "small", nominalSide: 10, maxSide: 20, crossingTargetSeconds: 10, crossingSeverity: "warning" }], crossingTolerance: 0.25, doorMinSpacingTiles: 8 },
+      { ...FIXTURE_TUNING, walkingSpeedTilesPerSecond: 4, sizeClasses: [{ size: "small", nominalSide: 10, maxSide: 20, reachMaxSeconds: 10 }] },
       { stamps: new Map([[HUT_A.id, HUT_A]]), terrains: new Map([[BASE, { name: "base fill", layer: "Ground" }]]), served: ["terrain"] },
     );
     expect(report).toContain(HUT_A.id);
@@ -265,5 +264,35 @@ describe("preview outlines and marks", () => {
     expect(pixel(marked.image, 16, 40)).not.toEqual(pixel(plain.image, 16, 40));
     expect(pixel(marked.image, 56, 56)).not.toEqual(pixel(plain.image, 56, 56));
     expect(pixel(marked.image, 8, 8)).toEqual(pixel(plain.image, 8, 8));
+  });
+
+  it("draws the walkability overlay's narrow and flagged cells", () => {
+    const map = {
+      width: 4,
+      height: 4,
+      tileWidth: 32,
+      tileHeight: 32,
+      tilesets: [],
+      layers: [],
+      objects: [],
+      walkable: "1".repeat(16),
+      abovePlayer: "0".repeat(16),
+      regions: [],
+      anchors: [],
+    };
+    const rect = { from: [0, 0], to: [3, 3] } as const;
+    const plain = renderMapPreview(map, { rect, tilePixels: 16, grid: false, images: null });
+    const overlaid = renderMapPreview(map, {
+      rect,
+      tilePixels: 16,
+      grid: false,
+      images: null,
+      overlay: { narrow: [[1, 0]], flagged: [[2, 0]] },
+    });
+    const pixel = (image: typeof plain.image, x: number, y: number) => Array.from(image.data.subarray((y * 64 + x) * 4, (y * 64 + x) * 4 + 3));
+    // The narrow cell's centre, the flagged cell's cross at its top-left, and an unmarked cell.
+    expect(pixel(overlaid.image, 24, 8)).not.toEqual(pixel(plain.image, 24, 8));
+    expect(pixel(overlaid.image, 32, 0)).not.toEqual(pixel(plain.image, 32, 0));
+    expect(pixel(overlaid.image, 56, 56)).toEqual(pixel(plain.image, 56, 56));
   });
 });

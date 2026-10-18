@@ -5,7 +5,10 @@
 //
 // Every view outlines the map's regions (numbered in region order) and marks
 // anchors with their letter (`ANCHOR_LETTERS`) and door entries with a dot,
-// and may trace a route. A grid view adds a tile grid (stronger every ten
+// and may trace a route. A walkability overlay tints walkable cells green
+// (and over tiles without a grid, shades blocked cells), cells narrower than the minimum path width orange, and marks the narrow
+// cells on routes from the town (validator findings) with a red cross. A
+// grid view adds a tile grid (stronger every ten
 // tiles), tints blocked cells red, and labels tile coordinates in a margin
 // `PREVIEW_GRID_MARGIN` pixels wide along its top and left edges. Views may
 // also outline numbered footprints (stamp placements) and mark named points
@@ -54,12 +57,21 @@ export interface MapPreviewOptions {
   readonly grid: boolean;
   /** Tileset images; null draws walkability colours. */
   readonly images: PreviewImageLoader | null;
-  /** Tiles to trace, such as the main route. */
+  /** Tiles to trace, such as the main routes out of town. */
   readonly route?: readonly TilePoint[];
+  /** The walkability overlay: walkable cells tinted, narrow cells marked. */
+  readonly overlay?: WalkabilityOverlay;
   /** Footprints to outline with a numbered label, such as stamp placements. */
   readonly outlines?: readonly { readonly rect: TileRect; readonly label: string }[];
   /** Points to mark with a letter, such as a stamp's named points. */
   readonly marks?: readonly { readonly at: TilePoint; readonly letter: string }[];
+}
+
+export interface WalkabilityOverlay {
+  /** Walkable cells narrower than the minimum path width, tinted orange. */
+  readonly narrow: readonly TilePoint[];
+  /** Narrow cells on routes from the town, marked with a red cross. */
+  readonly flagged: readonly TilePoint[];
 }
 
 export interface MapPreview {
@@ -118,6 +130,9 @@ const BLOCKED_TINT: Rgb = [230, 30, 30];
 const GRID_LINE: Rgb = [0, 0, 0];
 const LABEL: Rgb = [230, 230, 230];
 const ROUTE: Rgb = [255, 240, 60];
+const OVERLAY_WALKABLE: Rgb = [60, 220, 90];
+const OVERLAY_NARROW: Rgb = [255, 140, 0];
+const OVERLAY_FLAGGED: Rgb = [235, 20, 20];
 const LETTER: Rgb = [255, 255, 255];
 const OUTLINE: Rgb = [245, 245, 245];
 const MARK: Rgb = [20, 120, 200];
@@ -443,6 +458,34 @@ export function renderMapPreview(map: PreviewableMap, options: MapPreviewOptions
     }
   }
 
+  // The walkability overlay.
+  const inView = ([x, y]: TilePoint) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  if (options.overlay !== undefined) {
+    if (mode === "tiles") {
+      for (let y = y0; y <= y1; y += 1) {
+        for (let x = x0; x <= x1; x += 1) {
+          if (map.walkable[y * map.width + x] === "1") canvas.fill(cellX(x), cellY(y), tilePixels, tilePixels, OVERLAY_WALKABLE, 0.25);
+          // Without the grid view's red tint, blocked cells are shaded.
+          else if (!options.grid) canvas.fill(cellX(x), cellY(y), tilePixels, tilePixels, SHADOW, 0.35);
+        }
+      }
+    }
+    for (const tile of options.overlay.narrow) {
+      if (inView(tile)) canvas.fill(cellX(tile[0]), cellY(tile[1]), tilePixels, tilePixels, OVERLAY_NARROW, 0.55);
+    }
+    const thickness = Math.max(1, Math.floor(tilePixels / 8));
+    for (const tile of options.overlay.flagged) {
+      if (!inView(tile)) continue;
+      const left = cellX(tile[0]);
+      const top = cellY(tile[1]);
+      canvas.fill(left, top, tilePixels, tilePixels, OVERLAY_FLAGGED, 0.35);
+      for (let step = 0; step < tilePixels; step += 1) {
+        canvas.fill(left + step, top + step, thickness, thickness, OVERLAY_FLAGGED);
+        canvas.fill(left + tilePixels - 1 - step - (thickness - 1), top + step, thickness, thickness, OVERLAY_FLAGGED);
+      }
+    }
+  }
+
   // The coordinate grid and its margin labels.
   if (options.grid) {
     for (let x = x0; x <= x1 + 1; x += 1) {
@@ -499,7 +542,6 @@ export function renderMapPreview(map: PreviewableMap, options: MapPreviewOptions
   }
 
   // The route.
-  const inView = ([x, y]: TilePoint) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
   const dot = Math.max(2, Math.floor(tilePixels / 4));
   for (const tile of options.route ?? []) {
     if (!inView(tile)) continue;

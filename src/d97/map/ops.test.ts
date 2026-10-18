@@ -11,7 +11,7 @@ import { compileDreamMap, type DreamMapCompileInput } from "./compile";
 import { isWalkable, type CompiledDreamMap } from "./compiled";
 import type { DreamMapDefinition, DreamMapRecipeOp } from "./definition";
 import { mergeTileset, tilesetSpan, type WorkingMap } from "./ops/working-map";
-import { FIXTURE_TMX, HUT, HUT_STAMP, WATER, WATER_TERRAIN, WATER_TILESET, fixtureDefinition, loadFixtureText } from "./map-fixtures";
+import { FIXTURE_TMX, FIXTURE_TUNING, HUT, HUT_STAMP, WATER, WATER_TERRAIN, WATER_TILESET, fixtureDefinition, loadFixtureText } from "./map-fixtures";
 import type { D97MapTuning } from "./tuning";
 import { validateDreamMap } from "./validate";
 
@@ -191,10 +191,9 @@ describe("unused tilesets", () => {
 
 describe("a map built only from brushes and stamps", () => {
   const TUNING: D97MapTuning = {
+    ...FIXTURE_TUNING,
     walkingSpeedTilesPerSecond: 4,
-    sizeClasses: [{ size: "small", nominalSide: 20, maxSide: 40, crossingTargetSeconds: 8, crossingSeverity: "error" }],
-    crossingTolerance: 0.5,
-    doorMinSpacingTiles: 8,
+    sizeClasses: [{ size: "small", nominalSide: 20, maxSide: 40, reachMaxSeconds: 8 }],
   };
   const WALL = parseD97StampId("wall");
   const wall: DreamStamp = {
@@ -230,6 +229,6 @@ describe("a map built only from brushes and stamps", () => {
       { ...INPUT, stamps: new Map([[HUT, HUT_STAMP], [WALL, wall]]) },
     );
     if (!result.ok) throw new Error(JSON.stringify(result.errors));
-    expect(validateDreamMap(result.map, TUNING, ["terrain", "props"])).toEqual([]);
+    expect(validateDreamMap(result.map, TUNING, { served: ["terrain", "props"] })).toEqual([]);
   });
 });

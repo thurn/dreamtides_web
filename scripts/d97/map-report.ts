@@ -3,7 +3,9 @@
 // Coordinates print as `x,y` tiles; rectangles as `x0,y0–x1,y1`. `inspect`
 // also lists the recipe's stamp placements and terrain edits, the tilesets
 // the compiled map draws (with whether each image is served) and the unused
-// tilesets the compiler dropped.
+// tilesets the compiler dropped, and the town: each anchor's route from it
+// (distance, reach time, detour and width) and the narrow passages by
+// coordinate.
 
 import type { CompiledDreamMap, CompiledTileset } from "../../src/d97/map/compiled.ts";
 import type { TilePoint, TileRect } from "../../src/d97/map/definition.ts";
@@ -12,9 +14,9 @@ import { compiledTilesetForGid, type D97CatalogStamp } from "../../src/d97/map/s
 import { gidWithoutFlags } from "../../src/d97/map/tiled.ts";
 import type { D97StampId, D97TerrainId } from "../../src/types/identifiers.ts";
 import { ANCHOR_LETTERS } from "../../src/d97/map/preview.ts";
+import { narrowCells, townLayout, widthExemptCells, type DreamMapTown } from "../../src/d97/map/layout.ts";
 import {
   anchorStandTile,
-  mainRoute,
   mapEntries,
   reachableCells,
   regionCenterTile,
@@ -44,6 +46,8 @@ export interface InspectContext {
   readonly terrains: ReadonlyMap<D97TerrainId, { readonly name: string; readonly layer: string }>;
   /** Library-relative subtrees workspace preparation serves. */
   readonly served: readonly string[];
+  /** The map's town (`catalogMapTown`): null when its dream names none, undefined when no dream plays it. */
+  readonly town?: DreamMapTown | null;
 }
 
 /** Drawn cells per compiled tileset (tile layers and tile objects). */
@@ -131,6 +135,84 @@ function recipeLines(loaded: LoadedMap, context: InspectContext): string[] {
   return lines;
 }
 
+/** The town section of `inspect`: routes from the town, reach and narrow passages. */
+function townLines(loaded: LoadedMap, tuning: D97MapTuning, town: DreamMapTown | null | undefined): string[] {
+  const map = loaded.map;
+  const crossings = loaded.definition.narrowCrossings ?? [];
+  const lines: string[] = [];
+  const narrowMask = narrowCells(map, tuning.minPathWidthTiles, widthExemptCells(map, crossings));
+  const narrowCount = narrowMask.reduce((sum, cell) => sum + cell, 0);
+  lines.push(
+    `Walkable cells narrower than ${String(tuning.minPathWidthTiles)} tiles: ${String(narrowCount)} ` +
+      "(orange in previews; narrow crossings and guardian tiles exempt)",
+  );
+  lines.push(
+    `Narrow crossings (${String(crossings.length)}): ` +
+      (crossings.map((crossing) => `${crossing.name} ${crossing.cells.map(at).join(" ")}`).join("; ") || "none"),
+  );
+  if (town === undefined) {
+    lines.push("Town: none (no dream plays this map); reach and route widths are not measured", "");
+    return lines;
+  }
+  if (town === null) {
+    lines.push("Town: the map's dream names none; reach and route widths are not measured", "");
+    return lines;
+  }
+  const layout = townLayout(map, tuning, town, crossings);
+  if (layout === null) {
+    lines.push(`Town: door ${town.doorAnchorId} is not a door on this map`, "");
+    return lines;
+  }
+  const sizeClass = mapSizeClass(tuning, map);
+  lines.push(
+    `Town: door ${layout.door.id} entry ${at(layout.entry)}, cluster ${town.cluster}, radius ${String(tuning.townRadiusTiles)} tiles`,
+  );
+  lines.push("");
+  lines.push(
+    `Routes from the town (guardians beaten; width ${String(tuning.minPathWidthTiles)}, ` +
+      `main routes out of town ${String(tuning.mainRouteMinWidthTiles)}; detour at most ${String(tuning.maxDetourRatio)})`,
+  );
+  const rows = [["letter", "kind", "id", "stand", "distance", "town", "tiles", "time", "detour", "width", "narrow cells"]];
+  for (const route of layout.routes) {
+    rows.push([
+      ANCHOR_LETTERS[route.anchor.kind],
+      route.main ? "door (main)" : route.anchor.kind,
+      route.anchor.id,
+      at(route.stand),
+      route.distance.toFixed(1),
+      route.distance <= tuning.townRadiusTiles ? "in" : "out",
+      route.tiles === null ? "-" : String(route.tiles),
+      route.seconds === null ? "unreachable" : seconds(route.seconds),
+      route.detourRatio === null ? "-" : route.detourRatio.toFixed(2),
+      String(route.requiredWidth),
+      String(route.narrowCells.length),
+    ]);
+  }
+  lines.push(...(rows.length === 1 ? ["  none"] : table(rows)));
+  const reached = layout.routes.filter((route) => route.tiles !== null);
+  const farthest = reached.reduce<(typeof reached)[number] | null>(
+    (best, route) => (best === null || (route.tiles ?? 0) > (best.tiles ?? 0) ? route : best),
+    null,
+  );
+  lines.push(
+    farthest === null || farthest.seconds === null
+      ? "Reach: no anchor reached from the town"
+      : `Reach: ${seconds(farthest.seconds)} to ${farthest.anchor.kind} ${farthest.anchor.id} at ${at(farthest.stand)} ` +
+          `(${String(farthest.tiles)} tiles; the ${sizeClass.size} class allows ${seconds(sizeClass.reachMaxSeconds)})`,
+  );
+  lines.push("");
+  const narrowRoutes = layout.routes.filter((route) => route.narrowCells.length > 0);
+  lines.push(`Narrow passages on routes from the town (${String(narrowRoutes.length)} routes; red crosses in previews)`);
+  if (narrowRoutes.length === 0) lines.push("  none");
+  for (const route of narrowRoutes) {
+    lines.push(
+      `  ${route.anchor.kind} ${route.anchor.id} (needs ${String(route.requiredWidth)} wide): ${route.narrowCells.map(at).join(" ")}`,
+    );
+  }
+  lines.push("");
+  return lines;
+}
+
 /** The `inspect` report of a compiled map. */
 export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning, context: InspectContext): string {
   const map: CompiledDreamMap = loaded.map;
@@ -152,7 +234,7 @@ export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning, context: 
     source.kind === "tiled" ? `Source ${source.path} sha256 ${source.sha256}` : "Source blank canvas",
     `Size ${String(map.width)}×${String(map.height)} tiles of ${String(map.tileWidth)}×${String(map.tileHeight)} px: ` +
       `${sizeClass.size} class (about ${String(sizeClass.nominalSide)}×${String(sizeClass.nominalSide)}, ` +
-      `main-route target ${seconds(sizeClass.crossingTargetSeconds)} ±${String(Math.round(tuning.crossingTolerance * 100))}%)`,
+      `largest side ${String(sizeClass.maxSide)}, reach at most ${seconds(sizeClass.reachMaxSeconds)})`,
     `Walking speed ${String(speed)} tiles/s`,
     `Layers ${String(map.layers.length)} (${String(map.layers.filter((layer) => layer.above).length)} above the player), ` +
       `tile objects ${String(map.objects.length)}, tilesets ${String(map.tilesets.length)}`,
@@ -220,14 +302,7 @@ export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning, context: 
   }
   lines.push("");
 
-  const route = mainRoute(map, speed);
-  lines.push(
-    route === null
-      ? "Main route: none (fewer than two connected doors)"
-      : `Main route: door ${route.fromDoor} (${at(route.from)}) → door ${route.toDoor} (${at(route.to)}): ` +
-          `${String(route.tiles)} tiles, ${seconds(route.seconds)} (target ${seconds(sizeClass.crossingTargetSeconds)})`,
-  );
-  lines.push("");
+  lines.push(...townLines(loaded, tuning, context.town));
 
   lines.push("Crossing times between regions (center to center, guardians beaten)");
   const centers = map.regions.map((region) => regionCenterTile(map, region, reached));
@@ -251,7 +326,9 @@ export function inspectReport(loaded: LoadedMap, tuning: D97MapTuning, context: 
 
 /** One validator finding as a line. */
 export function formatFinding(finding: DreamMapFinding): string {
-  const head = `${finding.severity} ${finding.rule}`;
+  const allowlisted = "allowlisted" in finding && finding.allowlisted ? " (allowlisted)" : "";
+  const head = `${finding.severity}${allowlisted} ${finding.rule}`;
+  const cells = (tiles: readonly TilePoint[]) => tiles.map(at).join(" ");
   switch (finding.rule) {
     case "anchor-walkable":
       return `${head} at ${at(finding.at)}: ${finding.anchorKind} ${finding.anchorId} stands on a blocked cell`;
@@ -271,13 +348,42 @@ export function formatFinding(finding: DreamMapFinding): string {
       );
     case "tileset-unserved":
       return `${head}: tileset ${finding.tileset} draws ${finding.image}, which workspace preparation does not serve`;
-    case "main-route-missing":
-      return `${head}: the ${finding.size} map has fewer than two connected doors`;
-    case "main-route-crossing":
+    case "map-oversize":
+      return `${head}: the map's longer side is ${String(finding.side)} tiles, over the largest class's ${String(finding.maxSide)}`;
+    case "town-missing":
+      return `${head}: the map's dream names no town door and cluster`;
+    case "town-door-unknown":
+      return `${head}: town door ${finding.doorAnchorId} is not a door on this map`;
+    case "town-outside":
       return (
-        `${head} at ${at(finding.route.from)}: the ${finding.size} map's main route to ${at(finding.route.to)} takes ` +
-        `${seconds(finding.route.seconds)} (${String(finding.route.tiles)} tiles), outside ` +
-        `${seconds(finding.minSeconds)}–${seconds(finding.maxSeconds)} around its ${seconds(finding.targetSeconds)} target`
+        `${head} at ${at(finding.at)}: ${finding.anchorKind} ${finding.anchorId} belongs in town but stands ` +
+        `${finding.distance.toFixed(1)} tiles from the town door's entry, beyond ${String(finding.radius)}`
+      );
+    case "town-intrusion":
+      return (
+        `${head} at ${at(finding.at)}: ${finding.anchorKind} ${finding.anchorId} stands ` +
+        `${finding.distance.toFixed(1)} tiles from the town door's entry, inside the ${String(finding.radius)}-tile town`
+      );
+    case "path-narrow":
+      return (
+        `${head} at ${at(finding.at)}: the ${finding.main ? "main route out of town" : "route from the town"} to ` +
+        `${finding.anchorKind} ${finding.anchorId} needs ${String(finding.requiredWidth)} wide but crosses narrow cells ` +
+        cells(finding.cells)
+      );
+    case "crossing-only-route":
+      return (
+        `${head} at ${cells(finding.cells)}: narrow crossing ${finding.crossing} is the only wide route from the town to ` +
+        finding.anchors.map((anchor) => `${anchor.anchorKind} ${anchor.anchorId} (${at(anchor.at)})`).join(", ")
+      );
+    case "detour":
+      return (
+        `${head} at ${at(finding.at)}: the walk from the town to ${finding.anchorKind} ${finding.anchorId} takes ` +
+        `${String(finding.tiles)} tiles for ${String(finding.directTiles)} on open ground, ratio ${finding.ratio.toFixed(2)} over ${String(finding.maxRatio)}`
+      );
+    case "reach":
+      return (
+        `${head} at ${at(finding.at)}: the ${finding.size} map's farthest anchor, ${finding.anchorKind} ${finding.anchorId}, ` +
+        `is ${seconds(finding.seconds)} (${String(finding.tiles)} tiles) from the town, over ${seconds(finding.maxSeconds)}`
       );
   }
 }

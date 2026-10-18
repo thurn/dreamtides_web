@@ -20,6 +20,12 @@
 // anchors in the run's own dream only (`runDreamAnchor` in
 // src/rules/d97/d97-dreams.ts).
 //
+// A dream module names its town (decision P33): the town door, a door anchor
+// on its map, and the cluster tag of the town's friendly anchors. The map
+// validator (`npm run d97:map -- validate`) holds the dream's map to the town
+// radius, path width, detour and reach rules around it, and reports a dream
+// map whose dream names no town.
+//
 // A dream may own rooms (decision P19): small interior maps, each a map
 // module of its own, joined to the dream's map by a pair of building doors.
 // A room belongs to its dream: its anchors are the dream's, its residents are
@@ -115,6 +121,14 @@ export interface D97DreamTopology {
   readonly shopAnchorId: DreamAnchorId;
 }
 
+/** A dream's town (decision P33), by anchor UUID and cluster tag on its map. */
+export interface D97DreamTown {
+  /** The town door: a door anchor on the dream's map, where the town gathers. */
+  readonly doorAnchorId: DreamAnchorId;
+  /** The cluster tag of the town's friendly anchors (`cluster` on the map). */
+  readonly cluster: string;
+}
+
 /**
  * One room of a dream (decision P19): its map module and the two building
  * doors that join it to the dream's map.
@@ -134,6 +148,8 @@ export interface D97DreamDefinition {
   /** The dream's map module (`src/content/d97/maps/`). */
   readonly mapId: DreamMapId;
   readonly topology: D97DreamTopology;
+  /** The dream's town; the map validator reports a dream map without one. */
+  readonly town?: D97DreamTown;
   /** The dream's rooms, each behind one building door of its map. */
   readonly rooms: readonly D97DreamRoom[];
   /** At most one resident per anchor, on the dream's map or in a room; an anchor without one stays empty. */

@@ -1,12 +1,14 @@
 // The committed D97 map module format (decision P11). A dream map names its
 // source (a Tiled map in the LPC library, pinned by content hash, or a blank
 // canvas for maps composed from stamps), an edit recipe of typed operations,
-// named regions and landmarks for authoring, and its anchors.
+// named regions and landmarks for authoring, its anchors, and any
+// deliberately narrow crossings exempt from the path-width rules (P33).
 //
 // Coordinates are tile coordinates `[x, y]` from the top-left. Each recipe
 // operation reads the map as the operations before it left it, so operations
-// after a crop use cropped coordinates. Regions, landmarks and anchors use the
-// final, compiled coordinates. Rectangles include both corners.
+// after a crop use cropped coordinates. Regions, landmarks, anchors and
+// narrow crossings use the final, compiled coordinates. Rectangles include
+// both corners.
 
 import type {
   D97StampId,
@@ -202,6 +204,18 @@ export interface DreamMapLandmark {
   readonly note?: string;
 }
 
+/**
+ * A deliberately narrow crossing (decision P33), such as a plank bridge, in
+ * compiled coordinates. Its cells are exempt from the path-width rules, and
+ * the validator checks it is never the only route: every anchor it serves
+ * must still be reached on wide paths with its cells blocked.
+ */
+export interface DreamMapNarrowCrossing {
+  readonly name: string;
+  readonly cells: readonly TilePoint[];
+  readonly note?: string;
+}
+
 export interface DreamMapDefinition {
   readonly id: DreamMapId;
   readonly source: DreamMapSource;
@@ -210,6 +224,8 @@ export interface DreamMapDefinition {
   readonly regions: readonly DreamMapRegion[];
   readonly landmarks: readonly DreamMapLandmark[];
   readonly anchors: readonly DreamAnchorDefinition[];
+  /** Deliberately narrow crossings, exempt from the path-width rules. */
+  readonly narrowCrossings?: readonly DreamMapNarrowCrossing[];
 }
 
 /** Declare a dream map module. */

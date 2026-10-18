@@ -66,6 +66,14 @@ export default defineDream({
     // In front of the inn's bar.
     shopAnchorId: anchor("9823fdb3-fff7-4dda-8d86-230b0109e7a3"),
   },
+  // The town is the well square's cluster. Its door is the arrival door, the
+  // low cave, far from the square: the map predates the starting town, so its
+  // layout findings are allowlisted (src/content/d97/map-tuning.ts) until
+  // PT.2 (hv-j1n2.68) rebuilds it around the square.
+  town: {
+    doorAnchorId: anchor("c9f6d615-0e4c-465b-a990-7bd30bdb0fc8"),
+    cluster: "well square",
+  },
   rooms: [
     // The inn, behind the inn door on the well square.
     {

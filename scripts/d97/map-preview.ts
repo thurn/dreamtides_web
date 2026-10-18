@@ -3,14 +3,15 @@
 //
 // A map preview directory holds:
 // - `map.png`: the whole map, downscaled to fit `WHOLE_MAP_MAX_PIXELS`, with
-//   region outlines, anchors and the main route;
+//   region outlines, anchors and the main routes out of town;
 // - `region-<n>-<name>.png`: each region (or the one `--region` names) at
 //   native tile size, capped to `ZOOM_MAX_PIXELS`, with the coordinate grid;
 // - `rect-<x>-<y>-<w>-<h>.png` for a `--rect` view;
 // - `legend.txt`: the letters, region numbers and colours, and anchors.
 //
 // `--scale` multiplies the native tile size (32 px for LPC) in every view.
-// Stamp placements are outlined and numbered in every view.
+// Stamp placements are outlined and numbered in every view, and every view
+// draws the walkability overlay when the request carries one.
 
 import { join } from "node:path";
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -24,6 +25,7 @@ import {
   renderMapPreview,
   type MapPreview,
   type PreviewImageLoader,
+  type WalkabilityOverlay,
 } from "../../src/d97/map/preview.ts";
 import { sheetPreviewMap } from "../../src/d97/map/sheets.ts";
 import { stampPreviewMap, type D97CatalogStamp } from "../../src/d97/map/stamps.ts";
@@ -52,8 +54,10 @@ export interface MapPreviewRequest {
   readonly rect?: TileRect;
   /** Multiplies the native tile size in every view. */
   readonly scale?: number;
-  /** Traced on the whole-map view. */
+  /** Traced in every view, such as the main routes out of town. */
   readonly route?: readonly TilePoint[];
+  /** The walkability overlay drawn in every view. */
+  readonly overlay?: WalkabilityOverlay;
   /** Numbered footprints outlined in every view, such as stamp placements; listed in the legend. */
   readonly outlines?: readonly { readonly rect: TileRect; readonly label: string; readonly note: string }[];
 }
@@ -85,8 +89,10 @@ function legendText(map: CompiledDreamMap, outlines: MapPreviewRequest["outlines
     "",
     "Anchor letters (a dot of the same colour marks a door's entry tile):",
     ...Object.entries(ANCHOR_LETTERS).map(([kind, letter]) => `  ${letter} ${kind}`),
-    "Yellow dots trace the main route on map.png. In grid views, red-tinted cells are blocked;",
+    "Yellow dots trace the main routes out of town. In grid views, red-tinted cells are blocked;",
     "in walkability rendering (no library), green is walkable, brown blocked, blue above-player.",
+    "The walkability overlay tints walkable cells green over tiles, cells narrower than the",
+    "minimum path width orange, and crosses in red the narrow cells on routes from the town.",
     "",
     "Regions (outline colour, number drawn at the top-left corner):",
     ...map.regions.map((region, index) => {
@@ -129,6 +135,7 @@ export function writeMapPreviews(
         grid: false,
         images: request.images,
         ...(request.route === undefined ? {} : { route: request.route }),
+        ...(request.overlay === undefined ? {} : { overlay: request.overlay }),
         ...(request.outlines === undefined ? {} : { outlines: request.outlines }),
       }),
     ),
@@ -158,6 +165,7 @@ export function writeMapPreviews(
           grid: true,
           images: request.images,
           ...(request.route === undefined ? {} : { route: request.route }),
+          ...(request.overlay === undefined ? {} : { overlay: request.overlay }),
           ...(request.outlines === undefined ? {} : { outlines: request.outlines }),
         }),
       ),

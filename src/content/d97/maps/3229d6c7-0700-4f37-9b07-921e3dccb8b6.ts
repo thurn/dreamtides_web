@@ -8,7 +8,7 @@
 // names is a landmark or region here.
 //
 // The town stands on a terrace whose only ways down run east over the white
-// bridge, so the main route from the ember arch to the low cave walks the
+// bridge, so the walk from the ember arch to the low cave crosses the
 // whole valley: over the bridge, down the far bank, back across the fords,
 // round the woodcutter's yard and the long meadow, along the creek row, over
 // the plank bridge and through the south fields.

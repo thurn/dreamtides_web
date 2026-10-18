@@ -150,24 +150,38 @@ npm run d97:map -- compose --out <file> --size <w>x<h> --theme <theme>
   terrain and season edits, the tilesets the compiled map draws (each with
   whether workspace preparation serves its image, and its drawn cells), the
   unused tilesets the compiler dropped, per-region walkability and
-  reachability, landmark and anchor tables, the main route and
-  region-to-region crossing times at walking speed.
+  reachability, landmark and anchor tables, the town (from the dream that
+  plays the map): each anchor's route from the town door's entry with its
+  distance, reach time, detour ratio and required width, the reach, and the
+  narrow passages by coordinate; then region-to-region crossing times at
+  walking speed.
 - **preview** writes PNGs and a `legend.txt` to the gitignored
   `artifacts/d97/previews/<map>/`: `map.png` (the whole map, downscaled, with
   region outlines, anchor letters, numbered stamp outlines and the main
-  route) and one zoom per region (or the `--region`, plus any `--rect`) with a
-  labelled coordinate grid and blocked cells tinted red. `--scale` multiplies
+  routes out of town) and one zoom per region (or the `--region`, plus any
+  `--rect`) with a labelled coordinate grid and blocked cells tinted red.
+  Every view draws a walkability overlay: walkable cells tinted green,
+  cells narrower than the minimum path width orange, and the narrow cells on
+  routes from the town crossed in red. `--scale` multiplies
   the 32-pixel tile size. Labels and anchor letters draw on a dark outline and
   never shrink below a legible size. It prints each path with its pixel size.
   Without the LPC library it draws walkability colours instead of tiles.
 - **validate** prints findings by coordinate and exits 1 on errors: anchors
   on blocked cells, anchors no entry reaches, guarded doors (and chests
   behind guardians) reachable while their guardian stands, doors closer than
-  the minimum spacing, a main route outside its size class's crossing target,
-  and tilesets whose images workspace preparation does not serve (the art
-  manifest's `served` subtrees). On a dream's map a building door must be
+  the minimum spacing, tilesets whose images workspace preparation does not
+  serve (the art manifest's `served` subtrees), and the layout rules
+  (decisions P13 and P33): a map wider than the largest size class; and on a
+  dream's map, around the town its dream module names, the town radius (the
+  waypoint, shop or the building door to its room, quest givers and town
+  cluster inside; challengers, guardians, chests, quest objects and the exit
+  door outside), path widths on each anchor's route from the town (narrow
+  cells by coordinate, with the map's declared `narrowCrossings` exempt
+  unless one is the only route), the detour ratio and the size class's reach
+  maximum. Maps in the tuning's `layoutAllowlist` print their layout
+  findings as allowlisted warnings. On a dream's map a building door must be
   reached from the doors and waypoint; in a room every anchor must be reached
-  from its building door, and a room has no main route.
+  from its building door, and a room has no town.
 - **stamps** manages the stamp catalog (`src/content/d97/stamps/`), one
   module per stamp with a UUID, name, theme (building, nature, dungeon,
   desert, winter, japanese, scifi, graveyard, street), footprint, walkability
@@ -212,11 +226,14 @@ The compiler drops tilesets no drawn layer or tile object uses, so a
 compiled map names only art the renderer draws.
 
 Entries are door entry tiles and waypoints, and in a room (a map with
-building doors and no door or waypoint) its building doors' entry tiles; the
-main route is the longest
-shortest walk between two doors' entry tiles (`src/d97/map/routes.ts`). Walking
-speed, size classes, crossing targets and door spacing are tunables in
-`src/content/d97/map-tuning.ts`. The example map
+building doors and no door or waypoint) its building doors' entry tiles
+(`src/d97/map/routes.ts`). Routes from the town, path width (a cell is w
+wide when a w×w square of walkable cells contains it), the main routes out
+of town (to every other door of the map) and the detour ratio (a walk over
+its |dx| + |dy| open-ground distance) are defined in
+`src/d97/map/layout.ts`. Walking speed, size classes with their reach
+maxima, door spacing, the town radius, path widths, the detour ratio and the
+layout allowlist are in `src/content/d97/map-tuning.ts`. The example map
 `9ad96a1d-4542-4228-a20f-1e4f6e274058` is composed only from brushes and
 stamps; no dream plays it.
 

@@ -3,9 +3,11 @@
 //   inspect <map>                        stamp placements, terrain edits and
 //                                        tilesets, region walkability and
 //                                        reachability, landmarks, anchors,
-//                                        crossing times
+//                                        the town, reach times from it and
+//                                        narrow passages, crossing times
 //   preview <map> [--region <name>] [--rect x,y,w,h] [--scale <factor>] [--out <dir>]
-//                                        PNG previews and a legend
+//                                        PNG previews with a walkability
+//                                        overlay, and a legend
 //   validate <map> | --all               validator findings; exits 1 on errors
 //   stamps list [--theme <t>]            the stamp catalog
 //   stamps sheet [--theme <t>]           one preview sheet per theme
@@ -22,7 +24,8 @@
 //                                        a blank-canvas map module scaffold
 //
 // `<map>` is a catalog map id, a map module path or a Tiled map path (see
-// map-load.ts). Previews go to the gitignored `artifacts/d97/previews/`.
+// map-load.ts). A map's town comes from the dream that plays it
+// (map-town.ts). Previews go to the gitignored `artifacts/d97/previews/`.
 
 import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -30,6 +33,8 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { parseDreamAnchorId, parseDreamMapId } from "../../src/types/identifiers.ts";
 import { composeMapSource } from "./map-compose.ts";
 import { sheetTileset } from "../../src/d97/map/sheets.ts";
+import { D97_DIALOGUE_CONTENT } from "../../src/content/d97/dialogue/index.ts";
+import { D97_DREAMS } from "../../src/content/d97/dreams/index.ts";
 import { D97_MAP_TUNING } from "../../src/content/d97/map-tuning.ts";
 import { D97_DREAM_MAPS, D97_EXAMPLE_MAPS } from "../../src/content/d97/maps/index.ts";
 import { D97_TERRAINS } from "../../src/content/d97/terrains/index.ts";
@@ -38,10 +43,13 @@ import { recipePlacements } from "../../src/d97/map/recipe-summary.ts";
 import { D97_STAMPS } from "../../src/content/d97/stamps/index.ts";
 import type { TileRect } from "../../src/d97/map/definition.ts";
 import { D97_STAMP_THEMES, isD97StampTheme, type D97StampTheme } from "../../src/d97/map/stamps.ts";
-import { mainRoute } from "../../src/d97/map/routes.ts";
+import { narrowCells, townLayout, widthExemptCells, type DreamMapTown } from "../../src/d97/map/layout.ts";
+import type { TilePoint } from "../../src/d97/map/definition.ts";
+import { isRoomMap } from "../../src/d97/map/routes.ts";
 import { validateDreamMap } from "../../src/d97/map/validate.ts";
 import { d97LibraryDir, REPO_ROOT, servedArtPrefixes } from "./map-library.ts";
 import { loadMap, type LoadedMap } from "./map-load.ts";
+import { catalogMapTown } from "./map-town.ts";
 import { writeMapPreviews, writeSheetGrid } from "./map-preview.ts";
 import { formatFinding, inspectReport } from "./map-report.ts";
 import {
@@ -126,6 +134,15 @@ async function load(argument: string | undefined): Promise<LoadedMap | null> {
 
 const display = (path: string) => relative(process.cwd(), path) || path;
 
+/** The loaded map's town from the dream that plays it (see `catalogMapTown`). */
+function mapTown(loaded: LoadedMap): DreamMapTown | null | undefined {
+  return catalogMapTown(loaded.definition.id, {
+    dreams: D97_DREAMS,
+    maps: [...D97_DREAM_MAPS, ...D97_EXAMPLE_MAPS],
+    quests: D97_DIALOGUE_CONTENT.quests,
+  });
+}
+
 async function inspect(parsed: Parsed): Promise<number> {
   const loaded = await load(parsed.positional[1]);
   if (loaded === null) return 1;
@@ -134,6 +151,7 @@ async function inspect(parsed: Parsed): Promise<number> {
       stamps: new Map(D97_STAMPS.map((stamp) => [stamp.id, stamp])),
       terrains: new Map(D97_TERRAINS.map((terrain) => [terrain.id, terrain])),
       served: servedArtPrefixes(),
+      town: mapTown(loaded),
     }),
   );
   return 0;
@@ -148,7 +166,16 @@ async function preview(parsed: Parsed): Promise<number> {
   const rectText = option(parsed, "rect");
   const region = option(parsed, "region");
   const outDir = option(parsed, "out") ?? join(PREVIEW_ROOT, loaded.slug);
-  const route = mainRoute(loaded.map, D97_MAP_TUNING.walkingSpeedTilesPerSecond);
+  const town = mapTown(loaded);
+  const crossings = loaded.definition.narrowCrossings ?? [];
+  const layout = town === undefined || town === null ? null : townLayout(loaded.map, D97_MAP_TUNING, town, crossings);
+  const route = layout?.routes.filter((entry) => entry.main).flatMap((entry) => entry.path);
+  const narrowMask = narrowCells(loaded.map, D97_MAP_TUNING.minPathWidthTiles, widthExemptCells(loaded.map, crossings));
+  const narrow: TilePoint[] = [];
+  narrowMask.forEach((cell, index) => {
+    if (cell === 1) narrow.push([index % loaded.map.width, Math.floor(index / loaded.map.width)]);
+  });
+  const overlay = { narrow, flagged: layout?.routes.flatMap((entry) => entry.narrowCells) ?? [] };
   const images = libraryImageLoader(loaded.library);
   const catalog = new Map(D97_STAMPS.map((stamp) => [stamp.id, stamp]));
   const outlines = recipePlacements(loaded.definition, catalog)
@@ -161,7 +188,8 @@ async function preview(parsed: Parsed): Promise<number> {
     ...(region === undefined ? {} : { region }),
     ...(rectText === undefined ? {} : { rect: parseRect(rectText) }),
     ...(scale === undefined ? {} : { scale }),
-    ...(route === null ? {} : { route: route.path }),
+    ...(route === undefined ? {} : { route }),
+    overlay,
   });
   for (const image of written.images) {
     console.log(`${display(image.path)}  ${String(image.width)}×${String(image.height)} px  (${image.mode})`);
@@ -188,12 +216,24 @@ async function validate(parsed: Parsed): Promise<number> {
       errors += 1;
       continue;
     }
-    const findings = validateDreamMap(loaded.map, D97_MAP_TUNING, servedArtPrefixes());
+    const town = mapTown(loaded);
+    const findings = validateDreamMap(loaded.map, D97_MAP_TUNING, {
+      served: servedArtPrefixes(),
+      ...(town === undefined ? {} : { town }),
+      narrowCrossings: loaded.definition.narrowCrossings ?? [],
+    });
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
+    const allowlisted = findings.filter((finding) => "allowlisted" in finding && finding.allowlisted).length;
     errors += errorCount;
     console.log(
-      `${loaded.argument}: ${String(errorCount)} errors, ${String(findings.length - errorCount)} warnings`,
+      `${loaded.argument}: ${String(errorCount)} errors, ${String(findings.length - errorCount)} warnings` +
+        (allowlisted === 0 ? "" : ` (${String(allowlisted)} allowlisted layout findings)`),
     );
+    if (town === undefined) {
+      console.log(
+        `  ${isRoomMap(loaded.map) ? "a room" : "no dream plays this map"}: no town, so the town, path-width, detour and reach rules do not run`,
+      );
+    }
     for (const finding of findings) console.log(`  ${formatFinding(finding)}`);
   }
   return errors > 0 ? 1 : 0;

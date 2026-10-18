@@ -1,20 +1,25 @@
-// The shape of the D97 map tunables (decision P13): walking speed, the map
-// size classes with their main-route crossing targets, and door spacing. The
-// values live in the catalog (`src/content/d97/map-tuning.ts`); the map tools
-// and validators take them as input.
+// The shape of the D97 map tunables (decisions P13 and P33): walking speed,
+// the compact map size classes with their reach maxima, door spacing, the
+// town radius, path widths and the detour ratio, and the maps whose layout
+// findings are allowlisted. The values live in the catalog
+// (`src/content/d97/map-tuning.ts`); the map tools and validators take them
+// as input.
+
+import type { DreamMapId } from "../../types/identifiers";
 
 export type D97MapSize = "small" | "medium" | "large";
 
 export interface D97MapSizeClass {
   readonly size: D97MapSize;
-  /** The class's nominal side length in tiles ("about 110×110"). */
+  /** The class's nominal side length in tiles ("about 50×50"). */
   readonly nominalSide: number;
   /** The largest map side, in tiles, that still belongs to this class. */
   readonly maxSide: number;
-  /** The main-route crossing time this class aims for, in seconds. */
-  readonly crossingTargetSeconds: number;
-  /** How a main route outside the target band is reported. */
-  readonly crossingSeverity: "error" | "warning";
+  /**
+   * The most seconds the walk from the town door's entry to the farthest
+   * anchor may take at walking speed (P13's reach). A maximum, never a target.
+   */
+  readonly reachMaxSeconds: number;
 }
 
 export interface D97MapTuning {
@@ -22,13 +27,25 @@ export interface D97MapTuning {
   readonly walkingSpeedTilesPerSecond: number;
   /** Size classes ordered by `maxSide`, smallest first. */
   readonly sizeClasses: readonly D97MapSizeClass[];
-  /**
-   * The fraction a main route's crossing time may stray from its class
-   * target before the validator reports it.
-   */
-  readonly crossingTolerance: number;
   /** The least straight-line distance, in tiles, between two door anchors. */
   readonly doorMinSpacingTiles: number;
+  /** The town's radius in tiles around the town door's entry (P33). */
+  readonly townRadiusTiles: number;
+  /** The least path width, in tiles, on every anchor's route from the town. */
+  readonly minPathWidthTiles: number;
+  /** The least path width, in tiles, on the main routes out of town. */
+  readonly mainRouteMinWidthTiles: number;
+  /**
+   * The most a route from the town may walk, as a multiple of its
+   * open-ground distance (see `townLayout` in `./layout`).
+   */
+  readonly maxDetourRatio: number;
+  /**
+   * Maps whose layout findings (size, town, path width, detour and reach)
+   * are reported as allowlisted warnings instead of errors. A comment beside
+   * each entry names the bead that removes it.
+   */
+  readonly layoutAllowlist: readonly DreamMapId[];
 }
 
 /**

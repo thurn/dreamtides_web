@@ -1,21 +1,22 @@
 // The D97 map validator (decision P12): pure rules over a compiled map, each
 // a separate function returning structured findings by coordinate. The map
 // inspector (`npm run d97:map -- validate`) formats and prints them, and
-// exits non-zero on errors. Stand tiles, entries and the main route are
-// defined in `./routes`.
+// exits non-zero on errors. Stand tiles and entries are defined in
+// `./routes`; the town, path widths, routes from the town, reach and detour
+// in `./layout`.
+//
+// The **layout rules** (decisions P13 and P33) are the size, town, path
+// width, detour and reach rules. The town, width, detour and reach rules run
+// on a dream's map, whose dream module names its town; a room (P19) or an
+// example map no dream plays has no town. On a map the tuning's
+// `layoutAllowlist` names, every layout finding is a warning marked
+// `allowlisted`.
 
 import type { DreamAnchorId } from "../../types/identifiers";
 import { isWalkable, type CompiledAnchor, type CompiledDreamMap } from "./compiled";
-import type { DreamAnchorKind, TilePoint } from "./definition";
-import {
-  anchorStandTile,
-  isReached,
-  isRoomMap,
-  mainRoute,
-  mapEntries,
-  reachableCells,
-  type MainRoute,
-} from "./routes";
+import type { DreamAnchorKind, DreamMapNarrowCrossing, TilePoint } from "./definition";
+import { anchorsOnlyThroughCrossing, townDoor, townLayout, type DreamMapTown, type TownLayout } from "./layout";
+import { anchorStandTile, isReached, isRoomMap, mapEntries, reachableCells } from "./routes";
 import { mapSizeClass, type D97MapSize, type D97MapTuning } from "./tuning";
 
 export type DreamMapFindingSeverity = "error" | "warning";
@@ -51,12 +52,6 @@ export type DreamMapFinding =
       readonly distance: number;
       readonly minimum: number;
     }
-  /** Fewer than two connected doors, so the map has no main route. */
-  | {
-      readonly rule: "main-route-missing";
-      readonly severity: DreamMapFindingSeverity;
-      readonly size: D97MapSize;
-    }
   /** A tileset the map draws names an image workspace preparation does not serve. */
   | {
       readonly rule: "tileset-unserved";
@@ -64,16 +59,63 @@ export type DreamMapFinding =
       readonly tileset: string;
       readonly image: string;
     }
-  /** The main route's crossing time strays from the size class target. */
-  | {
-      readonly rule: "main-route-crossing";
-      readonly severity: DreamMapFindingSeverity;
+  | LayoutFinding;
+
+/** A finding of the layout rules, which the layout allowlist downgrades. */
+interface LayoutBase {
+  readonly severity: DreamMapFindingSeverity;
+  /** Downgraded to a warning by the tuning's `layoutAllowlist`. */
+  readonly allowlisted: boolean;
+}
+
+type LayoutFinding =
+  /** The map's longer side exceeds the largest size class's. */
+  | ({ readonly rule: "map-oversize"; readonly side: number; readonly maxSide: number } & LayoutBase)
+  /** The map's dream names no town. */
+  | ({ readonly rule: "town-missing" } & LayoutBase)
+  /** The dream's town door is not a door anchor on the map. */
+  | ({ readonly rule: "town-door-unknown"; readonly doorAnchorId: DreamAnchorId } & LayoutBase)
+  /** An anchor that belongs in town stands beyond the town radius. */
+  | ({ readonly rule: "town-outside"; readonly distance: number; readonly radius: number } & AnchorRef & LayoutBase)
+  /** A challenger, guardian, chest, quest object or the exit door stands inside the town radius. */
+  | ({ readonly rule: "town-intrusion"; readonly distance: number; readonly radius: number } & AnchorRef & LayoutBase)
+  /** An anchor's route from the town crosses cells narrower than its required width. */
+  | ({
+      readonly rule: "path-narrow";
+      readonly requiredWidth: number;
+      /** Whether the route is a main route out of town. */
+      readonly main: boolean;
+      /** The narrow cells, in walking order. */
+      readonly cells: readonly TilePoint[];
+    } & AnchorRef &
+      LayoutBase)
+  /** Blocking a narrow crossing leaves anchors without a wide route from the town. */
+  | ({
+      readonly rule: "crossing-only-route";
+      readonly crossing: string;
+      readonly cells: readonly TilePoint[];
+      readonly anchors: readonly AnchorRef[];
+    } & LayoutBase)
+  /** An anchor's walk from the town exceeds the detour ratio. */
+  | ({
+      readonly rule: "detour";
+      readonly tiles: number;
+      readonly directTiles: number;
+      readonly ratio: number;
+      readonly maxRatio: number;
+    } & AnchorRef &
+      LayoutBase)
+  /** The farthest anchor's walk from the town exceeds the size class's reach maximum. */
+  | ({
+      readonly rule: "reach";
       readonly size: D97MapSize;
-      readonly route: MainRoute;
-      readonly targetSeconds: number;
-      readonly minSeconds: number;
+      readonly tiles: number;
+      readonly seconds: number;
       readonly maxSeconds: number;
-    };
+    } & AnchorRef &
+      LayoutBase);
+
+const LAYOUT = { severity: "error", allowlisted: false } as const;
 
 function anchorRef(anchor: CompiledAnchor): AnchorRef {
   return { anchorId: anchor.id, anchorKind: anchor.kind, at: anchorStandTile(anchor) };
@@ -173,30 +215,147 @@ export function validateDoorSpacing(map: CompiledDreamMap, tuning: D97MapTuning)
 }
 
 /**
- * The main route's crossing time at walking speed lies within the size
- * class's target band, `target × (1 ± tolerance)`. The class's
- * `crossingSeverity` grades a miss: P12 holds medium maps to the target. A
- * room has no doors between dreams, so it has no main route.
+ * A map's longer side is at most the largest size class's `maxSide` (P13).
+ * A room is no dream map and has no size class.
  */
-export function validateMainRouteCrossing(map: CompiledDreamMap, tuning: D97MapTuning): DreamMapFinding[] {
+export function validateMapSize(map: CompiledDreamMap, tuning: D97MapTuning): DreamMapFinding[] {
   if (isRoomMap(map)) return [];
+  const side = Math.max(map.width, map.height);
+  const maxSide = Math.max(...tuning.sizeClasses.map((entry) => entry.maxSide));
+  return side > maxSide ? [{ rule: "map-oversize", ...LAYOUT, side, maxSide }] : [];
+}
+
+/** The town rules' layout, or the finding that stops them. */
+function layoutOrFinding(
+  map: CompiledDreamMap,
+  tuning: D97MapTuning,
+  town: DreamMapTown | null,
+  crossings: readonly DreamMapNarrowCrossing[],
+): TownLayout | DreamMapFinding {
+  if (town === null) return { rule: "town-missing", ...LAYOUT };
+  return townLayout(map, tuning, town, crossings) ?? { rule: "town-door-unknown", ...LAYOUT, doorAnchorId: town.doorAnchorId };
+}
+
+const HOSTILE_KINDS: ReadonlySet<DreamAnchorKind> = new Set(["challenger", "guardian", "chest", "object"]);
+
+/**
+ * The town (P33): within the town radius of the town door's entry stand the
+ * waypoint, every anchor of the town cluster and the dream's town anchors
+ * (the shop and quest givers, or the building doors to their rooms); outside
+ * it stand every challenger, guardian, chest and quest object, and the exit
+ * door. Distances are straight lines between stand tiles. `town` null is a
+ * dream that names no town.
+ */
+export function validateTown(map: CompiledDreamMap, tuning: D97MapTuning, town: DreamMapTown | null): DreamMapFinding[] {
+  const layout = layoutOrFinding(map, tuning, town, []);
+  if (!("routes" in layout)) return [layout];
+  const radius = tuning.townRadiusTiles;
+  const required = new Set(town?.townAnchorIds ?? []);
+  const findings: DreamMapFinding[] = [];
+  for (const route of layout.routes) {
+    const { anchor, distance } = route;
+    const belongsInTown =
+      anchor.kind === "waypoint" || (anchor.cluster !== undefined && anchor.cluster === town?.cluster) || required.has(anchor.id);
+    const staysOut = HOSTILE_KINDS.has(anchor.kind) || anchor.id === town?.exitDoorAnchorId;
+    if (belongsInTown && distance > radius) {
+      findings.push({ rule: "town-outside", ...LAYOUT, ...anchorRef(anchor), distance, radius });
+    } else if (staysOut && distance <= radius) {
+      findings.push({ rule: "town-intrusion", ...LAYOUT, ...anchorRef(anchor), distance, radius });
+    }
+  }
+  return findings;
+}
+
+/**
+ * Path widths (P33): every anchor's route from the town crosses no cell
+ * narrower than `minPathWidthTiles`, and every main route out of town none
+ * narrower than `mainRouteMinWidthTiles` (widths and routes as `./layout`
+ * defines them). A narrow crossing's cells are exempt, but it is never the
+ * only route: blocking it must leave every anchor it serves a wide route.
+ */
+export function validatePathWidths(
+  map: CompiledDreamMap,
+  tuning: D97MapTuning,
+  town: DreamMapTown | null,
+  crossings: readonly DreamMapNarrowCrossing[] = [],
+): DreamMapFinding[] {
+  const layout = layoutOrFinding(map, tuning, town, crossings);
+  if (!("routes" in layout)) return [layout];
+  const findings: DreamMapFinding[] = [];
+  for (const route of layout.routes) {
+    if (route.narrowCells.length === 0) continue;
+    findings.push({
+      rule: "path-narrow",
+      ...LAYOUT,
+      ...anchorRef(route.anchor),
+      requiredWidth: route.requiredWidth,
+      main: route.main,
+      cells: route.narrowCells,
+    });
+  }
+  for (const crossing of crossings) {
+    const stranded = anchorsOnlyThroughCrossing(map, layout, crossings, crossing);
+    if (stranded.length === 0) continue;
+    findings.push({
+      rule: "crossing-only-route",
+      ...LAYOUT,
+      crossing: crossing.name,
+      cells: crossing.cells,
+      anchors: stranded.map(anchorRef),
+    });
+  }
+  return findings;
+}
+
+/**
+ * The detour ratio (P33): no anchor's shortest walk from the town is longer
+ * than `maxDetourRatio` times its open-ground distance (`./layout`).
+ */
+export function validateDetours(map: CompiledDreamMap, tuning: D97MapTuning, town: DreamMapTown | null): DreamMapFinding[] {
+  const layout = layoutOrFinding(map, tuning, town, []);
+  if (!("routes" in layout)) return [layout];
+  const maxRatio = tuning.maxDetourRatio;
+  return layout.routes.flatMap((route): DreamMapFinding[] =>
+    route.tiles === null || route.detourRatio === null || route.detourRatio <= maxRatio
+      ? []
+      : [
+          {
+            rule: "detour",
+            ...LAYOUT,
+            ...anchorRef(route.anchor),
+            tiles: route.tiles,
+            directTiles: route.directTiles,
+            ratio: route.detourRatio,
+            maxRatio,
+          },
+        ],
+  );
+}
+
+/**
+ * Reach (P13): the walk from the town door's entry to the farthest anchor,
+ * at walking speed with guardians beaten, takes at most the size class's
+ * `reachMaxSeconds`. Unreached anchors are the reachability rule's.
+ */
+export function validateReach(map: CompiledDreamMap, tuning: D97MapTuning, town: DreamMapTown | null): DreamMapFinding[] {
+  const layout = layoutOrFinding(map, tuning, town, []);
+  if (!("routes" in layout)) return [layout];
   const sizeClass = mapSizeClass(tuning, map);
-  const severity = sizeClass.crossingSeverity;
-  const route = mainRoute(map, tuning.walkingSpeedTilesPerSecond);
-  if (route === null) return [{ rule: "main-route-missing", severity, size: sizeClass.size }];
-  const targetSeconds = sizeClass.crossingTargetSeconds;
-  const minSeconds = targetSeconds * (1 - tuning.crossingTolerance);
-  const maxSeconds = targetSeconds * (1 + tuning.crossingTolerance);
-  if (route.seconds >= minSeconds && route.seconds <= maxSeconds) return [];
+  let farthest: TownLayout["routes"][number] | null = null;
+  for (const route of layout.routes) {
+    if (route.tiles !== null && (farthest === null || route.tiles > (farthest.tiles ?? 0))) farthest = route;
+  }
+  if (farthest === null || farthest.tiles === null || farthest.seconds === null) return [];
+  if (farthest.seconds <= sizeClass.reachMaxSeconds) return [];
   return [
     {
-      rule: "main-route-crossing",
-      severity,
+      rule: "reach",
+      ...LAYOUT,
+      ...anchorRef(farthest.anchor),
       size: sizeClass.size,
-      route,
-      targetSeconds,
-      minSeconds,
-      maxSeconds,
+      tiles: farthest.tiles,
+      seconds: farthest.seconds,
+      maxSeconds: sizeClass.reachMaxSeconds,
     },
   ];
 }
@@ -220,21 +379,68 @@ export function validateTilesetsServed(map: CompiledDreamMap, served: readonly s
   return findings;
 }
 
+/** What the validator knows about a map beyond its compiled form. */
+export interface DreamMapValidationContext {
+  /** The served library subtrees; enables the tileset rule. */
+  readonly served?: readonly string[];
+  /**
+   * The map's town from its dream module, or null for a dream's map whose
+   * dream names none. Omitted for a map no dream plays (a room, an example
+   * map), which skips the town, width, detour and reach rules.
+   */
+  readonly town?: DreamMapTown | null;
+  /** The map definition's narrow crossings. */
+  readonly narrowCrossings?: readonly DreamMapNarrowCrossing[];
+}
+
+const LAYOUT_RULES: ReadonlySet<DreamMapFinding["rule"]> = new Set([
+  "map-oversize",
+  "town-missing",
+  "town-door-unknown",
+  "town-outside",
+  "town-intrusion",
+  "path-narrow",
+  "crossing-only-route",
+  "detour",
+  "reach",
+]);
+
+/** Whether `finding` comes from a layout rule (size, town, width, detour, reach). */
+function isLayoutFinding(finding: DreamMapFinding): finding is LayoutFinding {
+  return LAYOUT_RULES.has(finding.rule);
+}
+
 /**
- * Every validator rule, in a stable order. `served` (the served library
- * subtrees) enables the tileset check.
+ * Every validator rule, in a stable order. On a map the tuning's layout
+ * allowlist names, layout findings are allowlisted warnings.
  */
 export function validateDreamMap(
   map: CompiledDreamMap,
   tuning: D97MapTuning,
-  served?: readonly string[],
+  context: DreamMapValidationContext = {},
 ): DreamMapFinding[] {
-  return [
+  const { served, town, narrowCrossings = [] } = context;
+  const findings = [
     ...validateAnchorsWalkable(map),
     ...validateAnchorsReachable(map),
     ...validateGuardedAnchors(map),
     ...validateDoorSpacing(map, tuning),
-    ...validateMainRouteCrossing(map, tuning),
+    ...validateMapSize(map, tuning),
+    ...(town === undefined
+      ? []
+      : town === null || townDoor(map, town) === null
+        ? // The rule that stops the town rules, reported once.
+          validateTown(map, tuning, town)
+        : [
+            ...validateTown(map, tuning, town),
+            ...validatePathWidths(map, tuning, town, narrowCrossings),
+            ...validateDetours(map, tuning, town),
+            ...validateReach(map, tuning, town),
+          ]),
     ...(served === undefined ? [] : validateTilesetsServed(map, served)),
   ];
+  if (!tuning.layoutAllowlist.includes(map.id)) return findings;
+  return findings.map((finding) =>
+    isLayoutFinding(finding) ? { ...finding, severity: "warning", allowlisted: true } : finding,
+  );
 }

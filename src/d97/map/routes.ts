@@ -1,6 +1,7 @@
 // Walking analysis over a compiled map: entries, reachability, walking
-// routes and their crossing times, the main route, and per-region summaries.
-// Pure; the map inspector and the validator read these.
+// routes and their crossing times, and per-region summaries. Pure; the map
+// inspector, the validator and the town layout analysis (`./layout`) read
+// these.
 //
 // Definitions the tools share:
 //
@@ -10,10 +11,6 @@
 // - The map's **entries** are where a player can arrive: every door's entry
 //   tile (stepping through from another dream) and every waypoint's tile
 //   (fast travel and reloads, Appendix B §B5 and the visual guide).
-// - The **main route** is the longest of the shortest walks between two
-//   doors' entry tiles, with every guardian beaten: the farthest a player
-//   must cross to get from one door of the dream to another, which is what
-//   the P13 crossing targets size.
 
 import type { DreamAnchorId } from "../../types/identifiers";
 import { isWalkable, type CompiledAnchor, type CompiledDreamMap, type WalkabilityGrid } from "./compiled";
@@ -137,29 +134,6 @@ export function isReached(
   [x, y]: TilePoint,
 ): boolean {
   return x >= 0 && y >= 0 && x < grid.width && y < grid.height && reached[y * grid.width + x] === 1;
-}
-
-export interface MainRoute extends WalkingRoute {
-  readonly fromDoor: DreamAnchorId;
-  readonly toDoor: DreamAnchorId;
-}
-
-/**
- * The map's main route: the longest shortest walk between two door entry
- * tiles, guardians beaten. Ties keep the earliest pair in anchor order. Null
- * when no two doors are connected.
- */
-export function mainRoute(map: CompiledDreamMap, tilesPerSecond: number): MainRoute | null {
-  const doors = map.anchors.filter((anchor) => anchor.kind === "door");
-  let best: MainRoute | null = null;
-  for (let i = 0; i < doors.length; i += 1) {
-    for (let j = i + 1; j < doors.length; j += 1) {
-      const route = walkingRoute(map, anchorStandTile(doors[i]), anchorStandTile(doors[j]), tilesPerSecond);
-      if (route === null || (best !== null && route.tiles <= best.tiles)) continue;
-      best = { ...route, fromDoor: doors[i].id, toDoor: doors[j].id };
-    }
-  }
-  return best;
 }
 
 /** A region's cell counts. */
