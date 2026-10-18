@@ -42,12 +42,12 @@ module holds:
 
 | Anchor kind | Per map | Use |
 | --- | --- | --- |
-| Door | 2 or more | A door to another dream, with the entry point beside it |
+| Door | 2 or more | A door to another dream, with the entry point beside it; one is the dream's town door |
 | Waypoint | 1 | The dream's waypoint |
 | Shop | 1 | The dream's shop |
 | Guardian | 0–2 | A chokepoint: names the door anchor it blocks (B5) |
 | Challenger | 2–8, by size (B2) | A challenger |
-| Friendly | 3 or more | An authored resident or a placed friendly NPC |
+| Friendly | 3 or more | An authored resident, or a town cluster anchor for a placed friendly NPC |
 | Townsfolk | 3–8 | An ambient townsperson |
 | Chest | 1–2 | A chest; may name the guardian anchor it sits behind |
 | Object | 1 or more | A quest's lost object |
@@ -56,8 +56,40 @@ A door anchor names the entry point where a player arriving through it
 stands. The shop anchor is where the dream's shopkeeper stands. Doors stand
 at least 8 tiles apart.
 
-Friendly anchors can carry a **cluster** tag. A cluster is a group of anchors,
-usually three to six, where friendly NPCs gather like a small town.
+**The town.** Every dream has a town: its friendly cluster, gathered around
+its **town door**, a door anchor its dream module names (B2). The player
+starts in town and explores outward for challenges.
+
+- **The town radius** extends 12 tiles from the town door's entry. Within it
+  stand:
+  - the waypoint;
+  - the shop, or the building door to the room that holds it;
+  - every quest giver;
+  - most townsfolk;
+  - the **cluster** anchors: friendly anchors with the cluster tag, usually
+    three to six, where assembly places Dream Guides, amulet merchants and
+    changers, and sages (B7).
+- **Outside it** stand every challenger, guardian, chest and quest object,
+  and the exit door. Nothing hostile stands in town.
+- **Arrival.** A new run arrives at the start dream's town door, and act
+  assembly links each dream's town door on the side toward the act's entry
+  dream (B4), so the forward route's first arrival in every dream is its
+  town. Doors reached later may arrive elsewhere.
+
+**Paths.** Walkability is a first-class map check, and paths are wide and
+legible:
+
+- every anchor's route from the town runs on paths at least 2 tiles wide;
+- the main routes out of town are at least 3 tiles wide;
+- a deliberately narrow crossing, such as a plank bridge, is an explicit
+  per-cell exemption in the edit recipe, and is never the only route;
+- no route is longer than 1.6 times its straight-line distance;
+- walkable ground looks walkable, and blocked ground looks blocked: no
+  invisible walls and no walkable-looking dead ends.
+
+The town radius, path widths and detour ratio are tunables in
+`src/content/d97/map-tuning.ts`, beside walking speed and the size classes
+(B2).
 
 **Compiling.** Neither source maps nor edited maps are committed. The recipe
 compiler materializes each edited map and its walkability grid at workspace
@@ -70,17 +102,29 @@ model:
   tree clusters and door frames, each with a name, footprint, anchor points,
   an above-player mask and a preview sheet.
 - **The inspector** (`npm run d97:map -- <command>`) prints per-region
-  walkability and reachability, lists landmark and anchor coordinates, checks
-  crossing time between regions at walking speed, renders PNG previews (the
-  whole map, or a zoomed region with a coordinate grid, region outlines and
-  anchor letters) to a gitignored directory, and prints validator findings by
-  coordinate.
-- **The validator** checks that anchors stand on walkable cells, that every
-  anchor is reachable from the entries, that a guarded door is unreachable
-  while its guardian stands, that doors keep their spacing, and that a
-  medium map's main route meets its crossing-time target. A building door
-  on a dream's map must be reached from its doors and waypoint, and every
-  anchor in a room from the room's own building door.
+  walkability and reachability, lists landmark and anchor coordinates,
+  reports the reach time from the town door's entry to each anchor at walking
+  speed, reports narrow passages by coordinate, renders PNG previews (the
+  whole map, or a zoomed region with a coordinate grid, region outlines,
+  anchor letters and a walkability overlay) to a gitignored directory, and
+  prints validator findings by coordinate.
+- **The validator** checks that:
+  - anchors stand on walkable cells;
+  - every anchor is reachable from the entries;
+  - a guarded door is unreachable while its guardian stands;
+  - doors keep their spacing;
+  - the map meets its size class's reach maximum (B2);
+  - the waypoint, the shop or the building door to the shop's room, every
+    quest giver and every cluster anchor stand within the town radius of the
+    town door's entry;
+  - no challenger, guardian, chest or quest object stands inside it, and the
+    exit door stands outside it;
+  - every anchor's route from the town meets the path widths, except at a
+    recipe's narrow-crossing cells, which are never the only route;
+  - no route exceeds the detour ratio.
+
+  A building door on a dream's map must be reached from its doors and
+  waypoint, and every anchor in a room from the room's own building door.
 
 **Rooms.** A dream may own **rooms**: small interior maps, each a map module
 of its own, entered through ordinary building doors rather than dream doors.
@@ -107,7 +151,7 @@ shop. Building doors without a room are scenery.
   room of the last place is the map the overworld plays. Each passage logs
   the run, dream, room, map and both doors.
 - **Saves.** Reconciliation keeps a last place inside a room at that room's
-  current door, forgets one in a room the dream no longer has, and records
+  current door, forgets one in a room missing from its dream, and records
   the room a place's anchor stands in.
 
 Limbo has one fixed map. Key dreams use catalog maps (Appendix C §C6).
@@ -139,17 +183,20 @@ a dream module carries none:
 - its map and tileset (B1);
 - its **size**:
 
-  | Size | Challenger anchors | Guardian anchors | Map | Main-route crossing |
-  | --- | --- | --- | --- | --- |
-  | Small | 2–3 | 0–1 | About 60×60 tiles | About 1 minute |
-  | Medium | 4–5 | 1 | About 110×110 tiles | About 2 minutes |
-  | Large | 6–8 | 1–2 | About 150×150 tiles | About 3 minutes |
+  | Size | Challenger anchors | Guardian anchors | Map | Largest side | Reach |
+  | --- | --- | --- | --- | --- | --- |
+  | Small | 2–3 | 0–1 | About 32×32 tiles | 40 | At most 20 seconds |
+  | Medium | 4–5 | 1 | About 50×50 tiles | 56 | At most 30 seconds |
+  | Large | 6–8 | 1–2 | About 70×70 tiles | 80 | At most 45 seconds |
 
-  Crossing times are at walking speed (B1). The camera never shows the whole
-  of a medium map: at 2× on desktop it shows about 30×17 tiles.
-- its **topology**, by anchor UUID on its map: its waypoint, the door a new
-  run arrives through, its exit door with the guardian anchor blocking it,
-  and its shop (B5, B6);
+  Dreams are compact. **Reach** is the walking time (B1) from the town door's
+  entry to the farthest anchor. It is a maximum, never a minimum: no map pads
+  its route to fill time. At 2× on desktop the camera shows about 30×17
+  tiles, so a medium map is a few screens across.
+- its **topology**, by anchor UUID on its map: its waypoint, its **town
+  door** (B1), where a new run starting in this dream arrives, its exit door
+  with the guardian anchor blocking it, and its shop (B5, B6);
+- its **town cluster**: the cluster anchors of its town (B1);
 - its **residents**, keyed by anchor: each names its role (which matches its
   anchor's kind), its character (a sprite recipe), and the dialogue it
   speaks. Residents are the shopkeeper, 1–3 quest givers and 3–8 townsfolk,
@@ -173,8 +220,9 @@ the speaker's anchor kind, and condition types.
 
 **Townsfolk** are ambient residents. Each has a sprite recipe, a short
 personality and a small dialogue tree of barks and lore, some of it reacting
-to quest or act state. They offer no services and carry no head icon. They
-fill large maps, carry the story's through-line and hint at quests.
+to quest or act state. They offer no services and carry no head icon. Most
+stand in the town (B1). They carry the story's through-line and hint at
+quests.
 
 **Briefs.** Each dream module has a written brief beside it,
 `src/content/d97/dreams/<dream-uuid>.md`: its premise, mood, landmarks,
@@ -222,17 +270,21 @@ At run start, from the run seed, D97:
       incarnation's dream, which must have a guardian anchor.
    3. **Joins** the dreams with doors: a random spanning tree over free door
       anchors, plus up to two extra doors that form loops. Each door prefers
-      to join dreams of different categories.
+      to join dreams of different categories. Each dream's tree door on the
+      side toward the entry dream is its town door (B1), so the forward
+      route's first arrival in every dream is its town.
    4. **Seats the incarnation** at a guardian anchor in its dream and makes
       the door it blocks the act's **exit door**.
    5. **Seats Avatar guardians** at guardian anchors so that every route from
       the entry dream to the incarnation passes at least `g = 2` of them (B5).
       Remaining guardian anchors take optional guardians, up to four Avatar
       guardians per act, or stay empty, leaving their corridors open.
-   6. **Links** the exit door to the next act's entry dream. Act 5's exit door
-      leads to Limbo.
+   6. **Links** the exit door to the next act's entry dream, at that dream's
+      town door. Act 5's exit door leads to Limbo.
 4. **Places** Limbo's fixed map.
-5. **Populates** anchors (B7) and **binds** quests (B15).
+5. **Populates** anchors (B7), placing Dream Guides, amulet merchants and
+   changers, and sages at each dream's town cluster anchors, and **binds**
+   quests (B15).
 6. **Validates** the chokepoint rule, anchor capacity and quest reachability.
    On failure it retries with the next seed salt.
 
@@ -267,14 +319,14 @@ entry points while its guardian stands.
 Chests can stand behind a chokepoint, opening once its guardian falls.
 
 **The first slice.** Until act assembly exists, a run plays one dream. A new
-run arrives at its arrival door's entry, and stepping through its exit door
+run arrives at its town door's entry, and stepping through its exit door
 once the guardian falls ends the slice at a summary screen that names no
 dream.
 
 ## B6. Waypoints and the Dream Atlas
 
-- **Waypoints.** Each dream has one waypoint. Touching it activates it. The
-  start dream's waypoint is active from the start.
+- **Waypoints.** Each dream has one waypoint, in its town (B1). Touching it
+  activates it. The start dream's waypoint is active from the start.
 - **Fast travel.** While standing at an activated waypoint, outside battle,
   the player can travel free to any other activated waypoint, arriving beside
   it.
@@ -301,18 +353,19 @@ Assembly fills each act's anchors:
 | Incarnation | 1 per act | The exit chokepoint |
 | Avatar guardians | 2–4 per act | Guardian anchors chosen by B4 |
 | Challengers | 12–14 per act | Challenger anchors; about one in five is an Avatar character |
-| Shop | 1 per dream | The shop anchor |
+| Shop | 1 per dream | The shop anchor, in town |
 | Residents | As authored | Their anchors, by the dream module |
 | Townsfolk | 3–8 per dream, as authored | Townsfolk anchors |
-| Amulet merchants | 1–2 per act | Each resonance at least once across Acts 1–3 |
-| Amulet changer | 1 per act from Act 2 | |
-| Sages | About one dream in two | |
-| Dream Guide appearances | 12 per act (B13), plus one in each key dream | At most 3 per dream, 1 in a small dream |
-| Avatar quest giver | 1 in Act 2, 1 in Act 3 | A friendly Avatar character at a cluster anchor |
+| Amulet merchants | 1–2 per act | Town cluster anchors; each resonance at least once across Acts 1–3 |
+| Amulet changer | 1 per act from Act 2 | A town cluster anchor |
+| Sages | About one dream in two | A town cluster anchor |
+| Dream Guide appearances | 12 per act (B13), plus one in each key dream | Town cluster anchors; at most 3 per dream, 1 in a small dream |
+| Avatar quest giver | 1 in Act 2, 1 in Act 3 | A friendly Avatar character at a town cluster anchor |
 | Prize duelists | 1 per act | |
-| Chests | 1–2 per dream | About a quarter behind a chokepoint |
+| Chests | 1–2 per dream | Chest anchors outside town; about a quarter behind a chokepoint |
 
-- **Clusters first.** Placed friendly NPCs fill cluster anchors first.
+- **In town.** Placed friendly NPCs stand at their dream's town cluster
+  anchors (B1). Assembly places nothing hostile in town.
 - **Avatars.** In the campaign, each Avatar other than the starting Avatar
   appears at most once as a character: Avatar guardians first, then the two
   Avatar quest givers, then challengers. Once every Avatar has appeared, the
@@ -484,8 +537,9 @@ Each key dream adds one appearance of a uniformly random guide.
 
 - **One use per appearance.** Each appearance is a one-use site. Once used, the
   guide stays in the dream as an ordinary friendly character.
-- **Placement.** At most three appearances per dream, one in a small dream,
-  and never two of the same guide in one dream.
+- **Placement.** Each appearance stands at a cluster anchor in its dream's
+  town (B1). At most three appearances per dream, one in a small dream, and
+  never two of the same guide in one dream.
 - **Home tileset.** When an act includes a dream on a guide's home tileset,
   one of that guide's appearances in the act goes there, and it is always
   enhanced.
@@ -505,7 +559,8 @@ Each sage gives one free hint, once per run, of a fixed kind:
 | Way | Points out the door in this dream that starts the shortest route to this act's incarnation |
 | Seeker | Marks the dream holding the next step of an active quest on the Atlas; acts as a door sage when no quest is active |
 
-A door sage in a dream with no unexplored door acts as a way sage. Sages are
+A sage stands at a cluster anchor in its dream's town (B1). A door sage in a
+dream with no unexplored door acts as a way sage. Sages are
 optional: their hints save walking, and nothing in a run requires talking to
 one. They are D97's only source of information about unexplored doors. A
 hint never names a dream; it marks the destination on the Atlas.
@@ -630,7 +685,7 @@ defeats Apollyon.
 they fought. A reload places the player at the entry point of the last door
 they stepped through or beside the last waypoint they used, whichever was
 later. A reload inside a room places the player at the entry of the room's
-own door. A new run starts at its arrival door's entry.
+own door. A new run starts at the entry of its start dream's town door.
 
 **Saves.** A run must survive every later build: tuning, content, rules and
 code changes.

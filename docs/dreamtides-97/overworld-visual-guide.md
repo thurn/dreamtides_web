@@ -52,6 +52,11 @@ art.
    as text, and read the map back through rendered previews.
 5. **React for UI, Pixi for the world.** The world canvas draws only the map,
    characters and markers. Every panel, button and card is existing Cumulus UI.
+6. **Compact dreams, wide paths.** A dream is a few screens across and opens
+   in its town ([§B1](appendix-b-dreams.md#b1-tilesets-and-maps)). Its paths
+   are at least 2 tiles wide, and 3 on the main routes out of town. Walkable
+   ground looks walkable and blocked ground looks blocked: no invisible walls
+   and no walkable-looking dead ends.
 
 ## Art source: Liberated Pixel Cup
 
@@ -134,9 +139,9 @@ React 19.
   logged event; returning from a battle places the player beside the opponent,
   and a reload places the player at the last door or waypoint used
   ([Appendix B §B17](appendix-b-dreams.md#b17-state-and-logging)).
-- **Camera.** The camera follows the player and never shows the whole of a
-  medium map: at 2× on desktop it shows about 30×17 tiles. It keeps the
-  player clear of the HUD's control bar.
+- **Camera.** The camera follows the player. At 2× on desktop it shows about
+  30×17 tiles, so a medium map of about 50×50 is a few screens across. It
+  keeps the player clear of the HUD's control bar.
 
 ## Building maps
 
@@ -177,16 +182,16 @@ export default defineDreamMap({
   id: parseDreamMapId("…"),
   source: { kind: "tiled", path: "source-of-tales/maps/…", sha256: parseDreamMapSourceHash("…") },
   recipe: [
-    { op: "crop", from: [40, 60], to: [149, 169] },
-    { op: "erase", from: [55, 25], to: [64, 30] },
-    { op: "stamp", stamp: EMBER_ARCH, at: [58, 26] },
+    { op: "crop", from: [70, 80], to: [119, 129] },
+    { op: "erase", from: [36, 4], to: [44, 9] },
+    { op: "stamp", stamp: EMBER_ARCH, at: [38, 5] },
     { op: "paintTerrain", terrain: DIRT, layer: "Ground", shape: { kind: "path", points: [[0, 40], [30, 40]] } },
     { op: "abovePlayer", layer: "Over" },
-    { op: "block", from: [12, 3], to: [14, 5] },
+    { op: "block", from: [2, 3], to: [4, 5] },
   ],
-  regions: [{ name: "well square", from: [52, 20], to: [76, 34] }],
-  landmarks: [{ name: "the ember arch", at: [60, 28] }],
-  anchors: [/* doors, waypoint, shop, residents, challengers … with UUIDs */],
+  regions: [{ name: "well square", from: [14, 18], to: [32, 32] }],
+  landmarks: [{ name: "the ember arch", at: [40, 7] }],
+  anchors: [/* the town door, doors, waypoint, shop, residents, challengers … with UUIDs */],
 });
 ```
 
@@ -204,18 +209,23 @@ An agent authoring a map runs the inspector (`npm run d97:map -- <command>`)
 until it is clean:
 
 - **Inspect** prints per-region walkability and reachability summaries,
-  landmark and anchor coordinates, and the crossing time between regions at
-  walking speed.
+  landmark and anchor coordinates, the reach time from the town door's entry
+  to each anchor at walking speed, and narrow passages by coordinate.
 - **The validator** checks that every anchor stands on a walkable cell, that
   every anchor is reachable from the entries, that a guarded door is
   unreachable while its guardian stands, that doors stand at least 8 tiles
-  apart, and that a medium map's main route meets its crossing-time target.
-  It reports findings by coordinate.
+  apart, and that the map meets its size class's reach maximum
+  ([§B2](appendix-b-dreams.md#b2-dream-catalog)). It checks the town and
+  path rules of [§B1](appendix-b-dreams.md#b1-tilesets-and-maps): the
+  town's anchors stand within the town radius and nothing hostile inside
+  it, paths are at least 2 tiles wide (3 on the main routes out of town)
+  outside a recipe's narrow-crossing exemptions, and no route exceeds the
+  detour ratio. It reports findings by coordinate.
 - **The preview** renders the whole map, or a zoomed region with a
-  coordinate grid, region outlines and anchor letters, to PNGs in a
-  gitignored directory. The agent reads the pictures back and fixes what
-  reads badly: a cramped plaza, a road that leads nowhere, a door hidden
-  behind a house.
+  coordinate grid, region outlines, anchor letters and a walkability
+  overlay, to PNGs in a gitignored directory. The agent reads the pictures
+  back and fixes what reads badly: a cramped plaza, a road that leads
+  nowhere, a path too narrow to find, a door hidden behind a house.
 
 ### Backdrop maps
 
@@ -352,8 +362,12 @@ internal labels for art sets and never appear in game. Each scene below is a
 mockup at 2× of a 22×13-tile excerpt, with characters and markers placed as
 the game would show them. The "Map path" column names each scene's starting
 point; every path is a source plus recipe operations
-([Building maps](#building-maps)). The first dream built is a 110×110 crop
-of Source of Tales' Mountainwatch.
+([Building maps](#building-maps)). The first dream is a medium crop of
+Source of Tales' Mountainwatch, at most 56×56 tiles, whose well square is its
+town: the town door, waypoint, inn door and quest givers stand there, and its
+challengers, guardian and ember arch lie beyond. Its map is rebuilt to this
+design by Phase 3's playtest bead PT.2
+([Playtest revisions](plan/phase-3-act-one.md#playtest-revisions)).
 
 | Tileset | Category | Guide at home | Map path |
 | --- | --- | --- | --- |

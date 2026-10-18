@@ -106,8 +106,9 @@ Research inputs, outside this repository:
    and any of the 32 Avatars. The
    game builds a starting collection from the Avatar's bag and assembles the
    five acts.
-2. **Explore.** Walk through dreams, step through doors, activate waypoints,
-   and fast-travel between them from the Dream Atlas.
+2. **Explore.** Start in each dream's town and walk outward, step through
+   doors, activate waypoints, and fast-travel between them from the Dream
+   Atlas.
 3. **Challenge.** Opt into battles against challengers for their antes,
    victory bundles, Essence, amulets and, from Act 4, keys. Beat the Avatar
    guardians to pass their doors and for exact picks from their decks.
@@ -142,7 +143,7 @@ Refills make the battle count unbounded above. The endgame has no fixed length.
 | **Campaign** | Acts 1–5 and Limbo, ending with Apollyon's defeat. |
 | **Act** | One stage of the campaign: several act dreams assembled at run start, ending at an incarnation. |
 | **Dream** | One authored location: a map on one tileset, with its own characters, quests and doors. Dreams have no names. |
-| **Dream module** | A catalog dream's typed module: its map, its topology (waypoint, arrival door, exit door and its guardian, shop) and its residents by anchor. |
+| **Dream module** | A catalog dream's typed module: its map, its topology (waypoint, town door, exit door and its guardian, shop), its town cluster and its residents by anchor. |
 | **Room** | A small interior map that belongs to a dream, entered through an ordinary building door. |
 | **Act dream** | A dream placed in an act. Act dreams can be revisited for the rest of the run. |
 | **Key** | An item that opens one key dream, showing only its prize. |
@@ -164,7 +165,9 @@ Refills make the battle count unbounded above. The endgame has no fixed length.
 | **Limbo** | The final campaign dream, beyond the Act 5 incarnation. |
 | **Friendly NPC** | A character who can't be challenged: shopkeepers, amulet merchants, sages, Dream Guides and quest givers. |
 | **Townsfolk** | Ambient residents of a dream who talk but offer no services and carry no head icon. |
-| **Cluster** | A group of map anchors where friendly NPCs gather, which acts like a small town. |
+| **Town** | A dream's friendly cluster around its town door, where the forward route first arrives: the waypoint, the shop, the quest givers, most townsfolk and the cluster anchors. Nothing hostile stands in town. |
+| **Town door** | The door anchor a dream's town gathers around. A new run arrives at the start dream's town door. |
+| **Cluster** | The friendly anchors of a dream's town, where Dream Guides, amulet merchants and changers, and sages stand. |
 | **Collection** | Every owned card copy. |
 | **Active deck** | The owned copies equipped for battle. |
 | **Reserve** | Owned copies not in the active deck. |
@@ -340,10 +343,18 @@ Algorithms: [Appendix A](appendix-a-economy.md).
   dream module beside its written brief: its map, tileset, topology,
   residents (friendly characters, 3–8 townsfolk and challenger personas, each
   with dialogue), 1–3 quests written for that tileset, and any sealed doors
-  with their tolls or quest items. Dreams come in sizes from small (2–3
-  challengers, a map of about 60×60 tiles) to large (6–8 challengers, about
-  150×150), so an act might be eight small dreams or four large ones. See
+  with their tolls or quest items. Dreams are compact, in sizes from small
+  (2–3 challengers, a map of about 32×32 tiles, every anchor at most 20
+  seconds' walk from town) through medium (4–5 challengers, about 50×50, at
+  most 30 seconds) to large (6–8 challengers, about 70×70, at most 45
+  seconds), so an act might be eight small dreams or four large ones. See
   [Appendix B §B2](appendix-b-dreams.md#b2-dream-catalog).
+- **Towns.** Every dream has a town around its town door, where the
+  forward route first arrives: its waypoint, shop, quest givers and placed
+  friendly NPCs stand there, and its challengers, guardians and chests lie
+  beyond. Paths are wide and legible, at least 2 tiles everywhere an
+  anchor's route passes. See
+  [Appendix B §B1](appendix-b-dreams.md#b1-tilesets-and-maps).
 - **Unnamed dreams.** Dreams have no names anywhere in the game: not on doors,
   in the Atlas or in sage hints. Characters, quests and items have names.
   Limbo is the one named place: the door to it carries a "Limbo" nameplate.
@@ -479,10 +490,12 @@ Key modifiers are future work. Details:
 
 ## Friendly NPCs
 
-There are no towns. Friendly NPCs stand at map anchors, and maps group some
-anchors into clusters that act like small towns. A dream's friendly
-characters and townsfolk are authored with it, with their dialogue as typed
-graphs whose choices write intent events.
+Every dream's friendly NPCs gather in its town, around its town door: the
+shopkeeper, quest givers and most townsfolk stand there, and assembly places
+Dream Guides, amulet merchants and changers, and sages at its cluster
+anchors. The player starts in town and explores outward for challenges. A
+dream's friendly characters and townsfolk are authored with it, with their
+dialogue as typed graphs whose choices write intent events.
 
 | NPC | Role |
 | --- | --- |
