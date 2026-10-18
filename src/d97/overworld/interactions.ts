@@ -134,8 +134,8 @@ function battleResident(ctx: InteractionContext, anchor: CompiledAnchor): Intera
   return { ...result, logs: [routed, ...result.logs] };
 }
 
-function door({ run, topology }: InteractionContext, anchorId: DreamAnchorId): InteractionResult {
-  const reason = doorRefusal(run, topology, anchorId);
+function door({ run }: InteractionContext, anchorId: DreamAnchorId): InteractionResult {
+  const reason = doorRefusal(run, anchorId);
   if (reason !== null) return refuse(reason, [{ event: "d97_door_unopened", fields: { runId: run.runId, anchorId, reason } }]);
   return { intents: [{ type: "D97_STEP_THROUGH_DOOR", payload: { anchorId } }], logs: [] };
 }

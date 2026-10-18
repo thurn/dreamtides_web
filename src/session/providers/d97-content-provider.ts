@@ -16,6 +16,8 @@ import { avatarPoolOf } from "../../d97/collection/avatar-pool";
 import type { D97AvatarPool } from "../../d97/collection/types";
 import { D97_DIALOGUE_CONTENT } from "../../content/d97/dialogue";
 import { D97_DREAMS } from "../../content/d97/dreams";
+import { D97_TILESETS } from "../../content/d97/dreams/tilesets";
+import type { D97ActCatalogDream } from "../../d97/assembly/types";
 import { D97_DREAM_MAPS } from "../../content/d97/maps";
 import type { D97DevelopmentContent } from "../../d97/development-content";
 import type { JourneyContent } from "../../data/journey-content";
@@ -91,6 +93,14 @@ export function createD97ContentProvider(
     }));
     dreams.set(dream.id, registerDream(dream, anchors, dialogue.dialogues));
   }
+  // Act assembly draws catalog dreams whose tileset is known; the catalog
+  // validator reports any other.
+  const categories = new Map(D97_TILESETS.map((tileset) => [tileset.id, tileset.category]));
+  const actDreams = D97_DREAMS.flatMap((dream): D97ActCatalogDream[] => {
+    const category = categories.get(dream.tilesetId);
+    const registered = dreams.get(dream.id);
+    return category === undefined || registered === undefined ? [] : [{ dream, category, anchors: registered.anchors }];
+  });
   return {
     buildOpponentDeck: (input) => buildD97OpponentDeck(battleContent, input),
     startBattle: (input) => startD97Battle(battleContent, input),
@@ -99,6 +109,7 @@ export function createD97ContentProvider(
     dialogue,
     dreams,
     defaultDreamId: D97_DREAMS[0]?.id ?? null,
+    actCatalog: { dreams: actDreams, deckSourceAvatarIds: [...rewardPools.keys()].sort(codeUnits) },
     avatarIds: new Set(content.avatars.map((avatar) => avatar.id)),
     tideAffinityIndex:
       tides4Decks === undefined

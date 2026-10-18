@@ -36,7 +36,7 @@ import type { FoldState } from "../fold-state";
 import { advanceDefeatQuest } from "./d97-quests";
 import type { D97Transition } from "./d97-run";
 import { d97ContentProvider, type D97ContentProvider } from "./d97-content";
-import { runDreamAnchor } from "./d97-dreams";
+import { runBattleResident } from "./d97-acts";
 import { d97RunAct, type D97Encounter, type D97Run } from "./d97-state";
 import type { D97BattleInput, D97RunInput } from "./events/spec";
 
@@ -108,9 +108,9 @@ export function previewEncounter(
   const content = d97ContentProvider();
   if (content === null) return null;
   if (run.encounters[anchorId] !== undefined) return null;
-  // Only a challenger or guardian of the run's own dream.
-  const challenger = runDreamAnchor(run, content, anchorId)?.challengers.get(anchorId);
-  if (challenger === undefined) return null;
+  // Only a challenger or guardian of the run's own dream, as its act seats them.
+  const challenger = runBattleResident(run, content, anchorId);
+  if (challenger === null) return null;
   const tier = encounterTier(challenger.role, d97RunAct(run));
   const knob = tierKnob(tier, D97_ENCOUNTERS.tierKnobs);
   // The incarnation the run meets: the look drawn and the Avatar fought as agree.

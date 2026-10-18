@@ -109,6 +109,8 @@ export type D97CharacterId = DomainIdentity<"D97CharacterId">;
 export type LpcSheetKey = DomainIdentity<"LpcSheetKey">;
 /** One Dreamtides 97 dream module: a map and its residents (a UUID). */
 export type D97DreamId = DomainIdentity<"D97DreamId">;
+/** One act of a Dreamtides 97 run, derived from the run seed when assembled (a UUID). */
+export type D97ActId = DomainIdentity<"D97ActId">;
 /** One room of a D97 dream: a small interior map behind a building door (a UUID). */
 export type D97RoomId = DomainIdentity<"D97RoomId">;
 /** One D97 tileset: an art set dreams are drawn in, with its category (a UUID). */
@@ -207,6 +209,7 @@ const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
 const brandD97CharacterId = identityConstructor<D97CharacterId>();
 const brandLpcSheetKey = identityConstructor<LpcSheetKey>();
 const brandD97DreamId = identityConstructor<D97DreamId>();
+const brandD97ActId = identityConstructor<D97ActId>();
 const brandD97RoomId = identityConstructor<D97RoomId>();
 const brandD97TilesetId = identityConstructor<D97TilesetId>();
 const brandDreamMapId = identityConstructor<DreamMapId>();
@@ -424,6 +427,12 @@ export const parseD97DreamId = identityParser(
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );
+export const parseD97ActId = identityParser(
+  "D97 act id",
+  brandD97ActId,
+  (value) => UUID_PATTERN.test(value),
+  (value) => value.toLowerCase(),
+);
 export const parseD97RoomId = identityParser(
   "D97 room id",
   brandD97RoomId,
@@ -600,6 +609,7 @@ export const auguryArchetypeIdFromUnknown = identityDecoder(
 export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const d97DreamIdFromUnknown = identityDecoder(parseD97DreamId);
 export const d97RoomIdFromUnknown = identityDecoder(parseD97RoomId);
+export const d97ActIdFromUnknown = identityDecoder(parseD97ActId);
 export const d97OwnedCopyIdFromUnknown = identityDecoder(parseD97OwnedCopyId);
 export const dreamAnchorIdFromUnknown = identityDecoder(parseDreamAnchorId);
 export const d97QuestIdFromUnknown = identityDecoder(parseD97QuestId);

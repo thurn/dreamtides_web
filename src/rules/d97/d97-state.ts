@@ -10,6 +10,7 @@ import type {
   D97Collection,
   D97RewardBags,
 } from "../../d97/collection/types";
+import type { D97Act } from "../../d97/assembly/types";
 import type { D97QuestState } from "../../d97/quests/types";
 import type { CardId } from "../../types/card-identity";
 import type {
@@ -93,6 +94,13 @@ export interface D97Run {
    * (Phase 3) moves it.
    */
   readonly dreamId: D97DreamId;
+  /**
+   * The run's assembled acts (Appendix B §B4), Act 1 first: written by
+   * `D97_START_RUN` and never re-derived (decision P5). A save from before act
+   * assembly decodes with none, and load-time reconciliation gives it the
+   * one-dream act of its dream.
+   */
+  readonly acts: readonly D97Act[];
   /** The starting event's timestamp, for diagnostics. */
   readonly startedAt: string;
   /** Spendable Essence. */
@@ -142,13 +150,17 @@ export interface D97Shop {
   readonly rolls: number;
 }
 
+/** The assembled act holding the run's dream, or null when none does. */
+export function d97RunActOf(run: D97Run): D97Act | null {
+  return run.acts.find((act) => act.dreamIds.includes(run.dreamId)) ?? null;
+}
+
 /**
- * The act `run` is in: M1 runs play the first act (decision P7), and act
- * progression arrives with act assembly. Every act-dependent rule and view
- * reads it here.
+ * The number of the act `run` is in: the act holding its dream, or Act 1
+ * before it has one. Every act-dependent rule and view reads it here.
  */
-export function d97RunAct(_run: D97Run): number {
-  return 1;
+export function d97RunAct(run: D97Run): number {
+  return d97RunActOf(run)?.number ?? 1;
 }
 
 /**

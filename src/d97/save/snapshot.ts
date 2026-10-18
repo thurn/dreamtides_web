@@ -4,9 +4,9 @@
 // genesis state plus these two slices, so a snapshot restores it exactly.
 // Older schema versions migrate forward on decode.
 //
-// The live state is a phase union (`D97State`); schema v4 persists it as
+// The live state is a phase union (`D97State`); schema v5 persists it as
 // `{ screen, run }` with `run` nullable on any screen. The converters below
-// keep the persisted JSON exactly v4: writing is the identity, and reading
+// keep the persisted JSON exactly v5: writing is the identity, and reading
 // accepts only the combinations the union names (no run on Avatar select, a
 // run everywhere else), refusing any other as it refuses a malformed field.
 
@@ -17,17 +17,17 @@ import { genesisFoldState, type FoldState } from "../../rules/fold-state";
 import type { BuildGitRevision } from "../../types/build-identity";
 import type { IntentKey } from "../../types/identifiers";
 import { migrateSnapshot, type D97SaveMigration } from "./migrate";
-import { parseSnapshotV4, type D97RunV4, type D97StateV4 } from "./schema-v4";
+import { parseSnapshotV5, type D97RunV5, type D97StateV5 } from "./schema-v5";
 
 export const D97_SAVE_FORMAT = "dreamtides-97-save";
 
 /**
  * The current snapshot schema version. Each version is frozen: its shape is
- * written out in its own module (`./schema-v4.ts`), type-tied to the live
+ * written out in its own module (`./schema-v5.ts`), type-tied to the live
  * state, and a change to the persisted shape bumps the version and adds a
  * migration (`./migrations/`).
  */
-export const D97_SAVE_SCHEMA_VERSION = 4;
+export const D97_SAVE_SCHEMA_VERSION = 5;
 
 /** The build that wrote a snapshot: the cross-build trigger and diagnostics. */
 export interface D97SaveBuild {
@@ -51,19 +51,19 @@ export interface D97Snapshot {
 type Exact<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 
 /**
- * Fails type checking when the live run stops being exactly schema v4's: a
+ * Fails type checking when the live run stops being exactly schema v5's: a
  * persisted-shape change needs the next schema version and a migration.
  */
-const LIVE_RUN_IS_V4: Exact<D97Run, D97RunV4> = true;
-void LIVE_RUN_IS_V4;
+const LIVE_RUN_IS_V5: Exact<D97Run, D97RunV5> = true;
+void LIVE_RUN_IS_V5;
 
-/** The persisted v4 form of a live state: the same JSON, widened. */
-function d97StateToV4(d97: D97State): D97StateV4 {
+/** The persisted v5 form of a live state: the same JSON, widened. */
+function d97StateToV5(d97: D97State): D97StateV5 {
   return d97;
 }
 
-/** The live state a persisted v4 state names, or null when its screen and run disagree. */
-function d97StateFromV4(d97: D97StateV4): D97State | null {
+/** The live state a persisted v5 state names, or null when its screen and run disagree. */
+function d97StateFromV5(d97: D97StateV5): D97State | null {
   const { screen, run } = d97;
   if (screen.type === "avatarSelect") return run === null ? { screen, run } : null;
   if (run === null) return null;
@@ -90,7 +90,7 @@ export function takeSnapshot(
 }
 
 export function encodeSnapshot(snapshot: D97Snapshot): string {
-  return JSON.stringify({ ...snapshot, d97: d97StateToV4(snapshot.d97) });
+  return JSON.stringify({ ...snapshot, d97: d97StateToV5(snapshot.d97) });
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -115,8 +115,8 @@ export function decodeSnapshot(
   if (!isRecord(parsed) || parsed.format !== D97_SAVE_FORMAT) return null;
   const migrated = migrateSnapshot(parsed, migrations, D97_SAVE_SCHEMA_VERSION);
   if (migrated === null) return null;
-  const persisted = parseSnapshotV4(migrated.value);
-  const d97 = persisted === null ? null : d97StateFromV4(persisted.d97);
+  const persisted = parseSnapshotV5(migrated.value);
+  const d97 = persisted === null ? null : d97StateFromV5(persisted.d97);
   if (persisted === null || d97 === null) return null;
   const snapshot: D97Snapshot = { ...persisted, d97 };
   return { snapshot, migratedFrom: migrated.from === D97_SAVE_SCHEMA_VERSION ? null : migrated.from };

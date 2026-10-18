@@ -19,14 +19,20 @@
 //   when that door's anchor changed and records the room its anchor stands
 //   in now; the anchor a battle returns the player beside is dropped when it
 //   is not on the last place's map;
-// - a held quest whose definition was removed is abandoned.
+// - a held quest whose definition was removed is abandoned;
+// - a run without an assembled act (a save from before act assembly) is
+//   given the one-dream act of its dream (`preAssemblySave`), and a run whose
+//   act no longer resolves (its dream is not in it, or one of its dreams, or
+//   an anchor its doors, seats or quest bindings name, is gone) has it
+//   replaced by that one-dream act; both are logged.
 //
 // New tunables need no repair: they apply going forward.
 
 import type { D97SaveTuning } from "../../content/d97/save";
 import type { D97Encounter, D97Place, D97Run, D97Shop, D97State } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
-import type { AvatarId, D97DreamId, D97OwnedCopyId, D97QuestId, D97RoomId, DreamAnchorId } from "../../types/identifiers";
+import type { AvatarId, D97ActId, D97DreamId, D97OwnedCopyId, D97QuestId, D97RoomId, D97RunSeed, DreamAnchorId } from "../../types/identifiers";
+import type { D97Act } from "../assembly/types";
 import type { D97RewardBags } from "../collection/types";
 import type { DreamAnchorKind } from "../map/definition";
 import type { D97Snapshot } from "./snapshot";
@@ -63,6 +69,8 @@ export interface D97SaveCatalog {
   /** The dream a run whose dream was removed moves to. */
   readonly defaultDreamId: D97DreamId;
   readonly questIds: ReadonlySet<D97QuestId>;
+  /** The one-dream act of `dreamId` for a run of `runSeed` (`preAssemblySave`), or null for an unknown dream. */
+  readonly oneDreamAct: (dreamId: D97DreamId, runSeed: D97RunSeed) => D97Act | null;
 }
 
 /** One repair, logged with UUIDs. */
@@ -75,7 +83,9 @@ export type D97Reconciliation =
   | { readonly kind: "dreamMoved"; readonly dreamId: D97DreamId | null; readonly toDreamId: D97DreamId }
   | { readonly kind: "roomRemoved"; readonly roomId: D97RoomId }
   | { readonly kind: "placeRoomChanged"; readonly anchorId: DreamAnchorId; readonly roomId: D97RoomId | null; readonly toRoomId: D97RoomId | null }
-  | { readonly kind: "questAbandoned"; readonly questId: D97QuestId };
+  | { readonly kind: "questAbandoned"; readonly questId: D97QuestId }
+  | { readonly kind: "actAssembled"; readonly actId: D97ActId; readonly dreamId: D97DreamId }
+  | { readonly kind: "actReplaced"; readonly actId: D97ActId; readonly toActId: D97ActId; readonly dreamId: D97DreamId };
 
 type CardFate = { readonly kind: "keep" } | { readonly kind: "replace"; readonly to: CardId } | { readonly kind: "retire" };
 
@@ -164,6 +174,7 @@ class Reconciler {
     return {
       ...run,
       dreamId,
+      acts: this.acts(run.acts, dreamId, run.runSeed),
       essence,
       collection: { ...run.collection, copies },
       bags: { ...run.bags, drawn: this.drawn(run.bags.drawn) },
@@ -178,6 +189,41 @@ class Reconciler {
         pendingReward: pending === null ? null : { ...pending, cardIds: this.cards(pending.cardIds, "questReward") },
       },
     };
+  }
+
+  /**
+   * The run's acts: kept while they resolve against the catalog, otherwise
+   * (none, or one that no longer resolves) the one-dream act of its dream.
+   */
+  private acts(acts: readonly D97Act[], dreamId: D97DreamId, runSeed: D97RunSeed): readonly D97Act[] {
+    if (acts.length > 0 && this.actsResolve(acts, dreamId)) return acts;
+    const act = this.catalog.oneDreamAct(dreamId, runSeed);
+    if (act === null) return acts;
+    const replaced = acts[0];
+    this.log.push(
+      replaced === undefined
+        ? { kind: "actAssembled", actId: act.actId, dreamId }
+        : { kind: "actReplaced", actId: replaced.actId, toActId: act.actId, dreamId },
+    );
+    return [act];
+  }
+
+  /** Whether some act holds the run's dream and every dream and anchor each act names is in the catalog. */
+  private actsResolve(acts: readonly D97Act[], dreamId: D97DreamId): boolean {
+    const anchors = new Map(this.catalog.dreams.map((dream) => [dream.id, new Set(dream.anchors.map((anchor) => anchor.id))]));
+    const has = ({ dreamId: at, anchorId }: { readonly dreamId: D97DreamId; readonly anchorId: DreamAnchorId }) => anchors.get(at)?.has(anchorId) === true;
+    return (
+      acts.some((act) => act.dreamIds.includes(dreamId)) &&
+      acts.every(
+        (act) =>
+          act.dreamIds.every((id) => anchors.has(id)) &&
+          act.doors.every((door) => has(door.from) && has(door.to)) &&
+          has(act.exitDoor) &&
+          act.guardians.every(has) &&
+          act.challengers.every(has) &&
+          act.quests.every((quest) => quest.roles.every(has)),
+      )
+    );
   }
 
   /** Each bag's draw counts, a replaced card's merged into its replacement's. */

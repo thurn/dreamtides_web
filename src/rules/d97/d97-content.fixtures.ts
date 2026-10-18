@@ -2,10 +2,12 @@
 // space, a synthetic pinned pool per roster Avatar (ring 1: the pool cards;
 // ring 2: the facet cards), synthetic capacity stages, a handful of Starter
 // cards and two registered
-// synthetic dreams (./d97-dreams.fixtures.ts), the first the default. Every id
-// is a test UUID.
+// synthetic dreams (./d97-dreams.fixtures.ts), the first the default, with no
+// catalog dreams for act assembly unless a test passes its own, so a run plays
+// its start dream as a one-dream act. Every id is a test UUID.
 
 import type { D97RewardBagTuning } from "../../content/d97/collection";
+import type { D97ActCatalog } from "../../d97/assembly/types";
 import type { D97AvatarPool } from "../../d97/collection/types";
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
@@ -74,6 +76,7 @@ export function syntheticD97Content(
     itemIds?: readonly D97ItemId[];
     dreams?: readonly D97DreamDefinition[];
     dialogues?: readonly D97DialogueModule[];
+    actCatalog?: D97ActCatalog;
   } = {},
 ): D97ContentProvider {
   const avatarIds = options.avatarIds ?? [testAvatarId("d97-roster-avatar")];
@@ -130,6 +133,7 @@ export function syntheticD97Content(
     dialogue: { dialogues, quests, items: new Map() },
     dreams: new Map(dreams.map((dream) => [dream.id, registerDream(dream, syntheticDreamAnchors(dream), dialogues)])),
     defaultDreamId: dreams[0]?.id ?? null,
+    actCatalog: options.actCatalog ?? { dreams: [], deckSourceAvatarIds: avatarIds },
     rewardPool: (avatarId) => pools.get(avatarId) ?? null,
     rewardBagTuning: options.bagTuning ?? SYNTHETIC_BAG_TUNING,
     buildOpponentDeck: ({ deckSize, signatureCount }) => ({

@@ -1,7 +1,8 @@
 // The D97 travel cases (Appendix B §B5, §B6, §B17): touching a waypoint and
 // stepping through a door. Each records where a reload places the player.
-// In the M1 slice the exit door is the only door that leads anywhere: once its
-// guardian is beaten, stepping through it ends the slice. The touched anchor
+// The exit door of the run's act (`runExitDoor`, the door its incarnation
+// seat blocks) is the only door that leads anywhere: once the guardian
+// seated there is beaten, stepping through it ends the slice. The touched anchor
 // is resolved in the run's own dream (`runDreamAnchor`), so another dream's
 // waypoint or door bounces. Both stand on the dream's own map, so neither
 // opens while the player is inside one of its rooms (./d97-rooms.ts).
@@ -11,6 +12,7 @@
 import type { D97DreamDefinition, D97DreamTopology } from "../../content/d97/dreams/schema";
 import type { DreamAnchorId } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
+import { runExitDoor } from "./d97-acts";
 import { runDreamAnchor } from "./d97-dreams";
 import type { D97Transition } from "./d97-run";
 import { d97RunRoomId, type D97Run } from "./d97-state";
@@ -36,17 +38,15 @@ export function waypointRefusal(topology: D97DreamTopology, anchorId: DreamAncho
 }
 
 /**
- * Why stepping through the door at `anchorId` in a dream of `topology` goes
- * nowhere for `run`, or null when it opens: only the exit door leads
- * anywhere, and only once its guardian is beaten.
+ * Why stepping through the door at `anchorId` in the run's dream goes
+ * nowhere for `run`, or null when it opens: only the act's exit door leads
+ * anywhere, and only once the guardian seated at its incarnation seat is
+ * beaten.
  */
-export function doorRefusal(
-  run: D97Run,
-  topology: D97DreamTopology,
-  anchorId: DreamAnchorId,
-): "noDestination" | "guardianStanding" | null {
-  if (anchorId !== topology.exitDoorAnchorId) return "noDestination";
-  return run.encounters[topology.exitGuardianAnchorId]?.beaten === true ? null : "guardianStanding";
+export function doorRefusal(run: D97Run, anchorId: DreamAnchorId): "noDestination" | "guardianStanding" | null {
+  const exit = runExitDoor(run);
+  if (exit === null || anchorId !== exit.doorAnchorId) return "noDestination";
+  return run.encounters[exit.guardianAnchorId]?.beaten === true ? null : "guardianStanding";
 }
 
 /**
@@ -83,8 +83,9 @@ export function activateWaypoint(input: D97RunInput, payload: AnchorPayload): D9
  */
 export function stepThroughDoor(input: D97RunInput, payload: AnchorPayload): D97Transition | null {
   const context = travelContext(input, payload);
-  if (context === null || doorRefusal(context.run, context.dream.topology, context.anchorId) !== null) return null;
+  if (context === null || doorRefusal(context.run, context.anchorId) !== null) return null;
   const { run, anchorId, dream } = context;
+  const guardianAnchorId = runExitDoor(run)?.guardianAnchorId ?? null;
   return {
     d97: {
       screen: { type: "sliceEnd" },
@@ -97,7 +98,7 @@ export function stepThroughDoor(input: D97RunInput, payload: AnchorPayload): D97
           runId: run.runId,
           anchorId,
           mapId: dream.mapId,
-          guardianAnchorId: dream.topology.exitGuardianAnchorId,
+          guardianAnchorId,
           destination: "sliceEnd",
           battlesFought: run.battlesFought,
           essence: run.essence,

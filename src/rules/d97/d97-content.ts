@@ -24,6 +24,7 @@ import type { D97BattleInit } from "../battle/fold";
 import type { D97Encounter, D97Run } from "./d97-state";
 import type { D97QuestCatalog } from "../../d97/quests/quests";
 import type { D97DialogueCatalog } from "../../d97/dialogue/catalog";
+import type { D97ActCatalog } from "../../d97/assembly/types";
 
 /** An opponent's constructed deck (Appendix B §B9). */
 export interface D97OpponentBuild {
@@ -118,6 +119,12 @@ export interface D97ContentProvider extends D97StartingCollectionContent, D97Rew
   readonly dreams: ReadonlyMap<D97DreamId, D97RegisteredDream>;
   /** The dream a run starts in when its start names none; null for no catalog dream. */
   readonly defaultDreamId: D97DreamId | null;
+  /**
+   * What act assembly draws from (src/d97/assembly/): the dream catalog's
+   * dreams with their categories and maps' anchors, and the deck source
+   * Avatars. Development and synthetic dreams are registered but not in it.
+   */
+  readonly actCatalog: D97ActCatalog;
 }
 
 let provider: D97ContentProvider | null = null;

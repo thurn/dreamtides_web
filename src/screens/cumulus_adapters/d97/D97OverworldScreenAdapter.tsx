@@ -15,6 +15,7 @@ import { D97OverworldScreen, type D97OverworldControlId } from "../../../cumulus
 import type { JourneyContent } from "../../../data/journey-content";
 import type { CompiledDreamMap } from "../../../d97/map/compiled";
 import { buildDialogueCatalog } from "../../../d97/dialogue/catalog";
+import { publishD97QaRun } from "../../../d97/overworld/qa-surface";
 import { logEvent } from "../../../logging";
 import { d97ContentProvider } from "../../../rules/d97/d97-content";
 import { d97RunAct, type D97Run } from "../../../rules/d97/d97-state";
@@ -68,6 +69,8 @@ function D97DreamOverworld({
   const travel = useD97Travel({ run, dream: dream.topology, mapId: map.id, returningFromBattle });
   const [hudInset, setHudInset] = useState(0);
   const loggedRef = useRef<CompiledDreamMap["id"] | null>(null);
+
+  useEffect(() => (import.meta.env.DEV ? publishD97QaRun(run) : undefined), [run]);
 
   useEffect(() => {
     // Once per map shown, despite StrictMode's doubled effects.

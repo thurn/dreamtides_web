@@ -26,6 +26,7 @@ import { isFoldableGenesis } from "../eventlog/wire";
 import { logEvent } from "../logging";
 import { startEngineBattleWithCommits } from "../rules/battle/engine-battle";
 import { getBattleInitProvider } from "../rules/battle/journey-battle";
+import { oneDreamFirstAct } from "../rules/d97/d97-acts";
 import { d97ContentProvider } from "../rules/d97/d97-content";
 import type { FoldState } from "../rules/fold-state";
 import { BUILD_GIT_SHA } from "../runtime/build-info";
@@ -77,8 +78,8 @@ export function needsD97Rebase(
  * The catalog this build reconciles saves against: the registered dreams
  * (the catalog's, and the development dream in a development build) with
  * their maps' declared anchors (their rooms' included), their rooms and
- * their arrival doors, so a
- * rebase needs neither the map library nor the compiled maps.
+ * their arrival doors, and the one-dream act a run from before act assembly
+ * is given, so a rebase needs neither the map library nor the compiled maps.
  */
 function currentCatalog(): D97SaveCatalog | null {
   const content = d97ContentProvider();
@@ -93,6 +94,7 @@ function currentCatalog(): D97SaveCatalog | null {
     })),
     defaultDreamId: content.defaultDreamId,
     questIds: new Set(content.quests.keys()),
+    oneDreamAct: (dreamId, runSeed) => oneDreamFirstAct(content, dreamId, runSeed, "preAssemblySave"),
   };
 }
 

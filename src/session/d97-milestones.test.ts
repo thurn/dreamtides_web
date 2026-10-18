@@ -2,7 +2,8 @@
 // `src/d97/save/fixtures/milestones/` is a real exported D97 snapshot from
 // the milestone's playthrough. Each one, stored as a D97 game, opens in this
 // build through the real load path (migration, reconciliation against the
-// current catalog and rebase) into a playable run. Only that property is
+// current catalog and rebase) into a playable run: a run in a registered
+// dream, inside an assembled act. Only that property is
 // asserted, never the run's contents: a failure means a migration or a
 // reconciliation is missing, never that the fixture needs regenerating.
 
@@ -82,6 +83,8 @@ describe("D97 milestone saves", () => {
     expect(d97?.run).not.toBeNull();
     expect(d97!.screen.type).not.toBe("avatarSelect");
     expect(d97ContentProvider()?.dreams.has(d97!.run!.dreamId)).toBe(true);
+    // Reconciliation gives a save from before act assembly the act of its dream.
+    expect(d97!.run!.acts.some((act) => act.dreamIds.includes(d97!.run!.dreamId))).toBe(true);
     await game!.close();
   });
 });

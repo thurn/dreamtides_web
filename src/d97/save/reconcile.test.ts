@@ -11,11 +11,15 @@
 // reconcile as the dream's: a record moves into the room, the last place in
 // the room follows its door, a removed room moves the place to the town
 // door, and a battle's
-// return anchor off the place's map is dropped.
+// return anchor off the place's map is dropped; a save from before act
+// assembly is given the one-dream act of its dream, and an act naming a
+// removed anchor is replaced by it, both logged.
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { D97SaveTuning } from "../../content/d97/save";
-import { registerD97ContentProvider } from "../../rules/d97/d97-content";
+import { oneDreamFirstAct } from "../../rules/d97/d97-acts";
+import { d97ContentProvider, registerD97ContentProvider } from "../../rules/d97/d97-content";
+import { syntheticDreamAnchor } from "../../rules/d97/d97-dreams.fixtures";
 import type { D97Encounter, D97Run } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
 import { parseD97DreamId, parseD97QuestId, parseDreamAnchorId, type DreamAnchorId } from "../../types/identifiers";
@@ -47,6 +51,11 @@ const ANCHORS: D97SaveAnchor[] = [
   { id: SAVE_DREAM.topology.waypointAnchorId, kind: "waypoint", roomId: null },
   { id: SAVE_ROOM.buildingDoorAnchorId, kind: "buildingDoor", roomId: null },
   { id: SAVE_ROOM.doorAnchorId, kind: "buildingDoor", roomId: SAVE_ROOM.id },
+  // The anchors the run's one-dream act names: its exit door and guardian and its challengers.
+  { id: SAVE_DREAM.topology.exitDoorAnchorId, kind: "door", roomId: null },
+  { id: SAVE_DREAM.topology.exitGuardianAnchorId, kind: "guardian", roomId: null },
+  { id: syntheticDreamAnchor(1, 6), kind: "challenger", roomId: null },
+  { id: syntheticDreamAnchor(1, 7), kind: "challenger", roomId: null },
 ];
 
 const ROOM_ANCHORS: D97SaveAnchor[] = [{ id: ROOM_CHALLENGER, kind: "challenger", roomId: SAVE_ROOM.id }];
@@ -65,6 +74,7 @@ function catalog(retired: ReadonlySet<CardId> = new Set(), overrides: Partial<D9
     dreams: [{ id: SAVE_DREAM.id, anchors: ANCHORS, rooms: SAVE_DREAM.rooms, arrivalDoorAnchorId: ARRIVAL }],
     defaultDreamId: SAVE_DREAM.id,
     questIds: new Set([QUEST]),
+    oneDreamAct: (dreamId, runSeed) => oneDreamFirstAct(d97ContentProvider()!, dreamId, runSeed, "preAssemblySave"),
     ...overrides,
   };
 }
@@ -131,7 +141,8 @@ describe("reconcileSnapshot", () => {
   });
 
   it("moves an encounter off a removed anchor to a free anchor of its kind, or drops it", () => {
-    const save = snapshot((run) => ({ ...run, encounters: { [CHALLENGER]: encounter(CHALLENGER, []), [REMOVED]: encounter(REMOVED, []) } }));
+    const held = [CHALLENGER, syntheticDreamAnchor(1, 6), syntheticDreamAnchor(1, 7)];
+    const save = snapshot((run) => ({ ...run, encounters: { ...Object.fromEntries(held.map((anchorId) => [anchorId, encounter(anchorId, [])])), [REMOVED]: encounter(REMOVED, []) } }));
     const moved = reconcileSnapshot(save, catalog(), TUNING);
     expect(moved.snapshot.d97.run!.encounters[SPARE_CHALLENGER]?.anchorId).toBe(SPARE_CHALLENGER);
     expect(moved.reconciliations).toEqual([{ kind: "anchorMoved", where: "encounter", anchorId: REMOVED, toAnchorId: SPARE_CHALLENGER }]);
@@ -194,6 +205,23 @@ describe("reconcileSnapshot", () => {
     expect(removed.reconciliations).toEqual([{ kind: "questAbandoned", questId: QUEST }]);
   });
 
+  it("gives a save from before act assembly the one-dream act of its dream", () => {
+    const save = snapshot();
+    const act = save.d97.run!.acts[0];
+    const result = reconcileSnapshot(snapshot((run) => ({ ...run, acts: [] })), catalog(), TUNING);
+    expect(result.snapshot.d97.run!.acts).toEqual([{ ...act, fallback: "preAssemblySave" }]);
+    expect(result.reconciliations).toEqual([{ kind: "actAssembled", actId: act.actId, dreamId: SAVE_DREAM.id }]);
+  });
+
+  it("replaces an act that names a removed anchor with the one-dream act of the run's dream", () => {
+    const save = snapshot();
+    const act = save.d97.run!.acts[0];
+    const stale = { ...act, exitDoor: { dreamId: SAVE_DREAM.id, anchorId: REMOVED } };
+    const result = reconcileSnapshot(snapshot((run) => ({ ...run, acts: [stale] })), catalog(), TUNING);
+    expect(result.snapshot.d97.run!.acts).toEqual([{ ...act, fallback: "preAssemblySave" }]);
+    expect(result.reconciliations).toEqual([{ kind: "actReplaced", actId: act.actId, toActId: act.actId, dreamId: SAVE_DREAM.id }]);
+  });
+
   describe("anchors inside the dream's room", () => {
     const withRoom = (anchors: readonly D97SaveAnchor[], rooms = SAVE_DREAM.rooms) =>
       catalog(new Set(), { dreams: [{ id: SAVE_DREAM.id, anchors: [...ANCHORS, ...anchors], rooms, arrivalDoorAnchorId: ARRIVAL }] });
@@ -207,7 +235,8 @@ describe("reconcileSnapshot", () => {
     });
 
     it("moves a record off a removed anchor onto a free anchor of its kind inside the room", () => {
-      const save = snapshot((run) => ({ ...run, encounters: { [CHALLENGER]: encounter(CHALLENGER, []), [SPARE_CHALLENGER]: encounter(SPARE_CHALLENGER, []), [REMOVED]: encounter(REMOVED, []) } }));
+      const held = [CHALLENGER, SPARE_CHALLENGER, syntheticDreamAnchor(1, 6), syntheticDreamAnchor(1, 7)];
+      const save = snapshot((run) => ({ ...run, encounters: { ...Object.fromEntries(held.map((anchorId) => [anchorId, encounter(anchorId, [])])), [REMOVED]: encounter(REMOVED, []) } }));
       const result = reconcileSnapshot(save, withRoom(ROOM_ANCHORS), TUNING);
       expect(result.reconciliations).toEqual([{ kind: "anchorMoved", where: "encounter", anchorId: REMOVED, toAnchorId: ROOM_CHALLENGER }]);
       expect(result.snapshot.d97.run!.encounters[ROOM_CHALLENGER]?.anchorId).toBe(ROOM_CHALLENGER);

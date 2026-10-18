@@ -201,8 +201,9 @@ a dream module carries none:
   anchor's kind), its character (a sprite recipe), and the dialogue it
   speaks. Residents are the shopkeeper, 1–3 quest givers and 3–8 townsfolk,
   with authored personas. A resident challenger or guardian also names its
-  deck; in the one-dream slice the dream module seats its challengers and
-  exit guardian this way, where act assembly places them otherwise (B7). An
+  deck; act assembly keeps the challengers and guardians a dream module
+  seats this way at their anchors, and seats generic challengers at the
+  dream's empty challenger anchors (B7). An
   Avatar challenger or guardian instead lists the Avatars it may appear as,
   each with that Avatar's own character and dialogue; a run meets the first
   one the player is not playing, which it sees, hears and fights alike;
@@ -318,7 +319,12 @@ entry points while its guardian stands.
 
 Chests can stand behind a chokepoint, opening once its guardian falls.
 
-**The first slice.** Until act assembly exists, a run plays one dream. A new
+**The one-dream act.** A run whose start dream is outside the catalog, or
+whose catalog cannot supply an act's shape at all (too few dreams, tilesets,
+categories, guardian anchors or challenger anchors for B3 and B4), plays its
+start dream as a one-dream act: no doors, the dream's exit door and exit
+guardian as the act's exit door and incarnation seat, and no chokepoint
+rule. A save from before act assembly is given the same act on load. A new
 run arrives at its town door's entry, and stepping through its exit door
 once the guardian falls ends the slice at a summary screen that names no
 dream.

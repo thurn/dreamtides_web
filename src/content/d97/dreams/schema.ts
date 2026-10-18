@@ -18,7 +18,10 @@
 // waypoint, the door a new run arrives through, its exit door with the
 // guardian blocking it, and its shop. The travel and shop rules resolve these
 // anchors in the run's own dream only (`runDreamAnchor` in
-// src/rules/d97/d97-dreams.ts).
+// src/rules/d97/d97-dreams.ts). Act assembly (src/d97/assembly/) reads the
+// catalog dreams' modules to join them into acts; the run's stored act says
+// which door leads out and who stands at each battle anchor
+// (src/rules/d97/d97-acts.ts).
 //
 // A dream module names its town (decision P33): the town door, a door anchor
 // on its map, and the cluster tag of the town's friendly anchors. The map
@@ -128,9 +131,9 @@ export interface D97DreamTopology {
   readonly waypointAnchorId: DreamAnchorId;
   /** The door a new run arrives through. */
   readonly arrivalDoorAnchorId: DreamAnchorId;
-  /** The exit door: stepping through it after its guardian falls ends the slice. */
+  /** The exit door: the exit door of the dream's one-dream act (src/d97/assembly/). */
   readonly exitDoorAnchorId: DreamAnchorId;
-  /** The guardian anchor standing at the exit door's chokepoint. */
+  /** The guardian anchor standing at the exit door's chokepoint: a one-dream act's incarnation seat. */
   readonly exitGuardianAnchorId: DreamAnchorId;
   /** The dream's one shop, on its map or in one of its rooms. */
   readonly shopAnchorId: DreamAnchorId;

@@ -21,6 +21,7 @@ import {
   startingEssence,
 } from "../../d97/collection/starting-collection";
 import { emptyQuestState } from "../../d97/quests/quests";
+import { actAssemblyLogRecords, assembleFirstAct } from "./d97-acts";
 import { d97ContentProvider } from "./d97-content";
 import type { D97Run, D97State } from "./d97-state";
 import type { D97SelectInput } from "./events/spec";
@@ -46,7 +47,9 @@ function drawHex(value: number): string {
  * Every Avatar's reward bag opens at the run-start stage, and the same stream
  * chooses the Standard starting package from the Avatar's ring 1, drawing
  * each kept pick from its bag; an Avatar without a pinned pool bounces. The
- * start dream's waypoint is active from the start.
+ * start dream's waypoint is active from the start. Act 1 is assembled from
+ * the run seed with the start dream as its entry dream (src/d97/assembly/) and
+ * stored in the run; a catalog that no seed salt assembles bounces.
  */
 export function startRun(
   _input: D97SelectInput,
@@ -60,12 +63,17 @@ export function startRun(
     return null;
   }
   const requested = payload.dreamId ?? content.defaultDreamId;
-  const dream = requested === null ? undefined : content.dreams.get(requested)?.definition;
-  if (dream === undefined) return null;
+  const registered = requested === null ? undefined : content.dreams.get(requested);
+  if (registered === undefined) return null;
+  const dream = registered.definition;
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
   const runId = parseD97RunId(`event:${String(ctx.seq)}`);
   const runSeed = parseD97RunSeed(`${drawHex(random())}${drawHex(random())}`);
+  // Act 1, from the run seed; a catalog no seed salt assembles bounces the start.
+  const assembly = assembleFirstAct(content, registered, runSeed);
+  if (!assembly.ok) return null;
+  const { act } = assembly;
   const initialBags = initialRewardBags(content.rewardBagTuning);
   const initialBagSize = bagSize(activeRewardBag(content, { avatarId, bags: initialBags }));
   const starting = chooseStartingCollection({
@@ -101,6 +109,7 @@ export function startRun(
     runSeed,
     avatarId,
     dreamId: dream.id,
+    acts: [act],
     startedAt: ctx.timestamp,
     essence: startingEssence(D97_STARTING_PACKAGE),
     battlesFought,
@@ -128,6 +137,7 @@ export function startRun(
           activeWaypointIds: run.activeWaypointIds,
         },
       },
+      ...actAssemblyLogRecords(runId, act, assembly.failures, assembly.shortfall),
       {
         event: "d97_reward_bags_opened",
         fields: {

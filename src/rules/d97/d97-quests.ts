@@ -37,7 +37,7 @@ import type {
   DreamAnchorId,
 } from "../../types/identifiers";
 import { d97ContentProvider } from "./d97-content";
-import { runDreamAnchor } from "./d97-dreams";
+import { runSpeakerDialogue } from "./d97-acts";
 import type { D97Transition } from "./d97-run";
 import { d97BeatenAnchorIds, d97RunAct, type D97OverworldState, type D97Run } from "./d97-state";
 import type { D97RunInput } from "./events/spec";
@@ -48,7 +48,7 @@ import type { D97RunInput } from "./events/spec";
  */
 function speakerOffers(run: D97Run, anchorId: DreamAnchorId, effect: D97DialogueEffect): boolean {
   const content = d97ContentProvider();
-  const module = content === null ? null : (runDreamAnchor(run, content, anchorId)?.speakerDialogue(anchorId, run.avatarId) ?? null);
+  const module = content === null ? null : runSpeakerDialogue(run, content, anchorId);
   return module !== null && dialogueCarriesEffect(module, effect);
 }
 

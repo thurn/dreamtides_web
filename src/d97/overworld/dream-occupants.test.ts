@@ -3,7 +3,10 @@
 // their own); residents the validator flags are left out; the challenger
 // assembly reads battle residents; a topology's anchors must exist with their
 // kinds and its guardian must block its exit; and the development dream
-// occupies every character anchor of its map. An Avatar resident is drawn,
+// occupies every character anchor of its map. A generic challenger the run's
+// act seats at an empty challenger anchor stands there with its persona's
+// look and lines; a seat at a resident's anchor or an unknown look adds none.
+// An Avatar resident is drawn,
 // speaks and fights as one incarnation: a run playing its first
 // incarnation's Avatar meets its second in the occupant and the encounter.
 
@@ -48,6 +51,8 @@ const AVATAR = parseAvatarId(id(300));
 const VAELA = parseAvatarId(id(301));
 const TESSA = parseAvatarId(id(302));
 const PLAYER = parseAvatarId(id(303));
+const CHALLENGER_A = anchor(1);
+const CHALLENGER_B = anchor(2);
 
 /** A dialogue module spoken at `kind`, portraying `avatarId` when given. */
 function lines(dialogueId: typeof GREETING, kind: D97DialogueModule["speaker"]["kind"], avatarId?: AvatarId): D97DialogueModule {
@@ -112,6 +117,18 @@ describe("dreamOccupants", () => {
     expect(occupants.has(anchor(7))).toBe(false);
     expect(occupants.size).toBe(RESIDENTS.length);
     expect(dreamOccupants(dream([]), REGISTRY, PLAYER).size).toBe(0);
+  });
+
+  it("adds the generic challengers the act seats at the dream's empty challenger anchors", () => {
+    const generic = (anchorId: typeof CHALLENGER_A, characterId: typeof HERO) =>
+      ({ dreamId: dream([]).id, anchorId, occupant: { kind: "generic", characterId, dialogueId: GREETING, deckSourceAvatarId: AVATAR } }) as const;
+    const seats = [generic(CHALLENGER_A, BRUTE), generic(CHALLENGER_B, BRUTE), generic(anchor(5), BRUTE), generic(CHALLENGER_A, UNKNOWN_CHARACTER)];
+    const placed = dreamOccupants(dream(RESIDENTS.slice(1)), REGISTRY, PLAYER, seats);
+    expect(placed.get(CHALLENGER_A)).toEqual({ character: BRUTE, badge: "challenger", scale: "standard", dialogue: GREETING });
+    // A resident keeps its anchor, and a seat at a friendly anchor places no one.
+    expect(placed.get(CHALLENGER_B)?.badge).toBe("prizeDuel");
+    expect(placed.get(anchor(5))?.character).toBe(HERO);
+    expect(dreamOccupants(dream(RESIDENTS.slice(1)), REGISTRY, PLAYER, [generic(CHALLENGER_A, UNKNOWN_CHARACTER)]).has(CHALLENGER_A)).toBe(false);
   });
 
   it("assembles challengers and guardians from battle residents", () => {

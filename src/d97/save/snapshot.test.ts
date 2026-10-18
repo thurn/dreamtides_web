@@ -6,7 +6,9 @@
 // head starts (shown on the exported milestone save, whose encounters carry
 // them) and version 2 to 3 placing the last place on its dream's own map;
 // the golden schema-version-2 and -3 saves are frozen the same way and decode
-// with their bag v0 moved onto the pinned-pool bags; and the golden save of
+// with their bag v0 moved onto the pinned-pool bags; the golden
+// schema-version-4 save is frozen the same way and decodes with no act, which
+// load-time reconciliation gives it (./reconcile.test.ts); and the golden save of
 // the current version has exactly the
 // shape a run folded today writes (so a change to the persisted shape must
 // bump the schema version and ship a migration, P5), re-encoding to its own
@@ -31,6 +33,9 @@ import {
   takeSnapshot,
   type D97SaveBuild,
 } from "./snapshot";
+
+/** SHA-256 of `fixtures/d97-save-v4.json`, LF line endings. */
+const GOLDEN_V4_SHA256 = "dd9d433ef1daa938f933e5b2f9194b7981e81fe85aabd75f4314d50b6b754ae1";
 
 /** SHA-256 of `fixtures/d97-save-v3.json`, LF line endings. */
 const GOLDEN_V3_SHA256 = "ae1460be941f95098eefc7ea72bcf61b7a409cc63ac20db2cc404c4db99ac3cf";
@@ -129,6 +134,26 @@ describe("D97 snapshots", () => {
       const run = decoded!.snapshot.d97.run!;
       expect(run.bags.stage).toBe(1);
       expect(run).not.toHaveProperty("bag");
+      expect(snapshotFoldState(SAVE_GENESIS, decoded!.snapshot).d97?.run?.collection.copies.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe("the frozen golden schema-version-4 save", () => {
+    const raw = readFileSync(new URL("./fixtures/d97-save-v4.json", import.meta.url), "utf8").replace(/\r\n/gu, "\n");
+
+    it("keeps its committed bytes", () => {
+      // Frozen by bead hv-j1n2.3 when schema version 5 superseded it. Never
+      // regenerate it: a change to the persisted shape bumps the schema
+      // version, adds a migration and commits a new golden fixture.
+      expect(createHash("sha256").update(raw).digest("hex")).toBe(GOLDEN_V4_SHA256);
+      expect((JSON.parse(raw) as { schemaVersion: unknown }).schemaVersion).toBe(4);
+    });
+
+    it("loads under the current migrations, a run from before act assembly with no act", () => {
+      const decoded = decodeSnapshot(raw, D97_SAVE_MIGRATIONS);
+      expect(decoded?.migratedFrom).toBe(4);
+      const run = decoded!.snapshot.d97.run!;
+      expect(run.acts).toEqual([]);
       expect(snapshotFoldState(SAVE_GENESIS, decoded!.snapshot).d97?.run?.collection.copies.length).toBeGreaterThan(0);
     });
   });

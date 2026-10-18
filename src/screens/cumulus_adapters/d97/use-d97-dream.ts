@@ -8,8 +8,8 @@
 // included) loads while it is fetched. A run whose dream is not registered,
 // or whose map cannot be loaded, has no dream to play: the hook reports it
 // unavailable. Its occupants are the dream's residents on all its maps, drawn
-// for the Avatar the run plays; the scene shows those standing on the map
-// played. Logs each map loaded, an unavailable dream and any topology or
+// for the Avatar the run plays, and the generic challengers the run's act
+// seats in the dream; the scene shows those standing on the map played. Logs each map loaded, an unavailable dream and any topology or
 // resident findings, with UUIDs.
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -26,9 +26,9 @@ import { dreamOccupants, validateDreamResidents, validateDreamTopology } from ".
 import type { OverworldOccupants } from "../../../d97/overworld/occupants";
 import { logEvent } from "../../../logging";
 import { d97ContentProvider } from "../../../rules/d97/d97-content";
-import { d97RunRoomId, type D97Run } from "../../../rules/d97/d97-state";
+import { d97RunActOf, d97RunRoomId, type D97Run } from "../../../rules/d97/d97-state";
 import { d97DevelopmentContent } from "../../../runtime/qa-scene-entry";
-import type { AvatarId, D97RoomId, DreamMapId } from "../../../types/identifiers";
+import type { D97RoomId, DreamMapId } from "../../../types/identifiers";
 
 export interface D97PlayedDream {
   readonly dream: D97DreamDefinition;
@@ -49,15 +49,21 @@ export type D97DreamState =
 
 const LOADING: D97DreamState = { kind: "loading" };
 
-/** Each map's played dream, per Avatar the run plays (its residents' incarnations). */
-const played = new Map<CompiledDreamMap, Map<AvatarId, D97PlayedDream>>();
-function play(dream: D97DreamDefinition, roomId: D97RoomId | null, map: CompiledDreamMap, runAvatarId: AvatarId): D97PlayedDream {
+/**
+ * Each map's played dream, per Avatar the run plays (its residents'
+ * incarnations) and act (its assembled challengers).
+ */
+const played = new Map<CompiledDreamMap, Map<string, D97PlayedDream>>();
+function play(dream: D97DreamDefinition, roomId: D97RoomId | null, map: CompiledDreamMap, run: D97Run): D97PlayedDream {
+  const runAvatarId = run.avatarId;
+  const act = d97RunActOf(run);
   let byAvatar = played.get(map);
   if (byAvatar === undefined) {
     byAvatar = new Map();
     played.set(map, byAvatar);
   }
-  let entry = byAvatar.get(runAvatarId);
+  const key = `${runAvatarId}|${act?.actId ?? ""}`;
+  let entry = byAvatar.get(key);
   if (entry === undefined) {
     const development = d97DevelopmentContent();
     const sprites = development === null ? D97_CHARACTER_SPRITES : [...D97_CHARACTER_SPRITES, ...development.characterSprites];
@@ -73,8 +79,8 @@ function play(dream: D97DreamDefinition, roomId: D97RoomId | null, map: Compiled
     if (findings.length > 0 && byAvatar.size === 0) {
       logEvent("d97_dream_findings", { dreamId: dream.id, mapId: map.id, findings });
     }
-    entry = { dream, roomId, map, occupants: dreamOccupants(dream, registry, runAvatarId) };
-    byAvatar.set(runAvatarId, entry);
+    entry = { dream, roomId, map, occupants: dreamOccupants(dream, registry, runAvatarId, act?.challengers ?? []) };
+    byAvatar.set(key, entry);
   }
   return entry;
 }
@@ -83,7 +89,7 @@ const inlineMaps = new Map<DreamMapId, CompiledDreamMap>();
 
 /** The dream `run` is in: loading while its map arrives, or unavailable. */
 export function useD97Dream(run: D97Run): D97DreamState {
-  const { runId, dreamId, avatarId } = run;
+  const { runId, dreamId } = run;
   const roomId = d97RunRoomId(run);
   const selection = useMemo(() => {
     const dreams = [...(d97ContentProvider()?.dreams.values() ?? [])].map((dream) => dream.definition);
@@ -137,10 +143,10 @@ export function useD97Dream(run: D97Run): D97DreamState {
       map = compileMap();
       inlineMaps.set(dream.mapId, map);
     }
-    return { kind: "ready", played: play(dream, null, map, avatarId) };
+    return { kind: "ready", played: play(dream, null, map, run) };
   }
   if (load === null || load.mapId !== mapId) return LOADING;
   return load.result.ok
-    ? { kind: "ready", played: play(selection.dream, room?.id ?? null, load.result.map, avatarId) }
+    ? { kind: "ready", played: play(selection.dream, room?.id ?? null, load.result.map, run) }
     : { kind: "unavailable", reason: load.result.reason };
 }

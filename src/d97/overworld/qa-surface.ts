@@ -1,8 +1,11 @@
 // The development QA surface (decision P26): `window.__d97` in development
-// builds, for browser QA to read the overworld and drive it. Teleporting is a
-// QA convenience that writes no event; walking and interacting behave exactly
-// as a click or a key press would.
+// builds, for browser QA to read the overworld and drive it. Its state carries
+// the run's identity, dream and stored acts as the overworld last published
+// them (`publishD97QaRun`). Teleporting is a QA convenience that writes no
+// event; walking and interacting behave exactly as a click or a key press
+// would.
 
+import type { D97Run } from "../../rules/d97/d97-state";
 import type { DreamAnchorId, DreamMapId } from "../../types/identifiers";
 import { isWalkable, type CompiledDreamMap } from "../map/compiled";
 import type { TilePoint } from "../map/definition";
@@ -35,6 +38,20 @@ declare global {
   }
 }
 
+/** The run the overworld shows, as the surface's state reports it. */
+type D97QaRun = Pick<D97Run, "runId" | "dreamId" | "acts">;
+
+let qaRun: D97QaRun | null = null;
+
+/** Publish the run the overworld shows to the surface's state; returns its withdrawal. */
+export function publishD97QaRun(run: D97QaRun): () => void {
+  const published = { runId: run.runId, dreamId: run.dreamId, acts: run.acts };
+  qaRun = published;
+  return () => {
+    if (qaRun === published) qaRun = null;
+  };
+}
+
 /** Install `window.__d97` for `scene`; returns its removal. */
 export function installD97QaSurface(
   map: CompiledDreamMap,
@@ -65,6 +82,7 @@ export function installD97QaSurface(
         playerScreenRect: scene.playerScreenRect(),
         playerBodyScreenRect: scene.playerBodyScreenRect(),
         hiddenAnchorIds: scene.hiddenAnchorIds(),
+        run: qaRun,
       };
     },
     dream: () => ({ mapId: map.id }),

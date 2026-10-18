@@ -9,7 +9,9 @@
 // character where its maps have no such anchor.
 // An Avatar resident is drawn as the incarnation the run meets
 // (`incarnationFor`), the same one its encounter fights as; the validator
-// checks every incarnation's character and dialogue.
+// checks every incarnation's character and dialogue. The generic challengers
+// act assembly placed at the dream's empty challenger anchors (src/d97/assembly/)
+// stand beside its residents, each with its persona's look and lines.
 
 import {
   derivedBadge,
@@ -20,6 +22,7 @@ import {
 } from "../../content/d97/dreams/schema";
 import type { AvatarId, D97CharacterId, D97DialogueId, D97DreamId, D97RoomId, DreamAnchorId } from "../../types/identifiers";
 import type { D97DialogueModule } from "../../content/d97/dialogue/schema";
+import type { D97ChallengerSeat } from "../assembly/types";
 import type { DreamAnchorKind } from "../map/definition";
 import type { OverworldOccupant, OverworldOccupants } from "./occupants";
 
@@ -155,15 +158,25 @@ function occupantOf(resident: D97DreamResident, runAvatarId: AvatarId): Overworl
 /**
  * The occupants of `dream` on its map for a run playing `runAvatarId`: every
  * resident without a finding, keyed by anchor, each Avatar resident as the
- * incarnation the run meets. Anchors without a resident stay unoccupied.
+ * incarnation the run meets, and each generic challenger its act `seats` at
+ * a challenger anchor of the dream that no resident holds, when its look is
+ * known. Anchors without either stay unoccupied.
  */
 export function dreamOccupants(
   dream: D97DreamDefinition,
   registry: D97DreamResidentRegistry,
   runAvatarId: AvatarId,
+  seats: readonly D97ChallengerSeat[] = [],
 ): OverworldOccupants {
   const flawed = new Set(validateDreamResidents(dream, registry).map((finding) => finding.anchorId));
-  return new Map(
+  const occupants = new Map(
     dream.residents.filter((resident) => !flawed.has(resident.anchorId)).map((resident) => [resident.anchorId, occupantOf(resident, runAvatarId)]),
   );
+  const challengerAnchors = new Set(registry.anchors.filter((anchor) => anchor.kind === "challenger").map((anchor) => anchor.id));
+  for (const { dreamId, anchorId, occupant } of seats) {
+    if (occupant.kind !== "generic" || dreamId !== dream.id || occupants.has(anchorId) || !challengerAnchors.has(anchorId)) continue;
+    if (!registry.characterIds.has(occupant.characterId)) continue;
+    occupants.set(anchorId, { character: occupant.characterId, badge: derivedBadge("challenger"), scale: "standard", dialogue: occupant.dialogueId });
+  }
+  return occupants;
 }
