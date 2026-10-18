@@ -15,7 +15,7 @@ import { useIsDesktop } from "../../primitives/use-is-desktop";
 import type { DomTestId } from "../../types/dom";
 
 /** The panels a D97 frame holds, for test hooks and QA. */
-export type D97PanelKind = "quest-log" | "menu" | "encounter-preview" | "quest-reward";
+export type D97PanelKind = "quest-log" | "menu" | "credits" | "encounter-preview" | "quest-reward";
 
 export interface D97PanelProps {
   readonly kind: D97PanelKind;
@@ -78,7 +78,9 @@ export function D97Panel({
           maxWidth: `min(100%, ${String(maxWidth)}px)`,
           maxHeight: "100%",
           minHeight: 0,
+          // A column, so the panel shrinks to the frame's capped height and its body scrolls.
           display: "flex",
+          flexDirection: "column",
         }}
       >
         <GlassPanel

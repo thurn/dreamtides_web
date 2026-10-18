@@ -40,6 +40,8 @@ export interface D97Interactions {
   readonly notNow: () => void;
   readonly control: (id: D97OverworldControlId) => void;
   readonly closeDeck: () => void;
+  /** The Menu's Credits: the credits panel replaces the Menu. */
+  readonly openCredits: () => void;
   readonly close: () => void;
 }
 
@@ -99,6 +101,10 @@ export function useD97Interactions(context: InteractionContext, initialPanel: D9
     logEvent("d97_deck_editor_closed", { runId });
     dispatch({ type: "close" });
   }, [runId]);
+  const openCredits = useCallback(() => {
+    logEvent("d97_credits_opened", { runId });
+    dispatch({ type: "open", panel: { kind: "credits" } });
+  }, [runId]);
   const close = useCallback(() => dispatch({ type: "close" }), []);
-  return { panel, interact, challenge, openShop, fight, notNow, control, closeDeck, close };
+  return { panel, interact, challenge, openShop, fight, notNow, control, closeDeck, openCredits, close };
 }

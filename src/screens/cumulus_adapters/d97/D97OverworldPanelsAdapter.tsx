@@ -1,11 +1,13 @@
 // Adapter for the panels over the D97 overworld: the deck editor, the
 // encounter preview, the quest surfaces (conversation, quest log, pending
-// reward), the shop and the Menu, each shown while the overworld's open panel
+// reward), the shop, the Menu and its credits, each shown while the overworld's open panel
 // (./use-d97-interactions.ts) names it. Every equip and unequip is recorded
 // as an intent. Wiring only.
 
 import { useCallback, useMemo } from "react";
+import { D97_ART_SOURCES } from "../../../content/d97/art-sources";
 import { D97_COLLECTION } from "../../../content/d97/collection";
+import { D97CreditsPanel } from "../../../cumulus/screens/d97/D97CreditsPanel";
 import { D97DeckEditorScreen } from "../../../cumulus/screens/d97/D97DeckEditorScreen";
 import { D97EncounterPreview } from "../../../cumulus/screens/d97/D97EncounterPreview";
 import { D97MenuPanel } from "../../../cumulus/screens/d97/D97MenuPanel";
@@ -17,6 +19,7 @@ import type { CardId } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import type { AvatarContent } from "../../../types/content";
 import type { D97OwnedCopyId } from "../../../types/identifiers";
+import { buildD97CreditsView } from "./d97-credits-view-model";
 import { buildD97DeckEditorView } from "./d97-deck-editor-view-model";
 import { D97QuestSurfacesAdapter } from "./D97QuestSurfacesAdapter";
 import { D97ShopAdapter } from "./D97ShopAdapter";
@@ -47,6 +50,7 @@ export function D97OverworldPanelsAdapter({
   const anchorOf = (kind: "conversation" | "shop" | "preview") => (panel !== null && panel.kind === kind ? panel.anchorId : null);
   const shopAnchorId = anchorOf("shop");
   const preview = useD97EncounterPreview({ run, anchorId: anchorOf("preview"), avatars, cardsById: cards, occupants, dialogues: catalog.dialogues });
+  const creditsView = useMemo(() => buildD97CreditsView(D97_ART_SOURCES), []);
   const deckView = useMemo(() => buildD97DeckEditorView(run.collection, cards, D97_COLLECTION.minimumDeckSize), [run.collection, cards]);
   const equip = useCallback(
     (copyId: D97OwnedCopyId) => void actions.d97({ type: "D97_EQUIP_COPY", payload: { copyId } }).catch(reportFailure),
@@ -83,7 +87,8 @@ export function D97OverworldPanelsAdapter({
           onClose={interactions.close}
         />
       )}
-      {panel?.kind === "menu" && <D97MenuPanel onClose={interactions.close} />}
+      {panel?.kind === "menu" && <D97MenuPanel onClose={interactions.close} onCredits={interactions.openCredits} />}
+      {panel?.kind === "credits" && <D97CreditsPanel view={creditsView} onClose={interactions.close} />}
     </>
   );
 }

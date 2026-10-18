@@ -5,8 +5,9 @@
  * fetched, its licenses and its credited authors. The library itself lives
  * outside the repository, at `~/Documents/lpc/` by default, one directory per
  * source. `scripts/setup-assets.ts` links each source's `served` subtrees
- * into the gitignored `public/d97/<directory>/`; the credits screen is
- * generated from this manifest and the sources' `creditsFiles`.
+ * into the gitignored `public/d97/<directory>/`. The credits screen is
+ * generated from this manifest: each source's title, page, licenses and
+ * authors, and its `creditsFiles` by the file names they ship under.
  */
 
 /** A pinned git checkout: a shallow clone of `repository` at `commit`. */

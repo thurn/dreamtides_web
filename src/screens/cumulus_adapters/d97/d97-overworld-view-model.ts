@@ -52,7 +52,7 @@ export function buildD97DoorVeils(dream: D97DreamTopology): ReadonlyMap<DreamAnc
 }
 
 /** The panel open over the overworld: an interaction's, or a HUD control's. */
-export type D97OverworldPanel = InteractionPanel | { readonly kind: "menu" } | { readonly kind: "quests" };
+export type D97OverworldPanel = InteractionPanel | { readonly kind: "menu" } | { readonly kind: "credits" } | { readonly kind: "quests" };
 
 export type D97OverworldPanelAction =
   | { readonly type: "open"; readonly panel: D97OverworldPanel }
