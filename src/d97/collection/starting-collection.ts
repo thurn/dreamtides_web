@@ -1,6 +1,7 @@
 // The Standard starting package (Appendix A §A17 at d = 1, decision P29):
 // starting Essence and the starting collection, chosen by the unified tide
-// affinity picker over reward bag v0. Pure: content and randomness arrive as
+// affinity picker over the starting Avatar's ring 1 (the signature tide's
+// eligible cards). Pure: content and randomness arrive as
 // arguments.
 
 import {
@@ -16,8 +17,7 @@ import {
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
 import type { TideId } from "../../types/identifiers";
-import { bagCardIds } from "./reward-bag";
-import type { D97RewardBag } from "./types";
+import type { D97AvatarPool } from "./types";
 
 /** The card facts the starting collection reads. */
 export interface D97StartingCollectionContent {
@@ -30,7 +30,7 @@ export interface D97StartingCollectionContent {
 
 /** The chosen starting collection: one copy of each card. */
 export interface D97StartingCollection {
-  /** The kept affinity picks, in pick order; each is drawn from the bag. */
+  /** The kept affinity picks, in pick order; each is drawn from the bag's ring 1. */
   readonly keptCardIds: readonly CardId[];
   /** The lowest-affinity picks that starter dilution cut. */
   readonly cutCardIds: readonly CardId[];
@@ -57,23 +57,23 @@ function starterDilutionCount(tuning: D97StartingPackageTuning): number {
 }
 
 /**
- * Choose the starting collection: the context gains +1 per joined tide of the
- * dealt pool; the candidates are the bag's distinct cards; iterative picks
+ * Choose the starting collection: the context gains +1 per tide in the
+ * Avatar's tide set; the candidates are ring 1's cards; iterative picks
  * rank them by [cosine affinity to the context, rarity] and draw uniformly
  * from the top band, adding each pick's tide vector, until `pickCount` are
  * chosen; then the lowest-affinity picks are cut and that many distinct
  * Starter cards join in seeded random order.
  */
 export function chooseStartingCollection(args: {
-  bag: D97RewardBag;
+  pool: D97AvatarPool;
   content: D97StartingCollectionContent;
   tuning: D97StartingPackageTuning;
   random: () => number;
 }): D97StartingCollection {
-  const { bag, content, tuning, random } = args;
+  const { pool, content, tuning, random } = args;
   const context = new Map<TideId, number>();
-  addTideIds(context, bag.joinedTideIds);
-  const candidates: AffinityPickCandidate[] = bagCardIds(bag).map((id) => {
+  addTideIds(context, pool.tideIds);
+  const candidates: AffinityPickCandidate[] = pool.ring1.map((id) => {
     const rarity = content.cardRarity(id);
     return rarity === null ? { id } : { id, rarity };
   });

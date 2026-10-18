@@ -9,7 +9,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { D97_QUESTS } from "../../content/d97/quests";
-import { createRewardBag, bagWeight } from "../../d97/collection/reward-bag";
+import { activeRewardBag, bagWeight } from "../../d97/collection/reward-bag";
 import {
   ANCHORS,
   DEFEAT_QUEST,
@@ -38,8 +38,8 @@ import type { D97BattleFoldState } from "../battle/fold";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
-import { registerD97ContentProvider } from "./d97-content";
-import { syntheticD97Content } from "./d97-content.fixtures";
+import { d97ContentProvider, registerD97ContentProvider } from "./d97-content";
+import { SYNTHETIC_BAG_TUNING, syntheticD97Content, syntheticFacetCardIds, syntheticPoolCardIds } from "./d97-content.fixtures";
 import { speakingResident, syntheticDream, syntheticDreamAnchor } from "./d97-dreams.fixtures";
 import { d97RunAct, type D97Run } from "./d97-state";
 import { withD97Run } from "./d97-state.fixtures";
@@ -225,7 +225,7 @@ describe("lost-object quests", () => {
     expect(pending?.questId).toBe(LOST_OBJECT_QUEST.id);
     expect(pending?.cardIds).toHaveLength(D97_QUESTS.cardChoiceSize);
     // The offer removes nothing; the relic goes back with the quest.
-    expect(runOf(turnedIn.state).bag).toEqual(before.bag);
+    expect(runOf(turnedIn.state).bags).toEqual(before.bags);
     expect(runOf(turnedIn.state).quests.items).toEqual([]);
     expect(turnedIn.records.map((record) => record.event)).toEqual(["d97_quest_completed", "d97_quest_reward_offered"]);
 
@@ -237,26 +237,24 @@ describe("lost-object quests", () => {
     expect(run.quests.pendingReward).toBeNull();
     expect(run.collection.copies).toHaveLength(before.collection.copies.length + 1);
     expect(run.collection.copies[run.collection.copies.length - 1]).toMatchObject({ cardId: chosen, zone: "reserve" });
-    expect(bagWeight(run.bag, chosen)).toBe(bagWeight(before.bag, chosen) - 1);
+    const content = d97ContentProvider()!;
+    expect(bagWeight(activeRewardBag(content, run), chosen)).toBe(bagWeight(activeRewardBag(content, before), chosen) - 1);
     expect(picked.records.map((record) => record.event)).toEqual(["d97_bag_draw", "d97_quest_reward_chosen"]);
     bounces(picked.state, "D97_CHOOSE_QUEST_REWARD", { questId: LOST_OBJECT_QUEST.id, cardId: chosen });
   });
 
   it("never offers a card more times than the bag holds it", () => {
-    const one = testCardId("d97-bag-one");
-    const two = testCardId("d97-bag-two");
-    let state = withRun(started(), (run) => ({
-      ...run,
-      bag: createRewardBag({
-        avatarId: AVATAR,
-        dealSeed: 0,
-        joinedTideIds: [],
-        dealt: [
-          { cardId: one, copies: 1 },
-          { cardId: two, copies: 2 },
-        ],
-      }),
-    }));
+    // Exhaust the bag but for one copy of `one` and two of `two`.
+    const stage = SYNTHETIC_BAG_TUNING.stages[0];
+    const [one, two, ...rest] = syntheticPoolCardIds(40);
+    if (one === undefined || two === undefined) throw new Error("no pool");
+    const drawn = Object.fromEntries([
+      [one, stage.ring1Capacity - 1],
+      ...rest.map((cardId) => [cardId, stage.ring1Capacity] as const),
+      ...syntheticFacetCardIds(20).map((cardId) => [cardId, stage.ring2Capacity] as const),
+    ]);
+    if (stage.ring1Capacity !== 2) throw new Error("the synthetic stage opens ring 1 at two copies");
+    let state = withRun(started(), (run) => ({ ...run, bags: { ...run.bags, drawn: { [AVATAR]: drawn } } }));
     state = applied(state, "D97_ACCEPT_QUEST", { questId: LOST_OBJECT_QUEST.id, anchorId: ANCHORS.giver });
     state = applied(state, "D97_PICK_UP_OBJECT", { anchorId: ANCHORS.object });
     state = applied(state, "D97_COMPLETE_QUEST", { questId: LOST_OBJECT_QUEST.id, anchorId: ANCHORS.giver });

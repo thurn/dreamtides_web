@@ -15,7 +15,7 @@ import {
   type D97AcquiringRun,
 } from "../../d97/collection/acquisition";
 import { emptyCollection } from "../../d97/collection/collection";
-import { bagSize, createRewardBag } from "../../d97/collection/reward-bag";
+import { activeRewardBag, bagSize, initialRewardBags } from "../../d97/collection/reward-bag";
 import {
   chooseStartingCollection,
   startingEssence,
@@ -38,19 +38,15 @@ function drawHex(value: number): string {
     .padStart(13, "0");
 }
 
-/** The 32-bit seed one [0, 1) draw names. */
-function drawSeed(value: number): number {
-  return Math.floor(value * 0x100000000) >>> 0;
-}
-
 /**
  * `D97_START_RUN { avatarId, dreamId? }` starts the run on the overworld with
  * any roster Avatar, in the registered dream `dreamId` names (the content's
  * default dream when omitted; a dream the content does not register bounces). The run's id comes from the event's seq and its seed from
  * the event's random stream, so both are recorded outcomes of this event.
- * The same stream deals the Avatar's reward bag and chooses the Standard
- * starting package; both are stored, never re-derived. The start dream's
- * waypoint is active from the start.
+ * Every Avatar's reward bag opens at the run-start stage, and the same stream
+ * chooses the Standard starting package from the Avatar's ring 1, drawing
+ * each kept pick from its bag; an Avatar without a pinned pool bounces. The
+ * start dream's waypoint is active from the start.
  */
 export function startRun(
   _input: D97SelectInput,
@@ -59,7 +55,8 @@ export function startRun(
 ): D97Transition | null {
   const { avatarId } = payload;
   const content = d97ContentProvider();
-  if (content === null || !content.avatarIds.has(avatarId)) {
+  const pool = content?.rewardPool(avatarId) ?? null;
+  if (content === null || !content.avatarIds.has(avatarId) || pool === null) {
     return null;
   }
   const requested = payload.dreamId ?? content.defaultDreamId;
@@ -69,17 +66,10 @@ export function startRun(
   const random = (): number => ctx.rng(drawIndex++);
   const runId = parseD97RunId(`event:${String(ctx.seq)}`);
   const runSeed = parseD97RunSeed(`${drawHex(random())}${drawHex(random())}`);
-  const dealSeed = drawSeed(random());
-  const deal = content.dealRewardPool(avatarId, dealSeed);
-  const dealtBag = createRewardBag({
-    avatarId,
-    dealSeed,
-    joinedTideIds: deal.joinedTideIds,
-    dealt: deal.cards,
-  });
-  const dealtBagSize = bagSize(dealtBag);
+  const initialBags = initialRewardBags(content.rewardBagTuning);
+  const initialBagSize = bagSize(activeRewardBag(content, { avatarId, bags: initialBags }));
   const starting = chooseStartingCollection({
-    bag: dealtBag,
+    pool,
     content,
     tuning: D97_STARTING_PACKAGE,
     random,
@@ -90,7 +80,8 @@ export function startRun(
     runSeed,
     battlesFought,
     collection: emptyCollection(),
-    bag: dealtBag,
+    avatarId,
+    bags: initialBags,
   };
   const drawRecords: ReducerLogRecord[] = [];
   const acquisitions = [
@@ -99,12 +90,12 @@ export function startRun(
   ];
   for (const { cardId, source } of acquisitions) {
     // A kept card the bag no longer holds is not acquired.
-    const acquired = acquireForRun(acquiring, { cardId, channel: "starting", zone: "deck", source });
+    const acquired = acquireForRun(acquiring, { cardId, channel: "starting", zone: "deck", source }, content);
     if (acquired === null) continue;
     acquiring = acquired.run;
     drawRecords.push(...acquired.logRecords);
   }
-  const { collection, bag } = acquiring;
+  const { collection, bags } = acquiring;
   const run: D97Run = {
     runId,
     runSeed,
@@ -114,7 +105,7 @@ export function startRun(
     essence: startingEssence(D97_STARTING_PACKAGE),
     battlesFought,
     collection,
-    bag,
+    bags,
     encounters: {},
     returnAnchorId: null,
     quests: emptyQuestState(),
@@ -138,14 +129,15 @@ export function startRun(
         },
       },
       {
-        event: "d97_reward_bag_dealt",
+        event: "d97_reward_bags_opened",
         fields: {
           runId,
           avatarId,
-          dealSeed,
-          joinedTideIds: bag.joinedTideIds,
-          distinctCardCount: bag.entries.length,
-          bagSize: dealtBagSize,
+          stage: initialBags.stage,
+          tideIds: pool.tideIds,
+          ring1Size: pool.ring1.length,
+          ring2Size: pool.ring2.length,
+          bagSize: initialBagSize,
         },
       },
       ...drawRecords,

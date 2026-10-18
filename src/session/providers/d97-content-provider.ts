@@ -1,31 +1,31 @@
-// Real D97ContentProvider: the roster, the reward-bag deal, the starting
-// collection's card facts, captured from the loaded content, and the
-// registered dreams with their quests, quest items and each resident's
-// dialogue. A production build registers the dream catalog; a development
-// build passes its development fixtures (src/d97/development-content.ts) and
-// registers the development dream beside it. The deal is the
-// journey draft's pool construction (the tides4 deal, then the per-card pool
-// caps, then the cards of rarities bags never hold left out), keyed by card UUID and with no logging,
-// so a fold may call it any number of times.
+// Real D97ContentProvider: the roster, every Avatar's pinned reward-bag pool
+// (src/content/d97/pools/, its rings over the tide catalog's eligible cards),
+// the capacity stages, the starting collection's card facts, captured from
+// the loaded content, and the registered dreams with their quests, quest
+// items and each resident's dialogue. A production build registers the dream
+// catalog; a development build passes its development fixtures
+// (src/d97/development-content.ts) and registers the development dream beside
+// it.
 
 import { buildD97OpponentDeck, startD97Battle, type D97BattleContent } from "../../battle/integration/d97-battle";
-import { resolvePool } from "../../data/cards-v2-database";
 import { buildDialogueCatalog } from "../../d97/dialogue/catalog";
-import { D97_COLLECTION } from "../../content/d97/collection";
+import { D97_COLLECTION, D97_REWARD_BAG } from "../../content/d97/collection";
+import { D97_PINNED_POOLS } from "../../content/d97/pools";
+import type { D97PinnedPool } from "../../content/d97/pools/schema";
+import { avatarPoolOf } from "../../d97/collection/avatar-pool";
+import type { D97AvatarPool } from "../../d97/collection/types";
 import { D97_DIALOGUE_CONTENT } from "../../content/d97/dialogue";
 import { D97_DREAMS } from "../../content/d97/dreams";
 import { D97_DREAM_MAPS } from "../../content/d97/maps";
 import type { D97DevelopmentContent } from "../../d97/development-content";
 import type { JourneyContent } from "../../data/journey-content";
-import type { D97DealtCard } from "../../d97/collection/reward-bag";
 import { cardPriceFactsOf, type D97CardPriceFacts } from "../../d97/shop/pricing";
-import { generatePoolFromData } from "../../draft/pool/generate";
 import type { D97ContentProvider, D97RegisteredDream } from "../../rules/d97/d97-content";
 import { dreamMapAnchors, registerDream } from "../../rules/d97/d97-dreams";
 import { buildTideAffinityIndex } from "../../selection/tide-affinity";
 import type { CardId } from "../../types/card-identity";
 import type { Rarity } from "../../types/cards";
-import { identityEntries, type D97DreamId } from "../../types/identifiers";
+import type { AvatarId, D97DreamId, TideId } from "../../types/identifiers";
 
 function codeUnits(left: string, right: string): number {
   if (left < right) return -1;
@@ -35,11 +35,14 @@ function codeUnits(left: string, right: string): number {
 
 /**
  * The D97 content of `content`, registering the dream catalog and, when
- * `development` is given (development builds only), the development dream.
+ * `development` is given (development builds only), the development dream,
+ * with `pinnedPools` (the pinned-pool catalog by default) as the Avatars'
+ * reward-bag pools.
  */
 export function createD97ContentProvider(
   content: JourneyContent,
   development: D97DevelopmentContent | null,
+  pinnedPools: readonly D97PinnedPool[] = D97_PINNED_POOLS,
 ): D97ContentProvider {
   const pool = content.poolContext;
   const tides4Decks = pool.poolData.tides4Decks;
@@ -53,15 +56,28 @@ export function createD97ContentProvider(
   }
   const starterNumbers = new Set(pool.starterCardNumbers);
   const bagRarities = new Set<Rarity>(D97_COLLECTION.bagRarities);
+  const cardsById = new Map([...content.cardDatabase.values()].map((card) => [card.id, card]));
+  // Eligible cards (Appendix A §A1): Common, Uncommon and Rare supply cards.
+  const eligible = (cardId: CardId): boolean => {
+    const card = cardsById.get(cardId);
+    return card !== undefined && !card.isStarter && !starterNumbers.has(card.cardNumber) && card.rarity !== undefined && bagRarities.has(card.rarity);
+  };
+  const tideCards = new Map<TideId, readonly CardId[]>((tides4Decks?.tides ?? []).map((tide) => [tide.id, tide.cards.map((card) => card.id)]));
+  const rewardPools = new Map<AvatarId, D97AvatarPool>();
+  for (const pinned of pinnedPools) {
+    const avatarPool = avatarPoolOf(pinned, (tideId) => tideCards.get(tideId) ?? null, eligible, (cardId) => cardsById.has(cardId));
+    if (avatarPool !== null) rewardPools.set(pinned.avatarId, avatarPool);
+  }
   const battleContent: D97BattleContent = {
     cardDatabase: content.cardDatabase,
-    cardsById: new Map([...content.cardDatabase.values()].map((card) => [card.id, card])),
+    cardsById,
     avatars: content.avatars,
     dreamsignTemplates: content.dreamsignTemplates,
     dreamwellCardIds: content.dreamwellCards.map((card) => card.id),
     opponentsData: content.opponentsData,
     tides4Decks,
     tides4Tuning: pool.tides4Tuning,
+    pinnedDealtPool: (avatarId) => rewardPools.get(avatarId)?.dealt ?? [],
   };
   const dialogue = buildDialogueCatalog(development === null ? [D97_DIALOGUE_CONTENT] : [D97_DIALOGUE_CONTENT, development.dialogue]);
   const maps = new Map((development === null ? D97_DREAM_MAPS : [...D97_DREAM_MAPS, development.map]).map((map) => [map.id, map]));
@@ -91,39 +107,7 @@ export function createD97ContentProvider(
     cardRarity: (cardId) => rarityById.get(cardId) ?? null,
     cardPriceFacts: (cardId) => priceFactsById.get(cardId) ?? null,
     starterCardIds: [...new Set(starterCardIds)].sort(codeUnits),
-    dealRewardPool: (avatarId, seed) => {
-      const generated = generatePoolFromData(
-        pool.poolData,
-        seed,
-        avatarId,
-        pool.tides4Tuning,
-      );
-      const { draftPoolCopiesByCard } = resolvePool(
-        generated,
-        pool.idIndex,
-        pool.defaultPoolCopyCap,
-        pool.poolCopyCapsByCardNumber,
-      );
-      const cards: D97DealtCard[] = [];
-      for (const [key, copies] of identityEntries(draftPoolCopiesByCard)) {
-        const cardNumber = Number(key);
-        const card = content.cardDatabase.get(cardNumber);
-        if (
-          card === undefined ||
-          starterNumbers.has(cardNumber) ||
-          card.rarity === undefined ||
-          !bagRarities.has(card.rarity)
-        ) {
-          continue;
-        }
-        cards.push({ cardId: card.id, copies });
-      }
-      return {
-        joinedTideIds: generated.tides4Provenance.tides
-          .filter((tide) => tide.joined)
-          .map((tide) => tide.id),
-        cards,
-      };
-    },
+    rewardPool: (avatarId) => rewardPools.get(avatarId) ?? null,
+    rewardBagTuning: D97_REWARD_BAG,
   };
 }

@@ -16,7 +16,7 @@
 import type { D97DialogueEffect, D97QuestDefinition, D97ServiceKind } from "../../content/d97/dialogue/schema";
 import { D97_QUESTS } from "../../content/d97/quests";
 import { acquireForRun } from "../../d97/collection/acquisition";
-import { bagSize, sampleBagOffer } from "../../d97/collection/reward-bag";
+import { activeRewardBag, bagSize, sampleBagOffer } from "../../d97/collection/reward-bag";
 import { dialogueCarriesEffect } from "../../d97/dialogue/effects";
 import {
   abandonQuest as abandonInState,
@@ -150,12 +150,15 @@ export function completeQuest(
       { event: "d97_quest_reward_paid", fields: { runId: run.runId, questId: quest.id, amount, essence } },
     ]);
   }
+  const content = d97ContentProvider();
+  if (content === null) return null;
+  const bag = activeRewardBag(content, run);
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const cardIds = sampleBagOffer(run.bag, D97_QUESTS.cardChoiceSize, random);
+  const cardIds = sampleBagOffer(bag, D97_QUESTS.cardChoiceSize, random);
   const offered: ReducerLogRecord = {
     event: "d97_quest_reward_offered",
-    fields: { runId: run.runId, questId: quest.id, cardIds, bagSize: bagSize(run.bag) },
+    fields: { runId: run.runId, questId: quest.id, avatarId: run.avatarId, cardIds, bagSize: bagSize(bag) },
   };
   const pendingReward = cardIds.length === 0 ? null : { questId: quest.id, cardIds };
   return withRun(d97, { ...run, quests: { ...quests, pendingReward } }, [completed, offered]);
@@ -173,7 +176,9 @@ export function chooseQuestReward(
   const pending = run.quests.pendingReward;
   if (pending === null || pending.questId !== questId) return null;
   if (!pending.cardIds.includes(cardId)) return null;
-  const acquired = acquireForRun(run, { cardId, channel: "bag", zone: "reserve", source: "named" });
+  const content = d97ContentProvider();
+  if (content === null) return null;
+  const acquired = acquireForRun(run, { cardId, channel: "bag", zone: "reserve", source: "offer" }, content);
   return withRun(
     d97,
     { ...acquired.run, quests: { ...run.quests, pendingReward: null } },

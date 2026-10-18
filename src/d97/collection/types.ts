@@ -51,25 +51,51 @@ export interface D97Collection {
   readonly nextCopyOrdinal: number;
 }
 
-/** One card's reward-bag accounting. */
-export interface D97BagEntry {
-  readonly cardId: CardId;
-  /** The dealt copy count: the most copies the bag ever supplies. */
-  readonly target: number;
-  /** Copies of the card acquired in the run through any channel. */
-  readonly acquired: number;
+/**
+ * One Avatar's pinned pool as the reward bag reads it (Appendix A §A2,
+ * decision P29): its tide set, the tide set's rings over eligible cards, and
+ * the pool its pinned tides4 deal dealt. Content, never state.
+ */
+export interface D97AvatarPool {
+  readonly avatarId: AvatarId;
+  /** The tide set: the signature tide, then its three facets. */
+  readonly tideIds: readonly TideId[];
+  /** Ring 1: the signature tide's eligible cards, in card-UUID order. */
+  readonly ring1: readonly CardId[];
+  /** Ring 2: the facets' eligible cards outside ring 1, in card-UUID order. */
+  readonly ring2: readonly CardId[];
+  /** The pinned dealt pool: the Avatar's battle draft pool. */
+  readonly dealt: readonly { readonly cardId: CardId; readonly copies: number }[];
 }
 
 /**
- * Reward bag v0 (decision P29): the tides4 pool the journey's draft would deal
- * the run's Avatar, stored as copy targets when the run starts.
+ * Every Avatar's reward bag (Appendix A §A2), as a run stores it: the
+ * campaign's capacity stage and, per Avatar, the copies of each card acquired
+ * from that Avatar's bag. Every Avatar's bag exists from run start; one with
+ * no draws has no entry. The rings and capacities are content.
+ */
+export interface D97RewardBags {
+  /** The highest capacity stage opened so far. */
+  readonly stage: number;
+  /** `drawn(c)` per Avatar: copies acquired from that Avatar's bag, by card UUID. */
+  readonly drawn: Readonly<Partial<Record<AvatarId, Readonly<Partial<Record<CardId, number>>>>>>;
+}
+
+/** One card of a bag view: its ring, its capacity at the current stage, and its draws. */
+export interface D97BagEntry {
+  readonly cardId: CardId;
+  readonly ring: 1 | 2;
+  readonly capacity: number;
+  readonly drawn: number;
+}
+
+/**
+ * One Avatar's reward bag at the run's current stage, derived from its
+ * pinned pool and the run's bag state: one entry per tide-set eligible card,
+ * in card-UUID order, with `w(c) = capacity(c) − drawn(c)`.
  */
 export interface D97RewardBag {
   readonly avatarId: AvatarId;
-  /** The 32-bit seed the pool was dealt from, for diagnostics. */
-  readonly dealSeed: number;
-  /** The tides the deal joined, in join order. */
-  readonly joinedTideIds: readonly TideId[];
-  /** One entry per dealt card, sorted by card UUID. */
+  readonly stage: number;
   readonly entries: readonly D97BagEntry[];
 }

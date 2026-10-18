@@ -1,8 +1,8 @@
 // The D97 run contract: a D97 genesis folds a D97 slice on Avatar select
 // while a journey genesis folds none; `D97_START_RUN` records the run (id,
 // seed, roster Avatar, and its dream: the requested registered dream, or the
-// content's default dream) once, deals its reward bag and Standard starting
-// package, moves to the overworld and logs it; equip and unequip move owned
+// content's default dream) once, opens every Avatar's reward bag at the
+// run-start stage, draws the Standard starting package from ring 1, moves to the overworld and logs it; equip and unequip move owned
 // copies between the deck and the reserve; and each mode bounces the other
 // mode's events.
 
@@ -12,15 +12,16 @@ import {
   D97_STARTING_PACKAGE,
 } from "../../content/d97/collection";
 import { acquireForRun } from "../../d97/collection/acquisition";
-import { bagWeight } from "../../d97/collection/reward-bag";
+import { activeRewardBag, bagWeight } from "../../d97/collection/reward-bag";
 import { eventRng } from "../../eventlog/rng";
 import type { Genesis } from "../../eventlog/types";
 import { testAvatarId, testCardId } from "../../types/test-identities";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import { ctx, event, GENESIS } from "../reducer-fixtures";
-import { registerD97ContentProvider } from "./d97-content";
+import { d97ContentProvider, registerD97ContentProvider } from "./d97-content";
 import {
+  SYNTHETIC_BAG_TUNING,
   SYNTHETIC_STARTERS,
   syntheticD97Content,
   syntheticPoolCardIds,
@@ -141,16 +142,13 @@ describe("D97_START_RUN", () => {
     expect(later?.runId).not.toBe(first.state.d97?.run?.runId);
   });
 
-  it("deals the Avatar's pool into the bag with the dealt counts as copy targets", () => {
-    const run = runOf(startedState());
-    const poolCards = syntheticPoolCardIds(POOL_SIZE);
-    expect(run.bag.avatarId).toBe(ROSTER_AVATAR);
-    expect(run.bag.entries.map((entry) => entry.cardId).sort()).toEqual(
-      [...poolCards].sort(),
-    );
-    for (const entry of run.bag.entries) {
-      expect(entry.target).toBe(poolCards.indexOf(entry.cardId) % 3 === 0 ? 2 : 1);
-    }
+  it("opens every bag at the run-start stage, with draws only from the starting picks", () => {
+    const result = startRun(genesisFoldState(D97_GENESIS), ROSTER_AVATAR);
+    const run = runOf(result.state);
+    expect(run.bags.stage).toBe(SYNTHETIC_BAG_TUNING.stages[0]?.stage);
+    expect(Object.keys(run.bags.drawn)).toEqual([ROSTER_AVATAR]);
+    const opened = result.logRecords?.find((record) => record.event === "d97_reward_bags_opened");
+    expect(opened?.fields).toMatchObject({ runId: run.runId, avatarId: ROSTER_AVATAR, stage: run.bags.stage, ring1Size: POOL_SIZE });
   });
 
   it("builds the Standard starting package: Essence and distinct copies all in the deck", () => {
@@ -174,7 +172,7 @@ describe("D97_START_RUN", () => {
     ).toHaveLength(STARTER_DILUTION);
   });
 
-  it("draws every kept pick from the bag and logs each draw by UUID", () => {
+  it("draws every kept pick from ring 1 of the bag and logs each draw by UUID", () => {
     const result = startRun(genesisFoldState(D97_GENESIS), ROSTER_AVATAR);
     const run = runOf(result.state);
     const draws = (result.logRecords ?? []).filter(
@@ -186,10 +184,13 @@ describe("D97_START_RUN", () => {
     expect(draws.map((draw) => draw.fields.cardId)).toEqual(
       picked.map((copy) => copy.cardId),
     );
+    const bag = activeRewardBag(d97ContentProvider()!, run);
+    const ring1Capacity = SYNTHETIC_BAG_TUNING.stages[0]?.ring1Capacity ?? 0;
+    const ring1 = new Set(syntheticPoolCardIds(POOL_SIZE));
     for (const copy of picked) {
-      const entry = run.bag.entries.find((candidate) => candidate.cardId === copy.cardId);
-      expect(entry?.acquired).toBe(1);
-      expect(bagWeight(run.bag, copy.cardId)).toBe((entry?.target ?? 0) - 1);
+      expect(ring1.has(copy.cardId)).toBe(true);
+      expect(run.bags.drawn[ROSTER_AVATAR]?.[copy.cardId]).toBe(1);
+      expect(bagWeight(bag, copy.cardId)).toBe(ring1Capacity - 1);
     }
     for (const draw of draws) {
       expect(Object.keys(draw.fields).sort()).toEqual([
@@ -197,10 +198,14 @@ describe("D97_START_RUN", () => {
         "bagSize",
         "cardId",
         "remaining",
+        "ring",
         "runId",
+        "source",
+        "stage",
       ]);
       expect(draw.fields.runId).toBe(run.runId);
       expect(draw.fields.avatarId).toBe(ROSTER_AVATAR);
+      expect(draw.fields.ring).toBe(1);
     }
   });
 
@@ -262,7 +267,7 @@ describe("D97_EQUIP_COPY and D97_UNEQUIP_COPY", () => {
       channel: "bag",
       zone: "reserve",
       source: "named",
-    }).copy;
+    }, d97ContentProvider()!).copy;
     for (const type of ["D97_EQUIP_COPY", "D97_UNEQUIP_COPY"] as const) {
       expect(deckEdit(started, type, stranger.copyId).outcome).toBe("bounced");
       expect(deckEdit(started, type, "not-a-copy").outcome).toBe("bounced");

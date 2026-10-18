@@ -1,21 +1,24 @@
 // The one way a Dreamtides 97 run gains a card (decision P29). Every
-// acquisition, through any channel, adds an owned copy to the collection and
-// counts one copy against the reward bag, so `w(c) = target(c) − acquired(c)`
-// holds by construction. When the bag held the card, the acquisition logs a
-// `d97_bag_draw` record carrying UUIDs and counts only.
+// acquisition, through any channel, adds an owned copy to the collection. An
+// acquisition from the active reward bag (a draw, or an offered card the bag
+// still holds) also counts one copy in that Avatar's `drawn(c)`, so
+// `w(c) = capacity(c) − drawn(c)` holds by construction (Appendix A §A2), and
+// logs a `d97_bag_draw` record carrying UUIDs and counts only. Copies from
+// other channels (antes, Starter cards, named rewards) never change `w`.
 
 import type { ReducerLogRecord } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
 import type { D97RunId, D97RunSeed } from "../../types/identifiers";
 import { ownedCopyId } from "./collection";
-import { bagSize, bagWeight } from "./reward-bag";
+import type { AvatarId } from "../../types/identifiers";
+import { activeRewardBag, bagRing, bagSize, bagWeight, recordBagDraw, type D97RewardBagContent } from "./reward-bag";
 import type {
   D97AcquisitionChannel,
   D97Collection,
   D97CopyProvenance,
   D97CopyZone,
   D97OwnedCopy,
-  D97RewardBag,
+  D97RewardBags,
 } from "./types";
 
 /** The run fields an acquisition reads and writes. */
@@ -25,16 +28,20 @@ export interface D97AcquiringRun {
   /** Battles fought so far; the new copy's provenance records it. */
   readonly battlesFought: number;
   readonly collection: D97Collection;
-  readonly bag: D97RewardBag;
+  /** The run's current Avatar: its bag is the active one. */
+  readonly avatarId: AvatarId;
+  readonly bags: D97RewardBags;
 }
 
 /**
- * Where the acquired card came from. `draw`: the card was picked from the
- * bag, which must still hold a copy of it. `named`: the game named the card
- * (a starter, an ante, a quest reward, a shop slot); the run gains it whether
- * or not the bag holds it.
+ * Where the acquired card came from. `draw`: the card was drawn from the
+ * active bag, which must still hold a copy of it. `offer`: the card was
+ * offered from the bag (a shop slot, a card-choice offer); the run gains it
+ * either way, and it counts against the bag if the bag still holds a copy.
+ * `named`: the game named the card from outside the bag (a Starter card, an
+ * ante); the bag never counts it.
  */
-export type D97AcquisitionSource = "draw" | "named";
+export type D97AcquisitionSource = "draw" | "offer" | "named";
 
 /** The channel and its price: a shop purchase records the Essence paid. */
 type D97AcquisitionPurchase =
@@ -89,35 +96,24 @@ function acquireCopy(
   };
 }
 
-/**
- * Count one acquired copy of `cardId`. A card outside the bag has a target of
- * zero, so its acquisition leaves the bag unchanged; acquisitions past a
- * card's target keep counting, and its weight stays at zero.
- */
-function recordAcquisition(bag: D97RewardBag, cardId: CardId): D97RewardBag {
-  if (!bag.entries.some((entry) => entry.cardId === cardId)) return bag;
-  return {
-    ...bag,
-    entries: bag.entries.map((entry) =>
-      entry.cardId === cardId
-        ? { ...entry, acquired: entry.acquired + 1 }
-        : entry,
-    ),
-  };
-}
-
-/** The reducer log record of a copy the bag supplied. */
+/** The reducer log record of a copy the active bag supplied. */
 function bagDrawLogRecord(
   runId: D97RunId,
-  bag: D97RewardBag,
+  content: D97RewardBagContent,
+  run: D97AcquiringRun,
   cardId: CardId,
+  source: D97AcquisitionSource,
 ): ReducerLogRecord {
+  const bag = activeRewardBag(content, run);
   return {
     event: "d97_bag_draw",
     fields: {
       runId,
       avatarId: bag.avatarId,
       cardId,
+      source,
+      ring: bagRing(bag, cardId),
+      stage: bag.stage,
       remaining: bagWeight(bag, cardId),
       bagSize: bagSize(bag),
     },
@@ -126,8 +122,9 @@ function bagDrawLogRecord(
 
 /**
  * Acquire one copy of `request.cardId` for the run: the copy joins the
- * collection in `request.zone` with its provenance, and the bag counts it.
- * A `draw` the bag cannot supply returns null and changes nothing.
+ * collection in `request.zone` with its provenance, and a draw or an offered
+ * card the active bag still holds counts against that bag. A `draw` the bag
+ * cannot supply returns null and changes nothing.
  */
 export function acquireForRun<
   R extends D97AcquiringRun,
@@ -135,13 +132,15 @@ export function acquireForRun<
 >(
   run: R,
   request: D97AcquisitionRequest<S>,
-): S extends "named" ? D97Acquisition<R> : D97Acquisition<R> | null;
+  content: D97RewardBagContent,
+): S extends "draw" ? D97Acquisition<R> | null : D97Acquisition<R>;
 export function acquireForRun<R extends D97AcquiringRun>(
   run: R,
   request: D97AcquisitionRequest<D97AcquisitionSource>,
+  content: D97RewardBagContent,
 ): D97Acquisition<R> | null {
   const { cardId } = request;
-  const supplied = bagWeight(run.bag, cardId) > 0;
+  const supplied = request.source !== "named" && bagWeight(activeRewardBag(content, run), cardId) > 0;
   if (request.source === "draw" && !supplied) return null;
   const provenance: D97CopyProvenance = {
     channel: request.channel,
@@ -154,10 +153,11 @@ export function acquireForRun<R extends D97AcquiringRun>(
     provenance,
     zone: request.zone,
   });
-  const bag = recordAcquisition(run.bag, cardId);
+  const bags = supplied ? recordBagDraw(run.bags, run.avatarId, cardId) : run.bags;
+  const next: R = { ...run, collection, bags };
   return {
-    run: { ...run, collection, bag },
+    run: next,
     copy,
-    logRecords: supplied ? [bagDrawLogRecord(run.runId, bag, cardId)] : [],
+    logRecords: supplied ? [bagDrawLogRecord(run.runId, content, next, cardId, request.source)] : [],
   };
 }

@@ -12,7 +12,7 @@ import { D97_ENCOUNTERS } from "../../content/d97/encounters";
 import { D97_SHOP } from "../../content/d97/shop";
 import { acquireForRun } from "../../d97/collection/acquisition";
 import { canUnequip, findCopy, removeCopies } from "../../d97/collection/collection";
-import { sampleFilteredOffer } from "../../d97/collection/reward-bag";
+import { activeRewardBag, sampleFilteredOffer } from "../../d97/collection/reward-bag";
 import {
   buyQuote,
   cardBaseValue,
@@ -70,6 +70,7 @@ function rollStock(run: D97Run, content: D97ContentProvider, ctx: EventContext):
   const random = (): number => ctx.rng(drawIndex++);
   const slots: D97ShopSlot[] = [];
   const shown = new Set<CardId>();
+  const bag = activeRewardBag(content, run);
   const count = shopSlotCount(D97_SHOP.priceBand, D97_SHOP);
   for (let index = 0; index < count; index += 1) {
     const ceiling = slotCeiling(index, D97_SHOP);
@@ -77,7 +78,7 @@ function rollStock(run: D97Run, content: D97ContentProvider, ctx: EventContext):
       const facts = content.cardPriceFacts(cardId);
       return facts !== null && D97_ENCOUNTERS.rarityCost[facts.rarity] <= ceiling;
     };
-    const cardId = sampleFilteredOffer(run.bag, eligible, shown, random);
+    const cardId = sampleFilteredOffer(bag, eligible, shown, random);
     const price = cardId === null ? null : quoteOf(content, cardId);
     if (cardId === null || price === null) continue;
     shown.add(cardId);
@@ -117,16 +118,16 @@ export function buyShopCard(input: D97RunInput, payload: ShopPayload & { readonl
   const context = shopContext(input, payload);
   const { slotIndex } = payload;
   if (context === null) return null;
-  const { run, anchorId } = context;
+  const { run, anchorId, content } = context;
   const shop = run.shops[anchorId];
   const slot = shop?.slots[slotIndex];
   if (shop === undefined || slot === undefined || slot.purchased || slot.price > run.essence) return null;
-  const acquired = acquireForRun(run, { cardId: slot.cardId, channel: "shop", price: slot.price, zone: "reserve", source: "named" });
-  const { collection, bag } = acquired.run;
+  const acquired = acquireForRun(run, { cardId: slot.cardId, channel: "shop", price: slot.price, zone: "reserve", source: "offer" }, content);
+  const { collection, bags } = acquired.run;
   const { copy } = acquired;
   const slots = shop.slots.map((candidate, index) => (index === slotIndex ? { ...candidate, purchased: true } : candidate));
   const essence = run.essence - slot.price;
-  return withShop(input.d97, run, anchorId, { ...shop, slots }, { collection, essence, bag }, [
+  return withShop(input.d97, run, anchorId, { ...shop, slots }, { collection, essence, bags }, [
     ...acquired.logRecords,
     {
       event: "d97_shop_card_bought",

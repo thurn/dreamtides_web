@@ -1,15 +1,13 @@
 // The real D97 content provider over synthetic journey content: a production
 // provider registers the dream catalog and no development dream, a
 // development provider registers the development dream beside it, each with
-// its own speakers; its reward pool is the pool the journey's draft builds for the same Avatar and seed
-// (per-card caps applied, cards of rarities bags never hold left out), and a D97 run started
-// through the registered providers gets its full starting collection.
+// its own speakers; each pinned pool's rings are its tide set's eligible
+// cards over the loaded tide catalog (ring 2 outside ring 1, Legendary and
+// Starter cards left out), its dealt pool the cards the catalog knows; an
+// Avatar without a pinned pool has none; and a D97 run started on the
+// provider gets its starting collection from ring 1.
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import {
-  buildAvatarPackage,
-  hashStringToSeed,
-} from "../../data/journey-content";
 import {
   D97_COLLECTION,
   D97_STARTING_PACKAGE,
@@ -21,8 +19,9 @@ import { eventRng } from "../../eventlog/rng";
 import { genesisFoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
 import { ctx, event } from "../../rules/reducer-fixtures";
-import { serializeCardNumber } from "../../types/draft";
-import { testAvatarId, testJourneySeed } from "../../types/test-identities";
+import type { D97PinnedPool } from "../../content/d97/pools/schema";
+import { registerD97ContentProvider } from "../../rules/d97/d97-content";
+import { testAvatarId, testCardId } from "../../types/test-identities";
 import { createD97ContentProvider } from "./d97-content-provider";
 import {
   AVATAR_ID,
@@ -33,6 +32,20 @@ import {
   clearGameProviders,
   registerGameProviders,
 } from "./register-game-providers";
+
+/** A pinned pool for the synthetic Avatar over the synthetic tide catalog: signature tide 1, facets 2, 3 and 2. */
+function syntheticPinnedPool(content: ReturnType<typeof makeRarityContent>): D97PinnedPool {
+  const [first, second, third] = content.poolContext.poolData.tides4Decks!.tides;
+  if (first === undefined || second === undefined || third === undefined) throw new Error("synthetic tides missing");
+  return {
+    avatarId: AVATAR_ID,
+    signatureTideId: first.id,
+    borrowedSignature: false,
+    facetTideIds: [second.id, third.id, second.id],
+    dealSeed: 0,
+    dealt: [...first.cards.map((card) => ({ cardId: card.id, copies: 1 })), { cardId: testCardId("d97-retired-card"), copies: 1 }],
+  };
+}
 
 afterEach(() => {
   clearGameProviders();
@@ -93,53 +106,41 @@ describe("createD97ContentProvider", () => {
     }
   });
 
-  it("deals the pool the journey draft deals for the same Avatar and seed", () => {
-    vi.spyOn(console, "log").mockImplementation(() => {});
+  it("builds each pinned pool's rings over the tide catalog's eligible cards", () => {
     const content = makeRarityContent();
-    const avatar = content.avatars.find((entry) => entry.id === AVATAR_ID);
-    if (avatar === undefined) throw new Error("missing Avatar");
-    const journeySeed = testJourneySeed("d97-deal");
-    const journey = buildAvatarPackage(avatar, content.poolContext, journeySeed);
-    const deal = createD97ContentProvider(content, null).dealRewardPool(
-      AVATAR_ID,
-      hashStringToSeed(`${journeySeed}:${AVATAR_ID}`),
-    );
-    const byId = new Map(
-      [...content.cardDatabase.values()].map((card) => [card.id, card]),
-    );
-    const dealtByNumber = Object.fromEntries(
-      deal.cards.map(({ cardId, copies }) => {
-        const card = byId.get(cardId);
-        if (card === undefined) throw new Error("unknown dealt card");
-        return [serializeCardNumber(card.cardNumber), copies];
-      }),
-    );
-    const eligible = Object.fromEntries(
-      Object.entries(journey.draftPoolCopiesByCard).filter(([number]) => {
-        const rarity = content.cardDatabase.get(Number(number))?.rarity;
-        return rarity !== undefined && D97_COLLECTION.bagRarities.includes(rarity);
-      }),
-    );
-    expect(Object.keys(eligible).length).toBeGreaterThan(0);
-    expect(dealtByNumber).toEqual(eligible);
-    expect(deal.joinedTideIds).toEqual(journey.joinedTideIds);
-    expect(deal.cards.some(({ cardId }) => byId.get(cardId)?.isStarter)).toBe(
-      false,
-    );
-    expect(
-      Object.keys(journey.draftPoolCopiesByCard).some(
-        (number) => content.cardDatabase.get(Number(number))?.rarity === "Legendary",
-      ),
-    ).toBe(true);
-    expect(
-      deal.cards.some(({ cardId }) => byId.get(cardId)?.rarity === "Legendary"),
-    ).toBe(false);
+    const provider = createD97ContentProvider(content, null, [syntheticPinnedPool(content)]);
+    const pool = provider.rewardPool(AVATAR_ID);
+    if (pool === null) throw new Error("no pinned pool");
+    const byId = new Map([...content.cardDatabase.values()].map((card) => [card.id, card]));
+    const tides = content.poolContext.poolData.tides4Decks!.tides;
+    const tideCards = (index: number) => new Set(tides[index].cards.map((card) => card.id));
+    expect(pool.tideIds).toEqual([tides[0].id, tides[1].id, tides[2].id, tides[1].id]);
+    expect(pool.ring1.length).toBeGreaterThan(0);
+    expect(pool.ring2.length).toBeGreaterThan(0);
+    for (const cardId of pool.ring1) expect(tideCards(0).has(cardId)).toBe(true);
+    for (const cardId of pool.ring2) {
+      expect(tideCards(0).has(cardId)).toBe(false);
+      expect(tideCards(1).has(cardId) || tideCards(2).has(cardId)).toBe(true);
+    }
+    for (const cardId of [...pool.ring1, ...pool.ring2]) {
+      const card = byId.get(cardId);
+      expect(card?.isStarter).toBe(false);
+      expect(D97_COLLECTION.bagRarities).toContain(card?.rarity);
+    }
+    const legendary = [...tideCards(0)].filter((cardId) => byId.get(cardId)?.rarity === "Legendary");
+    expect(legendary.length).toBeGreaterThan(0);
+    expect(pool.dealt.every(({ cardId }) => byId.has(cardId))).toBe(true);
+    expect(pool.dealt.length).toBeGreaterThan(0);
+    expect(provider.rewardPool(testAvatarId("d97-unpinned-avatar"))).toBeNull();
   });
 
   it("starts a D97 run with its full starting deck through the registered providers", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     const content = makeRarityContent();
     registerGameProviders(content);
+    const provider = createD97ContentProvider(content, null, [syntheticPinnedPool(content)]);
+    registerD97ContentProvider(provider);
+    const ring1 = provider.rewardPool(AVATAR_ID)?.ring1 ?? [];
     const d97Genesis = { ...GENESIS, mode: "d97" as const };
     const result = reduceGameEvent(
       genesisFoldState(d97Genesis),
@@ -148,12 +149,13 @@ describe("createD97ContentProvider", () => {
     );
     expect(result.outcome).toBe("applied");
     const copies = result.state.d97?.run?.collection.copies ?? [];
-    expect(copies).toHaveLength(D97_STARTING_PACKAGE.pickCount);
+    expect(copies).toHaveLength(Math.min(D97_STARTING_PACKAGE.pickCount, ring1.length));
     const starters = copies.filter(
       (copy) =>
         [...content.cardDatabase.values()].find((card) => card.id === copy.cardId)
           ?.isStarter === true,
     );
+    for (const copy of copies) expect(ring1.includes(copy.cardId) || starters.includes(copy)).toBe(true);
     expect(starters).toHaveLength(
       D97_STARTING_PACKAGE.starterBase +
         D97_STARTING_PACKAGE.starterPerDifficulty * D97_STARTING_PACKAGE.difficulty,

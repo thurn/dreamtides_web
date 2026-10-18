@@ -1,5 +1,6 @@
 // Reconciliation over a synthetic save: a fully resolvable save is untouched;
-// a retired card maps to its replacement everywhere it appears; an owned copy
+// a retired card maps to its replacement everywhere it appears, its bag draws
+// merged into the replacement's; an owned copy
 // of a retired card without one is removed and compensated in Essence while
 // its other references are dropped; an encounter or shop on a removed anchor
 // moves to a free anchor of its kind, or is dropped; places on removed
@@ -80,7 +81,7 @@ describe("reconcileSnapshot", () => {
     const save = snapshot();
     const run = save.d97.run!;
     const retired = run.collection.copies[0].cardId;
-    const replacement = run.bag.entries.find((entry) => entry.cardId !== retired)!.cardId;
+    const replacement = run.collection.copies.find((copy) => copy.cardId !== retired)!.cardId;
     const withEncounter = snapshot((edited) => ({ ...edited, encounters: { [CHALLENGER]: encounter(CHALLENGER, [retired]) } }));
     const result = reconcileSnapshot(withEncounter, catalog(new Set([retired])), { ...TUNING, retirements: [{ cardId: retired, replacementId: replacement }] });
     const next = result.snapshot.d97.run!;
@@ -90,6 +91,21 @@ describe("reconcileSnapshot", () => {
     expect(next.essence).toBe(run.essence);
     expect(result.reconciliations.every((entry) => entry.kind === "cardReplaced")).toBe(true);
     expect(result.reconciliations.length).toBeGreaterThan(0);
+  });
+
+  it("merges a replaced card's bag draws into its replacement's and drops a retired card's", () => {
+    const save = snapshot();
+    const run = save.d97.run!;
+    const [retired, replacement, dropped] = run.collection.copies.map((copy) => copy.cardId);
+    const avatarId = run.avatarId;
+    const drawn = run.bags.drawn[avatarId]!;
+    expect([drawn[retired], drawn[replacement], drawn[dropped]]).toEqual([1, 1, 1]);
+    const result = reconcileSnapshot(save, catalog(new Set([retired, dropped])), { ...TUNING, retirements: [{ cardId: retired, replacementId: replacement }] });
+    const next = result.snapshot.d97.run!.bags.drawn[avatarId]!;
+    expect(next[replacement]).toBe(2);
+    expect(next[retired]).toBeUndefined();
+    expect(next[dropped]).toBeUndefined();
+    expect(result.reconciliations).toContainEqual({ kind: "cardDropped", where: "bag", cardId: dropped });
   });
 
   it("compensates owned copies of a retired card without a replacement and drops its references", () => {

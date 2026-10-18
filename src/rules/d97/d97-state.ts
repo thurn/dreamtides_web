@@ -8,7 +8,7 @@
 
 import type {
   D97Collection,
-  D97RewardBag,
+  D97RewardBags,
 } from "../../d97/collection/types";
 import type { D97QuestState } from "../../d97/quests/types";
 import type { CardId } from "../../types/card-identity";
@@ -78,13 +78,14 @@ export interface D97Encounter {
 }
 
 /**
- * A started D97 run: its identity, entropy, chosen Avatar, purse, collection
- * and reward bag.
+ * A started D97 run: its identity, entropy, current Avatar, purse, collection
+ * and every Avatar's reward bag.
  */
 export interface D97Run {
   readonly runId: D97RunId;
   /** Recorded once when the run starts; generators derive from it. */
   readonly runSeed: D97RunSeed;
+  /** The run's current Avatar: its reward bag is the active one (Appendix A §A2). */
   readonly avatarId: AvatarId;
   /**
    * The dream the run is in: the dream it started in, recorded by
@@ -100,8 +101,11 @@ export interface D97Run {
   readonly battlesFought: number;
   /** Every owned copy, in the active deck or the reserve. */
   readonly collection: D97Collection;
-  /** The Avatar's reward bag v0, dealt at run start. */
-  readonly bag: D97RewardBag;
+  /**
+   * Every Avatar's reward bag (Appendix A §A2): the capacity stage and each
+   * Avatar's draws; the rings are the Avatars' pinned pools, in content.
+   */
+  readonly bags: D97RewardBags;
   /** Every previewed encounter, by anchor. */
   readonly encounters: Readonly<Partial<Record<DreamAnchorId, D97Encounter>>>;
   /**

@@ -25,6 +25,7 @@
     "d97:dialogue": "tsx scripts/d97/dialogue.ts",
     "d97:characters": "tsx scripts/d97/link-characters.ts",
     "d97:save-fixture": "tsx scripts/d97/regenerate-save-fixture.ts",
+    "d97:pools": "tsx scripts/d97/curate-pools.ts",
     "fuzz:engine": "tsx scripts/fuzz-engine.ts",
     "bead:entities": "tsx scripts/bead-entities.ts",
     "lab:preflight": "tsx scripts/qa/lab-preflight.ts",

@@ -5,7 +5,9 @@
 // decode under the current migrations, version 1 to 2 dropping encounters'
 // head starts (shown on the exported milestone save, whose encounters carry
 // them) and version 2 to 3 placing the last place on its dream's own map;
-// and the golden save of the current version has exactly the
+// the golden schema-version-2 and -3 saves are frozen the same way and decode
+// with their bag v0 moved onto the pinned-pool bags; and the golden save of
+// the current version has exactly the
 // shape a run folded today writes (so a change to the persisted shape must
 // bump the schema version and ship a migration, P5), re-encoding to its own
 // JSON through the live phase union, which refuses a screen and run that
@@ -29,6 +31,12 @@ import {
   takeSnapshot,
   type D97SaveBuild,
 } from "./snapshot";
+
+/** SHA-256 of `fixtures/d97-save-v3.json`, LF line endings. */
+const GOLDEN_V3_SHA256 = "ae1460be941f95098eefc7ea72bcf61b7a409cc63ac20db2cc404c4db99ac3cf";
+
+/** SHA-256 of `fixtures/d97-save-v2.json`, LF line endings. */
+const GOLDEN_V2_SHA256 = "68c077156558ae241e8de1ab9c1bdac0747c99fed0ca8bb82947f223b596e145";
 
 const BUILD = { reducerVersion: "test", gitRevision: "unknown" } as D97SaveBuild;
 
@@ -98,6 +106,30 @@ describe("D97 snapshots", () => {
       const encounters = Object.values(decodeSnapshot(v1, D97_SAVE_MIGRATIONS)?.snapshot.d97.run?.encounters ?? {});
       expect(encounters.length).toBeGreaterThan(0);
       for (const encounter of encounters) expect(encounter).not.toHaveProperty("headStarts");
+    });
+  });
+
+  describe.each([
+    { version: 2, path: "./fixtures/d97-save-v2.json", sha256: GOLDEN_V2_SHA256 },
+    { version: 3, path: "./fixtures/d97-save-v3.json", sha256: GOLDEN_V3_SHA256 },
+  ])("the frozen golden schema-version-$version save", ({ version, path, sha256 }) => {
+    const raw = readFileSync(new URL(path, import.meta.url), "utf8").replace(/\r\n/gu, "\n");
+
+    it("keeps its committed bytes", () => {
+      // Frozen by bead hv-j1n2.11 when a later schema version superseded it.
+      // Never regenerate it: a change to the persisted shape bumps the schema
+      // version, adds a migration and commits a new golden fixture.
+      expect(createHash("sha256").update(raw).digest("hex")).toBe(sha256);
+      expect((JSON.parse(raw) as { schemaVersion: unknown }).schemaVersion).toBe(version);
+    });
+
+    it("loads under the current migrations, its bag v0 moved onto the pinned-pool bags", () => {
+      const decoded = decodeSnapshot(raw, D97_SAVE_MIGRATIONS);
+      expect(decoded?.migratedFrom).toBe(version);
+      const run = decoded!.snapshot.d97.run!;
+      expect(run.bags.stage).toBe(1);
+      expect(run).not.toHaveProperty("bag");
+      expect(snapshotFoldState(SAVE_GENESIS, decoded!.snapshot).d97?.run?.collection.copies.length).toBeGreaterThan(0);
     });
   });
 

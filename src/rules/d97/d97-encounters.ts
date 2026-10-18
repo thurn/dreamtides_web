@@ -20,7 +20,7 @@ import {
   removeCopies,
 } from "../../d97/collection/collection";
 import type { D97Collection, D97OwnedCopy } from "../../d97/collection/types";
-import { pickFromBag } from "../../d97/collection/reward-bag";
+import { activeRewardBag, pickFromBag } from "../../d97/collection/reward-bag";
 import { cardBaseValue, saleQuote } from "../../d97/shop/pricing";
 import type { EventContext, ReducerLogRecord } from "../../eventlog/types";
 import type { CardId } from "../../types/card-identity";
@@ -307,7 +307,7 @@ export function endEncounterBattle(
   const lost = result.kind === "victory" && result.winner !== "player";
   const battlesFought = run.battlesFought + 1;
   let collection = run.collection;
-  let bag = run.bag;
+  let bags = run.bags;
   let essence = run.essence;
   const wonCardIds: CardId[] = [];
   const records: ReducerLogRecord[] = [];
@@ -316,25 +316,25 @@ export function endEncounterBattle(
     let drawIndex = 0;
     const random = (): number => ctx.rng(drawIndex++);
     let remaining = role === "challenger" ? bundleBudget(tier) : 0;
-    let acquiring: D97AcquiringRun = { runId: run.runId, runSeed: run.runSeed, battlesFought, collection, bag };
+    let acquiring: D97AcquiringRun = { runId: run.runId, runSeed: run.runSeed, battlesFought, collection, avatarId: run.avatarId, bags };
     if (opponentAnteCardId !== null) {
-      const ante = acquireForRun(acquiring, { cardId: opponentAnteCardId, channel: "ante", zone: "reserve", source: "named" });
+      const ante = acquireForRun(acquiring, { cardId: opponentAnteCardId, channel: "ante", zone: "reserve", source: "named" }, content);
       acquiring = ante.run;
       records.push(...ante.logRecords);
       wonCardIds.push(opponentAnteCardId);
       remaining -= rarityCost(content.cardRarity(opponentAnteCardId));
     }
     while (remaining > 0) {
-      const cardId = pickFromBag(acquiring.bag, random);
+      const cardId = pickFromBag(activeRewardBag(content, acquiring), random);
       if (cardId === null) break;
-      const drawn = acquireForRun(acquiring, { cardId, channel: "bundle", zone: "reserve", source: "draw" });
+      const drawn = acquireForRun(acquiring, { cardId, channel: "bundle", zone: "reserve", source: "draw" }, content);
       if (drawn === null) break;
       acquiring = drawn.run;
       records.push(...drawn.logRecords);
       wonCardIds.push(cardId);
       remaining -= rarityCost(content.cardRarity(cardId));
     }
-    ({ collection, bag } = acquiring);
+    ({ collection, bags } = acquiring);
     essence += encounter.extra?.amount ?? 0;
   } else if (lost && playerAnteCopyId !== null) {
     const copy = findCopy(collection, playerAnteCopyId);
@@ -350,7 +350,7 @@ export function endEncounterBattle(
     essence,
     battlesFought,
     collection,
-    bag,
+    bags,
     encounters: { ...run.encounters, [anchorId]: settled },
     returnAnchorId: anchorId,
   };

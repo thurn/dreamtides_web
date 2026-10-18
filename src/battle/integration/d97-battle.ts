@@ -33,6 +33,8 @@ export interface D97BattleContent {
   readonly opponentsData: OpponentsData;
   readonly tides4Decks: Tides4DecksJson | undefined;
   readonly tides4Tuning: Tides4Tuning | undefined;
+  /** An Avatar's pinned dealt pool (decision P29), the player's battle draft pool. */
+  readonly pinnedDealtPool: (avatarId: AvatarId) => readonly { readonly cardId: CardId; readonly copies: number }[];
 }
 
 function avatarOf(content: D97BattleContent, avatarId: AvatarId): AvatarContent | null {
@@ -152,7 +154,7 @@ export function startD97Battle(
       enemy: encounter.deck.map((cardId) => ({ cardId })),
     },
     draftPools: {
-      player: run.bag.entries.flatMap((entry) => Array.from({ length: entry.target }, () => entry.cardId)),
+      player: content.pinnedDealtPool(run.avatarId).flatMap((entry) => Array.from({ length: entry.copies }, () => entry.cardId)),
       enemy: [...encounter.draftPool],
     },
     dreamwell: [...content.dreamwellCardIds],

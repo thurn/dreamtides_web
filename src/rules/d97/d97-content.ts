@@ -2,7 +2,7 @@
 // loaded catalogs before any event folds (src/session/providers/), so the
 // cases stay pure and every fold of a log on one build sees the same content.
 
-import type { D97DealtCard } from "../../d97/collection/reward-bag";
+import type { D97RewardBagContent } from "../../d97/collection/reward-bag";
 import type { D97CardPriceFacts } from "../../d97/shop/pricing";
 import type { D97StartingCollectionContent } from "../../d97/collection/starting-collection";
 import type { D97TierKnob } from "../../content/d97/encounters";
@@ -19,20 +19,11 @@ import type {
   D97RoomId,
   DreamAnchorId,
   DreamsignId,
-  TideId,
 } from "../../types/identifiers";
 import type { D97BattleInit } from "../battle/fold";
 import type { D97Encounter, D97Run } from "./d97-state";
 import type { D97QuestCatalog } from "../../d97/quests/quests";
 import type { D97DialogueCatalog } from "../../d97/dialogue/catalog";
-
-/** One Avatar's dealt tides4 pool. */
-export interface D97PoolDeal {
-  /** The tides the deal joined, in join order. */
-  readonly joinedTideIds: readonly TideId[];
-  /** Dealt copies per card (Starter cards excluded, per-card caps applied). */
-  readonly cards: readonly D97DealtCard[];
-}
 
 /** An opponent's constructed deck (Appendix B §B9). */
 export interface D97OpponentBuild {
@@ -90,14 +81,9 @@ export interface D97RegisteredDream {
 }
 
 /** Fold-relevant D97 content. */
-export interface D97ContentProvider extends D97StartingCollectionContent {
+export interface D97ContentProvider extends D97StartingCollectionContent, D97RewardBagContent {
   /** Every Avatar a run may start with (the full roster). */
   readonly avatarIds: ReadonlySet<AvatarId>;
-  /**
-   * Deal `avatarId`'s tides4 pool exactly as the journey's draft would, from
-   * a 32-bit seed. Deterministic in its arguments.
-   */
-  readonly dealRewardPool: (avatarId: AvatarId, seed: number) => D97PoolDeal;
   /**
    * Build `avatarId`'s opponent deck at a tier knob from a 32-bit seed.
    * Deterministic in its arguments; null when the Avatar has no pool.

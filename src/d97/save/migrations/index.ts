@@ -6,5 +6,6 @@
 import type { D97SaveMigration } from "../migrate";
 import { V1_TO_V2 } from "./v1-to-v2";
 import { V2_TO_V3 } from "./v2-to-v3";
+import { V3_TO_V4 } from "./v3-to-v4";
 
-export const D97_SAVE_MIGRATIONS: readonly D97SaveMigration[] = [V1_TO_V2, V2_TO_V3];
+export const D97_SAVE_MIGRATIONS: readonly D97SaveMigration[] = [V1_TO_V2, V2_TO_V3, V3_TO_V4];

@@ -22,7 +22,8 @@
 import type { D97SaveTuning } from "../../content/d97/save";
 import type { D97Encounter, D97Place, D97Run, D97Shop, D97State } from "../../rules/d97/d97-state";
 import type { CardId } from "../../types/card-identity";
-import type { D97DreamId, D97OwnedCopyId, D97QuestId, D97RoomId, DreamAnchorId } from "../../types/identifiers";
+import type { AvatarId, D97DreamId, D97OwnedCopyId, D97QuestId, D97RoomId, DreamAnchorId } from "../../types/identifiers";
+import type { D97RewardBags } from "../collection/types";
 import type { DreamAnchorKind } from "../map/definition";
 import type { D97Snapshot } from "./snapshot";
 
@@ -148,10 +149,6 @@ class Reconciler {
       this.log.push({ kind: "cardCompensated", copyId: copy.copyId, cardId: copy.cardId, essence: this.tuning.retiredCardEssence });
       return [];
     });
-    const bagEntries = run.bag.entries.flatMap((entry) => {
-      const cardId = this.card(entry.cardId, "bag");
-      return cardId === null ? [] : [{ ...entry, cardId }];
-    });
     const quests = run.quests;
     const pending = quests.pendingReward;
     const lastPlace = this.lastPlace(run.lastPlace);
@@ -160,7 +157,7 @@ class Reconciler {
       dreamId,
       essence,
       collection: { ...run.collection, copies },
-      bag: { ...run.bag, entries: bagEntries },
+      bags: { ...run.bags, drawn: this.drawn(run.bags.drawn) },
       encounters: this.anchored(run.encounters, (encounter) => (encounter.role === "guardian" ? "guardian" : "challenger"), "encounter", (encounter, anchorId) => this.encounter({ ...encounter, anchorId })),
       shops: this.anchored(run.shops, () => "shop", "shop", (shop) => this.shop(shop)),
       returnAnchorId: this.returnAnchor(run.returnAnchorId, lastPlace),
@@ -172,6 +169,20 @@ class Reconciler {
         pendingReward: pending === null ? null : { ...pending, cardIds: this.cards(pending.cardIds, "questReward") },
       },
     };
+  }
+
+  /** Each bag's draw counts, a replaced card's merged into its replacement's. */
+  private drawn(drawn: D97RewardBags["drawn"]): D97RewardBags["drawn"] {
+    const next: Partial<Record<AvatarId, Partial<Record<CardId, number>>>> = {};
+    for (const [avatarId, cards] of Object.entries(drawn) as [AvatarId, Partial<Record<CardId, number>> | undefined][]) {
+      const counts: Partial<Record<CardId, number>> = {};
+      for (const [cardId, count] of Object.entries(cards ?? {}) as [CardId, number | undefined][]) {
+        const kept = this.card(cardId, "bag");
+        if (kept !== null && count !== undefined) counts[kept] = (counts[kept] ?? 0) + count;
+      }
+      next[avatarId] = Object.fromEntries(Object.entries(counts).sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0)));
+    }
+    return next;
   }
 
   private abandon(questId: D97QuestId): null {
